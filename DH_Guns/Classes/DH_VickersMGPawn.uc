@@ -28,9 +28,9 @@ defaultproperties
 
     GunClass=Class'DH_VickersMG'
     HandsReloadSequence="RELOAD_AC"
-    DriverPositions(0)=(PositionMesh=SkeletalMesh'DH_Fiat1435_anm.FIAT1435_GUN_AC_1ST',bExposed=true,ViewFOV=72.5)
-    DriverPositions(1)=(PositionMesh=SkeletalMesh'DH_Fiat1435_anm.FIAT1435_GUN_AC_1ST',bExposed=true,ViewFOV=72.5)
-    DriverPositionsExtra(0)=(CameraBone="GUNSIGHT_CAMERA_AC")
-    DriverPositionsExtra(1)=(CameraBone="GUNSIGHT_CAMERA_AC")
-    GunsightCameraBone="GUNSIGHT_CAMERA_AC"
+    DriverPositions(0)=(PositionMesh=SkeletalMesh'DH_Vickers_anm.VICKERS_TURRET_INT',bExposed=true,ViewFOV=72.5)
+    DriverPositions(1)=(PositionMesh=SkeletalMesh'DH_Vickers_anm.VICKERS_TURRET_INT',bExposed=true,ViewFOV=72.5)
+    DriverPositionsExtra(0)=(CameraBone="CAMERA_GUNSIGHT")
+    DriverPositionsExtra(1)=(CameraBone="CAMERA_GUNSIGHT")
+    GunsightCameraBone="CAMERA_GUNSIGHT"
 }

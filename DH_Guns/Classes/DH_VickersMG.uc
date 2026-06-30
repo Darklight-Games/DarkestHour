@@ -31,10 +31,9 @@ defaultproperties
 
     InitialPrimaryAmmo=300
     NumMGMags=3
-    ReloadSequence="RELOAD_WC"
-    Mesh=SkeletalMesh'DH_Fiat1435_anm.FIAT1435_GUN_AC_3RD'
-    CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_Fiat1435_stc.FIAT35_GUN_YAW_COLLISION',AttachBone="MG_YAW")
-    WeaponFireAttachmentBone="MUZZLE_AC"
+    ReloadSequence="RELOAD"
+    Mesh=SkeletalMesh'DH_Vickers_anm.VICKERS_TURRET_EXT'
+    WeaponFireAttachmentBone="MUZZLE"
     WeaponFireOffset=-10.0
 
     AmmoRoundStaticMesh=StaticMesh'DH_Fiat1435_stc.FIAT1435_BELT_LINK_1ST'
@@ -87,11 +86,11 @@ defaultproperties
 
     BarrelCount=1
     BarrelClass=Class'DH_VickersMGBarrel'
-    BarrelSteamBone="MUZZLE_AC"
+    BarrelSteamBone="MUZZLE"
 
     bLimitYaw=true
-    MaxNegativeYaw=-2184    // -12 degrees
-    MaxPositiveYaw=2184     // +12 degrees
+    MaxNegativeYaw=-8192    // -45 degrees
+    MaxPositiveYaw=8192     // +45 degrees
     CustomPitchUpLimit=3640     // +20 degrees
     CustomPitchDownLimit=61895  // -20 degrees
 
@@ -105,25 +104,13 @@ defaultproperties
     FireSoundClass=SoundGroup'DH_MN_InfantryWeapons_sound.Breda38FireLoop'
     FireEndSound=SoundGroup'DH_MN_InfantryWeapons_sound.Breda38FireLoopEnd'
 
-    FiringAnim="BOLT_FIRING"
-    FiringIdleAnim="BOLT_IDLE"
+    FiringAnim="FIRING_LOOP"
+    FiringIdleAnim="FIRING_IDLE"
     FiringChannel=2
     FiringBone="FIRING_ROOT"
 
     ShellEjectors(0)=(ShellEjectClass=Class'RO3rdShellEject762x54mm',Bone="EJECTOR",RotationOffset=(Pitch=-16384,Yaw=16384))
 
-    ProjectileRotationMode=PRM_MuzzleBone
-
-    // Regular MGs do not have collision on because it's assumed that they're a small part
-    // mounted on a larger vehicle. In this case, we want to have collision on because it's
-    // a standalone weapon.
-    bCollideActors=true
-    bBlockActors=true
-    bProjTarget=true
-    bBlockNonZeroExtentTraces=true
-    bBlockZeroExtentTraces=true
-
-    NumRoundsInStaticMesh=1
-
-    CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_Fiat1435_stc.FIAT1435_GUN_PITCH_COLLISION',AttachBone="MG_PITCH")
+    CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_Vickers_Stc.VICKERS_TURRET_PITCH_COLLISION',AttachBone="MG_PITCH")
+    CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_Vickers_Stc.VICKERS_TURRET_YAW_COLLISION',AttachBone="MG_YAW")
 }
