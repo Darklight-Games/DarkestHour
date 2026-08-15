@@ -254,7 +254,7 @@ def main():
     default_ini_crc = crc32(Path(default_config_path).read_bytes())
 
     config = ConfigParserMultiOpt()
-    config.read(default_config_path)
+    config.read(default_config_path, encoding='windows-1252')
     default_packages = config.get('Editor.EditorEngine', '+editpackages')
 
     # Read the paths and make sure that there are no ambiguous file names.
@@ -262,7 +262,7 @@ def main():
     paths = []
     if os.path.isfile(config_path):
         config = ConfigParserMultiOpt()
-        config.read(config_path)
+        config.read(config_path, encoding='windows-1252')
         paths = config.get('Core.System', 'paths')
 
     filename_paths = dict()
@@ -289,6 +289,8 @@ def main():
         version = (version_data['major'], version_data['minor'], version_data['patch'])
         prerelease = version_data.get('prerelease', None)
         build_manifest = BuildManifest.new_from_cli(version, prerelease)
+        if build_manifest is None:
+            raise RuntimeError('Failed to generate build manifest')
         if build_manifest is not None:
             # Need to define where the build manifest file will be written.
             build_manifest_path = Path(args.dir) / make_config['build_manifest_path']
@@ -346,7 +348,7 @@ def main():
     # Get packages from generated INI.
     if os.path.isfile(config_path):
         config = ConfigParserMultiOpt()
-        config.read(config_path)
+        config.read(config_path, encoding='windows-1252')
         packages = config.get('Editor.EditorEngine', 'editpackages')
     else:
         packages = default_packages

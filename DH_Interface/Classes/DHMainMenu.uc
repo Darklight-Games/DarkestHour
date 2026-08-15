@@ -17,6 +17,8 @@ var automated       DHGUIScrollTextBox      tb_MOTDContent;
 var automated       GUIImage                i_MOTDLoading;
 var automated       ROGUIProportionalContainerNoSkin c_MOTD;
 
+var array<ExtendedConsole.ServerFavorite> StaticFavorites;
+
 var     HTTPRequest             MOTDRequest;
 
 var     string                  MOTDURL;
@@ -103,6 +105,8 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     // not completely fix) the issue. This value can be increased so long as
     // it does not cause clipping issues.
     PlayerOwner().ConsoleCommand("NearClip 4");
+
+    AddOfficialServersToFavorites();
 }
 
 function ShowBadConfigMessage()
@@ -531,8 +535,23 @@ function GetMOTD()
     i_MOTDLoading.SetVisibility(true);
 }
 
+function AddOfficialServersToFavorites()
+{
+    local int i;
+
+    for (i = 0; i < default.StaticFavorites.Length; ++i)
+    {
+        class'ExtendedConsole'.static.AddFavorite(StaticFavorites[i]);
+    }
+}
+
 defaultproperties
 {
+    StaticFavorites(0)=(IP="104.243.41.183",Port=7757,ServerName="Official Server #1")
+    StaticFavorites(1)=(IP="104.243.41.183",Port=7777,ServerName="Official Server #2")
+    StaticFavorites(2)=(IP="104.243.41.183",Port=7817,ServerName="Official Server #3")
+    StaticFavorites(3)=(IP="104.243.41.183",Port=7797,ServerName="Official Armored Server #1")
+    
     // Render Entry.rom instead of background
     bRenderWorld=true
 
