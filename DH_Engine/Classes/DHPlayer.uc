@@ -786,14 +786,24 @@ function ShowMidGameMenu(bool bPause)
 function bool AllowTextMessage(string Msg)
 {
     local int i;
+    local DHPlayerReplicationInfo PRI;
 
     if (PlayerReplicationInfo.bSilentAdmin || Level.NetMode == NM_Standalone || PlayerReplicationInfo.bAdmin)
     {
         return true;
     }
 
+    // TODO: Get rid of `bIsGagged` and merge admin mutator features with the restriction system.
     if (Level.Pauser == none && Level.TimeSeconds - LastBroadcastTime < 2 || bIsGagged)
     {
+        return false;
+    }
+
+    PRI = DHPlayerReplicationInfo(PlayerReplicationInfo);
+
+    if (PRI != none && PRI.bRestrictOutboundMessages)
+    {
+        ReceiveLocalizedMessage(class'DHAdminMessage', 8);
         return false;
     }
 
@@ -5904,6 +5914,12 @@ exec function Speak(string ChannelTitle)
         return;
     }
 
+    if (PRI.bRestrictOutboundVoice)
+    {
+        ReceiveLocalizedMessage(class'DHAdminMessage', 9);
+        return;
+    }
+
     // Colin: Hard-coding this, unfortunately, because we need to have the
     // player be able to join just by executing "Speak Squad". We can't
     // depend on the name of the squad because it's not unique and is subject
@@ -8230,6 +8246,7 @@ defaultproperties
     NextSpawnTime=15
     ROMidGameMenuClass="DH_Interface.DHDeployMenu"
     ChatRoomMessageClass="DH_Engine.DHChatRoomMessage"
+    PlayerChatType="DH_Engine.DHPlayerChatManager"
     GlobalDetailLevel=5
     PlayerReplicationInfoClass=Class'DHPlayerReplicationInfo'
     InputClass=Class'DHPlayerInput'

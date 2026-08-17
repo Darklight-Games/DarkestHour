@@ -17,6 +17,83 @@ var private array<string>           DeveloperIDs;
 var private array<Patron>           Patrons; // A list of patreon ROIDs for users that are on MAC and don't work with normal system
 var private array<string>           GloballyBannedIDs;
 
+struct Restriction
+{
+    var string PlayerID;
+    var bool   bOutboundMessages;
+    var bool   bOutboundVoice;
+};
+
+var globalconfig array<Restriction> Restrictions;
+
+function ApplyRestrictionByID(string ID)
+{
+    local DHPlayer C;
+
+    for (C = DHPlayer(Level.ControllerList); C != none; C = DHPlayer(C.NextController))
+    {
+        if (C.GetPlayerIDHash() ~= ID)
+        {
+            ApplyRestriction(C);
+            return;
+        }
+    }
+}
+
+function ApplyRestriction(DHPlayer PC)
+{
+    local int i;
+    local string PlayerID;
+    local DHPlayerReplicationInfo PRI;
+
+    if (PC == none)
+    {
+        return;
+    }
+
+    PlayerID = PC.GetPlayerIDHash();
+
+    if (PlayerID == "")
+    {
+        return;
+    }
+
+    for (i = 0; i < Restrictions.Length; ++i)
+    {
+        if (Restrictions[i].PlayerID != PlayerID)
+        {
+            continue;
+        }
+
+        // Duplicate IDs are not allowed (or unlikely), so we can assign PRI here
+        // instead of doing it every time this function is called.
+        PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
+
+        if (PRI == none)
+        {
+            return;
+        }
+
+        // Outbound messages
+        PRI.bRestrictOutboundMessages = Restrictions[i].bOutboundMessages;
+
+        // Outbound voice
+        if (PRI.bRestrictOutboundVoice != Restrictions[i].bOutboundVoice)
+        {
+            PRI.bRestrictOutboundVoice = Restrictions[i].bOutboundVoice;
+
+            // Player will be muted via the chat manager, but we still
+            // unset their active channel just to be thorough.
+            if (PRI.bRestrictOutboundVoice && PC.ActiveRoom != none)
+            {
+                PC.ActiveRoom = none;
+                PC.ClientSetActiveRoom(-1);
+                PRI.ActiveChannel = -1;
+            }
+        }
+    }
+}
+
 function bool AdminLogin(PlayerController P, string Username, string Password)
 {
     local xAdminUser    User;
