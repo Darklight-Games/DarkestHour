@@ -868,6 +868,14 @@ function bool CanUseSayType(string SayType)
         return false;
     }
 
+    PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
+
+    if (PRI != none && PRI.bRestrictedChat)
+    {   
+        PC.ReceiveLocalizedMessage(class'DHAdminMessage', 8);
+        return false;
+    }
+
     switch (SayType)
     {
         case "Say":
@@ -879,7 +887,6 @@ function bool CanUseSayType(string SayType)
         case "VehicleSay":
             return PC.Pawn != none && PC.Pawn.IsA('Vehicle');
         case "CommandSay":
-            PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
             return PRI != none && PRI.CanAccessCommandChannel();
     }
 

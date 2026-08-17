@@ -17,6 +17,55 @@ var private array<string>           DeveloperIDs;
 var private array<Patron>           Patrons; // A list of patreon ROIDs for users that are on MAC and don't work with normal system
 var private array<string>           GloballyBannedIDs;
 
+struct Restriction
+{
+    var string ROID;
+    var bool   bChat;
+    var bool   bVoice;
+};
+
+var private globalconfig array<Restriction> Restrictions; 
+
+function ApplyRestriction(DHPlayer PC)
+{
+    local int i, j;
+    local string ROID;
+    local DHPlayerReplicationInfo PRI;
+
+    if (PC == none)
+    {
+        return;
+    }
+
+    PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
+    ROID = PC.GetPlayerIDHash();
+
+    if (PRI == none || ROID == "")
+    {
+        return;
+    }
+
+    for (i = 0; i < Restrictions.Length; ++i)
+    {
+        if (Restrictions[i].ROID != ROID)
+        {
+            continue;
+        }
+
+        if (Restrictions[i].bChat)
+        {
+            PRI.bRestrictedChat = true;
+            Log("RESTRICT CHAT FOR" @ ROID);
+        }
+
+        if (Restrictions[i].bVoice)
+        {
+            PRI.bRestrictedVoice = true;
+            Log("RESTRICT VOICE FOR" @ ROID);
+        }
+    }
+}
+
 function bool AdminLogin(PlayerController P, string Username, string Password)
 {
     local xAdminUser    User;
@@ -305,4 +354,6 @@ defaultproperties
     GloballyBannedIDs(42)="76561199070325442"
     GloballyBannedIDs(43)="76561199072481619"
     GloballyBannedIDs(44)="76561199707205805"
+
+    Restrictions(0)=(ROID="76561198043869714",bChat=true,bVoice=true)
 }

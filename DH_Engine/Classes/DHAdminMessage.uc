@@ -16,6 +16,8 @@ var localized string AlliedTeamNameGenitive;
 var localized string AxisTeamNameGenitive;
 var localized string AdminLoggedInMessage;
 var localized string AdminLoggedOutMessage;
+var localized string RestrictedChatForPlayerMessage;
+var localized string RestrictedVoiceForPlayerMessage;
 
 static function string GetSquadName(int TeamIndex, int SquadIndex, DHSquadReplicationInfo SRI)
 {
@@ -66,6 +68,10 @@ static function string GetString(optional int S, optional PlayerReplicationInfo 
             return Repl(default.AdminLoggedInMessage, "{0}", RelatedPRI_1.PlayerName);
         case 7:
             return Repl(default.AdminLoggedOutMessage, "{0}", RelatedPRI_1.PlayerName);
+        case 8:
+            return default.RestrictedChatForPlayerMessage;
+        case 9:
+            return default.RestrictedVoiceForPlayerMessage;
         default:
             break;
     }
@@ -87,6 +93,8 @@ defaultproperties
     AdminLoggedOutMessage="{0} gave up administrator abilities."
     AlliedTeamNameGenitive="Allied"
     AxisTeamNameGenitive="Axis"
+    RestrictedChatForPlayerMessage="Your chat access has been revoked on this server."
+    RestrictedVoiceForPlayerMessage="Your voice chat access has been revoked on this server."
 
     bIsSpecial=false
     bIsConsoleMessage=true
