@@ -5904,6 +5904,12 @@ exec function Speak(string ChannelTitle)
         return;
     }
 
+    if (PRI.bRestrictedVoice)
+    {
+        ReceiveLocalizedMessage(class'DHAdminMessage', 9);
+        return;
+    }
+
     // Colin: Hard-coding this, unfortunately, because we need to have the
     // player be able to join just by executing "Speak Squad". We can't
     // depend on the name of the squad because it's not unique and is subject

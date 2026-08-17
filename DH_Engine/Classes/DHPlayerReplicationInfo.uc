@@ -53,12 +53,17 @@ var     int                     PlayerIQ;
 
 var     int                     NoRallyPointsTime; // Time when SL lost all rally points
 
+// Restrictions
+var     bool                    bRestrictedChat;
+var     bool                    bRestrictedVoice;
+
 replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
         SquadIndex, SquadMemberIndex, PatronTier, bIsDeveloper, DHKills, bIsSquadAssistant,
-        TotalScore, CategoryScores, PlayerIQ, NoRallyPointsTime, bIsIncognito, bIsPossesingPawn;
+        TotalScore, CategoryScores, PlayerIQ, NoRallyPointsTime, bIsIncognito, bIsPossesingPawn,
+        bRestrictedChat, bRestrictedVoice;
 }
 
 simulated function string GetNamePrefix()

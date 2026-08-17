@@ -5189,6 +5189,7 @@ event PostLogin(PlayerController NewPlayer)
     local DHPlayer                PC;
     local Object                  O;
     local DHPlayerSession         S;
+    local DHAccessControl         DHAC;
     local string                  ROIDHash;
 
     if (NewPlayer == none)
@@ -5283,6 +5284,12 @@ event PostLogin(PlayerController NewPlayer)
     }
 
     PC = DHPlayer(NewPlayer);
+    DHAC = DHAccessControl(AccessControl);
+
+    if (DHAC != none)
+    {
+        DHAC.ApplyRestriction(PC);
+    }
 
     if (PC != none)
     {
