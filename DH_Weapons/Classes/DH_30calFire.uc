@@ -20,12 +20,12 @@ defaultproperties
     ShellEjectors(0)=(EjectClass=Class'ShellEject1st762x54mm',EjectBone="EJECTOR",IronSightOffset=(X=40,Z=-10),RotOffsetIron=(Yaw=16384))
 
     // Recoil
-    RecoilRate=0.0675
-    MaxVerticalRecoilAngle=500
-    MaxHorizontalRecoilAngle=300
-    RecoilCurve=(Points=((InVal=0.0,OutVal=0.5),(InVal=6.0,OutVal=1.2),(InVal=12.0,OutVal=0.9),(InVal=50.0,OutVal=1.0),(InVal=10000000000.0,OutVal=1.0)))
+    RecoilRate=0.06
+    MaxVerticalRecoilAngle=480
+    MaxHorizontalRecoilAngle=270
+    RecoilCurve=(Points=((InVal=0.0,OutVal=0.4),(InVal=6.0,OutVal=1.1),(InVal=9.0,OutVal=1.2),(InVal=16.0,OutVal=0.9),(InVal=10000000000.0,OutVal=1.0)))
     RecoilFallOffExponent=4.0
-    RecoilFallOffFactor=30.0
+    RecoilFallOffFactor=40.0
 
     AmbientFireSound=SoundGroup'DH_WeaponSounds.30cal_FireLoop01'
     FireEndSound=SoundGroup'DH_WeaponSounds.30cal_FireEnd01'
@@ -44,5 +44,6 @@ defaultproperties
     ShakeRotRate=(X=10000.0,Y=10000.0,Z=10000.0)
     ShakeRotTime=1.2
 
-    PctHipMGPenalty=1.5
+    PctHipMGPenalty=1.15
+    HipSpreadModifier=5.0
 }

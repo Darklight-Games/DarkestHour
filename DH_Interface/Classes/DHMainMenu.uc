@@ -881,7 +881,7 @@ defaultproperties
     WinHeight=1.0
     MOTDErrorString="Error: Could not download news feed ({0})"
     bShouldRequestMOTD=true
-    GitHubURL="http://github.com/DarklightGames/DarkestHour/"
+    GitHubURL="http://github.com/Darklight-Games/DarkestHour"
     FacebookURL="http://www.facebook.com/darkesthourgame"
     SteamCommunityURL="http://steamcommunity.com/app/1280"
     DiscordURL="http://discord.gg/EEwFhtk"
