@@ -15,7 +15,10 @@ function CreateTabs()
     super.CreateTabs();
 
     // Activate the Internet tab immediately
-    c_Tabs.ActivateTabByName(PanelCaption[2], true);
+    // HACK: The Steam Master Server is not responding.
+    // As an emergency measure, put the player in the LAN list.
+    // We are forcibly populating the LAN list from the MainMenu so that the official servers appear.
+    c_Tabs.ActivateTabByName(PanelCaption[0], true);
 }
 
 function InternalOnOpen()

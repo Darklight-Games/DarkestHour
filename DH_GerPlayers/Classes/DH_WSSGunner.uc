@@ -14,5 +14,5 @@ defaultproperties
     Headgear(1)=Class'DH_SSHelmetTwo'
 
     PrimaryWeapons(2)=(Item=Class'DH_ZB30Weapon')
-    SecondaryWeapons(2)=(Item=Class'DH_C96Weapon')
+    SecondaryWeapons(2)=(Item=Class'DH_BHPWeapon')
 }
