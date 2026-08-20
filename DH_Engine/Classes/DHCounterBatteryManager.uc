@@ -7,9 +7,9 @@ class DHCounterBatteryManager extends Actor
     dependson(DHVehicleWeapon)
     notplaceable;
 
-const SMALL_GUN_DEVIATION = 100;
-const MEDIUM_GUN_DEVIATION = 75;
-const LARGE_GUN_DEVIATION = 50;
+const SMALL_GUN_DEVIATION = 50;
+const MEDIUM_GUN_DEVIATION = 37;
+const LARGE_GUN_DEVIATION = 25;
 
 // The index of the team who will be notified of the artillery reports with markers.
 var int TeamIndex;
