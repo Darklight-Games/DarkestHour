@@ -115,6 +115,7 @@ UserLogs
 !.vscode/settings.json
 *.log
 umodel.cfg
+steam_appid.txt
 
 # IDA
 *.bak
