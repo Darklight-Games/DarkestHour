@@ -3160,6 +3160,13 @@ simulated function SpawnVehicleAttachments()
                 MapIconAttachment.Setup();
                 MapIconAttachment.SetTeamIndex(VehicleTeam);
                 MapIconAttachment.VehicleClass = Class;
+
+                if (SpawnPointAttachment != none && SpawnPointAttachment.BaseMapIconAttachment == none)
+                {
+                    // Will likely be assigned when the spawn is attached, but we also do it here
+                    // in case things get out of order.
+                    SpawnPointAttachment.BaseMapIconAttachment = MapIconAttachment;
+                }
             }
             else
             {
@@ -4618,6 +4625,11 @@ function CreateSpawnPointAttachment(bool bIsTemporary)
     SpawnPointAttachment.SetIsActive(true);
     SpawnPointAttachment.bHasSpawnKillPenalty = default.bHasSpawnKillPenalty;
     SpawnPointattachment.bIsTemporary = bIsTemporary;
+
+    if (MapIconAttachment != none && SpawnPointAttachment.BaseMapIconAttachment == none)
+    {
+        SpawnPointAttachment.BaseMapIconAttachment = MapIconAttachment;
+    }
 }
 
 // Returns whether or not a player should spawn inside the vehicle when using its spawn point.

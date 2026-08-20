@@ -72,6 +72,9 @@ var bool    bIsLowPriority;                             // When true, this spawn
 var class<DHMapIconAttachment> MapIconAttachmentClass;
 var DHMapIconAttachment        MapIconAttachment;
 
+// Reference to icon of the base actor for syncing map locations
+var DHMapIconAttachment        BaseMapIconAttachment;
+
 // Danger zone
 var(DHDangerZone)   float BaseInfluenceModifier;
 var                 float InitialBaseInfluenceModifier;
@@ -80,7 +83,8 @@ replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
-        SpawnPointIndex, TeamIndex, BlockReason, bIsActive, bIsEncroachedUpon;
+        SpawnPointIndex, TeamIndex, BlockReason, bIsActive, bIsEncroachedUpon,
+        BaseMapIconAttachment;
 }
 
 // Implemented to add this spawn point to the GRI's SpawnPoints array, setting the GRI reference & our index position in that array
