@@ -116,7 +116,15 @@ function UpdateSpawnPointPositions()
             continue;
         }
 
-        GRI.GetMapCoords(GRI.SpawnPoints[i].Location, X, Y, b_SpawnPoints[i].WinWidth * ViewportScale, b_SpawnPoints[i].WinHeight * ViewportScale);
+        if (GRI.SpawnPoints[i].BaseMapIconAttachment != none)
+        {
+            // Get location from a related map icon to keep both items in sync and avoid replicating the same location twice.
+            GRI.GetMapCoords(GRI.SpawnPoints[i].BaseMapIconAttachment.GetWorldCoords(GRI), X, Y, b_SpawnPoints[i].WinWidth * ViewportScale, b_SpawnPoints[i].WinHeight * ViewportScale);
+        }
+        else
+        {
+            GRI.GetMapCoords(GRI.SpawnPoints[i].Location, X, Y, b_SpawnPoints[i].WinWidth * ViewportScale, b_SpawnPoints[i].WinHeight * ViewportScale);
+        }
 
         X = FClamp(1.0 - X - GRI.SpawnPoints[i].SpawnPointIconOffsetMultiplierX * b_SpawnPoints[i].WinWidth * ViewPortScale, 0.0, 1.0);
         Y = FClamp(1.0 - Y - GRI.SpawnPoints[i].SpawnPointIconOffsetMultiplierY * b_SpawnPoints[i].WinHeight * ViewPortScale, 0.0, 1.0);
