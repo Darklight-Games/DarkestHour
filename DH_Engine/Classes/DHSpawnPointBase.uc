@@ -411,20 +411,20 @@ function SetIsActive(bool bIsActive)
 
 simulated function GUIStyles GetStyle(GUIController GUIController, GUI.eFontScale FontScale)
 {
-    return GUIController.GetStyle(SpawnPointStyle, FontScale);
+    return GUIController.GetStyle(GetMapStyleName(), FontScale);
 }
 
 // Override to change the button style for display on the deploy menu.
 simulated function string GetMapStyleName()
 {
-    if (bMainSpawn)
-    {
-        return "DHMainSpawnButtonStyle";
-    }
-
     if (bAirborneSpawn)
     {
         return "DHParatroopersButtonStyle";
+    }
+
+    if (bMainSpawn)
+    {
+        return "DHMainSpawnButtonStyle";
     }
 
     return SpawnPointStyle;
