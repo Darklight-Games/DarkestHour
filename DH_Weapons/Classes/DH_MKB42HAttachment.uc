@@ -159,7 +159,7 @@ defaultproperties
     PA_IronFireLastShot="stand_shootiron_stg44"
     PA_CrouchFireLastShot="crouch_shoot_stg44"
     PA_ProneFireLastShot="prone_shoot_stg44"
-    
+
     PA_BayonetAltFire="stand_stab_kar"
     PA_CrouchBayonetAltFire="crouch_idlestrike_bayo"
     PA_ProneBayonetAltFire="prone_idlestrike_bayo"

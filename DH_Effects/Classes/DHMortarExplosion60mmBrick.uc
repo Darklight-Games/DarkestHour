@@ -49,7 +49,7 @@ defaultproperties
         ColorScale(0)=(Color=(B=128,G=255,R=255,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(R=128,A=255))
         MaxParticles=50
-      
+
         InitialParticlesPerSecond=500.000000
         Texture=Texture'Effects_Tex.fire_quad'
         LifetimeRange=(Min=0.200000,Max=0.750000)
@@ -76,7 +76,7 @@ defaultproperties
         ColorScale(1)=(RelativeTime=1.000000,Color=(B=64,G=128,R=255,A=255))
         ColorScaleRepeats=4.000000
         MaxParticles=100
-      
+
         StartLocationOffset=(Z=20.000000)
         AddLocationFromOtherEmitter=1
         SphereRadiusRange=(Min=20.000000,Max=50.000000)
@@ -107,7 +107,7 @@ defaultproperties
         ColorScale(0)=(Color=(B=128,G=255,R=255,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(R=128,A=255))
         MaxParticles=15
-      
+
         StartSizeRange=(X=(Min=80.000000),Y=(Min=80.000000),Z=(Min=80.000000))
         InitialParticlesPerSecond=500.000000
         Texture=Texture'Effects_Tex.fire_quad'
@@ -190,7 +190,7 @@ defaultproperties
         FadeOutStartTime=0.500000
         FadeInEndTime=0.200000
         MaxParticles=2
-      
+
         StartLocationRange=(X=(Min=-10.000000,Max=10.000000),Y=(Min=-10.000000,Max=10.000000))
         SpinCCWorCW=(X=1.000000)
         SpinsPerSecondRange=(X=(Min=-0.100000,Max=0.100000))
@@ -227,7 +227,7 @@ defaultproperties
         FadeOutStartTime=0.700000
         FadeInEndTime=0.200000
         MaxParticles=4
-      
+
         StartLocationRange=(X=(Min=-150.000000,Max=125.000000),Y=(Min=-100.000000,Max=100.000000),Z=(Min=25.000000,Max=25.000000))
         SpinsPerSecondRange=(X=(Min=0.100000,Max=0.150000))
         SizeScale(0)=(RelativeSize=0.500000)
@@ -256,7 +256,7 @@ defaultproperties
         ColorScale(0)=(Color=(G=128,R=255,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(G=128,R=255,A=255))
         MaxParticles=1
-      
+
         StartLocationOffset=(Z=-50.000000)
         StartSpinRange=(X=(Min=0.500000,Max=0.500000))
         SizeScale(0)=(RelativeSize=0.500000)
@@ -280,7 +280,7 @@ defaultproperties
         ColorScale(0)=(Color=(B=38,G=54,R=100,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(B=38,G=54,R=100,A=255))
         MaxParticles=12
-      
+
         StartLocationRange=(X=(Min=-35.000000,Max=35.000000),Y=(Min=-35.000000,Max=35.000000))
         SpinsPerSecondRange=(X=(Min=0.010000,Max=0.050000))
         SizeScale(0)=(RelativeTime=1.000000,RelativeSize=15.000000)

@@ -205,19 +205,19 @@ function int CheckID(string CDHash)
 // Modified to send localized strings.
 function AdminEntered(PlayerController P, string Username)
 {
-	Log(P.PlayerReplicationInfo.PlayerName @ "logged in as Administrator.");
+    Log(P.PlayerReplicationInfo.PlayerName @ "logged in as Administrator.");
 
     // "<Player Name> logged in as a server administrator."
-	Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', 6, P.PlayerReplicationInfo);
+    Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', 6, P.PlayerReplicationInfo);
 }
 
 // Modified to send localized strings.
 function AdminExited(PlayerController P)
 {
-	Log(P.PlayerReplicationInfo.PlayerName @ "logged out.");
+    Log(P.PlayerReplicationInfo.PlayerName @ "logged out.");
 
     // "<Player Name> gave up administrator abilities."
-	Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', 7, P.PlayerReplicationInfo);
+    Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', 7, P.PlayerReplicationInfo);
 }
 
 defaultproperties

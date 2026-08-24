@@ -675,7 +675,7 @@ simulated function Tick(float DeltaTime)
             Throttle = FClamp(Throttle, -0.5, 0.5);
         }
     }
-    
+
     if (Role == ROLE_Authority)
     {
         // Recalculate the total supply count for our pawn, or -1 if there are
@@ -697,7 +697,7 @@ simulated function Tick(float DeltaTime)
             }
         }
     }
-    
+
     if (Level.NetMode != NM_DedicatedServer)
     {
         VehicleSpeed = Abs(ForwardVel); // don't need VSize(Velocity), as already have ForwardVel
@@ -761,7 +761,7 @@ simulated function Tick(float DeltaTime)
                 RightTreadPanner.PanRate = 0.0;
             }
         }
- 
+
         // Update the dust color.
         UpdateDustColor();
 
@@ -775,7 +775,7 @@ simulated function Tick(float DeltaTime)
     {
         UpdateSteeringAnimation();
     }
-    
+
     super.Tick(DeltaTime);
 
     // Disable Tick if vehicle isn't moving & has no driver
@@ -800,7 +800,7 @@ simulated function UpdateDustColor()
     }
 
     DustColor = Level.DustColor;
-    
+
     if (PhysicsVolume != none && PhysicsVolume.IsA('DHWaterVolume'))
     {
         DustColor = Level.WaterDustColor;
@@ -850,7 +850,7 @@ simulated function InitializeSteeringAnimation()
 simulated function float GetSteeringAnimationTime()
 {
     local float F;
-    
+
     F = (Steering + 1.0) / 2.0;
 
     return F * (SteeringAnimation.FrameCount - 1);
@@ -2294,7 +2294,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
             if (GetTeamNum() != 255 && InstigatorTeam != 255 && GetTeamNum() == InstigatorTeam)
             {
                 bIsFriendlyFire = true;
-                
+
                 // If no one has ever entered the vehicle, then don't allow team damage
                 if (!bDriverAlreadyEntered)
                 {
@@ -2981,7 +2981,7 @@ static function StaticPrecache(LevelInfo L)
             }
         }
     }
-    
+
 
     for (i = 0; i < default.CollisionAttachments.Length; ++i)
     {

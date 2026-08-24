@@ -16,8 +16,6 @@ defaultproperties
     RecoilCurve=(Points=((InVal=0.0,OutVal=0.8),(InVal=3.0,OutVal=1.3),(InVal=12.0,OutVal=1.1),(InVal=10000000000.0,OutVal=1.0)))
     RecoilFallOffFactor=18.0
 
-    
-    
     FireSounds(0)=SoundGroup'DH_WeaponSounds.CarbineFire01'
     FireSounds(1)=SoundGroup'DH_WeaponSounds.CarbineFire02'
     FireSounds(2)=SoundGroup'DH_WeaponSounds.CarbineFire03'

@@ -15,7 +15,7 @@ class DHStyle_MenuTextButton extends GUIStyles;
 defaultproperties
 {
     KeyName="DHMenuTextButtonStyle"
-    
+
     // Small
     FontNames(0)="DHButtonFont"   // Blurry
     FontNames(1)="DHButtonFont"   // Watched

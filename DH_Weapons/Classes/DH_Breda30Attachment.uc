@@ -11,7 +11,7 @@ defaultproperties
     MenuImage=Texture'DH_Breda30_tex.breda30_icon'
 
     bStaticReload=true
-    
+
     mMuzFlashClass=Class'MuzzleFlash3rdSTG'
     ROShellCaseClass=Class'RO3rdShellEject762x54mm'
     MuzzleBoneName="MUZZLE"
@@ -29,7 +29,7 @@ defaultproperties
     WA_CrouchReloadEmpty="reload_crouch_breda"
     WA_ProneReload="reload_prone_breda"
     WA_ProneReloadEmpty="reload_prone_breda"
-    
+
 
     // STAND
 

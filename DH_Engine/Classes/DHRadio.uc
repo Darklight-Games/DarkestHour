@@ -342,7 +342,7 @@ simulated function NotifySelected(Pawn User)
     {
         return;
     }
-    
+
     switch (Error)
     {
         case ERROR_None:

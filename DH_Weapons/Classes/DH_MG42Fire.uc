@@ -32,7 +32,7 @@ defaultproperties
     BipodDeployFireAnim="Shoot_Loop"
     BipodDeployFireLoopAnim="Shoot_Loop"
     BipodDeployFireEndAnim="Shoot_End"
-    
+
     FireEndAnim="hip_Shoot_End"
     FireLoopAnim="Hip_Shoot_loop"
 

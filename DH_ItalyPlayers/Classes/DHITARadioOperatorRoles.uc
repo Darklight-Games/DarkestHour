@@ -30,7 +30,7 @@ defaultproperties
     HeadgearProbabilities(3)=0.05
 
     GivenItems(0)="DH_Equipment.DH_ItalianRadioItem"
-    
+
     Backpacks(0)=(BackpackClass=Class'DH_StazioneRF1Backpack')
 
     DetachedArmClass=Class'DHSeveredArm_ItalianLivorno'

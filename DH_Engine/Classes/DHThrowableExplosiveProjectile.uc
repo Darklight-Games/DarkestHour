@@ -749,7 +749,7 @@ function BlowUp(Vector HitLocation)
         {
             DelayedHurtRadius(Damage, DamageRadius, MyDamageType, MomentumTransfer, HitLocation);
         }
-        
+
         MakeNoise(1.0);
     }
 }

@@ -101,7 +101,7 @@ defaultproperties
     AmmoIgnitionProbability=0.0 // 0 as ammo hitpoints are meant to represent fuel, not explosive ammo
     FireDetonationChance=0.02
     PlayerFireDamagePer2Secs=10.0 //kills a little more slowly than tanks since halftracks are open vehicles, also gives infantry a little more time to reach safety before bailing
-	
+
     // Vehicle destruction
     ExplosionDamage=85.0
     ExplosionRadius=150.0

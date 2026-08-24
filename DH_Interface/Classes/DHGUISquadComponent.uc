@@ -315,7 +315,7 @@ defaultproperties
     b_JoinSquad=JoinSquadButton
 
     OnShow=InternalOnShow
-    
+
     DarkBackgroundColor=(R=128,G=128,B=128,A=255)
     LightBackgroundColor=(R=255,G=255,B=255,A=255)
 }

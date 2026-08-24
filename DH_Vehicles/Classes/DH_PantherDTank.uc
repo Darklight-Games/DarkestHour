@@ -104,7 +104,7 @@ defaultproperties
     WheelRotationScale=81250.0
     ExhaustPipes(0)=(ExhaustPosition=(X=-230.0,Y=20.0,Z=65.0),ExhaustRotation=(Pitch=22000))
     ExhaustPipes(1)=(ExhaustPosition=(X=-230.0,Y=-20.0,Z=65.0),ExhaustRotation=(Pitch=22000))
-    
+
     // HUD
     VehicleHudImage=Texture'DH_InterfaceArt_tex.panther_body'
     VehicleHudTurret=TexRotator'DH_InterfaceArt_tex.panther_turret_rot'

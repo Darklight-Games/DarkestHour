@@ -25,7 +25,7 @@ defaultproperties
     RecoilFallOffFactor=6.0
 
     FlashEmitterClass=Class'MuzzleFlash1stMG'
-    
+
     FireSounds(0)=SoundGroup'DH_WeaponSounds.Bren_Fire01'
     FireSounds(1)=SoundGroup'DH_WeaponSounds.Bren_Fire02'
     FireSounds(2)=SoundGroup'DH_WeaponSounds.Bren_Fire03'
@@ -42,7 +42,7 @@ defaultproperties
     ShellHipOffset=(Y=-7.0)
     ShellRotOffsetIron=(Pitch=-13000)
     ShellRotOffsetHip=(Pitch=-13000)
-    
+
     ShakeOffsetMag=(X=2.0,Y=1.0,Z=2.0)
     ShakeOffsetRate=(X=1000.0,Y=1000.0,Z=1000.0)
     ShakeOffsetTime=1.0

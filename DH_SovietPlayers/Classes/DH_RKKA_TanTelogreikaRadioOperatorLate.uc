@@ -8,11 +8,11 @@ class DH_RKKA_TanTelogreikaRadioOperatorLate extends DHSOVRadioOperatorRoles;
 defaultproperties
 {
     RolePawns(0)=(PawnClass=Class'DH_SovietTanTeloStrapsLatePawn',Weight=1.0)
-	SleeveTexture=Texture'DHSovietCharactersTex.DH_rus_sleeves_tan'
+    SleeveTexture=Texture'DHSovietCharactersTex.DH_rus_sleeves_tan'
     Headgear(0)=Class'DH_SovietSidecap'
     Headgear(1)=Class'DH_SovietFurHat'
 
     HeadgearProbabilities(0)=0.5
     HeadgearProbabilities(1)=0.5
-	Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
+    Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
 }

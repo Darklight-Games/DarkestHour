@@ -1287,7 +1287,7 @@ function DrawVehicleIcon(Canvas Canvas, ROVehicle Vehicle, optional ROVehicleWea
     {
         return;
     }
-    
+
     // Figure where to draw
     Coords.PosX = Canvas.ClipX * VehicleIconCoords.X;
     Coords.Height = Canvas.ClipY * VehicleIconCoords.YL * HudScale;
@@ -2026,7 +2026,7 @@ function DrawSignals(Canvas C)
         {
             Alpha *= 0.5;
         }
-        
+
         // Fade the signal out based on the angle so that it doesn't obscure the view.
         AngleDegrees = Class'UUnits'.static.RadiansToDegrees(Acos(Direction dot ViewDirection));
         Alpha *= Class'UInterp'.static.MapRangeClamped(AngleDegrees, 2.0, 5.0, 0.0, 1.0);
@@ -2035,7 +2035,7 @@ function DrawSignals(Canvas C)
         TimeRemaining = PC.Signals[i].SignalClass.default.DurationSeconds - T;
         const FADE_DURATION = 0.5;
         Alpha *= Class'UInterp'.static.MapRangeClamped(TimeRemaining, 0.0, FADE_DURATION, 0.0, 1.0);
-        
+
         // Set the minimum alpha so that the signal is always visible for the first few moments.
         AlphaMin = Class'UInterp'.static.MapRangeClamped(T, SignalNewTimeSeconds, SignalNewTimeSeconds + FADE_DURATION, 1.0, 0.0);
 
@@ -3392,7 +3392,7 @@ function DrawMap(Canvas C, AbsoluteCoordsInfo SubCoords, DHPlayer Player, Box Vi
     {
         OwnerTeam = 255;
     }
-    
+
     // Draw objectives
     LevelInfo = Class'DH_LevelInfo'.static.GetInstance(Player.Level);
     AxisNationClass = LevelInfo.GetTeamNationClass(AXIS_TEAM_INDEX);
@@ -3752,7 +3752,7 @@ function DrawMap(Canvas C, AbsoluteCoordsInfo SubCoords, DHPlayer Player, Box Vi
 
             ObjLabel = "[" $ i $ "]" @
                         "B" @  DHGRI.SpawnPoints[i].BaseInfluenceModifier;
-                    
+
             DHDrawIconOnMap(C, SubCoords, MapIconTeam[DHGRI.SpawnPoints[i].GetTeamIndex()], MyMapScale, DHGRI.SpawnPoints[i].Location, MapCenter, Viewport, 1, ObjLabel, DHGRI);
         }
     }
@@ -4011,7 +4011,7 @@ function DrawPlayerIconsOnMap(Canvas C, AbsoluteCoordsInfo SubCoords, float MyMa
         PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
         SRI = PC.SquadReplicationInfo;
     }
-    
+
     // Set the font to be used to draw player icons.
     C.Font = Class'DHFonts'.static.GetDHTinyFontByResolution(C.ClipX, C.ClipY);
 
@@ -4316,7 +4316,7 @@ function UpdateHud()
                 StanceIcon.WidgetTexture = StanceStanding;
             }
         }
-        
+
         HealthFigureClass = GetHealthFigureClass();
 
         if (HealthFigureClass != none)
@@ -5946,46 +5946,46 @@ function DHDrawTypingPrompt(Canvas C)
 // Modified from ROHud to pass the right name of the weapon and fix the font.
 simulated function DrawWeaponName(Canvas C)
 {
-	local string CurWeaponName;
-	local float XL,YL, Fade;
+    local string CurWeaponName;
+    local float XL,YL, Fade;
 
-	if (bHideWeaponName)
+    if (bHideWeaponName)
     {
-		return;
+        return;
     }
 
-	if (WeaponDrawTimer>Level.TimeSeconds)
-	{
-		C.DrawColor = WhiteColor;
-		C.Font = GetMediumFontFor(C);
-		C.TextSize(CurWeaponName, XL, YL);
+    if (WeaponDrawTimer>Level.TimeSeconds)
+    {
+        C.DrawColor = WhiteColor;
+        C.Font = GetMediumFontFor(C);
+        C.TextSize(CurWeaponName, XL, YL);
 
-		Fade = WeaponDrawTimer - Level.TimeSeconds;
+        Fade = WeaponDrawTimer - Level.TimeSeconds;
 
-		if (Fade <= 1)
+        if (Fade <= 1)
         {
             C.DrawColor.A = 255 * Fade;
         }
 
-		C.StrLen(LastWeaponName, XL, YL);
-		C.SetPos((C.ClipX / 2) - (XL / 2), C.ClipY * 0.8 - YL);
-		C.DrawText(LastWeaponName);
-	}
-
-	if (PawnOwner == none || PawnOwner.PendingWeapon == none)
-    {
-		return;
+        C.StrLen(LastWeaponName, XL, YL);
+        C.SetPos((C.ClipX / 2) - (XL / 2), C.ClipY * 0.8 - YL);
+        C.DrawText(LastWeaponName);
     }
 
-	CurWeaponName = Class'DHPlayer'.static.GetInventoryName(PawnOwner.PendingWeapon.Class);
+    if (PawnOwner == none || PawnOwner.PendingWeapon == none)
+    {
+        return;
+    }
 
-	if (CurWeaponName != LastWeaponName)
-	{
-		WeaponDrawTimer = Level.TimeSeconds + 1.5;
-		WeaponDrawColor = PawnOwner.PendingWeapon.HudColor;
-	}
+    CurWeaponName = Class'DHPlayer'.static.GetInventoryName(PawnOwner.PendingWeapon.Class);
 
-   	LastWeaponName = CurWeaponName;
+    if (CurWeaponName != LastWeaponName)
+    {
+        WeaponDrawTimer = Level.TimeSeconds + 1.5;
+        WeaponDrawColor = PawnOwner.PendingWeapon.HudColor;
+    }
+
+    LastWeaponName = CurWeaponName;
 }
 
 defaultproperties
@@ -6196,5 +6196,5 @@ defaultproperties
     PrereleaseDisclaimerText="This is a pre-release build. All content is subject to change."
 
     PortraitText(0)=(Text="",PosX=0.0,PosY=0.5,WrapWidth=0,WrapHeight=0,OffsetX=8,OffsetY=0,DrawPivot=DP_LowerLeft,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=255,B=255,A=255),Tints[1]=(R=255,G=255,B=255,A=255))
-	PortraitText(1)=(Text="",PosX=0.0,PosY=0.5,WrapWidth=0,WrapHeight=0,OffsetX=8,OffsetY=0,DrawPivot=DP_UpperLeft,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=255,B=255,A=255),Tints[1]=(R=255,G=255,B=255,A=255))
+    PortraitText(1)=(Text="",PosX=0.0,PosY=0.5,WrapWidth=0,WrapHeight=0,OffsetX=8,OffsetY=0,DrawPivot=DP_UpperLeft,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=255,B=255,A=255),Tints[1]=(R=255,G=255,B=255,A=255))
 }

@@ -16,5 +16,4 @@ defaultproperties
     ShakeRotMag=(X=50.0,Y=50.0,Z=400.0)
     ShakeRotTime=5.0
     AimError=500.0
-    
 }

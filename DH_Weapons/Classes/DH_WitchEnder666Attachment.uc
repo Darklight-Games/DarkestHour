@@ -59,7 +59,7 @@ defaultproperties
     PA_ProneReloadEmptyAnim="prone_reload_single_1897"
     PA_PostReloadAnim="reload_end_1897"
     PA_PronePostReloadAnim="prone_reload_end_1897"
-    
+
     //movement animations
     PA_MovementAnims(0)="stand_jogF_1897"
     PA_MovementAnims(1)="stand_jogB_1897"
@@ -136,7 +136,7 @@ defaultproperties
     PA_TurnIronRightAnim="stand_turnRiron_kar"
     PA_TurnIronLeftAnim="stand_turnLiron_kar"
     PA_ProneTurnRightAnim="prone_turnR_1987"
-	PA_ProneTurnLeftAnim="prone_turnL_1987"
+    PA_ProneTurnLeftAnim="prone_turnL_1987"
 
     //intermission anims
     PA_StandToProneAnim="StandtoProne_1897"
@@ -251,7 +251,7 @@ defaultproperties
     PA_SprintHoldBash(5)="stand_sprintFRholdbash_axe"
     PA_SprintHoldBash(6)="stand_sprintBLholdbash_axe"
     PA_SprintHoldBash(7)="stand_sprintBRholdbash_axe"
-    
+
     PA_SprintCrouchHoldBash(0)="crouch_sprintFholdbash_axe"
     PA_SprintCrouchHoldBash(1)="crouch_sprintBholdbash_axe"
     PA_SprintCrouchHoldBash(2)="crouch_sprintLholdbash_axe"

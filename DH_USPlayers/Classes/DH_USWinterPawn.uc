@@ -22,7 +22,7 @@ defaultproperties
     Skins(1)=Texture'DHUSCharactersTex.GI_Variant_Jacket'
 
 // Same texture declared twice as this role has only one texture variant, necessary due to AmericanPawn inheritance
-	BodySkins(0)=Texture'DHUSCharactersTex.GI_Variant_Jacket'
+    BodySkins(0)=Texture'DHUSCharactersTex.GI_Variant_Jacket'
     BodySkins(1)=Texture'DHUSCharactersTex.GI_Variant_Jacket'
 
     bReversedSkinsSlots=true

@@ -11,7 +11,7 @@ defaultproperties
     MaxSpeed=8962.5
     LifeSpan=20.0
     SpeedFudgeScale=1.0
-    
+
     HitMapMarkerClass=Class'DHMapMarker_ArtilleryHit_Smoke'
     GasDamageClass=Class'DHShellSmokeWPGasDamageType_Artillery'
 

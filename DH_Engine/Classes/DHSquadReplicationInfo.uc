@@ -228,7 +228,7 @@ private function SendJoinSquadNagMessage()
     for (C = Level.ControllerList; C != none; C = C.nextController)
     {
         PC = DHPlayer(C);
-        
+
         if (PC != none && !PC.IsInSquad())
         {
             PC.ReceiveLocalizedMessage(SquadMessageClass, 73,,, PC);
@@ -289,7 +289,7 @@ private function UpdateSquadMemberLocations(DHPlayer PC)
     local DHPlayerReplicationInfo PRI, OtherPRI;
     local Controller OtherController;
     local float X, Y;
-    
+
     PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
 
     // We want our player to know where his squadmates are at all times by
@@ -564,7 +564,7 @@ function ResetSquadRallyPoints()
             RallyPoints[i] = none;
         }
     }
-    
+
     ResetSquadNextRallyPointTimes();
 }
 
@@ -1305,16 +1305,16 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
             return -1;
         }
     }
-    
+
     MemberIndex = GetEmptySquadMemberIndex(TeamIndex, SquadIndex);
-    
+
     if (MemberIndex >= 0)
     {
         // Leave the squad, but do not invalidate the role within LeaveSquad.
         LeaveSquad(PRI, false, true);
 
         SetMember(TeamIndex, SquadIndex, MemberIndex, PRI);
-        
+
         if (!bIsQuiet)
         {
             // "{0} has joined the squad"
@@ -1729,7 +1729,7 @@ private simulated function DHGameReplicationInfo GetGameReplicationInfo()
     {
         return GRI;
     }
-    
+
     PC = Level.GetLocalPlayerController();
 
     if (PC != none)
@@ -3220,7 +3220,7 @@ function ESquadPromotionRequestResult SendSquadPromotionRequest(DHPlayerReplicat
     local SquadPromotionRequest PR;
     local DHPlayer SenderPC, RecipientPC;
     local int i;
-    
+
     if (!IsSquadLeader(SenderPRI, TeamIndex, SquadIndex) || !IsInSquad(RecipientPRI, TeamIndex, SquadIndex))
     {
         return SPPR_Fatal;
@@ -3241,7 +3241,7 @@ function ESquadPromotionRequestResult SendSquadPromotionRequest(DHPlayerReplicat
     {
         return SPPR_Fatal;
     }
-    
+
     for (i = 0; i < SquadPromotionRequests.Length; ++i)
     {
         if (SquadPromotionRequests[i].TeamIndex == TeamIndex &&
@@ -3313,7 +3313,7 @@ function bool DenySquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionReq
     local int SquadPromotionRequestIndex;
     local SquadPromotionRequest SPR;
     local PlayerController PC;
-    
+
     SquadPromotionRequestIndex = GetSquadPromotionRequestIndexByID(SquadPromotionRequestID);
 
     if (SquadPromotionRequestIndex == -1)
@@ -3354,7 +3354,7 @@ function bool AcceptSquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionR
     }
 
     SPR = SquadPromotionRequests[SquadPromotionRequestIndex];
-    
+
     if (!IsSquadPromotionRequestValid(SPR))
     {
         return false;

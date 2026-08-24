@@ -97,7 +97,7 @@ replication
     // Variables the server will replicate to the client that owns this actor
     reliable if (bNetOwner && bNetDirty && Role == ROLE_Authority)
         MainAmmoChargeExtra, NumSmokeLauncherRounds, SmokeLauncherAdjustmentSetting;
-    
+
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
         TotalRoundsRemaining;
@@ -1865,7 +1865,7 @@ simulated function CalcWeaponFire(bool bWasAltFire)
     }
 
     WeaponFireLocation = GetBoneCoords(WeaponFireAttachBone).Origin;
-    
+
     if (CurrentFireOffset != vect(0.0, 0.0, 0.0)) // apply any positional offset
     {
         WeaponFireLocation += CurrentFireOffset >> WeaponFireRotation;

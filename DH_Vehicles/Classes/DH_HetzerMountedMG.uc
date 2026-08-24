@@ -61,14 +61,14 @@ simulated function StartReload(optional bool bResumingPausedReload)
 {
     // We never resume from a paused reload on the Hetzer.
     super.StartReload(false);
-    
+
     PlayReloadAnimations();
 }
 
 simulated function PauseReload()
 {
     super.PauseReload();
-    
+
     StopReloadAnimations();
 }
 

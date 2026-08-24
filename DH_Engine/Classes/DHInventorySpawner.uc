@@ -361,7 +361,7 @@ simulated event Destroyed()
 static function string GetMenuName(DHPlayer PC)
 {
     local string S;
-    
+
     S = default.MenuNameFormat;
     S = Repl(S, "{name}", PC.GetInventoryName(default.WeaponClass));
     S = Repl(S, "{noun}", default.MenuNoun);

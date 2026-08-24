@@ -7,7 +7,7 @@ class DHStyle_SquareButton extends ROSTY2SquareButton;
 
 defaultproperties
 {
-	FontNames(0)="DHSmallFont"
+    FontNames(0)="DHSmallFont"
     FontNames(1)="DHSmallFont"
     FontNames(2)="DHSmallFont"
     FontNames(3)="DHSmallFont"

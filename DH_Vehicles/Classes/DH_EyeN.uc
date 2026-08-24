@@ -17,8 +17,8 @@ defaultproperties
      //LightRadius=555
      //LightBrightness=200
      //LightPeriod=2
-     //bLightingVisibility=True 
-     
+     //bLightingVisibility=True
+
      VehicleNameString="Nefarious Eye"
      Mesh=SkeletalMesh'DH_UFO_anm.EyeBody'
      Skins(0)=Texture'DH_UFO_tex.UFO.EyeA'

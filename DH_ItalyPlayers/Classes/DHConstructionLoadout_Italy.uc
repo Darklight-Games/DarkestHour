@@ -9,7 +9,7 @@ class DHConstructionLoadout_Italy extends DHConstructionLoadout
 defaultproperties
 {
     Loadouts(0)=Class'DHConstructionLoadout_Sandbags'
-    
+
     // Logistics
     Constructions(0)=(ConstructionClass=Class'DHConstruction_SupplyCache_Italy',Limit=-1,MaxActive=-1)
     Constructions(1)=(ConstructionClass=Class'DHConstruction_PlatoonHQ_Italy',Limit=-1,MaxActive=5)

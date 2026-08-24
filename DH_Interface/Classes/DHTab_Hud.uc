@@ -98,7 +98,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             }
             ch_UseTechnicalAmmoNames.SetComponentValue(bUseTechnicalAmmoNames,true);
             break;
-            
+
         case ch_UseNativeItemNames:
             if (H != none)
             {
@@ -273,7 +273,7 @@ function SaveSettings()
             PC.ConsoleCommand("set DH_Engine.DHPlayer bUseNativeItemNames" @ string(bUseNativeItemNames));
             bSave = true;
         }
-        
+
         if (bSave)
         {
             H.SaveConfig();

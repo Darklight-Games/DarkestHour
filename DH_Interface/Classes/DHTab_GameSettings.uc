@@ -124,11 +124,11 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
         case ch_BayonetAtStart:
             ch_BayonetAtStart.Checked(PlayerOwner().ConsoleCommand("get DH_Engine.DHPlayer bSpawnWithBayonet"));
             break;
-        
+
         case co_AutomaticVehicleAlerts:
             co_AutomaticVehicleAlerts.SetIndex(int(PlayerOwner().ConsoleCommand("get DH_Engine.DHPlayer AutomaticVehicleAlerts")));
             break;
-        
+
         // Incognito
         case ch_Incognito:
             if (DHPlayer(PC) != none)
@@ -383,7 +383,7 @@ function SaveSettings()
             DHP.SetLockTankOnEntry(bLockTankOnEntry);
             bSaveConfig = true;
         }
-        
+
         if (DHP.AutomaticVehicleAlerts != AutomaticVehicleAlerts)
         {
             DHP.AutomaticVehicleAlerts = AutomaticVehicleAlerts;
@@ -423,7 +423,7 @@ function SaveSettings()
             Class'DHPlayer'.default.bLockTankOnEntry = bLockTankOnEntry;
             bStaticSaveConfig = true;
         }
-        
+
         if (Class'DHPlayer'.default.AutomaticVehicleAlerts != AutomaticVehicleAlerts)
         {
             Class'DHPlayer'.default.AutomaticVehicleAlerts = AutomaticVehicleAlerts;

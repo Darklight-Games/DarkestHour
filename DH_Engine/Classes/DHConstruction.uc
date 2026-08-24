@@ -1221,7 +1221,7 @@ static function ConstructionError GetPlayerError(DHActorProxy.Context Context)
         E.OptionalInteger = default.SquadMemberCountMinimum;
         return E;
     }
-    
+
     if (!P.CanPlaceConstruction())
     {
         E.Type = ERROR_NoSquadmatesNearby;

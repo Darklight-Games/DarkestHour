@@ -36,7 +36,7 @@ simulated function SetAttachmentsHidden(bool bNewHidden)
 function OnReloadFinished(int AmmoIndex)
 {
     bIsHEATLoaded = AmmoIndex == 2;
-    
+
     if (Level.NetMode == NM_Standalone)
     {
         SetAttachmentsHidden(!bIsHEATLoaded);
@@ -53,7 +53,7 @@ simulated function PostNetReceive()
 simulated function FlashMuzzleFlash(bool bWasAltFire)
 {
     super.FlashMuzzleFlash(bWasAltFire);
-    
+
     if (Level.NetMode != NM_DedicatedServer)
     {
         SetAttachmentsHidden(true);

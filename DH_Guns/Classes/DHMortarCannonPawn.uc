@@ -171,7 +171,7 @@ simulated function InitializeHands()
     HandsActor.SetSkins(DHPlayer(Controller));
 
     HandsActor.bHidden = true;
-    
+
     Gun.AttachToBone(HandsActor, HandsAttachBone);
 
     HandsActor.SetRelativeLocation(HandsRelativeLocation);
@@ -236,7 +236,7 @@ simulated function Fire(optional float F)
     if (VehWep != none)
     {
         VehWep.CalcWeaponFire(false);
-        
+
         if (VehWep.IsMuzzleObstructed())
         {
             // Send a message to the user that the gun is obstructed.
@@ -320,7 +320,7 @@ simulated function PlayThirdPersonFiringAnim()
     ProjectileMesh.SetStaticMesh(FiringProjectileMesh);
 
     Driver.AttachToBone(ProjectileMesh, 'weapon_rhand');
-    
+
     ProjectileMesh.SetRelativeLocation(vect(0, 0, 0));
     ProjectileMesh.SetRelativeRotation(rot(0, 0, 0));
     ProjectileMesh.LifeSpan = ProjectileLifeSpan;
@@ -417,7 +417,7 @@ simulated state Firing
     {
         local DHPlayer PC;
         local Rotator ProjectileRelativeRotation;
-        
+
         PC = DHPlayer(Controller);
 
         if (IsLocallyControlled())

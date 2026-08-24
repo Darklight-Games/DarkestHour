@@ -375,7 +375,7 @@ function bool GetSpawnPosition(out Vector SpawnLocation, out Rotator SpawnRotati
 
 /*
         LocationHintTag = SM.GetVehiclePoolLocationHintTag(VehiclePoolIndex);
-        
+
         if (LocationHintTag != '')
         {
             // The vehicle pool has a location hint tag.
@@ -450,7 +450,7 @@ function bool GetSpawnPosition(out Vector SpawnLocation, out Rotator SpawnRotati
             bIsBlocked = true;
             break;
         }
-        
+
         for (k = 0; k < EnemyLocations.Length; ++k)
         {
             // Location hint has enemies nearby, so mark it as blocked.
@@ -495,7 +495,7 @@ function bool GetSpawnPosition(out Vector SpawnLocation, out Rotator SpawnRotati
 function OnPawnSpawned(Pawn P)
 {
     super.OnPawnSpawned(P);
-    
+
     // Increment the location hint index offset.
     if (P.IsA('Vehicle'))
     {
@@ -505,7 +505,7 @@ function OnPawnSpawned(Pawn P)
     {
         ++InfantryLocationHintIndexOffset;
     }
-    
+
     if (HasLimitedSpawns())
     {
         --SpawnsRemaining;

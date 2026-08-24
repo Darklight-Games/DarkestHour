@@ -115,7 +115,7 @@ simulated function EDeployError GetDeployError(DHPawn P)
     {
         return DE_Fatal;
     }
-    
+
     // Can't deploy if we're in water
     if (P.PhysicsVolume.bWaterVolume || P.PhysicsVolume.bPainCausing)
     {
@@ -139,7 +139,7 @@ simulated function EDeployError GetDeployError(DHPawn P)
     {
         return DE_Leaning;
     }
-    
+
     // Check we're standing on a level, static surface, by tracing straight downwards to see what we're standing on
     TraceStart = P.Location;
     TraceEnd = TraceStart - vect(0.0, 0.0, 128.0);
@@ -192,7 +192,7 @@ simulated function EDeployError GetDeployError(DHPawn P)
             }
         }
     }
-    
+
     return DE_None;
 }
 

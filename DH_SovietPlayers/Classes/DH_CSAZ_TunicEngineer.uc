@@ -14,7 +14,7 @@ defaultproperties
     Headgear(1)=Class'DH_BritishTommyHelmet'
     Headgear(2)=Class'DH_SovietHelmet'
     SleeveTexture=Texture'Weapons1st_tex.russian_sleeves'
-    
+
     HeadgearProbabilities(0)=0.6
     HeadgearProbabilities(1)=0.2
     HeadgearProbabilities(2)=0.2

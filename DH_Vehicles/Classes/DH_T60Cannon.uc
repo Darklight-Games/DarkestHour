@@ -13,7 +13,7 @@ defaultproperties
     HighDetailOverlay=Material'allies_vehicles_tex.T60_int_s'
     bUseHighDetailOverlayIndex=true
     HighDetailOverlayIndex=1
-    
+
     // Turret armor
     FrontArmorFactor=2.5
     RightArmorFactor=2.5

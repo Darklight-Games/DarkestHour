@@ -44,7 +44,7 @@ defaultproperties
     DHPenetrationTable(9)=0.5
     DHPenetrationTable(10)=0.3
 
-	//below is very approximate, i just added 20% above ausf L values
+    //below is very approximate, i just added 20% above ausf L values
 
     MechanicalRanges(1)=(Range=100,RangeValue=9.6)
     MechanicalRanges(2)=(Range=200,RangeValue=22.0)

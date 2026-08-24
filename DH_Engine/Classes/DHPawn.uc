@@ -622,7 +622,7 @@ simulated event AnimEnd(int Channel)
                 }
                 else
                 {
-		    // TODO: Add deployed idle empty
+                    // TODO: Add deployed idle empty
                     if (WA.bOutOfAmmo && WA.WA_IdleEmpty != '' && Anim != WA.WA_ReloadEmpty)
                     {
                         WA.LoopAnim(WA.WA_IdleEmpty);
@@ -5364,14 +5364,14 @@ function int LimitPitch(int Pitch, optional float DeltaTime)
 // for calculating the weapon location during leaning, going prone, etc.
 simulated function Vector CalcDrawOffset(Inventory Inv)
 {
-	local Vector DrawOffset;
+    local Vector DrawOffset;
 
-	if (Controller == none)
+    if (Controller == none)
     {
-		return (Inv.PlayerViewOffset >> Rotation) + BaseEyeHeight * vect(0,0,1);
+        return (Inv.PlayerViewOffset >> Rotation) + BaseEyeHeight * vect(0,0,1);
     }
 
-	DrawOffset = (0.9 / Weapon.DisplayFOV * 100 * ModifiedPlayerViewOffset(Inv)) >> GetViewRotation();
+    DrawOffset = (0.9 / Weapon.DisplayFOV * 100 * ModifiedPlayerViewOffset(Inv)) >> GetViewRotation();
 
     DrawOffset += EyePosition();
 
@@ -5382,7 +5382,7 @@ simulated function Vector CalcDrawOffset(Inventory Inv)
         DrawOffset += CameraShake();
     }
 
-	return DrawOffset;
+    return DrawOffset;
 }
 
 // Returns true if the player can switch the prone state - only valid on the client.
@@ -5688,7 +5688,7 @@ function bool ResupplyMissingGrenadesAndItems(int TimeSeconds)
         {
             continue;
         }
-        
+
         WeaponClass = class<DHWeapon>(DynamicLoadObject(string(RI.SecondaryWeapons[i].Item), Class'Class'));
 
         if (WeaponClass != none && FindInventoryType(WeaponClass) != none)
@@ -5696,7 +5696,7 @@ function bool ResupplyMissingGrenadesAndItems(int TimeSeconds)
             // We already have this weapon.
             continue;
         }
-        
+
         if (WeaponClass.default.bCanResupplyWhenEmpty)
         {
             ServerGiveWeapon(string(RI.SecondaryWeapons[i].Item), WeaponClass, false);
@@ -6955,7 +6955,7 @@ exec function SetFlySpeed(float NewSpeed)
 exec function GimmeSupplies()
 {
     local DH_LevelInfo LI;
-    
+
     LI = Class'DH_LevelInfo'.static.GetInstance(Level);
 
     if (LI != none)

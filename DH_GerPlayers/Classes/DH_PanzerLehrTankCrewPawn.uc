@@ -10,6 +10,6 @@ defaultproperties
     Mesh=SkeletalMesh'DHCharactersGER_anm.Ger_TankCrew'
     Skins(0)=Texture'DHGermanCharactersTex.Panzer_Lehr_01'
     Skins(1)=Texture'Characters_tex.ger_face01'
-	Skins(3)=Texture'Gear_tex.ger_ammo'
+    Skins(3)=Texture'Gear_tex.ger_ammo'
     bReversedSkinsSlots=false
 }

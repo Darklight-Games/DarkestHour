@@ -146,7 +146,7 @@ function Vector GetProjectileFireLocation(class<Projectile> ProjClass)
     {
         return GetBoneCoords(Barrels[FiringBarrelIndex].MuzzleBone).Origin + ((WeaponFireOffset * vect(1.0, 0.0, 0.0)) >> WeaponFireRotation);
     }
-    
+
     return super.GetProjectileFireLocation(ProjClass);
 }
 

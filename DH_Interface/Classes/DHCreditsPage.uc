@@ -200,7 +200,7 @@ defaultproperties
     Programmers(9)="Teufelhund"
     Programmers(10)="Fennich_FJR6"
     Programmers(11)="jmoney"
-    
+
     Modelers(0)="RustIronCrowe"
     Modelers(1)="Apekop"
     Modelers(2)="Coyote Ninja"
@@ -249,7 +249,7 @@ defaultproperties
     Artists(4)="Patison"
     Artists(5)="Seven"
     Artists(6)="Napoleon Blownapart"
-    
+
     Animators(0)="Exocet"
     Animators(1)="Mike Munk (TWI)"
     Animators(2)="TT33"
@@ -316,7 +316,7 @@ defaultproperties
     CommunityAdmins(1)="toaster"
     CommunityAdmins(2)="Sugardust"
     CommunityAdmins(3)="Wittmann"
-    
+
     PastPatreonSupporters(0)="-[SiN]-Titus"
     PastPatreonSupporters(1)=".Reflected."
     PastPatreonSupporters(2)="[DNR]Gun4hire"
@@ -349,7 +349,7 @@ defaultproperties
     PastPatreonSupporters(29)="Saferight"
     PastPatreonSupporters(30)="Sean Gift"
     PastPatreonSupporters(31)="Zhang Han"
-    
+
     OtherContributors(0)="After-Hourz Gaming Network"
     OtherContributors(1)="All the lads from Splat"
     OtherContributors(2)="The Wild Bunch"
@@ -363,7 +363,7 @@ defaultproperties
     OtherContributors(10)="Good Guys Gaming Community"
     OtherContributors(11)="ChrisMo1944"
     OtherContributors(12)="Metallicafan212 for the fix to the SDK selection bug"
-    
+
     SpecialThanks(0)="A huge thanks goes out to all the former members of the Darklight Games team. Without their years of hard work, we would never have made it to this point. We're eternally grateful."
     SpecialThanks(1)="All of our testers over the years. You've helped create a (mostly) bug free experience!"
     SpecialThanks(2)="Alan, John, Dayle & all the guys at Tripwire Interactive for their assistance, support, and of course for the game that we all love so much."

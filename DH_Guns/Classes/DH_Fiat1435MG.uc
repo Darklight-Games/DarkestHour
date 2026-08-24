@@ -96,7 +96,7 @@ replication
 simulated function OnSwitchMesh()
 {
     super.OnSwitchMesh();
-    
+
     SetupAnimationDrivers();
     InitializeAmmoRounds();
     UpdateClip();
@@ -174,7 +174,7 @@ function Fire(Controller C)
     local Actor ShellEjectActor;
 
     super.Fire(C);
-    
+
     StartFiringAnimation();
 
     // TODO: make sure this will work in multiplayer; only have this run on the client. server doesn't care.
@@ -192,7 +192,7 @@ function Fire(Controller C)
             ShellEjectActor.bOwnerNoSee = false;
         }
     }
-    
+
     UpdateClip();
 }
 
@@ -242,7 +242,7 @@ simulated state Reloading
     // Don't allow the player to change the range while reloading.
     simulated function DecrementRange();
     simulated function IncrementRange();
-    
+
     simulated function BeginState()
     {
         local DH_Fiat1435MGPawn MGPawn;
@@ -361,7 +361,7 @@ simulated function UpdateRangeDriver()
     {
         return;
     }
-    
+
     FreezeAnimAt(RangeDriverAnimationFrame, RangeDriverChannel);
 }
 
@@ -489,7 +489,7 @@ defaultproperties
     RangeDriverAnimFrameCount=10
     RangeDriverChannel=1
     RangeDriverBone="REAR_SIGHT"
-    
+
     RangeTable(0)=(Range=100.0,AnimationTime=0.120)
     RangeTable(1)=(Range=200.0,AnimationTime=0.135)
     RangeTable(2)=(Range=300.0,AnimationTime=0.150)

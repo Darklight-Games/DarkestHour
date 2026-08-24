@@ -39,7 +39,7 @@ simulated function PostNetBeginPlay()
 function DHPlayerReplicationInfo GetPrimaryOccupant()
 {
     local ROVehicle V;
-	local int i;
+    local int i;
 
     V = ROVehicle(AttachedTo);
 
@@ -48,21 +48,21 @@ function DHPlayerReplicationInfo GetPrimaryOccupant()
         return DHPlayerReplicationInfo(V.Controller.PlayerReplicationInfo);
     }
 
-	for (i = 0; i < V.WeaponPawns.Length; i++)
+    for (i = 0; i < V.WeaponPawns.Length; i++)
     {
-		if (V.WeaponPawns[i] != none && V.WeaponPawns[i].Controller != none && !V.WeaponPawns[i].IsA('DHPassengerPawn'))
+        if (V.WeaponPawns[i] != none && V.WeaponPawns[i].Controller != none && !V.WeaponPawns[i].IsA('DHPassengerPawn'))
         {
-			return DHPlayerReplicationInfo(V.WeaponPawns[i].PlayerReplicationInfo);
+            return DHPlayerReplicationInfo(V.WeaponPawns[i].PlayerReplicationInfo);
         }
     }
-    
+
     return none;
 }
 
 function Timer()
 {
     super.Timer();
-    
+
     DriverPRI = GetPrimaryOccupant();
 }
 

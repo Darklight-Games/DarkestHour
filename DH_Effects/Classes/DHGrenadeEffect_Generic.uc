@@ -44,7 +44,7 @@ defaultproperties
         Opacity=0.700000
         FadeOutStartTime=1.50000 // was 1.38
         MaxParticles=12
-      
+
         StartLocationOffset=(X=10.000000,Y=10.000000,Z=-0.300000)
         StartLocationRange=(Z=(Max=15.000000))
         SpinsPerSecondRange=(X=(Min=0.050000,Max=0.100000))
@@ -82,7 +82,7 @@ defaultproperties
         Opacity=0.700000
         FadeOutStartTime=1.30000 // was 1.38
         MaxParticles=12 // was 9
-      
+
         StartLocationRange=(X=(Min=-30.000000,Max=30.000000),Y=(Min=-30.000000,Max=30.000000),Z=(Min=0.000000,Max=0.000000)) //Start Z set to 0, instead of -200
         SpinsPerSecondRange=(X=(Min=0.050000,Max=0.100000))
         StartSpinRange=(X=(Min=-1.000000,Max=1.000000))
@@ -118,7 +118,7 @@ defaultproperties
         ColorScale(1)=(RelativeTime=1.000000,Color=(B=128,G=128,R=128,A=255))
         FadeOutStartTime=0.025000
         MaxParticles=15 // was 8
-      
+
         StartSizeRange=(X=(Min=1.3,Max=2.8),Y=(Min=1.3,Max=2.8),Z=(Min=5.000000,Max=6.000000)) //increased size
         InitialParticlesPerSecond=64.000000
         DrawStyle=PTDS_AlphaBlend
@@ -152,7 +152,7 @@ defaultproperties
         FadeInEndTime=0.360000
         CoordinateSystem=PTCS_Relative
         MaxParticles=5
-      
+
         StartLocationRange=(X=(Min=-30.000000,Max=30.000000),Y=(Min=-30.000000,Max=30.000000))
         StartLocationShape=PTLS_Sphere
         SpinsPerSecondRange=(X=(Min=0.050000,Max=0.100000))
@@ -213,7 +213,7 @@ defaultproperties
         ColorScale(0)=(Color=(B=255,G=255,R=255,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(B=255,G=255,R=255,A=255))
         MaxParticles=20 //Was 12
-      
+
         StartLocationRange=(Z=(Min=100.000000,Max=200.000000))
         StartSizeRange=(X=(Min=0.000000,Max=0.000000),Y=(Min=0.000000,Max=0.000000),Z=(Min=0.000000,Max=0.000000))
         LifetimeRange=(Min=0.500000,Max=0.70000) // was 0.2
@@ -235,7 +235,7 @@ defaultproperties
         Opacity=0.450000
         FadeOutStartTime=0.285000
         MaxParticles=20 //Was 12
-      
+
         SpinsPerSecondRange=(X=(Max=0.050000))
         StartSpinRange=(X=(Min=-1.000000,Max=1.000000))
         SizeScale(0)=(RelativeTime=1.000000,RelativeSize=15.000000)
@@ -250,7 +250,7 @@ defaultproperties
 
     AutoDestroy=True
     bNoDelete=False
-   
+
    // Light Flash
    bUseFlash=true
 

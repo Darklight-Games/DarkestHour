@@ -85,7 +85,7 @@ defaultproperties
 {
     MyDamageType=Class'DHMortarDamageType'
     MomentumTransfer=75000.0
-    
+
     ImpactEffect=Class'DHMortarHitEffect' //default for 60mm HE projectile
 
     HitMapMarkerClass=Class'DHMapMarker_ArtilleryHit_HE'

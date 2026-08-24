@@ -590,7 +590,7 @@ function UpdateVehicles(optional bool bShowAlert)
             li_Vehicles.SetIndex(0);
         }
     }
-    
+
     // Update the max vehicles number as well.
     l_MaxVehicles.Caption = string(Max(0, GRI.GetReservableTankCount(CurrentTeam)));
 
@@ -671,7 +671,7 @@ function UpdateRoles()
                 S @= "*" $ RoleLockedText $ "*";
                 break;
         }
-        
+
         li_Roles.SetItemAtIndex(i, S);
         li_Roles.SetDisabledAtIndex(i, RoleEnabledResult != RER_Enabled);
     }

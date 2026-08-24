@@ -13,7 +13,7 @@ defaultproperties
     MapIconMaterial=Texture'DH_GUI_tex.supply_point'
 
     Mesh=SkeletalMesh'DH_AutocarrettaOM_anm.OM33_BODY_SUPPORT_EXT'
-    
+
     RandomAttachmentGroups(0)=(Options=((Probability=0.9,Attachment=(AttachBone="BODY",StaticMesh=StaticMesh'DH_AutocarrettaOM_stc.OM33_WINDSHIELD'))))
     RandomAttachmentGroups(1)=(Options=((Probability=0.75,Attachment=(AttachBone="BODY",StaticMesh=StaticMesh'DH_AutocarrettaOM_stc.OM33_ROOF_CABIN'))))
     RandomAttachmentGroups(2)=(Dependencies=((GroupIndex=0,OptionIndex=0)),Options=((Probability=0.75,Attachment=(AttachBone="BODY",StaticMesh=StaticMesh'DH_AutocarrettaOM_stc.OM33_SEARCHLIGHT'))))
@@ -47,7 +47,7 @@ defaultproperties
     DestroyedMeshSkins(0)=Combiner'DH_AutocarrettaOM_tex.OM_Flatbed_Green_D'
     DestroyedMeshSkins(1)=Combiner'DH_AutocarrettaOM_tex.OM_Wheels_Green_D'
     DestroyedMeshSkins(2)=Combiner'DH_AutocarrettaOM_tex.OM_BaseVehicle_Green_D'
-    
+
     // Logistics
     SupplyAttachmentClass=Class'DHConstructionSupplyAttachment_Vehicle'
     SupplyAttachmentBone="BODY"

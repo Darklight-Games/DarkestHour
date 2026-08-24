@@ -103,7 +103,7 @@ function LowerSplashGuard()
 simulated function OnWaterEntered()
 {
     LoopAnim(WaterIdleAnim, 1.0, 1.0);
-    
+
     if (Role == ROLE_Authority)
     {
         RaiseSplashGuard();

@@ -12,13 +12,13 @@ defaultproperties
     SleeveTexture=Texture'DHGermanCharactersTex.Volkssturm_sleeve'
     Headgear(0)=Class'ROGermanHat'
     Headgear(1)=Class'ROGermanHat'
-	
+
     PrimaryWeapons(0)=(Item=Class'DH_ZB30Weapon') // TO DO: wz28
     PrimaryWeapons(1)=(Item=none)
     PrimaryWeapons(2)=(Item=none)
     SecondaryWeapons(0)=(Item=Class'DH_Nagant1895Weapon') // TO DO: some other weird sidearms?
     SecondaryWeapons(1)=(Item=none)
     SecondaryWeapons(2)=(Item=none)
-    
+
     bCanBeSquadLeader=false
 }

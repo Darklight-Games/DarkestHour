@@ -223,7 +223,7 @@ simulated exec function SpawnRangeTarget()
     {
         return;
     }
-    
+
     MG = DH_Fiat1435MG(Gun);
 
     if (Gun == none)

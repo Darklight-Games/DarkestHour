@@ -373,7 +373,7 @@ static function bool IsEntryAvailable(DHActorProxy.Context Context, int Index)
 {
     local int i, j;
     local bool bHasAny;
-    
+
     if (default.VehicleClasses[Index].SeasonFilters.Length == 0)
     {
         // If the season filter list is empty, the entry is always available.

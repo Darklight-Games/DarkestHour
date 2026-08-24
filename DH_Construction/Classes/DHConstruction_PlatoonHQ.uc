@@ -90,7 +90,7 @@ function DHSpawnPoint_PlatoonHQ InitializeSpawnPoint()
         SpawnPoint.SetTeamIndex(GetTeamIndex());
         SpawnPoint.SetIsActive(true);
     }
-    
+
     SpawnPoint.ResetEstablishmentTimer();
     SpawnPoint.BlockReason = SPBR_Constructing;
 
@@ -290,7 +290,7 @@ static function DHConstruction.ConstructionError GetCustomProxyError(DHConstruct
 function static UpdateProxy(DHActorProxy CP)
 {
     super.UpdateProxy(CP);
-    
+
     CP.Skins[default.FlagSkinIndex] = CP.CreateProxyMaterial(default.FlagMaterial);
 }
 
@@ -329,7 +329,7 @@ defaultproperties
     // Health
     HealthMax=500
     TatteredHealthThreshold=250
-    
+
     // Damage
     DamageTypeScales(0)=(DamageType=Class'DHShellAPImpactDamageType',Scale=0.33)            // AP Impact
     DamageTypeScales(1)=(DamageType=Class'DHRocketImpactDamage',Scale=0.33)                 // AT Rocket Impact

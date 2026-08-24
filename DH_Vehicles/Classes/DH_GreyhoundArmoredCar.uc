@@ -66,12 +66,12 @@ defaultproperties
     TurnDamping=100.0
 
     // Damage
-	// pros: 37mm ammorack is less likely to detonate
-	// cons: tight 4 men crew; petrol fuel
+    // pros: 37mm ammorack is less likely to detonate
+    // cons: tight 4 men crew; petrol fuel
     Health=510
     HealthMax=510.0
-	EngineHealth=300
-	AmmoIgnitionProbability=0.27  // 0.75 default
+    EngineHealth=300
+    AmmoIgnitionProbability=0.27  // 0.75 default
     EngineToHullFireChance=0.1  //increased from 0.05 for all petrol engines
     DisintegrationHealth=-800.0 //petrol
     TurretDetonationThreshold=4000.0 // increased from 1750

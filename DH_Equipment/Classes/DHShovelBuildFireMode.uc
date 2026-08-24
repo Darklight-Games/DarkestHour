@@ -48,7 +48,7 @@ simulated function bool AllowFire()
     {
         return false;
     }
-    
+
     return  (Construction.GetTeamIndex() == NEUTRAL_TEAM_INDEX || Construction.GetTeamIndex() == Instigator.GetTeamNum()) && Construction.CanBeBuilt();
 }
 

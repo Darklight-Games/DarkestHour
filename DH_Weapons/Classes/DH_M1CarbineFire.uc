@@ -19,7 +19,7 @@ defaultproperties
 
     FireRate=0.18
     MuzzleBone="MuzzleNew2"
-    
+
     RecoilRate=0.06
     MaxVerticalRecoilAngle=500  //keep in mind the first shot gets 0.8 coefficient
     MaxHorizontalRecoilAngle=110

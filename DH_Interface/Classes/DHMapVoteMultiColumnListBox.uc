@@ -60,7 +60,7 @@ function LoadList(VotingReplicationInfo LoadVRI)
 defaultproperties
 {
     Begin Object Class=GUIContextMenu Name=AdminMapContextMenu
-		ContextItems(0)="ADMIN: Force map to this"
+        ContextItems(0)="ADMIN: Force map to this"
         OnSelect=InternalOnClick
         OnOpen=InternalOnOpen
     End Object

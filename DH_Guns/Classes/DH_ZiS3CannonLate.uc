@@ -12,7 +12,7 @@ defaultproperties
 {
     TertiaryProjectileClass=Class'DH_ZiS3CannonShellAPCR'
     ProjectileDescriptions(2)="APCR"
-	nProjectileDescriptions(2)="BR-350P"
+    nProjectileDescriptions(2)="BR-350P"
 
     InitialTertiaryAmmo=2
     MaxTertiaryAmmo=4

@@ -28,7 +28,7 @@ defaultproperties
     RightArmorFactor=3.0
     LeftArmorFactor=3.0
     RearArmorFactor=3.0
-    
+
     FrontArmorSlope=15.0
     RightArmorSlope=22.0
     LeftArmorSlope=22.0
@@ -75,7 +75,7 @@ defaultproperties
 
     // Weapon fire
     WeaponFireOffset=-2.0
-    
+
     AltFireAttachmentBone="MG_MUZZLE"
     AltFireOffset=(X=-8,Y=0,Z=0)
 
@@ -88,7 +88,7 @@ defaultproperties
 
     YawBone="gun_yaw"
     PitchBone="gun_pitch"
-    
+
     ShootAnim="shoot"
     ShootAnimBoneName="barrel"
 

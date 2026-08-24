@@ -105,7 +105,7 @@ function bool MapContainerPreDraw(Canvas C)
                       c_MapRoot.ActualHeight(),
                       true);
 
-    // Set the correct prompt label based on the state of the HUD.    
+    // Set the correct prompt label based on the state of the HUD.
     PC = DHPlayer(PlayerOwner());
 
     if (PC != none && PC.bHideMapActivateMousePrompt)

@@ -167,7 +167,7 @@ function InitDroppedPickupFor(Inventory Inv)
                 }
             }
         }
-        
+
         // If the weapon is empty and we have an empty static mesh variant, show that instead
         if (EmptyStaticMesh != none && W.AmmoAmount(0) == 0)
         {

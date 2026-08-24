@@ -14,7 +14,7 @@ defaultproperties
     bAreRallyPointsEnabled=true
     bAreConstructionsEnabled=true
 
-	bUseInfiniteReinforcements=true
+    bUseInfiniteReinforcements=true
     bSquadSpecialRolesOnly=true
     bHasTemporarySpawnVehicles=true
 

@@ -480,7 +480,7 @@ function PostRender(Canvas C)
         C.SetPos(CenterX - (XL / 2), CenterY - (GUIScale * 192) - YL);
         C.DrawText(ORI.DescriptionText);
     }
-    
+
     if (bDebugCursor)
     {
         // Draw the cursor position for debugging purposes.

@@ -9,7 +9,7 @@ defaultproperties
 {
     Damage=5000000
     Speed=6000.0  //very slow
-    ShellDiameter=100 
+    ShellDiameter=100
     //bIsTracerBullet=true
     TracerEffectClass=none
     StaticMesh=StaticMesh'DH_UFO_stc.Snake'

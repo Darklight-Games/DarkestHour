@@ -104,7 +104,7 @@ defaultproperties
     PA_DeployedFire="stand_shootiron_mg42"
     PA_CrouchDeployedFire="crouch_shootiron_mg42"
     PA_ProneDeployedFire="prone_shoot_mg42"
-    
+
     //PA_AltFire="single_iron_mg42"
     //PA_CrouchAltFire="crouch_single_mg42"
     //PA_ProneAltFire="prone_single_mg42"
@@ -112,7 +112,7 @@ defaultproperties
 
     PA_CrouchFireLastShot="crouch_shoot_mg42"
     PA_ProneFireLastShot="prone_shoot_mg42"
-    
+
 
     PA_WalkIronAnims(0)="stand_walkFhip_mg34"
     PA_WalkIronAnims(1)="stand_walkBhip_mg34"
