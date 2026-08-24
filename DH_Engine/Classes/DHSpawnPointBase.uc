@@ -520,6 +520,7 @@ defaultproperties
     SpawnProtectionTime=2.0
     SpawnKillProtectionTime=7.0
     bAlwaysRelevant=true
+    bReplicateMovement=false
     RemoteRole=ROLE_SimulatedProxy
     bIsActive=false
     bHidden=true
