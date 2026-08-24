@@ -39,7 +39,10 @@ auto simulated state Constructing
 
         // We initialize the spawn point here since we run this code path when we come out of the dummy
         // state after the spawn point has already been destroyed. This makes sure it's back in business.
-        InitializeSpawnPoint();
+        if (Role == ROLE_Authority)
+        {
+            InitializeSpawnPoint();
+        }
 
         if (Radio != none)
         {
@@ -72,8 +75,8 @@ simulated state Constructed
     }
 }
 
-simulated function DHSpawnPoint_PlatoonHQ InitializeSpawnPoint()
-{  
+function DHSpawnPoint_PlatoonHQ InitializeSpawnPoint()
+{
     local Vector SpawnPointLocation;
 
     if (SpawnPoint == none)
