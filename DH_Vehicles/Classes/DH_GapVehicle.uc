@@ -1,7 +1,7 @@
 //-----------------------------------------------------------
 // Props to Moz
 //-----------------------------------------------------------
-class DH_EyeE extends ROChopperCraft;
+class DH_GapVehicle extends ROChopperCraft;
 
 #exec OBJ LOAD FILE=..\Animations\allies_ba64_anm.ukx
 #exec OBJ LOAD FILE=..\Textures\Vehicle_Optic.utx
@@ -210,7 +210,6 @@ simulated event SVehicleUpdateParams()
     }
 
 }
-
 // Overridden to play the correct idle animation for the vehicle
 simulated function PostBeginPlay()
 {
@@ -225,18 +224,18 @@ defaultproperties
 {
 
     DamagedEffectClass=none //no damage smoke
-    
-     DriverWeapons(0)=(WeaponClass=Class'DH_Vehicles.DH_EyeEGun',WeaponBone="Turret_placement3")
 
-     //AmbientGlow=224
-     //bUseDynamicLights=true
-     //bUseLightingFromBase=true
+     DriverWeapons(0)=(WeaponClass=Class'DH_Vehicles.DH_GapCannon',WeaponBone="Turret_placement3")
+
+     AmbientGlow=224
+     bUseDynamicLights=true
+     bUseLightingFromBase=true
      //LightType=LT_SubtlePulse
-     //LightEffect=LE_TorchWaver
-     //LightRadius=555
-     //LightBrightness=200
-     //LightPeriod=2
-     //bLightingVisibility=True
+    // LightEffect=LE_TorchWaver
+     LightRadius=555
+     LightBrightness=200
+     LightPeriod=2
+     bLightingVisibility=True
 
      WheelPenScale=1.200000
      WheelPenOffset=0.010000
@@ -252,32 +251,32 @@ defaultproperties
      WheelSuspensionTravel=10.000000
      WheelSuspensionMaxRenderTravel=5.000000
      MinBrakeFriction=40.000000
-     MaxPitchSpeed=7000.000000
+     MaxPitchSpeed=4500.000000
      UprightStiffness=100.000000
      UprightDamping=300.000000
-     MaxThrustForce=300.000000
+     MaxThrustForce=200.000000
      LongDamping=0.100000
-     MaxStrafeForce=250.000000
+     MaxStrafeForce=150.000000
      LatDamping=0.100000
-     MaxRiseForce=200.000000
+     MaxRiseForce=100.000000
      UpDamping=0.100000
-     TurnTorqueFactor=3500.000000
-     TurnTorqueMax=2200.000000
-     TurnDamping=110.000000
-     MaxYawRate=3.500000
+     TurnTorqueFactor=4400.000000
+     TurnTorqueMax=2500.000000
+     TurnDamping=150.000000
+     MaxYawRate=4.500000
      PitchTorqueFactor=200.000000
      PitchTorqueMax=35.000000
      PitchDamping=30.000000
-     RollTorqueTurnFactor=450.000000
-     RollTorqueStrafeFactor=250.000000
-     RollTorqueMax=70.000000
+     RollTorqueTurnFactor=4.000000
+     RollTorqueStrafeFactor=1.000000
+     RollTorqueMax=1.000000
      RollDamping=40.000000
-     StopThreshold=100.000000
+     StopThreshold=5.000000
      MaxRandForce=0.100000
      RandForceInterval=0.750000
-     IdleSound=none //there are wing sounds in the skeletal mesh
-     StartUpSound=none
-     ShutDownSound=none
+     IdleSound=none
+     StartUpSound=Sound'DH_UFO_snd.UFO.UfoBigShot'
+     ShutDownSound=Sound'DH_UFO_snd.UFO.PortalEnter'
      DestroyedVehicleMesh=none
      DestructionEffectClass=Class'ROEffects.ROVehicleDestroyedEmitter'
      DisintegrationEffectClass=Class'ROEffects.ROVehicleDestroyedEmitter'
@@ -287,7 +286,7 @@ defaultproperties
      DamagedEffectScale=1.750000
      DamagedEffectOffset=(X=60.000000,Y=10.000000,Z=10.000000)
      TimeTilDissapear=1.000000
-     BeginningIdleAnim="EyeIdle"
+     BeginningIdleAnim="GapIdle"
      DriverPositions(0)=(PositionMesh=SkeletalMesh'allies_ba64_anm.BA64_body_int',TransitionUpAnim="Overlay_Out",ViewPitchUpLimit=65535,ViewPitchDownLimit=65535,bDrawOverlays=True)
      VehicleHudImage=none
      VehicleHudOccupantsX(0)=0.500000
@@ -308,7 +307,7 @@ defaultproperties
          SupportBoneName="Axle_RF"
          SupportBoneAxis=AXIS_X
      End Object
-     Wheels(0)=SVehicleWheel'DH_Vehicles.DH_EyeE.LFWheel1'
+     Wheels(0)=SVehicleWheel'DH_Vehicles.DH_GapVehicle.LFWheel1'
 
      Begin Object Class=SVehicleWheel Name=RFWheel1
          SteerType=VST_Steered
@@ -319,7 +318,7 @@ defaultproperties
          SupportBoneName="Axle_LF"
          SupportBoneAxis=AXIS_X
      End Object
-     Wheels(1)=SVehicleWheel'DH_Vehicles.DH_EyeE.RFWheel1'
+     Wheels(1)=SVehicleWheel'DH_Vehicles.DH_GapVehicle.RFWheel1'
 
      Begin Object Class=SVehicleWheel Name=LRWheel1
          bPoweredWheel=True
@@ -331,7 +330,7 @@ defaultproperties
          SupportBoneName="Axle_LR"
          SupportBoneAxis=AXIS_X
      End Object
-     Wheels(2)=SVehicleWheel'DH_Vehicles.DH_EyeE.LRWheel1'
+     Wheels(2)=SVehicleWheel'DH_Vehicles.DH_GapVehicle.LRWheel1'
 
      Begin Object Class=SVehicleWheel Name=RRWheel1
          bPoweredWheel=True
@@ -343,12 +342,12 @@ defaultproperties
          SupportBoneName="Axle_RR"
          SupportBoneAxis=AXIS_X
      End Object
-     Wheels(3)=SVehicleWheel'DH_Vehicles.DH_EyeE.RRWheel1'
+     Wheels(3)=SVehicleWheel'DH_Vehicles.DH_GapVehicle.RRWheel1'
 
      VehicleMass=4.000000
      bTeamLocked=False
      bHasHandbrake=True
-     DriveAnim="EyeIdle"
+     DriveAnim="VBA64_driver_idle_close"
      ExitPositions(0)=(Y=-200.000000,Z=100.000000)
      ExitPositions(1)=(Y=200.000000,Z=100.000000)
      ExitPositions(2)=(Y=-200.000000,Z=100.000000)
@@ -358,7 +357,7 @@ defaultproperties
      TPCamDistance=350.000000
      TPCamLookat=(X=0.000000,Z=0.000000)
      TPCamWorldOffset=(Z=100.000000)
-     VehicleNameString="Evil Eye"
+     VehicleNameString="Boundary Gap"
      MaxDesireability=0.600000
      ObjectiveGetOutDist=1500.000000
      HUDOverlayClass=none
@@ -366,14 +365,16 @@ defaultproperties
      HUDOverlayFOV=85.000000
      bCanBeBaseForPawns=True
      GroundSpeed=100000.000000
-     HealthMax=1800.000000
-     Health=1800
-     Mesh=SkeletalMesh'DH_UFO_anm.EyeBody'
-     Skins(0)=Texture'DH_UFO_tex.UFO.EyeB'
+     HealthMax=200.000000
+     Health=200
+     Mesh=SkeletalMesh'DH_UFO_anm.GapHull'
+     Skins(0)=Texture'DH_UFO_tex.GAP.gapeye_A00'
      //Skins(1)=Texture'allies_vehicles_tex.int_vehicles.BA64_int'
      SoundRadius=600.000000
      ExplosionSounds(0)=sound'DH_UFO_snd.UFO.UfoDeath'
      ExplosionSounds(1)=sound'DH_UFO_snd.UFO.UfoDeath'
+
+
 
      CollisionRadius=175.000000
      CollisionHeight=40.000000
@@ -397,7 +398,7 @@ defaultproperties
          KFriction=1.500000
          KImpactThreshold=300.000000
      End Object
-     KParams=KarmaParamsRBFull'DH_Vehicles.DH_EyeE.KParams1100'
+     KParams=KarmaParamsRBFull'DH_Vehicles.DH_GapVehicle.KParams1100'
 
      //HighDetailOverlay=Shader'allies_vehicles_tex.int_vehicles.BA64_int_s'
      bUseHighDetailOverlayIndex=False
