@@ -25,5 +25,6 @@ static function string GetHeaderString(
 
 defaultproperties
 {
+    Weight=1
     Controls(0)=(Keys=("USE"),Text="Enter")
 }

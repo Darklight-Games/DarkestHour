@@ -18,6 +18,7 @@ static function string GetHeaderString(
 
 defaultproperties
 {
+    Weight=1
     Controls(0)=(Keys=("FIRE","ROIRONSIGHTS"),Text="Finish")
     Controls(1)=(Keys=("LEANLEFT","LEANRIGHT"),Text="Rotate")
 }

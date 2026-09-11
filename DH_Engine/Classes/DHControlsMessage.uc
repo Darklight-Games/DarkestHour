@@ -19,6 +19,11 @@ var Color HeaderColor;
 
 var array<Control> Controls;
 
+// When multiple control messages are queued per frame, only the one with the higher weight will be displayed.
+// This avoids having multiple overlapping control prompts at once.
+// When weights are equal, the message received first will not be displaced.
+var byte Weight;
+
 // Override these functions to customize the message based on the context.
 static function string GetHeaderString(
     optional PlayerReplicationInfo RelatedPRI_1,

@@ -5291,7 +5291,32 @@ function LocalizedMessage(class<LocalMessage> Message, optional int Switch, opti
 
     i = arraycount(LocalMessages);
 
-    if (Message.default.bIsUnique)
+    // We only want to display one controls message at a time.
+    // If this is a control message, compare the weights against any existing control message.
+    // If the new message is a higher weight, replace the existing one.
+    if (ClassIsChildOf(Message, class'DHControlsMessage'))
+    {
+        for (i = 0; i < arraycount(LocalMessages); ++i)
+        {
+            if (ClassIsChildOf(LocalMessages[i].Message, class'DHControlsMessage'))
+            {
+                if (class<DHControlsMessage>(Message).default.Weight >=
+                    class<DHControlsMessage>(LocalMessages[i].Message).default.Weight)
+                {
+                    // New message has a higher weight than the existing one. Clear the existing
+                    // message, it will be replaced below.
+                    ClearMessage(LocalMessages[i]);
+                    break;
+                }
+                else
+                {
+                    // New message has a lower weight than the existing one. Do not add this message.
+                    return;
+                }
+            }
+        }
+    }
+    else if (Message.default.bIsUnique)
     {
         for (i = 0; i < arraycount(LocalMessages); ++i)
         {
