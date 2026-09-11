@@ -274,6 +274,9 @@ var     Vector      DestructionEffectOffset;    // Offset for the destruction ef
 // Vehicle state, used to restore a saved state.
 var DHVehicleState SavedVehicleState;
 
+// Tick
+var bool bIsTickEnabled;
+
 replication
 {
     // Variables the server will replicate to clients when this actor is 1st replicated
@@ -632,7 +635,26 @@ simulated function Tick(float DeltaTime)
     local Rotator           WheelsRotation;
     local float             VehicleSpeed, MotionSoundVolume, LinTurnSpeed;
     local int               i;
+    local DHPawn            P;
+    local DHMountedWeapon   W;
+    
+    P = DHPawn(Instigator);
 
+    bIsTickEnabled=true;
+    
+    if ( P !=None)
+    {
+        W = DHMountedWeapon(P.Weapon);
+    }
+            
+    if (W !=None)
+    {
+        if ((Level.TimeSeconds - LastNotifyTime) > TouchMessageClass.default.LifeTime)
+        {
+            W.bIsVehiclePromptShown=false;
+        }
+    }
+    
     // Stop all movement if engine off or both tracks damaged
     if (bEngineOff || (bLeftTrackDamaged && bRightTrackDamaged))
     {
@@ -775,10 +797,11 @@ simulated function Tick(float DeltaTime)
     
     super.Tick(DeltaTime);
 
-    // Disable Tick if vehicle isn't moving & has no driver
+    //Disable Tick if vehicle isn't moving & has no driver
     if (!bDriving && ForwardVel ~= 0.0)
     {
         Disable('Tick');
+        bIsTickEnabled=false;
     }
 }
 
@@ -4263,12 +4286,33 @@ function bool HasDamageableWheels()
 // Modified to prevent "enter vehicle" screen messages if vehicle is destroyed or if it's an enemy vehicle
 // Also to pass self as optional object to message, allowing it to display the vehicle name.
 simulated event NotifySelected(Pawn User)
-{
-    if (Level.NetMode != NM_DedicatedServer && User != none && User.IsHumanControlled() && (User.GetTeamNum() == VehicleTeam || !bTeamLocked)
-        && ((Level.TimeSeconds - LastNotifyTime) >= TouchMessageClass.default.LifeTime) && Health > 0)
+{   
+    local DHMountedWeapon MW;
+    local DHPawn P;
+
+    P = DHPawn(User);
+
+    if (P !=None)
     {
+        MW = DHMountedWeapon(P.Weapon);
+    }
+    
+    if (Level.NetMode != NM_DedicatedServer && User != none && User.IsHumanControlled() && (User.GetTeamNum() == VehicleTeam || !bTeamLocked)
+        && ((Level.TimeSeconds - LastNotifyTime) >= TouchMessageClass.default.LifeTime) && Health > 0) 
+    { 
         User.ReceiveLocalizedMessage(TouchMessageClass, 0, User.PlayerReplicationInfo,, self);
         LastNotifyTime = Level.TimeSeconds;
+        
+        if (MW !=None)
+        {
+            MW.bIsVehiclePromptShown=true;
+        }
+       
+        if(bIsTickEnabled==false && MW !=None) 
+        {
+            Enable('Tick');
+        }
+        
     }
 }
 

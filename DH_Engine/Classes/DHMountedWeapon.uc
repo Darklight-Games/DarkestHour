@@ -23,11 +23,15 @@ var         int         HudAmmoCount;
 var     bool    bDeploying;
 var()   name    DeployAnimation;
 
+
 var()   bool    bCanDeployWhileStanding;
 var()   bool    bCanDeployWhileCrouched;
 var()   bool    bCanDeployWhileCrawling;
 
 var()   bool    bShouldAlignToGround;
+
+var bool bIsVehiclePromptShown; // it fixes vehicle prompt and mounted mg prompt overlap
+
 
 replication
 {
@@ -264,7 +268,7 @@ simulated function DHActorProxy CreateProxyCursor()
 // Implemented to force player to equip the stationary weapon if it isn't already his current weapon
 // TODO: not necessarily universal; some carried weapons may be small enough to be put away.
 simulated function Tick(float DeltaTime)
-{
+{   
     if (Instigator != none && Instigator.Weapon != self && Instigator.PendingWeapon != self && Instigator.IsLocallyControlled())
     {
         Instigator.SwitchWeapon(InventoryGroup);
@@ -275,8 +279,11 @@ simulated function Tick(float DeltaTime)
     }
 
     if (CanConfirmPlacement())
-    {
-        Instigator.ReceiveLocalizedMessage(class'DHMountedWeaponControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
+    {   
+        if (!bIsVehiclePromptShown)
+        {   
+            Instigator.ReceiveLocalizedMessage(class'DHMountedWeaponControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
+        }
     }
 }
 
@@ -523,4 +530,5 @@ defaultproperties
     bCanDeployWhileStanding=true
     bCanDeployWhileCrawling=true
     bShouldAlignToGround=true
+    bIsVehiclePromptShown=false;
 }
