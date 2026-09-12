@@ -29,7 +29,7 @@ defaultproperties
     // TODO: there are also "late" versions; maybe just make them variants.
     Constructions(9)=(ConstructionClass=Class'DH_Zis3GunConstruction',Limit=5,MaxActive=-1)
     Constructions(10)=(ConstructionClass=Class'DH_Zis2GunConstruction',Limit=3,MaxActive=-1)
-    Constructions(11)=(ConstructionClass=Class'DH_M1927GunConstruction',Limit=5,MaxActive=-1)
+    Constructions(11)=(ConstructionClass=Class'DH_M1927GunConstruction',Limit=3,MaxActive=-1)
     Constructions(12)=(ConstructionClass=Class'DH_45mmM1942GunConstruction',Limit=2,MaxActive=-1)
     Constructions(13)=(ConstructionClass=Class'DH_BM36MortarConstruction',Limit=3,MaxActive=-1)
 }
