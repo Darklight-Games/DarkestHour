@@ -34,10 +34,10 @@ defaultproperties
     DisplayFOV=85.0
     IronSightDisplayFOV=60.0
     PlayerIronsightFOV=90.0
-    
+
     bCanFireFromHip=true
     FreeAimRotationSpeed=2.0
-    
+
     IronBringUp="Rest_2_Hip"
     IronPutDown="Hip_2_Rest"
     BipodHipIdle="Hip_Idle"

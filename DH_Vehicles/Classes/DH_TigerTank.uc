@@ -61,8 +61,8 @@ defaultproperties
     EngineRestartFailChance=0.25  //unreliability
 
     // Damage
-	// pros: 5 men crew, relatively sparsed;
-	// cons: petrol fuel; a lot of reliability problems with engine/transmission
+    // pros: 5 men crew, relatively sparsed;
+    // cons: petrol fuel; a lot of reliability problems with engine/transmission
     Health=570
     HealthMax=570.0
     EngineHealth=220  // reduced from 300

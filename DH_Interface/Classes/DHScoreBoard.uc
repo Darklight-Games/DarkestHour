@@ -1190,7 +1190,7 @@ defaultproperties
 {
     TabSpaces="    "
     LargeTabSpaces="        "
-    
+
     SquadMemberIndexColumnTitle="#"
     RoleColumnTitle="Role"
     KillsColumnTitle="K"

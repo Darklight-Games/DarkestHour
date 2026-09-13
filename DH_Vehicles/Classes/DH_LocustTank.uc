@@ -124,12 +124,12 @@ defaultproperties
     TransRatio=0.14
 
     // Damage
-	// pros: 37mm ammoracks are unlikely to explode
-	// cons: 3 men crew in a tight space; petrol fuel
+    // pros: 37mm ammoracks are unlikely to explode
+    // cons: 3 men crew in a tight space; petrol fuel
     Health=455
     HealthMax=455.0
-	EngineHealth=300
-	AmmoIgnitionProbability=0.27  // 0.75 default
+    EngineHealth=300
+    AmmoIgnitionProbability=0.27  // 0.75 default
     EngineToHullFireChance=0.1  //increased from 0.05 for all petrol engines
     DisintegrationHealth=-800.0 //petrol
     TurretDetonationThreshold=4000.0 // increased from 1750

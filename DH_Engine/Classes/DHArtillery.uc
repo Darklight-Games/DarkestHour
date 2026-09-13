@@ -77,7 +77,7 @@ static function bool HasEnoughSquadMembersToRequest(DHPlayer PC)
     local DHPlayerReplicationInfo PRI;
 
     PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
-    
+
     return PRI != none && PRI.HasSquadMembers(default.RequiredSquadMemberCount);
 }
 

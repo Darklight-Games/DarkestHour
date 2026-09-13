@@ -19,7 +19,7 @@ defaultproperties
     CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_Semovente4732_stc.semovente4732_barrel_collision',AttachBone="BARREL")
 
     GunnerAttachmentBone="TURRET"
-    
+
     ShootAnim="SHOOT"
     ShootAnimBoneName="BARREL"
 

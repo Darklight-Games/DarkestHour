@@ -79,7 +79,7 @@ var     int                     CorpseStayTimeMax;
 var     globalconfig string     ROIDHash;            // client ROID hash (this gets set/updated when a player joins a server)
 var     globalconfig bool       bDynamicFogRatio;    // client option to have their fog distance dynamic based on FPS and MinDesiredFPS
 var     globalconfig int        MinDesiredFPS;       // client option used to calculate fog ratio when dynamic fog ratio is true
-var 	config    	bool  		bUseNativeItemNames; // client option to display native item names instead of translated ones
+var     config       bool       bUseNativeItemNames; // client option to display native item names instead of translated ones
 var     globalconfig bool       bIsIncognito;        // when true, patron & developer tags are not displayed on the scoreboard
 
 var     byte                    ArtillerySupportSquadIndex;
@@ -3668,11 +3668,11 @@ function ServerListClientGUIDs()
 
 exec function ListClientGUIDs()
 {
-	if (Level.TimeSeconds - LastListClientGUIDTime > 1.0)
-	{
-   	   	LastListClientGUIDTime = Level.TimeSeconds;
-	   	ServerListClientGUIDs();
-   	}
+    if (Level.TimeSeconds - LastListClientGUIDTime > 1.0)
+    {
+        LastListClientGUIDTime = Level.TimeSeconds;
+        ServerListClientGUIDs();
+    }
 }
 
 // Will have the client make a .txt file on their machine with the listplayers info in it, very useful to be able to copy ROIDs

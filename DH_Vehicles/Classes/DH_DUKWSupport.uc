@@ -13,7 +13,7 @@ defaultproperties
     SupplyAttachmentClass=Class'DHConstructionSupplyAttachment_Vehicle'
     SupplyAttachmentStaticMesh=StaticMesh'DH_Construction_stc.USA_Supply_cache_full'
     SupplyAttachmentBone="SUPPLY_ATTACHMENT"
-    
+
     ResupplyAttachmentBone="SUPPLY_ATTACHMENT"
 
     PassengerPawns(0)=(AttachBone="passenger_01",DriveAnim="dukw_passenger_01",DrivePos=(Z=58))

@@ -33,9 +33,9 @@ defaultproperties
     DHPenetrationTable(10)=4.2 // 3000m
 
     //Gunsight adjustments
-	//adjusted from zis3 because for some weird reason SU76 gun shoots significantly below the cross on 0 meters setting
+    //adjusted from zis3 because for some weird reason SU76 gun shoots significantly below the cross on 0 meters setting
     bMechanicalAiming=true
-	MechanicalRanges(0)=(Range=0,RangeValue=100.0)
+    MechanicalRanges(0)=(Range=0,RangeValue=100.0)
     MechanicalRanges(1)=(Range=200,RangeValue=107.0)
     MechanicalRanges(2)=(Range=400,RangeValue=103.0)
     MechanicalRanges(3)=(Range=600,RangeValue=127.0)

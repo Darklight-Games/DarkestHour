@@ -346,7 +346,7 @@ function ResetConstructionRuntimeInfo()
 {
     local int i;
     local DH_LevelInfo LI;
-    
+
     LI = Class'DH_LevelInfo'.static.GetInstance(Level);
 
     if (LI != none)

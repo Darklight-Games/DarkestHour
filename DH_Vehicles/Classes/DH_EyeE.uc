@@ -8,28 +8,28 @@ class DH_EyeE extends ROChopperCraft;
 #exec OBJ LOAD FILE=..\textures\DH_UFO_tex.utx
 
 // wheel params
-var()	float			WheelSoftness;
-var()	float			WheelPenScale;
-var()	float			WheelPenOffset;
-var()	float			WheelRestitution;
-var()	float			WheelAdhesion;
-var()	float			WheelInertia;
-var()	InterpCurve		WheelLongFrictionFunc;
-var()	float			WheelLongSlip;
-var()	InterpCurve		WheelLatSlipFunc;
-var()	float			WheelLongFrictionScale;
-var()	float			WheelLatFrictionScale;
-var()	float			WheelHandbrakeSlip;
-var()	float			WheelHandbrakeFriction;
-var()	float			WheelSuspensionTravel;
-var()	float			WheelSuspensionOffset;
-var()	float			WheelSuspensionMaxRenderTravel;
+var()    float          WheelSoftness;
+var()    float          WheelPenScale;
+var()    float          WheelPenOffset;
+var()    float          WheelRestitution;
+var()    float          WheelAdhesion;
+var()    float          WheelInertia;
+var()    InterpCurve    WheelLongFrictionFunc;
+var()    float          WheelLongSlip;
+var()    InterpCurve    WheelLatSlipFunc;
+var()    float          WheelLongFrictionScale;
+var()    float          WheelLatFrictionScale;
+var()    float          WheelHandbrakeSlip;
+var()    float          WheelHandbrakeFriction;
+var()    float          WheelSuspensionTravel;
+var()    float          WheelSuspensionOffset;
+var()    float          WheelSuspensionMaxRenderTravel;
 
-var()	float			MinBrakeFriction;
+var()    float          MinBrakeFriction;
 
-var()   float   MaxPitchSpeed;
+var()    float          MaxPitchSpeed;
 
-var		int					PendingPositionIndex;	// Position index the client is trying to switch to
+var      int            PendingPositionIndex; // Position index the client is trying to switch to
 
 /* =================================================================================== *
 * NextViewPoint()
@@ -40,94 +40,94 @@ var		int					PendingPositionIndex;	// Position index the client is trying to swi
 * =================================================================================== */
 simulated function NextViewPoint()
 {
-	 GotoState('ViewTransition');
+     GotoState('ViewTransition');
 }
 
 function ServerChangeViewPoint(bool bForward)
 {
-	if (bForward)
-	{
-		if ( DriverPositionIndex < (DriverPositions.Length - 1) )
-		{
-			PreviousPositionIndex = DriverPositionIndex;
-			DriverPositionIndex++;
+    if (bForward)
+    {
+        if ( DriverPositionIndex < (DriverPositions.Length - 1) )
+        {
+            PreviousPositionIndex = DriverPositionIndex;
+            DriverPositionIndex++;
 
-			if(  Level.Netmode == NM_Standalone  || Level.NetMode == NM_ListenServer )
-			{
-				NextViewPoint();
-			}
-		}
-	}
-	else
-	{
-		if ( DriverPositionIndex > 0 )
-		{
-			PreviousPositionIndex = DriverPositionIndex;
-			DriverPositionIndex--;
+            if(  Level.Netmode == NM_Standalone  || Level.NetMode == NM_ListenServer )
+            {
+                NextViewPoint();
+            }
+        }
+    }
+    else
+    {
+        if ( DriverPositionIndex > 0 )
+        {
+            PreviousPositionIndex = DriverPositionIndex;
+            DriverPositionIndex--;
 
-			if(  Level.Netmode == NM_Standalone  || Level.NetMode == NM_ListenServer )
-			{
-				NextViewPoint();
-			}
-		}
-	}
+            if(  Level.Netmode == NM_Standalone  || Level.NetMode == NM_ListenServer )
+            {
+                NextViewPoint();
+            }
+        }
+    }
 }
 
 simulated function PostNetReceive()
 {
-	super.PostNetReceive();
+    super.PostNetReceive();
 
-	if ( DriverPositionIndex != SavedPositionIndex )
-	{
-		PreviousPositionIndex = SavedPositionIndex;
-		SavedPositionIndex = DriverPositionIndex;
-		NextViewPoint();
-	}
+    if ( DriverPositionIndex != SavedPositionIndex )
+    {
+        PreviousPositionIndex = SavedPositionIndex;
+        SavedPositionIndex = DriverPositionIndex;
+        NextViewPoint();
+    }
 
-	// Kill the engine sounds if the engine is dead
-	if( EngineHealth <= 0 )
-	{
-		if( IdleSound != none )
-			IdleSound=none;
+    // Kill the engine sounds if the engine is dead
+    if( EngineHealth <= 0 )
+    {
+        if( IdleSound != none )
+            IdleSound=none;
 
-		if( StartUpSound != none )
-			StartUpSound=none;
+        if( StartUpSound != none )
+            StartUpSound=none;
 
-		if( ShutDownSound != none )
-			ShutDownSound=none;
+        if( ShutDownSound != none )
+            ShutDownSound=none;
 
-		if( AmbientSound != none )
-			AmbientSound=none;
-	}
+        if( AmbientSound != none )
+            AmbientSound=none;
+    }
 }
 
 simulated function NextWeapon()
 {
-	if( !bMultiPosition || IsInState('ViewTransition') || DriverPositionIndex != PendingPositionIndex)
-		return;
+    if( !bMultiPosition || IsInState('ViewTransition') || DriverPositionIndex != PendingPositionIndex)
+        return;
 
-	// Make sure the client doesn't switch positions while the server is changing position indexes
-	if ( DriverPositionIndex < (DriverPositions.Length - 1) )
-	{
-		PendingPositionIndex = DriverPositionIndex + 1;
-	}
+    // Make sure the client doesn't switch positions while the server is changing position indexes
+    if ( DriverPositionIndex < (DriverPositions.Length - 1) )
+    {
+        PendingPositionIndex = DriverPositionIndex + 1;
+    }
 
-	ServerChangeViewPoint(true);
+    ServerChangeViewPoint(true);
 }
 
 // Overriden to switch viewpoints while driving
 simulated function PrevWeapon()
 {
-	if( !bMultiPosition || IsInState('ViewTransition') || DriverPositionIndex != PendingPositionIndex)
-		return;
+    if( !bMultiPosition || IsInState('ViewTransition') || DriverPositionIndex != PendingPositionIndex)
+        return;
 
     // Make sure the client doesn't switch positions while the server is changing position indexes
-	if ( DriverPositionIndex > 0 )
-	{
-		PendingPositionIndex = DriverPositionIndex - 1;
-	}
+    if ( DriverPositionIndex > 0 )
+    {
+        PendingPositionIndex = DriverPositionIndex - 1;
+    }
 
-	ServerChangeViewPoint(false);
+    ServerChangeViewPoint(false);
 }
 
 // Subclassed to remove onslaught functionality we don't need. This actually never happens in our game yet.
@@ -135,31 +135,31 @@ simulated event TeamChanged()
 {
 /*    local int i;
 
-	// MergeTODO: Don't think we need any of this
-	for (i = 0; i < Weapons.Length; i++)
-		Weapons[i].SetTeam(Team); */
+    // MergeTODO: Don't think we need any of this
+    for (i = 0; i < Weapons.Length; i++)
+        Weapons[i].SetTeam(Team); */
 }
 
 // Allow behindview for debugging
 exec function ToggleViewLimit()
 {
-	if( !class'ROEngine.ROLevelInfo'.static.RODebugMode() || Level.NetMode != NM_Standalone  )
-		return;
+    if( !class'ROEngine.ROLevelInfo'.static.RODebugMode() || Level.NetMode != NM_Standalone  )
+        return;
 
-	if( bAllowViewChange )
-	{
-		bAllowViewChange=false;
-		bDontUsePositionMesh = false;
-		bLimitYaw = true;
-		bLimitPitch = true;
-	}
-	else
-	{
-		bAllowViewChange=true;
-		bDontUsePositionMesh = true;
-		bLimitYaw = false;
-		bLimitPitch = false;
-	}
+    if( bAllowViewChange )
+    {
+        bAllowViewChange=false;
+        bDontUsePositionMesh = false;
+        bLimitYaw = true;
+        bLimitPitch = true;
+    }
+    else
+    {
+        bAllowViewChange=true;
+        bDontUsePositionMesh = true;
+        bLimitYaw = false;
+        bLimitPitch = false;
+    }
 }
 
 
@@ -176,7 +176,7 @@ simulated function Tick(float DeltaTime)
     local float EnginePitch;
 
     if(Level.NetMode != NM_DedicatedServer)
-	{
+    {
         EnginePitch = 48.0 + VSize(Velocity)/MaxPitchSpeed *32.0;
         SoundPitch = FClamp(EnginePitch, 48, 96);
     }
@@ -187,55 +187,54 @@ simulated function Tick(float DeltaTime)
 
 simulated event SVehicleUpdateParams()
 {
-	local int i;
+    local int i;
 
-	Super.SVehicleUpdateParams();
+    Super.SVehicleUpdateParams();
 
-	for(i=0; i<Wheels.Length; i++)
-	{
-		Wheels[i].Softness = WheelSoftness;
-		Wheels[i].PenScale = WheelPenScale;
-		Wheels[i].PenOffset = WheelPenOffset;
-		Wheels[i].LongSlip = WheelLongSlip;
-		Wheels[i].LatSlipFunc = WheelLatSlipFunc;
-		Wheels[i].Restitution = WheelRestitution;
-		Wheels[i].Adhesion = WheelAdhesion;
-		Wheels[i].WheelInertia = WheelInertia;
-		Wheels[i].LongFrictionFunc = WheelLongFrictionFunc;
-		Wheels[i].HandbrakeFrictionFactor = WheelHandbrakeFriction;
-		Wheels[i].HandbrakeSlipFactor = WheelHandbrakeSlip;
-		Wheels[i].SuspensionTravel = WheelSuspensionTravel;
-		Wheels[i].SuspensionOffset = WheelSuspensionOffset;
-		Wheels[i].SuspensionMaxRenderTravel = WheelSuspensionMaxRenderTravel;
-	}
+    for(i=0; i<Wheels.Length; i++)
+    {
+        Wheels[i].Softness = WheelSoftness;
+        Wheels[i].PenScale = WheelPenScale;
+        Wheels[i].PenOffset = WheelPenOffset;
+        Wheels[i].LongSlip = WheelLongSlip;
+        Wheels[i].LatSlipFunc = WheelLatSlipFunc;
+        Wheels[i].Restitution = WheelRestitution;
+        Wheels[i].Adhesion = WheelAdhesion;
+        Wheels[i].WheelInertia = WheelInertia;
+        Wheels[i].LongFrictionFunc = WheelLongFrictionFunc;
+        Wheels[i].HandbrakeFrictionFactor = WheelHandbrakeFriction;
+        Wheels[i].HandbrakeSlipFactor = WheelHandbrakeSlip;
+        Wheels[i].SuspensionTravel = WheelSuspensionTravel;
+        Wheels[i].SuspensionOffset = WheelSuspensionOffset;
+        Wheels[i].SuspensionMaxRenderTravel = WheelSuspensionMaxRenderTravel;
+    }
 
 }
 
 // Overridden to play the correct idle animation for the vehicle
 simulated function PostBeginPlay()
 {
-	// RO functionality
-	if( HasAnim(BeginningIdleAnim))
-	{
-	    LoopAnim(BeginningIdleAnim);
-	}
+    // RO functionality
+    if( HasAnim(BeginningIdleAnim))
+    {
+        LoopAnim(BeginningIdleAnim);
+    }
 }
 
 defaultproperties
 {
-
      DriverWeapons(0)=(WeaponClass=Class'DH_Vehicles.DH_EyeEGun',WeaponBone="Turret_placement3")
 
      //AmbientGlow=224
      //bUseDynamicLights=true
      //bUseLightingFromBase=true
      //LightType=LT_SubtlePulse
-    // LightEffect=LE_TorchWaver
+     //LightEffect=LE_TorchWaver
      //LightRadius=555
      //LightBrightness=200
      //LightPeriod=2
-     //bLightingVisibility=True 
-     
+     //bLightingVisibility=True
+
      WheelPenScale=1.200000
      WheelPenOffset=0.010000
      WheelRestitution=0.100000
@@ -372,8 +371,6 @@ defaultproperties
      SoundRadius=600.000000
      ExplosionSounds(0)=sound'DH_UFO_snd.UFO.UfoDeath'
      ExplosionSounds(1)=sound'DH_UFO_snd.UFO.UfoDeath'
-
-
 
      CollisionRadius=175.000000
      CollisionHeight=40.000000

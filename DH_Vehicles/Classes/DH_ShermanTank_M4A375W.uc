@@ -57,11 +57,11 @@ defaultproperties
     SteerSpeed=75.0
 
     // Damage
-	// pros: 5 men crew; wet stowage
-	// cons: petrol
+    // pros: 5 men crew; wet stowage
+    // cons: petrol
     Health=565
     HealthMax=565.0
-	EngineHealth=300
+    EngineHealth=300
     EngineToHullFireChance=0.1  //increased from 0.05 for all petrol engines
     DisintegrationHealth=-1000.0 //petrol and wet stowage
     VehHitpoints(0)=(PointRadius=30.0,PointOffset=(X=-90.0,Z=6.0)) // engine

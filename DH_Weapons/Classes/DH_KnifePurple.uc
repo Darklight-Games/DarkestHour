@@ -9,7 +9,7 @@ defaultproperties
 {
     Damage=5000000
     BallisticCoefficient=2.675
-    Speed=18000.0  
+    Speed=18000.0
     TracerEffectClass=none
     StaticMesh=StaticMesh'DH_UFO_stc.KnifePurple'
     DeflectedMesh=none

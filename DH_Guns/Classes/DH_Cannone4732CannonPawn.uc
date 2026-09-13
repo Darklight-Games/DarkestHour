@@ -23,7 +23,7 @@ defaultproperties
     CameraBone="camera_gun"
 
     GunOpticsClass=Class'DH_Cannone4732Optics'
-    
+
     // DriveAnim="cannone4732_gunner_yaw"    // HACK: if this is set to "", the spine bone gets all fucked up. We should have a neutral pose here, probably.
     // AnimationDrivers(0)=(Type=ADT_Yaw,DriverPositionIndexRange=(Min=0,Max=1),Sequence="cannone4732_gunner_yaw",FrameCount=60,Channel=0)
     // AnimationDrivers(1)=(Type=ADT_Yaw,DriverPositionIndexRange=(Min=2,Max=2),Sequence="cannone4732_gunner_stand_yaw",FrameCount=60,Channel=2)

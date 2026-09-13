@@ -13,7 +13,7 @@ defaultproperties
 
     InitialPrimaryAmmo=250
     NumMGMags=2
-    
+
     Mesh=SkeletalMesh'DH_M1919_anm.M1919A4_M2_GUN_EXT'
 
     ReloadCameraTweenTime=0.5
@@ -23,7 +23,7 @@ defaultproperties
     RangeDriverAnimFrameCount=10
     RangeDriverChannel=1
     RangeDriverBone="REAR_SIGHT"
-    
+
     RangeTable(0)=(Range=100.0,AnimationTime=0.120)
     RangeTable(1)=(Range=200.0,AnimationTime=0.135)
     RangeTable(2)=(Range=300.0,AnimationTime=0.150)

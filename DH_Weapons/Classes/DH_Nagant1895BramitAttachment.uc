@@ -16,7 +16,7 @@ defaultproperties
     mMuzFlashClass=none
     ROShellCaseClass=none //its a revolver
     bRapidFire=false
-    
+
     WA_Idle="Idle"
     WA_IdleEmpty="Idle"
     WA_Fire="Idle"

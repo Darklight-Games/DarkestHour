@@ -1054,7 +1054,7 @@ simulated state ViewTransition
     {
         local PlayerController PC;
         local int DriverAnimationChannel;
-        
+
         if (VehicleBase != none)
         {
             StoredVehicleRotation = VehicleBase.Rotation;
@@ -1098,7 +1098,7 @@ simulated state ViewTransition
 
             FPCamPos = DriverPositions[DriverPositionIndex].ViewLocation; // note we set FPCamPos even in behind view so camera debugging works
         }
-        
+
         // Play any transition animation for the weapon itself & set a duration to control when we exit this state
         ViewTransitionDuration = 0.0; // start with zero in case we don't have a transition animation
 
@@ -1134,7 +1134,7 @@ simulated state ViewTransition
             {
                 ROPawn(Driver).ToggleAuxCollision(true);
             }
-            
+
             ClientViewTransitionStartTime = Level.TimeSeconds;
             ClientViewTransitionEndTime = ClientViewTransitionStartTime + ViewTransitionDuration;
 
@@ -2782,7 +2782,7 @@ private simulated function SetAnimationDriverBlendAlpha(int AnimationDriverIndex
     local SAnimationDriver AD;
 
     AD = AnimationDrivers[AnimationDriverIndex];
-    
+
     if (Driver != none && AD.Channel != 0)
     {
         Driver.AnimBlendParams(AD.Channel, BlendAlpha, 0.0, 0.0, AD.BoneName);

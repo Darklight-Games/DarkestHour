@@ -31,7 +31,7 @@ defaultproperties
     BipodDeployFireAnim="Bipod_shoot_single"
     BipodDeployFireLoopAnim="Bipod_Shoot_Loop"
     BipodDeployFireEndAnim="Bipod_Shoot_End"
-    
+
     FireLastAnim="hip_shoot_end"
     BipodDeployFireLastAnim="bipd_shoot_end"
 

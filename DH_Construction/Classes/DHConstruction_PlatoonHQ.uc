@@ -39,7 +39,10 @@ auto simulated state Constructing
 
         // We initialize the spawn point here since we run this code path when we come out of the dummy
         // state after the spawn point has already been destroyed. This makes sure it's back in business.
-        InitializeSpawnPoint();
+        if (Role == ROLE_Authority)
+        {
+            InitializeSpawnPoint();
+        }
 
         if (Radio != none)
         {
@@ -72,8 +75,8 @@ simulated state Constructed
     }
 }
 
-simulated function DHSpawnPoint_PlatoonHQ InitializeSpawnPoint()
-{  
+function DHSpawnPoint_PlatoonHQ InitializeSpawnPoint()
+{
     local Vector SpawnPointLocation;
 
     if (SpawnPoint == none)
@@ -87,7 +90,7 @@ simulated function DHSpawnPoint_PlatoonHQ InitializeSpawnPoint()
         SpawnPoint.SetTeamIndex(GetTeamIndex());
         SpawnPoint.SetIsActive(true);
     }
-    
+
     SpawnPoint.ResetEstablishmentTimer();
     SpawnPoint.BlockReason = SPBR_Constructing;
 
@@ -287,7 +290,7 @@ static function DHConstruction.ConstructionError GetCustomProxyError(DHConstruct
 function static UpdateProxy(DHActorProxy CP)
 {
     super.UpdateProxy(CP);
-    
+
     CP.Skins[default.FlagSkinIndex] = CP.CreateProxyMaterial(default.FlagMaterial);
 }
 
@@ -326,7 +329,7 @@ defaultproperties
     // Health
     HealthMax=500
     TatteredHealthThreshold=250
-    
+
     // Damage
     DamageTypeScales(0)=(DamageType=Class'DHShellAPImpactDamageType',Scale=0.33)            // AP Impact
     DamageTypeScales(1)=(DamageType=Class'DHRocketImpactDamage',Scale=0.33)                 // AT Rocket Impact

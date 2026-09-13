@@ -9,7 +9,7 @@ defaultproperties
 {
     Mesh=SkeletalMesh'DHCharactersUS_anm.US_GI'
     Skins(1)=Texture'DHUSCharactersTex.GI_Sarg1'
-	
+
     BodySkins(0)=Texture'DHUSCharactersTex.GI_Sarg1'
     BodySkins(1)=Texture'DHUSCharactersTex.GI_Sarg2'
 }

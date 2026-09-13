@@ -22,7 +22,7 @@ defaultproperties
     bIsSniper=true
     bForceModelScope=true
     ScopeOverlay=Texture'DH_Weapon_tex.Scopes.Ger_sniperscope_overlay'
-	ScriptedScopeTexture=Texture'DH_Weapon_tex.Scopes.Ger_ZF41sniperscoped_overlay'
+    ScriptedScopeTexture=Texture'DH_Weapon_tex.Scopes.Ger_ZF41sniperscoped_overlay'
 
     IronSightDisplayFOV=40.0
     IronSightDisplayFOVHigh=40.0
@@ -54,6 +54,6 @@ defaultproperties
     PreReloadAnim="single_open"
     PreReloadHalfAnim="single_open_half"
     PostReloadAnim="single_close"
-    
+
     FullReloadAnim="reload"
 }

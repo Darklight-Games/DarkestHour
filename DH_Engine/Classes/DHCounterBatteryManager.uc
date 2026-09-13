@@ -41,7 +41,7 @@ function OnArtilleryFired(Class<DHVehicleWeapon> VehicleWeaponClass, Vector Worl
     local DHPlayer PC;
     local Vector MarkerLocation;
     local float Deviation, Theta;
-    
+
     // Get a random range deviation using a uniform distribution so that it's spread evenly across the cicle.
     Deviation = GetDeviationMax(VehicleWeaponClass) * Sqrt(FRand());
     Deviation = class'DHUnits'.static.MetersToUnreal(Deviation);

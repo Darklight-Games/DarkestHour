@@ -14,7 +14,7 @@ defaultproperties
     VehicleHudTurretLook=TexRotator'DH_InterfaceArt_tex.Cromwell_Turret_95mm_Look'
     SpawnOverlay(0)=Material'DH_InterfaceArt_tex.cromwell_95mm'
 
-	// Damage
-	// Cons: high-caliber ammunition is more likely to detonate
-	AmmoIgnitionProbability=0.84  // 0.75 default
+    // Damage
+    // Cons: high-caliber ammunition is more likely to detonate
+    AmmoIgnitionProbability=0.84  // 0.75 default
 }

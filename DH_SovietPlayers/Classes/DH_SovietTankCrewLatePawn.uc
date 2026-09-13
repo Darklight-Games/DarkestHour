@@ -12,5 +12,5 @@ defaultproperties
     Skins(0)=Texture'Characters_tex.Russian_Tanker'
     Skins(1)=Texture'Characters_tex.rus_face01'
 
-	Skins(3)=Texture'DHSovietCharactersTex.sov_details'
+    Skins(3)=Texture'DHSovietCharactersTex.sov_details'
 }

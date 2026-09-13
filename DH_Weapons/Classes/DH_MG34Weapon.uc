@@ -62,13 +62,13 @@ defaultproperties
     BarrelClass=Class'DH_MG34Barrel'
     BarrelSteamBone="Barrel"
     BarrelChangeAnim="Bipod_Barrel_Change"
-    
+
     bCanBipodDeploy=true
     bCanBeResupplied=true
     ZoomOutTime=0.1
 
     bMustReloadWithBipodDeployed=true
-    
+
     IdleToBipodDeploy="hip_2_bipod"
     IdleToBipodDeployEmpty="hip_2_bipod"
     BipodDeployToIdle="bipod_2_hip"

@@ -18,7 +18,7 @@ defaultproperties
         ColorScale(1)=(RelativeTime=1.000000,Color=(B=255,G=255,R=255,A=255))
         Opacity=0.600000
         MaxParticles=12
-      
+
         StartSpinRange=(X=(Min=-1.000000,Max=1.000000))
         SizeScale(0)=(RelativeTime=1.000000,RelativeSize=1.100000)
         StartSizeRange=(X=(Min=0.000000,Max=7.000000),Y=(Min=0.000000,Max=7.000000),Z=(Min=0.000000,Max=7.000000))
@@ -46,7 +46,7 @@ defaultproperties
         ColorScale(2)=(RelativeTime=1.000000,Color=(B=91,G=145,R=255,A=255))
         FadeOutStartTime=1.050000
         MaxParticles=3
-      
+
         StartSizeRange=(X=(Min=0.800000,Max=2.000000),Y=(Min=0.800000,Max=2.000000),Z=(Min=0.800000,Max=2.000000))
         InitialParticlesPerSecond=5.000000
         Texture=Texture'DH_FX_Tex.dhweaponspark'
@@ -69,7 +69,7 @@ defaultproperties
         Opacity=0.400000
         FadeOutStartTime=0.080000
         MaxParticles=6
-      
+
         SpinsPerSecondRange=(X=(Min=0.050000,Max=0.100000))
         StartSpinRange=(X=(Min=-1.000000,Max=1.000000))
         SizeScale(0)=(RelativeTime=1.000000,RelativeSize=2.000000)
@@ -85,8 +85,8 @@ defaultproperties
     Emitters(2)=SpriteEmitter'SpriteEmitter2'
 
     AutoReset=True
-   
+
     bNoDelete=False
-        
+
     DrawScale3D=(X=0.200000,Y=0.200000)
 }

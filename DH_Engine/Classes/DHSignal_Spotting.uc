@@ -9,7 +9,7 @@ class DHSignal_Spotting extends DHSignal
 static function Material GetWorldIconMaterial(optional Object OptionalObject)
 {
     local class<DHMapMarker> MapMarkerClass;
-    
+
     MapMarkerClass = class<DHMapMarker>(OptionalObject);
 
     if (MapMarkerClass != none)
@@ -25,7 +25,7 @@ static function Material GetWorldIconMaterial(optional Object OptionalObject)
 static function Color GetColor(optional Object OptionalObject)
 {
     local class<DHMapMarker> MapMarkerClass;
-    
+
     MapMarkerClass = class<DHMapMarker>(OptionalObject);
 
     if (MapMarkerClass != none)
@@ -46,7 +46,7 @@ static function OnSent(DHPlayer PC, Vector Location, optional Object OptionalObj
     {
         return;
     }
-    
+
     MapMarkerClass = class<DHMapMarker>(OptionalObject);
 
     if (MapMarkerClass != none && MapMarkerClass.default.SpottingConsoleCommand != "")

@@ -238,7 +238,7 @@ defaultproperties
     FFKillMessage="{name} killed a friendly soldier."
     VoteStarted="{name} started a vote."
     FFViolationMessage="Removing {name} due to a friendly fire violation."
-	RoleChangeMsg="You will attempt to respawn as {role}."
+    RoleChangeMsg="You will attempt to respawn as {role}."
     MaxRoleMsg="Unable to change to {role}."
     HasForgivenMessage="{victim} has forgiven {killer}."
     EnteredMessage="{name} has entered the battlefield."

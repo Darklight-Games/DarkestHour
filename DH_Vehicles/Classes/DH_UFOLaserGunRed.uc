@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_UFOLaserGunRed extends DHVehicleAutoCannon; 
+class DH_UFOLaserGunRed extends DHVehicleAutoCannon;
 
 defaultproperties
 {
@@ -65,12 +65,12 @@ defaultproperties
 
     // Reload (i cant get it to work)
     //HUDOverlayReloadAnim="Bipod_Reload_s"
-    ReloadStages(0)=(Sound=Sound'DH_UFO_snd.UFO.UfoCharge',Duration=1.97) // 
+    ReloadStages(0)=(Sound=Sound'DH_UFO_snd.UFO.UfoCharge',Duration=1.97) //
     ReloadStages(1)=(Sound=none,Duration=0.06)
     ReloadStages(2)=(Sound=none,Duration=0.02)
     ReloadStages(3)=(Sound=none,Duration=0.03)
 
-    AltReloadStages(0)=(Sound=Sound'DH_UFO_snd.UFO.UfoChargeTwo',Duration=1.97) // 
+    AltReloadStages(0)=(Sound=Sound'DH_UFO_snd.UFO.UfoChargeTwo',Duration=1.97) //
     AltReloadStages(1)=(Sound=none,Duration=0.06)
     AltReloadStages(2)=(Sound=none,Duration=0.02)
     AltReloadStages(3)=(Sound=none,Duration=0.03)

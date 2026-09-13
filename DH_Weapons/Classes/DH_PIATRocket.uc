@@ -12,8 +12,8 @@ defaultproperties
     StraightFlightTime=0.5
 
     //Damage
-	Damage=800
-	DamageRadius=600  //1.1 KG
+    Damage=800
+    DamageRadius=600  //1.1 KG
     ShellImpactDamage=Class'DH_PIATImpactDamType'
     MyDamageType=Class'DH_PIATDamType'
 

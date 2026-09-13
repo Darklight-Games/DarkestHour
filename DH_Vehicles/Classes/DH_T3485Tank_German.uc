@@ -12,5 +12,5 @@ defaultproperties
     Skins(0)=Texture'DH_T34_2_tex.DH_ger_T3485_ext'
     CannonSkins(0)=Texture'DH_T34_2_tex.DH_ger_T3485_ext'
     //DestroyedMeshSkins(0)=
-	//to do: above
+    //to do: above
 }

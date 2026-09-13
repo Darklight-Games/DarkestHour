@@ -92,15 +92,15 @@ defaultproperties
 
     // TODO: revisit all of hte damage stuff
     // Damage
-	// pros: diesel fuel; 20mm ammo is very unlikely to detonate;
-	// 4 men crew
+    // pros: diesel fuel; 20mm ammo is very unlikely to detonate;
+    // 4 men crew
     Health=500
     HealthMax=500
-	EngineHealth=300
-	AmmoIgnitionProbability=0.2  // 0.75 default
+    EngineHealth=300
+    AmmoIgnitionProbability=0.2  // 0.75 default
     TurretDetonationThreshold=5000.0 // increased from 1750
 
-	PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
+    PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
     FireDetonationChance=0.045  //reduced from 0.07 for all diesels
     DisintegrationHealth=-1200.0 //diesel
     VehHitpoints(0)=(PointRadius=32.0,PointBone="engine",DamageMultiplier=1.0,HitPointType=HP_Engine)

@@ -22,7 +22,7 @@ defaultproperties
         ColorScale(0)=(Color=(B=255,G=255,R=255,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(B=255,G=255,R=255,A=255))
         MaxParticles=20 //Was 12
-      
+
         StartLocationRange=(Z=(Min=100.000000,Max=200.000000))
         StartSizeRange=(X=(Min=0.000000,Max=0.000000),Y=(Min=0.000000,Max=0.000000),Z=(Min=0.000000,Max=0.000000))
         LifetimeRange=(Min=0.500000,Max=0.70000) // was 0.2
@@ -44,7 +44,7 @@ defaultproperties
         Opacity=0.450000
         FadeOutStartTime=0.285000
         MaxParticles=20 //Was 12
-      
+
         SpinsPerSecondRange=(X=(Max=0.050000))
         StartSpinRange=(X=(Min=-1.000000,Max=1.000000))
         SizeScale(0)=(RelativeTime=1.000000,RelativeSize=15.000000)

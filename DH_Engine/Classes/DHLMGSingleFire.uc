@@ -5,7 +5,7 @@
 
 class DHLMGSingleFire extends DHProjectileFire  //This fire class is made for the new mg34 w/ box, since the older DHMGSingleFire doesnt work on a weapon that isn't a "machinegun" (new mg34 is like bren)
     abstract;
-    
+
 // Firing animations when player has a bipod deployed
 // For weapons that can be fired three ways - from the hip, from ironsights, or from bipod deployed, e.g. Bren gun
 var     name    BipodDeployFireAnim;

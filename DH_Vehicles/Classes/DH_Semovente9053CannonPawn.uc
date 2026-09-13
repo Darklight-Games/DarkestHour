@@ -43,7 +43,7 @@ defaultproperties
     DriveAnim="semo9053_com_idle_close"
     bHasAltFire=false
     // Figure out what gunsight to use (also maybe refactor to have the gunsights be a separate class that can just be referenced and reused by multiple vehicles)
-    
+
     AmmoShellTexture=Texture'InterfaceArt_tex.panzer4F2shell'
     AmmoShellReloadTexture=Texture'InterfaceArt_tex.panzer4F2shell_reload'
     FireImpulse=(X=-110000)

@@ -57,7 +57,7 @@ function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
     GRI.GetMapCoords(Location, MapLocation.X, MapLocation.Y);
 
     PC.AddMarker(MapMarkerClass, MapLocation.X, MapLocation.Y, Location);
-    
+
     PC.ServerSignal(Class'DHSignal_Spotting', Location, MapMarkerClass);
 
     Interaction.Hide();

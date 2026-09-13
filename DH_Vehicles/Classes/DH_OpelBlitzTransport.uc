@@ -8,7 +8,7 @@ class DH_OpelBlitzTransport extends DH_OpelBlitz;
 defaultproperties
 {
     VehicleNameString="Opel Blitz (Transport)"
-    
+
     // TODO: offset these by once once we add the front passenger
     PassengerPawns(1)=(AttachBone="BODY",DriveRot=(Yaw=-49151),DrivePos=(X=-14.67,Y=-39.00,Z=128.49),DriveAnim="fiat626_passenger_fl")
     PassengerPawns(2)=(AttachBone="BODY",DriveRot=(Yaw=-16384),DrivePos=(X=-18.49,Y=44.09,Z=128.49),DriveAnim="opeblitz_passenger_fr")

@@ -21,7 +21,7 @@ defaultproperties
         ColorScale(1)=(RelativeTime=1.000000,Color=(B=115,G=136,R=145,A=255))
         FadeOutStartTime=0.306000
         MaxParticles=1
-      
+
         StartLocationOffset=(Z=50.000000)
         StartSpinRange=(X=(Min=0.500000,Max=0.500000))
         SizeScale(0)=(RelativeSize=0.500000)
@@ -49,7 +49,7 @@ defaultproperties
         ColorScale(0)=(Color=(B=128,G=255,R=255,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(R=128,A=255))
         MaxParticles=50
-      
+
         InitialParticlesPerSecond=500.000000
         Texture=Texture'Effects_Tex.fire_quad'
         LifetimeRange=(Min=0.200000,Max=0.750000)
@@ -70,7 +70,7 @@ defaultproperties
         ColorScale(0)=(Color=(G=128,R=255,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(G=128,R=255,A=255))
         MaxParticles=1
-      
+
         StartLocationOffset=(Z=-50.000000)
         StartSpinRange=(X=(Min=0.500000,Max=0.500000))
         SizeScale(0)=(RelativeSize=0.500000)
@@ -96,7 +96,7 @@ defaultproperties
         ColorScale(0)=(Color=(B=61,G=82,R=84,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(B=96,G=111,R=115,A=255))
         MaxParticles=16
-      
+
         SpinsPerSecondRange=(X=(Min=0.010000,Max=0.050000))
         SizeScale(0)=(RelativeSize=1.000000)
         SizeScale(1)=(RelativeTime=1.000000,RelativeSize=25.000000)
@@ -129,7 +129,7 @@ defaultproperties
         FadeOutStartTime=1.860000
         FadeInEndTime=0.180000
         MaxParticles=6
-      
+
         StartLocationRange=(X=(Min=-10.000000,Max=10.000000),Y=(Min=-10.000000,Max=10.000000))
         SpinCCWorCW=(X=1.000000)
         SpinsPerSecondRange=(X=(Min=-0.100000,Max=0.100000))
@@ -166,7 +166,7 @@ defaultproperties
         Opacity=0.600000
         FadeOutStartTime=1.325000
         MaxParticles=4
-      
+
         StartLocationRange=(X=(Min=-150.000000,Max=175.000000))
         UseRotationFrom=PTRS_Actor
         SpinsPerSecondRange=(X=(Min=0.050000,Max=0.075000))
@@ -195,7 +195,7 @@ defaultproperties
         ColorScale(0)=(Color=(G=128,R=255,A=255))
         ColorScale(1)=(RelativeTime=1.000000,Color=(G=128,R=255,A=255))
         MaxParticles=1
-      
+
         StartLocationOffset=(Z=-50.000000)
         StartSpinRange=(X=(Min=0.500000,Max=0.500000))
         SizeScale(0)=(RelativeSize=0.500000)
@@ -221,7 +221,7 @@ defaultproperties
         Opacity=0.720000
         FadeOutStartTime=0.870000
         FadeInEndTime=0.210000
-      
+
         StartLocationOffset=(Z=-50.000000)
         SizeScale(0)=(RelativeSize=0.100000)
         SizeScale(1)=(RelativeTime=0.500000,RelativeSize=1.500000)
@@ -251,7 +251,7 @@ defaultproperties
         FadeOutStartTime=0.870000
         FadeInEndTime=0.120000
         MaxParticles=4
-      
+
         StartLocationOffset=(Z=-100.000000)
         SizeScale(0)=(RelativeSize=0.500000)
         SizeScale(1)=(RelativeTime=0.500000,RelativeSize=1.500000)

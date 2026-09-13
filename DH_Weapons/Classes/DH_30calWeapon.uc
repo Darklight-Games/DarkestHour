@@ -51,7 +51,7 @@ defaultproperties
     IronPutDown="iron_out"
     IronIdleAnim="iron_idle"
     IdleAnim="rest_idle"
-    
+
     // Hip Firing
     PlayerIronsightFOV=90.0
     bCanFireFromHip=true

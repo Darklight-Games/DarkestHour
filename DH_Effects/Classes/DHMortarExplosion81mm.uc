@@ -360,7 +360,7 @@ defaultproperties
         VelocityLossRange=(Z=(Min=1.000000,Max=1.000000))
     End Object
     Emitters(11)=SpriteEmitter'SpriteEmitter11'
-    
+
     Begin Object Class=SpriteEmitter Name=SpriteEmitter12
         UseCollision=True
         UseCollisionPlanes=True

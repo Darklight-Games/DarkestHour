@@ -23,11 +23,11 @@ defaultproperties
     BareHandTexture=Texture'DHItalianCharactersTex.Italian_hands'
     SleeveTexture=Texture'DHItalianCharactersTex.Livorno_sleeves'
     GlovedHandTexture=Texture'DHSovietCharactersTex.hands_sovgloves' // TODO: replace
-    
+
     Headgear(0)=Class'DH_ItalianHelmet'
     Headgear(1)=Class'DH_ItalianHelmet_Livorno'
     Headgear(2)=Class'DH_ItalianCapNCO'
-    
+
     HeadgearProbabilities(0)=0.1
     HeadgearProbabilities(1)=0.1
     HeadgearProbabilities(2)=0.8

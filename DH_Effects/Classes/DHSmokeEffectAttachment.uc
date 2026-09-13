@@ -22,7 +22,7 @@ simulated function PostBeginPlay()
     if (Role == ROLE_Authority)
     {
         SetTimer(SmokeSoundDuration, false);
-        
+
         AmbientSound = SmokeLoopSound;
 
         PlaySound(SmokeIgniteSound, SLOT_NONE, 1.5,, 200.0);

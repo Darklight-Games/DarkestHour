@@ -27,7 +27,7 @@ function bool IsServerPasswordProtected(GameInfo.ServerResponseLine S)
     // Stats           2
     // LatestVersion   4
     // Listen Server   8
-    // Vac Secured	   16
+    // Vac Secured     16
     // Standard        32
     // UT CLassic      64
     return (S.Flags & 1) != 0;

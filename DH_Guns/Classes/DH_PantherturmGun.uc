@@ -11,7 +11,7 @@ defaultproperties
     PassengerWeapons(0)=(WeaponPawnClass=Class'DH_PantherturmCannonPawn',WeaponBone="turret_placement")
     Mesh=SkeletalMesh'DH_Panther_anm.Panther_body_ext'
     Skins(0)=Texture'DH_VehiclesGE_tex.PantherG_body_camo2'
-	Skins(1)=Texture'axis_vehicles_tex.PantherG_treads'
+    Skins(1)=Texture'axis_vehicles_tex.PantherG_treads'
     Skins(2)=Texture'axis_vehicles_tex.PantherG_treads'
     DestroyedVehicleMesh=StaticMesh'DH_German_vehicles_stc.PantherG_Destroyed2'
     VehicleHudImage=Texture'DH_InterfaceArt_tex.panther_body'
@@ -41,7 +41,7 @@ defaultproperties
     End Object
     KParams=KParams0
 
-	Begin Object Class=SVehicleWheel Name=LF_Steering
+    Begin Object Class=SVehicleWheel Name=LF_Steering
         bPoweredWheel=true
         SteerType=VST_Steered
         BoneName="steer_wheel_LF"
@@ -98,7 +98,7 @@ defaultproperties
     End Object
     Wheels(5)=Right_Drive_Wheel
 
-	// Damage
+    // Damage
     HealthMax=1600.0
     Health=1600
     EngineHealth=0

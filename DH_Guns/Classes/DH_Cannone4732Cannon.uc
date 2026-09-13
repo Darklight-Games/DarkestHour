@@ -20,7 +20,7 @@ defaultproperties
     WeaponFireAttachmentBone="muzzle"
 
     GunnerAttachmentBone="turret"
-    
+
     ShootAnim="shoot"
     ShootAnimBoneName="barrel"
 

@@ -72,7 +72,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
         sb_Social.ManageComponent(b_Facebook);
         b_VK.SetVisibility(false);
     }
-    
+
     sb_Social.ManageComponent(b_GitHub);
 
     // MOTD Components
@@ -99,7 +99,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     {
         PlayerOwner().ConsoleCommand("SetName" @ Repl(PlayerOwner().GetUrlOption("Name"), "�", "_"));
     }
-    
+
     // The default near-clip is 2.0, which is needlessly close and causes
     // severe z-fighting. Doubling the near-clip to 4.0 alleviates (but does
     // not completely fix) the issue. This value can be increased so long as
@@ -277,7 +277,7 @@ function bool ButtonClick(GUIComponent Sender)
         case b_Facebook:
             PlayerOwner().ConsoleCommand("START" @ default.FacebookURL);
             break;
-        
+
         case b_VK:
             PlayerOwner().ConsoleCommand("START" @ default.VKURL);
             break;
@@ -293,7 +293,7 @@ function bool ButtonClick(GUIComponent Sender)
         case b_Discord:
             PlayerOwner().ConsoleCommand("START" @ default.DiscordURL);
             break;
-        
+
         case b_Weblate:
             PlayerOwner().ConsoleCommand("START" @ default.WeblateURL);
 
@@ -551,7 +551,7 @@ defaultproperties
     StaticFavorites(1)=(IP="104.243.41.183",Port=7777,ServerName="Official Server #2")
     StaticFavorites(2)=(IP="104.243.41.183",Port=7817,ServerName="Official Server #3")
     StaticFavorites(3)=(IP="104.243.41.183",Port=7797,ServerName="Official Armored Server #1")
-    
+
     // Render Entry.rom instead of background
     bRenderWorld=true
 

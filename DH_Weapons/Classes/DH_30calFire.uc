@@ -16,7 +16,7 @@ defaultproperties
     AddedPitch=25
     MuzzleBone="MUZZLE_A6"
     ShellEmitBone="EJECTOR_LINK"
-    
+
     ShellEjectors(0)=(EjectClass=Class'ShellEject1st762x54mm',EjectBone="EJECTOR",IronSightOffset=(X=40,Z=-10),RotOffsetIron=(Yaw=16384))
 
     // Recoil

@@ -70,10 +70,10 @@ defaultproperties
     RemoteRole=ROLE_DumbProxy
 
     bCollideActors=true
-	bCollideWorld=false
-	bIgnoreEncroachers=true
-	bProjTarget=true
-	bBlockHitPointTraces=true
+    bCollideWorld=false
+    bIgnoreEncroachers=true
+    bProjTarget=true
+    bBlockHitPointTraces=true
 
     CollisionRadius=16.0
     CollisionHeight=32.0

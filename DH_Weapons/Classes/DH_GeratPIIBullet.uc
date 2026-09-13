@@ -11,7 +11,7 @@ defaultproperties
     MaxSpeed=60352.0
     ShellDiameter=0.9
     BallisticCoefficient=0.675
-    
+
     ImpactDamage=120
     Damage=230.0
 
@@ -19,14 +19,14 @@ defaultproperties
     EngineFireChance=0.2
 
     MyDamageType=Class'DH_GeratPIIDamType'
-    
+
     bHasTracer=true
     TracerEffectClass=Class'DHBulletTracer_YellowOrange'
     StaticMesh=StaticMesh'DH_Tracers.Ger_Tracer_Ball'
     DeflectedMesh=StaticMesh'DH_Tracers.Ger_Tracer_Ball'
     SpeedFudgeScale=0.50
     TracerHue=40
-    
+
     //Penetration
     DHPenetrationTable(0)=3.9  // 100
     DHPenetrationTable(1)=3.4  // 250

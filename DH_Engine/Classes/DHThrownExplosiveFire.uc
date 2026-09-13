@@ -223,7 +223,7 @@ event ModeTick(float DeltaTime)
         else if (!ExplosiveWeapon.bAlreadyExploded)
         {
             ExplosiveWeapon.bAlreadyExploded = true;
-            
+
             if (Weapon.Role == ROLE_Authority)
             {
                 Weapon.ConsumeAmmo(ThisModeNum, Weapon.AmmoAmount(ThisModeNum));

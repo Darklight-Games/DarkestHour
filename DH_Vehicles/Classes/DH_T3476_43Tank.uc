@@ -74,7 +74,7 @@ defaultproperties
     TransRatio=0.13
 
     // Damage
-	// same as m42
+    // same as m42
     Health=470
     HealthMax=470
     EngineHealth=300

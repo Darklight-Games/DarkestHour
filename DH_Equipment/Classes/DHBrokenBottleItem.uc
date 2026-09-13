@@ -41,8 +41,6 @@ function bool HandlePickupQuery(Pickup Item)
     return Inventory != none && Inventory.HandlePickupQuery(Item);
 }
 
-
-
 defaultproperties
 {
     FireModeClass(0)=Class'DHBrokenBottleMeleeFire' // for some odd reason, having just the singular firemodeclass causes tweening issues with the weapons bash animations
@@ -53,7 +51,6 @@ defaultproperties
     GroupOffset=0
     Priority=4 // this should be higher than any other weapon on InventoryGroup=4, raising this higher than 8 will require to raise priority on other weapons
     bCanThrow=true
-    
 
     DisplayFOV=90.0
     bCanSway=false
@@ -67,8 +64,7 @@ defaultproperties
     PutDownAnim="put_away_bottle"
     CrawlForwardAnim="crawlF_bottle"
     CrawlBackwardAnim="crawlB_bottle"
-  
-    
+
     AIRating=0.0
     CurrentRating=0.0
 

@@ -8,5 +8,5 @@ class DH_SU76Destroyer_CamoA extends DH_SU76Destroyer;
 defaultproperties
 {
     Skins(0)=Texture'DH_VehiclesSOV_tex.SU76_stripe_ext'
-	CannonSkins(0)=Texture'DH_VehiclesSOV_tex.SU76_stripe_ext'
+    CannonSkins(0)=Texture'DH_VehiclesSOV_tex.SU76_stripe_ext'
 }

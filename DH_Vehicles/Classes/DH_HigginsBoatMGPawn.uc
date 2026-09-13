@@ -50,7 +50,7 @@ defaultproperties
     FirstPersonGunShakeScale=0.75
     FirstPersonOffsetZScale=1.0
     bHideMuzzleFlashAboveSights=true
-    
+
     HudOverlayIdleAnim="bipod_idle"
     HudOverlayFireLoopAnim="deploy_shoot_loop"
     HudOverlayFireEndAnim="deploy_shoot_end"

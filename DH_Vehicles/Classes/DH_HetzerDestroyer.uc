@@ -71,7 +71,7 @@ defaultproperties
     VehicleHudImage=Texture'DH_Hetzer_tex.hetzer_body_icon'
     VehicleHudTurret=TexRotator'DH_Hetzer_tex.hetzer_turret_rot'
     VehicleHudTurretLook=TexRotator'DH_Hetzer_tex.hetzer_turret_look'
-    
+
     VehicleHudOccupantsX(0)=0.425
     VehicleHudOccupantsY(0)=0.325
     VehicleHudOccupantsX(1)=0.575

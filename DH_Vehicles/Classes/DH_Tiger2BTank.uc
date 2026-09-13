@@ -57,7 +57,7 @@ defaultproperties
     EngineRestartFailChance=0.5 //unreliability
 
     // Damage
-	// Compared to Tiger1: even more reliability problems due to extreme weight
+    // Compared to Tiger1: even more reliability problems due to extreme weight
     Health=570
     HealthMax=570.0
     EngineHealth=170  // reduced from 300
