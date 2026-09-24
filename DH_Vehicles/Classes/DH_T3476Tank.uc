@@ -36,17 +36,20 @@ defaultproperties
     DriverPositions(0)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_anm.T34_body_int',TransitionUpAnim="driver_hatch_open",DriverTransitionAnim="Vt3485_driver_close",ViewPitchUpLimit=0,ViewPitchDownLimit=65535,ViewPositiveYawLimit=0,ViewNegativeYawLimit=0,bDrawOverlays=true)
     DriverPositions(1)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_anm.T34_body_int',TransitionDownAnim="driver_hatch_close",DriverTransitionAnim="Vt3485_driver_open",ViewPitchUpLimit=5500,ViewPitchDownLimit=63500,ViewPositiveYawLimit=11000,ViewNegativeYawLimit=-12500,bExposed=true)
     DriveAnim="VT3476_driver_idle_close"
-    HUDOverlayClass=None
+    // HUDOverlayClass=None
 
     // Hull armor
-    FrontArmor(0)=(Thickness=4.5,Slope=-60.0,MaxRelativeHeight=-7.0,LocationName="lower")
-    FrontArmor(1)=(Thickness=4.5,Slope=60.0,LocationName="upper")
-    RightArmor(0)=(Thickness=4.5,MaxRelativeHeight=13.2,LocationName="lower")
+    FrontArmor(0)=(Thickness=4.5,Slope=-60.0,MaxRelativeHeight=47.3,LocationName="lower")
+    FrontArmor(1)=(Thickness=4.5,Slope=60.0,MaxRelativeHeight=90.7,LocationName="upper")
+
+    RightArmor(0)=(Thickness=4.5,MaxRelativeHeight=66.5,LocationName="lower")
     RightArmor(1)=(Thickness=4.5,Slope=40.0,LocationName="upper")
-    LeftArmor(0)=(Thickness=4.5,MaxRelativeHeight=13.2,LocationName="lower")
+
+    LeftArmor(0)=(Thickness=4.5,MaxRelativeHeight=66.5,LocationName="lower")
     LeftArmor(1)=(Thickness=4.5,Slope=40.0,LocationName="upper")
-    RearArmor(0)=(Thickness=4.5,Slope=-45.0,MaxRelativeHeight=-0.4,LocationName="lower")
-    RearArmor(1)=(Thickness=4.5,Slope=48.0,LocationName="upper")
+
+    RearArmor(0)=(Thickness=4.5,Slope=-45.0,MaxRelativeHeight=52.9,LocationName="lower")
+    RearArmor(1)=(Thickness=4.5,Slope=48.0,MaxRelativeHeight=100.1,LocationName="upper")
 
     FrontLeftAngle=330.0
     FrontRightAngle=30.0
@@ -77,8 +80,8 @@ defaultproperties
     FireAttachBone="Body"
     FireEffectOffset=(X=127.0,Y=-18.0,Z=25.0)
     DestroyedVehicleMesh=StaticMesh'allies_vehicles_stc.T3476_Destroyed'
-    DestroyedMeshSkins(0)=Combiner'DH_VehiclesSOV_tex.T3476_ext_dest'
-    DestroyedMeshSkins(1)=Combiner'DH_VehiclesSOV_tex.T3476_treads_dest'
+    // DestroyedMeshSkins(0)=Combiner'DH_VehiclesSOV_tex.T3476_ext_dest'
+    // DestroyedMeshSkins(1)=Combiner'DH_VehiclesSOV_tex.T3476_treads_dest'
 
     // Exit positions
     ExitPositions(0)=(X=215.0,Y=-14.0,Z=50.0)  // driver
@@ -104,8 +107,8 @@ defaultproperties
     WheelRotationScale=29250.0
     ExhaustEffectClass=Class'ExhaustDieselEffect'
     ExhaustEffectLowClass=Class'ExhaustDieselEffect_simple'
-    ExhaustPipes(0)=(ExhaustPosition=(X=-175,Y=30,Z=10),ExhaustRotation=(Pitch=36000,Yaw=0,Roll=0))
-    ExhaustPipes(1)=(ExhaustPosition=(X=-175,Y=-30,Z=10),ExhaustRotation=(Pitch=36000,Yaw=0,Roll=0))
+    ExhaustPipes(0)=(ExhaustPosition=(X=-175,Y=30,Z=64),ExhaustRotation=(Pitch=36000,Yaw=0,Roll=0))
+    ExhaustPipes(1)=(ExhaustPosition=(X=-175,Y=-30,Z=64),ExhaustRotation=(Pitch=36000,Yaw=0,Roll=0))
 
     // HUD
     VehicleHudImage=Texture'DH_InterfaceArt_tex.t34_body'

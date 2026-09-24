@@ -8,18 +8,27 @@ class DH_T3485CannonPawn extends DHSovietCannonPawn;
 defaultproperties
 {
     GunClass=Class'DH_T3485Cannon'
-    DriverPositions(0)=(ViewLocation=(X=23.0,Y=-15.0,Z=0.0),ViewFOV=21.25,PositionMesh=SkeletalMesh'DH_T34_anm.T34-85_turret_int',bDrawOverlays=true)
-    DriverPositions(1)=(ViewLocation=(X=0,Y=0,Z=15.0),ViewFOV=75.0,PositionMesh=SkeletalMesh'DH_T34_anm.T34-85_turret_int',DriverTransitionAnim="VT3485_com_close",TransitionUpAnim="com_open",ViewPitchUpLimit=2731,ViewPitchDownLimit=64080,ViewPositiveYawLimit=65536,ViewNegativeYawLimit=-65536,bDrawOverlays=true)
-    //
-    DriverPositions(2)=(PositionMesh=SkeletalMesh'DH_T34_anm.T34-85_turret_int',DriverTransitionAnim="VT3485_com_open",TransitionDownAnim="com_close",ViewPitchUpLimit=5000,ViewPitchDownLimit=62000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bExposed=true)
-    DriverPositions(3)=(ViewFOV=12.0,PositionMesh=SkeletalMesh'DH_T34_anm.T34-85_turret_int',DriverTransitionAnim="stand_idleiron_binoc",ViewPitchUpLimit=5000,ViewPitchDownLimit=62000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bDrawOverlays=true,bExposed=true)
 
-    DriveAnim="VT3485_com_idle_close"
+    CameraBone="GUNSIGHT_CAMERA"
+    PeriscopeCameraBone="CAMERA_PERISCOPE"
+    PlayerCameraBone="CAMERA_COM"
+
+    // gunsight
+    DriverPositions(0)=(PositionMesh=SkeletalMesh'DH_T34_85_anm.T34_85_TURRET_INT',ViewFOV=21.25,bDrawOverlays=true)
+    // periscope
+    DriverPositions(1)=(PositionMesh=SkeletalMesh'DH_T34_85_anm.T34_85_TURRET_INT',ViewFOV=75.0,DriverTransitionAnim="T34_85_COM_HATCH_CLOSE",TransitionUpAnim="com_hatch_open",ViewPitchUpLimit=2731,ViewPitchDownLimit=64080,ViewPositiveYawLimit=65536,ViewNegativeYawLimit=-65536,bDrawOverlays=true)
+    // exposed
+    DriverPositions(2)=(PositionMesh=SkeletalMesh'DH_T34_85_anm.T34_85_TURRET_INT',DriverTransitionAnim="T34_85_COM_HATCH_OPEN",TransitionDownAnim="com_hatch_close",ViewPitchUpLimit=5000,ViewPitchDownLimit=62000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bExposed=true)
+    // binocs
+    DriverPositions(3)=(PositionMesh=SkeletalMesh'DH_T34_85_anm.T34_85_TURRET_INT',ViewFOV=21.25,DriverTransitionAnim="T34_85_COM_BINOCS",ViewPitchUpLimit=5000,ViewPitchDownLimit=62000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bDrawOverlays=true,bExposed=true)
+
+    GunsightPositions=1
     PeriscopePositionIndex=1
     BinocPositionIndex=3
-
-    //PeriscopeOverlay=Texture'DH_VehicleOptics_tex.MG_sight'
+    DrivePos=(Z=58)
+    DriveAnim="T34_85_IDLE_CLOSE"
     //PeriscopeSize=0.5
+    
 
     GunsightOverlay=Texture'Vehicle_Optic.t3485_sight'
     GunsightSize=0.753 // 16 degrees visible FOV at 4x magnification (TSh-16 sight)

@@ -8,13 +8,19 @@ class DH_T3485Cannon extends DHVehicleCannon;
 defaultproperties
 {
     // Turret mesh
-    Mesh=SkeletalMesh'DH_T34_anm.T34-85_turret_ext'
-    Skins(0)=Texture'allies_vehicles_tex.T3485_ext'
-    Skins(1)=Texture'allies_vehicles_tex.T3485_int'
+    Mesh=SkeletalMesh'DH_T34_85_anm.T34_85_TURRET_EXT'
+    Skins(0)=Texture'DH_T34_85_tex.T34_85_EXT'
+    Skins(1)=Texture'DH_T34_85_tex.T34_85_INT'
     HighDetailOverlay=Shader'allies_vehicles_tex.T3485_int_s'
     bUseHighDetailOverlayIndex=true
     HighDetailOverlayIndex=1
-    CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_Soviet_vehicles_stc.T34-85_turret_col')
+    CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_COLLISION')
+    bUseTankTurretRotation=true
+    YawBone="GUN_YAW"
+    PitchBone="GUN_PITCH"
+    ShootAnim="SHOOT"
+    ShootAnimBoneName="BARREL"
+    GunnerAttachmentBone="GUN_YAW"
 
     // Turret armor
     FrontArmorFactor=8.4 //9.0 cm reduced by cast armor modifier 93%
@@ -31,6 +37,9 @@ defaultproperties
     RearRightAngle=162.0
     RearLeftAngle=198.0
 
+    // Collision Attachments
+    CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_T34_85_stc.T34_85_COM_HATCH_COLLISION',AttachBone="com_hatch")
+    CollisionStaticMeshes(2)=(CollisionStaticMesh=StaticMesh'DH_T34_85_stc.T34_85_MANTLET_COLLISION',AttachBone="gun_pitch")
     // Turret movement
     ManualRotationsPerSecond=0.02
     PoweredRotationsPerSecond=0.0555 // 20 degrees/sec
@@ -70,7 +79,8 @@ defaultproperties
 
     // Weapon fire
     WeaponFireOffset=150.9
-    AltFireOffset=(X=-41.0,Y=17.5,Z=0.0)
+    AltFireAttachmentBone="MG_MUZZLE"
+    AltFireOffset=(X=-8.0,Y=0.0,Z=0.0)
 
     // Sounds
     CannonFireSound(0)=Sound'Vehicle_Weapons.85mm_fire01'
