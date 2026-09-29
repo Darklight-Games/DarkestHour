@@ -355,6 +355,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
 {
     local ROVehicle       HitVehicle;
     local ROVehicleWeapon HitVehicleWeapon;
+    local DHDestroyableSchurzen HitSchurzen;
     local Vector          Direction, TempHitLocation, HitNormal;
     local array<int>      HitPoints;
 
@@ -367,6 +368,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
 
     SavedTouchActor = Other;
     HitVehicleWeapon = ROVehicleWeapon(Other);
+    HitSchurzen = DHDestroyableSchurzen(Other);
     HitVehicle = ROVehicle(Other.Base);
     Direction = Normal(Velocity);
 
@@ -424,6 +426,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
         // We hit a player pawn's 'general' collision area, but now we need to run a HitPointTrace to make sure we actually hit part of his body
         if (Other.IsA('ROPawn'))
         {
+            Log("We hit an ROPawn");
             // HitPointTraces don't work well with short traces, so we have to do long trace first, then if we hit player we check whether he was within the whip attachment
             Other = HitPointTrace(TempHitLocation, HitNormal, HitLocation + (Direction * 65535.0), HitPoints, HitLocation,, 0); // WhizType 0 for no whiz
 
@@ -455,6 +458,8 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
         // We hit some other kind of pawn, destroyable mesh, or construction
         else if (Other.IsA('RODestroyableStaticMesh') || Other.IsA('Pawn'))
         {
+            Log("We hit an ROSDM");
+
             if (Role == ROLE_Authority)
             {
                 Other.TakeDamage(ImpactDamage, Instigator, HitLocation, MomentumTransfer * Direction, ShellImpactDamage);
@@ -468,8 +473,42 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
 
             HurtWall = Other; // added to prevent Other from being damaged again by HurtRadius called by Explode/BlowUp
         }
-        else if (Other.IsA('DHConstruction') || Other.IsA('DHDestroyableStaticMesh'))
+        //We hit a type of side skirt armor that we need to run a penetration check on.
+        else if (Other.IsA('DHDestroyableSchurzen'))
         {
+            Trace(TempHitLocation, HitNormal, HitLocation + (Direction * 50.0), HitLocation - (Direction * 50.0), true);
+
+            Log("We hit a destroyable side skirt");
+            Log("Projectile:" @ self.Name @ "RoundType:" @ RoundType);
+
+            if (!HitSchurzen.ShouldPenetrate(self, HitLocation, HitNormal, Direction))
+            {
+                Log("ShouldPenetrate returned: FALSE (Shell BLOCKED by Schurzen)");
+                if (Role == ROLE_Authority)
+                {
+                    HitSchurzen.TakeDamage(ImpactDamage, Instigator, HitLocation, MomentumTransfer * Direction, ShellImpactDamage);
+                }
+                // I don't think we need this function, it's too complex for what we're doing here, it looks like if we DON'T run return, this skips to Explode and destroys the shell.
+                //FailToPenetrateArmor(HitLocation, HitNormal, HitSchurzen); 
+                //return;
+            }
+            else
+            {
+                Log("ShouldPenetrate returned: TRUE (Shell PENETRATED Schurzen)");
+                if (Role == ROLE_Authority)
+                {
+                    HitSchurzen.TakeDamage(ImpactDamage, Instigator, HitLocation, MomentumTransfer * Direction, ShellImpactDamage);
+                }
+
+                HurtWall = Other;
+                Velocity *= 0.90; //I don't know if we need to bother with this, changing velocity probably doesn't matter for a skirt that is right next to the tank.
+                return;
+            }
+        }
+        else if (Other.IsA('DHConstruction'))
+        {
+            Log("We hit a DH Construction");
+            
             if (Role == ROLE_Authority)
             {
                 Other.TakeDamage(ImpactDamage, Instigator, HitLocation, MomentumTransfer * Direction, ShellImpactDamage);
