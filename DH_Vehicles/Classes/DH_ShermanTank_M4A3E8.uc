@@ -44,7 +44,7 @@ simulated function CreateAttachments()
     if (Role == ROLE_Authority)
     {
         // Left logs
-        LogsLeft = Spawn(Class'DHDestroyableStaticMesh', self);
+        LogsLeft = Spawn(Class'DHDestroyableSchurzen', self);
 
         if (LogsLeft != none)
         {
@@ -55,7 +55,7 @@ simulated function CreateAttachments()
         }
 
         // Right logs
-        LogsRight = Spawn(Class'DHDestroyableStaticMesh', self);
+        LogsRight = Spawn(Class'DHDestroyableSchurzen', self);
 
         if (LogsRight != none)
         {
