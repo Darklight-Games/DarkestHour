@@ -57,3 +57,8 @@ function QueryHeaderPage(WebRequest Request, WebResponse Response)
     // Set URIs
     ShowPage(Response, HeaderPage);
 }
+
+defaultproperties
+{
+    QueryHandlerClasses(1)="DH_Engine.DHWebQueryDefaults"
+}

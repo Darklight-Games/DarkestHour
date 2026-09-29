@@ -24,7 +24,21 @@ struct Restriction
     var bool   bVoice;
 };
 
-var private globalconfig array<Restriction> Restrictions; 
+var globalconfig array<Restriction> Restrictions;
+
+function ApplyRestrictionByID(string ID)
+{
+    local DHPlayer C;
+
+    for (C = DHPlayer(Level.ControllerList); C != none; C = DHPlayer(C.NextController))
+    {
+        if (C.GetPlayerIDHash() ~= ID)
+        {
+            ApplyRestriction(C);
+            return;
+        }
+    }
+}
 
 function ApplyRestriction(DHPlayer PC)
 {

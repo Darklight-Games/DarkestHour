@@ -262,3 +262,57 @@ td.i6	{ background-color:#01FF5B; } /*dgreen	*/
 td.i7	{ background-color:#01FFD2; } /*lblueg	*/
 td.i8	{ background-color:#01B4FF; } /*lblue	*/
 td.i9	{ background-color:#013DFF; } /*dblue	*/
+
+.textbox.playerid {
+    width: 18ch;
+}
+
+/*Tables for array CRUD operations*/
+.crud-table {
+    text-align: left;
+    white-space: nowrap;
+    --section-padding: 1em;
+}
+
+.crud-table :is(thead, tbody) tr:last-child :is(th, td) {
+    padding-bottom: var(--section-padding);
+}
+
+.crud-table .button {
+    --btn-primary-color: #ededed;
+    --btn-secondary-color: #0e0e0e;
+    display: inline-block;
+    width: 8ch;
+    padding: 1px 4px;
+    border: 1px solid var(--btn-primary-color);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--btn-primary-color);
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-size: 10pt;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.crud-table .button.create {
+    --btn-primary-color: #64ce64;
+}
+
+.crud-table .button.update {
+    --btn-primary-color: #d4995e;
+}
+
+.crud-table .button.delete {
+    --btn-primary-color: #d65e5e;
+    border-style: dotted;
+}
+
+.crud-table .button:hover {
+    background: var(--btn-primary-color);
+    color: var(--btn-secondary-color)
+}
+
+.crud-table .button:active {
+    filter: background(75%);
+}
