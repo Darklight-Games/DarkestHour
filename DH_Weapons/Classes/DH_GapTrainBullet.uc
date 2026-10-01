@@ -8,10 +8,10 @@ class DH_GapTrainBullet extends DHCannonShell;
 defaultproperties
 {
     Speed=4550.0 
-    MaxSpeed=62220.0
+    MaxSpeed=6220.0
     ShellDiameter=355.2
     BallisticCoefficient=0.1 //TODO: find correct BC
-    SpeedFudgeScale=0.3
+    SpeedFudgeScale=0.8
 
     //Damage
     ImpactDamage=30000
