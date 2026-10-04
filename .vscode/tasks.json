@@ -73,7 +73,7 @@
         {
             "label": "Run",
             "command": "./RedOrchestraLargeAddressAware.exe -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- -mod=DarkestHourDev" },
+            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- -mod=DarkestHourDev &' >/dev/null 2>&1" },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
@@ -84,7 +84,7 @@
         {
             "label": "Run with Parameters",
             "command": "./RedOrchestraLargeAddressAware.exe ${input:buildArgs} -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- ${input:buildArgs} -mod=DarkestHourDev" },
+            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- ${input:buildArgs} -mod=DarkestHourDev &' >/dev/null 2>&1" },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
@@ -95,7 +95,7 @@
         {
             "label": "Run Map",
             "command": "./RedOrchestraLargeAddressAware.exe ${input:pickMap}?quickstart=true -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- ${input:pickMap}?quickstart=true -mod=DarkestHourDev" },
+            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- ${input:pickMap}?quickstart=true -mod=DarkestHourDev &' >/dev/null 2>&1" },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
@@ -106,7 +106,7 @@
         {
             "label": "Run Default Map",
             "command": "./RedOrchestraLargeAddressAware.exe DH-Target_Range.rom?quickstart=true -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- DH-Target_Range.rom?quickstart=true -mod=DarkestHourDev" },
+            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- DH-Target_Range.rom?quickstart=true -mod=DarkestHourDev &' >/dev/null 2>&1" },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
@@ -117,7 +117,7 @@
         {
             "label": "Connect",
             "command": "./RedOrchestraLargeAddressAware.exe 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev" },
+            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev &' >/dev/null 2>&1"},
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
@@ -129,7 +129,7 @@
             // TODO: Add support for Windows
             "label": "Connect Multiple Clients",
             "command": "echo Not supported on Windows. Use dhdev_server_with_clients.bat script instead.; echo",
-            "linux": { "command": "steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev --multi" },
+            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev --multi &' >/dev/null 2>&1" },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
@@ -155,7 +155,7 @@
             "linux": {
                 // NOTE: Requires launch options configured on Linux. See:
                 //       https://github.com/DarklightGames/DarkestHour/wiki/Running-SDK-on-Linux
-                "command": "steam -applaunch 1220 -- -mod=DarkestHourDev -nogamma",
+                "command": "nohup sh -c 'steam -applaunch 1220 -- -mod=DarkestHourDev -nogamma &' >/dev/null 2>&1",
             },
             "type": "shell",
             "group": "test",
