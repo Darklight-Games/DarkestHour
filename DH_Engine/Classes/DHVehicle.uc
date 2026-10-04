@@ -75,7 +75,7 @@ struct RandomAttachmentGroup
 var() bool bDoRandomAttachments;
 var() array<RandomAttachmentGroup> RandomAttachmentGroups;
 
-const MAX_RANDOM_ATTACHMENT_GROUPS = 8;
+const MAX_RANDOM_ATTACHMENT_GROUPS = 14;
 var byte RandomAttachmentGroupOptions[MAX_RANDOM_ATTACHMENT_GROUPS];
 
 // Use this to set the skins of all random attachments at once.
@@ -3310,7 +3310,7 @@ simulated function SpawnVehicleAttachments()
     {
         VA = VehicleAttachments[i];
 
-        if (VA.bAttachToWeapon)
+        if (VA.bAttachToWeapon && Level.NetMode != NM_Standalone)
         {
             // Do not do the attachment here. The weapon will handle it when it is spawned client-side in InitializeVehicleBase.
             // This guarantees that it has a valid reference to this vehicle.
@@ -4637,6 +4637,51 @@ function CreateSpawnPointAttachment(bool bIsTemporary)
 function bool ShouldPlayersSpawnInsideVehicle()
 {
     return !bEngineOff;
+}
+
+// New debug commands for static attachments
+exec function ListAttachments()
+{
+    local int i;
+
+    Log("Vehicle attachments for" @ self);
+
+    for (i = 0; i < VehicleAttachments.Length; ++i)
+    {
+        Log("" $ i @ "-" @ VehicleAttachments[i].Actor @ "(" $ VehicleAttachments[i].StaticMesh $ ")");
+    }
+}
+
+exec function SetAttachmentRotation(int Index, optional string Pitch, optional string Yaw, optional string Roll)
+{
+    local Rotator Rotation;
+
+    if (Index < 0 || Index >= VehicleAttachments.Length)
+    {
+        Warn("Bad index");
+    }
+
+    Rotation.Pitch = int(Pitch);
+    Rotation.Yaw = int(Yaw);
+    Rotation.Roll = int(Roll);
+
+    VehicleAttachments[Index].Actor.SetRelativeRotation(Rotation);
+}
+
+exec function SetAttachmentLocation(int Index, optional string X, optional string Y, optional string Z)
+{
+    local Vector Location;
+
+    if (Index < 0 || Index >= VehicleAttachments.Length)
+    {
+        Warn("Bad index");
+    }
+
+    Location.X = int(X);
+    Location.Y = int(Y);
+    Location.Z = int(Z);
+
+    VehicleAttachments[Index].Actor.SetRelativeLocation(Location);
 }
 
 defaultproperties

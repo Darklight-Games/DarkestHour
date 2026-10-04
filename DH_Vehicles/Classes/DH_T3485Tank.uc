@@ -3,8 +3,11 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // TODO
-// attachments
-// smokes
+// fix turret attachments
+// add destroyed cope cages
+// figure out driver controlled smoke system
+// add infantry riders
+// add hatch opening sounds
 
 class DH_T3485Tank extends DH_T3476Tank;
 
@@ -36,7 +39,7 @@ defaultproperties
     // Driver
     DriverPositions(0)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_85_anm.T34_85_BODY_INT',TransitionUpAnim="driver_hatch_open",DriverTransitionAnim="T34_DRIVER_HATCH_CLOSE",ViewPitchUpLimit=0,ViewPitchDownLimit=65535,ViewPositiveYawLimit=0,ViewNegativeYawLimit=0,bDrawOverlays=true)
     DriverPositions(1)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_85_anm.T34_85_BODY_INT',TransitionDownAnim="driver_hatch_close",DriverTransitionAnim="T34_DRIVER_HATCH_OPEN",ViewPitchUpLimit=5500,ViewPitchDownLimit=63500,ViewPositiveYawLimit=11000,ViewNegativeYawLimit=-12500,bExposed=true)
-    DrivePos=(Z=58)
+    DrivePos=(Z=110.3)
     DriveRot=(Yaw=16384)
     DriveAnim="T34_DRIVER_CLOSE_IDLE"
     DriverAttachmentBone="BODY"
@@ -50,13 +53,21 @@ defaultproperties
     TreadVelocityScale=175.0
     WheelRotationScale=50000.0
 
+    // Attachments
+    RandomAttachmentGroups(0)=(Options=((Probability=0.8,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_SPARE_TRACK',Offset=(X=153,Z=56.3),Rotation=(Pitch=-5606),AttachBone="body"))))
+    RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3),AttachBone="body"))))
+    RandomAttachmentGroups(2)=(Options=((Probability=0.7,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_FUEL_TANK_L',AttachBone="body"))))
+    RandomAttachmentGroups(3)=(Options=((Probability=0.7,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_FUEL_TANK_R',AttachBone="body"))))
+    RandomAttachmentGroups(4)=(Options=((Probability=0.85,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',bAttachToWeapon=true,AttachBone="gun_yaw"))))
+    
     // Shadow
-    ShadowZOffset=50.0
+    ShadowZOffset=20.0
 
     // Damage
     // pros: diesel fuel; 5 men crew
     // cons: fuel tanks in crew compartment
     Health=525
+
     HealthMax=525
     EngineHealth=300
 
