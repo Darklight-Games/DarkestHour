@@ -11,8 +11,8 @@ defaultproperties
     CannonSkins(0)=Texture'DH_T34_85_tex.T34_85_EXT_BERLIN'
     PassengerWeapons(0)=(WeaponPawnClass=Class'DH_T3485CannonPawn_Berlin')
 
-    RandomAttachmentGroups(2)=(Options=((Probability=0.6,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_BODY_CAGE_LR',Offset=(Z=57.3),AttachBone="body")),(Probability=0.3,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_FUEL_TANK_L',AttachBone="body"))))
-    RandomAttachmentGroups(3)=(Options=((Probability=0.6,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_BODY_CAGE_RR',Offset=(Z=57.3),AttachBone="body")),(Probability=0.3,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_FUEL_TANK_R',AttachBone="body"))))
+    RandomAttachmentGroups(2)=(Options=((Probability=0.7,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_BODY_CAGE_LR',Offset=(Z=57.3),AttachBone="body")),(Probability=0.2,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_FUEL_TANK_L',AttachBone="body"))))
+    RandomAttachmentGroups(3)=(Options=((Probability=0.7,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_BODY_CAGE_RR',Offset=(Z=57.3),AttachBone="body")),(Probability=0.2,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_FUEL_TANK_R',AttachBone="body"))))
     RandomAttachmentGroups(4)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_CR',bAttachToWeapon=true,AttachBone="gun_yaw")))) 
     RandomAttachmentGroups(5)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_BODY_CAGE_LF',Offset=(Z=57.3),AttachBone="body"))))
     RandomAttachmentGroups(6)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_BODY_CAGE_RF',Offset=(Z=57.3),AttachBone="body"))))

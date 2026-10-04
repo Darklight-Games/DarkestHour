@@ -4,7 +4,6 @@
 //==============================================================================
 // TODO
 // fix turret attachments
-// add destroyed cope cages
 // figure out driver controlled smoke system
 // add infantry riders
 // add hatch opening sounds
