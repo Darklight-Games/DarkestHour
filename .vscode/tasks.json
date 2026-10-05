@@ -33,7 +33,40 @@
                         "line": 2,
                         "message": 3
                     }
-                }
+                },
+                {
+                    // DEFAULT PROPERTIES ERRORS:
+                    //
+                    // %Package.ClassName%: Missing '=' in default properties assignment: %s
+                    // %Package.ClassName%: Unknown property in defaults: %s
+                    // %Package.ClassName%: Out of bound array default property (%i/%i)
+                    // %Package.ClassName%: Missing '\"' in string default properties : %s"
+                    // %Package.ClassName%: Delegate assignment failed: %s
+
+                    "owner": "unrealscript",
+                    "source": "ucc",
+                    "severity": "error",
+                    "pattern": {
+                        "regexp": "^(.+?\\..+):\\s((?:Unknown|Missing|Out of|Delegate).+)",
+                        "file": 1,
+                        "message": 2,
+                    }
+                },
+                {
+                    // DEFAULT PROPERTIES ERRORS:
+                    //
+                    // redundant data: %s
+                    // BEGIN OBJECT: name %s redefined.
+                    // BEGIN OBJECT: Can't create subobject as Class %s hasn't been compiled yet.
+
+                    "owner": "unrealscript",
+                    "source": "ucc",
+                    "severity": "error",
+                    "pattern": {
+                        "regexp": "^((?:redundant data|BEGIN OBJECT):.+)",
+                        "message": 1,
+                    }
+                },
             ],
             "group": {
                 "kind": "build",
@@ -68,7 +101,26 @@
                         "line": 2,
                         "message": 3
                     }
-                }
+                },
+                {
+                    "owner": "unrealscript",
+                    "source": "ucc",
+                    "severity": "error",
+                    "pattern": {
+                        "regexp": "^(.+?\\..+):\\s((?:Unknown|Missing|Out of|Delegate).+)",
+                        "file": 1,
+                        "message": 2,
+                    }
+                },
+                {
+                    "owner": "unrealscript",
+                    "source": "ucc",
+                    "severity": "error",
+                    "pattern": {
+                        "regexp": "^((?:redundant data|BEGIN OBJECT):.+)",
+                        "message": 1,
+                    }
+                },
             ],
             "group": "build"
         },
