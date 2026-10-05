@@ -13,7 +13,9 @@
                     "fileLocation": "absolute",
                     "source": "ucc",
                     "pattern": {
-                        "regexp": "(?!.*Class names shouldn't end in a digit)(^.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\s(Warning|Error),\\s(.+$)",
+                        // NOTE: If the file path starts with `Z:`, the driver letter is omitted to fix
+                        //       incorrect file paths on Linux when compiler runs through Wine.
+                        "regexp": "^(?!.*Class names shouldn't end in a digit)(?:Z:)?(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\s(Warning|Error),\\s(.+$)",
                         "file": 1,
                         "line": 2,
                         "severity": 3,
@@ -26,7 +28,7 @@
                     "source": "ucc",
                     "severity": "info",
                     "pattern": {
-                        "regexp": "^(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\sWarning,\\s(Class names shouldn't end in a digit)$",
+                        "regexp": "^(?:Z:)?(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\sWarning,\\s(Class names shouldn't end in a digit)$",
                         "file": 1,
                         "line": 2,
                         "message": 3
@@ -48,7 +50,7 @@
                     "fileLocation": "absolute",
                     "source": "ucc",
                     "pattern": {
-                        "regexp": "^(?!.*Class names shouldn't end in a digit)(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\s(Warning|Error),\\s(.+)$",
+                        "regexp": "^(?!.*Class names shouldn't end in a digit)(?:Z:)?(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\s(Warning|Error),\\s(.+)$",
                         "file": 1,
                         "line": 2,
                         "severity": 3,
@@ -61,7 +63,7 @@
                     "source": "ucc",
                     "severity": "info",
                     "pattern": {
-                        "regexp": "^(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\sWarning,\\s(Class names shouldn't end in a digit)$",
+                        "regexp": "^(?:Z:)?(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\sWarning,\\s(Class names shouldn't end in a digit)$",
                         "file": 1,
                         "line": 2,
                         "message": 3
