@@ -49,7 +49,7 @@
                     "pattern": {
                         "regexp": "^(.+?\\..+):\\s((?:Unknown|Missing|Out of|Delegate).+)",
                         "file": 1,
-                        "message": 2,
+                        "message": 2
                     }
                 },
                 {
@@ -64,9 +64,9 @@
                     "severity": "error",
                     "pattern": {
                         "regexp": "^((?:redundant data|BEGIN OBJECT):.+)",
-                        "message": 1,
+                        "message": 1
                     }
-                },
+                }
             ],
             "group": {
                 "kind": "build",
@@ -109,7 +109,7 @@
                     "pattern": {
                         "regexp": "^(.+?\\..+):\\s((?:Unknown|Missing|Out of|Delegate).+)",
                         "file": 1,
-                        "message": 2,
+                        "message": 2
                     }
                 },
                 {
@@ -118,88 +118,123 @@
                     "severity": "error",
                     "pattern": {
                         "regexp": "^((?:redundant data|BEGIN OBJECT):.+)",
-                        "message": 1,
+                        "message": 1
                     }
-                },
+                }
             ],
             "group": "build"
         },
         {
             "label": "Run",
             "command": "./RedOrchestraLargeAddressAware.exe -mod=DarkestHourDev",
-            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- -mod=DarkestHourDev &' >/dev/null 2>&1" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Run with Parameters",
             "command": "./RedOrchestraLargeAddressAware.exe ${input:buildArgs} -mod=DarkestHourDev",
-            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- ${input:buildArgs} -mod=DarkestHourDev &' >/dev/null 2>&1" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- ${input:buildArgs} -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Run Map",
             "command": "./RedOrchestraLargeAddressAware.exe ${input:pickMap}?quickstart=true -mod=DarkestHourDev",
-            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- ${input:pickMap}?quickstart=true -mod=DarkestHourDev &' >/dev/null 2>&1" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- ${input:pickMap}?quickstart=true -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Run Default Map",
             "command": "./RedOrchestraLargeAddressAware.exe DH-Target_Range.rom?quickstart=true -mod=DarkestHourDev",
-            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- DH-Target_Range.rom?quickstart=true -mod=DarkestHourDev &' >/dev/null 2>&1" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- DH-Target_Range.rom?quickstart=true -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Connect",
             "command": "./RedOrchestraLargeAddressAware.exe 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev",
-            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev &' >/dev/null 2>&1"},
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
-            // TODO: Add support for Windows
             "label": "Connect Multiple Clients",
             "command": "echo Not supported on Windows. Use dhdev_server_with_clients.bat script instead.; echo",
-            "linux": { "command": "nohup sh -c 'steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev --multi &' >/dev/null 2>&1" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev --multi &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Run Server",
             "command": "./UCC.exe server ${input:pickMap}?MaxPlayers=64?Mutator=DH_AdminMenuMutator.DHAdminMenuMutator -log=DHServerLog.log -mod=DarkestHourDev -ini=DarkestHourDev.ini",
-            "linux": { "command": "wine UCC.exe server ${input:pickMap}?game=DH_Engine.DarkestHourGame?MaxPlayers=64?Mutator=DH_AdminMenuMutator.DHAdminMenuMutator -log=DHServerLog.log -mod=DarkestHourDev -ini=DarkestHourDev.ini"},
+            "linux": {
+                "command": "wine UCC.exe server ${input:pickMap}?game=DH_Engine.DarkestHourGame?MaxPlayers=64?Mutator=DH_AdminMenuMutator.DHAdminMenuMutator -log=DHServerLog.log -mod=DarkestHourDev -ini=DarkestHourDev.ini"
+            },
             "type": "shell",
             "group": "test",
+            "isBackground": true,
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "runOptions": {
+                "instancePolicy": "terminateOldest"
             }
         },
         {
@@ -209,13 +244,16 @@
             "linux": {
                 // NOTE: Requires launch options configured on Linux. See:
                 //       https://github.com/DarklightGames/DarkestHour/wiki/Running-SDK-on-Linux
-                "command": "nohup sh -c 'steam -applaunch 1220 -- -mod=DarkestHourDev -nogamma &' >/dev/null 2>&1",
+                "command": "nohup sh -c 'steam -applaunch 1220 -- -mod=DarkestHourDev -nogamma &' >/dev/null 2>&1"
             },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
@@ -261,17 +299,37 @@
             "problemMatcher": []
         },
         {
+            "label": "Kill Server",
+            "type": "shell",
+            "hide": true,
+            "command": "echo ${input:killServer}",
+            "problemMatcher": [],
+            "presentation": {
+                "close": true,
+            },
+            "runOptions": {
+                "instancePolicy": "terminateOldest"
+            }
+        },
+        {
             "label": "Build and Run Server",
             "dependsOrder": "sequence",
             "dependsOn": [
+                "Kill Server",
                 "Build",
                 "Run Server"
             ],
             "group": "test",
             "problemMatcher": []
-        },
+        }
     ],
     "inputs": [
+        {
+            "type": "command",
+            "id": "killServer",
+            "command": "workbench.action.tasks.terminate",
+            "args": "Run Server"
+        },
         {
             "type": "promptString",
             "id": "runArgs",
@@ -295,16 +353,29 @@
             "type": "command",
             "command": "extension.commandvariable.pickStringRemember",
             "args": {
-                "description": "Run map",
+                "description": "Select the map picker option...",
                 "options": [
-                    ["Use last map", "${remember:lastMapName}"],
-                    ["Select map", "${pickFile:mapName}"]
+                    {
+                        "label": "Last Map",
+                        "description": "${remember:lastMapName}",
+                        "value": {
+                            // Need to do this to get the default value instead of "I don't remember"
+                            "mapName": {
+                                "text": "${remember:lastMapName}"
+                            }
+                        }
+                    },
+                    {
+                        "label": "Select Map",
+                        "value": "${pickFile:mapName}"
+                    },
                 ],
                 "rememberTransformed": true,
                 "key": "lastMapName",
+                "default": "DH-Target_Range.rom",
                 "pickFile": {
                     "mapName": {
-                        "description": "Select a map",
+                        "description": "Select the map to launch",
                         "include": "DarkestHourDev/Maps/**/*.rom",
                         "keyRemember": "mapName",
                         "display": "fileName",
