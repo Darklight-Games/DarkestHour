@@ -25,7 +25,7 @@ defaultproperties
     GunsightPositions=1
     PeriscopePositionIndex=1
     BinocPositionIndex=3
-    DrivePos=(Z=58)
+    DrivePos=(X=-0.5,Z=58.5)
     DriveAnim="T34_85_IDLE_CLOSE"
     //PeriscopeSize=0.5
     
