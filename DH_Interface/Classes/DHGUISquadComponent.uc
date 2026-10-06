@@ -106,10 +106,12 @@ function OnSquadNameEditBoxDeactivate()
 function OnSquadNameEditBoxEnter()
 {
     local DHPlayer PC;
+    local DHPlayerReplicationInfo PRI;
 
     PC = DHPlayer(PlayerOwner());
+    PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
 
-    if (PC != none)
+    if (PC != none && PRI != none && !PRI.bRestrictSquadNames)
     {
         l_SquadName.Caption = eb_SquadName.TextStr;
 

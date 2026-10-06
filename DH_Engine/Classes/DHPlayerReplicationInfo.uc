@@ -56,6 +56,7 @@ var     int                     NoRallyPointsTime; // Time when SL lost all rall
 // Restrictions
 var     bool                    bRestrictOutboundMessages;
 var     bool                    bRestrictOutboundVoice;
+var     bool                    bRestrictSquadNames;
 
 replication
 {
@@ -63,7 +64,7 @@ replication
     reliable if (bNetDirty && Role == ROLE_Authority)
         SquadIndex, SquadMemberIndex, PatronTier, bIsDeveloper, DHKills, bIsSquadAssistant,
         TotalScore, CategoryScores, PlayerIQ, NoRallyPointsTime, bIsIncognito, bIsPossesingPawn,
-        bRestrictOutboundMessages, bRestrictOutboundVoice;
+        bRestrictOutboundMessages, bRestrictOutboundVoice, bRestrictSquadNames;
 }
 
 simulated function string GetNamePrefix()

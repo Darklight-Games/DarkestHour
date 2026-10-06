@@ -22,6 +22,7 @@ struct Restriction
     var string PlayerID;
     var bool   bOutboundMessages;
     var bool   bOutboundVoice;
+    var bool   bSquadNames;
 };
 
 var globalconfig array<Restriction> Restrictions;
@@ -91,6 +92,16 @@ function ApplyRestriction(DHPlayer PC)
                 PRI.ActiveChannel = -1;
             }
         }
+
+        // Squad name editing
+        if (PRI.Team != none &&
+            Restrictions[i].bSquadNames && !PRI.bRestrictSquadNames &&
+            PC.SquadReplicationInfo != none && PRI.IsSquadLeader())
+        {
+            PC.SquadReplicationInfo.SetName(PRI.Team.TeamIndex, PRI.SquadIndex, "");
+        }
+
+        PRI.bRestrictSquadNames = Restrictions[i].bSquadNames;
     }
 }
 

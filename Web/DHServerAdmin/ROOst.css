@@ -318,7 +318,7 @@ td.i9	{ background-color:#013DFF; } /*dblue	*/
 }
 
 .crud-table :is(th,td).check {
-    text-align: right;
+    text-align: center;
 }
 
 .crud-table :is(th,td) {
