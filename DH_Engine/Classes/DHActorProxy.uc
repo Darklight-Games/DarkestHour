@@ -65,6 +65,7 @@ enum EActorProxyErrorType
     ERROR_Exhausted,                // Your team cannot place any more of these this round.
     ERROR_NoSquadmatesNearby,       // No squadmates nearby.
     ERROR_Other,
+    ERROR_Leaning,                  // Cannot be placed if player is leaning, only for MountedWeaponProxy
 };
 
 var struct ActorProxyError
@@ -297,6 +298,7 @@ function Tick(float DeltaTime)
 
     UpdateError();
 }
+function ActorProxyError GetPawnError(){} // Empty as it is only for MountedWeaponProxy
 
 function ActorProxyError GetContextError(Context Context)
 {
@@ -308,8 +310,7 @@ function ActorProxyError GetContextError(Context Context)
 
     return Error;
 }
-
-function UpdateError(optional bool bForceUpdate)
+function UpdateError(optional bool bForceUpdate) 
 {
     local ActorProxyError ProvisionalPositionError, NewProxyError;
 
@@ -329,6 +330,11 @@ function UpdateError(optional bool bForceUpdate)
         // other more critical errors rather than minor errors like "not enough
         // room" etc.
         NewProxyError = ProvisionalPositionError;
+    }
+
+    if (NewProxyError.Type == ERROR_None)
+    {
+        NewProxyError = GetPawnError();
     }
 
     if (bForceUpdate || ProxyError != NewProxyError)

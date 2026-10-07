@@ -29,6 +29,8 @@ var()   bool    bCanDeployWhileCrawling;
 
 var()   bool    bShouldAlignToGround;
 
+var     bool    bIsEncumbering; // When blsEncumbering = true, player cannot run, go prone, and switch weapons
+
 replication
 {
     // Functions a client can call on the server
@@ -41,7 +43,7 @@ replication
 simulated state Deploying
 {
     simulated function BeginState()
-    {
+    {   
         local DHPawn P;
 
         super.BeginState();
@@ -77,22 +79,32 @@ simulated state Deploying
         return;
     }
 
-    // Modified to prevent player from changing stance while he is crouched & deploying the mortar
-    simulated function bool WeaponAllowCrouchChange()
-    {
-        return false;
-    }
-
-    simulated function bool WeaponAllowProneChange()
-    {
-        return false;
-    }
-
     simulated function bool CanThrow()
     {
         return false;
     }
 
+    // Modified to prevent player from changing stance while he is crouched & deploying the mortar
+    simulated function bool WeaponAllowJump()
+    {
+        return false; 
+    }
+    
+    simulated function bool WeaponAllowCrouchChange()
+    {
+        return false;
+    }
+    
+    simulated function bool WeaponAllowProneChange()
+    {
+        return false;
+    }
+
+    simulated function bool WeaponCanSwitch()
+    {
+        return false;
+    }
+    
 Begin:
     PlayAnim(DeployAnimation);
     Sleep(GetAnimDuration(DeployAnimation));
@@ -265,7 +277,7 @@ simulated function DHActorProxy CreateProxyCursor()
 // TODO: not necessarily universal; some carried weapons may be small enough to be put away.
 simulated function Tick(float DeltaTime)
 {
-    if (Instigator != none && Instigator.Weapon != self && Instigator.PendingWeapon != self && Instigator.IsLocallyControlled())
+    if (Instigator != none && Instigator.Weapon != self && Instigator.PendingWeapon != self && Instigator.IsLocallyControlled() && bIsEncumbering)
     {
         Instigator.SwitchWeapon(InventoryGroup);
     }
@@ -278,6 +290,68 @@ simulated function Tick(float DeltaTime)
     {
         Instigator.ReceiveLocalizedMessage(class'DHMountedWeaponControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
     }
+
+}
+
+//Modified to hide cursor and prompt while player is raising or lowering his weapon 
+simulated function OnTick (float DeltaTime)
+{
+    local Actor HitActor;
+    local Vector HitLocation, HitNormal;
+    local PlayerController PC;
+    local int bLimitLocalRotation;
+    local Range LocalRotationYawRange;
+
+    if (ProxyCursor == none || Instigator == none)
+    {
+        return;
+    }
+
+    PC = PlayerController(Instigator.Controller);
+
+    if (PC == none)
+    {
+        return;
+    }
+
+    TraceFromPlayer(HitActor, HitLocation, HitNormal, bLimitLocalRotation, LocalRotationYawRange);
+
+    if (!ProxyCursor.bHidden)
+    {
+        ProxyCursor.UpdateParameters(HitLocation, PC.CalcViewRotation, HitActor, HitNormal, bool(bLimitLocalRotation), LocalRotationYawRange);
+        
+        if (IsInState('RaisingWeapon') || IsInState('LoweringWeapon'))
+        {
+            ProxyCursor.bHidden=true;
+        }
+        else if (ProxyCursor.ProxyError.Type != ERROR_None)
+        {
+            if (ErrorMessageClass != none)
+            {
+                Instigator.ReceiveLocalizedMessage(ErrorMessageClass, int(ProxyCursor.ProxyError.Type),,, ProxyCursor);
+            }
+        }
+        else
+        {
+            if (ControlsMessageClass != none)
+            {
+                Instigator.ReceiveLocalizedMessage(ControlsMessageClass, 0, Instigator.PlayerReplicationInfo,, ProxyCursor);
+            }
+        }
+    }
+}
+// Copied from ROWeapon as we don't want to use PutDown from superclass for MMGs and mortars
+simulated function bool PutDown()
+{
+ 	GotoState('LoweringWeapon');
+
+	if (ROWeaponAttachment(ThirdPersonActor) != None)
+	{
+		ROWeaponAttachment(ThirdPersonActor).AmbientSound = None;
+	}
+
+    OldWeapon = None;
+    return true; // return false if preventing weapon switch
 }
 
 // Modified to add a hint when carrying a stationary weapon.
@@ -295,10 +369,118 @@ simulated function BringUp(optional Weapon PrevWeapon)
     }
 }
 
-// Functions always returning false as carried mortar is too heavy & bulky to put away, or to sprint, crawl, or mantle with
+simulated function bool WeaponAllowSprint()
+{
+    if (!bIsEncumbering)
+    {
+        return super.WeaponAllowSprint();
+    }
+    else 
+    {
+        return false;
+    }
+}
+
+simulated function bool WeaponAllowProneChange()
+{
+    if (!bIsEncumbering)
+    {
+        return super.WeaponAllowProneChange();
+    }
+    else
+    {
+        return false;
+    }
+}      
+    
 simulated function bool WeaponCanSwitch()
 {
-    return false;
+    if (!bIsEncumbering)
+    {
+        return super.WeaponCanSwitch();
+    }
+    else
+    {
+        return false;
+    }
+}
+
+simulated function bool WeaponAllowMantle()
+{
+    if (!bIsEncumbering)
+    {   
+        return super.WeaponAllowMantle();
+    }
+    else
+    {
+        return false;
+    }
+}
+
+// Copied this state from ROWeapon and removed lines for fire modes, as we don't want to use LoweringWeapon from superclass for MMGs and mortars
+simulated state LoweringWeapon
+{
+    simulated function Timer()
+    {
+		GotoState('Idle');
+    }
+
+    simulated function BeginState()
+    {
+	    if (ClientState == WS_BringUp || ClientState == WS_ReadyToFire)
+	    {
+            if ( ClientState == WS_BringUp )
+			{		
+                TweenAnim(SelectAnim,PutDownTime);
+            }
+			else if ( HasAnim(PutDownAnim) )
+			{		
+                PlayAnim(PutDownAnim, PutDownAnimRate, 0.0);
+	        }
+
+	        ClientState = WS_PutDown;
+	    }
+
+	    SetTimer(GetAnimDuration(PutDownAnim, PutDownAnimRate),false);
+    }
+
+    simulated function EndState()
+    {
+		if (ClientState == WS_PutDown)
+	    {
+			if ( Instigator.PendingWeapon == none )
+			{
+				PlayIdle();
+				ClientState = WS_ReadyToFire;
+			}
+			else
+			{
+				ClientState = WS_Hidden;
+				Instigator.ChangedWeapon();
+				if ( Instigator.Weapon == self )
+				{
+					PlayIdle();
+					ClientState = WS_ReadyToFire;
+				}
+			}
+	    }
+    }
+}
+
+// Modified to unhide cursor when player raised his weapon
+simulated state RaisingWeapon
+{
+    simulated function bool IsBusy()
+    {
+        return super.IsBusy();
+    }
+
+    simulated function EndState()
+    {
+        super.EndState();
+
+        ProxyCursor.bHidden=false;
+    }
 }
 
 // Implemented so pressing the deploy key will attempt to deploy a carried mortar
@@ -307,11 +489,10 @@ exec simulated function Deploy()
     local DHPawn  P;
 
     P = DHPawn(Instigator);
-
     // BUG: player can drop the weapon while in this state, bricking the pawn's movement until it dies.
     // solution: don't let them drop the weapon while deploying.
 
-    if (CanConfirmPlacement())
+    if (CanConfirmPlacement() && P.Physics != PHYS_Falling) // Don't allow player to deploy mmg when he is jumping
     {
         GotoState('Deploying');
     }
@@ -327,12 +508,6 @@ simulated function bool CanConfirmPlacement()
     }
 
     P = DHPawn(Instigator);
-
-    if (P != none && (P.bLeanLeft || P.bLeanRight))
-    {
-        // Don't allow deploying while leaning.
-        return false;
-    }
 
     return super.CanConfirmPlacement();
 }
@@ -523,4 +698,6 @@ defaultproperties
     bCanDeployWhileStanding=true
     bCanDeployWhileCrawling=true
     bShouldAlignToGround=true
+    bIsEncumbering=true
 }
+

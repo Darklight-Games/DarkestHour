@@ -18,8 +18,23 @@ function DHActorProxy.ActorProxyError GetContextError(Context Context)
     return Error;
 }
 
+function ActorProxyError GetPawnError()
+{
+    local DHPawn P;
+    local ActorProxyError E;
+
+    P = DHPawn(Instigator);
+
+    if (P != none && (P.bLeanLeft || P.bLeanRight)) // Do not allow player to deploy mmg/mortar while he is leaning
+    {
+        E.Type = ERROR_Leaning;
+        return E;
+    }
+}
+
 protected simulated function bool CanPlaceInDangerZone()
 {
     // There's no reason to restrict mounted weapons from being placed in the danger zone.
     return true;
 }
+
