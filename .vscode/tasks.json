@@ -7,6 +7,18 @@
             "label": "Build",
             "type": "shell",
             "command": "python tools/make/make.py -mod DarkestHourDev .",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
             "problemMatcher": [
                 {
                     "owner": "unrealscript",
@@ -67,16 +79,21 @@
                         "message": 1
                     }
                 }
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            ]
         },
         {
             "label": "Build with Parameters",
             "type": "shell",
             "command": "python tools/make/make.py ${input:buildArgs} -mod DarkestHourDev .",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
             "problemMatcher": [
                 {
                     "owner": "unrealscript",
@@ -121,8 +138,7 @@
                         "message": 1
                     }
                 }
-            ],
-            "group": "build"
+            ]
         },
         {
             "label": "Run",
@@ -205,7 +221,7 @@
             }
         },
         {
-            "label": "Connect Multiple Clients",
+            "label": "Connect (2 Clients)",
             "command": "echo Not supported on Windows. Use dhdev_server_with_clients.bat script instead.; echo",
             "linux": {
                 "command": "nohup sh -c 'steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev --multi &' >/dev/null 2>&1"
@@ -232,6 +248,58 @@
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "runOptions": {
+                "instancePolicy": "terminateOldest"
+            }
+        },
+        {
+            "label": "runtask:Run Server",
+            "hide": true,
+            "type": "shell",
+            "command": "echo ${input:runServer}",
+            "group": "test",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "silent",
+                "focus": false,
+            }
+        },
+        {
+            "label": "Kill Server",
+            "type": "shell",
+            "hide": true,
+            "command": "echo ${input:killServer}",
+            "problemMatcher": [],
+            "presentation": {
+                "close": true,
+            },
+            "runOptions": {
+                "instancePolicy": "terminateOldest"
+            }
+        },
+        {
+            "label": "Wait for Server",
+            "type": "shell",
+            "options": {
+                "env": {
+                    "QUERY_PORT": "7758",
+                    "QUERY_TIMEOUT": "120",
+                    "DEFAULT_WAIT": "15"
+                }
+            },
+            "command": "if command -v nc &>/dev/null; then echo \"Waiting for server on port ${QUERY_PORT}...\"; timeout ${QUERY_TIMEOUT} sh -c \"while ! nc -uvz 127.0.0.1 ${QUERY_PORT}; do sleep 1; done\" || echo \"Failed to find the server!\"; else echo \"Cannot check the server status: 'netcat' is not installed! Waiting ${DEFAULT_WAIT} seconds...\"; sleep ${DEFAULT_WAIT}; fi",
+            "windows": {
+                // TODO: add proper Windows implementation
+                "command": "timeout 15"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "clear": true,
+                "showReuseMessage": false
             },
             "runOptions": {
                 "instancePolicy": "terminateOldest"
@@ -299,19 +367,6 @@
             "problemMatcher": []
         },
         {
-            "label": "Kill Server",
-            "type": "shell",
-            "hide": true,
-            "command": "echo ${input:killServer}",
-            "problemMatcher": [],
-            "presentation": {
-                "close": true,
-            },
-            "runOptions": {
-                "instancePolicy": "terminateOldest"
-            }
-        },
-        {
             "label": "Build and Run Server",
             "dependsOrder": "sequence",
             "dependsOn": [
@@ -321,9 +376,41 @@
             ],
             "group": "test",
             "problemMatcher": []
-        }
+        },
+        {
+            "label": "Build and Run Multiplayer",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Kill Server",
+                "Build",
+                "runtask:Run Server",
+                "Wait for Server",
+                "Connect"
+            ],
+            "group": "test",
+            "problemMatcher": [],
+        },
+        {
+            "label": "Build and Run Multiplayer (2 Clients)",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Kill Server",
+                "Build",
+                "runtask:Run Server",
+                "Wait for Server",
+                "Connect (2 Clients)"
+            ],
+            "group": "test",
+            "problemMatcher": [],
+        },
     ],
     "inputs": [
+        {
+            "type": "command",
+            "id": "runServer",
+            "command": "workbench.action.tasks.runTask",
+            "args": "Run Server"
+        },
         {
             "type": "command",
             "id": "killServer",
