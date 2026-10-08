@@ -42,9 +42,6 @@ var     float           SprintEndAnimRate;
 var     float           SprintStartAnimRate;
 var     float           SprintLoopAnimRate;
 
-var     bool            bShouldDestroyOnPutAway; // We don't want to keep the construction-weapon(DHActorProxyWeapon) in our inventory
-                                                 // when player is switching to other weapon, but we do for other weapons
-
 replication
 {
     // Variables the server will replicate to all clients
@@ -520,13 +517,18 @@ simulated state RaisingWeapon
     }
 }
 
+simulated function bool ShouldDestroyOnPutAway()
+{
+    return false;
+}
+
 simulated state LoweringWeapon
 {
     simulated function BeginState()
     {
         // NOTE: The !bDeleteMe and GotoState('Idle') are integral to stop
         // stack overflows!
-        if (Role == ROLE_Authority && !bDeleteMe && bShouldDestroyOnPutAway)
+        if (Role == ROLE_Authority && !bDeleteMe && ShouldDestroyOnPutAway())
         {
             GotoState('Idle');
             SelfDestroy();

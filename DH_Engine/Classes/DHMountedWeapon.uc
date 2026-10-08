@@ -105,7 +105,7 @@ simulated state Deploying
         return false;
     }
     
-    function DropFrom(vector StartLocation) {} 
+    function DropFrom(vector StartLocation);
     
 Begin:
     PlayAnim(DeployAnimation);
@@ -408,56 +408,6 @@ simulated function bool WeaponAllowMantle()
     }
     
     return super.WeaponAllowMantle();
-}
-
-// Copied this state from ROWeapon and removed lines for fire modes, as we don't want to use LoweringWeapon from superclass for MMGs and mortars
-simulated state LoweringWeapon
-{
-    simulated function Timer()
-    {
-		GotoState('Idle');
-    }
-
-    simulated function BeginState()
-    {
-	    if (ClientState == WS_BringUp || ClientState == WS_ReadyToFire)
-	    {
-            if ( ClientState == WS_BringUp )
-			{		
-                TweenAnim(SelectAnim,PutDownTime);
-            }
-			else if ( HasAnim(PutDownAnim) )
-			{		
-                PlayAnim(PutDownAnim, PutDownAnimRate, 0.0);
-	        }
-
-	        ClientState = WS_PutDown;
-	    }
-
-	    SetTimer(GetAnimDuration(PutDownAnim, PutDownAnimRate),false);
-    }
-
-    simulated function EndState()
-    {
-		if (ClientState == WS_PutDown)
-	    {
-			if ( Instigator.PendingWeapon == none )
-			{
-				PlayIdle();
-				ClientState = WS_ReadyToFire;
-			}
-			else
-			{
-				ClientState = WS_Hidden;
-				Instigator.ChangedWeapon();
-				if ( Instigator.Weapon == self )
-				{
-					PlayIdle();
-					ClientState = WS_ReadyToFire;
-				}
-			}
-	    }
-    }
 }
 
 // Modified to unhide cursor when player raised his weapon
