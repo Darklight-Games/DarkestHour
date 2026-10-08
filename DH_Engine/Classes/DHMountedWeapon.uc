@@ -43,7 +43,7 @@ replication
 simulated state Deploying
 {
     simulated function BeginState()
-    {   
+    {
         local DHPawn P;
 
         super.BeginState();
@@ -104,6 +104,8 @@ simulated state Deploying
     {
         return false;
     }
+    
+    function DropFrom(vector StartLocation) {} 
     
 Begin:
     PlayAnim(DeployAnimation);
@@ -274,7 +276,6 @@ simulated function DHActorProxy CreateProxyCursor()
 }
 
 // Implemented to force player to equip the stationary weapon if it isn't already his current weapon
-// TODO: not necessarily universal; some carried weapons may be small enough to be put away.
 simulated function Tick(float DeltaTime)
 {
     if (Instigator != none && Instigator.Weapon != self && Instigator.PendingWeapon != self && Instigator.IsLocallyControlled() && bIsEncumbering)
@@ -371,50 +372,42 @@ simulated function BringUp(optional Weapon PrevWeapon)
 
 simulated function bool WeaponAllowSprint()
 {
-    if (!bIsEncumbering)
-    {
-        return super.WeaponAllowSprint();
-    }
-    else 
+    if (bIsEncumbering)
     {
         return false;
     }
+    
+    return super.WeaponAllowSprint();
 }
 
 simulated function bool WeaponAllowProneChange()
 {
-    if (!bIsEncumbering)
-    {
-        return super.WeaponAllowProneChange();
-    }
-    else
+    if (bIsEncumbering)
     {
         return false;
     }
+
+    return super.WeaponAllowProneChange();
 }      
     
 simulated function bool WeaponCanSwitch()
 {
-    if (!bIsEncumbering)
-    {
-        return super.WeaponCanSwitch();
-    }
-    else
+    if (bIsEncumbering)
     {
         return false;
     }
+    
+    return super.WeaponCanSwitch();
 }
 
 simulated function bool WeaponAllowMantle()
 {
-    if (!bIsEncumbering)
+    if (bIsEncumbering)
     {   
-        return super.WeaponAllowMantle();
-    }
-    else
-    {
         return false;
     }
+    
+    return super.WeaponAllowMantle();
 }
 
 // Copied this state from ROWeapon and removed lines for fire modes, as we don't want to use LoweringWeapon from superclass for MMGs and mortars
@@ -470,11 +463,6 @@ simulated state LoweringWeapon
 // Modified to unhide cursor when player raised his weapon
 simulated state RaisingWeapon
 {
-    simulated function bool IsBusy()
-    {
-        return super.IsBusy();
-    }
-
     simulated function EndState()
     {
         super.EndState();
@@ -492,7 +480,7 @@ exec simulated function Deploy()
     // BUG: player can drop the weapon while in this state, bricking the pawn's movement until it dies.
     // solution: don't let them drop the weapon while deploying.
 
-    if (CanConfirmPlacement() && P.Physics != PHYS_Falling) // Don't allow player to deploy mmg when he is jumping
+    if (CanConfirmPlacement() && P.Physics != PHYS_Falling) // Don't allow player to deploy mmg when he is jumping 
     {
         GotoState('Deploying');
     }
@@ -630,17 +618,6 @@ exec simulated function SwitchFireMode()
     CycleVariant();
 }
 
-// TODO: use state instead.
-function DropFrom(vector StartLocation)
-{
-    if (bDeploying)
-    {
-        return;
-    }
-
-    super.DropFrom(StartLocation);
-}
- 
 public function bool ShouldShowProxyCursor()
 {
     local DHPawn P;

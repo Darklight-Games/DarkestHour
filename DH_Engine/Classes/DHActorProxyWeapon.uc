@@ -161,30 +161,6 @@ simulated function BringUp(optional Weapon PrevWeapon)
     }
 }
 
-simulated state LoweringWeapon
-{
-    simulated function BeginState()
-    {
-        // NOTE: The !bDeleteMe and GotoState('Idle') are integral to stop
-        // stack overflows!
-        if (Role == ROLE_Authority && !bDeleteMe)
-        {
-            GotoState('Idle');
-            SelfDestroy();
-        }
-
-        super.BeginState();
-    }
-
-    simulated function EndState()
-    {
-        if (!bDeleteMe)
-        {
-            super.EndState();
-        }
-    }
-}
-
 simulated function bool PutDown()
 {
     if (ProxyCursor != none)
@@ -454,4 +430,5 @@ defaultproperties
     LocalRotationRate=32768
     bCanRotateCursor=true
     ClickSound=Sound'ROMenuSounds.msfxMouseClick'
+    bShouldDestroyOnPutAway=true // We don't want to keep the construction-weapon in our inventory when player is switching to other weapon
 }

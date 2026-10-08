@@ -3838,7 +3838,7 @@ function TakeFallingDamage()
 simulated function bool CanJump()
 {
     local DHWeapon W;
-    W = DHWeapon(self.weapon);
+    W = DHWeapon(Weapon);
     
     if (W !=none && !W.WeaponAllowJump())
     {

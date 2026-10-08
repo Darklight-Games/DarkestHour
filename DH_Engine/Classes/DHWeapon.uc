@@ -42,6 +42,9 @@ var     float           SprintEndAnimRate;
 var     float           SprintStartAnimRate;
 var     float           SprintLoopAnimRate;
 
+var     bool            bShouldDestroyOnPutAway; // We don't want to keep the construction-weapon(DHActorProxyWeapon) in our inventory
+                                                 // when player is switching to other weapon, but we do for other weapons
+
 replication
 {
     // Variables the server will replicate to all clients
@@ -517,6 +520,30 @@ simulated state RaisingWeapon
     }
 }
 
+simulated state LoweringWeapon
+{
+    simulated function BeginState()
+    {
+        // NOTE: The !bDeleteMe and GotoState('Idle') are integral to stop
+        // stack overflows!
+        if (Role == ROLE_Authority && !bDeleteMe && bShouldDestroyOnPutAway)
+        {
+            GotoState('Idle');
+            SelfDestroy();
+        }
+
+        super.BeginState();
+    }
+
+    simulated function EndState()
+    {
+        if (!bDeleteMe)
+        {
+            super.EndState();
+        }
+    }
+}
+
 // New state to automatically lower one-shot weapons, then either bring up another if player still has more, or switch to a different weapon if just used last one
 simulated state AutoLoweringWeapon extends LoweringWeapon
 {
@@ -718,6 +745,10 @@ simulated function bool WeaponAllowMantle()
     return true;
 }
 
+simulated function bool WeaponAllowJump()
+{
+    return true;
+}
 // Determines if the weapon is thrown on death.
 function bool CanDeadThrow()
 {
@@ -1179,4 +1210,6 @@ defaultproperties
     SprintStartAnimRate=1.5
     SprintEndAnimRate=1.5
     SprintLoopAnimRate=1.5
+
+    bShouldDestroyOnPutAway=false
 }
