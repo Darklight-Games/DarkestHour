@@ -430,5 +430,4 @@ defaultproperties
     LocalRotationRate=32768
     bCanRotateCursor=true
     ClickSound=Sound'ROMenuSounds.msfxMouseClick'
-    bShouldDestroyOnPutAway=true // We don't want to keep the construction-weapon in our inventory when player is switching to other weapon
 }

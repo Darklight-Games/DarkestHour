@@ -29,7 +29,7 @@ var()   bool    bCanDeployWhileCrawling;
 
 var()   bool    bShouldAlignToGround;
 
-var     bool    bIsEncumbering; // When blsEncumbering = true, player cannot run, go prone, and switch weapons
+var     bool    bIsEncumbering; // When true, player cannot run, go prone or switch weapons
 
 replication
 {
@@ -84,7 +84,7 @@ simulated state Deploying
         return false;
     }
 
-    // Modified to prevent player from changing stance while he is crouched & deploying the mortar
+    // Modified to prevent player from changing stance while he is crouched & deploying the weapon
     simulated function bool WeaponAllowJump()
     {
         return false; 

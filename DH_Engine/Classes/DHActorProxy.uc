@@ -64,10 +64,9 @@ enum EActorProxyErrorType
     ERROR_MissingRequirement,       // Not close enough to a required friendly actor.
     ERROR_Exhausted,                // Your team cannot place any more of these this round.
     ERROR_NoSquadmatesNearby,       // No squadmates nearby.
-    ERROR_Other,
-    // Only for stationary weapons:
     ERROR_Leaning,                  // Cannot be placed if player is leaning
     ERROR_PlayerIsntCrouched,       // Cannot be placed if player is not crouched
+    ERROR_Other,
 };
 
 var struct ActorProxyError
@@ -301,7 +300,7 @@ function Tick(float DeltaTime)
     UpdateError();
 }
 
-function ActorProxyError GetPawnError(); // It's only for MountedWeaponProxy, so it returns ERROR_None here
+function ActorProxyError GetPawnError();
 
 
 function ActorProxyError GetContextError(Context Context)
