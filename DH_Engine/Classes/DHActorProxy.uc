@@ -65,7 +65,9 @@ enum EActorProxyErrorType
     ERROR_Exhausted,                // Your team cannot place any more of these this round.
     ERROR_NoSquadmatesNearby,       // No squadmates nearby.
     ERROR_Other,
-    ERROR_Leaning,                  // Cannot be placed if player is leaning, only for MountedWeaponProxy
+    // Only for stationary weapons:
+    ERROR_Leaning,                  // Cannot be placed if player is leaning
+    ERROR_PlayerIsntCrouched,       // Cannot be placed if player is not crouched
 };
 
 var struct ActorProxyError
