@@ -298,7 +298,13 @@ function Tick(float DeltaTime)
 
     UpdateError();
 }
-function ActorProxyError GetPawnError(){} // Empty as it is only for MountedWeaponProxy
+
+function ActorProxyError GetPawnError() // It's only for MountedWeaponProxy, so it returns ERROR_None here
+{
+    local ActorProxyError Error;
+
+    return Error;
+} 
 
 function ActorProxyError GetContextError(Context Context)
 {
