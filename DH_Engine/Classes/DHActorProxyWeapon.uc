@@ -98,7 +98,11 @@ simulated function OnTick(float DeltaTime)
     {
         ProxyCursor.UpdateParameters(HitLocation, PC.CalcViewRotation, HitActor, HitNormal, bool(bLimitLocalRotation), LocalRotationYawRange);
 
-        if (ProxyCursor.ProxyError.Type != ERROR_None)
+        if (IsInState('RaisingWeapon') || IsInState('LoweringWeapon'))
+        {
+            ProxyCursor.bHidden=true;
+        }
+        else if (ProxyCursor.ProxyError.Type != ERROR_None)
         {
             if (ErrorMessageClass != none)
             {

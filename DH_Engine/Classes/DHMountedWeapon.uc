@@ -294,53 +294,6 @@ simulated function Tick(float DeltaTime)
 
 }
 
-//Modified to hide cursor and prompt while player is raising or lowering his weapon 
-simulated function OnTick (float DeltaTime)
-{
-    local Actor HitActor;
-    local Vector HitLocation, HitNormal;
-    local PlayerController PC;
-    local int bLimitLocalRotation;
-    local Range LocalRotationYawRange;
-
-    if (ProxyCursor == none || Instigator == none)
-    {
-        return;
-    }
-
-    PC = PlayerController(Instigator.Controller);
-
-    if (PC == none)
-    {
-        return;
-    }
-
-    TraceFromPlayer(HitActor, HitLocation, HitNormal, bLimitLocalRotation, LocalRotationYawRange);
-
-    if (!ProxyCursor.bHidden)
-    {
-        ProxyCursor.UpdateParameters(HitLocation, PC.CalcViewRotation, HitActor, HitNormal, bool(bLimitLocalRotation), LocalRotationYawRange);
-        
-        if (IsInState('RaisingWeapon') || IsInState('LoweringWeapon'))
-        {
-            ProxyCursor.bHidden=true;
-        }
-        else if (ProxyCursor.ProxyError.Type != ERROR_None)
-        {
-            if (ErrorMessageClass != none)
-            {
-                Instigator.ReceiveLocalizedMessage(ErrorMessageClass, int(ProxyCursor.ProxyError.Type),,, ProxyCursor);
-            }
-        }
-        else
-        {
-            if (ControlsMessageClass != none)
-            {
-                Instigator.ReceiveLocalizedMessage(ControlsMessageClass, 0, Instigator.PlayerReplicationInfo,, ProxyCursor);
-            }
-        }
-    }
-}
 // Copied from ROWeapon as we don't want to use PutDown from superclass for MMGs and mortars
 simulated function bool PutDown()
 {
