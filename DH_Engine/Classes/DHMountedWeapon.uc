@@ -79,32 +79,12 @@ simulated state Deploying
         return;
     }
 
-    simulated function bool CanThrow()
-    {
-        return false;
-    }
-
     // Modified to prevent player from changing stance while he is crouched & deploying the weapon
-    simulated function bool WeaponAllowJump()
-    {
-        return false; 
-    }
-    
-    simulated function bool WeaponAllowCrouchChange()
-    {
-        return false;
-    }
-    
-    simulated function bool WeaponAllowProneChange()
-    {
-        return false;
-    }
-
-    simulated function bool WeaponCanSwitch()
-    {
-        return false;
-    }
-    
+    simulated function bool CanThrow();
+    simulated function bool WeaponAllowJump();
+    simulated function bool WeaponAllowCrouchChange();
+    simulated function bool WeaponAllowProneChange();
+    simulated function bool WeaponCanSwitch();
     function DropFrom(vector StartLocation);
     
 Begin:
