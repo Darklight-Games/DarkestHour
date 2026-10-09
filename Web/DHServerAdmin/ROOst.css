@@ -324,3 +324,11 @@ td.i9	{ background-color:#013DFF; } /*dblue	*/
 .crud-table :is(th,td) {
     padding-right: 1em;
 }
+
+.crud-table .textbox.playername {
+    width: 11ch;
+}
+
+.crud-table :is(th,td).textbox {
+    text-align: left;
+}

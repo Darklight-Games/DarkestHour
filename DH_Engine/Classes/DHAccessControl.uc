@@ -20,6 +20,7 @@ var private array<string>           GloballyBannedIDs;
 struct Restriction
 {
     var string PlayerID;
+    var string ForcedName;
     var bool   bOutboundMessages;
     var bool   bOutboundVoice;
     var bool   bSquadNames;
@@ -27,7 +28,7 @@ struct Restriction
 
 var globalconfig array<Restriction> Restrictions;
 
-function ApplyRestrictionByID(string ID)
+function ApplyRestrictionsByID(string ID)
 {
     local DHPlayer C;
 
@@ -35,13 +36,15 @@ function ApplyRestrictionByID(string ID)
     {
         if (C.GetPlayerIDHash() ~= ID)
         {
-            ApplyRestriction(C);
+            ApplyRestrictions(C);
             return;
         }
     }
 }
 
-function ApplyRestriction(DHPlayer PC)
+// Should be called on restriction list updates and in PostLogin (after
+// ID hash is updated, and before player name is sent out into the wild)
+function ApplyRestrictions(DHPlayer PC, optional bool bOnLogin)
 {
     local int i;
     local string PlayerID;
@@ -102,6 +105,14 @@ function ApplyRestriction(DHPlayer PC)
         }
 
         PRI.bRestrictSquadNames = Restrictions[i].bSquadNames;
+
+        // Force player name
+        PC.bRestrictName = Restrictions[i].ForcedName != "";
+
+        if (PC.bRestrictName)
+        {
+            DarkestHourGame(Level.Game).ChangeName(PC, Restrictions[i].ForcedName, !bOnLogin);
+        }
     }
 }
 

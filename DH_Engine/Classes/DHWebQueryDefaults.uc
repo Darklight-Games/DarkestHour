@@ -128,7 +128,8 @@ function EOperationError UpdateRestriction(WebRequest Request)
     DHAC.Restrictions[i].bOutboundMessages = Request.GetVariable("OutMsg") != "";
     DHAC.Restrictions[i].bOutboundVoice = Request.GetVariable("OutVoice") != "";
     DHAC.Restrictions[i].bSquadNames = Request.GetVariable("SquadName") != "";
-    DHAC.ApplyRestrictionByID(PlayerID);
+    DHAC.Restrictions[i].ForcedName = Request.GetVariable("ForcedName", "");
+    DHAC.ApplyRestrictionsByID(PlayerID);
     DHAC.SaveConfig();
 }
 
@@ -149,7 +150,7 @@ function EOperationError DeleteRestriction(WebRequest Request)
     }
 
     DHAC.Restrictions.Remove(i, 1);
-    DHAC.ApplyRestrictionByID(PlayerID);
+    DHAC.ApplyRestrictionsByID(PlayerID);
     DHAC.SaveConfig();
 }
 
@@ -208,6 +209,8 @@ function QueryDefaultsRestrictions(WebRequest Request, WebResponse Response)
         PlayerID = DHAC.Restrictions[i].PlayerID;
 
         Response.Subst("PlayerID", PlayerID);
+        Response.Subst("ForcedNameVal", DHAC.Restrictions[i].ForcedName);
+        Response.Subst("ForcedName", WebInclude(DefaultsRestrictionsPage $ "_playername"));
         Response.Subst("OutMsg", Checkbox("OutMsg", DHAC.Restrictions[i].bOutboundMessages));
         Response.Subst("OutVoice", Checkbox("OutVoice", DHAC.Restrictions[i].bOutboundVoice));
         Response.Subst("SquadName", Checkbox("SquadName", DHAC.Restrictions[i].bSquadNames));

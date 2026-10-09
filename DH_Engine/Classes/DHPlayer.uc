@@ -223,6 +223,9 @@ var     float                   LastListClientGUIDTime;
 // I'd love to put this elsewhere, but I can't seem to poll any relevant state in the HUD.
 var     bool                    bHideMapActivateMousePrompt;
 
+// Restrictions
+var     bool                    bRestrictName;
+
 replication
 {
     // Variables the server will replicate to the client that owns this actor
@@ -858,8 +861,15 @@ exec function VehicleSay(string Msg)
 }
 
 // Overridden to increase max name length from 20 to 32 chars
+// and refuse changes initiated by players with a name restriction.
 function ChangeName(coerce string S)
 {
+    if (bRestrictName)
+    {
+        ReceiveLocalizedMessage(class'DHAdminMessage', 10);
+        return;
+    }
+
     if (Len(S) > 32)
     {
         S = Left(S, 32);

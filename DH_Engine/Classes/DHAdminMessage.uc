@@ -18,6 +18,7 @@ var localized string AdminLoggedInMessage;
 var localized string AdminLoggedOutMessage;
 var localized string PlayerMessagesRestrictionMessage;
 var localized string PlayerVoiceRestrictionMessage;
+var localized string PlayerNameRestrictionMesssage;
 
 static function string GetSquadName(int TeamIndex, int SquadIndex, DHSquadReplicationInfo SRI)
 {
@@ -72,6 +73,8 @@ static function string GetString(optional int S, optional PlayerReplicationInfo 
             return default.PlayerMessagesRestrictionMessage;
         case 9:
             return default.PlayerVoiceRestrictionMessage;
+        case 10:
+            return default.PlayerNameRestrictionMesssage;
         default:
             break;
     }
@@ -95,6 +98,7 @@ defaultproperties
     AxisTeamNameGenitive="Axis"
     PlayerMessagesRestrictionMessage="You're not allowed to send messages on this server."
     PlayerVoiceRestrictionMessage="You're not allowed to speak in the voice chat on this server."
+    PlayerNameRestrictionMesssage="You're not allowed to change your name on this server."
 
     bIsSpecial=false
     bIsConsoleMessage=true
