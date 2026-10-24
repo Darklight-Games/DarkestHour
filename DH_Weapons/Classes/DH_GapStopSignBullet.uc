@@ -8,6 +8,7 @@ class DH_GapStopSignBullet extends DHCannonShellAPDS;
 defaultproperties
 {
     Damage=5000000
+    DamageRadius=10.0
     Speed=8000.0  //very slow
     TracerEffectClass=none
     StaticMesh=StaticMesh'DH_UFO_stc.UFO.stopsign_bullet'
