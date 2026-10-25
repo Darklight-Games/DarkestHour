@@ -45,7 +45,7 @@ defaultproperties
 
     Spread=0.01
     AltFireSpread=0.01
-    FireInterval=5
+    FireInterval=10
     AltFireInterval=1
 
     // Weapon fire
@@ -69,8 +69,8 @@ defaultproperties
 
     // Coaxial MG ammo
     AltFireProjectileClass=Class'DH_GapStopSignBullet'
-    InitialAltAmmo=43000
-    NumMGMags=150
+    InitialAltAmmo=12
+    NumMGMags=1
 
     TracerProjectileClass=Class'DH_GapTrainSignBullet'
     TracerFrequency=1
