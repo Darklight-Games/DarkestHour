@@ -390,10 +390,8 @@ static function bool ShouldShowOnMenu(DHActorProxy.Context Context)
     {
         return super.ShouldShowOnMenu(Context);
     }
-    else
-    {
-        return false;
-    }
+
+    return false;
 }
 
 defaultproperties

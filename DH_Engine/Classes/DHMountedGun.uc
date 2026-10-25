@@ -555,6 +555,11 @@ function ServerEnterRotation(DHPawn Instigator)
 {
     local ERotateError RotateError;
 
+    if (Instigator == none)
+    {
+        return;
+    }
+
     RotateError = GetRotationError(Instigator);
 
     if (RotateError != ERROR_None)
@@ -564,7 +569,7 @@ function ServerEnterRotation(DHPawn Instigator)
         return;
     }
 
-    Instigator.GunToRotate =self;
+    Instigator.GunToRotate = self;
     RotateControllerPawn = Instigator;
     GotoState('Rotating');
 }
@@ -697,13 +702,17 @@ state Rotating
         RotatingActor.OnDestroyed = OnRotatingActorDestroyed;
         RotatingActor.ControlRadiusInMeters = InteractRadiusInMeters;
         RotatingActor.ControllerPawn = RotateControllerPawn;
-        RotatingActor.RotationRate.Yaw = RotationsPerSecond * 65536;;
+        RotatingActor.RotationRate.Yaw = RotationsPerSecond * 65536;
 
         if (RotateSound != none)
         {
             RotateSoundAttachment = Spawn(Class'ROSoundAttachment');
-            RotateSoundAttachment.AmbientSound = RotateSound;
-            RotateSoundAttachment.SetBase(self);
+
+            if (RotateSoundAttachment != none)
+            {
+                RotateSoundAttachment.AmbientSound = RotateSound;
+                RotateSoundAttachment.SetBase(self);
+            }
         }
 
         SetPhysics(PHYS_None);
@@ -726,6 +735,11 @@ state Rotating
 
     function HandleRotate(int RotationFactor)
     {
+        if (RotatingActor == none)
+        {
+            return;
+        }
+
         RotatingActor.SetRotationFactor(RotationFactor);
 
         if (RotateSoundAttachment != none)
@@ -745,11 +759,14 @@ state Rotating
     {
         SetBase(none);
 
-        SetRotation(RotatingActor.DesiredRotation);
-
-        if (RotatingActor != none && !RotatingActor.bPendingDelete)
+        if (RotatingActor != none)
         {
-            RotatingActor.Destroy();
+            SetRotation(RotatingActor.DesiredRotation);
+
+            if (!RotatingActor.bPendingDelete)
+            {
+                RotatingActor.Destroy();
+            }
         }
 
         if (RotateSoundAttachment != none)
@@ -823,7 +840,7 @@ simulated event PostNetReceive()
         }
     }
 
-    if (RotatingActor != Base)
+    if (RotatingActor != none && RotatingActor != Base)
     {
         SetBase(RotatingActor);
     }
