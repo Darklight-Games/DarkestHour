@@ -9,16 +9,19 @@ var localized string                            lmsgMapOutOfBounds;
 var localized string                            NoRestartMapPrivilegeText;
 var localized string                            NoChangeMapPrivilegeText;
 var localized string                            NoDescriptionAvailable;
+var localized string                            NoPreviewAvailable;
+var localized string                            MapAuthorText;
+var localized string                            MapPlayersRangeText;
+var localized string                            MapPlayersText;
 
 var automated moEditBox ed_Filter;
 var automated GUIButton b_FilterClear;
-var automated GUILabel  l_MapPreviewName;
+var automated GUILabel  l_MapPreviewName, l_NoMapPreview, l_MapAuthor, l_MapPlayers;
 var automated GUIImage  i_MapPreviewImage;
 
 var automated GUIScrollTextBox lb_MapPreviewDesc;
 
 var CacheManager.MapRecord MapRecord;
-
 
 function InternalOnOpen()
 {
@@ -26,6 +29,10 @@ function InternalOnOpen()
 
     // Fill the filter box in case a pattern is set
     ed_Filter.SetText(DHMapVoteMultiColumnList(lb_MapListBox.List).GetFilterPattern());
+
+    // We call it here to fix the problem: 
+    // when we open the vote menu some preview's componentns are not shown until we select the map.
+    UpdatePreview(none);
 }
 
 function bool AlignBK(Canvas C)
@@ -60,7 +67,34 @@ function UpdatePreview(GUIComponent Sender)
         MapRecord = class'CacheManager'.static.GetMapRecord(MapName); //DH-Armored_La_Fueille_Advance
 
         l_MapPreviewName.Caption = class'DHMapDatabase'.static.GetHumanReadableMapName(MVRI.MapList[MapIndex].MapName);
+
+        if (MapRecord.Author != "" && !class'CacheManager'.static.IsDefaultContent(MapRecord.MapName))
+        {
+            l_MapAuthor.Caption = Repl(MapAuthorText, "{author}", MapRecord.Author);
+        }
+        else
+        {
+            l_MapAuthor.Caption = "";
+        }
+
         i_MapPreviewImage.Image = Material(DynamicLoadObject(MapRecord.ScreenshotRef, class'Material'));
+        
+        l_NoMapPreview.SetVisibility( i_MapPreviewImage.Image == none ); 
+        i_MapPreviewImage.SetVisibility( i_MapPreviewImage.Image != none );
+        
+        // Only show 1 number if min & max are the same
+	    if (MapRecord.PlayerCountMin == MapRecord.PlayerCountMax)
+        {
+		    l_MapPlayers.Caption = MapPlayersText;
+        }
+	    else
+        {
+            l_MapPlayers.Caption = MapPlayersRangeText;
+        }
+
+        l_MapPlayers.Caption = Repl(l_MapPlayers.Caption, "{min}", MapRecord.PlayerCountMin);
+        l_MapPlayers.Caption = Repl(l_MapPlayers.Caption, "{max}", MapRecord.PlayerCountMax);
+
         MapDesc = MapRecord.Description;
 
         if (MapDesc != "")
@@ -330,6 +364,21 @@ defaultproperties
     End Object
     i_MapPreviewImage=MapPreviewImage
 
+    Begin Object Class=GUILabel Name=NoPreview
+        Caption="No Preview Available"
+        TextAlign=TXTA_Center
+        TextColor=(B=0,G=255,R=247)
+        TextFont="DHSmallFont"
+        bTransparent=false
+        bMultiLine=true
+        VertAlign=TXTA_Center
+        WinWidth=0.352002
+		WinHeight=0.337480
+		WinLeft=0.53
+		WinTop=0.2
+    End Object
+    l_NoMapPreview=GUILabel'DH_Interface.NoPreview'
+
     Begin Object Class=DHGUIScrollTextBox Name=MapPreviewDesc
         bNoTeletype=true
         CharDelay=0.0025
@@ -346,6 +395,29 @@ defaultproperties
     End Object
     lb_MapPreviewDesc=MapPreviewDesc
 
+    Begin Object Class=GUILabel Name=MapAuthorLabel
+        Caption=""
+        TextAlign=TXTA_Center
+        StyleName="DHSmallText"
+        WinWidth=0.352002
+		WinHeight=0.337480
+		WinLeft=0.53
+		WinTop=0.34
+        
+    End Object
+    l_MapAuthor=GUILabel'DH_Interface.MapAuthorLabel'
+
+    Begin Object Class=GUILabel Name=RecommendedPlayers
+        Caption=""
+        TextAlign=TXTA_Right
+        StyleName="DHSmallText"
+        WinWidth=0.352002
+        WinHeight=0.31
+        WinLeft=0.53
+        WinTop=0.025
+    End Object
+    l_MapPlayers=GUILabel'DH_Interface.RecommendedPlayers'
+    
     f_Chat=none
 
     OnMessage=InternalOnMessage
@@ -353,4 +425,7 @@ defaultproperties
     NoRestartMapPrivilegeText="You don't have sufficient admin privileges to restart a map!"
     NoChangeMapPrivilegeText="You don't have sufficient admin privileges to change a map!"
     NoDescriptionAvailable="No description available."
+    MapAuthorText="Author: {author}"
+    MapPlayersText="{min} players"
+    MapPlayersRangeText="{min}-{max} players"
 }
