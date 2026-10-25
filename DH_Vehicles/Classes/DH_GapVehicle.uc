@@ -365,8 +365,8 @@ defaultproperties
      HUDOverlayFOV=85.000000
      bCanBeBaseForPawns=True
      GroundSpeed=100000.000000
-     HealthMax=200.000000
-     Health=200
+     HealthMax=45.000000
+     Health=45
      Mesh=SkeletalMesh'DH_UFO_anm.GapHull'
      Skins(0)=Texture'DH_UFO_tex.GAP.gapeye_A00'
      //Skins(1)=Texture'allies_vehicles_tex.int_vehicles.BA64_int'
