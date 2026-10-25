@@ -251,7 +251,7 @@ defaultproperties
      WheelSuspensionTravel=10.000000
      WheelSuspensionMaxRenderTravel=5.000000
      MinBrakeFriction=40.000000
-     MaxPitchSpeed=4500.000000
+     MaxPitchSpeed=2000.000000
      UprightStiffness=100.000000
      UprightDamping=300.000000
      MaxThrustForce=200.000000
