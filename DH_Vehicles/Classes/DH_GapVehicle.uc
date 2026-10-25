@@ -251,7 +251,7 @@ defaultproperties
      WheelSuspensionTravel=10.000000
      WheelSuspensionMaxRenderTravel=5.000000
      MinBrakeFriction=40.000000
-     MaxPitchSpeed=4500.000000
+     MaxPitchSpeed=2000.000000
      UprightStiffness=100.000000
      UprightDamping=300.000000
      MaxThrustForce=200.000000
@@ -365,8 +365,8 @@ defaultproperties
      HUDOverlayFOV=85.000000
      bCanBeBaseForPawns=True
      GroundSpeed=100000.000000
-     HealthMax=200.000000
-     Health=200
+     HealthMax=45.000000
+     Health=45
      Mesh=SkeletalMesh'DH_UFO_anm.GapHull'
      Skins(0)=Texture'DH_UFO_tex.GAP.gapeye_A00'
      //Skins(1)=Texture'allies_vehicles_tex.int_vehicles.BA64_int'

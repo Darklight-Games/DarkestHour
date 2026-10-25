@@ -16,5 +16,4 @@ defaultproperties
     PrimaryWeapons(1)=(Item=none,AssociatedAttachment=Class'ROKar98AmmoPouch')
     HandType=Hand_Gloved
 
-    bCanBeSquadLeader=false
 }
