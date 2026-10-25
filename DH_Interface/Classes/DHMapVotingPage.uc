@@ -9,7 +9,6 @@ var localized string                            lmsgMapOutOfBounds;
 var localized string                            NoRestartMapPrivilegeText;
 var localized string                            NoChangeMapPrivilegeText;
 var localized string                            NoDescriptionAvailable;
-var localized string                            NoPreviewAvailable;
 var localized string                            MapAuthorText;
 var localized string                            MapPlayersRangeText;
 var localized string                            MapPlayersText;
