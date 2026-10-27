@@ -3,9 +3,10 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_MG34LafetteGunConstruction_Low extends DH_MG34LafetteGunConstruction;
+class DH_MG42LafetteGun_LowDesert extends DH_MG42LafetteGun_Low;
 
 defaultproperties
 {
-    VehicleClasses(0)=(VariantIndex=0,VehicleClass=Class'DH_MG34LafetteGun_Low')
+    Skins(0)=Texture'DH_MG34_tex.LAFETTE_BODY_YELLOW'
+    BeginningIdleAnim="LAFETTE_BODY_LOW"
 }

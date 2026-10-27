@@ -171,7 +171,14 @@ simulated function OnConfirmPlacement()
 
     if (CP != none)
     {
-        ServerCreateConstruction(CP.ConstructionClass, CP.GroundActor, ProxyCursor.Location, ProxyCursor.Rotation, CP.VariantIndex, CP.DefaultSkinIndex + CP.SkinIndex);
+        ServerCreateConstruction(
+            CP.ConstructionClass, 
+            CP.GroundActor, 
+            ProxyCursor.Location, 
+            ProxyCursor.Rotation, 
+            CP.VariantIndex, 
+            CP.SkinIndex
+            );
     }
 }
 
@@ -225,7 +232,7 @@ function DHConstruction ServerCreateConstruction(class<DHConstruction> Construct
     }
 
     TestProxy.GroundActor = Owner;
-    TestProxy.SetConstructionClass(ConstructionClass);
+    TestProxy.SetConstructionClass(ConstructionClass, VariantIndex, SkinIndex);
     TestProxy.SetLocation(Location);
     TestProxy.SetRotation(Rotation);
 
@@ -290,7 +297,7 @@ simulated function ResetCursor()
     if (CP != none)
     {
         // This resets the proxy.
-        CP.SetConstructionClass(CP.ConstructionClass);
+        CP.SetConstructionClass(CP.ConstructionClass, CP.VariantIndex, CP.SkinIndex);
 
         ClientPlayClickSound();
     }

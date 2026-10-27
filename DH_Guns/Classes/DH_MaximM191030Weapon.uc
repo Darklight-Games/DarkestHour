@@ -8,8 +8,7 @@ class DH_MaximM191030Weapon extends DHMountedWeapon;
 defaultproperties
 {
     ItemName="Maxim M1910/30"
-    ConstructionClasses(0)=Class'DH_MaximM191030GunConstruction'
-    ConstructionClasses(1)=Class'DH_MaximM191030GunConstruction_Standing'
+    ConstructionClass=Class'DH_MaximM191030GunConstruction'
     AttachmentClass=Class'DH_MaximM191030Attachment'
     PickupClass=Class'DH_MaximM191030Pickup'
     Mesh=SkeletalMesh'DH_M2Mortar_anm.M2MORTAR_WEAPON'

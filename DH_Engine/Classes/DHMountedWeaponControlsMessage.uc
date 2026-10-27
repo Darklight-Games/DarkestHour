@@ -20,7 +20,9 @@ static function bool ShouldShowControl(int Index, optional int Switch, optional 
     switch (Index)
     {
         case 1:
-            return MW.ConstructionClasses.Length > 1;
+            // TODO: we need to know how many variants we have.
+            // return MW.ConstructionClasses.Length > 1;
+            return true;
         default:
             return true;
     }

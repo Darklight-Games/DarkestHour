@@ -79,7 +79,7 @@ var DynamicProjector  RotationProjector;
 var float             CrushMomentumThreshold;
 
 // When non-null, this gun can be picked up by a player.
-var class<DHWeapon>   MountedWeaponClass;
+var class<DHMountedWeapon>  MountedWeaponClass;
 
 // Whether or not the weapon is currented mounted.
 var bool              bIsWeaponMounted;

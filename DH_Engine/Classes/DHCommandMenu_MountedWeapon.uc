@@ -4,6 +4,7 @@
 //==============================================================================
 
 class DHCommandMenu_MountedWeapon extends DHCommandMenu
+    dependson(DHActorProxy)
     dependson(DHMountedGun);
 
 const ROTATE_OPTION_INDEX = 0;
@@ -68,13 +69,28 @@ function bool UnmountWeapon(DHPawn Pawn, DHMountedGun Gun)
     return true;
 }
 
+function DHActorProxy.Context GetContext()
+{
+    local DHActorProxy.Context Context;
+    local DHPlayer PC;
+
+    PC = GetPlayerController();
+
+    Context.TeamIndex = PC.GetTeamNum();
+    Context.LevelInfo = Class'DH_LevelInfo'.static.GetInstance(PC.Level);
+    Context.PlayerController = PC;
+    Context.GroundActor = none;
+
+    return Context;
+}
+
 function PickUpMountedWeapon(DHPawn Pawn, DHMountedGun Gun)
 {
     local DHMountedWeapon MountedWeapon;
     local DHMountedMG MG;
     local int i;
 
-    if (Pawn == none || Gun == none)
+    if (Pawn == none || Gun == none || Gun.MountedWeaponClass == none)
     {
         return;
     }
@@ -88,6 +104,23 @@ function PickUpMountedWeapon(DHPawn Pawn, DHMountedGun Gun)
 
     if (MountedWeapon != none)
     {
+        if (Gun.MountedWeaponClass.default.ConstructionClass != none)
+        {
+            // Sets the variant and skin indices of the weapon.
+            Gun.MountedWeaponClass.default.ConstructionClass.static.GetIndicesForVehicleClass(
+                GetContext(),
+                Gun.Class, 
+                MountedWeapon.ConstructionVariantIndex,
+                MountedWeapon.ConstructionSkinIndex
+                );
+            
+            // Since we've changed the variant and skin indices, we need to update the proxy
+            // cursor to reflect this, otherwise it will show the default variant and skin.
+            // This probably only needs to be done in standalone, since the
+            // ConstructionVariantIndex and ConstructionSkinIndex are replicated to the client.
+            MountedWeapon.UpdateProxyCursor();
+        }
+
         MountedWeapon.SetVehicleState(Gun.GetVehicleState());
 
         // Transfer the barrel bundles to the weapon.

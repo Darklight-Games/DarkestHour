@@ -12,9 +12,11 @@ class DHMountedWeapon extends DHActorProxyWeapon
 // Construction classes here are meant to be used to toggle the mount being used.
 // This method was chosen because different mounts will have different placement
 // rules and mechanics (a role best suited for being handled in constructions).
-var array<class<DHConstruction_Vehicle> >   ConstructionClasses;
-var int                                     ConstructionClassIndex;
-var private DHVehicleState                  VehicleState;
+var class<DHConstruction_Vehicle>   ConstructionClass;
+var int                             ConstructionVariantIndex;
+var int                             ConstructionSkinIndex;
+
+var private DHVehicleState          VehicleState;
 
 var array<DHWeaponBarrelBundle> WeaponBarrelBundles;
 
@@ -33,11 +35,15 @@ var()   bool    bShouldAlignToGround;
 
 var     bool    bIsEncumbering; // When true, player cannot run, go prone or switch weapons
 
+var     bool    bHasDeployed;
+
 replication
 {
     // Functions a client can call on the server
     reliable if (Role < ROLE_Authority)
         ServerDeployEnd;
+    reliable if (Role == ROLE_Authority && (bNetInitial || bNetDirty))
+        ConstructionVariantIndex, ConstructionSkinIndex;
     reliable if (bNetOwner && bNetDirty && Role == ROLE_Authority)
         HudAmmoCount;
 }
@@ -88,8 +94,6 @@ simulated state Deploying
             P.bIsDeployingMountedWeapon = false;
             P.SetLockViewRotation(false);
         }
-
-        ServerDeployEnd(ProxyCursor.GroundActor, ProxyCursor.Location, ProxyCursor.Rotation);
     }
 
     exec simulated function Deploy()
@@ -108,13 +112,40 @@ simulated state Deploying
 Begin:
     PlayAnim(DeployAnimation);
     Sleep(GetAnimDuration(DeployAnimation));
+    ServerDeployEnd(ProxyCursor.GroundActor, ProxyCursor.Location, ProxyCursor.Rotation);
     GotoState('Idle');
+}
+
+function DHActorProxy.Context GetContext()
+{
+    local DHActorProxy.Context Context;
+
+    if (Instigator == none)
+    {
+        Context.TeamIndex = Instigator.GetTeamNum();
+        Context.PlayerController = DHPlayer(Instigator.Controller);
+    }
+    
+    Context.LevelInfo = class'DH_LevelInfo'.static.GetInstance(Level);
+    Context.VariantIndex = ConstructionVariantIndex;
+    Context.SkinIndex = ConstructionSkinIndex;
+    Context.bIsInHands = true;
+
+    return Context;
 }
 
 function class<DHVehicle> GetVehicleClass()
 {
-    // TODO: this sucks.
-    return ConstructionClasses[ConstructionClassIndex].default.VehicleClasses[0].VehicleClass;
+    local class<DHVehicle> VehicleClass;
+
+    if (ConstructionClass == none)
+    {
+        return none;
+    }
+
+    VehicleClass = ConstructionClass.static.GetVehicleClass(GetContext());
+
+    return VehicleClass;
 }
 
 function DHVehicleState EnsureVehicleState()
@@ -272,12 +303,28 @@ simulated function Material GetHudAmmoIconMaterial()
     return HudAmmoIconMaterial;
 }
 
+simulated function UpdateProxyCursor()
+{
+    local DHMountedWeaponProxy Proxy;
+
+    Proxy = DHMountedWeaponProxy(ProxyCursor);
+
+    if (Proxy != none)
+    {
+        Proxy.SetVariantAndSkin(ConstructionVariantIndex, ConstructionSkinIndex);
+    }
+}
+
 simulated function DHActorProxy CreateProxyCursor()
 {
     local DHMountedWeaponProxy Cursor;
 
     Cursor = Spawn(class'DHMountedWeaponProxy', Instigator);
-    Cursor.SetConstructionClass(ConstructionClasses[ConstructionClassIndex]);
+
+    if (Cursor != none)
+    {
+        Cursor.SetConstructionClass(ConstructionClass, ConstructionVariantIndex, ConstructionSkinIndex);
+    }
 
     return Cursor;
 }
@@ -298,7 +345,6 @@ simulated function Tick(float DeltaTime)
     {
         Instigator.ReceiveLocalizedMessage(class'DHMountedWeaponControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
     }
-
 }
 
 // Copied from ROWeapon as we don't want to use PutDown from superclass for MMGs and mortars
@@ -377,7 +423,10 @@ simulated state RaisingWeapon
     {
         super.EndState();
 
-        ProxyCursor.bHidden=false;
+        if (ProxyCursor != none)
+        {
+            ProxyCursor.bHidden = false;
+        }
     }
 }
 
@@ -417,7 +466,7 @@ function bool CanSpawnVehicle(Actor Owner, Vector Location, Rotator Rotation)
     }
 
     TestProxy.GroundActor = Owner;
-    TestProxy.SetConstructionClass(ConstructionClasses[ConstructionClassIndex]);
+    TestProxy.SetConstructionClass(ConstructionClass, ConstructionVariantIndex, ConstructionSkinIndex);
     TestProxy.SetLocation(Location);
     TestProxy.SetRotation(Rotation);
 
@@ -439,6 +488,11 @@ function ServerDeployEnd(Actor Owner, Vector Location, Rotator Rotation)
     local class<DHVehicle> VehicleClass;
     local DHMountedMG MG;
     local int i;
+
+    if (bDeleteMe)
+    {
+        return;
+    }
     
     if (!CanSpawnVehicle(Owner, Location, Rotation))
     {
@@ -511,9 +565,9 @@ exec simulated function ROManualReload();
 
 static function string GetInventoryName(bool bUseNativeItemNames)
 {
-    if (default.ConstructionClasses[0].default.VehicleClass != none)
+    if (default.ConstructionClass.default.VehicleClass != none)
     {
-        return default.ConstructionClasses[0].default.VehicleClass.default.VehicleNameString;
+        return default.ConstructionClass.default.VehicleClass.default.VehicleNameString;
     }
 
     return super.GetInventoryName(bUseNativeItemNames);
@@ -525,11 +579,11 @@ final function CycleVariant()
 
     Proxy = DHMountedWeaponProxy(ProxyCursor);
 
-    if (Proxy != none && ConstructionClasses.Length > 1)
+    if (Proxy != none)
     {
-        ConstructionClassIndex = ++ConstructionClassIndex % ConstructionClasses.Length;
+        ++ConstructionVariantIndex;
 
-        Proxy.SetConstructionClass(ConstructionClasses[ConstructionClassIndex]);
+        Proxy.SetVariantAndSkin(ConstructionVariantIndex, ConstructionSkinIndex);
 
         ClientPlayClickSound();
     }
@@ -619,4 +673,3 @@ defaultproperties
     bShouldAlignToGround=true
     bIsEncumbering=true
 }
-

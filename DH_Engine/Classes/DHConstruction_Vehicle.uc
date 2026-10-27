@@ -286,6 +286,44 @@ static function array<int> GetAvailableIndicesForVariant(DHActorProxy.Context Co
     return Indices;
 }
 
+static function GetIndicesForVehicleClass(
+    DHActorProxy.Context Context,
+    class<DHVehicle> VehicleClass,
+    out int VariantIndex,
+    out int SkinIndex
+    )
+{
+    local int i, j;
+
+    VariantIndex = 0;
+    SkinIndex = 0;
+
+    if (VehicleClass == none)
+    {
+        return;
+    }
+
+    for (i = 0; i < default.VehicleClasses.Length; ++i)
+    {
+        if (default.VehicleClasses[i].VehicleClass == VehicleClass)
+        {
+            VariantIndex = default.VehicleClasses[i].VariantIndex;
+
+            // The skin index is implicit in the ordering of each variant's entries.
+            // Count how many earlier entries share the same variant to determine the skin.
+            for (j = 0; j < i; ++j)
+            {
+                if (default.VehicleClasses[j].VariantIndex == VariantIndex && IsEntryAvailable(Context, j))
+                {
+                    ++SkinIndex;
+                }
+            }
+
+            return;
+        }
+    }
+}
+
 // Override to get a different vehicle class based on scenario (eg. snow camo etc.)
 static function class<DHVehicle> GetVehicleClass(DHActorProxy.Context Context)
 {
@@ -319,6 +357,12 @@ static function bool IsEntryAvailable(DHActorProxy.Context Context, int Index)
 {
     local int i, j;
     local bool bHasAny;
+    local DH_LevelInfo.ESeason Season;
+    
+    if (Context.LevelInfo != none)
+    {
+        Season = Context.LevelInfo.Season;
+    }
     
     if (default.VehicleClasses[Index].SeasonFilters.Length == 0)
     {
@@ -335,7 +379,7 @@ static function bool IsEntryAvailable(DHActorProxy.Context Context, int Index)
                 bHasAny = false;
                 for (j = 0; j < default.VehicleClasses[Index].SeasonFilters[i].Seasons.Length; ++j)
                 {
-                    if (default.VehicleClasses[Index].SeasonFilters[i].Seasons[j] == Context.LevelInfo.Season)
+                    if (default.VehicleClasses[Index].SeasonFilters[i].Seasons[j] == Season)
                     {
                         bHasAny = true;
                         break;
@@ -349,7 +393,7 @@ static function bool IsEntryAvailable(DHActorProxy.Context Context, int Index)
             case SFO_None:
                 for (j = 0; j < default.VehicleClasses[Index].SeasonFilters[i].Seasons.Length; ++j)
                 {
-                    if (default.VehicleClasses[Index].SeasonFilters[i].Seasons[j] == Context.LevelInfo.Season)
+                    if (default.VehicleClasses[Index].SeasonFilters[i].Seasons[j] == Season)
                     {
                         return false;
                     }

@@ -25,7 +25,7 @@ function DHActorProxy.Context GetContext()
 
     Context = super.GetContext();
     Context.VariantIndex = VariantIndex;
-    Context.SkinIndex = DefaultSkinIndex + SkinIndex;
+    Context.SkinIndex = SkinIndex;
 
     return Context;
 }
@@ -41,7 +41,7 @@ function Destroyed()
     }
 }
 
-final function SetConstructionClass(class<DHConstruction> ConstructionClass)
+final function SetConstructionClass(class<DHConstruction> ConstructionClass, optional int VariantIndex, optional int SkinIndex)
 {
     if (ConstructionClass == none)
     {
@@ -49,11 +49,9 @@ final function SetConstructionClass(class<DHConstruction> ConstructionClass)
         return;
     }
 
-    // Reset the variant and skin indices.
-    VariantIndex = 0;
-    SkinIndex = 0;
-
     self.ConstructionClass = ConstructionClass;
+    self.VariantIndex = VariantIndex;
+    self.SkinIndex = SkinIndex;
 
     UpdateDefaultSkinIndex();
     UpdateAppearance();
@@ -492,6 +490,11 @@ simulated function UpdateProjectors()
     super.UpdateProjectors();
 
     // TODO: manage our other projectors.
+}
+
+simulated function SetVariantAndSkin(int VariantIndex, int SkinIndex)
+{
+    SetConstructionClass(ConstructionClass, VariantIndex, SkinIndex);
 }
 
 defaultproperties

@@ -10,6 +10,9 @@ var DHVehicleState              VehicleState;
 var array<DHWeaponBarrelBundle> WeaponBarrelBundles;
 var DHMapIconAttachment_Vehicle MapIconAttachment;
 
+var int VariantIndex;
+var int SkinIndex;
+
 simulated function Destroyed()
 {
     super.Destroyed();
@@ -46,6 +49,10 @@ function Inventory SpawnCopy(Pawn Other)
 
             WeaponBarrelBundles[i] = none;
         }
+        
+        MW.ConstructionSkinIndex = SkinIndex;
+        MW.ConstructionVariantIndex = VariantIndex;
+        MW.UpdateProxyCursor();
     }
 
     return Copy;
@@ -64,6 +71,8 @@ function InitDroppedPickupFor(Inventory Inv)
     if (MountedWeapon != none)
     {
         VehicleState = MountedWeapon.GetVehicleState();
+        VariantIndex = MountedWeapon.ConstructionVariantIndex;
+        SkinIndex = MountedWeapon.ConstructionSkinIndex;
     }
 
     if (MapIconAttachment != none)
@@ -90,7 +99,9 @@ function InitDroppedPickupFor(Inventory Inv)
     if (MapIconAttachment != none)
     {
         MapIconAttachment.SetBase(self);
-        MapIconAttachment.VehicleClass = MountedWeapon.ConstructionClasses[0].default.VehicleClasses[0].VehicleClass;
+        // NOTE: This makes the assumption that the first vehicle class in the array is the one we want to use for the map icon.
+        // This is true for now but might change in the future.
+        MapIconAttachment.VehicleClass = MountedWeapon.ConstructionClass.default.VehicleClasses[0].VehicleClass;
 
         if (Inv.Instigator != none)
         {
