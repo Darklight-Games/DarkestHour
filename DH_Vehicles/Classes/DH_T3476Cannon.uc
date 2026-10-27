@@ -8,13 +8,22 @@ class DH_T3476Cannon extends DHVehicleCannon;
 defaultproperties
 {
     // Turret mesh
-    Mesh=SkeletalMesh'DH_T34_anm.T34-76_turret_ext'
-    Skins(0)=Texture'allies_vehicles_tex.T3476_ext'
-    Skins(1)=Texture'allies_vehicles_tex.T3476_int'
-    bUseHighDetailOverlayIndex=true
-    HighDetailOverlayIndex=1
-    HighDetailOverlay=Shader'allies_vehicles_tex.t3476_int_s'
-    CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_Soviet_vehicles_stc.T34-76_turret_col')
+    Mesh=SkeletalMesh'DH_T34_76_anm.T3476_TURRET_EXT'
+    Skins(0)=Texture'DH_T34_76_tex.T3476_EXT'
+    Skins(1)=Texture'DH_T34_76_tex.T3476_INT'
+    CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_T34_76_stc.T3476_TURRET_COLLISION')
+
+    bUseTankTurretRotation=true
+    YawBone="GUN_YAW"
+    PitchBone="GUN_PITCH"
+    ShootAnim="SHOOT"
+    ShootAnimBoneName="BARREL"
+    GunnerAttachmentBone="GUN_YAW"
+
+    // interior controls
+    GunWheels(0)=(RotationType=ROTATION_Yaw,BoneName="YAW_WHEEL",Scale=-16.0,RotationAxis=AXIS_X)
+    GunWheels(1)=(RotationType=ROTATION_Pitch,BoneName="PITCH_WHEEL",Scale=16.0,RotationAxis=AXIS_X)
+    GunWheels(2)=(RotationType=ROTATION_Pitch,BoneName="PITCH_GEAR",Scale=16.0,RotationAxis=AXIS_Y)
 
     // Turret armor (model 1941)
     FrontArmorFactor=4.5
@@ -30,6 +39,9 @@ defaultproperties
     RearRightAngle=162.0
     RearLeftAngle=198.0
 
+    // Collision Attachments
+    CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_T34_76_stc.T3476_COM_HATCH_COLLISION',AttachBone="com_hatch")
+
     // Turret movement
     ManualRotationsPerSecond=0.029
     PoweredRotationsPerSecond=0.0833 // 30 degrees/sec
@@ -39,15 +51,19 @@ defaultproperties
     // Cannon ammo
     PrimaryProjectileClass=Class'DH_T3476CannonShellEarly'
     SecondaryProjectileClass=Class'DH_T3476CannonShellHE'
-    ProjectileDescriptions(0)="APBC"
 
-    nProjectileDescriptions(0)="BR-350A" //
+    ProjectileDescriptions(0)="APBC"
+    ProjectileDescriptions(1)="HE"
+
+    nProjectileDescriptions(0)="BR-350A"
     nProjectileDescriptions(1)="OF-350"
 
     InitialPrimaryAmmo=25
     InitialSecondaryAmmo=25
+
     MaxPrimaryAmmo=27
     MaxSecondaryAmmo=50
+    
     SecondarySpread=0.002
 
     // Coaxial MG ammo
@@ -62,7 +78,8 @@ defaultproperties
     // Weapon fire
     WeaponFireOffset=71.9
     AddedPitch=230
-    AltFireOffset=(X=-81.0,Y=12.5,Z=1.5)
+    AltFireAttachmentBone="MG_MUZZLE"
+    AltFireOffset=(X=-8.0,Y=0.0,Z=0.0)
 
     // Sounds
     CannonFireSound(0)=Sound'Vehicle_Weapons.76mm_fire01'

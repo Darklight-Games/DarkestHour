@@ -10,8 +10,8 @@ defaultproperties
     FireAttachBone="com_attachment"
 
     // Turret mesh
-    Mesh=SkeletalMesh'DH_T34_2_anm.T34m43_turret_ext'
-    Skins(0)=Texture'DH_T34_2_tex.T3476_M42_green'
+    // Mesh=SkeletalMesh'DH_T34_2_anm.T34m43_turret_ext'
+    // Skins(0)=Texture'DH_T34_2_tex.T3476_M42_green'
     //Skins(1)=Texture'allies_vehicles_tex.T3476_int'
     bUseHighDetailOverlayIndex=false
 

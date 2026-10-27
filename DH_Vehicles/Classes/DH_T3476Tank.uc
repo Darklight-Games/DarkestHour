@@ -2,41 +2,78 @@
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
+// TODO
+// Fix destroyed static meshes
+// Fix sight reticle 
+// Fix GUI pictures
+// Add more skins
+// Add destroyed skins
+// Add periscope reticle
+// Add riders
+// Add hatch sounds
 
 class DH_T3476Tank extends DHArmoredVehicle;
 
 defaultproperties
 {
     // Vehicle properties
-    VehicleNameString="T34/76"
+    VehicleNameString="T-34-76 mod.1941"
     VehicleTeam=1
     ReinforcementCost=4
-
-    // Hull mesh
-    Mesh=SkeletalMesh'DH_T34_anm.T34_body_ext'
-    Skins(0)=Texture'allies_vehicles_tex.T3476_ext'
-    Skins(1)=Texture'allies_vehicles_tex.T3476_treads'
-    Skins(2)=Texture'allies_vehicles_tex.T3476_treads'
-    Skins(3)=Texture'allies_vehicles_tex.T3476_int'
-    bUseHighDetailOverlayIndex=true
-    HighDetailOverlayIndex=3
-    HighDetailOverlay=Material'allies_vehicles_tex.t3476_int_s'
 
     // Vehicle weapons & passengers
     PassengerWeapons(0)=(WeaponPawnClass=Class'DH_T3476CannonPawn',WeaponBone="Turret_Placement")
     PassengerWeapons(1)=(WeaponPawnClass=Class'DH_T3476MountedMGPawn',WeaponBone="MG_Placement")
-    PassengerPawns(0)=(AttachBone="Body",DrivePos=(X=-59.0,Y=-50.0,Z=53.0),DriveRot=(Yaw=-16384),DriveAnim="VHalftrack_Rider1_idle")
-    PassengerPawns(1)=(AttachBone="body",DrivePos=(X=-100.0,Y=-25.0,Z=105.5),DriveAnim="crouch_idle_binoc") // kneeling, as can't sit in usual position due to fuel drum
-    PassengerPawns(2)=(AttachBone="Body",DrivePos=(X=-135.0,Y=35.0,Z=51.0),DriveRot=(Yaw=-32768),DriveAnim="VHalftrack_Rider5_idle")
-    PassengerPawns(3)=(AttachBone="Body",DrivePos=(X=-59.0,Y=50.0,Z=54.0),DriveRot=(Yaw=16384),DriveAnim="VHalftrack_Rider6_idle")
+
+    // Hull mesh
+    Mesh=SkeletalMesh'DH_T34_76_anm.T3476_BODY_EXT'
+    Skins(0)=Texture'DH_T34_76_tex.T3476_EXT'
+    Skins(1)=Texture'DH_T34_tex.T34_TRACK_EARLY'
+    Skins(2)=Texture'DH_T34_tex.T34_TRACK_EARLY'
+    Skins(4)=Texture'DH_T34_76_tex.T3476_INT'
+    DestroyedVehicleMesh=StaticMesh'allies_vehicles_stc.T3476_Destroyed'
+    // DestroyedMeshSkins(0)=Combiner'DH_VehiclesSOV_tex.T3476_ext_dest'
+    // DestroyedMeshSkins(1)=Combiner'DH_VehiclesSOV_tex.T3476_treads_dest'
+    // DestroyedVehicleMesh=StaticMesh'DH_T34M42_stc.T34M42_DESTROYED'
+    
+    // Destroyed Treads
+    DamagedTrackStaticMeshLeft=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_L'
+    DamagedTrackStaticMeshRight=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_R'
+
+    // Periscope
+    PeriscopePositionIndex=0
+    PeriscopeCameraBone="DRIVER_PERISCOPE"
 
     // Driver
     InitialPositionIndex=0
     UnbuttonedPositionIndex=1
-    DriverPositions(0)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_anm.T34_body_int',TransitionUpAnim="driver_hatch_open",DriverTransitionAnim="Vt3485_driver_close",ViewPitchUpLimit=0,ViewPitchDownLimit=65535,ViewPositiveYawLimit=0,ViewNegativeYawLimit=0,bDrawOverlays=true)
-    DriverPositions(1)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_anm.T34_body_int',TransitionDownAnim="driver_hatch_close",DriverTransitionAnim="Vt3485_driver_open",ViewPitchUpLimit=5500,ViewPitchDownLimit=63500,ViewPositiveYawLimit=11000,ViewNegativeYawLimit=-12500,bExposed=true)
-    DriveAnim="VT3476_driver_idle_close"
-    // HUDOverlayClass=None
+    DriverPositions(0)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_76_anm.T3476_BODY_INT',TransitionUpAnim="driver_hatch_open",DriverTransitionAnim="T34_DRIVER_HATCH_CLOSE",ViewPitchUpLimit=0,ViewPitchDownLimit=65535,ViewPositiveYawLimit=0,ViewNegativeYawLimit=0,bDrawOverlays=true)
+    DriverPositions(1)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_76_anm.T3476_BODY_INT',TransitionDownAnim="driver_hatch_close",DriverTransitionAnim="T34_DRIVER_HATCH_OPEN",ViewPitchUpLimit=5500,ViewPitchDownLimit=63500,ViewPositiveYawLimit=11000,ViewNegativeYawLimit=-12500,bExposed=true)
+    DrivePos=(Z=110.3)
+    DriveRot=(Yaw=16384)
+    DriveAnim="T34_DRIVER_CLOSE_IDLE"
+    DriverAttachmentBone="BODY"
+    bLockCameraDuringTransition=true
+
+    // Collision Attachments
+    CollisionAttachments(0)=(StaticMesh=StaticMesh'DH_T34_stc.T34_DRIVER_HATCH_COLLISION',AttachBone="driver_hatch")
+
+    // Attachments
+    RandomAttachmentGroups(0)=(Options=((Probability=0.6,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_76_stc.T3476_FUEL_TANKS',SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0))))))
+    RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3)))))
+    RandomAttachmentGroups(2)=(Options=((Probability=0.8,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',Offset=(X=5,Y=68.5,Z=79.6),Rotation=(Pitch=7826,Yaw=-16380)))))
+
+    //Interface 
+    VehicleHudImage=Texture'DH_InterfaceArt_tex.t34_body'
+    VehicleHudTurret=TexRotator'DH_InterfaceArt_tex.t34_76_turret_rot'
+    VehicleHudTurretLook=TexRotator'DH_InterfaceArt_tex.t34_76_turret_look'
+    SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_76'
+    
+    // Riders
+    PassengerPawns(0)=(AttachBone="Body",DrivePos=(X=-59.0,Y=-50.0,Z=53.0),DriveRot=(Yaw=-16384),DriveAnim="VHalftrack_Rider1_idle")
+    PassengerPawns(1)=(AttachBone="body",DrivePos=(X=-100.0,Y=-25.0,Z=105.5),DriveAnim="crouch_idle_binoc") // kneeling, as can't sit in usual position due to fuel drum
+    PassengerPawns(2)=(AttachBone="Body",DrivePos=(X=-135.0,Y=35.0,Z=51.0),DriveRot=(Yaw=-32768),DriveAnim="VHalftrack_Rider5_idle")
+    PassengerPawns(3)=(AttachBone="Body",DrivePos=(X=-59.0,Y=50.0,Z=54.0),DriveRot=(Yaw=16384),DriveAnim="VHalftrack_Rider6_idle")
 
     // Hull armor
     FrontArmor(0)=(Thickness=4.5,Slope=-60.0,MaxRelativeHeight=47.3,LocationName="lower")
@@ -71,6 +108,7 @@ defaultproperties
     PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
     FireDetonationChance=0.045  //reduced from 0.07 for all diesels
     DisintegrationHealth=-1200.0 //diesel
+    AmmoIgnitionProbability=0.8 // 0.75 default
     VehHitpoints(0)=(PointRadius=40.0,PointOffset=(X=-90.0,Y=0.0,Z=0.0)) // engine
     VehHitpoints(1)=(PointRadius=25.0,PointBone="Body",PointOffset=(X=13.0,Y=-25.0,Z=-5.0),DamageMultiplier=5.0,HitPointType=HP_AmmoStore)
     VehHitpoints(2)=(PointRadius=25.0,PointBone="Body",PointOffset=(X=13.0,Y=25.0,Z=-5.0),DamageMultiplier=5.0,HitPointType=HP_AmmoStore)
@@ -79,9 +117,6 @@ defaultproperties
     DamagedEffectOffset=(X=-105.0,Y=0.0,Z=40.0) // adjusted from original
     FireAttachBone="Body"
     FireEffectOffset=(X=127.0,Y=-18.0,Z=25.0)
-    DestroyedVehicleMesh=StaticMesh'allies_vehicles_stc.T3476_Destroyed'
-    // DestroyedMeshSkins(0)=Combiner'DH_VehiclesSOV_tex.T3476_ext_dest'
-    // DestroyedMeshSkins(1)=Combiner'DH_VehiclesSOV_tex.T3476_treads_dest'
 
     // Exit positions
     ExitPositions(0)=(X=215.0,Y=-14.0,Z=50.0)  // driver
@@ -103,17 +138,15 @@ defaultproperties
     RumbleSound=Sound'Vehicle_Engines.tank_inside_rumble02'
 
     // Visual effects
-    TreadVelocityScale=110.0
-    WheelRotationScale=29250.0
+    TreadVelocityScale=175.0
+    WheelRotationScale=50000.0
     ExhaustEffectClass=Class'ExhaustDieselEffect'
     ExhaustEffectLowClass=Class'ExhaustDieselEffect_simple'
     ExhaustPipes(0)=(ExhaustPosition=(X=-175,Y=30,Z=64),ExhaustRotation=(Pitch=36000,Yaw=0,Roll=0))
     ExhaustPipes(1)=(ExhaustPosition=(X=-175,Y=-30,Z=64),ExhaustRotation=(Pitch=36000,Yaw=0,Roll=0))
+    ShadowZOffset=20.0
 
     // HUD
-    VehicleHudImage=Texture'DH_InterfaceArt_tex.t34_body'
-    VehicleHudTurret=TexRotator'DH_InterfaceArt_tex.t34_76_turret_rot'
-    VehicleHudTurretLook=TexRotator'DH_InterfaceArt_tex.t34_76_turret_look'
     VehicleHudTreadsPosX(0)=0.36 // some positions adjusted from original
     VehicleHudTreadsScale=0.73
     VehicleHudOccupantsX(0)=0.465
@@ -128,7 +161,6 @@ defaultproperties
     VehicleHudOccupantsY(5)=0.73
     VehicleHudOccupantsX(6)=0.58
     VehicleHudOccupantsY(6)=0.62
-    SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_76'
 
     // Visible wheels
     LeftWheelBones(0)="Wheel_L_1"

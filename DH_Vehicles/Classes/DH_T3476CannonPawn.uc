@@ -8,21 +8,38 @@ class DH_T3476CannonPawn extends DHSovietCannonPawn;
 defaultproperties
 {
     GunClass=Class'DH_T3476Cannon'
-    DriverPositions(0)=(ViewLocation=(X=115.0,Y=-15.0,Z=0.0),ViewFOV=34.0,PositionMesh=SkeletalMesh'DH_T34_anm.T34-76_turret_int',bDrawOverlays=true)
-    DriverPositions(1)=(ViewLocation=(X=35,Y=-5.0,Z=20.0),ViewFOV=34.0,PositionMesh=SkeletalMesh'DH_T34_anm.T34-76_turret_int',DriverTransitionAnim="VT3476_com_idle_close",TransitionUpAnim="com_open",DriverTransitionAnim="VT3476_com_close",ViewPitchUpLimit=1,ViewPitchDownLimit=65535,ViewPositiveYawLimit=65536,ViewNegativeYawLimit=-65536,bDrawOverlays=true)
-    //
-    DriverPositions(2)=(PositionMesh=SkeletalMesh'DH_T34_anm.T34-76_turret_int',TransitionDownAnim="com_close",DriverTransitionAnim="VT3476_com_open",ViewPitchUpLimit=5000,ViewPitchDownLimit=62000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bExposed=true)
-    DriverPositions(3)=(ViewFOV=12.0,PositionMesh=SkeletalMesh'DH_T34_anm.T34-76_turret_int',DriverTransitionAnim="stand_idleiron_binoc",ViewPitchUpLimit=5000,ViewPitchDownLimit=62000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bDrawOverlays=true,bExposed=true)
 
+    //Driver's positions and anims
+    CameraBone="GUN_CAMERA"
+    PeriscopeCameraBone="CAMERA_PERISCOPE"
+    PlayerCameraBone="CAMERA_COM"
+
+    GunsightPositions=1
     PeriscopePositionIndex=1
-    UnbuttonedPositionIndex=2
-    BinocPositionIndex=3
+    UnbuttonedPositionIndex=3
+    BinocPositionIndex=4
 
-    PeriscopeOverlay=Texture'DH_VehicleOptics_tex.MG_sight' //emulating the PT4-7 periscope 2.5x 26' FOV
+    //gunsight    
+    DriverPositions(0)=(PositionMesh=SkeletalMesh'DH_T34_76_anm.T3476_TURRET_INT',ViewFOV=30.0,TransitionUpAnim="gunsight_out",bDrawOverlays=true)
+    //periscope 
+    DriverPositions(1)=(PositionMesh=SkeletalMesh'DH_T34_76_anm.T3476_TURRET_INT',ViewFOV=30.0,TransitionUpAnim="periscope_out",TransitionDownAnim="gunsight_in",ViewPitchUpLimit=5460,ViewPitchDownLimit=62790,ViewPositiveYawLimit=65536,ViewNegativeYawLimit=-65536,bDrawOverlays=true)
+    //turret view
+    DriverPositions(2)=(PositionMesh=SkeletalMesh'DH_T34_76_anm.T3476_TURRET_INT',ViewFOV=90.0,DriverTransitionAnim="T3476_COM_HATCH_CLOSE",TransitionUpAnim="com_hatch_open",TransitionDownAnim="periscope_in",ViewPitchUpLimit=5000,ViewPitchDownLimit=64500,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bDrawOverlays=false)
+    //exposed
+    DriverPositions(3)=(PositionMesh=SkeletalMesh'DH_T34_76_anm.T3476_TURRET_INT',DriverTransitionAnim="T3476_COM_HATCH_OPEN",TransitionDownAnim="com_hatch_close",ViewPitchUpLimit=5000,ViewPitchDownLimit=62000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bExposed=true)
+    //binocs 
+    DriverPositions(4)=(PositionMesh=SkeletalMesh'DH_T34_76_anm.T3476_TURRET_INT',ViewFOV=21.25,DriverTransitionAnim="T3476_COM_BINOCS",ViewPitchUpLimit=5000,ViewPitchDownLimit=59000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bDrawOverlays=true,bExposed=true)
+
+    DrivePos=(X=-13,Y=-21,Z=8)
+    DriveRot=(Yaw=16384)
+
+    //Periscope
+    PeriscopeOverlay=Texture'DH_VehicleOptics_tex.MG_sight' //emulating the PTK periscope 2.5x 26' FOV TODO: add PTK reticle
     PeriscopeSize=0.76
 
-    DriveAnim="VT3476_com_idle_close"
-    bLockCameraDuringTransition=true // just stops player being able to turn & see through incomplete turret interior when buttoning or unbuttoning
+    DriveAnim="T3476_COM_IDLE_CLOSE"
+    bLockCameraDuringTransition=false
+
     GunsightOverlay=Texture'DH_VehicleOptics_tex.T3476_sight_background' // edited RO sight to make edges solid black to avoid graphical smears on sides of sight
     CannonScopeCenter=Texture'Vehicle_Optic.T3476_sight_mover'
     GunsightSize=0.441 // 15 degrees visible FOV at 2.5x magnification (TMFD-7 sight)

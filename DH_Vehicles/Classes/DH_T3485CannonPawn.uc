@@ -25,14 +25,14 @@ defaultproperties
     GunsightPositions=1
     PeriscopePositionIndex=1
     BinocPositionIndex=3
-    DrivePos=(X=-0.5,Z=58.5)
+    DrivePos=(X=-2.5,Z=58.5)
     DriveAnim="T34_85_IDLE_CLOSE"
     //PeriscopeSize=0.5
     
 
     GunsightOverlay=Texture'Vehicle_Optic.t3485_sight'
     GunsightSize=0.753 // 16 degrees visible FOV at 4x magnification (TSh-16 sight)
-    OverlayCorrectionY=-2.5 // raises sight slightly so tip of reticle arrowhead is right on the aim point
+    // OverlayCorrectionY=-2.5 // raises sight slightly so tip of reticle arrowhead is right on the aim point
     CannonScopeCenter=Texture'Vehicle_Optic.T3476_sight_mover'
     ScopeCenterPositionX=0.075
     ScopeCenterScaleX=2.0

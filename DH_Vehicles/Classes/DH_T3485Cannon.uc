@@ -40,6 +40,7 @@ defaultproperties
     // Collision Attachments
     CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_T34_85_stc.T34_85_COM_HATCH_COLLISION',AttachBone="com_hatch")
     CollisionStaticMeshes(2)=(CollisionStaticMesh=StaticMesh'DH_T34_85_stc.T34_85_MANTLET_COLLISION',AttachBone="gun_pitch")
+    
     // Turret movement
     ManualRotationsPerSecond=0.02
     PoweredRotationsPerSecond=0.0555 // 20 degrees/sec

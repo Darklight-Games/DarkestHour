@@ -8,5 +8,5 @@ class DH_T3476_42TankFactory extends DH_USVehicles; // later version with HVAP i
 defaultproperties
 {
     VehicleClass=Class'DH_T3476_42Tank'
-    Mesh=SkeletalMesh'DH_T34_2_anm.T34_42_hull'
+    // Mesh=SkeletalMesh'DH_T34_2_anm.T34_42_hull'
 }

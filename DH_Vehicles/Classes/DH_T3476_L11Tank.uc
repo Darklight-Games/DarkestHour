@@ -29,9 +29,9 @@ defaultproperties
 
     // Hull mesh
     Mesh=SkeletalMesh'DH_T3476_L11_anm.T3476_L11_BODY_EXT'
-    Skins(0)=Texture'DH_T34_2_tex.T3476_L11_EXT'
-    Skins(1)=Texture'DH_T34_2_tex.T34_TRACK_EARLY'
-    Skins(2)=Texture'DH_T34_2_tex.T34_TRACK_EARLY'
+    Skins(0)=Texture'DH_T34_76_L11_tex.T3476_L11_EXT'
+    Skins(1)=Texture'DH_T34_tex.T34_TRACK_EARLY'
+    Skins(2)=Texture'DH_T34_tex.T34_TRACK_EARLY'
     // Skins(3)=Texture'DH_T34_85_tex.T34_85_INT'
     // DestroyedVehicleMesh=StaticMesh'DH_T34_85_stc.T34_85_DESTROYED'
     // VehicleHudTurret=TexRotator'DH_InterfaceArt_tex.t34_85_turret_rot'

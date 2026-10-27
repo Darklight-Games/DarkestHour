@@ -2,11 +2,11 @@
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
-// TODO
-// fix turret attachments
-// figure out driver controlled smoke system
-// add infantry riders
-// add hatch opening sounds
+// TODO 
+// Fix turret attachments
+// Figure out driver controlled smoke system (or maybe it was controlled by commander?)
+// Fix GUI pictures
+// Add hatch sounds
 
 class DH_T3485Tank extends DH_T3476Tank;
 
@@ -31,51 +31,31 @@ defaultproperties
     VehicleHudTurretLook=TexRotator'DH_InterfaceArt_tex.t34_85_turret_look'
     SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_85'
 
-    // Periscope
-    PeriscopePositionIndex=0
-    PeriscopeCameraBone="DRIVER_PERISCOPE"
-
     // Driver
+    UnbuttonedPositionIndex=1
     DriverPositions(0)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_85_anm.T34_85_BODY_INT',TransitionUpAnim="driver_hatch_open",DriverTransitionAnim="T34_DRIVER_HATCH_CLOSE",ViewPitchUpLimit=0,ViewPitchDownLimit=65535,ViewPositiveYawLimit=0,ViewNegativeYawLimit=0,bDrawOverlays=true)
     DriverPositions(1)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_85_anm.T34_85_BODY_INT',TransitionDownAnim="driver_hatch_close",DriverTransitionAnim="T34_DRIVER_HATCH_OPEN",ViewPitchUpLimit=5500,ViewPitchDownLimit=63500,ViewPositiveYawLimit=11000,ViewNegativeYawLimit=-12500,bExposed=true)
     DrivePos=(Z=110.3)
     DriveRot=(Yaw=16384)
     DriveAnim="T34_DRIVER_CLOSE_IDLE"
     DriverAttachmentBone="BODY"
-    UnbuttonedPositionIndex=1
     bLockCameraDuringTransition=true
 
     // Collision Attachments
     CollisionAttachments(0)=(StaticMesh=StaticMesh'DH_T34_stc.T34_DRIVER_HATCH_COLLISION',AttachBone="driver_hatch")
-    
-    // Visual effects
-    TreadVelocityScale=175.0
-    WheelRotationScale=50000.0
 
     // Attachments
-    RandomAttachmentGroups(0)=(Options=((Probability=0.8,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_SPARE_TRACK',Offset=(X=153,Z=56.3),Rotation=(Pitch=-5606),AttachBone="body"))))
-    RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3),AttachBone="body"))))
-    RandomAttachmentGroups(2)=(Options=((Probability=0.7,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_FUEL_TANK_L',AttachBone="body"))))
-    RandomAttachmentGroups(3)=(Options=((Probability=0.7,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_FUEL_TANK_R',AttachBone="body"))))
-    RandomAttachmentGroups(4)=(Options=((Probability=0.85,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',bAttachToWeapon=true,AttachBone="gun_yaw"))))
+    RandomAttachmentGroups(0)=(Options=((Probability=0.8,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_SPARE_TRACK',Offset=(X=153,Z=56.3),Rotation=(Pitch=-5606)))))
+    RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3)))))
+    RandomAttachmentGroups(2)=(Options=((Probability=0.7,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_FUEL_TANK_LATE_L',Offset=(X=-104,Y=-75.3,Z=88.5),SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0))))))
+    RandomAttachmentGroups(3)=(Options=((Probability=0.7,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_FUEL_TANK_LATE_R',Offset=(X=-104,Y=75.3,Z=88.5),SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0))))))
+    RandomAttachmentGroups(4)=(Options=((Probability=0.85,Attachment=(AttachBone="gun_yaw",bAttachToWeapon=true,AttachBone="gun_yaw",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP'))))
     
-    // Shadow
-    ShadowZOffset=20.0
-
     // Damage
     // pros: diesel fuel; 5 men crew
     // cons: fuel tanks in crew compartment
     Health=525
-
     HealthMax=525
     EngineHealth=300
-
-    // Destroyed Treads
-    DamagedTrackStaticMeshLeft=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_L'
-    DamagedTrackStaticMeshRight=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_R'
-
-    PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
-    FireDetonationChance=0.045  //reduced from 0.07 for all diesels
-    DisintegrationHealth=-1200.0 //diesel
-    AmmoIgnitionProbability=0.8 // 0.75 default
+    EngineRestartFailChance=0.1 // mid-late war variant with better engine production quality
 }

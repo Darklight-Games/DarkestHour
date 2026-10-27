@@ -27,10 +27,10 @@ defaultproperties
     ReinforcementCost=4
 
     // Hull mesh
-    Mesh=SkeletalMesh'DH_T34_2_anm.T34m43_body_ext'
-    Skins(0)=Texture'DH_T34_2_tex.T3476_M42_green'
-    Skins(1)=Texture'allies_vehicles_tex.T3476_treads'
-    Skins(2)=Texture'allies_vehicles_tex.T3476_treads'
+    // Mesh=SkeletalMesh'DH_T34_2_anm.T34m43_body_ext'
+    // Skins(0)=Texture'DH_T34_2_tex.T3476_M42_green'
+    // Skins(1)=Texture'allies_vehicles_tex.T3476_treads'
+    // Skins(2)=Texture'allies_vehicles_tex.T3476_treads'
 
     bUseHighDetailOverlayIndex=false
     //HighDetailOverlayIndex=3
@@ -47,8 +47,8 @@ defaultproperties
     // Driver
     InitialPositionIndex=0
     UnbuttonedPositionIndex=1
-    DriverPositions(0)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_2_anm.T34m42_hull_int',TransitionUpAnim="driver_hatch_open",DriverTransitionAnim="Vt3485_driver_close",ViewPitchUpLimit=0,ViewPitchDownLimit=65535,ViewPositiveYawLimit=0,ViewNegativeYawLimit=0,bDrawOverlays=true)
-    DriverPositions(1)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_2_anm.T34m42_hull_int',TransitionDownAnim="driver_hatch_close",DriverTransitionAnim="Vt3485_driver_open",ViewPitchUpLimit=5500,ViewPitchDownLimit=63500,ViewPositiveYawLimit=11000,ViewNegativeYawLimit=-12500,bExposed=true)
+    // DriverPositions(0)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_2_anm.T34m42_hull_int',TransitionUpAnim="driver_hatch_open",DriverTransitionAnim="Vt3485_driver_close",ViewPitchUpLimit=0,ViewPitchDownLimit=65535,ViewPositiveYawLimit=0,ViewNegativeYawLimit=0,bDrawOverlays=true)
+    // DriverPositions(1)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_2_anm.T34m42_hull_int',TransitionDownAnim="driver_hatch_close",DriverTransitionAnim="Vt3485_driver_open",ViewPitchUpLimit=5500,ViewPitchDownLimit=63500,ViewPositiveYawLimit=11000,ViewNegativeYawLimit=-12500,bExposed=true)
     DriveAnim="VT3476_driver_idle_close"
     HUDOverlayClass=None
     //HUDOverlayFOV=85.0
