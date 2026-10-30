@@ -409,6 +409,10 @@ simulated function PostBeginPlay()
 // to flag bClientInitialized, & to skip lots of pointless stuff if an already destroyed vehicle gets replicated
 simulated function PostNetBeginPlay()
 {
+    // Populate the vehicle attachments here so that when each weapon calls
+    // SpawnWeaponAttachments, the vehicle's VehicleAttachments is already populated.
+    PopulateVehicleAttachments();
+
     super.PostNetBeginPlay();
 
     // Net client initialisation, based on replicated info about driving status/position
@@ -3089,15 +3093,130 @@ simulated function UpdatePrecacheStaticMeshes()
     }
 }
 
+// Populate the vehicle attachments array with the random attachments.
+simulated function PopulateVehicleAttachments()
+{
+    local VehicleAttachment VA;
+    local float             RandomNumber, ProbabilitySum;
+    local int               i, j, k, DependenciesMet;
+    local bool              bDidMeetDependencies;
+
+    if (!bDoRandomAttachments)
+    {
+        return;
+    }
+
+    for (i = 0; i < Min(MAX_RANDOM_ATTACHMENT_GROUPS, RandomAttachmentGroups.Length); ++i)
+    {
+        ProbabilitySum = 0.0;
+        RandomNumber = FRand();
+
+        const OPTION_INDEX_NONE = -1;
+        const OPTION_INDEX_ANY = -2;
+
+        RandomAttachmentGroupOptions[i] = OPTION_INDEX_NONE;
+
+        DependenciesMet = 0;
+
+        // Check dependencies, if any exist.
+        for (j = 0; j < RandomAttachmentGroups[i].Dependencies.Length; ++j)
+        {
+            // Check that the group index is less than the current group index.
+            // If it is not, throw an error.
+            if (RandomAttachmentGroups[i].Dependencies[j].GroupIndex >= i)
+            {
+                // Give detailed error with indices.
+                Warn("Random attachment group" @ i @ "has a dependency on group" @ RandomAttachmentGroups[i].Dependencies[j].GroupIndex @ "which is higher than the current group index.");
+                break;
+            }
+
+            if (RandomAttachmentGroups[i].Dependencies[j].OptionIndex == OPTION_INDEX_ANY)
+            {
+                // Any non-empty option in the group will satisfy the dependency.
+                if (RandomAttachmentGroupOptions[RandomAttachmentGroups[i].Dependencies[j].GroupIndex] != OPTION_INDEX_NONE)
+                {
+                    DependenciesMet++;
+                }
+            }
+            else
+            {
+                // We are looking for a specific option in the group to satisfy the dependency.
+                if (RandomAttachmentGroupOptions[RandomAttachmentGroups[i].Dependencies[j].GroupIndex] == byte(RandomAttachmentGroups[i].Dependencies[j].OptionIndex))
+                {
+                    DependenciesMet++;
+                }
+            }
+        }
+
+        if (RandomAttachmentGroups[i].Dependencies.Length > 0)
+        {
+            switch (RandomAttachmentGroups[i].DependencyType)
+            {
+                case GDT_All:
+                    bDidMeetDependencies = DependenciesMet == RandomAttachmentGroups[i].Dependencies.Length;
+                    break;
+                case GDT_Any:
+                    bDidMeetDependencies = DependenciesMet > 0;
+                    break;
+                case GDT_None:
+                    bDidMeetDependencies = DependenciesMet == 0;
+                    break;
+            }
+
+            if (!bDidMeetDependencies)
+            {
+                // Skip this group if dependencies are not met.
+                continue;
+            }
+        }
+
+        for (j = 0; j < RandomAttachmentGroups[i].Options.Length; ++j)
+        {
+            ProbabilitySum += RandomAttachmentGroups[i].Options[j].Probability;
+
+            if (RandomNumber < ProbabilitySum)
+            {
+                RandomAttachmentGroupOptions[i] = j;
+                break;
+            }
+        }
+    }
+
+    for (i = 0; i < Min(MAX_RANDOM_ATTACHMENT_GROUPS, RandomAttachmentGroups.Length); ++i)
+    {
+        if (RandomAttachmentGroupOptions[i] >= 0 && RandomAttachmentGroupOptions[i] < RandomAttachmentGroups[i].Options.Length)
+        {
+            VA = RandomAttachmentGroups[i].Options[RandomAttachmentGroupOptions[i]].Attachment;
+
+            for (k = 0; k < VA.SkinIndexMap.Length; ++k)
+            {
+                VA.Skins[VA.SkinIndexMap[k].AttachmentSkinIndex] = Skins[VA.SkinIndexMap[k].VehicleSkinIndex];
+            }
+
+            if (VA.StaticMesh != none)
+            {
+                // Apply global skin override to the attachment if no per-attachment skin is specified.
+                for (j = 0; j < RandomAttachmentSkins.Length; ++j)
+                {
+                    if (RandomAttachmentSkins[j] != none && (VA.Skins.Length < j || VA.Skins[j] == none))
+                    {
+                        VA.Skins[j] = RandomAttachmentSkins[j];
+                    }
+                }
+
+                VehicleAttachments[VehicleAttachments.Length] = VA;
+            }
+        }
+    }
+}
+
 // New function to spawn specific attachments & variety of possible generic vehicle attachments (which avoid need for subclassed common functionality & lots of instance variables)
 simulated function SpawnVehicleAttachments()
 {
     local VehicleAttachment VA;
     local class<Actor>      AttachClass;
     local Actor             A;
-    local float             RandomNumber, ProbabilitySum;
-    local int               i, j, k, DependenciesMet;
-    local bool              bDidMeetDependencies;
+    local int               i, j;
 
     // Treads & movement sound attachments
     if (Level.NetMode != NM_DedicatedServer)
@@ -3192,117 +3311,6 @@ simulated function SpawnVehicleAttachments()
                 RadioAttachment.SetRelativeLocation(vect(0, 0, 0));
             }
         }
-
-        // If vehicle has possible random decorative attachments, select which one (if any at all, depending on specified chances)
-        if (bDoRandomAttachments)
-        {
-            for (i = 0; i < Min(MAX_RANDOM_ATTACHMENT_GROUPS, RandomAttachmentGroups.Length); ++i)
-            {
-                ProbabilitySum = 0.0;
-                RandomNumber = FRand();
-
-                const OPTION_INDEX_NONE = -1;
-                const OPTION_INDEX_ANY = -2;
-
-                RandomAttachmentGroupOptions[i] = OPTION_INDEX_NONE;
-
-                DependenciesMet = 0;
-
-                // Check dependencies, if any exist.
-                for (j = 0; j < RandomAttachmentGroups[i].Dependencies.Length; ++j)
-                {
-                    // Check that the group index is less than the current group index.
-                    // If it is not, throw an error.
-                    if (RandomAttachmentGroups[i].Dependencies[j].GroupIndex >= i)
-                    {
-                        // Give detailed error with indices.
-                        Warn("Random attachment group" @ i @ "has a dependency on group" @ RandomAttachmentGroups[i].Dependencies[j].GroupIndex @ "which is higher than the current group index.");
-                        break;
-                    }
-
-                    if (RandomAttachmentGroups[i].Dependencies[j].OptionIndex == OPTION_INDEX_ANY)
-                    {
-                        // Any non-empty option in the group will satisfy the dependency.
-                        if (RandomAttachmentGroupOptions[RandomAttachmentGroups[i].Dependencies[j].GroupIndex] != OPTION_INDEX_NONE)
-                        {
-                            DependenciesMet++;
-                        }
-                    }
-                    else
-                    {
-                        // We are looking for a specific option in the group to satisfy the dependency.
-                        if (RandomAttachmentGroupOptions[RandomAttachmentGroups[i].Dependencies[j].GroupIndex] == byte(RandomAttachmentGroups[i].Dependencies[j].OptionIndex))
-                        {
-                            DependenciesMet++;
-                        }
-                    }
-                }
-
-                if (RandomAttachmentGroups[i].Dependencies.Length > 0)
-                {
-                    switch (RandomAttachmentGroups[i].DependencyType)
-                    {
-                        case GDT_All:
-                            bDidMeetDependencies = DependenciesMet == RandomAttachmentGroups[i].Dependencies.Length;
-                            break;
-                        case GDT_Any:
-                            bDidMeetDependencies = DependenciesMet > 0;
-                            break;
-                        case GDT_None:
-                            bDidMeetDependencies = DependenciesMet == 0;
-                            break;
-                    }
-
-                    if (!bDidMeetDependencies)
-                    {
-                        // Skip this group if dependencies are not met.
-                        continue;
-                    }
-                }
-
-                for (j = 0; j < RandomAttachmentGroups[i].Options.Length; ++j)
-                {
-                    ProbabilitySum += RandomAttachmentGroups[i].Options[j].Probability;
-
-                    if (RandomNumber < ProbabilitySum)
-                    {
-                        RandomAttachmentGroupOptions[i] = j;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    // Spawn any selected random decorative attachments.
-    if (bDoRandomAttachments)
-    {
-        for (i = 0; i < Min(MAX_RANDOM_ATTACHMENT_GROUPS, RandomAttachmentGroups.Length); ++i)
-        {
-            if (RandomAttachmentGroupOptions[i] >= 0 && RandomAttachmentGroupOptions[i] < RandomAttachmentGroups[i].Options.Length)
-            {
-                VA = RandomAttachmentGroups[i].Options[RandomAttachmentGroupOptions[i]].Attachment;
-
-                for (k = 0; k < VA.SkinIndexMap.Length; ++k)
-                {
-                    VA.Skins[VA.SkinIndexMap[k].AttachmentSkinIndex] = Skins[VA.SkinIndexMap[k].VehicleSkinIndex];
-                }
-
-                if (VA.StaticMesh != none)
-                {
-                    // Apply global skin override to the attachment if no per-attachment skin is specified.
-                    for (j = 0; j < RandomAttachmentSkins.Length; ++j)
-                    {
-                        if (RandomAttachmentSkins[j] != none && (VA.Skins.Length < j || VA.Skins[j] == none))
-                        {
-                            VA.Skins[j] = RandomAttachmentSkins[j];
-                        }
-                    }
-
-                    VehicleAttachments[VehicleAttachments.Length] = VA;
-                }
-            }
-        }
     }
 
     // Spawn any attachments.
@@ -3310,9 +3318,10 @@ simulated function SpawnVehicleAttachments()
     {
         VA = VehicleAttachments[i];
 
-        if (VA.bAttachToWeapon && Level.NetMode != NM_Standalone)
+        if (VA.bAttachToWeapon)
         {
-            // Do not do the attachment here. The weapon will handle it when it is spawned client-side in InitializeVehicleBase.
+            // Do not do weapon attachments here.
+            // The weapon will handle it when it is spawned client-side in InitializeVehicleBase.
             // This guarantees that it has a valid reference to this vehicle.
             continue;
         }
