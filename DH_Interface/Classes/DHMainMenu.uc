@@ -551,6 +551,7 @@ defaultproperties
     StaticFavorites(1)=(IP="104.243.41.183",Port=7777,ServerName="Official Server #2")
     StaticFavorites(2)=(IP="104.243.41.183",Port=7817,ServerName="Official Server #3")
     StaticFavorites(3)=(IP="104.243.41.183",Port=7797,ServerName="Official Armored Server #1")
+    StaticFavorites(4)=(IP="87.98.237.193",Port=7757,ServerName="Red Orchestra Poland Server")
 
     // Render Entry.rom instead of background
     bRenderWorld=true
