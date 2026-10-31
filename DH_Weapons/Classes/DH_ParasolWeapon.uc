@@ -126,8 +126,10 @@ defaultproperties
     bCanBeResupplied=false
     bCanResupplyWhenEmpty=true
 
-    IronSightDisplayFOV=95.0
+    IronSightDisplayFOV=100.0
     DisplayFOV=85.0
+
+    bUsesIronsightFOV=false
 
 
     RangeDistanceUnit=DU_Meters
