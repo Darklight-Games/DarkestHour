@@ -5,7 +5,6 @@
 // TODO: let the player move the camera around somehow when using MMGs? (free look)
 //==============================================================================
 
-
 class DH_MG34LafetteMGPawn extends DHMountedMGPawn;
 
 defaultproperties
@@ -23,8 +22,8 @@ defaultproperties
     DriverPositionsExtra(0)=(CameraBone="")
     DriverPositionsExtra(1)=(CameraBone="IRONSIGHT_CAMERA")
     DriverPositionsExtra(2)=(CameraBone="")
-    
-    //DriverPositionMeshSkins(0)=Texture'DH_Maxim_tex.MAXIM_TURRET_INT'
+
+    DriverPositionMeshSkins(0)=Texture'DH_MG34_tex.MG34_1ST'
 
     GunsightCameraBone="GUNSIGHT_CAMERA"
     GunsightPositionIndex=0

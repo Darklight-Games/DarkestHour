@@ -2242,8 +2242,9 @@ simulated function SwitchMesh(int PositionIndex, optional bool bUpdateAnimations
     local Mesh    NewMesh;
     local Rotator WeaponYaw, WeaponPitch;
     local int i;
+    local DHVehicle V;
 
-    if ((Role == ROLE_AutonomousProxy || Level.NetMode == NM_Standalone || Level.NetMode == NM_ListenServer) && Gun != none)
+    if (Gun != none && (Role == ROLE_AutonomousProxy || Level.NetMode == NM_Standalone || Level.NetMode == NM_ListenServer))
     {
         // If switching to a valid driver position, get its PositionMesh
         if (PositionIndex >= 0 && PositionIndex < DriverPositions.Length)
@@ -2280,24 +2281,39 @@ simulated function SwitchMesh(int PositionIndex, optional bool bUpdateAnimations
                 Gun.SetBoneRotation(Gun.YawBone, WeaponYaw);
                 Gun.SetBoneRotation(Gun.PitchBone, WeaponPitch);
             }
+            
+            Gun.Skins.Length = 0;
 
             // Handle skins if we are using driver position mesh skins.
             if (NewMesh == Gun.default.Mesh)
             {
-                Gun.Skins.Length = 0;
-
                 for (i = 0; i < Gun.default.Skins.Length; ++i)
                 {
                     Gun.Skins[i] = Gun.default.Skins[i];
                 }
+                
+                V = DHVehicle(Gun.Base);
+
+                if (V != none)
+                {
+                    for (i = 0; i < V.CannonSkins.Length; ++i)
+                    {
+                        if (V.CannonSkins[i] != none)
+                        {
+                            Gun.Skins[i] = V.CannonSkins[i];
+                        }
+                    }
+                }
             }
             else
             {
-                Gun.Skins.Length = 0;
-                
+                // Switching to a driver position mesh (first person).
                 for (i = 0; i < DriverPositionMeshSkins.Length; ++i)
                 {
-                    Gun.Skins[i] = DriverPositionMeshSkins[i];
+                    if (DriverPositionMeshSkins[i] != none)
+                    {
+                        Gun.Skins[i] = DriverPositionMeshSkins[i];
+                    }
                 }
             }
 

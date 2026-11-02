@@ -22,8 +22,6 @@ defaultproperties
     DriverPositionsExtra(0)=(CameraBone="")
     DriverPositionsExtra(1)=(CameraBone="IRONSIGHT_CAMERA")
     DriverPositionsExtra(2)=(CameraBone="")
-    
-    //DriverPositionMeshSkins(0)=Texture'DH_Maxim_tex.MAXIM_TURRET_INT'
 
     GunsightCameraBone="GUNSIGHT_CAMERA"
     GunsightPositionIndex=0
