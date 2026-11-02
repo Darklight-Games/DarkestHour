@@ -21,16 +21,10 @@ function ActorProxyError GetPawnError()
     {
         return E;
     }
-    
+
     if (P.bLeanLeft || P.bLeanRight) // Do not allow player to deploy mmg/mortar while he is leaning
     {
         E.Type = ERROR_Leaning;
-        return E;
-    }
-
-    if (P.Velocity != vect(0.0, 0.0, 0.0)) // Do not allow player to deploy the stationary weapon while he is moving
-    {
-        E.Type = ERROR_PlayerBusy;
         return E;
     }
 

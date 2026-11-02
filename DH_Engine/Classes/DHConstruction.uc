@@ -1138,12 +1138,6 @@ static function DHActorProxy.ActorProxyError GetContextError(DHActorProxy.Contex
         return E;
     }
 
-    if (!P.CanSwitchWeapon() && !P.CanThrowWeapon())
-    {
-        E.Type = ERROR_PlayerBusy;
-        return E;
-    }
-
     CM = Class'DHConstructionManager'.static.GetInstance(P.Level);
 
     if (CM == none)

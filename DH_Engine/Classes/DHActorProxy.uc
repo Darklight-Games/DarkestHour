@@ -261,6 +261,9 @@ function Color GetProxyColor()
         case ERROR_Fatal:
         case ERROR_PlayerBusy:
             return Class'UColor'.default.Black;
+        case ERROR_Leaning:
+        case ERROR_PlayerIsntCrouched:
+            return class'UColor'.default.Yellow;
         default:
             return Class'UColor'.default.Red;
     }
@@ -301,7 +304,6 @@ function Tick(float DeltaTime)
 }
 
 function ActorProxyError GetPawnError();
-
 
 function ActorProxyError GetContextError(Context Context)
 {
@@ -768,18 +770,25 @@ function SetProxyError(ActorProxyError NewProxyError)
 
     if (Projector != none)
     {
-        switch (ProxyError.Type)
-        {
-        case ERROR_None:
-            Projector.ProjTexture = Projector.GreenTexture;
-            break;
-        default:
-            Projector.ProjTexture = Projector.RedTexture;
-            break;
-        }
+        Projector.ProjTexture = GetProjectorMaterial(ProxyError.Type);
     }
 
     UpdateColor(GetProxyColor());
+}
+
+function Material GetProjectorMaterial(EActorProxyErrorType ErrorType)
+{
+    switch (ErrorType)
+    {
+        case ERROR_None:
+            return Projector.GreenTexture;
+        case ERROR_PlayerIsntCrouched:
+        case ERROR_PlayerBusy:
+        case ERROR_Leaning:
+            return Projector.OrangeTexture;
+        default:
+            return Projector.RedTexture;
+    }  
 }
 
 function GetCollisionSize(Context Context, out float Radius, out float Height)

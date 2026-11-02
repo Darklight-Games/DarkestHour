@@ -208,6 +208,27 @@ function ActorProxyError GetContextError(Context Context)
     return ConstructionClass.static.GetContextError(Context);
 }
 
+function ActorProxyError GetPawnError()
+{
+    local ActorProxyError E;
+    local DHPawn P;
+
+    P = DHPawn(Instigator);
+
+    if (P == none)
+    {
+        return E;
+    }
+
+    if (!P.CanSwitchWeapon() && !P.CanThrowWeapon())
+    {
+        E.Type = ERROR_PlayerBusy;
+        return E;
+    }
+
+    return E;
+}
+
 function ActorProxyError GetPositionError()
 {
     local ActorProxyError E;

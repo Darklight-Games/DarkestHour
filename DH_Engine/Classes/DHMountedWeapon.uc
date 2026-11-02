@@ -384,13 +384,10 @@ simulated state RaisingWeapon
 // Implemented so pressing the deploy key will attempt to deploy a carried stationary weapon
 exec simulated function Deploy()
 {
-    local DHPawn  P;
-
-    P = DHPawn(Instigator);
     // BUG: player can drop the weapon while in this state, bricking the pawn's movement until it dies.
     // solution: don't let them drop the weapon while deploying.
 
-    if (CanConfirmPlacement() && P.Physics != PHYS_Falling) // Don't allow player to deploy mmg when he is jumping 
+    if (CanConfirmPlacement())
     {
         GotoState('Deploying');
     }
@@ -398,14 +395,10 @@ exec simulated function Deploy()
 
 simulated function bool CanConfirmPlacement()
 {
-    local DHPawn P;
-
     if (!IsInState('Idle'))
     {
         return false;
     }
-
-    P = DHPawn(Instigator);
 
     return super.CanConfirmPlacement();
 }

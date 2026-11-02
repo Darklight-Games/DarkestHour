@@ -8,11 +8,13 @@ class DHActorProxyProjector extends DynamicProjector
 
 var Material GreenTexture;
 var Material RedTexture;
+var Material OrangeTexture;
 
 defaultproperties
 {
     GreenTexture=Material'DH_Construction_tex.aura_green'
     RedTexture=Material'DH_Construction_tex.aura_red'
+    OrangeTexture=Material'DH_Construction_tex.aura_orange'
     bNoProjectOnOwner=true
     bProjectActor=false
     bProjectOnAlpha=true
