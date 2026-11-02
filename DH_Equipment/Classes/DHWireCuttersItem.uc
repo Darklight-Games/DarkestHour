@@ -63,7 +63,6 @@ simulated state Cutting
         if (DHPawn(Instigator) != none)
         {
             DHPawn(Instigator).SetIsCuttingWire(true);
-            //DHPawn(Instigator).bCanCutWire = false;
         }
 
         PlayAnim('cutStart');
