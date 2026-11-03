@@ -178,8 +178,8 @@ function DrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, bool
         // Allied Side
         GetCellLeftWidth(2, CellLeft, CellWidth);
         Flag = Class'DHMapDatabase'.static.GetAlliedNationIcon(MI.AlliedNation);
-        FlagHeight = H *1.2; // 0.8;
-        FlagWidth = FlagHeight * 1.6; // Assuming flag aspect ratio is 16:10
+        FlagHeight = H *1.5;
+        FlagWidth = FlagHeight * 1.4;
 
         if (Flag != none)
         {
