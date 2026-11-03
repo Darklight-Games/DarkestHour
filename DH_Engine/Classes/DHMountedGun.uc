@@ -32,6 +32,9 @@ enum EPickUpError
     ERROR_None,
     ERROR_Fatal,
     ERROR_CannotBePickedUp,
+    ERROR_CannotBePickedUpWhileCrawling,
+    ERROR_CannotBePickedUpWhileCrouched,
+    ERROR_CannotBePickedUpWhileStanding,
 };
 
 enum EMountError
@@ -80,17 +83,19 @@ var float             CrushMomentumThreshold;
 
 // When non-null, this gun can be picked up by a player.
 var class<DHMountedWeapon>  MountedWeaponClass;
+var bool              bCanBePickedUpWhileCrawling;
+var bool              bCanBePickedUpWhileCrouched;
+var bool              bCanBePickedUpWhileStanding;
 
-// Whether or not the weapon is currented mounted.
-var bool              bIsWeaponMounted;
 // The weapon to give to the player when the weapon is unmounted.
 var protected class<DHWeapon> UnmountedWeaponClass;
-// TODO: store the ROID of the player that took the gun? (so that we can know if 
+
+// TODO: store the ROID of the player that took the gun? (so that we can display who took it)
 
 replication
 {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        bIsBeingRotated, bIsWeaponMounted;
+        bIsBeingRotated;
 
     reliable if (bNetDirty && Role == ROLE_Authority && !IsInState('Rotating'))
         NextRotationTime;
@@ -136,7 +141,7 @@ function bool MountWeapon(DHPawn Instigator)
     Instigator.DeleteInventory(Instigator.Weapon);
     
     // Mark the weapon as mounted.
-    bIsWeaponMounted = true;
+    SetIsWeaponMounted(true);
 
     return true;
 }
@@ -169,7 +174,7 @@ function bool DismountWeapon(DHPawn Instigator, optional out DHWeapon Dismounted
 
     if (DismountedWeapon != none)
     {
-        bIsWeaponMounted = false;
+        SetIsWeaponMounted(false);
     }
 
     // TODO: theres an issue here where vehicle weapons don't store the internals of individual mags, but the weapons do.
@@ -197,6 +202,23 @@ simulated function bool CanWeaponBeUnmounted()
     return GetUnmountedWeaponClass() != none;
 }
 
+simulated function bool IsWeaponMounted()
+{
+    local DHMountedMG GunActor;
+
+    if (WeaponPawns.Length > 0 && WeaponPawns[0] != none)
+    {
+        GunActor = DHMountedMG(WeaponPawns[0].Gun);
+
+        if (GunActor != none)
+        {
+            return GunActor.IsWeaponMounted();
+        }
+    }
+
+    return false;
+}
+
 // Modified so we always use this actor & rely on its modified TryToDrive() function to control entry to the gun
 function Vehicle FindEntryVehicle(Pawn P)
 {
@@ -222,7 +244,7 @@ function bool TryToDrive(Pawn P)
     }
 
     // Deny entry if the weapon has been detached.
-    if (!bIsWeaponMounted)
+    if (!IsWeaponMounted())
     {
         DisplayVehicleMessage(15, P);
         return false;
@@ -378,6 +400,21 @@ simulated function EPickUpError GetPickUpError(DHPawn Pawn)
         return ERROR_Fatal;
     }
 
+    if (!bCanBePickedUpWhileCrawling && Pawn.bIsCrawling)
+    {
+        return ERROR_CannotBePickedUpWhileCrawling;
+    }
+
+    if (!bCanBePickedUpWhileCrouched && Pawn.bIsCrouched)
+    {
+        return ERROR_CannotBePickedUpWhileCrouched;
+    }
+
+    if (!bCanBePickedUpWhileStanding && !Pawn.bIsCrawling && !Pawn.bIsCrouched)
+    {
+        return ERROR_CannotBePickedUpWhileStanding;
+    }
+
     if (MountedWeaponClass == none)
     {
         return ERROR_CannotBePickedUp;
@@ -398,7 +435,7 @@ simulated function EMountError GetMountError(DHPawn Pawn)
         return ERROR_NotAllowed;
     }
 
-    if (bIsWeaponMounted)
+    if (IsWeaponMounted())
     {
         return ERROR_Mounted;
     }
@@ -423,7 +460,7 @@ simulated function EUnmountError GetUnmountError(DHPawn Pawn)
         return ERROR_NotAllowed;
     }
 
-    if (!bIsWeaponMounted)
+    if (!IsWeaponMounted())
     {
         return ERROR_Unmounted;
     }
@@ -801,6 +838,7 @@ simulated event PostNetReceive()
     local Rotator UncompressedRotation;
     local int FirstComma,SecondComma;
     local String CutSentinel;
+
     super.PostNetReceive();
 
     // Rotation is sent as string, process.
@@ -843,6 +881,22 @@ simulated event PostNetReceive()
     if (RotatingActor != none && RotatingActor != Base)
     {
         SetBase(RotatingActor);
+    }
+}
+
+simulated function SetIsWeaponMounted(bool bNewIsWeaponMounted)
+{
+    local DHMountedMG GunActor;
+
+    if (WeaponPawns.Length > 0 && WeaponPawns[0] != none)
+    {
+        GunActor = DHMountedMG(WeaponPawns[0].Gun);
+
+        if (GunActor != none)
+        {
+            GunActor.SetIsWeaponMounted(bNewIsWeaponMounted);
+            return;
+        }
     }
 }
 
@@ -1032,5 +1086,7 @@ defaultproperties
     bShouldDrawOccupantList=false
     bTeamLocked=false
 
-    bIsWeaponMounted=true
+    bCanBePickedUpWhileCrawling=false
+    bCanBePickedUpWhileCrouched=true
+    bCanBePickedUpWhileStanding=true
 }

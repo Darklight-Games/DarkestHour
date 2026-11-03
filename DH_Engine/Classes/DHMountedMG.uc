@@ -9,6 +9,11 @@ class DHMountedMG extends DHVehicleWeapon
 var DHWeaponRangeParams     RangeParams;
 var int                     RangeIndex;
 
+var private bool            bIsWeaponMounted;
+var bool                    bOldIsWeaponMounted;
+var name                    MountBoneName;
+var byte                    MountBoneChannel;
+
 // Reload
 var()   name                ReloadSequence;
 
@@ -82,7 +87,7 @@ var float                           ReloadZeroAimTweenSeconds;
 replication
 {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        RangeIndex;
+        RangeIndex, bIsWeaponMounted;
     unreliable if (bNetDirty && Role == ROLE_Authority)
         BarrelCondition, BarrelTemperature, bBarrelIsSteamActive;
 }
@@ -186,10 +191,38 @@ simulated function PostNetReceive()
 {
     super.PostNetReceive();
 
+    if (bOldIsWeaponMounted != bIsWeaponMounted)
+    {
+        SetIsWeaponMounted(bIsWeaponMounted);
+        bOldIsWeaponMounted = bIsWeaponMounted;
+    }
+
     if (bOldBarrelIsSteamActive != bBarrelIsSteamActive)
     {
         // TODO: turn on or off the steam emitter.
         SetBarrelSteamActive(0, bBarrelIsSteamActive);
+    }
+}
+
+simulated function bool IsWeaponMounted()
+{
+    return bIsWeaponMounted;
+}
+
+simulated function SetIsWeaponMounted(bool bNewIsWeaponMounted)
+{
+    self.bIsWeaponMounted = bNewIsWeaponMounted;
+
+    if (MountBoneName != '')
+    {
+        if (bNewIsWeaponMounted)
+        {
+            SetBoneScale(MountBoneChannel, 1.0, MountBoneName);
+        }
+        else
+        {
+            SetBoneScale(MountBoneChannel, 0.0, MountBoneName);
+        }
     }
 }
 
@@ -499,7 +532,7 @@ simulated state ChangingBarrels extends Busy
 
         super.BeginState();
 
-        if (BarrelChangeAnimation != '')
+        if (HasAnim(BarrelChangeAnimation))
         {
             PlayAnim(BarrelChangeAnimation, 1.0, 0.0, 0.0);
         }
@@ -525,7 +558,10 @@ simulated state ChangingBarrels extends Busy
     // TODO: Perhaps add some sort of mechanism to only do the actual swap mid-animation (a notify on the animation, perhaps?)
     simulated function PerformBarrelChange()
     {
-        BarrelBundle.PerformBarrelChange();
+        if (BarrelBundle != none)
+        {
+            BarrelBundle.PerformBarrelChange();
+        }
     }
 
 Begin:
@@ -916,4 +952,7 @@ defaultproperties
 
     ReloadZeroAimTweenSeconds=0.5
     bShouldZeroAimDuringReload=true
+
+    bIsWeaponMounted=true
+    bOldIsWeaponMounted=true
 }

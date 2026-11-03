@@ -538,7 +538,7 @@ function ServerDeployEnd(Actor Owner, Vector Location, Rotator Rotation)
 
         MG = DHMountedMG(Vehicle.WeaponPawns[i].Gun);
 
-        if (MG != none && WeaponBarrelBundles[i] != none)
+        if (MG != none && i < WeaponBarrelBundles.Length && WeaponBarrelBundles[i] != none)
         {
             MG.SetBarrelBundle(WeaponBarrelBundles[i]);
             WeaponBarrelBundles[i] = none;

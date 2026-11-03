@@ -20,6 +20,9 @@ var localized string FatalText;
 var localized string CooldownText;
 var localized string BusyText;
 var localized string CannotBePickedUpText;
+var localized string CannotBePickedUpWhileCrawlingText;
+var localized string CannotBePickedUpWhileCrouchedText;
+var localized string CannotBePickedUpWhileStandingText;
 var localized string PlayerMovingText;
 var localized string AlreadyUnmountedText;
 var localized string AlreadyMountedText;
@@ -302,6 +305,15 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
                 case ERROR_CannotBePickedUp:
                     ORI.InfoText[0] = default.CannotBePickedUpText;
                     break;
+                case ERROR_CannotBePickedUpWhileCrawling:
+                    ORI.InfoText[0] = default.CannotBePickedUpWhileCrawlingText;
+                    break;
+                case ERROR_CannotBePickedUpWhileCrouched:
+                    ORI.InfoText[0] = default.CannotBePickedUpWhileCrouchedText;
+                    break;
+                case ERROR_CannotBePickedUpWhileStanding:
+                    ORI.InfoText[0] = default.CannotBePickedUpWhileStandingText;
+                    break;
                 case ERROR_Fatal:
                     ORI.InfoText[0] = default.FatalText;
                     break;
@@ -391,10 +403,10 @@ function bool IsOptionHidden(int OptionIndex)
     {
         case UNMOUNT_OPTION_INDEX:
             // If the weapon is not mounted, then we can't unmount it, so hide the option.
-            return !Gun.bIsWeaponMounted;
+            return !Gun.IsWeaponMounted();
         case MOUNT_OPTION_INDEX:
             // If the weapon is mounted, we can't mount it again.
-            return Gun.bIsWeaponMounted;
+            return Gun.IsWeaponMounted();
         default:
             return super.IsOptionHidden(OptionIndex);
     }
@@ -464,6 +476,9 @@ defaultproperties
     Options(3)=(ActionText="Attach Weapon",Material=Texture'DH_InterfaceArt2_tex.AttachMG',HoldTime=2.5,HoldSound=Sound'DH_MortarSounds.mortar_pickup')
     EnemyGunText="Cannot rotate an enemy gun"
     CannotBePickedUpText="Cannot be picked up"
+    CannotBePickedUpWhileCrawlingText="Cannot be picked up while crawling"
+    CannotBePickedUpWhileCrouchedText="Cannot be picked up while crouched"
+    CannotBePickedUpWhileStandingText="Cannot be picked up while standing"
     CannotBeRotatedText="Cannot be rotated"
     OccupiedText="Gun is occupied"
     FatalText="Interaction unavailable"

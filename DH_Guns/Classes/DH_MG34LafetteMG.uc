@@ -120,4 +120,6 @@ defaultproperties
     BarrelChangeAnimation="BARREL_CHANGE"
 
     HudAltAmmoIcon=Texture'DH_MG34_tex.MG34_DRUM_AMMO_ICON'
+
+    MountBoneName="MG_ROOT"
 }

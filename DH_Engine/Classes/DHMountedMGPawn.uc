@@ -661,7 +661,7 @@ simulated function bool AttemptBarrelChange()
 
     if (MG.TryChangeBarrels())
     {
-        // We're changing barrels, so un-zoom.    {
+        // We're changing barrels, so un-zoom.
         SetIsZoomed(false);
 
         PendingAction = ACTION_None;
