@@ -18,4 +18,6 @@ defaultproperties
     // There's nothing really to explode or smoke in mmg destruction
     DestructionEffectClass=none
     DisintegrationEffectClass=none
+    ExplosionSounds(0)=none
+    ExplosionSounds(1)=none
 }   
