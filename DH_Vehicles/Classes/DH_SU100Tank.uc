@@ -63,10 +63,10 @@ defaultproperties
     // RandomAttachmentGroups(2)=(Options=((Probability=0.8,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',Offset=(X=5,Y=68.5,Z=79.6),Rotation=(Pitch=7826,Yaw=-16380)))))
 
     //Interface 
-    VehicleHudImage=Texture'DH_InterfaceArt_tex.t34_body'
-    VehicleHudTurret=TexRotator'DH_InterfaceArt_tex.t34_76_turret_rot'
-    VehicleHudTurretLook=TexRotator'DH_InterfaceArt_tex.t34_76_turret_look'
-    SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_76'
+    VehicleHudImage=Texture'DH_SU100_tex.SU100_BODY_ICON'
+    VehicleHudTurret=TexRotator'DH_SU100_tex.SU100_TURRET_ROT'
+    VehicleHudTurretLook=TexRotator'DH_SU100_tex.SU100_TURRET_LOOK'
+    SpawnOverlay(0)=Material'DH_SU100_tex.SU100_PROFILE_ICON'
 
     // Riders
     PassengerPawns(0)=(AttachBone="Body",DrivePos=(X=-59.0,Y=-50.0,Z=53.0),DriveRot=(Yaw=-16384),DriveAnim="VHalftrack_Rider1_idle")
