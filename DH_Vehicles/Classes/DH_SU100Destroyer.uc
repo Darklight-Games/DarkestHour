@@ -13,7 +13,7 @@
 // Add GUI pictures
 // Add hatch sounds
 
-class DH_SU100Tank extends DHArmoredVehicle;
+class DH_SU100Destroyer extends DHArmoredVehicle;
 
 defaultproperties
 {
