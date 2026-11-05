@@ -48,8 +48,6 @@ replication
 
 function SpawnBarrels()
 {
-    local int i;
-
     if (BarrelClass == none || Barrels.Length == 0)
     {
         return;

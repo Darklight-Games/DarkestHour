@@ -597,7 +597,7 @@ simulated function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 
 simulated function PostBeginPlay()
 {
-    local DHWeaponBarrelBundle BarrelBundle;
+    local DHWeaponBarrelBundle NewBarrelBundle;
 
     super.PostBeginPlay();
 
@@ -605,12 +605,11 @@ simulated function PostBeginPlay()
 
     SetupAnimationDrivers();
 
-
     if (Role == ROLE_Authority)
     {
-        BarrelBundle = Spawn(Class'DHWeaponBarrelBundle', self);
-        BarrelBundle.Setup(BarrelClass, BarrelCount);
-        SetBarrelBundle(BarrelBundle);
+        NewBarrelBundle = Spawn(Class'DHWeaponBarrelBundle', self);
+        NewBarrelBundle.Setup(BarrelClass, BarrelCount);
+        SetBarrelBundle(NewBarrelBundle);
     }
 }
 

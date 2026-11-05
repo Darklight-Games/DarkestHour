@@ -287,8 +287,6 @@ simulated event WeaponTick(float DeltaTime)
 // Modified so works in DHDebugMode, & to log barrels & their current temperature & state
 simulated function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 {
-    local int            i;
-
     if (Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode())
     {
         return;
