@@ -8,7 +8,7 @@ class DH_G41Fire extends DHSemiAutoFire;
 defaultproperties
 {
     ProjectileClass=Class'DH_G41Bullet'
-    AmmoClass=Class'DH_EnfieldNo4Ammo'
+    AmmoClass=Class'DH_G41Ammo'
     FireRate=0.215
     Spread=50.0
 
