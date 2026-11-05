@@ -475,16 +475,16 @@ def main():
             sys.exit(1)
 
         # Run ucc make.
-        env = os.environ.copy()
+        ucc_env = os.environ.copy()
         ucc_args = ['ucc', 'Editor.MakeCommandlet', '-mod=' + args.mod]
         if args.debug:
             ucc_args.append('-debug')
         if sys.platform == 'linux':
             # Run `ucc` through wine and disable all wine debug output.
             ucc_args = ['wine'] + ucc_args
-            env['WINEDEBUG'] = '-all'
+            ucc_env['WINEDEBUG'] = '-all'
 
-        proc = subprocess.Popen(ucc_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, env=env)
+        proc = subprocess.Popen(ucc_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, env=ucc_env)
         print_filtered_output(proc.stdout, args.errors_only)
         proc.wait()
 
@@ -509,7 +509,7 @@ def main():
                 ucc_args = ['ucc', 'Editor.DumpIntCommandlet', package, '-mod=' + args.mod]
                 if sys.platform == 'linux':
                     ucc_args.insert(0, 'wine')
-                processes.append(subprocess.Popen(ucc_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1))
+                processes.append(subprocess.Popen(ucc_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, env=ucc_env))
 
             for proc in processes:
                 print_filtered_output(proc.stdout, args.errors_only)
