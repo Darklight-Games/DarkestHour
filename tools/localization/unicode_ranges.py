@@ -1,10 +1,10 @@
-from typing import List, Union, Tuple, Iterable
+from collections.abc import Iterable
 
 class UnicodeRanges:
-    def __init__(self, ranges: List[Union[int, Tuple[int, int]]] = None):
+    def __init__(self, ranges: list[int | tuple[int, int]] | None = None):
         # Initialize the ranges as an empty list of tuples (start, end)
         if ranges is None:
-            ranges: List[Tuple[int, int]] = []
+            ranges: list[tuple[int, int]] = []
         # Convert any single integers to tuples
         ranges = [(r, r) if isinstance(r, int) else r for r in ranges]
         self._ranges = []
@@ -24,7 +24,7 @@ class UnicodeRanges:
         # Replace the current range and delete any overlapped ranges
         self._ranges[insert_index: i] = [(start, end)]
 
-    def add_ranges(self, ranges: Iterable[Tuple[int, int]]):
+    def add_ranges(self, ranges: Iterable[tuple[int, int]]):
         for start, end in ranges:
             self.add_range(start, end)
 
@@ -52,7 +52,7 @@ class UnicodeRanges:
         for ordinal in ordinals:
             self.add_ordinal(ordinal)
 
-    def get_ranges(self) -> List[Tuple[int, int]]:
+    def get_ranges(self) -> list[tuple[int, int]]:
         return self._ranges
 
     def merge(self, other):

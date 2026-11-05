@@ -502,7 +502,15 @@ def main():
         manifest.default_ini_crc = default_ini_crc
         manifest.write(manifest_path)
 
-    print_header(f'Build: {len(compiled_packages)} succeeded, {len(packages_to_compile) - len(compiled_packages)} failed, 0 skipped, {len(up_to_date_packages)} up-to-date')
+
+    # Add color to the lines. Green for success, red for failure.
+    if sys.platform != 'win32':
+        build_result = f'Build: {len(compiled_packages)} succeeded, {len(packages_to_compile) - len(compiled_packages)} failed, 0 skipped, {len(up_to_date_packages)} up-to-date'
+        color_code = '\033[92m' if did_build_succeed else '\033[91m'
+
+        print_header(f'{color_code}{build_result}\033[0m')
+    else:
+        print_header(f'Build: {len(compiled_packages)} succeeded, {len(packages_to_compile) - len(compiled_packages)} failed, 0 skipped, {len(up_to_date_packages)} up-to-date')
 
     # Exit with an error code if the build fails
     if not did_build_succeed:
