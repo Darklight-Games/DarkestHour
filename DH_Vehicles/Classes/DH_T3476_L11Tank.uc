@@ -24,7 +24,7 @@ defaultproperties
     ReinforcementCost=4
 
     // Vehicle passenger & weapons
-    // PassengerWeapons(0)=(WeaponPawnClass=Class'DH_T3485CannonPawn')
+    PassengerWeapons(0)=(WeaponPawnClass=Class'DH_T3476_L11CannonPawn')
     PassengerWeapons(1)=(WeaponPawnClass=Class'DH_T3476_L11MountedMGPawn')
 
     // Hull mesh
@@ -37,10 +37,6 @@ defaultproperties
     // VehicleHudTurret=TexRotator'DH_InterfaceArt_tex.t34_85_turret_rot'
     // VehicleHudTurretLook=TexRotator'DH_InterfaceArt_tex.t34_85_turret_look'
     // SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_85'
-
-    // Periscope
-    PeriscopePositionIndex=0
-    PeriscopeCameraBone="DRIVER_PERISCOPE"
 
     // Driver
     DriverPositions(0)=(ViewFOV=85.0,PositionMesh=SkeletalMesh'DH_T34_85_anm.T34_85_BODY_INT',TransitionUpAnim="driver_hatch_open",DriverTransitionAnim="T34_DRIVER_HATCH_CLOSE",ViewPitchUpLimit=0,ViewPitchDownLimit=65535,ViewPositiveYawLimit=0,ViewNegativeYawLimit=0,bDrawOverlays=true)
@@ -55,33 +51,11 @@ defaultproperties
     // Collision Attachments
     CollisionAttachments(0)=(StaticMesh=StaticMesh'DH_T3476_L11_stc.T3476_L11_DRIVER_HATCH_COLLISION',AttachBone="driver_hatch")
     
-    // Visual effects
-    TreadVelocityScale=175.0
-    WheelRotationScale=50000.0
-
     // Attachments
-    // RandomAttachmentGroups(0)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_SPARE_TRACK',Offset=(X=153,Z=56.3),Rotation=(Pitch=-5606),AttachBone="body"))))
-    // RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3),AttachBone="body"))))
-    // RandomAttachmentGroups(2)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_FUEL_TANKS',AttachBone="body"))))
-    // RandomAttachmentGroups(3)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',bAttachToWeapon=true,AttachBone="gun_yaw"))))
-    
-    // Shadow
-    ShadowZOffset=20.0
+    RandomAttachmentGroups(0)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3),AttachBone="body"))))
+    RandomAttachmentGroups(1)=(Options=((Probability=1,Attachment=(StaticMesh=StaticMesh'DH_T3476_L11_stc.T3476_L11_SEARCHLIGHT',bAttachToWeapon=true,AttachBone="gun_yaw",SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0)))))) 
+    RandomAttachmentGroups(2)=(Options=((Probability=0,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',Offset=(X=5,Y=68.5,Z=79.6),Rotation=(Pitch=7826,Yaw=-16380)))))
 
-    // Damage
-    // pros: diesel fuel; 5 men crew
-    // cons: fuel tanks in crew compartment
-    Health=525
-
-    HealthMax=525
-    EngineHealth=300
-
-    // Destroyed Treads
-    // DamagedTrackStaticMeshLeft=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_L'
-    // DamagedTrackStaticMeshRight=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_R'
-
-    PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
-    FireDetonationChance=0.045  //reduced from 0.07 for all diesels
-    DisintegrationHealth=-1200.0 //diesel
-    AmmoIgnitionProbability=0.8 // 0.75 default
+    // Engine
+    EngineRestartFailChance=0.25 //unreliability of early modification
 }

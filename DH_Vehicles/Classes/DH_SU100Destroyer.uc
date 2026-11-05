@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // TODO
-// Make new 100mm shell class and assign to SU-100 cannon
+// Make new 100mm HE shell class and assign to SU-100 cannon
 // Make new sight reticle
 // Add more skins
 // Add destroyed skins

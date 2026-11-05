@@ -3,9 +3,8 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // TODO 
-// Fix turret attachments
 // Figure out driver controlled smoke system (or maybe it was controlled by commander?)
-// Fix GUI pictures
+// Add spawn icon
 // Add hatch sounds
 
 class DH_T3485Tank extends DH_T3476Tank;
@@ -27,8 +26,8 @@ defaultproperties
     Skins(2)=Texture'DH_T34_tex.T34_TRACK'
     Skins(3)=Texture'DH_T34_85_tex.T34_85_INT'
     DestroyedVehicleMesh=StaticMesh'DH_T34_85_stc.T34_85_DESTROYED'
-    VehicleHudTurret=TexRotator'DH_InterfaceArt_tex.t34_85_turret_rot'
-    VehicleHudTurretLook=TexRotator'DH_InterfaceArt_tex.t34_85_turret_look'
+    VehicleHudTurret=TexRotator'DH_T34_85_tex.T3485_turret_rot'
+    VehicleHudTurretLook=TexRotator'DH_T34_85_tex.T3485_turret_look'
     SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_85'
 
     // Driver

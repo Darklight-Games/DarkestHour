@@ -16,7 +16,7 @@ defaultproperties
     CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_T34_85_stc.T34_85_COM_HATCH_COLLISION',AttachBone="com_hatch")
     CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_SU100_stc.SU100_MANTLET_COLLISION',AttachBone="gun_pitch")
 
-    // AnimationDrivers(0)=(Channel=2,BoneName="GUN_PITCH",AnimationName="PITCH_DRIVER",AnimationFrameCount=25,RotationType=ROTATION_Pitch)
+    AnimationDrivers(0)=(Channel=2,BoneName="GUN_COVER",AnimationName="PITCH_DRIVER",AnimationFrameCount=14,RotationType=ROTATION_Pitch)
 
     // Armor
     GunMantletArmorFactor=1.0
@@ -42,33 +42,27 @@ defaultproperties
     CustomPitchDownLimit=64974
 
     // Cannon ammo
-    PrimaryProjectileClass=Class'DH_T3485CannonShell_Early'
-    SecondaryProjectileClass=Class'DH_T3485CannonShellAPCR'
-    TertiaryProjectileClass=Class'DH_T3485CannonShellHE'
+    PrimaryProjectileClass=Class'DH_SU100CannonShell'
+    SecondaryProjectileClass=Class'DH_T3485CannonShellHE'
 
     ProjectileDescriptions(0)="APBC"
-    ProjectileDescriptions(1)="APCR"
-    ProjectileDescriptions(2)="HE"
+    ProjectileDescriptions(1)="HE"
 
-    nProjectileDescriptions(0)="BR-365"
-    nProjectileDescriptions(1)="BR-365P"
-    nProjectileDescriptions(2)="O-365"
+    nProjectileDescriptions(0)="BR-412B"
+    nProjectileDescriptions(1)="OF-412"
 
     InitialPrimaryAmmo=28
     InitialSecondaryAmmo=4
-    InitialTertiaryAmmo=16
+
     MaxPrimaryAmmo=30
     MaxSecondaryAmmo=6
-    MaxTertiaryAmmo=25
-    SecondarySpread=0.001
-    TertiarySpread=0.002
+
+    SecondarySpread=0.002
 
     // Sounds
-    CannonFireSound(0)=Sound'Vehicle_Weapons.85mm_fire01'
-    CannonFireSound(1)=Sound'Vehicle_Weapons.85mm_fire02'
-    CannonFireSound(2)=Sound'Vehicle_Weapons.85mm_fire03'
-    AltFireSoundClass=Sound'DH_WeaponSounds.dt_fire_loop'
-    AltFireEndSound=Sound'DH_WeaponSounds.dt_fire_end'
+    CannonFireSound(0)=SoundGroup'DH_GerVehicleSounds.DH88mm_01'
+    CannonFireSound(1)=SoundGroup'DH_GerVehicleSounds.DH88mm_02'
+    CannonFireSound(2)=SoundGroup'DH_GerVehicleSounds.DH88mm_03'
     ReloadStages(0)=(Sound=Sound'DH_Vehicle_Reloads.reload_02s_01')
     ReloadStages(1)=(Sound=Sound'DH_Vehicle_Reloads.reload_02s_02')
     ReloadStages(2)=(Sound=Sound'DH_Vehicle_Reloads.reload_02s_03')

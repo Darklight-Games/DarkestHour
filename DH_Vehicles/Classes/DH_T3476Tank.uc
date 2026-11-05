@@ -3,13 +3,10 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // TODO
-// Fix destroyed static meshes
-// Fix sight reticle 
-// Fix GUI pictures
-// Add more skins
-// Add destroyed skins
+// Fix sight reticle
 // Add periscope reticle
-// Add riders
+// Make new riders animations
+// Add spawn icon
 // Add hatch sounds
 
 class DH_T3476Tank extends DHArmoredVehicle;
@@ -31,11 +28,9 @@ defaultproperties
     Skins(1)=Texture'DH_T34_tex.T34_TRACK_EARLY'
     Skins(2)=Texture'DH_T34_tex.T34_TRACK_EARLY'
     Skins(4)=Texture'DH_T34_76_tex.T3476_INT'
-    DestroyedVehicleMesh=StaticMesh'allies_vehicles_stc.T3476_Destroyed'
-    // DestroyedMeshSkins(0)=Combiner'DH_VehiclesSOV_tex.T3476_ext_dest'
-    // DestroyedMeshSkins(1)=Combiner'DH_VehiclesSOV_tex.T3476_treads_dest'
-    // DestroyedVehicleMesh=StaticMesh'DH_T34M42_stc.T34M42_DESTROYED'
-    
+    DestroyedVehicleMesh=StaticMesh'DH_T34_76_stc.T3476_DESTROYED'
+    DestroyedMeshSkins(0)=Combiner'DH_T34_76_tex.T3476_ext_dest'
+
     // Destroyed Treads
     DamagedTrackStaticMeshLeft=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_L'
     DamagedTrackStaticMeshRight=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_R'
@@ -61,23 +56,23 @@ defaultproperties
     // Attachments
     RandomAttachmentGroups(0)=(Options=((Probability=0.6,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_76_stc.T3476_FUEL_TANKS',SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0))))))
     RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3)))))
-    RandomAttachmentGroups(2)=(Options=((Probability=0.8,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',Offset=(X=5,Y=68.5,Z=79.6),Rotation=(Pitch=7826,Yaw=-16380)))))
+    RandomAttachmentGroups(2)=(Options=((Probability=0.8,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',Offset=(X=5,Y=68.5,Z=80),Rotation=(Pitch=7826,Yaw=-16926,Roll=-728)))))
 
     //Interface 
-    VehicleHudImage=Texture'DH_InterfaceArt_tex.t34_body'
-    VehicleHudTurret=TexRotator'DH_InterfaceArt_tex.t34_76_turret_rot'
-    VehicleHudTurretLook=TexRotator'DH_InterfaceArt_tex.t34_76_turret_look'
+    VehicleHudImage=Texture'DH_T34_76_tex.T3476_body'
+    VehicleHudTurret=TexRotator'DH_T34_76_tex.T3476_turret_rot'
+    VehicleHudTurretLook=TexRotator'DH_T34_76_tex.T3476_turret_look'
     SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_76'
     
     // Riders
-    PassengerPawns(0)=(AttachBone="Body",DrivePos=(X=-59.0,Y=-50.0,Z=53.0),DriveRot=(Yaw=-16384),DriveAnim="VHalftrack_Rider1_idle")
-    PassengerPawns(1)=(AttachBone="body",DrivePos=(X=-100.0,Y=-25.0,Z=105.5),DriveAnim="crouch_idle_binoc") // kneeling, as can't sit in usual position due to fuel drum
-    PassengerPawns(2)=(AttachBone="Body",DrivePos=(X=-135.0,Y=35.0,Z=51.0),DriveRot=(Yaw=-32768),DriveAnim="VHalftrack_Rider5_idle")
-    PassengerPawns(3)=(AttachBone="Body",DrivePos=(X=-59.0,Y=50.0,Z=54.0),DriveRot=(Yaw=16384),DriveAnim="VHalftrack_Rider6_idle")
+    PassengerPawns(0)=(AttachBone="Body",DrivePos=(X=-70,Y=-50.0,Z=104.5),DriveRot=(Yaw=-16384),DriveAnim="VHalftrack_Rider1_idle")
+    PassengerPawns(1)=(AttachBone="body",DrivePos=(X=-100.0,Y=-25.0,Z=158),DriveAnim="crouch_idle_binoc") // kneeling, as can't sit in usual position due to fuel drum
+    PassengerPawns(2)=(AttachBone="Body",DrivePos=(X=-135.0,Y=35.0,Z=104.5),DriveRot=(Yaw=-32768),DriveAnim="VHalftrack_Rider5_idle")
+    PassengerPawns(3)=(AttachBone="Body",DrivePos=(X=-70,Y=50.0,Z=104.5),DriveRot=(Yaw=16384),DriveAnim="VHalftrack_Rider6_idle")
 
     // Hull armor
     FrontArmor(0)=(Thickness=4.5,Slope=-60.0,MaxRelativeHeight=47.3,LocationName="lower")
-    FrontArmor(1)=(Thickness=4.5,Slope=60.0,MaxRelativeHeight=90.7,LocationName="upper")
+    FrontArmor(1)=(Thickness=4.5,Slope=60.0,LocationName="upper")
 
     RightArmor(0)=(Thickness=4.5,MaxRelativeHeight=66.5,LocationName="lower")
     RightArmor(1)=(Thickness=4.5,Slope=40.0,LocationName="upper")
@@ -86,7 +81,7 @@ defaultproperties
     LeftArmor(1)=(Thickness=4.5,Slope=40.0,LocationName="upper")
 
     RearArmor(0)=(Thickness=4.5,Slope=-45.0,MaxRelativeHeight=52.9,LocationName="lower")
-    RearArmor(1)=(Thickness=4.5,Slope=48.0,MaxRelativeHeight=100.1,LocationName="upper")
+    RearArmor(1)=(Thickness=4.5,Slope=48.0,LocationName="upper")
 
     FrontLeftAngle=330.0
     FrontRightAngle=30.0

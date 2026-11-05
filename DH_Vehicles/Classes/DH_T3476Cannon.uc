@@ -12,6 +12,8 @@ defaultproperties
     Skins(0)=Texture'DH_T34_76_tex.T3476_EXT'
     Skins(1)=Texture'DH_T34_76_tex.T3476_INT'
     CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_T34_76_stc.T3476_TURRET_COLLISION')
+    CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_T34_76_stc.T3476_COM_HATCH_COLLISION',AttachBone="com_hatch")
+    CollisionStaticMeshes(2)=(CollisionStaticMesh=StaticMesh'DH_T34_76_stc.T3476_MANLET_COLLISION',AttachBone="gun_pitch")
 
     bUseTankTurretRotation=true
     YawBone="GUN_YAW"
@@ -38,9 +40,6 @@ defaultproperties
     FrontRightAngle=19.0
     RearRightAngle=162.0
     RearLeftAngle=198.0
-
-    // Collision Attachments
-    CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_T34_76_stc.T3476_COM_HATCH_COLLISION',AttachBone="com_hatch")
 
     // Turret movement
     ManualRotationsPerSecond=0.029

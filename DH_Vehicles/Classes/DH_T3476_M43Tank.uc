@@ -3,10 +3,8 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // TODO
-// Add camo variants
-// add hatches sounds
-// add destroyed statics
-// add GUI pictures
+// Add spawn icon
+// Add hatch sounds
 
 class DH_T3476_M43Tank extends DH_T3476Tank;
 
@@ -16,7 +14,7 @@ defaultproperties
     VehicleNameString="T-34-76 Mod.1943"
     ReinforcementCost=4
 
-    // Vehicle passenger & weapons
+    // Weapons
     PassengerWeapons(0)=(WeaponPawnClass=Class'DH_T3476_M43CannonPawn')
     PassengerWeapons(1)=(WeaponPawnClass=Class'DH_T3476_M42MountedMGPawn')
 
@@ -28,10 +26,10 @@ defaultproperties
     Skins(3)=Texture'DH_T34_76_M43_tex.T34M43_INT'
     DestroyedVehicleMesh=StaticMesh'DH_T34M43_stc.T34M43_DESTROYED'
 
-    //Interface images 
-    // VehicleHudImage=Texture'DH_T34_76_M42_tex.T34M42_body'
-    // VehicleHudTurret=TexRotator'DH_T34_76_M42_tex.T34M42_turret_rot'
-    // VehicleHudTurretLook=TexRotator'DH_T34_76_M42_tex.T34M42_turret_look'
+    // Interface images 
+    VehicleHudImage=Texture'DH_T34_76_M43_tex.T34M43_body'
+    VehicleHudTurret=TexRotator'DH_T34_76_M43_tex.T34M43_turret_rot'
+    VehicleHudTurretLook=TexRotator'DH_T34_76_M43_tex.T34M43_turret_look'
     // SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_85'
 
     // Driver

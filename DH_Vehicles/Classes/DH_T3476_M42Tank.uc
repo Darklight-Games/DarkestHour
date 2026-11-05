@@ -3,6 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // TODO
+// Add spawn icon
 // Add hatch sounds
 
 class DH_T3476_M42Tank extends DH_T3476Tank;
@@ -13,7 +14,7 @@ defaultproperties
     VehicleNameString="T-34-76 Mod.1942"
     ReinforcementCost=4
 
-    // Vehicle passenger & weapons
+    // Weapons
     PassengerWeapons(0)=(WeaponPawnClass=Class'DH_T3476_M42CannonPawn')
     PassengerWeapons(1)=(WeaponPawnClass=Class'DH_T3476_M42MountedMGPawn')
 

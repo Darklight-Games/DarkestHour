@@ -13,7 +13,7 @@ defaultproperties
     Skins(1)=Texture'DH_T34_76_M43_tex.T34M43_INT'
     bUseHighDetailOverlayIndex=false
 
-     // Collision Attachments    
+    // Collision Attachments    
     CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_T34M43_stc.T34M43_TURRET_COLLISION')
     CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_T34M43_stc.T34M43_COM_HATCH_F_COLLISION',AttachBone="com_hatch_f")
     CollisionStaticMeshes(2)=(CollisionStaticMesh=StaticMesh'DH_T34M43_stc.T34M43_COM_HATCH_R_COLLISION',AttachBone="com_hatch_r")

@@ -18,10 +18,10 @@ defaultproperties
     RandomAttachmentGroups(5)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_BODY_CAGE_LF',Offset=(Z=57.3),AttachBone="body"))))
     RandomAttachmentGroups(6)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_BODY_CAGE_RF',Offset=(Z=57.3),AttachBone="body"))))
     RandomAttachmentGroups(7)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_BODY_CAGE_CR',Offset=(Z=57.3),AttachBone="body"))))
-    RandomAttachmentGroups(8)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_CF',bAttachToWeapon=true,AttachBone="gun_yaw"))))
-    RandomAttachmentGroups(9)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_LF',bAttachToWeapon=true,AttachBone="gun_yaw"))))
-    RandomAttachmentGroups(10)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_RF',bAttachToWeapon=true,AttachBone="gun_yaw"))))
-    RandomAttachmentGroups(11)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_LR',bAttachToWeapon=true,AttachBone="gun_yaw"))))
-    RandomAttachmentGroups(12)=(Options=((Probability=0.9,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_RR',bAttachToWeapon=true,AttachBone="gun_yaw"))))
+    RandomAttachmentGroups(8)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_CF',bAttachToWeapon=true,AttachBone="gun_yaw"))))
+    RandomAttachmentGroups(9)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_LF',Offset=(Y=3),bAttachToWeapon=true,AttachBone="gun_yaw"))))
+    RandomAttachmentGroups(10)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_RF',Offset=(Y=-3),bAttachToWeapon=true,AttachBone="gun_yaw"))))
+    RandomAttachmentGroups(11)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_LR',bAttachToWeapon=true,AttachBone="gun_yaw"))))
+    RandomAttachmentGroups(12)=(Options=((Probability=0.95,Attachment=(StaticMesh=StaticMesh'DH_T34_85_stc.T34_85_TURRET_CAGE_RR',bAttachToWeapon=true,AttachBone="gun_yaw"))))
     // RandomAttachmentGroups(13)=
 }
