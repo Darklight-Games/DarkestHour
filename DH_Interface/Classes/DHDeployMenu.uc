@@ -590,7 +590,7 @@ function UpdateVehicles(optional bool bShowAlert)
             li_Vehicles.SetIndex(0);
         }
     }
-    
+
     // Update the max vehicles number as well.
     l_MaxVehicles.Caption = string(Max(0, GRI.GetReservableTankCount(CurrentTeam)));
 
@@ -671,7 +671,7 @@ function UpdateRoles()
                 S @= "*" $ RoleLockedText $ "*";
                 break;
         }
-        
+
         li_Roles.SetItemAtIndex(i, S);
         li_Roles.SetDisabledAtIndex(i, RoleEnabledResult != RER_Enabled);
     }
@@ -1703,7 +1703,7 @@ function UpdateSquads()
         SetVisible(C.lb_Members, true);
         SetVisible(C.li_Members, true);
         SetVisible(C.l_SquadName, !C.bIsEditingName);
-        SetVisible(C.eb_SquadName, bIsSquadLeader);
+        SetVisible(C.eb_SquadName, bIsSquadLeader && (!PC.bRestrictSquadNames || C.bIsEditingName));
         SetVisible(C.b_CreateSquad, false);
         SetVisible(C.b_JoinSquad, !bIsInSquad);
         SetVisible(C.b_LeaveSquad, bIsInSquad);
@@ -1787,7 +1787,7 @@ function UpdateSquads()
         ++j;
     }
 
-    if (!bIsInASquad && j < SquadLimit && j < p_Squads.SquadComponents.Length)
+    if (!bIsInASquad && j < SquadLimit && j < p_Squads.SquadComponents.Length && !PRI.bRestrictLeaderPositions)
     {
         C = p_Squads.SquadComponents[j++];
 

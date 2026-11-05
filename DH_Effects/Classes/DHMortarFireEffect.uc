@@ -13,7 +13,7 @@ simulated function PostBeginPlay()
         bDynamicLight = true;
         SetTimer(0.15, false);
     }
-    
+
     LightBrightness = RandRange(96, 150);
     super.PostBeginPlay();
 }

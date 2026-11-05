@@ -7,9 +7,9 @@ class DHStyle_ContextMenuSelection extends DHStyle_ContextMenu;
 
 defaultproperties
 {
-	KeyName="DHContextMenuSelection"
+    KeyName="DHContextMenuSelection"
 
-	ImgColors(0)=(R=0,G=0,B=0,A=255)
+    ImgColors(0)=(R=0,G=0,B=0,A=255)
     ImgColors(1)=(R=0,G=0,B=0,A=255)
     ImgColors(2)=(R=0,G=0,B=0,A=255)
     ImgColors(3)=(R=0,G=0,B=0,A=255)

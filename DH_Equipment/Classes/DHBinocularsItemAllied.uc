@@ -15,6 +15,6 @@ defaultproperties
     HighDetailOverlay=Shader'DH_Equipment_tex.AlliedBinoc_s'
     bUseHighDetailOverlayIndex=true
     HighDetailOverlayIndex=2
-    
+
     ScopeOverlay=Texture'DH_VehicleOptics_tex.BINOC_overlay_6x30Allied'
 }

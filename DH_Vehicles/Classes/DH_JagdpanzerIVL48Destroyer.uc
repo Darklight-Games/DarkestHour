@@ -51,11 +51,11 @@ defaultproperties
     RearLeftAngle=208.0
 
     // Damage
-	// note: 4 men crew
-	// cons: petrol fuel
+    // note: 4 men crew
+    // cons: petrol fuel
     Health=525
     HealthMax=525.0
-	EngineHealth=300
+    EngineHealth=300
 
     EngineToHullFireChance=0.1  //increased from 0.05 for all petrol engines
     DisintegrationHealth=-800.0 //petrol

@@ -14,5 +14,5 @@ defaultproperties
     Headgear(0)=Class'DH_SovietHelmetSnow'
     HandType=Hand_Gloved
     GlovedHandTexture=Texture'DHSovietCharactersTex.hands_whitegloves'
-	Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
+    Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
 }

@@ -135,7 +135,7 @@ defaultproperties
     RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(AttachBone="BODY",StaticMesh=StaticMesh'DH_OpelBlitz_stc.OPELBLITZ_ATTACHMENT_TOOLS',SkinIndexMap=((VehicleSkinIndex=4,AttachmentSkinIndex=0))))))
     RandomAttachmentGroups(2)=(Options=((Probability=0.9,Attachment=(AttachBone="BODY",StaticMesh=StaticMesh'DH_OpelBlitz_stc.OPELBLITZ_ATTACHMENT_PLATE',SkinIndexMap=((VehicleSkinIndex=4,AttachmentSkinIndex=0))))))
     RandomAttachmentGroups(3)=(Options=((Probability=0.9,Attachment=(AttachBone="BODY",StaticMesh=StaticMesh'DH_OpelBlitz_stc.OPELBLITZ_ATTACHMENT_CANVAS',SkinIndexMap=((VehicleSkinIndex=2,AttachmentSkinIndex=0))))))
-    
+
     // HUD
     VehicleHudImage=Texture'DH_OpelBlitz_tex.interface.opelblitz_body'
     VehicleHudEngineY=0.125

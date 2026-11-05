@@ -54,6 +54,6 @@ defaultproperties
     PreReloadAnim="single_open"
     PreReloadHalfAnim="single_open_half"
     PostReloadAnim="single_close"
-    
+
     FullReloadAnim="reload"
 }

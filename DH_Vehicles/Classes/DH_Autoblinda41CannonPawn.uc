@@ -8,7 +8,7 @@ class DH_Autoblinda41CannonPawn extends DHVehicleCannonPawn;
 defaultproperties
 {
     GunClass=Class'DH_Autoblinda41Cannon'
-    
+
     // Gunsight
     DriverPositions(0)=(PositionMesh=SkeletalMesh'DH_FiatL640_anm.fiatl640_turret_int',ViewFOV=18.0,ViewPitchUpLimit=6000,ViewPitchDownLimit=63500,ViewPositiveYawLimit=19000,ViewNegativeYawLimit=-20000,bDrawOverlays=true)
     // Periscope
@@ -17,7 +17,7 @@ defaultproperties
     DriverPositions(2)=(PositionMesh=SkeletalMesh'DH_FiatL640_anm.fiatl640_turret_int',TransitionDownAnim="close",ViewPitchUpLimit=5000,ViewPitchDownLimit=60000,ViewPositiveYawLimit=10000,ViewNegativeYawLimit=-10000,bExposed=true,DriverTransitionAnim="fiatl640_gunner_open")
     // Binocs
     DriverPositions(3)=(PositionMesh=SkeletalMesh'DH_FiatL640_anm.fiatl640_turret_int',ViewFOV=12.0,ViewPitchUpLimit=5000,ViewPitchDownLimit=63500,ViewPositiveYawLimit=10000,ViewNegativeYawLimit=-10000,bDrawOverlays=true,bExposed=true,DriverTransitionAnim="fiatl640_gunner_binocs")
-    
+
     bManualTraverseOnly=true
     DrivePos=(X=0.0,Y=0.0,Z=58.0)
     DriveRot=(Yaw=16384)

@@ -14,7 +14,7 @@ function SetIdentiferByType(DHIdentifierInfo.EIdentifierType Type, string String
     {
         return;
     }
-    
+
     IdentifierInfoClass.static.SetIdentifierByType(self, Type, String);
 }
 

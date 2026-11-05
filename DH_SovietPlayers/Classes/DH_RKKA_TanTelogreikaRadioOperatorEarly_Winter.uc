@@ -12,5 +12,5 @@ defaultproperties
     Headgear(0)=Class'DH_SovietHelmet'
     HeadgearProbabilities(0)=1.0
     HandType=Hand_Gloved
-	Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
+    Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
 }

@@ -60,11 +60,11 @@ defaultproperties
     TransRatio=0.1
 
     // Damage
-	// pros: diesel fuel, 5 men crew
+    // pros: diesel fuel, 5 men crew
     Health=525
     HealthMax=525.0
-	EngineHealth=300
-	AmmoIgnitionProbability=0.8  // 0.75 default
+    EngineHealth=300
+    AmmoIgnitionProbability=0.8  // 0.75 default
     PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
     FireDetonationChance=0.045  //reduced from 0.07 for all diesels
     DisintegrationHealth=-1200.0 //diesel

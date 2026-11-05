@@ -26,10 +26,10 @@ defaultproperties
     DriverPositions(2)=(PositionMesh=SkeletalMesh'DH_PanzerIV_anm.panzer4J_body_int')
 
     // Damage
-	// pros: 5 men crew
-	// cons: petrol fuel;
-	// (mostly unchanged as it extends ausf H)
-	// this modification was produced late in the war (1944-45), most (if not all) tanks of this modification had very low quality armor due to absence of proper alloys, which was less effective and caused a lot of spalling
+    // pros: 5 men crew
+    // cons: petrol fuel;
+    // (mostly unchanged as it extends ausf H)
+    // this modification was produced late in the war (1944-45), most (if not all) tanks of this modification had very low quality armor due to absence of proper alloys, which was less effective and caused a lot of spalling
     Health=535
     HealthMax=535.0
    VehHitpoints(0)=(PointOffset=(X=-100.0,Y=0.0,Z=12.0)) // engine

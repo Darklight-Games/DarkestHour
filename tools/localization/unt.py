@@ -1,13 +1,12 @@
 import re
 from collections import OrderedDict
-from configparser import RawConfigParser, MissingSectionHeaderError
-from typing import Tuple, List, Set, Iterable
+from collections.abc import Iterable
+from configparser import MissingSectionHeaderError, RawConfigParser
 
 import polib
 from parsimonious.exceptions import IncompleteParseError, ParseError
 from parsimonious.grammar import Grammar
 from parsimonious.nodes import NodeVisitor
-
 
 # Unreal has different extensions for different languages, so map the ISO 639-1 code to the extension.
 iso639_to_language_extension = {
@@ -23,7 +22,7 @@ iso639_to_language_extension = {
 
 
 grammar = Grammar(
-    """
+    r"""
     value = string / name / array / struct
     string = ~'"[^\"]*"'
     name = ~"[A-Z_0-9\.]+"i
@@ -69,7 +68,7 @@ class ValueVisitor(NodeVisitor):
     def visit_struct(self, node, visited_children):
         if len(visited_children) == 3:
             return visited_children[1][0]
-        return dict()
+        return {}
 
     def visit_string(self, node, visited_children):
         return node.text.lstrip('"').rstrip('"')
@@ -91,7 +90,7 @@ class ValueVisitor(NodeVisitor):
         return visited_children or node
 
 
-def parse_unt(contents: str) -> List[Tuple[str, str]]:
+def parse_unt(contents: str) -> list[tuple[str, str]]:
     """
     Parse an Unreal Tournament translation file.
     :param contents: The contents of the file.
@@ -105,7 +104,7 @@ def parse_unt(contents: str) -> List[Tuple[str, str]]:
     except MissingSectionHeaderError as e:
         raise RuntimeError(f'Failed to parse file: {e}')
 
-    key_value_pairs: List[Tuple[str, str]] = []
+    key_value_pairs: list[tuple[str, str]] = []
 
     for section in config.sections():
         for key in config[section]:
@@ -120,12 +119,11 @@ def parse_unt(contents: str) -> List[Tuple[str, str]]:
             except ParseError:
                 pass
 
-            if type(value) == str:
+            if type(value) == str and value.startswith('"') and value.endswith('"'):
                 # We need to fix string values that are not quoted.
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1]
-                    # Escape quotes.
-                    value = value.replace('"', '\\"')
+                value = value[1:-1]
+                # Escape quotes.
+                value = value.replace('"', '\\"')
 
             id = f'{section}.{key}'
 
@@ -192,7 +190,7 @@ def _add_entry(msgid: str, msgstr: str, sections):
             key = match['id']
             if key in target:
                 if not isinstance(target[key], list):
-                    raise Exception(f'Expected {key} to be a list (found {type(target[key])})')
+                    raise RuntimeError(f'Expected {key} to be a list (found {type(target[key])})')
             else:
                 target[match['id']] = []
             target = target[match['id']]
@@ -229,13 +227,13 @@ def _add_entry(msgid: str, msgstr: str, sections):
     target[target_key] = msgstr
 
 
-def unt_from_key_value_pairs(key_value_pairs: Iterable[Tuple[str, str]]) -> str:
+def unt_from_key_value_pairs(key_value_pairs: Iterable[tuple[str, str]]) -> str:
     sections = OrderedDict()
 
     for key, value in key_value_pairs:
         try:
             _add_entry(key, value, sections)
-        except Exception as e:
+        except RuntimeError as e:
             print(f'Failed to add entry {key}: {e}')
 
     def write_key_value_pairs_recursive(key_value_pairs, parent_key=None):
@@ -253,12 +251,12 @@ def unt_from_key_value_pairs(key_value_pairs: Iterable[Tuple[str, str]]) -> str:
             return f'"{value}"'
         elif isinstance(value, list):
             return '(' + ','.join(map(write_value, value)) + ')'
-        elif isinstance(value, dict) or isinstance(value, OrderedDict):
+        elif isinstance(value, (dict, OrderedDict)):
             return '(' + ','.join(f'{k}={write_value(v)}' for k, v in value.items()) + ')'
         elif value is None:
             return ''
         else:
-            raise Exception(f'Unknown type: {type(value)}')
+            raise RuntimeError(f'Unknown type: {type(value)}')
 
     lines = []
 
@@ -281,7 +279,7 @@ def po_to_unt(contents: str) -> str:
     return unt_from_key_value_pairs(key_value_pairs)
 
 
-def read_unique_characters_from_unt_file(path: str) -> Set[int]:
+def read_unique_characters_from_unt_file(path: str) -> set[int]:
     characters = set()
     with open(path, 'r', encoding='utf-16-le') as file:
         file.seek(2)  # Skip the BOM.

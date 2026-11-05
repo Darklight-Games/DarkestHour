@@ -16,5 +16,5 @@ defaultproperties
     VehicleHudTurretLook=TexRotator'DH_InterfaceArt_tex.panzer3n_turret_look'
     SpawnOverlay(0)=Material'DH_InterfaceArt_tex.panzer3_n'
 
-	AmmoIgnitionProbability=0.75  // 0.75 default; 75mm ammo instead of 50mm
+    AmmoIgnitionProbability=0.75  // 0.75 default; 75mm ammo instead of 50mm
 }

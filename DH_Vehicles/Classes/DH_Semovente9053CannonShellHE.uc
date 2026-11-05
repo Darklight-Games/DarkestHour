@@ -17,7 +17,7 @@ defaultproperties
 
     //Damage
     ImpactDamage=1000
-    
+
     Damage=473.0   // 1000 gramms TNT, citation needed, references show exactly 1000 but that seems off
     DamageRadius=1530.0
     MyDamageType=Class'DHShellHE88mmDamageType' // with 2mm off there really isnt much of a difference

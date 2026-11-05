@@ -11,7 +11,7 @@ defaultproperties
     AmmoClass=Class'DH_MAB42Ammo'
     FAProjSpawnOffset=(X=-28.0)
     FireRate=0.125 // ~532 rpm (value had to be found experimentally due to an engine bug)
-    
+
 
     Spread=140.0    // shorter barrel than the MAB38; late-war lower quality
 

@@ -12,7 +12,7 @@ defaultproperties
 
     Skins(0)=Texture'DH_ZiS_tex.ZIS_BODY_EXT'
     Skins(1)=Texture'DH_ZiS_tex.ZIS_TURRET_EXT'
-    
+
     CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_ZiS_stc.ZIS2_TURRET_YAW_COLLISION',AttachBone="GUN_YAW")
     CollisionStaticMeshes(1)=(CollisionStaticMesh=StaticMesh'DH_ZiS_stc.ZIS2_BARREL_COLLISION',AttachBone="BARREL")
     CollisionStaticMeshes(2)=(CollisionStaticMesh=StaticMesh'DH_ZiS_stc.ZIS_PITCH_COLLISION',AttachBone="GUN_PITCH")

@@ -21,7 +21,7 @@ defaultproperties
     MaxHorizontalRecoilAngle=140
     RecoilCurve=(Points=((InVal=0.0,OutVal=0.5),(InVal=2.0,OutVal=0.7),(InVal=6.0,OutVal=1.2),(InVal=10.0,OutVal=1.0),(InVal=10000000000.0,OutVal=1.0)))
     RecoilFallOffFactor=18.0
-    
+
     // Iron sight (actually scoped) recoil is increased because:
     // full auto is much harder to control when aiming in scoped
     // realistically you'd see black void after any misalignment of the scope, and you'd have to "guess" how to align it back in
@@ -29,11 +29,10 @@ defaultproperties
     PctCrouchIronRecoil=0.85 //0.6 by default
     PctProneIronRecoil=0.65  //0.4
     PctRestDeployRecoil=0.6  //0.5
-    
+
     FireIronLoopAnim="scope_Shoot_Loop"
     FireIronEndAnim="scope_Shoot_end"
     FireIronAnim="scope_Shoot_Loop"
-    
 
     FireSounds(0)=SoundGroup'DH_WeaponSounds.stg44_fire01'
     FireSounds(1)=SoundGroup'DH_WeaponSounds.stg44_fire02'

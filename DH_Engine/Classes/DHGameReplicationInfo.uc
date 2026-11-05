@@ -31,7 +31,8 @@ enum EVehicleReservationError
     ERROR_PoolInactive,
     ERROR_PoolMaxActive,
     ERROR_NoReservations,
-    ERROR_NoLicense
+    ERROR_NoLicense,
+    ERROR_Restricted
 };
 
 struct SpawnVehicle
@@ -346,7 +347,7 @@ function ResetConstructionRuntimeInfo()
 {
     local int i;
     local DH_LevelInfo LI;
-    
+
     LI = Class'DH_LevelInfo'.static.GetInstance(Level);
 
     if (LI != none)
@@ -1565,6 +1566,11 @@ simulated function EVehicleReservationError GetVehicleReservationError(DHPlayer 
     if (!IgnoresMaxTeamVehiclesFlags(VehiclePoolIndex) && GetReservableTankCount(TeamIndex) <= 0)
     {
         return ERROR_TeamMaxActive;
+    }
+
+    if (PC.bRestrictVehicleAccess)
+    {
+        return ERROR_Restricted;
     }
 
     return ERROR_None;

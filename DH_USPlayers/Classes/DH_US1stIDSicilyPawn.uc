@@ -8,7 +8,7 @@ class DH_US1stIDSicilyPawn extends DH_AmericanPawn;
 defaultproperties
 {
     Mesh=SkeletalMesh'DHCharactersUS_anm.US_GI_NoPack'
-    
+
     Skins(1)=Texture'DHUSCharactersTex.US_1stID_Sicily_1'
 
     BodySkins(0)=Texture'DHUSCharactersTex.US_1stID_Sicily_1'

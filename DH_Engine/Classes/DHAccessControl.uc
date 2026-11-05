@@ -17,6 +17,142 @@ var private array<string>           DeveloperIDs;
 var private array<Patron>           Patrons; // A list of patreon ROIDs for users that are on MAC and don't work with normal system
 var private array<string>           GloballyBannedIDs;
 
+struct Restriction
+{
+    var string PlayerID;
+    var string ForcedName;
+    var bool   bOutboundMessages;
+    var bool   bOutboundVoice;
+    var bool   bLeaderPositions;
+    var bool   bSquadNames;
+    var bool   bVehicleAccess;
+};
+
+var globalconfig array<Restriction> Restrictions;
+
+function ApplyRestrictionsByID(string ID)
+{
+    local DHPlayer C;
+
+    for (C = DHPlayer(Level.ControllerList); C != none; C = DHPlayer(C.NextController))
+    {
+        if (C.GetPlayerIDHash() ~= ID)
+        {
+            ApplyRestrictions(C);
+            return;
+        }
+    }
+}
+
+// Should be called on restriction list updates and in PostLogin (after
+// ID hash is updated, and before player name is sent out into the wild)
+//
+// TODO:
+// - Vehicles: kick restricted player off the tank role when they die
+//             (they can't spawn, but they still can hog the role for a while)
+function ApplyRestrictions(DHPlayer PC, optional bool bOnLogin)
+{
+    local int i;
+    local string PlayerID;
+    local DHPlayerReplicationInfo PRI;
+
+    if (PC == none)
+    {
+        return;
+    }
+
+    PlayerID = PC.GetPlayerIDHash();
+
+    if (PlayerID == "")
+    {
+        return;
+    }
+
+    for (i = 0; i < Restrictions.Length; ++i)
+    {
+        if (Restrictions[i].PlayerID != PlayerID)
+        {
+            continue;
+        }
+
+        // Duplicate IDs are not allowed (or unlikely), so we can assign PRI here
+        // instead of doing it every time this function is called.
+        PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
+
+        if (PRI == none)
+        {
+            return;
+        }
+
+        // Outbound messages
+        PC.bRestrictOutboundMessages = Restrictions[i].bOutboundMessages;
+
+        // Outbound voice
+        if (PRI.bRestrictOutboundVoice != Restrictions[i].bOutboundVoice)
+        {
+            PRI.bRestrictOutboundVoice = Restrictions[i].bOutboundVoice;
+
+            // Player will be muted via the chat manager, but we still
+            // unset their active channel just to be thorough.
+            if (PRI.bRestrictOutboundVoice)
+            {
+                PC.UnsetActiveRoom();
+            }
+        }
+
+        // Squad name editing
+        if (PRI.Team != none &&
+            Restrictions[i].bSquadNames && !PC.bRestrictSquadNames &&
+            PC.SquadReplicationInfo != none && PRI.IsSquadLeader())
+        {
+            PC.SquadReplicationInfo.SetName(PRI.Team.TeamIndex, PRI.SquadIndex, "");
+        }
+
+        PC.bRestrictSquadNames = Restrictions[i].bSquadNames;
+
+        // Force player name
+        PC.bRestrictName = Restrictions[i].ForcedName != "";
+
+        if (PC.bRestrictName)
+        {
+            DarkestHourGame(Level.Game).ChangeName(PC, Restrictions[i].ForcedName, !bOnLogin);
+        }
+
+        // Driving vehicles
+        if (PC.bRestrictVehicleAccess != Restrictions[i].bVehicleAccess)
+        {
+            PC.bRestrictVehicleAccess = Restrictions[i].bVehicleAccess;
+
+            // Kick them out from the vehicle immediately
+            if (PC.bRestrictVehicleAccess)
+            {
+                PC.LeaveVehicleAsDriver();
+                PC.ReceiveLocalizedMessage(class'DHAdminMessage', 11);
+            }
+        }
+
+        // Squad positions (SL and ASL)
+        if (PRI.bRestrictLeaderPositions != Restrictions[i].bLeaderPositions)
+        {
+            PRI.bRestrictLeaderPositions = Restrictions[i].bLeaderPositions;
+
+            if (PRI.bRestrictLeaderPositions && PRI.Team != none && PC.SquadReplicationInfo != none)
+            {
+                if (PRI.IsSquadLeader())
+                {
+                    PC.SquadReplicationInfo.LeaveSquad(PRI);
+                }
+                else if (PRI.IsAssistantLeader())
+                {
+                    PC.SquadReplicationInfo.SetAssistantSquadLeader(PRI.Team.TeamIndex, PRI.SquadIndex, none);
+                }
+
+                PC.ReceiveLocalizedMessage(class'DHAdminMessage', 12);
+            }
+        }
+    }
+}
+
 function bool AdminLogin(PlayerController P, string Username, string Password)
 {
     local xAdminUser    User;
@@ -205,19 +341,19 @@ function int CheckID(string CDHash)
 // Modified to send localized strings.
 function AdminEntered(PlayerController P, string Username)
 {
-	Log(P.PlayerReplicationInfo.PlayerName @ "logged in as Administrator.");
+    Log(P.PlayerReplicationInfo.PlayerName @ "logged in as Administrator.");
 
     // "<Player Name> logged in as a server administrator."
-	Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', 6, P.PlayerReplicationInfo);
+    Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', 6, P.PlayerReplicationInfo);
 }
 
 // Modified to send localized strings.
 function AdminExited(PlayerController P)
 {
-	Log(P.PlayerReplicationInfo.PlayerName @ "logged out.");
+    Log(P.PlayerReplicationInfo.PlayerName @ "logged out.");
 
     // "<Player Name> gave up administrator abilities."
-	Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', 7, P.PlayerReplicationInfo);
+    Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', 7, P.PlayerReplicationInfo);
 }
 
 defaultproperties

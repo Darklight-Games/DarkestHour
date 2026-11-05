@@ -14,5 +14,5 @@ defaultproperties
     HeadgearProbabilities(1)=0.5
 
     SleeveTexture=Texture'DHSovietCharactersTex.LWP_light_sleeves'
-	Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
+    Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
 }

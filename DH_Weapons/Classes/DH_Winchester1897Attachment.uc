@@ -43,7 +43,7 @@ defaultproperties
     WA_ProneReload="idle_1897"
     WA_PostReload="reload_end_1897"
 
-    
+
 
     // bayonet
     WA_BayonetIdle="idle_bayo_1897"
@@ -83,12 +83,12 @@ defaultproperties
     PA_ProneBayonetAttachAnim="prone_Bayattach_1897"
     PA_BayonetDetachAnim="stand_bayremove_1897"
     PA_ProneBayonetDetachAnim="prone_bayremove_1897"
-    
+
     //bayonet stabbing animations
     PA_BayonetAltFire="stand_stab_kar"
     PA_CrouchBayonetAltFire="crouch_idlestrike_bayo"
     PA_ProneBayonetAltFire="prone_idlestrike_bayo"
-    
+
     //movement animations
     PA_MovementAnims(0)="stand_jogF_1897"
     PA_MovementAnims(1)="stand_jogB_1897"
@@ -165,7 +165,7 @@ defaultproperties
     PA_TurnIronRightAnim="stand_turnRiron_kar"
     PA_TurnIronLeftAnim="stand_turnLiron_kar"
     PA_ProneTurnRightAnim="prone_turnR_1987"
-	PA_ProneTurnLeftAnim="prone_turnL_1987"
+    PA_ProneTurnLeftAnim="prone_turnL_1987"
 
     //intermission anims
     PA_StandToProneAnim="StandtoProne_1897"

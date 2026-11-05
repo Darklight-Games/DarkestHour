@@ -27,7 +27,7 @@ defaultproperties
     ROShellCaseClass=Class'RO3rdShellEject762x54mmGreen'
     bAnimNotifiedShellEjects=true
     bRapidFire=false
-    
+
     MuzzleBoneName="tipnew"
 
     WA_Idle="idle_nagant9130scoped"

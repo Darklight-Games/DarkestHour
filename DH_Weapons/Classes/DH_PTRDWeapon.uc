@@ -120,7 +120,7 @@ defaultproperties
     CrawlEndEmptyAnim="crawl_out"
 
     Priority=10
-    
+
     IronBringUp="Rest_2_Bipod"
     IronPutDown="Bipod_2_Rest"
     IdleAnim="Rest_Idle"

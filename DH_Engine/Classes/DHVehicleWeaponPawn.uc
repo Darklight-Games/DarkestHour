@@ -1052,7 +1052,7 @@ simulated state ViewTransition
     {
         local PlayerController PC;
         local int DriverAnimationChannel;
-        
+
         if (VehicleBase != none)
         {
             StoredVehicleRotation = VehicleBase.Rotation;
@@ -1096,7 +1096,7 @@ simulated state ViewTransition
 
             FPCamPos = DriverPositions[DriverPositionIndex].ViewLocation; // note we set FPCamPos even in behind view so camera debugging works
         }
-        
+
         // Play any transition animation for the weapon itself & set a duration to control when we exit this state
         ViewTransitionDuration = 0.0; // start with zero in case we don't have a transition animation
 
@@ -1132,7 +1132,7 @@ simulated state ViewTransition
             {
                 ROPawn(Driver).ToggleAuxCollision(true);
             }
-            
+
             ClientViewTransitionStartTime = Level.TimeSeconds;
             ClientViewTransitionEndTime = ClientViewTransitionStartTime + ViewTransitionDuration;
 
@@ -1340,6 +1340,12 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
             DisplayVehicleMessage(0); // not qualified to operate vehicle
             return false;
         }
+
+        if (!bMustBeTankerToSwitch && Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(self.Controller)))
+        {
+            DisplayVehicleMessage(32); // restricted from operating vehicles
+            return false;
+        }
     }
     // Trying to switch to non-driver position
     else
@@ -1380,6 +1386,12 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
         if (Role == ROLE_Authority && (AV != none || GetArmoredVehicleBase(AV)) && AV.AreCrewPositionsLockedForPlayer(self))
         {
             DisplayVehicleMessage(22); // this vehicle has been locked by its crew
+            return false;
+        }
+
+        if (Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(self.Controller)))
+        {
+            DisplayVehicleMessage(32); // restricted from operating vehicles
             return false;
         }
     }

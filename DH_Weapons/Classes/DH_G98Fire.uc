@@ -14,7 +14,7 @@ defaultproperties
     Spread=45.0   //worn-out barrel
     FireSounds(0)=SoundGroup'DH_CC_Inf_Weapons.G98_shootA'
     FireSounds(1)=SoundGroup'DH_CC_Inf_Weapons.G98_shootB'
-    
+
     MuzzleBone="MuzzleG98"
 
     FlashEmitterClass=Class'MuzzleFlash1stKar'

@@ -22,7 +22,7 @@ defaultproperties
     DamageRadius=650.0          // TODO: pick an appropriate value
 
     MyDamageType=Class'DHShellHE50mmATDamageType'
-    
+
     PenetrationMag=550.0
     HullFireChance=0.5
     EngineFireChance=0.5

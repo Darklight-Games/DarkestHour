@@ -134,7 +134,7 @@ defaultproperties
         VelocityLossRange=(X=(Min=0.15,Max=0.15),Y=(Min=0.15,Max=0.15),Z=(Min=0.1,Max=0.1))
     End Object
     Emitters(3)=SpriteEmitter'SpriteEmitter3'
-    
+
 
  //White phosphorus Flares and trails
     //Flares
@@ -287,5 +287,5 @@ defaultproperties
         StartVelocityRange=(Z=(Min=300.0,Max=300.0))
     End Object
     Emitters(8)=SpriteEmitter'SpriteEmitter8'
-    
+
 }

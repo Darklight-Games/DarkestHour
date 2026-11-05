@@ -14,7 +14,7 @@ simulated function float CustomHandleRecoil()
     {
         return PctHipMGPenalty;
     }
-    
+
     return 1.0;
 }
 

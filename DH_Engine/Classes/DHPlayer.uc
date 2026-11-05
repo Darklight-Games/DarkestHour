@@ -26,6 +26,7 @@ enum ERoleEnabledResult
     RER_SquadLeaderOnly,
     RER_NonSquadLeaderOnly,
     RER_Locked,
+    RER_Restricted,
 };
 
 enum EAutomaticVehicleAlerts
@@ -57,7 +58,6 @@ var     private MapMarkerCooldown                               MapMarkerCooldow
 
 var     input float             aBaseFire;
 var     bool                    bToggleRun;          // user activated toggle run
-var     bool                    bIsGagged;           // player is gagged from chatting
 
 // Continue automatically running or driving after opening chat
 var     globalconfig bool       bKeepMovingWhileTyping;
@@ -79,7 +79,7 @@ var     int                     CorpseStayTimeMax;
 var     globalconfig string     ROIDHash;            // client ROID hash (this gets set/updated when a player joins a server)
 var     globalconfig bool       bDynamicFogRatio;    // client option to have their fog distance dynamic based on FPS and MinDesiredFPS
 var     globalconfig int        MinDesiredFPS;       // client option used to calculate fog ratio when dynamic fog ratio is true
-var 	config    	bool  		bUseNativeItemNames; // client option to display native item names instead of translated ones
+var     config       bool       bUseNativeItemNames; // client option to display native item names instead of translated ones
 var     globalconfig bool       bIsIncognito;        // when true, patron & developer tags are not displayed on the scoreboard
 
 var     byte                    ArtillerySupportSquadIndex;
@@ -223,6 +223,12 @@ var     float                   LastListClientGUIDTime;
 // I'd love to put this elsewhere, but I can't seem to poll any relevant state in the HUD.
 var     bool                    bHideMapActivateMousePrompt;
 
+// Restrictions
+var     bool                    bRestrictOutboundMessages; // Disable ability to send text messages
+var     bool                    bRestrictVehicleAccess;    // Disable entering vehicles as driver or gunner
+var     bool                    bRestrictSquadNames;       // Disable editing of squad names
+var     bool                    bRestrictName;             // Player name is enforced by access control
+
 replication
 {
     // Variables the server will replicate to the client that owns this actor
@@ -231,10 +237,9 @@ replication
         NextSpawnTime, NextVehicleSpawnTime, NextChangeTeamTime, LastKilledTime,
         DHPrimaryWeapon, DHSecondaryWeapon, bSpectateAllowViewPoints,
         SquadReplicationInfo, SquadMemberLocations, bSpawnedKilled,
-        SquadLeaderLocations, bIsGagged,
-        NextSquadRallyPointTime, SquadRallyPointCount,
+        SquadLeaderLocations, NextSquadRallyPointTime, SquadRallyPointCount,
         bSurrendered, bIQManaged, ArtillerySupportSquadIndex,
-        MapMarkerCooldowns;
+        MapMarkerCooldowns, bRestrictOutboundMessages, bRestrictVehicleAccess, bRestrictSquadNames;
 
     reliable if (bNetInitial && bNetOwner && bNetDirty && Role == ROLE_Authority)
         MinIQToGrowHead;
@@ -792,8 +797,14 @@ function bool AllowTextMessage(string Msg)
         return true;
     }
 
-    if (Level.Pauser == none && Level.TimeSeconds - LastBroadcastTime < 2 || bIsGagged)
+    if (Level.Pauser == none && Level.TimeSeconds - LastBroadcastTime < 2)
     {
+        return false;
+    }
+
+    if (bRestrictOutboundMessages)
+    {
+        ReceiveLocalizedMessage(class'DHAdminMessage', 8);
         return false;
     }
 
@@ -848,8 +859,15 @@ exec function VehicleSay(string Msg)
 }
 
 // Overridden to increase max name length from 20 to 32 chars
+// and refuse changes initiated by players with a name restriction.
 function ChangeName(coerce string S)
 {
+    if (bRestrictName)
+    {
+        ReceiveLocalizedMessage(class'DHAdminMessage', 10);
+        return;
+    }
+
     if (Len(S) > 32)
     {
         S = Left(S, 32);
@@ -2270,6 +2288,22 @@ ignores SeePlayer, HearNoise, Bump;
     }
 }
 
+// Force player out of a vehicle or a weapon pawn, unless they're a passenger
+function LeaveVehicleAsDriver()
+{
+    if (Vehicle(Pawn) == none)
+    {
+        return;
+    }
+
+    if (VehicleWeaponPawn(Pawn) != none && VehicleWeaponPawn(Pawn).bPassengerOnly)
+    {
+        return;
+    }
+
+    Vehicle(Pawn).KDriverLeave(true);
+}
+
 // Modified so player can enter vehicle if looking at one of its vehicle weapons (generally a turret), not just its hull/base
 // In particular this makes it much easier to enter AT guns, which can have a very small base & a large 'turret'
 function ServerUse()
@@ -3648,11 +3682,11 @@ function ServerListClientGUIDs()
 
 exec function ListClientGUIDs()
 {
-	if (Level.TimeSeconds - LastListClientGUIDTime > 1.0)
-	{
-   	   	LastListClientGUIDTime = Level.TimeSeconds;
-	   	ServerListClientGUIDs();
-   	}
+    if (Level.TimeSeconds - LastListClientGUIDTime > 1.0)
+    {
+        LastListClientGUIDTime = Level.TimeSeconds;
+        ServerListClientGUIDs();
+    }
 }
 
 // Will have the client make a .txt file on their machine with the listplayers info in it, very useful to be able to copy ROIDs
@@ -5864,6 +5898,22 @@ simulated function RemoveSquadAssistantVolunteer(int VolunteerIndex)
     SquadAssistantVolunteers.Length = 0;
 }
 
+function UnsetActiveRoom()
+{
+    if (ActiveRoom == none)
+    {
+        return;
+    }
+
+    ActiveRoom = none;
+    ClientSetActiveRoom(-1);
+
+    if (PlayerReplicationInfo != none)
+    {
+        PlayerReplicationInfo.ActiveChannel = -1;
+    }
+}
+
 exec function Speak(string ChannelTitle)
 {
     local VoiceChatRoom VCR;
@@ -5881,6 +5931,12 @@ exec function Speak(string ChannelTitle)
 
     if (VRI == none && PRI == none)
     {
+        return;
+    }
+
+    if (PRI.bRestrictOutboundVoice)
+    {
+        ReceiveLocalizedMessage(class'DHAdminMessage', 9);
         return;
     }
 
@@ -8109,6 +8165,11 @@ function ERoleEnabledResult GetRoleEnabledResult(DHRoleInfo RI)
         {
             return RER_NonSquadLeaderOnly;
         }
+
+        if (bRestrictVehicleAccess && RI.bCanBeTankCrew)
+        {
+            return RER_Restricted;
+        }
     }
 
     return RER_Enabled;
@@ -8219,6 +8280,7 @@ defaultproperties
     NextSpawnTime=15
     ROMidGameMenuClass="DH_Interface.DHDeployMenu"
     ChatRoomMessageClass="DH_Engine.DHChatRoomMessage"
+    PlayerChatType="DH_Engine.DHPlayerChatManager"
     GlobalDetailLevel=5
     PlayerReplicationInfoClass=Class'DHPlayerReplicationInfo'
     InputClass=Class'DHPlayerInput'

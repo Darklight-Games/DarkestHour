@@ -64,7 +64,7 @@ defaultproperties
 
     FirstSelectAnim="draw1"
     BarrelChangeAnim="BarrelChange"
-    
+
     bCanBipodDeploy=true
     bCanBeResupplied=true
     ZoomOutTime=0.1

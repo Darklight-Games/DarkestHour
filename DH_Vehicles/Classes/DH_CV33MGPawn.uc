@@ -38,7 +38,7 @@ defaultproperties
     DriveRot=(Pitch=0,Yaw=16384,Roll=0)
     BinocsDriveRot=(Pitch=0,Yaw=16384,Roll=0)
     DriveAnim="cv33_gunner_closed"
-    
+
     FirstPersonGunRefBone="1stperson_wep"
     FirstPersonGunShakeScale=2.5
     FirstPersonOffsetZScale=3.0

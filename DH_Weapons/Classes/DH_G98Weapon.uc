@@ -36,7 +36,7 @@ defaultproperties
     PreReloadHalfAnim="reload_start_st"
     PostReloadAnim="reload_end_st"
     FullReloadAnim="reload_st"
-    
+
     BoltHipAnim="bolt_st"
     BoltIronAnim="iron_boltrest_st"
 }

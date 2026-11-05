@@ -47,7 +47,7 @@ defaultproperties
 {
     FireModeClass(0)=Class'DHTrenchMaceMeleeFire' // for some odd reason, having just the singular firemodeclass causes tweening issues with the weapons bash animations
     FireModeClass(1)=Class'DHTrenchMaceMeleeFire' // hacky fix but duplicating the firemodeclass fixes this?
-    
+
     ItemName="Trench Club"
     InventoryGroup=7
     GroupOffset=0
@@ -64,7 +64,7 @@ defaultproperties
     SprintStartAnim="sprint_start"
     SprintEndAnim="sprint_end"
     PutDownAnim="put_away"
-    
+
     AIRating=0.0
     CurrentRating=0.0
 

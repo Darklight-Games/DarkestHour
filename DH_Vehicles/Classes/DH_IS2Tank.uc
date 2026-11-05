@@ -60,13 +60,13 @@ defaultproperties
     TransRatio=0.09
 
     // Damage
-	// pros: Diesel fuel
-	// cons: high caliber ammorack is more likely to detonate; fuel tanks in the crew compartment
-	// 4 men crew
+    // pros: Diesel fuel
+    // cons: high caliber ammorack is more likely to detonate; fuel tanks in the crew compartment
+    // 4 men crew
     Health=485
     HealthMax=485.0
-	EngineHealth=300
-	AmmoIgnitionProbability=0.9  // 0.75 default
+    EngineHealth=300
+    AmmoIgnitionProbability=0.9  // 0.75 default
     TurretDetonationThreshold=1400.0 // reduced from 1750
     PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
     FireDetonationChance=0.045  //reduced from 0.07 for all diesels

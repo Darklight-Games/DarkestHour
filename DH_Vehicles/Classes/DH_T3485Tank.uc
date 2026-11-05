@@ -25,8 +25,8 @@ defaultproperties
     SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_85'
 
     // Damage
-	// pros: diesel fuel; 5 men crew
-	// cons: fuel tanks in crew compartment
+    // pros: diesel fuel; 5 men crew
+    // cons: fuel tanks in crew compartment
     Health=525
     HealthMax=525
     EngineHealth=300

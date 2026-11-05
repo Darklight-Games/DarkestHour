@@ -232,17 +232,17 @@ function ReadMapInfo(string MapName)
     }
     else
     {
-		asb_Scroll.Caption = MapName;
+        asb_Scroll.Caption = MapName;
     }
 
-	UpdateScreenshot(Index);
+    UpdateScreenshot(Index);
 
-	// Only show 1 number if min & max are the same
-	if (CacheMaps[Index].PlayerCountMin == CacheMaps[Index].PlayerCountMax)
+    // Only show 1 number if min & max are the same
+    if (CacheMaps[Index].PlayerCountMin == CacheMaps[Index].PlayerCountMax)
     {
-		l_MapPlayers.Caption = MapPlayersText;
+        l_MapPlayers.Caption = MapPlayersText;
     }
-	else
+    else
     {
         l_MapPlayers.Caption = MapPlayersRangeText;
     }
@@ -250,14 +250,14 @@ function ReadMapInfo(string MapName)
     l_MapPlayers.Caption = Repl(l_MapPlayers.Caption, "{min}", CacheMaps[Index].PlayerCountMin);
     l_MapPlayers.Caption = Repl(l_MapPlayers.Caption, "{max}", CacheMaps[Index].PlayerCountMax);
 
-	mDesc = li_Maps.GetExtra();
+    mDesc = li_Maps.GetExtra();
 
     if (mDesc == "")
     {
         mDesc = MessageNoInfo;
     }
 
-	lb_MapDesc.SetContent( mDesc );
+    lb_MapDesc.SetContent( mDesc );
 
     if (CacheMaps[Index].Author != "" && !Class'CacheManager'.static.IsDefaultContent(CacheMaps[Index].MapName))
     {

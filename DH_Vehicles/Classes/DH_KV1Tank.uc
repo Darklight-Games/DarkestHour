@@ -54,14 +54,14 @@ defaultproperties
     GearRatios(4)=0.7
     TransRatio=0.072
 
-	EngineRestartFailChance=0.2 //unreliability of early design +  weight
+    EngineRestartFailChance=0.2 //unreliability of early design +  weight
 
     // Damage
-	// pros: diesel fuel; 5 men crew
-	// cons: fuel tanks in crew compartment;
+    // pros: diesel fuel; 5 men crew
+    // cons: fuel tanks in crew compartment;
     Health=565
     HealthMax=565.0
-	EngineHealth=240   //reliability problems due to early design ("child problems") and high weight
+    EngineHealth=240   //reliability problems due to early design ("child problems") and high weight
 
     PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
     FireDetonationChance=0.045  //reduced from 0.07 for all diesels

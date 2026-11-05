@@ -18,7 +18,7 @@ defaultproperties
 
     // Recoil
     PctBipodDeployRecoil=0.1
-    
+
     MaxVerticalRecoilAngle=485
     MaxHorizontalRecoilAngle=310
     RecoilCurve=(Points=((InVal=0.0,OutVal=0.5),(InVal=6.0,OutVal=1.2),(InVal=12.0,OutVal=0.9),(InVal=50.0,OutVal=1.0),(InVal=10000000000.0,OutVal=1.0)))
@@ -31,7 +31,7 @@ defaultproperties
     ShellIronSightOffset=(X=25.0,Y=0.0,Z=-10.0)
     ShellRotOffsetIron=(Pitch=3000)
     FireEndAnim="Hip_Shoot_End"
-    
+
     BipodDeployFireAnim="bipod_shoot_loop"
     BipodDeployFireLoopAnim="bipod_Shoot_Loop"
     BipodDeployFireEndAnim="bipod_Shoot_End"

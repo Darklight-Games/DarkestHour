@@ -53,12 +53,17 @@ var     int                     PlayerIQ;
 
 var     int                     NoRallyPointsTime; // Time when SL lost all rally points
 
+// Restrictions
+var     bool                    bRestrictOutboundVoice;    // Disable ability to speak in voice chat
+var     bool                    bRestrictLeaderPositions;  // Disable access to SL and ASL positions and ability to create squads
+
 replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
         SquadIndex, SquadMemberIndex, PatronTier, bIsDeveloper, DHKills, bIsSquadAssistant,
-        TotalScore, CategoryScores, PlayerIQ, NoRallyPointsTime, bIsIncognito, bIsPossesingPawn;
+        TotalScore, CategoryScores, PlayerIQ, NoRallyPointsTime, bIsIncognito, bIsPossesingPawn,
+        bRestrictOutboundVoice, bRestrictLeaderPositions;
 }
 
 simulated function string GetNamePrefix()
@@ -189,6 +194,11 @@ simulated static function bool IsPlayerTankCrew(Pawn P)
 {
     return P != none && ROPlayerReplicationInfo(P.PlayerReplicationInfo) != none && ROPlayerReplicationInfo(P.PlayerReplicationInfo).RoleInfo != none
         && ROPlayerReplicationInfo(P.PlayerReplicationInfo).RoleInfo.bCanBeTankCrew;
+}
+
+simulated static function bool IsPlayerVehicleAccessRestricted(DHPlayer C)
+{
+    return C != none && C.bRestrictVehicleAccess;
 }
 
 simulated static function bool IsPlayerLicensedToDrive(DHPlayer C)

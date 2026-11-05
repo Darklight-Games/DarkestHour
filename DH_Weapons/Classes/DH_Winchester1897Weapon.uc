@@ -53,7 +53,7 @@ defaultproperties
     bSniping=false
     bCanUseUnfiredRounds=false
     bEjectRoundOnReload=false
-    
+
     bHasBayonet=true
     BayonetBoneName="bayonet"
     BayoAttachAnim="Bayonet_on"

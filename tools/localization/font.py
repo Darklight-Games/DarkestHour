@@ -1,18 +1,18 @@
 import copy
 import glob
 import os
-import sys
 import platform
 import subprocess
+import sys
 from collections import OrderedDict
+from collections.abc import Iterable
 from pathlib import Path
-from typing import List, Iterable, Dict, Tuple
-from iso639 import Language
-from fontTools.ttLib import TTFont, TTLibError
-from unicode_ranges import UnicodeRanges
-from ttf import Compression, TrueTypeFont, TrueTypeFactory
-from font_config import FontConfiguration, FontSize
 
+from font_config import FontConfiguration, FontSize
+from fontTools.ttLib import TTFont, TTLibError
+from iso639 import Language
+from ttf import Compression, TrueTypeFactory, TrueTypeFont
+from unicode_ranges import UnicodeRanges
 from unt import iso639_to_language_extension, read_unique_characters_from_unt_file
 
 
@@ -38,7 +38,7 @@ class FontPackage:
     def __init__(self, mod: str, package_name: str):
         self.mod = mod
         self.package_name = package_name
-        self.font_factories: Dict[str, TrueTypeFactory] = {}
+        self.font_factories: dict[str, TrueTypeFactory] = {}
 
 
 class FontStyleItem:
@@ -47,7 +47,7 @@ class FontStyleItem:
         self.resolution = resolution
 
 
-def get_font_resolutions_and_sizes(config: FontConfiguration, font_style_size: FontSize) -> Tuple[List[int], List[int]]:
+def get_font_resolutions_and_sizes(config: FontConfiguration, font_style_size: FontSize) -> tuple[list[int], list[int]]:
     match font_style_size.method:
         case 'proportional':
             resolution_baseline = config.resolution.baseline
@@ -58,7 +58,7 @@ def get_font_resolutions_and_sizes(config: FontConfiguration, font_style_size: F
 
                     # Make sure the resolution group exists.
             if resolution_group not in resolution_groups:
-                raise Exception(f'Resolution group "{resolution_group}" does not exist')
+                raise RuntimeError(f'Resolution group "{resolution_group}" does not exist')
 
             resolutions = resolution_groups[resolution_group]
             sizes = [int(font_size_baseline * resolution / resolution_baseline) for resolution in resolutions]
@@ -69,11 +69,11 @@ def get_font_resolutions_and_sizes(config: FontConfiguration, font_style_size: F
             sizes = font_style_size.sizes
             resolutions = [0] * len(sizes)
         case _:
-            raise Exception(f'Invalid size method: {font_style_size.method}, expected one of {["proportional", "fixed"]}')    
+            raise RuntimeError(f'Invalid size method: {font_style_size.method}, expected one of {["proportional", "fixed"]}')    
     if type(sizes) == int:
         sizes = [sizes]
     elif type(sizes) != list:
-        raise Exception(f'Invalid sizes for font style: {sizes}')
+        raise RuntimeError(f'Invalid sizes for font style: {sizes}')
     return resolutions, sizes
 
 
@@ -88,7 +88,7 @@ def write_font_style_class_file(path: Path, font_style_name: str, class_name: st
             '',
             f'class {font_style_name} extends GUIFont;',
             '',
-            f'event Font GetFont(int ResX)',
+            'event Font GetFont(int ResX)',
             '{',
             f'    return Class\'{class_name}\'.static.Get{font_style_name}ByResolution(Controller.ResX, Controller.ResY);',
             '}',
@@ -98,8 +98,7 @@ def write_font_style_class_file(path: Path, font_style_name: str, class_name: st
             f'    KeyName="{font_style_name}"',
             '}',
         ]
-        for line in lines:
-            f.write(line + '\n')
+        f.writelines(line + '\n' for line in lines)
 
 
 font_weight_to_styles = [
@@ -121,7 +120,7 @@ for weight, styles in font_weight_to_styles:
         font_style_to_weight[style] = weight
 
 
-def get_font_styles_from_weight(weight: int) -> List[str]:
+def get_font_styles_from_weight(weight: int) -> list[str]:
     weight_min = 100
     weight_max = 950
     weight = max(weight_min, min(weight, weight_max))
@@ -144,15 +143,15 @@ def get_font_style_closest(installed_fonts, styles: Iterable[str], fontname: str
     return installed_fonts[fontname][font_style_list[0][1]]
 
 
-def get_font_paths() -> List[str]:
+def get_font_paths() -> list[str]:
     font_paths = set()
     match platform.system():
         case 'Linux':
             import shutil
             if shutil.which('fc-list') is None:
                 raise RuntimeError('fc-list is not installed')
-            fc_list_output = subprocess.run(['fc-list', '--format=%{file}\n'], capture_output=True, text=True).stdout
-            font_paths |= set([x for x in fc_list_output.split('\n') if x])
+            fc_list_output = subprocess.run(['fc-list', '--format=%{file}\n'], capture_output=True, text=True, check=False).stdout
+            font_paths |= {x for x in fc_list_output.split('\n') if x}
         case 'Windows':
             from os import walk
             font_directories = [
@@ -171,7 +170,7 @@ def get_font_paths() -> List[str]:
             
 
 # Get the list of all installed Fonts.
-def get_installed_fonts() -> Dict[str, Dict[str, str]]:
+def get_installed_fonts() -> dict[str, dict[str, str]]:
     def get_font(font: TTFont, font_path: str):
         x = lambda x: font['name'].getDebugName(x)
         if x(16) is None:
@@ -205,7 +204,7 @@ def get_installed_fonts() -> Dict[str, Dict[str, str]]:
             except TTLibError as e:
                 raise RuntimeError(f'Error reading font at "{font_path}": {e}') from e
 
-    installed_fonts: Dict[str, Dict[str, str]] = {}
+    installed_fonts: dict[str, dict[str, str]] = {}
     for (family, style, path) in ttf_fonts:
         if family not in installed_fonts:
             installed_fonts[family] = {}
@@ -270,24 +269,24 @@ def write_fonts_class_file(
     ]
 
     # Create the function to load the fonts.
-    for font_style_name in font_style_items.keys():
+    for font_style_name in font_style_items:
         items_array_name = f'{font_style_name}Items'
         lines += [
             f'static function Font Get{font_style_name}ByIndex(int i) {{',
             f'    return GetFontByIndex(default.{items_array_name}[i].FontIndex);',
-            f'}}',
-            f'',
-            f'// Load a font by the nearest target resolution',
+            '}}',
+            '',
+            '// Load a font by the nearest target resolution',
             f'static function Font Get{font_style_name}ByResolution(int ResX, int ResY) {{',
-            f'    local int i;',
-            f'    ResY = GetEffectiveResolution(ResX, ResY);',
+            '    local int i;',
+            '    ResY = GetEffectiveResolution(ResX, ResY);',
             f'    for (i = 0; i < arraycount(default.{items_array_name}); i++) {{',
             f'        if (ResY >= default.{items_array_name}[i].Resolution) {{',
             f'            return Get{font_style_name}ByIndex(i);',
-            f'        }}',
-            f'    }}',
+            '        }}',
+            '    }}',
             f'    return Get{font_style_name}ByIndex(arraycount(default.{items_array_name}) - 1);',
-            f'}}',
+            '}}',
             '',
         ]
 
@@ -307,15 +306,14 @@ def write_fonts_class_file(
 
     # Write the lines to the file.
     with open(unrealscript_fonts_path, 'w') as file:
-        for line in lines:
-            file.write(line + '\n')
+        file.writelines(line + '\n' for line in lines)
 
 
 def write_font_package_generation_script(path: Path, font_packages: Iterable[FontPackage]):
     lines = []
 
     for font_package in font_packages:
-        for _, font_factory in font_package.font_factories.items():
+        for font_factory in font_package.font_factories.values():
             font_factory.write_characters_to_disk()
             command_string = font_factory.get_command_string()
             if len(command_string) > 256:
@@ -369,12 +367,12 @@ def generate(args):
     # Read the font configuration file.
     config = FontConfiguration.from_file(fonts_config_path)
 
-    fonts: Dict[str, TrueTypeFont] = OrderedDict()
+    fonts: dict[str, TrueTypeFont] = OrderedDict()
 
     # Font style items should only be determined for the BASE language.
     # For all other languages, we need to make a mapping then output a localization file.
-    font_style_items: Dict[str, List[FontStyleItem]] = {}
-    font_packages: Dict[str, FontPackage] = dict()
+    font_style_items: dict[str, list[FontStyleItem]] = {}
+    font_packages: dict[str, FontPackage] = {}
 
     # Add the initial font package.
     font_package = FontPackage(mod, config.package_name)
@@ -449,7 +447,7 @@ def generate(args):
             # Add all of the used characters to the package's unicode ranges.
             package_unicode_ranges.add_ordinals(used_characters)
         
-        language_font_names: List[Tuple[int, str]] = []
+        language_font_names: list[tuple[int, str]] = []
 
         font_package = FontPackage(mod, package_name)
 
@@ -491,7 +489,7 @@ def generate(args):
     unrealscript_gui_font_path = Path(root_path) / config.unrealscript.gui_fonts_directory
 
     # Write the font style classes.
-    for font_style_name in font_style_items.keys():
+    for font_style_name in font_style_items:
         gui_font_path = unrealscript_gui_font_path / f'{font_style_name}.uc'
         write_font_style_class_file(gui_font_path, font_style_name, config.unrealscript.fonts_class_name)
 
@@ -512,23 +510,23 @@ def generate(args):
         #======================================
 
         # Keep a cache of evaluated unicode ranges for each font, since this is a very intensive operation.
-        font_unicode_ranges_cache: Dict[str, UnicodeRanges] = dict()
+        font_unicode_ranges_cache: dict[str, UnicodeRanges] = dict()
         installed_fonts = get_installed_fonts()
 
         # Refine the unicode ranges based on what the font actually supports.
-        for _, font_package in font_packages.items():
-            for _, font_factory in font_package.font_factories.items():
+        for font_package in font_packages.values():
+            for font_factory in font_package.font_factories.values():
                 font = font_factory.font
                 styles = get_font_styles_from_weight(font.style)
 
                 # Ensure that the font is installed.
                 if font.fontname not in installed_fonts:
-                    raise Exception(f'Font family "{font.fontname}" is not installed')
+                    raise RuntimeError(f'Font family "{font.fontname}" is not installed')
 
                 # Get the path to the font that is closest to matching the requested styles.
                 font_path = get_font_style_closest(installed_fonts, styles, font.fontname)
                 if font_path is None:
-                    raise Exception(f'Could not find {styles} styles for installed font "{font.fontname}"')
+                    raise RuntimeError(f'Could not find {styles} styles for installed font "{font.fontname}"')
 
                 # Load the font and get the supported unicode ranges.
                 if font_path not in font_unicode_ranges_cache:

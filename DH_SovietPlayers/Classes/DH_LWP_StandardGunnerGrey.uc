@@ -14,6 +14,6 @@ defaultproperties
     Headgear(0)=Class'DH_LWPHelmet'
 
     SleeveTexture=Texture'DHSovietCharactersTex.LWP_grey_sleeves'
-    
+
     PrimaryWeapons(0)=(Item=Class'DH_DP27LateWeapon')
 }

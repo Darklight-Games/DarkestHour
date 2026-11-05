@@ -13,7 +13,7 @@ defaultproperties
 
     //spread
     AddedPitch=13 //scope zero found experimentally with debugaddedpitch function, scope zeroed to 100m
-    
+
     BipodDeployFireAnim="deploy_shoot_scoped"
     BipodDeployFireLoopAnim="deploy_shoot_scoped"
     BipodDeployFireLastAnim="deploy_shoot_last_scoped"

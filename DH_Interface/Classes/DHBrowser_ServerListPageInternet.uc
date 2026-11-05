@@ -27,7 +27,7 @@ function bool IsServerPasswordProtected(GameInfo.ServerResponseLine S)
     // Stats           2
     // LatestVersion   4
     // Listen Server   8
-    // Vac Secured	   16
+    // Vac Secured     16
     // Standard        32
     // UT CLassic      64
     return (S.Flags & 1) != 0;
@@ -86,9 +86,8 @@ defaultproperties
     bStandardized=true
     StandardHeight=0.8
 
-    bDisableWhitelist=true
+    bDisableWhitelist=false
 
     ServerWhitelist(0)="104.243.41.183"     // Official US
-    ServerWhitelist(1)="185.206.148.38"     // Official EU
-    ServerWhitelist(2)="45.76.59.241"       // Amish USA
+    ServerWhitelist(1)="87.98.237.193"     // RO.PL Fight Nights
 }

@@ -45,7 +45,7 @@ defaultproperties
     ProjectileDescriptions(0)="HE"
     ProjectileDescriptions(1)="AP"
 
-    nProjectileDescriptions(0)="OF-471" 
+    nProjectileDescriptions(0)="OF-471"
     nProjectileDescriptions(1)="BR-471" // earlier AP round without ballistic cap
 
     InitialPrimaryAmmo=16

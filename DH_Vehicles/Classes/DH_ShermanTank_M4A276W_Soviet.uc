@@ -35,19 +35,19 @@ defaultproperties
     Skins(0)=Texture'DH_VehiclesUS_tex3.ShermanM4A2_soviet'
 
     // Movement
-	//different diesel engine
+    //different diesel engine
     GearRatios(1)=0.19
     GearRatios(3)=0.62
     GearRatios(4)=0.76
     TransRatio=0.094
 
     // Damage
-	// Compared to A3: diesel fuel
+    // Compared to A3: diesel fuel
     EngineToHullFireChance=0.05  //standart 0.05 for diesel
     PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
     FireDetonationChance=0.045  //reduced from 0.07 for all diesels
     DisintegrationHealth=-1400.0 //diesel and wet stowage
 
-	//to do: destroyed textures
+    //to do: destroyed textures
 }
 

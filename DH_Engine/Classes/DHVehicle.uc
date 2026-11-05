@@ -677,7 +677,7 @@ simulated function Tick(float DeltaTime)
             Throttle = FClamp(Throttle, -0.5, 0.5);
         }
     }
-    
+
     if (Role == ROLE_Authority)
     {
         // Recalculate the total supply count for our pawn, or -1 if there are
@@ -699,7 +699,7 @@ simulated function Tick(float DeltaTime)
             }
         }
     }
-    
+
     if (Level.NetMode != NM_DedicatedServer)
     {
         VehicleSpeed = Abs(ForwardVel); // don't need VSize(Velocity), as already have ForwardVel
@@ -763,7 +763,7 @@ simulated function Tick(float DeltaTime)
                 RightTreadPanner.PanRate = 0.0;
             }
         }
- 
+
         // Update the dust color.
         UpdateDustColor();
 
@@ -797,7 +797,7 @@ simulated function UpdateDustColor()
     }
 
     DustColor = Level.DustColor;
-    
+
     if (PhysicsVolume != none && PhysicsVolume.IsA('DHWaterVolume'))
     {
         DustColor = Level.WaterDustColor;
@@ -1085,7 +1085,7 @@ function Vehicle FindEntryVehicle(Pawn P)
 {
     local ROVehicleWeaponPawn WP;
     local Vehicle             VehicleGoal;
-    local bool                bPlayerIsTankCrew, bCanEnterTankCrewPositions, bHasTankCrewPositions, bAreCrewPositionsLockedForPlayer, bIsPlayerLicensedToDrive;
+    local bool                bPlayerIsTankCrew, bCanEnterTankCrewPositions, bHasTankCrewPositions, bAreCrewPositionsLockedForPlayer, bIsPlayerLicensedToDrive, bIsPlayerRestricted;
     local int                 i;
     local Vehicle             LowPriorityEntry;
 
@@ -1106,8 +1106,10 @@ function Vehicle FindEntryVehicle(Pawn P)
             bCanEnterTankCrewPositions = !bAreCrewPositionsLockedForPlayer;
         }
 
+        bIsPlayerRestricted = Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(P.Controller));
+
         // Select driver position if it's empty, & player isn't barred by tank crew restriction, & it isn't a locked armored vehicle that player can't enter
-        if (Driver == none && (!bMustBeTankCommander || bCanEnterTankCrewPositions) && (!bRequiresDriverLicense || bIsPlayerLicensedToDrive))
+        if (Driver == none && (!bMustBeTankCommander || bCanEnterTankCrewPositions) && (!bRequiresDriverLicense || bIsPlayerLicensedToDrive) && !bIsPlayerRestricted)
         {
             return self;
         }
@@ -1120,7 +1122,7 @@ function Vehicle FindEntryVehicle(Pawn P)
             WP = ROVehicleWeaponPawn(WeaponPawns[i]);
 
             // Select weapon pawn if it's empty, & player isn't barred by tank crew restriction, & this isn't a locked armored vehicle that player can't enter
-            if (WP != none && WP.Driver == none && (!WP.bMustBeTankCrew || bCanEnterTankCrewPositions))
+            if (WP != none && WP.Driver == none && (!WP.bMustBeTankCrew || (bCanEnterTankCrewPositions && !bIsPlayerRestricted)))
             {
                 if (i >= PrioritizeWeaponPawnEntryFromIndex)
                 {
@@ -1152,13 +1154,21 @@ function Vehicle FindEntryVehicle(Pawn P)
             {
                 DisplayVehicleMessage(3, P); // all rider positions full (if non-tanker tries to enter a tank that has rider positions)
             }
+
             if (bHasTankCrewPositions && bAreCrewPositionsLockedForPlayer)
             {
                 DisplayVehicleMessage(22, P); // this vehicle has been locked by its crew
             }
             else if (!bHasTankCrewPositions || bPlayerIsTankCrew)
             {
-                DisplayVehicleMessage(2, P); // vehicle is full (this simple message if vehicle isn't a tank or if player is a tank crewman)
+                if (bIsPlayerRestricted && (Driver == none || bHasTankCrewPositions))
+                {
+                    DisplayVehicleMessage(32, P); // player is restricted from operating vehicles
+                }
+                else
+                {
+                    DisplayVehicleMessage(2, P); // vehicle is full (this simple message if vehicle isn't a tank or if player is a tank crewman)
+                }
             }
             else if (FirstRiderPositionIndex < WeaponPawns.Length)
             {
@@ -1282,10 +1292,19 @@ function bool TryToDrive(Pawn P)
         }
     }
 
-    if (default.bRequiresDriverLicense && !Class'DHPlayerReplicationInfo'.static.IsPlayerLicensedToDrive(DHPlayer(P.Controller)) && P.IsHumanControlled())
+    if (P.IsHumanControlled())
     {
-        DisplayVehicleMessage(0, P); // not qualified to operate vehicle
-        return false;
+        if (default.bRequiresDriverLicense && !Class'DHPlayerReplicationInfo'.static.IsPlayerLicensedToDrive(DHPlayer(P.Controller)))
+        {
+            DisplayVehicleMessage(0, P); // not qualified to operate vehicle
+            return false;
+        }
+
+        if (Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(P.Controller)))
+        {
+            DisplayVehicleMessage(32, P);
+            return false;
+        }
     }
 
     // Deny entry if vehicle has a driver
@@ -2272,7 +2291,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
             if (GetTeamNum() != 255 && InstigatorTeam != 255 && GetTeamNum() == InstigatorTeam)
             {
                 bIsFriendlyFire = true;
-                
+
                 // If no one has ever entered the vehicle, then don't allow team damage
                 if (!bDriverAlreadyEntered)
                 {
@@ -2959,7 +2978,7 @@ static function StaticPrecache(LevelInfo L)
             }
         }
     }
-    
+
 
     for (i = 0; i < default.CollisionAttachments.Length; ++i)
     {
@@ -3138,6 +3157,13 @@ simulated function SpawnVehicleAttachments()
                 MapIconAttachment.Setup();
                 MapIconAttachment.SetTeamIndex(VehicleTeam);
                 MapIconAttachment.VehicleClass = Class;
+
+                if (SpawnPointAttachment != none && SpawnPointAttachment.BaseMapIconAttachment == none)
+                {
+                    // Will likely be assigned when the spawn is attached, but we also do it here
+                    // in case things get out of order.
+                    SpawnPointAttachment.BaseMapIconAttachment = MapIconAttachment;
+                }
             }
             else
             {
@@ -4630,6 +4656,11 @@ function CreateSpawnPointAttachment(bool bIsTemporary)
     SpawnPointAttachment.SetIsActive(true);
     SpawnPointAttachment.bHasSpawnKillPenalty = default.bHasSpawnKillPenalty;
     SpawnPointattachment.bIsTemporary = bIsTemporary;
+
+    if (MapIconAttachment != none && SpawnPointAttachment.BaseMapIconAttachment == none)
+    {
+        SpawnPointAttachment.BaseMapIconAttachment = MapIconAttachment;
+    }
 }
 
 // Returns whether or not a player should spawn inside the vehicle when using its spawn point.

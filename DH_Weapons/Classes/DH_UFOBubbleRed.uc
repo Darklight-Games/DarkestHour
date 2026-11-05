@@ -7,10 +7,19 @@ class DH_UFOBubbleRed extends DH_GeratPIIBullet;
 
 defaultproperties
 {
+    CollisionRadius=40.000000    
+    CollisionHeight=40.000000    
+
+    bCollideActors=True
+    bCollideWorld=True
+    
+    bBlockActors=False
+    bBlockPlayers=False
+
     Damage=5000000
     Speed=6000.0  //very slow
     BallisticCoefficient=2.675
-    ShellDiameter=100 
+    ShellDiameter=100
     //bIsTracerBullet=true
     TracerEffectClass=none
     StaticMesh=StaticMesh'DH_UFO_stc.BubbleRed'

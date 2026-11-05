@@ -79,27 +79,27 @@ defaultproperties
     InitialBarrels=1  //to do: make barrel swap animation
     BarrelClass=Class'DH_DP27Barrel'
     BarrelSteamBone="bipod"
-    
+
     bPlusOneLoading=false
-    
+
     bCanBipodDeploy=true
     bCanBeResupplied=true
     ZoomOutTime=0.1
 
     bMustReloadWithBipodDeployed=true
-    
+
     IdleToBipodDeploy="deploy"
     BipodDeployToIdle="undeploy"
     BipodIdleAnim="deploy_idle"
     BipodMagEmptyReloadAnim="reload_empty"
     BipodMagPartialReloadAnim="reload_half"
-    
+
     SprintStartAnim="Sprint_Start"
     SprintLoopAnim="sprint_middle"
     SprintEndAnim="Sprint_End"
     IdleAnim="Idle"
     PutDownAnim="Putaway"
-    
+
     IdleEmptyAnim="idle_empty"
     IdleToBipodDeployEmpty="deploy_empty"
     BipodDeployToIdleEmpty="undeploy_empty"

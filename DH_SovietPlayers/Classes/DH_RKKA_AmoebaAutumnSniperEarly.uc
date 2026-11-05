@@ -13,7 +13,7 @@ defaultproperties
 
     PrimaryWeapons(0)=(Item=Class'DH_MN9130ScopedPEWeapon',AssociatedAttachment=Class'ROInventory.ROMN9130AmmoPouch')
     PrimaryWeapons(1)=(Item=Class'DH_SVT40ScopedWeapon',AssociatedAttachment=Class'ROInventory.SVT40AmmoPouch')
-    
+
     SecondaryWeapons(0)=(Item=Class'DH_TT33Weapon')
     SecondaryWeapons(1)=(Item=Class'DH_Nagant1895BramitWeapon')
 }

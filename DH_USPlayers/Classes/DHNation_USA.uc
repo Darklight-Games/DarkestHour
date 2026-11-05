@@ -9,7 +9,7 @@ defaultproperties
 {
     NationName="United States of America"
     VoicePackClass=Class'DHUSVoice'
-    
+
     RallyPointClass=Class'DH_USPlayers.DHSquadRallyPoint_USA'
 
     DefaultConstructionLoadoutClass=Class'DHConstructionLoadout_USA'

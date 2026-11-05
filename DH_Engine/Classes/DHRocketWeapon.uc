@@ -64,7 +64,7 @@ exec simulated function SwitchFireMode()
             PlayIdle();
 
             Instigator.ReceiveLocalizedMessage(
-                Class'DHWeaponRangeMessage', 
+                Class'DHWeaponRangeMessage',
                 Class'UInteger'.static.FromShorts(RangeSettings[RangeIndex].Range, int(RangeDistanceUnit))
             );
         }
@@ -361,7 +361,7 @@ simulated state AssistedReloading extends Reloading
 
         PlayAnimAndSetTimer(RangeSettings[RangeIndex].AssistedReloadAnim, 1.0, 0.1);
     }
-    
+
     // HACK: Just play the idle anims as normal.
     simulated function PlayIdle()
     {

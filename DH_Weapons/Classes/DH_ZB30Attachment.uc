@@ -10,7 +10,7 @@ defaultproperties
     Mesh=SkeletalMesh'DH_Weapons3rd_CC_anm.ZB30'
     MenuImage=Texture'DH_InterfaceArt_CC_tex.ZB30'
     //MenuImage=Texture'CCInterfaceArt_tex.ZB30'
-    
+
     mMuzFlashClass=Class'MuzzleFlash3rdSTG'
     ROShellCaseClass=Class'RO3rdShellEject762x54mm'
     MuzzleBoneName="tip"
@@ -160,10 +160,10 @@ defaultproperties
     PA_IronFireLastShot="stand_shootiron_zb30"
     PA_CrouchFireLastShot="crouch_shoot_zb30"
     PA_ProneFireLastShot="prone_shoot_zb30"
-    
+
     PA_DiveToProneStartAnim="prone_diveF_kar"
     PA_DiveToProneEndAnim="prone_diveend_kar"
-    
+
     WA_Idle="idle_zb30"
     WA_IdleEmpty="idle_zb30"
     WA_Fire="idle_zb30"

@@ -12,19 +12,19 @@ const BUTTON_POS_TOP=0.7;
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
-	local float ButtonRowLeft;
+    local float ButtonRowLeft;
 
     super.InitComponent(MyController, MyOwner);
-    
-    // Set button positions
-	ButtonRowLeft = 0.5 - BUTTON_SPACING * 0.5 - BUTTON_WIDTH;
 
-	b_Cancel.SetPosition(ButtonRowLeft,
+    // Set button positions
+    ButtonRowLeft = 0.5 - BUTTON_SPACING * 0.5 - BUTTON_WIDTH;
+
+    b_Cancel.SetPosition(ButtonRowLeft,
                          BUTTON_POS_TOP,
                          BUTTON_WIDTH,
                          BUTTON_HEIGHT);
 
-	b_Ok.SetPosition(ButtonRowLeft + BUTTON_SPACING + BUTTON_WIDTH,
+    b_Ok.SetPosition(ButtonRowLeft + BUTTON_SPACING + BUTTON_WIDTH,
                      BUTTON_POS_TOP,
                      BUTTON_WIDTH,
                      BUTTON_HEIGHT);
@@ -35,7 +35,7 @@ function bool InternalOnPreDraw(Canvas C)
     // Bypass button positioning code in UT2K4GetDataMenu.
     // Button positions don't rely on ActualHeight() anymore, so we don't need
     // to adjust them on every draw call.
-	return super(UT2K4GenericMessageBox).InternalOnPreDraw(C);
+    return super(UT2K4GenericMessageBox).InternalOnPreDraw(C);
 }
 
 function RetryPassword()
@@ -65,19 +65,19 @@ function RetryPassword()
 
 defaultproperties
 {
-	Begin Object Class=GUIButton Name=GetPassFail
+    Begin Object Class=GUIButton Name=GetPassFail
         Caption="Cancel"
-		OnClick=InternalOnClick
-		bBoundToParent=true
-		TabOrder=2
-	End Object
-	b_Cancel=GetPassFail
+        OnClick=InternalOnClick
+        bBoundToParent=true
+        TabOrder=2
+    End Object
+    b_Cancel=GetPassFail
 
-	Begin Object Class=GUIButton Name=GetPassRetry
+    Begin Object Class=GUIButton Name=GetPassRetry
         Caption="Submit"
-		OnClick=InternalOnClick
-		bBoundToParent=true
-		TabOrder=1
-	End Object
-	b_OK=GetPassRetry
+        OnClick=InternalOnClick
+        bBoundToParent=true
+        TabOrder=1
+    End Object
+    b_OK=GetPassRetry
 }

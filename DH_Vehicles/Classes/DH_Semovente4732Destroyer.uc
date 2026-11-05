@@ -195,7 +195,7 @@ defaultproperties
     VehicleAttachments(27)=(AttachClass=Class'DHDecoAttachment',AttachBone="body",StaticMesh=StaticMesh'DH_Cannone4732_stc.cannone4732_shell',CullDistance=1024,Rotation=(Pitch=0,Roll=-1169,Yaw=-571),Offset=(X=-8.978,Y=45.32,Z=59.39))
     VehicleAttachments(28)=(AttachClass=Class'DHDecoAttachment',AttachBone="body",StaticMesh=StaticMesh'DH_Cannone4732_stc.cannone4732_shell',CullDistance=1024,Rotation=(Pitch=0,Roll=-1169,Yaw=-571),Offset=(X=-13.15,Y=45.32,Z=59.16))
     VehicleAttachments(29)=(AttachClass=Class'DHDecoAttachment',AttachBone="body",StaticMesh=StaticMesh'DH_Cannone4732_stc.cannone4732_shell',CullDistance=1024,Rotation=(Pitch=0,Roll=-1169,Yaw=-571),Offset=(X=-25.67,Y=45.31,Z=58.47))
-    
+
     // Visible wheels
     LeftWheelBones(0)="WHEEL_01_L"
     LeftWheelBones(1)="WHEEL_02_L"

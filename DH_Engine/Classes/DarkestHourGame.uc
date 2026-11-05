@@ -1363,7 +1363,6 @@ event PlayerController Login(string Portal, string Options, out string Error)
         bLargeGameVOIP = true;
     }
 
-    bWelcomePending = true;
 
     // WTF is this?
     if (bTestMode)
@@ -1416,8 +1415,6 @@ event PlayerController Login(string Portal, string Options, out string Error)
     {
         PC.SquadReplicationInfo = SquadReplicationInfo;
     }
-
-    ChangeName(NewPlayer, InName, false);
 
     return NewPlayer;
 }
@@ -5028,12 +5025,26 @@ event PostLogin(PlayerController NewPlayer)
     local DHPlayer                PC;
     local Object                  O;
     local DHPlayerSession         S;
+    local DHAccessControl         DHAC;
     local string                  ROIDHash;
 
     if (NewPlayer == none)
     {
         return;
     }
+
+    PC = DHPlayer(NewPlayer);
+    DHAC = DHAccessControl(AccessControl);
+
+    if (DHAC != none)
+    {
+        // This call should preceed `bWelcomePending` and metrics to avoid
+        // flashing player's real name anywhere if it's restricted.
+        DHAC.ApplyRestrictions(PC, true);
+    }
+
+    // Send "... entered the battlefield" message
+    bWelcomePending = true;
 
     // If we are using a GameStats actor, log the player's login
     if (GameStats != none && !bIsSaveGame && NewPlayer.PlayerReplicationInfo != none)
@@ -5120,9 +5131,6 @@ event PostLogin(PlayerController NewPlayer)
             NewPlayer.ClientSetLocation(StartSpectatorCamera.Location, StartSpectatorCamera.Rotation);
         }
     }
-
-    PC = DHPlayer(NewPlayer);
-
     if (PC != none)
     {
         PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);

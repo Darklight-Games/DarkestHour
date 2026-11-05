@@ -13,7 +13,7 @@ defaultproperties
     MaxSpeed=8962.5
     LifeSpan=20.0
     SpeedFudgeScale=1.0
-    
+
     HitMapMarkerClass=class'DHMapMarker_ArtilleryHit_HE'
     ShellImpactDamage=class'DHShellHEImpactDamageType_Artillery'
 

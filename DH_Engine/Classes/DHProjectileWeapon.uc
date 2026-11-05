@@ -361,7 +361,7 @@ simulated function Destroyed()
         Level.ObjectPool.FreeObject(ScopeScriptedShader);
         ScopeScriptedShader = none;
     }
-    
+
     DestroyMGAmmoBelt();
 }
 
@@ -1521,7 +1521,7 @@ Begin:
     {
         ZoomOut();
     }
-    
+
     Sleep(BipodDeployFOVDelay);
     SetPlayerFOV(PlayerDeployFOV);
 
@@ -2307,7 +2307,7 @@ simulated state ReloadingBipod extends Reloading
 
         ResetPlayerFOV();
     }
-    
+
     simulated function EndState()
     {
         super.EndState();
@@ -2404,7 +2404,7 @@ simulated function name GetReloadAnim()
             return BipodMagEmptyReloadAnim;
         }
     }
-    
+
     if (AmmoAmount(0) > 0 || (bTwoMagsCapacity && CurrentMagCount < 2))
     {
         return MagPartialReloadAnims[Rand(MagPartialReloadAnims.Length)];
@@ -3029,7 +3029,7 @@ simulated state ChangingBarrels extends WeaponBusy
             {
                 PlayAnim(BarrelChangeAnim, 1.0, 0.1);
             }
-            
+
             if (Role == ROLE_Authority)
             {
                 P = DHPawn(Instigator);
@@ -3560,7 +3560,7 @@ simulated function ForceUpdateAmmoBelt(int MyAmmoAmount)
         {
             continue;
         }
-        
+
         if (i < MyAmmoAmount)
         {
             MGBeltArray[i].SetDrawType(DT_StaticMesh);

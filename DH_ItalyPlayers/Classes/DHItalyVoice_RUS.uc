@@ -13,7 +13,7 @@ defaultproperties
     EnemySound(2)=SoundGroup'DH_voice_ita_infantry.sniper_rus'
     EnemySound(3)=SoundGroup'DH_voice_ita_infantry.pioneer_rus'
     EnemySound(4)=SoundGroup'DH_voice_ita_infantry.AT_soldier_rus'
-    
+
     VehicleAlertSound(0)=SoundGroup'DH_voice_ita_vehicle.enemy_forward_rus'
     VehicleAlertSound(1)=SoundGroup'DH_voice_ita_vehicle.enemy_left_rus'
     VehicleAlertSound(2)=SoundGroup'DH_voice_ita_vehicle.enemy_right_rus'

@@ -22,13 +22,13 @@ defaultproperties
     ShellDiameter=1.27
     BallisticCoefficient=0.65 // sources vary (as do actual round apparently), but this is about the consensus, with AP rounds a little lower than standard ball ammo
 
-	//Damage
+    //Damage
     Damage=450.0
     HullFireChance=0.05
     EngineFireChance=0.07  //assuming that some bullets in the belt are incendiary
     MyDamageType=Class'DH_50CalDamType'
 
-	//Speed
+    //Speed
     Speed=53268.0 // 880 m/s
     MaxSpeed=53268.0
 }

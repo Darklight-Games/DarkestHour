@@ -175,9 +175,9 @@ var private int         InfluenceReplicationCounter;
 // Team capture variable
 var() enum ETeamCapture
 {
-	TEAM_Axis,
-	TEAM_Allies,
-	TEAM_Both,
+    TEAM_Axis,
+    TEAM_Allies,
+    TEAM_Both,
 } TeamCanCapture;
 
 replication

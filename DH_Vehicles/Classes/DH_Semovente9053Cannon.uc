@@ -52,12 +52,12 @@ defaultproperties
 
     MaxPrimaryAmmo=7
     MaxSecondaryAmmo=2
-    
+
     SecondarySpread=0.00127
 
     // Weapon fire
     WeaponFireOffset=0.0
-    
+
     // Fire Effects
     FireEffectScale=1.75
     FireEffectOffset=(X=-15.0,Y=15.0,Z=0.0)
@@ -66,7 +66,7 @@ defaultproperties
     CannonFireSound(0)=SoundGroup'Vehicle_Weapons.85mm_fire01'
     CannonFireSound(1)=SoundGroup'Vehicle_Weapons.85mm_fire02'
     CannonFireSound(2)=SoundGroup'Vehicle_Weapons.85mm_fire03'
-    
+
     ReloadStages(0)=(Sound=Sound'DH_Vehicle_Reloads.reload_02s_01')
     ReloadStages(1)=(Sound=Sound'DH_Vehicle_Reloads.reload_02s_02')
     ReloadStages(2)=(Sound=Sound'DH_Vehicle_Reloads.reload_02s_03')

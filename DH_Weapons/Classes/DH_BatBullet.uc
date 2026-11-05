@@ -8,8 +8,8 @@ class DH_BatBullet extends DH_GeratPIIBullet;
 defaultproperties
 {
     Damage=10 // make it more of a spook than an actual killing projectile
-    Speed=12000.0  
-    ShellDiameter=100 
+    Speed=12000.0
+    ShellDiameter=100
     //bIsTracerBullet=true
     TracerEffectClass=none
     StaticMesh=StaticMesh'DH_UFO_stc.Bat'

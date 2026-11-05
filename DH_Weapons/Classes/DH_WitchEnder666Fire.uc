@@ -24,7 +24,6 @@ defaultproperties
     RecoilRate=0.075
     MaxVerticalRecoilAngle=900
     MaxHorizontalRecoilAngle=120
-    
 
     FireSounds(0)=Sound'DH_WeaponSounds.WitchEnderFire'
     ShellEjectClass=Class'DH_1stShellEjectShotgun'

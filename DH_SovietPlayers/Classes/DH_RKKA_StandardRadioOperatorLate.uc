@@ -14,6 +14,6 @@ defaultproperties
 
     SleeveTexture=Texture'Weapons1st_tex.russian_sleeves'
     Headgear(0)=Class'DH_SovietSidecap'
-	Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
+    Backpacks(0)=(BackpackClass=Class'DH_SovRadioBackpack',LocationOffset=(X=-0.1))
 
 }

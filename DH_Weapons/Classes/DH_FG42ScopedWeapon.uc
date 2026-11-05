@@ -40,7 +40,7 @@ defaultproperties
     SprintStartAnim="sprint_start_scoped"
     SprintLoopAnim="sprint_middle_scoped"
     SprintEndAnim="sprint_end_scoped"
-    
+
     // Select Fire
     SelectFireIronAnim="iron_switchfiremode_scoped"
     SelectFireBipodIronAnim="deploy_switchfiremode_scoped"

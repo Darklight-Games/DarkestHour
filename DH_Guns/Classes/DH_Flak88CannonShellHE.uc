@@ -13,7 +13,7 @@ defaultproperties
     BallisticCoefficient=2.4 //TODO: pls, check
 
 
-	//Damage
+    //Damage
     ImpactDamage=1000
     Damage=475.0   // 1002 gramms TNT
     DamageRadius=1550.0

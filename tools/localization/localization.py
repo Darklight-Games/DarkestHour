@@ -1,28 +1,30 @@
 import argparse
+import fnmatch
 import glob
 import logging
-from pathlib import Path
-
-import git
-from polib import POFile, pofile
 import os
 import re
+import subprocess
+import sys
+import time
 from collections import OrderedDict
 from configparser import MissingSectionHeaderError, RawConfigParser
-from iso639 import LanguageNotFoundError, Language
+from pathlib import Path
+
+import colorama
+import git
+import yaml
+from colorama import Fore
+from iso639 import Language, LanguageNotFoundError
 from parsimonious.exceptions import IncompleteParseError, ParseError
 from parsimonious.grammar import Grammar
 from parsimonious.nodes import NodeVisitor
-import subprocess
-from typing import List, Optional, Tuple
+from polib import POFile, pofile
 from unt import iso639_to_language_extension, unt_from_key_value_pairs
-import yaml
-import colorama
-import time
-from colorama import Fore
-import fnmatch
 
 colorama.init()
+
+logger = logging.getLogger(__name__)
 
 grammar_string = r"""
 value = string / name / array / struct
@@ -71,7 +73,7 @@ class ValueVisitor(NodeVisitor):
     def visit_struct(self, node, visited_children):
         if len(visited_children) == 3:
             return visited_children[1][0]
-        return dict()
+        return {}
 
     def visit_string(self, node, visited_children):
         return node.text.lstrip('"').rstrip('"')
@@ -93,7 +95,7 @@ class ValueVisitor(NodeVisitor):
         return visited_children or node
 
 
-def parse_unt(contents: str) -> List[Tuple[str, str]]:
+def parse_unt(contents: str) -> list[tuple[str, str]]:
     """
     Parse an Unreal Tournament translation file.
     :param contents: The contents of the file.
@@ -107,7 +109,7 @@ def parse_unt(contents: str) -> List[Tuple[str, str]]:
     except MissingSectionHeaderError as e:
         raise RuntimeError(f'Failed to parse file: {e}')
 
-    key_value_pairs: List[Tuple[str, str]] = []
+    key_value_pairs: list[tuple[str, str]] = []
 
     for section in config.sections():
         for key in config[section]:
@@ -122,12 +124,11 @@ def parse_unt(contents: str) -> List[Tuple[str, str]]:
             except ParseError:
                 pass
 
-            if type(value) == str:
+            if type(value) == str and value.startswith('"') and value.endswith('"'):
                 # We need to fix string values that are not quoted.
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1]
-                    # Escape quotes.
-                    value = value.replace('"', '\\"')
+                value = value[1:-1]
+                # Escape quotes.
+                value = value.replace('"', '\\"')
 
             id = f'{section}.{key}'
 
@@ -197,7 +198,7 @@ def add_entry(msgid: str, msgstr: str, sections):
             key = match['id']
             if key in target:
                 if not isinstance(target[key], list):
-                    raise Exception(f'Expected {key} to be a list (found {type(target[key])})')
+                    raise RuntimeError(f'Expected {key} to be a list (found {type(target[key])})')
             else:
                 target[match['id']] = []
             target = target[match['id']]
@@ -243,7 +244,7 @@ def po_to_unt(po: POFile) -> str:
     for entry in po:
         try:
             add_entry(entry.msgid, entry.msgstr, sections)
-        except Exception as e:
+        except RuntimeError as e:
             print(f'{Fore.YELLOW}Failed to add entry: {Fore.WHITE}{entry.msgid}: {e}')
 
     def write_key_value_pairs_recursive(key_value_pairs, parent_key=None):
@@ -261,12 +262,12 @@ def po_to_unt(po: POFile) -> str:
             return f'"{value}"'
         elif isinstance(value, list):
             return '(' + ','.join(map(write_value, value)) + ')'
-        elif isinstance(value, dict) or isinstance(value, OrderedDict):
+        elif isinstance(value, (dict, OrderedDict)):
             return '(' + ','.join(f'{k}={write_value(v)}' for k, v in value.items()) + ')'
         elif value is None:
             return ''
         else:
-            raise Exception(f'Unknown type: {type(value)}')
+            raise TypeError(f'Unknown type: {type(value)}')
 
     lines = []
 
@@ -311,7 +312,7 @@ def command_export_file(args):
         write_po(args.output_path, key_value_pairs, language_code)
 
 
-def get_language_from_unt_extension(extension: str) -> Optional[Language]:
+def get_language_from_unt_extension(extension: str) -> Language | None:
     # Make sure the extension is 4 characters long (e.g., ".int")
     if len(extension) != 4:
         raise LanguageNotFoundError(f'Invalid file extension "{extension}"')
@@ -327,7 +328,7 @@ def get_language_from_unt_extension(extension: str) -> Optional[Language]:
     return Language.from_part1(language_code)
 
 
-def read_localization_config(path: Path, mod: Optional[str] = None) -> dict:
+def read_localization_config(path: Path, mod: str | None = None) -> dict:
     if mod is not None:
         path /= mod
 
@@ -415,7 +416,7 @@ def command_export(args):
     print(f'{Fore.GREEN}Exported {count} file(s)')
 
 
-def read_unt(path: str) -> List[Tuple[str, str]]:
+def read_unt(path: str) -> list[tuple[str, str]]:
     with open(path, 'rb') as file:
         # Look for the BOM.
         bom = file.read(2)
@@ -444,10 +445,10 @@ def clean(args):
     system_path = root_path / args.mod / 'System'
     files_to_delete = []
 
-    process = subprocess.run(['git', 'ls-files'], cwd=str(system_path), capture_output=True, text=True)
+    process = subprocess.run(['git', 'ls-files'], cwd=str(system_path), capture_output=True, text=True, check=False)
     if process.returncode != 0:
         print('ERROR: Failed to list tracked files. Is git installed?')
-        exit(1)
+        sys.exit(1)
 
     git_tracked_files = set(process.stdout.splitlines())
 
@@ -491,7 +492,7 @@ def sync(args):
     repository_path = root_path / localization_data['repository']['path']
 
     # Do a submodule update to get the latest changes from the repository.
-    subprocess.run(["git", "-C", root_path, "submodule", "update", "--init", "--remote"])
+    subprocess.run(["git", "-C", root_path, "submodule", "update", "--init", "--remote"], check=False)
 
     # For each .po file in the repository, convert it to a .xxt file and move it to the System folder inside the mod.
     pattern = str(repository_path / '**' / '*.po')
@@ -513,9 +514,9 @@ def sync(args):
         print(f'{Fore.GREEN}{key}:{Fore.WHITE} {value}')
 
     files_processed = 0
-    language_files_processed = dict()
+    language_files_processed = {}
     sync_languages: set[str] = set(localization_data['sync']['languages'])
-    sync_excludes: list[dict[str, str]] = localization_data['sync'].get('exclude', list())
+    sync_excludes: list[dict[str, str]] = localization_data['sync'].get('exclude', [])
 
     for filename in glob.glob(pattern, recursive=True):
 
@@ -618,10 +619,10 @@ def remove_redundant_strings(args):
             if ext != target_language_extension:
                 continue
             # Find the corresponding source language file.
-            source_input_path = Path(target_input_path).with_suffix(f'.int')
+            source_input_path = Path(target_input_path).with_suffix('.int')
             if not source_input_path.is_file():
                 if args.verbose:
-                    logging.warn(f'Could not find source language file for {target_input_path}, skipping')
+                    logger.warning(f'Could not find source language file for {target_input_path}, skipping')
                 continue
 
             if args.verbose:

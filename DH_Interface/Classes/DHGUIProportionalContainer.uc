@@ -72,7 +72,7 @@ function bool InternalPreDraw(Canvas C)
         AlignStack[i].WinWidth = RelativeWidth(values.WinWidth * AW);
         AlignStack[i].WinHeight = RelativeHeight(values.WinHeight * AH);
     }
-    
+
     return false;
 }
 

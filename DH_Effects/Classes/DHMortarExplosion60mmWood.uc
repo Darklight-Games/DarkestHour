@@ -283,7 +283,7 @@ defaultproperties
     ColorScale(0)=(Color=(B=255,G=255,R=255,A=255))
     ColorScale(1)=(RelativeTime=1.000000,Color=(B=255,G=255,R=255,A=255))
     MaxParticles=5
-  
+
     StartLocationOffset=(Z=50.000000)
     SpinsPerSecondRange=(Y=(Min=1.000000,Max=3.000000))
     StartSpinRange=(X=(Min=-0.500000,Max=0.500000),Y=(Min=-0.500000,Max=0.500000),Z=(Min=-0.500000,Max=0.500000))
@@ -307,7 +307,7 @@ defaultproperties
     ColorScale(0)=(Color=(B=255,G=255,R=255,A=255))
     ColorScale(1)=(RelativeTime=1.000000,Color=(B=255,G=255,R=255,A=255))
     MaxParticles=3
-  
+
     StartLocationOffset=(Z=50.000000)
     SpinsPerSecondRange=(X=(Min=1.000000,Max=3.000000))
     StartSpinRange=(X=(Min=-0.100000,Max=0.100000),Y=(Min=-0.100000,Max=0.100000),Z=(Min=-0.100000,Max=0.100000))

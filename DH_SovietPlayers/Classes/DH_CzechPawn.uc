@@ -32,6 +32,6 @@ defaultproperties
     ShovelClass=Class'DHShovelItem_Russian'
     BinocsClass=Class'DHBinocularsItemSoviet'
     SmokeGrenadeClass=Class'DH_RDG1SmokeGrenadeWeapon'
-    
+
     HealthFigureClass=Class'DHHealthFigure_USSR'
 }

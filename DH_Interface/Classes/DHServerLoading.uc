@@ -126,7 +126,7 @@ simulated function SetImage()
         DrawOpImage(Operations[1]).Image = Texture'DH_GUI_Tex.DHSectionTopper';
         DrawOpImage(Operations[2]).Image = Texture'DH_GUI_Tex.DHSectionTopper';
     }
-    
+
     DrawOpImage(Operations[0]).Image = M;
 }
 

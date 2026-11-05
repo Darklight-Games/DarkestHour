@@ -57,15 +57,15 @@ defaultproperties
     TransRatio=0.07
     SteerSpeed=50.0
 
-	EngineRestartFailChance=0.5 //unreliability and extreme weight
+    EngineRestartFailChance=0.5 //unreliability and extreme weight
 
     // Damage
-	// pros: 6 men crew; relatively large space
-	// cons: petrol fuel; 128mm ammorack is more likely to explode
+    // pros: 6 men crew; relatively large space
+    // cons: petrol fuel; 128mm ammorack is more likely to explode
     Health=610
     HealthMax=610.0
-	EngineHealth=180  // serious problems with reliability due to extreme weight
-	AmmoIgnitionProbability=0.9  // 0.75 default
+    EngineHealth=180  // serious problems with reliability due to extreme weight
+    AmmoIgnitionProbability=0.9  // 0.75 default
     EngineToHullFireChance=0.1  //increased from 0.05 for all petrol engines
     DisintegrationHealth=-800.0 //petrol
     TurretDetonationThreshold=1300.0 // reduced from 1750 (this vehicle is turretless though? i am not sure how this works so put it here just in case)

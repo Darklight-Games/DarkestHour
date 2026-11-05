@@ -458,7 +458,7 @@ function bool PreLaunchTrace(Vector Start, Vector Direction)
             }
 
             Other = A;
-            
+
             break;
         }
     }

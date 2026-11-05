@@ -10,6 +10,6 @@ defaultproperties
     RolePawns(0)=(PawnClass=Class'DH_SovietAmoebaAutumnLatePawn',Weight=1.0)
     SleeveTexture=Texture'DHSovietCharactersTex.AmoebaSleeves'
     Headgear(0)=Class'DH_SovietSidecap'
-    
+
     PrimaryWeapons(0)=(Item=Class'DH_DP27LateWeapon')
 }

@@ -20,7 +20,7 @@ defaultproperties
     MaxHorizontalRecoilAngle=140
     RecoilCurve=(Points=((InVal=0.0,OutVal=0.43),(InVal=2.0,OutVal=0.7),(InVal=6.0,OutVal=1.2),(InVal=10.0,OutVal=1.0),(InVal=10000000000.0,OutVal=1.0)))
     RecoilFallOffFactor=18.0
-    
+
     FireIronLastAnim="iron_shoot_last"
     FireLastAnim="shoot_last"
 

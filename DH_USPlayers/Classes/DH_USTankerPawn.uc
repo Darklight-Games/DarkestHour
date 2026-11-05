@@ -11,6 +11,6 @@ defaultproperties
     Skins(1)=Texture'DHUSCharactersTex.US_743Armored_1'
 
 // Same texture declared twice as this role has only one texture variant, necessary due to AmericanPawn inheritance
-	BodySkins(0)=Texture'DHUSCharactersTex.US_743Armored_1'
+    BodySkins(0)=Texture'DHUSCharactersTex.US_743Armored_1'
     BodySkins(1)=Texture'DHUSCharactersTex.US_743Armored_1'
 }

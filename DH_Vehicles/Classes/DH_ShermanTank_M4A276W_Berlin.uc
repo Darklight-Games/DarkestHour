@@ -9,5 +9,5 @@ defaultproperties
 {
     CannonSkins(0)=Texture'DH_VehiclesUS_tex.Sherman76w_turret_ext_berlin'
     CannonSkins(1)=Texture'DH_VehiclesUS_tex.Sherman76w_turret_ext_berlin'
-	//problem: cannon mask uses default texture so has no stripes on it even though that special texture has stripes on the mask
+    //problem: cannon mask uses default texture so has no stripes on it even though that special texture has stripes on the mask
 }

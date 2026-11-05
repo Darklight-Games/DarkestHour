@@ -74,7 +74,7 @@ defaultproperties
 
     bIsArtillery=true
     CounterBatteryReport=CBR_Small
-    
+
     ResupplyInterval=12.0
 
     // No

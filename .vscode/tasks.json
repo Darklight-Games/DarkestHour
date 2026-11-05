@@ -7,13 +7,27 @@
             "label": "Build",
             "type": "shell",
             "command": "python tools/make/make.py -mod DarkestHourDev .",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
             "problemMatcher": [
                 {
                     "owner": "unrealscript",
                     "fileLocation": "absolute",
                     "source": "ucc",
                     "pattern": {
-                        "regexp": "(?!.*Class names shouldn't end in a digit)(^.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\s(Warning|Error),\\s(.+$)",
+                        // NOTE: If the file path starts with `Z:`, the driver letter is omitted to fix
+                        //       incorrect file paths on Linux when compiler runs through Wine.
+                        "regexp": "^(?!.*Class names shouldn't end in a digit)(?:Z:)?(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\s(Warning|Error),\\s(.+$)",
                         "file": 1,
                         "line": 2,
                         "severity": 3,
@@ -26,29 +40,67 @@
                     "source": "ucc",
                     "severity": "info",
                     "pattern": {
-                        "regexp": "^(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\sWarning,\\s(Class names shouldn't end in a digit)$",
+                        "regexp": "^(?:Z:)?(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\sWarning,\\s(Class names shouldn't end in a digit)$",
                         "file": 1,
                         "line": 2,
                         "message": 3
                     }
+                },
+                {
+                    // DEFAULT PROPERTIES ERRORS:
+                    //
+                    // %Package.ClassName%: Missing '=' in default properties assignment: %s
+                    // %Package.ClassName%: Unknown property in defaults: %s
+                    // %Package.ClassName%: Out of bound array default property (%i/%i)
+                    // %Package.ClassName%: Missing '\"' in string default properties : %s"
+                    // %Package.ClassName%: Delegate assignment failed: %s
+
+                    "owner": "unrealscript",
+                    "source": "ucc",
+                    "severity": "error",
+                    "pattern": {
+                        "regexp": "^(.+?\\..+):\\s((?:Unknown|Missing|Out of|Delegate).+)",
+                        "file": 1,
+                        "message": 2
+                    }
+                },
+                {
+                    // DEFAULT PROPERTIES ERRORS:
+                    //
+                    // redundant data: %s
+                    // BEGIN OBJECT: name %s redefined.
+                    // BEGIN OBJECT: Can't create subobject as Class %s hasn't been compiled yet.
+
+                    "owner": "unrealscript",
+                    "source": "ucc",
+                    "severity": "error",
+                    "pattern": {
+                        "regexp": "^((?:redundant data|BEGIN OBJECT):.+)",
+                        "message": 1
+                    }
                 }
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            ]
         },
         {
             "label": "Build with Parameters",
             "type": "shell",
             "command": "python tools/make/make.py ${input:buildArgs} -mod DarkestHourDev .",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
             "problemMatcher": [
                 {
                     "owner": "unrealscript",
                     "fileLocation": "absolute",
                     "source": "ucc",
                     "pattern": {
-                        "regexp": "^(?!.*Class names shouldn't end in a digit)(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\s(Warning|Error),\\s(.+)$",
+                        "regexp": "^(?!.*Class names shouldn't end in a digit)(?:Z:)?(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\s(Warning|Error),\\s(.+)$",
                         "file": 1,
                         "line": 2,
                         "severity": 3,
@@ -61,91 +113,196 @@
                     "source": "ucc",
                     "severity": "info",
                     "pattern": {
-                        "regexp": "^(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\sWarning,\\s(Class names shouldn't end in a digit)$",
+                        "regexp": "^(?:Z:)?(.+(?=\\(\\d+\\)\\s:))\\((\\d+)\\)\\s:\\sWarning,\\s(Class names shouldn't end in a digit)$",
                         "file": 1,
                         "line": 2,
                         "message": 3
                     }
+                },
+                {
+                    "owner": "unrealscript",
+                    "source": "ucc",
+                    "severity": "error",
+                    "pattern": {
+                        "regexp": "^(.+?\\..+):\\s((?:Unknown|Missing|Out of|Delegate).+)",
+                        "file": 1,
+                        "message": 2
+                    }
+                },
+                {
+                    "owner": "unrealscript",
+                    "source": "ucc",
+                    "severity": "error",
+                    "pattern": {
+                        "regexp": "^((?:redundant data|BEGIN OBJECT):.+)",
+                        "message": 1
+                    }
                 }
-            ],
-            "group": "build"
+            ]
         },
         {
             "label": "Run",
             "command": "./RedOrchestraLargeAddressAware.exe -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- -mod=DarkestHourDev" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Run with Parameters",
             "command": "./RedOrchestraLargeAddressAware.exe ${input:buildArgs} -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- ${input:buildArgs} -mod=DarkestHourDev" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- ${input:buildArgs} -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Run Map",
             "command": "./RedOrchestraLargeAddressAware.exe ${input:pickMap}?quickstart=true -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- ${input:pickMap}?quickstart=true -mod=DarkestHourDev" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- ${input:pickMap}?quickstart=true -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Run Default Map",
             "command": "./RedOrchestraLargeAddressAware.exe DH-Target_Range.rom?quickstart=true -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- DH-Target_Range.rom?quickstart=true -mod=DarkestHourDev" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- DH-Target_Range.rom?quickstart=true -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Connect",
             "command": "./RedOrchestraLargeAddressAware.exe 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev",
-            "linux": { "command": "steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
-            // TODO: Add support for Windows
-            "label": "Connect Multiple Clients",
+            "label": "Connect (2 Clients)",
             "command": "echo Not supported on Windows. Use dhdev_server_with_clients.bat script instead.; echo",
-            "linux": { "command": "steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev --multi" },
+            "linux": {
+                "command": "nohup sh -c 'steam -applaunch 1280 -- 127.0.0.1 ${input:runArgs} -mod=DarkestHourDev --multi &' >/dev/null 2>&1"
+            },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
             "label": "Run Server",
             "command": "./UCC.exe server ${input:pickMap}?MaxPlayers=64?Mutator=DH_AdminMenuMutator.DHAdminMenuMutator -log=DHServerLog.log -mod=DarkestHourDev -ini=DarkestHourDev.ini",
-            "linux": { "command": "wine UCC.exe server ${input:pickMap}?game=DH_Engine.DarkestHourGame?MaxPlayers=64?Mutator=DH_AdminMenuMutator.DHAdminMenuMutator -log=DHServerLog.log -mod=DarkestHourDev -ini=DarkestHourDev.ini"},
+            "linux": {
+                "command": "wine UCC.exe server ${input:pickMap}?game=DH_Engine.DarkestHourGame?MaxPlayers=64?Mutator=DH_AdminMenuMutator.DHAdminMenuMutator -log=DHServerLog.log -mod=DarkestHourDev -ini=DarkestHourDev.ini"
+            },
             "type": "shell",
             "group": "test",
+            "isBackground": true,
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "runOptions": {
+                "instancePolicy": "terminateOldest"
+            }
+        },
+        {
+            "label": "runtask:Run Server",
+            "hide": true,
+            "type": "shell",
+            "command": "echo ${input:runServer}",
+            "group": "test",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "silent",
+                "focus": false,
+            }
+        },
+        {
+            "label": "Kill Server",
+            "type": "shell",
+            "hide": true,
+            "command": "echo ${input:killServer}",
+            "problemMatcher": [],
+            "presentation": {
+                "close": true,
+            },
+            "runOptions": {
+                "instancePolicy": "terminateOldest"
+            }
+        },
+        {
+            "label": "Wait for Server",
+            "type": "shell",
+            "options": {
+                "env": {
+                    "QUERY_PORT": "7758",
+                    "QUERY_TIMEOUT": "120",
+                    "DEFAULT_WAIT": "15"
+                }
+            },
+            "command": "if command -v nc &>/dev/null; then echo \"Waiting for server on port ${QUERY_PORT}...\"; timeout ${QUERY_TIMEOUT} sh -c \"while ! nc -uvz 127.0.0.1 ${QUERY_PORT}; do sleep 1; done\" || echo \"Failed to find the server!\"; else echo \"Cannot check the server status: 'netcat' is not installed! Waiting ${DEFAULT_WAIT} seconds...\"; sleep ${DEFAULT_WAIT}; fi",
+            "windows": {
+                // TODO: add proper Windows implementation
+                "command": "timeout 15"
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": false,
+                "clear": true,
+                "showReuseMessage": false
+            },
+            "runOptions": {
+                "instancePolicy": "terminateOldest"
             }
         },
         {
@@ -155,13 +312,16 @@
             "linux": {
                 // NOTE: Requires launch options configured on Linux. See:
                 //       https://github.com/DarklightGames/DarkestHour/wiki/Running-SDK-on-Linux
-                "command": "steam -applaunch 1220 -- -mod=DarkestHourDev -nogamma",
+                "command": "nohup sh -c 'steam -applaunch 1220 -- -mod=DarkestHourDev -nogamma &' >/dev/null 2>&1"
             },
             "type": "shell",
             "group": "test",
             "problemMatcher": [],
             "options": {
                 "cwd": "${workspaceFolder}/System"
+            },
+            "presentation": {
+                "reveal": "silent"
             }
         },
         {
@@ -210,14 +370,53 @@
             "label": "Build and Run Server",
             "dependsOrder": "sequence",
             "dependsOn": [
+                "Kill Server",
                 "Build",
                 "Run Server"
             ],
             "group": "test",
             "problemMatcher": []
         },
+        {
+            "label": "Build and Run Multiplayer",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Kill Server",
+                "Build",
+                "runtask:Run Server",
+                "Wait for Server",
+                "Connect"
+            ],
+            "group": "test",
+            "problemMatcher": [],
+        },
+        {
+            "label": "Build and Run Multiplayer (2 Clients)",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Kill Server",
+                "Build",
+                "runtask:Run Server",
+                "Wait for Server",
+                "Connect (2 Clients)"
+            ],
+            "group": "test",
+            "problemMatcher": [],
+        },
     ],
     "inputs": [
+        {
+            "type": "command",
+            "id": "runServer",
+            "command": "workbench.action.tasks.runTask",
+            "args": "Run Server"
+        },
+        {
+            "type": "command",
+            "id": "killServer",
+            "command": "workbench.action.tasks.terminate",
+            "args": "Run Server"
+        },
         {
             "type": "promptString",
             "id": "runArgs",
@@ -241,16 +440,29 @@
             "type": "command",
             "command": "extension.commandvariable.pickStringRemember",
             "args": {
-                "description": "Run map",
+                "description": "Select the map picker option...",
                 "options": [
-                    ["Use last map", "${remember:lastMapName}"],
-                    ["Select map", "${pickFile:mapName}"]
+                    {
+                        "label": "Last Map",
+                        "description": "${remember:lastMapName}",
+                        "value": {
+                            // Need to do this to get the default value instead of "I don't remember"
+                            "mapName": {
+                                "text": "${remember:lastMapName}"
+                            }
+                        }
+                    },
+                    {
+                        "label": "Select Map",
+                        "value": "${pickFile:mapName}"
+                    },
                 ],
                 "rememberTransformed": true,
                 "key": "lastMapName",
+                "default": "DH-Target_Range.rom",
                 "pickFile": {
                     "mapName": {
-                        "description": "Select a map",
+                        "description": "Select the map to launch",
                         "include": "DarkestHourDev/Maps/**/*.rom",
                         "keyRemember": "mapName",
                         "display": "fileName",

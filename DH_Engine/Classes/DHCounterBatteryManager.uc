@@ -7,9 +7,9 @@ class DHCounterBatteryManager extends Actor
     dependson(DHVehicleWeapon)
     notplaceable;
 
-const SMALL_GUN_DEVIATION = 100;
-const MEDIUM_GUN_DEVIATION = 75;
-const LARGE_GUN_DEVIATION = 50;
+const SMALL_GUN_DEVIATION = 50;
+const MEDIUM_GUN_DEVIATION = 37;
+const LARGE_GUN_DEVIATION = 25;
 
 // The index of the team who will be notified of the artillery reports with markers.
 var int TeamIndex;
@@ -41,7 +41,7 @@ function OnArtilleryFired(Class<DHVehicleWeapon> VehicleWeaponClass, Vector Worl
     local DHPlayer PC;
     local Vector MarkerLocation;
     local float Deviation, Theta;
-    
+
     // Get a random range deviation using a uniform distribution so that it's spread evenly across the cicle.
     Deviation = GetDeviationMax(VehicleWeaponClass) * Sqrt(FRand());
     Deviation = class'DHUnits'.static.MetersToUnreal(Deviation);

@@ -1,15 +1,15 @@
-import os
-import glob
-import sys
 import argparse
-import subprocess
 import configparser
-import shutil
+import glob
 import json
+import os
+import shutil
+import subprocess
+import sys
 from binascii import crc32
 from json import JSONDecodeError
 from pathlib import Path
-from typing import Optional
+from typing import TextIO
 
 '''
 https://stackoverflow.com/questions/13921323/handling-duplicate-keys-with-configparser
@@ -18,7 +18,7 @@ https://stackoverflow.com/questions/13921323/handling-duplicate-keys-with-config
 
 class Manifest:
     def __init__(self):
-        self.package_crcs = dict()
+        self.package_crcs = {}
         self.default_ini_crc: int | None = None
 
     @staticmethod
@@ -28,7 +28,7 @@ class Manifest:
             try:
                 data = json.load(fp)
                 if isinstance(data, dict):
-                    manifest.package_crcs = data.get('package_crcs', dict())
+                    manifest.package_crcs = data.get('package_crcs', {})
                     manifest.default_ini_crc = data.get('default_ini_crc', None)
             except JSONDecodeError:
                 pass
@@ -152,7 +152,7 @@ class ConfigParserMultiOpt(configparser.RawConfigParser):
                 else:
                     mo = self._optcre.match(value)
                     if mo:
-                        optname, vi, optval = mo.group('option', 'vi', 'value')
+                        optname, _vi, optval = mo.group('option', 'vi', 'value')
                         if not optname:
                             e = self._handle_error(e, fpname, lineno, line)
                         optname = self.optionxform(optname.rstrip())
@@ -169,7 +169,7 @@ class ConfigParserMultiOpt(configparser.RawConfigParser):
                                 # If it does, convert it to a tuple if it isn't already one
                                 if not isinstance(cursect[optname], tuple):
                                     cursect[optname] = tuple(cursect[optname])
-                                cursect[optname] = cursect[optname] + tuple([optval])
+                                cursect[optname] = cursect[optname] + (optval,)
                             else:
                                 cursect[optname] = [optval]
                         else:
@@ -205,6 +205,39 @@ def print_header(s=''):
     print(''.join(header))
 
 
+def is_noise_output(line: str) -> bool:
+    stripped = line.strip()
+    if not stripped:
+        return True
+
+    prefixes = (
+        'Analyzing...',
+        'Parsing ',
+        'Compiling ',
+        'Importing Defaults for ',
+        'Weapon exported successfully:',
+        'Vehicle exported successfully:',
+        'Mutator exported successfully:',
+        'Game exported successfully:',
+        '... deferring'
+    )
+    return stripped.startswith(prefixes)
+
+
+def print_filtered_output(stream: TextIO, quiet: bool):
+    if stream is None:
+        return
+
+    for line in iter(stream.readline, ''):
+        if not line:
+            continue
+
+        if quiet and is_noise_output(line):
+            continue
+
+        print(line, end='', flush=True)
+
+
 def main():
     # parse options
     argparser = argparse.ArgumentParser()
@@ -216,13 +249,15 @@ def main():
     argparser.add_argument('-dumpint', required=False, action='store_true', help='dump localization files (.int)')
     argparser.add_argument('-debug', required=False, action='store_true', default=False,
                            help='compile debug packages (for use with UDebugger)')
-    
+    argparser.add_argument('-quiet', '-errors', '--quiet', '--errors', required=False, action='store_true',
+                           dest='errors_only', help='only print actual errors/warnings and suppress normal build chatter', default=True)
+
     args = argparser.parse_args()
 
     args.dir = os.path.abspath(args.dir)
 
     if not os.path.isdir(args.dir):
-        print('Error: "{}" is not a directory'.format(dir))
+        print(f'Error: "{dir}" is not a directory')
         sys.exit(1)
 
     # System directory.
@@ -265,7 +300,7 @@ def main():
         config.read(config_path, encoding='windows-1252')
         paths = config.get('Core.System', 'paths')
 
-    filename_paths = dict()
+    filename_paths = {}
     for path in paths:
         pathname = os.path.abspath(os.path.join(mod_dir, path))
         for path in glob.glob(pathname):
@@ -317,7 +352,7 @@ def main():
             try:
                 os.remove(package_path)
             except OSError:
-                print('Error: Failed to remove \'{}\' (is the client, server or editor running?)'.format(package))
+                print(f'Error: Failed to remove \'{package}\' (is the client, server or editor running?)')
                 sys.exit(1)
 
     config_path = os.path.join(mod_sys_dir, args.mod + '.ini')
@@ -353,7 +388,7 @@ def main():
     else:
         packages = default_packages
 
-    package_statuses = dict()
+    package_statuses = {}
     changed_packages = set()
 
     if args.clean and os.path.isfile(manifest_path):
@@ -375,7 +410,7 @@ def main():
 
     for package in packages:
         package_filename = f'{package}.u'
-        sys_package_path = os.path.join(sys_dir, package_filename)
+        _sys_package_path = os.path.join(sys_dir, package_filename)
 
         if is_compiled_package_in_root_system_folder(package_filename):
             continue
@@ -403,22 +438,22 @@ def main():
         if package_status != PACKAGE_OK:
             package_build_count += 1
 
-    up_to_date_packages = set([package for (package, status) in package_statuses.items() if status == PACKAGE_OK])
-    packages_to_compile = set([package for (package, status) in package_statuses.items() if status != PACKAGE_OK])
+    up_to_date_packages = {package for (package, status) in package_statuses.items() if status == PACKAGE_OK}
+    packages_to_compile = {package for (package, status) in package_statuses.items() if status != PACKAGE_OK}
     compiled_packages = set()
     did_build_succeed = True
 
     has_packages_to_compile = len(packages_to_compile) > 0
 
     if has_packages_to_compile:
-        print_header('Build started for mod: {}'.format(args.mod))
+        print_header(f'Build started for mod: {args.mod}')
 
         sorted_package_statuses = filter(
             lambda x: x + '.u' in package_statuses and package_statuses[x + '.u'] != PACKAGE_OK, packages)
         sorted_package_statuses = [(package, package_statuses[package + '.u']) for package in sorted_package_statuses]
 
         for package, status in sorted_package_statuses:
-            print('{}: {}'.format(package, PACKAGE_STATUS_STRINGS[status]))
+            print(f'{package}: {PACKAGE_STATUS_STRINGS[status]}')
 
         # Delete packages marked for compiling from both the root and mod's System folder.
         for package in packages_to_compile:
@@ -429,7 +464,7 @@ def main():
                         os.remove(package_path)
                     except OSError:
                         print(
-                            'Error: Failed to remove \'{}\' (is the client, server or editor running?)'.format(package))
+                            f'Error: Failed to remove \'{package}\' (is the client, server or editor running?)')
                         sys.exit(1)
 
         os.chdir(sys_dir)
@@ -440,21 +475,23 @@ def main():
             sys.exit(1)
 
         # Run ucc make.
+        env = os.environ.copy()
         ucc_args = ['ucc', 'Editor.MakeCommandlet', '-mod=' + args.mod]
         if args.debug:
             ucc_args.append('-debug')
         if sys.platform == 'linux':
-            # Run `ucc` through wine.
-            ucc_args.insert(0, 'wine')
+            # Run `ucc` through wine and disable all wine debug output.
+            ucc_args = ['wine'] + ucc_args
+            env['WINEDEBUG'] = '-all'
 
-        proc = subprocess.Popen(ucc_args)
-        proc.communicate()
+        proc = subprocess.Popen(ucc_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, env=env)
+        print_filtered_output(proc.stdout, args.errors_only)
+        proc.wait()
 
         # Store contents of ucc.log before it's overwritten.
         ucc_log_path = os.path.join(sys_dir, 'UCC.log')
-        ucc_log_file = open(ucc_log_path, 'rb')
-        ucc_log_contents = ucc_log_file.read()
-        ucc_log_file.close() 
+        with open(ucc_log_path, 'rb') as ucc_log_file:
+            ucc_log_contents = ucc_log_file.read()
 
         # Move compiled packages to mod directory.
         for root, dirs, filenames in os.walk(sys_dir):
@@ -472,9 +509,11 @@ def main():
                 ucc_args = ['ucc', 'Editor.DumpIntCommandlet', package, '-mod=' + args.mod]
                 if sys.platform == 'linux':
                     ucc_args.insert(0, 'wine')
-                processes.append(subprocess.Popen(ucc_args))
+                processes.append(subprocess.Popen(ucc_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1))
 
-            [p.wait() for p in processes]
+            for proc in processes:
+                print_filtered_output(proc.stdout, args.errors_only)
+                proc.wait()
 
             # Move localization files to mod directory.
             for root, dirs, filenames in os.walk(sys_dir):
@@ -484,10 +523,9 @@ def main():
                         os.remove(os.path.join(root, filename))
 
         # Rewrite ucc.log to be the contents of the original ucc make command (so that WOTgreal can parse it correctly).
-        ucc_log_file = open(ucc_log_path, 'wb')
-        ucc_log_file.truncate()
-        ucc_log_file.write(ucc_log_contents)
-        ucc_log_file.close()
+        with open(ucc_log_path, 'wb') as ucc_log_file:
+            ucc_log_file.truncate()
+            ucc_log_file.write(ucc_log_contents)
 
         did_build_succeed = len(compiled_packages) == len(packages_to_compile)
 
@@ -505,12 +543,15 @@ def main():
         manifest.default_ini_crc = default_ini_crc
         manifest.write(manifest_path)
 
-    print_header('Build: {} succeeded, {} failed, {} skipped, {} up-to-date'.format(
-        len(compiled_packages),
-        len(packages_to_compile) - len(compiled_packages),
-        0,  # TODO: these are ones that didn't even get evaluated
-        len(up_to_date_packages),
-    ))
+
+    # Add color to the lines. Green for success, red for failure.
+    if sys.platform != 'win32':
+        build_result = f'Build: {len(compiled_packages)} succeeded, {len(packages_to_compile) - len(compiled_packages)} failed, 0 skipped, {len(up_to_date_packages)} up-to-date'
+        color_code = '\033[92m' if did_build_succeed else '\033[91m'
+
+        print_header(f'{color_code}{build_result}\033[0m')
+    else:
+        print_header(f'Build: {len(compiled_packages)} succeeded, {len(packages_to_compile) - len(compiled_packages)} failed, 0 skipped, {len(up_to_date_packages)} up-to-date')
 
     # Exit with an error code if the build fails
     if not did_build_succeed:
@@ -518,7 +559,7 @@ def main():
 
 
 class BuildManifest:
-    def __init__(self, version: tuple[int, int, int], commit: str, branch: str = 'main', prerelease: Optional[str] = None):
+    def __init__(self, version: tuple[int, int, int], commit: str, branch: str = 'main', prerelease: str | None = None):
         self.version = version
         self.prerelease = prerelease
         self.branch = branch
@@ -551,7 +592,7 @@ class BuildManifest:
                '}\n'
 
     @staticmethod
-    def new_from_cli(version: tuple[int, int, int], prerelease: Optional[str] = None) -> 'BuildManifest':
+    def new_from_cli(version: tuple[int, int, int], prerelease: str | None = None) -> 'BuildManifest':
         import subprocess
         p = subprocess.Popen(['git', 'rev-parse', '--short', 'HEAD'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         commit, _ = p.communicate()

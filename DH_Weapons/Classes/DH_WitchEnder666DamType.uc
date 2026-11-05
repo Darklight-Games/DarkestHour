@@ -13,5 +13,4 @@ defaultproperties
     KDamageImpulse=2500.0
     GibModifier=4.0
     PawnDamageEmitter=Class'DHBloodPuffLargeCaliber'
-    
 }

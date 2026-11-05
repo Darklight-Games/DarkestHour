@@ -61,12 +61,12 @@ defaultproperties
     GearRatios(4)=0.65
 
     // Damage
-	// pros: 5 men crew; short 50mm ammunition is a bit less likely to explode (i assume)
-	// cons: petrol fuel
+    // pros: 5 men crew; short 50mm ammunition is a bit less likely to explode (i assume)
+    // cons: petrol fuel
     Health=560
     HealthMax=560.0
-	EngineHealth=300
-	AmmoIgnitionProbability=0.55  // 0.75 default
+    EngineHealth=300
+    AmmoIgnitionProbability=0.55  // 0.75 default
     EngineToHullFireChance=0.1  //increased from 0.05 for all petrol engines
     DisintegrationHealth=-800.0 //petrol
     TurretDetonationThreshold=2200.0 // increased from 1750

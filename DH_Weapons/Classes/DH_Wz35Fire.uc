@@ -7,7 +7,7 @@ class DH_Wz35Fire extends DHBoltFire;
 
 defaultproperties
 {
-    ProjectileClass=Class'DH_Wz35Bullet' 
+    ProjectileClass=Class'DH_Wz35Bullet'
     AmmoClass=Class'DH_Wz35Ammo'
     bUsePreLaunchTrace=false
     Spread=75.0

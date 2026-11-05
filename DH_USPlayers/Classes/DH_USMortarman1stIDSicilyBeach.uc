@@ -4,4 +4,3 @@
 //==============================================================================
 
 class DH_USMortarman1stIDSicilyBeach extends DHDeprecated;
-

@@ -52,11 +52,11 @@ defaultproperties
     GearRatios(4)=0.65
 
     // Damage
-	// pros: 5 men crew
-	// cons: petrol fuel
+    // pros: 5 men crew
+    // cons: petrol fuel
     Health=565
     HealthMax=565.0
-	EngineHealth=300
+    EngineHealth=300
     EngineToHullFireChance=0.1  //increased from 0.05 for all petrol engines
     DisintegrationHealth=-800.0 //petrol
     VehHitpoints(0)=(PointRadius=32.0,PointHeight=35.0,PointOffset=(X=-100.0,Y=0.0,Z=6.0)) // engine

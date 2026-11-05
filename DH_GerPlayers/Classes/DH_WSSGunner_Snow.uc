@@ -12,7 +12,7 @@ defaultproperties
     SleeveTexture=Texture'DHGermanCharactersTex.Dot44Sleeve' //to do
     Headgear(0)=Class'DH_SSHelmetSnow'
     HeadgearProbabilities(0)=1.0
-    
+
     PrimaryWeapons(2)=(Item=Class'DH_ZB30Weapon')
     SecondaryWeapons(2)=(Item=Class'DH_C96Weapon')
     HandType=Hand_Gloved

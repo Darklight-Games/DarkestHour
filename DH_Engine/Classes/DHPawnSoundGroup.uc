@@ -20,29 +20,29 @@ static function Sound GetSound(ESoundType SoundType, optional int SurfaceID)
     SurfaceID = SurfaceID % arraycount(default.LandSounds);
 
     if (SoundType == EST_Land)
-	{
+    {
         if (bIsCustomSurface)
         {
             return default.CustomLandSounds[SurfaceID];
         }
         else
         {
-		    return default.LandSounds[SurfaceID];
+            return default.LandSounds[SurfaceID];
         }
-	}
-	else if (SoundType == EST_Jump)
-	{
+    }
+    else if (SoundType == EST_Jump)
+    {
         if (bIsCustomSurface)
         {
             return default.CustomJumpSounds[SurfaceID];
         }
         else
         {
-	  	    return default.JumpSounds[SurfaceID];
+            return default.JumpSounds[SurfaceID];
         }
-	}
-	else
-	{
+    }
+    else
+    {
         return default.Sounds[int(SoundType)];
     }
 }

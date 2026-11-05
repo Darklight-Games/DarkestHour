@@ -13,7 +13,7 @@ defaultproperties
     DetachedLegClass=Class'SeveredLegGerGreat'
     Headgear(0)=Class'DH_HeerHelmetThree'
     Headgear(1)=Class'DH_HeerHelmetTwo'
-    
+
     PrimaryWeapons(2)=(Item=Class'DH_ZB30Weapon')
     SecondaryWeapons(2)=(Item=Class'DH_C96Weapon')
 }

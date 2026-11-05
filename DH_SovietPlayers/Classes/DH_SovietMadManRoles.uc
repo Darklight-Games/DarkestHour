@@ -17,11 +17,11 @@ defaultproperties
     GlovedHandTexture=Texture'DHUSCharactersTex.hands_USgloves'
     VoiceType="DH_SovietPlayers.DHPolishVoice"
     AltVoiceType="DH_SovietPlayers.DHPolishVoice"
-   
+
     MyName="Mad Man"
     AltName="Mad Man"
     Article="the "
     PluralName="Mad Men"
-    
+
     bCanPickupWeapons=false
 }

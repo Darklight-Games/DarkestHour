@@ -73,9 +73,9 @@ defaultproperties
     TransRatio=0.13
 
     // Damage
-	// pros: diesel fuel
-	// cons: cramped turret; fuel tanks in crew compartment
-	// 4 men crew
+    // pros: diesel fuel
+    // cons: cramped turret; fuel tanks in crew compartment
+    // 4 men crew
     Health=470
     HealthMax=470
     EngineHealth=300

@@ -65,12 +65,12 @@ defaultproperties
     GearRatios(0)=-0.35
 
     // Damage
-	// pros: Diesel fuel, 5 men crew
-	// cons: high caliber ammorack is more likely to detonate; fuel tanks in the crew compartment
+    // pros: Diesel fuel, 5 men crew
+    // cons: high caliber ammorack is more likely to detonate; fuel tanks in the crew compartment
     Health=525
     HealthMax=525.0
-	EngineHealth=300
-	AmmoIgnitionProbability=0.9  // 0.75 default
+    EngineHealth=300
+    AmmoIgnitionProbability=0.9  // 0.75 default
     PlayerFireDamagePer2Secs=12.0 // reduced from 15 for all diesels
     FireDetonationChance=0.045  //reduced from 0.07 for all diesels
     DisintegrationHealth=-1200.0 //diesel

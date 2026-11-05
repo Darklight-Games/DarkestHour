@@ -23,7 +23,7 @@ var array<SVehicleRecord> Records;
 static function string GetClassNameFromVehicleName(string VehicleName, optional string VariantName)
 {
     local int i, j, k;
-    
+
     for (i = 0; i < default.Records.Length; ++i)
     {
         for (j = 0; j < default.Records[i].VehicleNames.Length; ++j)

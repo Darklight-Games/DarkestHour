@@ -188,7 +188,7 @@ function InitDroppedPickupFor(Inventory Inv)
             BarrelBundle.OnConditionChanged = none;
             BarrelBundle.ForceUpdateBarrelStatuses();
         }
-        
+
         // If the weapon is empty and we have an empty static mesh variant, show that instead
         if (EmptyStaticMesh != none && W.AmmoAmount(0) == 0)
         {

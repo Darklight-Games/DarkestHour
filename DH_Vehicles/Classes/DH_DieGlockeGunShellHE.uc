@@ -9,7 +9,7 @@ defaultproperties
 {
     ShellImpactDamage=Class'DH_Flak38CannonShellDamageHE'
     MyDamageType=Class'DHShellHE20mmATDamageType'
-    
+
     //Penetration
     DHPenetrationTable(0)=20.7
     DHPenetrationTable(1)=20.5

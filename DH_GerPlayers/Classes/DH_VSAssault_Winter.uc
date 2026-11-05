@@ -21,6 +21,5 @@ defaultproperties
     GlovedHandTexture=Texture'Weapons1st_tex.hands_gergloves'
     BareHandTexture=Texture'Weapons1st_tex.hands_gergloves'
     CustomHandTexture=Texture'Weapons1st_tex.hands_gergloves'
-    
-    bCanBeSquadLeader=false
+
 }

@@ -12,7 +12,9 @@ simulated function OnConstructed()
 {
     super.OnConstructed();
 
-    if (Role == ROLE_Authority)
+    // Must ensure that SpawnPoint wasn't created already as this function can
+    // be called multiple times during the lifespan of this actor.
+    if (Role == ROLE_Authority && SpawnPoint == none)
     {
         SpawnPoint = Spawn(SpawnPointClass, self);
 

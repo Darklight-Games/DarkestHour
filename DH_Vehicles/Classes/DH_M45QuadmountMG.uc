@@ -37,7 +37,7 @@ function InitEffects()
 {
     local int i;
     local WeaponAmbientEmitter Emitter;
-    
+
     super.InitEffects();
 
     for (i = 0; i < Barrels.Length; ++i)

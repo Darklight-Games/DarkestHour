@@ -76,7 +76,7 @@ defaultproperties
     EmptyAmmoRoundBones(18)="BELT_EMPTY_19"
     EmptyAmmoRoundBones(19)="BELT_EMPTY_20"
     EmptyAmmoRoundBones(20)="BELT_EMPTY_21"
-    
+
     EmptyAmmoRoundRelativeRotation=(Roll=32768)
 
     BeltChannel=3
