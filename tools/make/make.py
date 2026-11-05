@@ -9,6 +9,7 @@ import sys
 from binascii import crc32
 from json import JSONDecodeError
 from pathlib import Path
+from typing import TextIO
 
 '''
 https://stackoverflow.com/questions/13921323/handling-duplicate-keys-with-configparser
@@ -204,6 +205,39 @@ def print_header(s=''):
     print(''.join(header))
 
 
+def is_noise_output(line: str) -> bool:
+    stripped = line.strip()
+    if not stripped:
+        return True
+
+    prefixes = (
+        'Analyzing...',
+        'Parsing ',
+        'Compiling ',
+        'Importing Defaults for ',
+        'Weapon exported successfully:',
+        'Vehicle exported successfully:',
+        'Mutator exported successfully:',
+        'Game exported successfully:',
+        '... deferring'
+    )
+    return stripped.startswith(prefixes)
+
+
+def print_filtered_output(stream: TextIO, quiet: bool):
+    if stream is None:
+        return
+
+    for line in iter(stream.readline, ''):
+        if not line:
+            continue
+
+        if quiet and is_noise_output(line):
+            continue
+
+        print(line, end='', flush=True)
+
+
 def main():
     # parse options
     argparser = argparse.ArgumentParser()
@@ -215,7 +249,9 @@ def main():
     argparser.add_argument('-dumpint', required=False, action='store_true', help='dump localization files (.int)')
     argparser.add_argument('-debug', required=False, action='store_true', default=False,
                            help='compile debug packages (for use with UDebugger)')
-    
+    argparser.add_argument('-quiet', '-errors', '--quiet', '--errors', required=False, action='store_true',
+                           dest='errors_only', help='only print actual errors/warnings and suppress normal build chatter', default=True)
+
     args = argparser.parse_args()
 
     args.dir = os.path.abspath(args.dir)
@@ -439,15 +475,18 @@ def main():
             sys.exit(1)
 
         # Run ucc make.
+        env = os.environ.copy()
         ucc_args = ['ucc', 'Editor.MakeCommandlet', '-mod=' + args.mod]
         if args.debug:
             ucc_args.append('-debug')
         if sys.platform == 'linux':
-            # Run `ucc` through wine.
-            ucc_args.insert(0, 'wine')
+            # Run `ucc` through wine and disable all wine debug output.
+            ucc_args = ['wine'] + ucc_args
+            env['WINEDEBUG'] = '-all'
 
-        proc = subprocess.Popen(ucc_args)
-        proc.communicate()
+        proc = subprocess.Popen(ucc_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, env=env)
+        print_filtered_output(proc.stdout, args.errors_only)
+        proc.wait()
 
         # Store contents of ucc.log before it's overwritten.
         ucc_log_path = os.path.join(sys_dir, 'UCC.log')
@@ -470,9 +509,11 @@ def main():
                 ucc_args = ['ucc', 'Editor.DumpIntCommandlet', package, '-mod=' + args.mod]
                 if sys.platform == 'linux':
                     ucc_args.insert(0, 'wine')
-                processes.append(subprocess.Popen(ucc_args))
+                processes.append(subprocess.Popen(ucc_args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1))
 
-            [p.wait() for p in processes]
+            for proc in processes:
+                print_filtered_output(proc.stdout, args.errors_only)
+                proc.wait()
 
             # Move localization files to mod directory.
             for root, dirs, filenames in os.walk(sys_dir):
