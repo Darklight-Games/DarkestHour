@@ -14,6 +14,6 @@ defaultproperties
     BashFinishEmptyAnim="bash_return_empty"
 
     TraceRange=175
-    DamageMin=100
+    DamageMin=230
     DamageMax=380
 }
