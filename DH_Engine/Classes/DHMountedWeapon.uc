@@ -581,6 +581,11 @@ final function CycleVariant()
 
     if (Proxy != none)
     {
+        if (Proxy.GetRuntimeData().bHasVariants == false)
+        {
+            return;
+        }
+        
         ++ConstructionVariantIndex;
 
         Proxy.SetVariantAndSkin(ConstructionVariantIndex, ConstructionSkinIndex);
