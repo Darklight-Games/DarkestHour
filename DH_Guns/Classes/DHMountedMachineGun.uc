@@ -6,6 +6,9 @@
 class DHMountedMachineGun extends DHMountedGun
     abstract;
 
+// There's nothing really to explode in mmgs.
+function VehicleExplosion(Vector MomentumNormal, float PercentMomentum);
+
 defaultproperties
 {
     // In order for the collision meshes to actually work, for some reason there needs to be karma shapes.
@@ -15,9 +18,4 @@ defaultproperties
         KMaxAngularSpeed=0.0
     End Object
     KParams=KParams0
-    // There's nothing really to explode or smoke in mmg destruction
-    DestructionEffectClass=none
-    DisintegrationEffectClass=none
-    ExplosionSounds(0)=none
-    ExplosionSounds(1)=none
 }   
