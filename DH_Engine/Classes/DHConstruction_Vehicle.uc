@@ -38,6 +38,9 @@ var array<SVehicleClass>    VehicleClasses;
 
 var DHVehicle               Vehicle;
 
+var localized string        VariantNoun;
+var localized string        SkinNoun;
+
 replication
 {
     reliable if (bNetInitial && Role == ROLE_Authority)
@@ -421,6 +424,8 @@ static function RuntimeData CreateProxyRuntimeData(DHConstructionProxy CP)
     // it will always return 0. This is a bug in UnrealScript.
     Indices = GetAvailableVariantIndices(Context);
     RuntimeData.bHasVariants = Indices.Length > 1;
+    RuntimeData.VariantNoun = default.VariantNoun;
+    RuntimeData.SkinNoun = default.SkinNoun;
 
     Indices = GetAvailableIndicesForVariant(Context, CP.VariantIndex);
     RuntimeData.bHasSkins = Indices.Length > 1;
@@ -457,4 +462,6 @@ defaultproperties
     // Because we need to keep the amount of non-ServerSideOnly packages down to an absolute minimum, we changed it so that
     // the client and server set the meshes independently.
     bNoRepMesh=true
+    VariantNoun="Variant"
+    SkinNoun="Skin"
 }

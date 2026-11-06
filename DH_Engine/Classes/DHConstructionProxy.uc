@@ -19,6 +19,16 @@ function DHConstruction.RuntimeData GetRuntimeData()
     return RuntimeData;
 }
 
+function string GetVariantNoun()
+{
+    return RuntimeData.VariantNoun;
+}
+
+function string GetSkinNoun()
+{
+    return RuntimeData.SkinNoun;
+}
+
 function DHActorProxy.Context GetContext()
 {
     local DHActorProxy.Context Context;

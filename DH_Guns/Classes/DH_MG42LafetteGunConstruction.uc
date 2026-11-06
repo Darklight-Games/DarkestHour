@@ -7,6 +7,7 @@ class DH_MG42LafetteGunConstruction extends DHMountedMachineGunConstruction;
 
 defaultproperties
 {
+    VariantNoun="Mount"
     VehicleClasses(0)=(VariantIndex=0,VehicleClass=Class'DH_MG42LafetteGun')
     VehicleClasses(1)=(VariantIndex=0,VehicleClass=Class'DH_MG42LafetteGun_Camo',SeasonFilters=((Operation=SFO_None,Seasons=(SEASON_Winter))))
     VehicleClasses(2)=(VariantIndex=0,VehicleClass=Class'DH_MG42LafetteGun_Desert',SeasonFilters=((Operation=SFO_Any,Seasons=(SEASON_Summer,SEASON_Autumn))))

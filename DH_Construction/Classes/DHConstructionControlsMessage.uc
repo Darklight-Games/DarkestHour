@@ -47,12 +47,39 @@ static function bool ShouldShowControl(int Index, optional int Switch, optional 
     }
 }
 
+static function string GetControlText(int Index, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+{
+    local string Text;
+    local DHConstructionProxy CP;
+
+    Text = super.GetControlText(Index, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
+
+    CP = DHConstructionProxy(OptionalObject);
+
+    if (CP != none)
+    {
+        switch (Index)
+        {
+            case 4:
+                Text = Repl(Text, "{variant}", CP.GetVariantNoun());
+                break;
+            case 5:
+                Text = Repl(Text, "{skin}", CP.GetSkinNoun());
+                break;
+            default:
+                break;
+        }
+    }
+
+    return Text;
+}
+
 defaultproperties
 {
     Controls(0)=(Keys=("FIRE"),Text="Confirm")
     Controls(1)=(Keys=("ROIRONSIGHTS"),Text="Cancel")
     Controls(2)=(Keys=("LEANLEFT","LEANRIGHT"),Text="Rotate")
     Controls(3)=(Keys=("ROMANUALRELOAD"),Text="Reset")
-    Controls(4)=(Keys=("SWITCHFIREMODE"),Text="Change Variant")
-    Controls(5)=(Keys=("ROMGOPERATION"),Text="Change Skin")
+    Controls(4)=(Keys=("SWITCHFIREMODE"),Text="Change {variant}")
+    Controls(5)=(Keys=("ROMGOPERATION"),Text="Change {skin}")
 }

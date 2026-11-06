@@ -40,6 +40,12 @@ static function bool ShouldShowControl(int Index, optional int Switch, optional 
     return true;
 }
 
+// Override in suubclasses
+static function string GetControlText(int Index, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+{
+    return default.Controls[Index].Text;
+}
+
 static function RenderComplexMessage(Canvas Canvas,
                               out float XL,
                               out float YL,
@@ -90,7 +96,7 @@ static function RenderComplexMessage(Canvas Canvas,
                                 Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White);
         }
 
-        S = Class'UString'.static.Join(" / ", Keys) @ default.Controls[i].Text;
+        S = Class'UString'.static.Join(" / ", Keys) @  GetControlText(i, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 
         Canvas.TextSize(S, XL, YL);
         Canvas.SetDrawColor(255, 255, 255);

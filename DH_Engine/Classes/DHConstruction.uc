@@ -210,6 +210,8 @@ var array<DHConstructionSocket>     SocketActors;
 struct RuntimeData
 {
     var string  MenuName;           // The name to display on the interface.
+    var string  VariantNoun;        // The noun to use when describing the variant (e.g., "mount", "model", etc.).
+    var string  SkinNoun;           // The noun to use when describing the skin (e.g., "skin", "camouflage", etc.).
     var bool    bHasVariants;       // If true, this construction has variants (e.g., an AT gun with a different mount)
     var bool    bHasSkins;          // If true, this construction has skins for the selected variant.
 };
