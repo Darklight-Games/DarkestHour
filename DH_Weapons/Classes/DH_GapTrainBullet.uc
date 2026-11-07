@@ -7,8 +7,8 @@ class DH_GapTrainBullet extends DHCannonShell;
 
 defaultproperties
 {
-    CollisionRadius=90.000000    
-    CollisionHeight=90.000000    
+    CollisionRadius=70.000000    
+    CollisionHeight=50.000000    
 
     bCollideActors=True
     bCollideWorld=True
