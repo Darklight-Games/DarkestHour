@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_UFOLaserGunBlue extends DHVehicleAutoCannon;
+class DH_UFOLaserGunBlue extends DH_UFOLaserGun;
 
 defaultproperties
 {

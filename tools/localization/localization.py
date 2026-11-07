@@ -244,7 +244,7 @@ def po_to_unt(po: POFile) -> str:
     for entry in po:
         try:
             add_entry(entry.msgid, entry.msgstr, sections)
-        except RuntimeError as e:
+        except (Exception, TypeError) as e:
             print(f'{Fore.YELLOW}Failed to add entry: {Fore.WHITE}{entry.msgid}: {e}')
 
     def write_key_value_pairs_recursive(key_value_pairs, parent_key=None):

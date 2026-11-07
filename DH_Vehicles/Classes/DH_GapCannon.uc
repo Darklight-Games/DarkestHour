@@ -5,9 +5,132 @@
 
 class DH_GapCannon extends DHVehicleAutoCannon;
 
+// --- Delayed Firing Variables ---
+var() float PrimaryFireDelay;      // Set to 1.0 in defaultproperties
+var   bool  bDelayActive;
+var   Controller DelayedController; // Stores who pulled the trigger
+
+var sound SavedCannonFireSound[3]; 
+
+// Intercept the projectile right as it spawns to strip its ability to hit the firing vehicle
+function Projectile SpawnProjectile(class<Projectile> ProjClass, bool bAltFire)
+{
+    local Projectile SpawnedProj;
+
+    // 1. Call the parent spawning logic to create the projectile actor
+    SpawnedProj = super.SpawnProjectile(ProjClass, bAltFire);
+
+    // 2. Configure UE2.5 native collision bypass parameters WITHOUT breaking AmbientSound
+    if (SpawnedProj != none && Base != none)
+    {
+        // Explicitly set the vehicle base (the UFO hull) as the instigator
+        SpawnedProj.Instigator = Instigator;
+        
+        // Tells the engine that the projectile is allowed to travel right through this instigator 
+        // without registering structural damage checks or collision blocks.
+        // This keeps the projectile independent so its AmbientSound moves along its flight vector.
+        if (Instigator != none)
+        {
+            SpawnedProj.Disable('Touch'); // Safety bypass for immediate frame 0 contact
+        }
+    }
+
+    return SpawnedProj;
+}
+
+// 1. Intercept the fire command: play visuals and audio instantly
+function Fire(Controller C)
+{
+    local sound SelectedSound;
+
+    if (bDelayActive)
+    {
+        return;
+    }
+
+    // A. Manually play the firing sound immediately
+    SelectedSound = CannonFireSound[Rand(3)];
+    if (SelectedSound != none)
+    {
+        PlayOwnedSound(SelectedSound, SLOT_None, 2.0, false, 5000.0, 1.0, true);
+    }
+
+    // B. Trigger visual and smoke effects instantly
+    if (Level.NetMode != NM_DedicatedServer)
+    {
+        FlashMuzzleFlash(false); 
+        
+        if (ShellCaseEmitter != none)
+        {
+            ShellCaseEmitter.Trigger(self, Instigator);
+        }
+
+        if (Instigator != none && Instigator.IsLocallyControlled())
+        {
+            PlayAnim('Shoot', 1.0, 0.1); 
+        }
+    }
+
+    // C. Lock the weapon state and prepare the 1-second delay
+    DelayedController = C;
+    bDelayActive = true;
+    SetTimer(PrimaryFireDelay, false);
+}
+
+// 2. Triggers 1 second later to launch the projectile from the MOVING vehicle
+simulated function Timer()
+{
+    local int i;
+    local coords BoneCoords;
+    local vector ForwardVector;
+    local float SafetyDistance;
+
+    bDelayActive = false;
+
+    // Recalculate spawn vector safely without breaking attachment constraints
+    if (Base != none && WeaponFireAttachmentBone != 'None')
+    {
+        BoneCoords = Base.GetBoneCoords(WeaponFireAttachmentBone);
+        
+        // 1. Determine the exact forward direction the barrel is facing right now
+        ForwardVector = Normal(Vector(WeaponFireRotation)); 
+        if (ForwardVector == vect(0,0,0)) 
+        {
+            ForwardVector = BoneCoords.XAxis; 
+        }
+
+        // 2. Set a safety offset in Unreal Units (e.g., 200 units pushing it forward)
+        // Adjust this number if you still experience self-hits during extreme turns
+        SafetyDistance = 200.000000; 
+
+        // 3. Update the spawn location forward, clearing the ship's internal cockpit collision box
+        WeaponFireLocation = BoneCoords.Origin + (ForwardVector * SafetyDistance);
+    }
+
+    // E. Backup and Clear the CannonFireSounds so the engine spawns the round silently
+    for (i = 0; i < 3; i++)
+    {
+        SavedCannonFireSound[i] = CannonFireSound[i];
+        CannonFireSound[i] = none;
+    }
+
+    // F. Execute the projectile spawn code at our safely pushed coordinate space
+    super.Fire(DelayedController); 
+
+    // G. Restore the sounds immediately for the next shot
+    for (i = 0; i < 3; i++)
+    {
+        CannonFireSound[i] = SavedCannonFireSound[i];
+    }
+
+    DelayedController = none;
+}
 
 defaultproperties
 {
+    PrimaryFireDelay=1.700000
+    bDelayActive=false
+    DelayedController=none
      AmbientGlow=224
      bUseDynamicLights=true
      bUseLightingFromBase=true
