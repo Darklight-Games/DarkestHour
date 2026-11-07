@@ -13,7 +13,7 @@ for /f "delims=" %%A in ('git status --porcelain 2^>nul') do set "GIT_CHANGES=1"
 if defined GIT_CHANGES (
     git status
     echo.
-    echo Git repository has unstaged changes. Deploy cancelled.
+    echo Git repository has uncommitted changes. Deploy cancelled.
     popd >nul
     exit /b 1
 )

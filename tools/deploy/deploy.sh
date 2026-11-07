@@ -10,7 +10,7 @@ pushd "$(dirname ${BASH_SOURCE:0})" > /dev/null
 # Make sure that the git repository is clean!
 if [[ $(git status --porcelain | wc -l) -ne 0 ]]; then
     git status
-    echo -e "${RED}Git repository has unstaged changes. Deploy cancelled.${NC}"
+    echo -e "${RED}Git repository has uncommitted changes. Deploy cancelled.${NC}"
     exit 1
 fi
 
