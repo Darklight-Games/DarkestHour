@@ -778,4 +778,5 @@ defaultproperties
     End Object
     CameraTransitionController=CameraTransitionController0
     RagdollOffset=(X=0.0,Y=0.0,Z=32.0)
+    DriverPositionIndexTarget=-1
 }
