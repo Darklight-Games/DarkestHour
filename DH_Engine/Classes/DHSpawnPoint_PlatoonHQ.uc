@@ -16,6 +16,12 @@ var int     CapturingEnemiesCount;
 var float   CaptureRadiusInMeters;
 var int     EnemiesNeededToDeconstruct;
 
+replication
+{
+    reliable if (Role == ROLE_Authority && bNetDirty)
+        bIsEstablished;
+}
+
 function PostBeginPlay()
 {
     super.PostBeginPlay();

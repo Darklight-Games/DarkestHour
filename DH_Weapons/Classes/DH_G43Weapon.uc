@@ -22,8 +22,8 @@ defaultproperties
     IronSightDisplayFOV=50.0
     DisplayFOV=85.0
 
-    MaxNumPrimaryMags=10
-    InitialNumPrimaryMags=10
+    MaxNumPrimaryMags=7
+    InitialNumPrimaryMags=7
 
     IronBringUp="iron_in_g43"
     IronPutDown="iron_out_g43"

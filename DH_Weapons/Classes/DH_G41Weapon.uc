@@ -26,8 +26,8 @@ defaultproperties
     DisplayFOV=82.0
     FreeAimRotationSpeed=7.5
 
-    MaxNumPrimaryMags=11
-    InitialNumPrimaryMags=11
+    MaxNumPrimaryMags=7
+    InitialNumPrimaryMags=7
 
     bShouldSkipBolt=true  //is semi-auto
     bHasBayonet=true
