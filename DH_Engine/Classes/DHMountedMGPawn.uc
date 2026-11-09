@@ -5,10 +5,6 @@
 // TODO
 //==============================================================================
 // [ ] Bullet snapping & whizzing should still work on exposed vehicle occupants.
-// [ ] There's no message when the gun barrel is blocked and the player tries
-//      to fire.
-// [ ] Switch off of the gunsight position when reloading.
-// [ ] muzzle flash not visible unless on ironsight/gunsight?
 //=============================================================================
 
 class DHMountedMGPawn extends DHVehicleMGPawn
@@ -766,7 +762,7 @@ defaultproperties
     UnbuttonedPositionIndex=0
     bDrawDriverInTP=true
     BinocsDriveRot=(Pitch=0,Yaw=16384,Roll=0)
-    bHideMuzzleFlashAboveSights=true
+    bHideMuzzleFlashAboveSights=false
     CameraBone="GUNNER_CAMERA"
     ReloadCameraBone="RELOAD_CAMERA"
     TargetStaticMesh=StaticMesh'DH_DebugTools.4MTARGET'
