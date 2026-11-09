@@ -2,6 +2,10 @@
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
+// [ ] leaving the gun during a reload results in weird shit; the whole reload
+//     needs to be cancelled and dequeued (reset state etc., probably the same
+//     for barrel reloads too.
+//==============================================================================
 
 class DHMountedMGPawn extends DHVehicleMGPawn
     abstract;
@@ -36,7 +40,7 @@ var DHCameraTransitionController CameraTransitionController;
 var int IronSightsPositionIndex;
 var int GunsightPositionIndex;
 
-//Ragdoll's offset change to fix its falling into terrain when driver dies
+// The offset for the driver's ragdoll when they are killed.
 var Vector RagdollOffset;
 
 var enum EPendingAction
@@ -55,6 +59,9 @@ struct PositionInfoExtra
     var name CameraBone;
 };
 var() array<PositionInfoExtra> DriverPositionsExtra;
+
+var Material BarrelHudTexture;
+var Material BarrelHudStatusTexture;
 
 simulated function bool ShouldViewSnapInPosition(byte PositionIndex)
 {
@@ -621,6 +628,20 @@ function bool CanFire()
     }
 
     return super.CanFire();
+}
+
+function int GetIntactBarrelCount()
+{
+    local DHMountedMG MG;
+
+    MG = DHMountedMG(Gun);
+
+    if (MG != none)
+    {
+        return MG.IntactBarrelCount;
+    }
+
+    return 0;
 }
 
 function OnFire()

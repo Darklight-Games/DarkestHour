@@ -50,4 +50,7 @@ defaultproperties
         FrameCount=6
     End Object
     AnimationDrivers(0)=(Parameters=AnimationDriverParameters0)
+
+    BarrelHudTexture=Texture'DH_MG34_tex.MG34_BARREL_ICON'
+    BarrelHudStatusTexture=Texture'DH_MG34_tex.MG34_BARREL_ICON_RELOAD'
 }

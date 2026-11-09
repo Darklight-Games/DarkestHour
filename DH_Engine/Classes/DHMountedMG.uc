@@ -76,6 +76,7 @@ var ROMGSteam                       BarrelSteamEmitter;
 var DHWeaponBarrelBundle.EBarrelCondition BarrelCondition;
 var float                           BarrelTemperature;
 var bool                            bBarrelIsSteamActive, bOldBarrelIsSteamActive;
+var int                             IntactBarrelCount;
 
 // Timing for force-aim during reload and barrel changes.
 var() bool                          bShouldZeroAimDuringReload;
@@ -91,7 +92,7 @@ replication
     reliable if (bNetDirty && Role == ROLE_Authority)
         RangeIndex, bIsWeaponMounted;
     unreliable if (bNetDirty && Role == ROLE_Authority)
-        BarrelCondition, BarrelTemperature, bBarrelIsSteamActive;
+        BarrelCondition, BarrelTemperature, bBarrelIsSteamActive, IntactBarrelCount;
 }
 
 simulated function Destroyed()
@@ -124,6 +125,7 @@ function SetBarrelBundle(DHWeaponBarrelBundle NewBundle)
         BarrelBundle.OnTemperatureChanged = OnBarrelTemperatureChanged;
         BarrelBundle.OnConditionChanged = OnBarrelConditionChanged;
         BarrelBundle.OnIsSteamActiveChanged = OnBarrelSteamIsActiveChanged;
+        BarrelBundle.OnIntactBarrelCountChanged = OnIntactBarrelCountChanged;
         BarrelBundle.ForceUpdateBarrelStatuses();
     }
 }
@@ -156,6 +158,11 @@ function OnBarrelSteamIsActiveChanged(int BarrelIndex, bool bIsSteamActive)
         // In a standalone game there is no PostNetReceive, so we must trigger the steam update immediately.
         SetBarrelSteamActive(BarrelIndex, bIsSteamActive);
     }
+}
+
+function OnIntactBarrelCountChanged(int NewIntactBarrelCount)
+{
+    IntactBarrelCount = NewIntactBarrelCount;
 }
 
 simulated function SetBarrelSteamActive(int BarrelIndex, bool bIsSteamActive)

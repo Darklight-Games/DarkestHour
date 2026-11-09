@@ -14,4 +14,6 @@ defaultproperties
     DriverPositionsExtra(0)=(CameraBone="GUNSIGHT_CAMERA_AC")
     DriverPositionsExtra(1)=(CameraBone="GUNSIGHT_CAMERA_AC")
     GunsightCameraBone="GUNSIGHT_CAMERA_AC"
+    BarrelHudTexture=Texture'DH_Fiat1435_tex.FIAT35_BARREL_ICON'
+    BarrelHudStatusTexture=Texture'DH_Fiat1435_tex.FIAT35_BARREL_ICON_RELOAD'
 }

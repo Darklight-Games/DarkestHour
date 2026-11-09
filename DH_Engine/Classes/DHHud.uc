@@ -64,6 +64,11 @@ var     SpriteWidget        EnemyPresentIcon;
 var     SpriteWidget        VehicleLockedIcon;                  // icon showing that an armored vehicle has been locked, stopping any new players entering tank crew positions
 var     SpriteWidget        VehicleAltAmmoReloadIcon;           // ammo reload icon for a coax MG, so reload progress can be shown on HUD like a tank cannon reload
 var     SpriteWidget        VehicleMGAmmoReloadIcon;            // ammo reload icon for a vehicle mounted MG position
+
+var(DHHud)  SpriteWidget    VehicleBarrelIcon;
+var(DHHud)  SpriteWidget    VehicleBarrelReloadIcon;
+var(DHHud)  NumericWidget   VehicleBarrelIconAmount;
+
 var     SpriteWidget        VehicleSmokeLauncherAmmoIcon;       // ammo icon for a vehicle mounted smoke launcher
 var     SpriteWidget        VehicleSmokeLauncherAmmoReloadIcon; // ammo reload icon for vehicle smoke launcher
 var     NumericWidget       VehicleSmokeLauncherAmmoAmount;     // ammo quantity display for vehicle smoke launcher
@@ -1874,7 +1879,7 @@ function DrawVehicleIcon(Canvas Canvas, ROVehicle Vehicle, optional ROVehicleWea
     // If player is in a hull-mounted MG, draw ammo
     ///////////////////////////////////////////////
 
-    else if (DHVehicleMGPawn(Passenger) != none && bShowWeaponInfo && ROVehicleWeapon(Passenger.Gun) != none)
+    else if (bShowWeaponInfo && DHVehicleMGPawn(Passenger) != none && ROVehicleWeapon(Passenger.Gun) != none)
     {
         // Draw MG ammo icon
         VehicleMGAmmoIcon.WidgetTexture = ROVehicleWeapon(Passenger.Gun).HudAltAmmoIcon;
@@ -1893,6 +1898,44 @@ function DrawVehicleIcon(Canvas Canvas, ROVehicle Vehicle, optional ROVehicleWea
         // Draw ammo count
         VehicleMGAmmoAmount.Value = ROVehicleWeapon(Passenger.Gun).GetNumMags();
         DrawNumericWidget(Canvas, VehicleMGAmmoAmount, Digits);
+
+        // Draw barrel status.
+        if (DHMountedMGPawn(Passenger) != none && DHMountedMGPawn(Passenger).BarrelHudTexture != none)
+        {
+            VehicleBarrelIcon.WidgetTexture = DHMountedMGPawn(Passenger).BarrelHudTexture;
+            DrawSpriteWidget(Canvas, VehicleBarrelIcon);
+
+            VehicleBarrelIcon.WidgetTexture = Texture'DH_InterfaceArt2_tex.icon_x';
+            DrawSpriteWidget(Canvas, VehicleBarrelIcon);
+
+            // Status (red when failed, yellow when damaged).
+            if (DHMountedMG(Passenger.Gun).BarrelCondition != BC_Good)
+            {
+                switch (DHMountedMG(Passenger.Gun).BarrelCondition)
+                {
+                    case BC_Good:
+                        VehicleBarrelReloadIcon.Tints[0] = class'UColor'.default.White;
+                        VehicleBarrelReloadIcon.Tints[1] = class'UColor'.default.White;
+                        break;
+                    case BC_Damaged:
+                        VehicleBarrelReloadIcon.Tints[0] = class'UColor'.default.Orange;
+                        VehicleBarrelReloadIcon.Tints[1] = class'UColor'.default.Orange;
+                        break;
+                    case BC_Failed:
+                        VehicleBarrelReloadIcon.Tints[0] = class'UColor'.default.Red;
+                        VehicleBarrelReloadIcon.Tints[1] = class'UColor'.default.Red;
+                        break;
+                }
+
+                VehicleBarrelReloadIcon.Tints[0].A = 80;
+                VehicleBarrelReloadIcon.Tints[1].A = 80;
+                VehicleBarrelReloadIcon.WidgetTexture = DHMountedMGPawn(Passenger).BarrelHudStatusTexture;
+                DrawSpriteWidget(Canvas, VehicleBarrelReloadIcon);
+            }
+
+            VehicleBarrelIconAmount.Value = Max(0, DHMountedMGPawn(Passenger).GetIntactBarrelCount() - 1);
+            DrawNumericWidget(Canvas, VehicleBarrelIconAmount, Digits);
+        }
     }
 
     ///////////////////////////////////////////////////////////
@@ -6162,6 +6205,9 @@ defaultproperties
     VehicleAltAmmoAmount=(PosX=0.35,OffsetX=125,OffsetY=-43) //0.3
     VehicleAltAmmoReloadIcon=(WidgetTexture=none,TextureCoords=(X1=0,Y1=0,X2=127,Y2=127),TextureScale=0.2,DrawPivot=DP_LowerLeft,PosX=0.35,PosY=1.0,OffsetX=0,OffsetY=-8,ScaleMode=SM_Up,Scale=1.0,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=0,B=0,A=80),Tints[1]=(R=255,G=0,B=0,A=80))
     VehicleMGAmmoReloadIcon=(WidgetTexture=none,TextureCoords=(X1=0,Y1=0,X2=127,Y2=127),TextureScale=0.3,DrawPivot=DP_LowerLeft,PosX=0.15,PosY=1.0,OffsetX=0,OffsetY=-8,ScaleMode=SM_Up,Scale=0.75,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=0,B=0,A=80),Tints[1]=(R=255,G=0,B=0,A=80))
+    VehicleBarrelIcon=      (WidgetTexture=none,TextureCoords=(X1=0,Y1=0,X2=127,Y2=127),TextureScale=0.2,DrawPivot=DP_LowerLeft,PosX=0.225,PosY=1.0,OffsetX=0,OffsetY=-24,ScaleMode=SM_Up,Scale=1.0,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=255,B=255,A=255),Tints[1]=(R=255,G=255,B=255,A=255))
+    VehicleBarrelReloadIcon=(WidgetTexture=none,TextureCoords=(X1=0,Y1=0,X2=127,Y2=127),TextureScale=0.2,DrawPivot=DP_LowerLeft,PosX=0.225,PosY=1.0,OffsetX=0,OffsetY=-24,ScaleMode=SM_Up,Scale=1.0,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=0,B=0,A=80),Tints[1]=(R=255,G=0,B=0,A=80))
+    VehicleBarrelIconAmount=(TextureScale=0.2,MinDigitCount=1,DrawPivot=DP_LowerLeft,PosX=0.22,PosY=1.0,OffsetX=140,OffsetY=-60,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=255,B=255,A=255),Tints[1]=(R=255,G=255,B=255,A=255))
     VehicleSmokeLauncherAmmoIcon=(WidgetTexture=none,TextureCoords=(X1=0,Y1=0,X2=127,Y2=127),TextureScale=0.19,DrawPivot=DP_LowerLeft,PosX=0.42,PosY=1.0,OffsetX=0,OffsetY=-9,ScaleMode=SM_Left,Scale=1.0,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=255,B=255,A=255),Tints[1]=(R=255,G=255,B=255,A=255))
     VehicleSmokeLauncherAmmoReloadIcon=(WidgetTexture=none,TextureCoords=(X1=0,Y1=0,X2=127,Y2=127),TextureScale=0.19,DrawPivot=DP_LowerLeft,PosX=0.42,PosY=1.0,OffsetX=0,OffsetY=-9,ScaleMode=SM_Up,Scale=1.0,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=0,B=0,A=80),Tints[1]=(R=255,G=0,B=0,A=80))
     VehicleSmokeLauncherAmmoAmount=(TextureScale=0.19,MinDigitCount=1,DrawPivot=DP_LowerLeft,PosX=0.42,PosY=1.0,OffsetX=125,OffsetY=-43,RenderStyle=STY_Alpha,Tints[0]=(R=255,G=255,B=255,A=255),Tints[1]=(R=255,G=255,B=255,A=255))
