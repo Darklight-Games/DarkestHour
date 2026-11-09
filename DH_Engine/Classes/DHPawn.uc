@@ -750,6 +750,8 @@ function DeactivateSpawnProtection()
 // Also to remove setting replicated variables, as is unnecessary as this event gets called on both server & net clients (by native code in HitPointTrace from bullet collision)
 event PawnWhizzed(Vector WhizLocation, int WhizType)
 {
+    local DHPlayer PC;
+
     // Whiz type 255 is special flag that we don't want to play whiz effects, & is only used by bullet's pre-launch trace to trigger this event so it can grab WhizLocation
     // WhizLocation has been calculated by native code & we save it as a non-replicated variable (instead of using mWhizSoundLocation, which would pointlessly replicate)
     if (WhizType == 255)
@@ -772,18 +774,64 @@ event PawnWhizzed(Vector WhizLocation, int WhizType)
         }
 
         // WhizType 3 means a friendly bullet at very close range, so don't suppress
-        if (WhizType != 3 && DHPlayer(Controller) != none)
+        if (WhizType != 3)
         {
-            DHPlayer(Controller).PlayerWhizzed(VSizeSquared(Location - WhizLocation));
+            PC = GetDHController();
+
+            if (PC != none)
+            {
+                PC.PlayerWhizzed(VSizeSquared(Location - WhizLocation));
+            }
         }
     }
+}
+
+// Returns either the direct controller of this pawn, or the controller of the vehicle that this pawn is driving (if any).
+simulated function DHPlayer GetDHController()
+{
+    if (DrivenVehicle != none)
+    {
+        return DHPlayer(DrivenVehicle.Controller);
+    }
+
+    return DHPlayer(Controller);
+}
+
+// Returns true when the pawn is driving a vehicle and in an exposed position.
+simulated function bool IsDrivingWhileExposed()
+{
+    local ROVehicle V;
+    local ROVehicleWeaponPawn VWP;
+
+    if (DrivenVehicle == none)
+    {
+        return false;
+    }
+
+    V = ROVehicle(DrivenVehicle);
+
+    if (V != none && V.DriverPositions[V.DriverPositionIndex].bExposed)
+    {
+        return true;
+    }
+
+    VWP = ROVehicleWeaponPawn(DrivenVehicle);
+
+    if (VWP != none && VWP.DriverPositions[VWP.DriverPositionIndex].bExposed)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 // New helper function, just to improve readability & to avoid repeating time check literal in other classes (e.g. bullet's pre-launch trace)
 // bSkipLocallyControlledCheck option is used by pre-launch trace, as server needs to do special whiz (type 4) to get WhizLocation to make net clients play whiz
 simulated function bool ShouldBeWhizzed(optional bool bSkipLocallyControlledCheck)
 {
-    return (Level.TimeSeconds - LastWhippedTime) > 0.15 && IsHumanControlled() && (bSkipLocallyControlledCheck || IsLocallyControlled());
+    return (Level.TimeSeconds - LastWhippedTime) > 0.15 && 
+        (IsHumanControlled() || IsDrivingWhileExposed()) &&
+        (bSkipLocallyControlledCheck || IsLocallyControlled());
 }
 
 // New server-to-client replicated function, used by DHProjectileFire's pre-launch trace system for the server to play whiz/snap effects on clients
