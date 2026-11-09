@@ -2,10 +2,6 @@
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
-// TODO
-//==============================================================================
-// [ ] Bullet snapping & whizzing should still work on exposed vehicle occupants.
-//=============================================================================
 
 class DHMountedMGPawn extends DHVehicleMGPawn
     abstract;
@@ -775,4 +771,7 @@ defaultproperties
     CameraTransitionController=CameraTransitionController0
     RagdollOffset=(X=0.0,Y=0.0,Z=32.0)
     DriverPositionIndexTarget=-1
+
+    bEjectDriver=true
+    EjectMomentum=30
 }
