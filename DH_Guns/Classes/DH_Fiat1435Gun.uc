@@ -13,7 +13,7 @@ defaultproperties
     Skins(0)=Texture'DH_Fiat1435_tex.FIAT1435_3RD'
     CannonSkins(0)=Texture'DH_Fiat1435_tex.FIAT1435_3RD'
     bCanBeRotated=true
-    CollisionRadius=36.0
+    CollisionRadius=40.0
     CollisionHeight=36.0
     PassengerWeapons(0)=(WeaponPawnClass=Class'DH_Fiat1435MGPawn',WeaponBone=turret_placement)
     RotationsPerSecond=0.125
