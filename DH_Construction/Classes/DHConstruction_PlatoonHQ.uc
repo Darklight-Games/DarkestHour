@@ -132,6 +132,7 @@ simulated function OnConstructed()
             Radio.SetBase(self);
             Radio.SetRelativeLocation(RadioLocationOffset);
             Radio.SetRelativeRotation(RadioRotationOffset);
+            Radio.Setup();
         }
         else
         {
