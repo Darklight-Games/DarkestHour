@@ -216,7 +216,7 @@ simulated function bool IsWeaponMounted()
         }
     }
 
-    return false;
+    return true;
 }
 
 // Modified so we always use this actor & rely on its modified TryToDrive() function to control entry to the gun
