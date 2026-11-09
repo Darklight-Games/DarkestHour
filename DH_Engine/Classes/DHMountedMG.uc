@@ -77,12 +77,14 @@ var DHWeaponBarrelBundle.EBarrelCondition BarrelCondition;
 var float                           BarrelTemperature;
 var bool                            bBarrelIsSteamActive, bOldBarrelIsSteamActive;
 
-// Timing for zero-aim during reload.
+// Timing for force-aim during reload and barrel changes.
 var() bool                          bShouldZeroAimDuringReload;
-var float                           ReloadZeroAimStartSeconds;
-var float                           ReloadZeroAimEndSeconds;
-var Quat                            ReloadStartLocalWeaponAim;
-var float                           ReloadZeroAimTweenSeconds;
+var() bool                          bShouldZeroAimDuringBarrelChange;
+var float                           ForceAimStartSeconds;
+var float                           ForceAimEndSeconds;
+var Quat                            ForceAimLocalWeaponAimStart;
+var float                           ForceAimTweenSeconds;
+var Rotator                         ForceAimLocalWeaponAimTarget;
 
 replication
 {
@@ -427,6 +429,23 @@ simulated state Busy
     }
 }
 
+// Call in tick functions to run the force-aiming functionality.
+simulated function TickForceAim()
+{
+    local float T;
+
+    if (WeaponPawn == none || WeaponPawn.LocalWeaponAim == ForceAimLocalWeaponAimTarget)
+    {
+        return;
+    }
+
+    // Interpolate the weapon aim to zero over a short duration.
+    // We do this so that the gun is in the right spot for the third person reload animations.
+    T = class'UInterp'.static.MapRangeClamped(Level.TimeSeconds, ForceAimStartSeconds, ForceAimEndSeconds, 0.0, 1.0);
+    T = class'UInterp'.static.Interpolate(T, 0.0, 1.0, INTERP_Deceleration);
+    WeaponPawn.LocalWeaponAim = QuatToRotator(QuatSlerp(ForceAimLocalWeaponAimStart, QuatFromRotator(ForceAimLocalWeaponAimTarget), T));
+}
+
 simulated state Reloading extends Busy
 {
     simulated function BeginState()
@@ -459,9 +478,7 @@ simulated state Reloading extends Busy
         // Initialize the variables for zero-aim tweening during reload.
         if (bShouldZeroAimDuringReload)
         {
-            ReloadZeroAimStartSeconds = Level.TimeSeconds;
-            ReloadZeroAimEndSeconds = Level.TimeSeconds + ReloadZeroAimTweenSeconds;
-            ReloadStartLocalWeaponAim = QuatFromRotator(MGPawn.LocalWeaponAim);
+            StartForceAim(rot(0, 0, 0));
         }
     }
 
@@ -485,23 +502,16 @@ simulated state Reloading extends Busy
 
     simulated function Tick(float DeltaTime)
     {
-        local float T;
-
         super.Tick(DeltaTime);
 
-        // TODO: we should also have this run while transitioning out of the gunsight.
-        if (bShouldZeroAimDuringReload && WeaponPawn != none && WeaponPawn.LocalWeaponAim != rot(0, 0, 0))
+        if (bShouldZeroAimDuringReload)
         {
-            // Interpolate the weapon aim to zero over a short duration.
-            // We do this so that the gun is in the right spot for the third person reload animations.
-            T = class'UInterp'.static.MapRangeClamped(Level.TimeSeconds, ReloadZeroAimStartSeconds, ReloadZeroAimEndSeconds, 0.0, 1.0);
-            T = class'UInterp'.static.Interpolate(T, 0.0, 1.0, INTERP_Deceleration);
-            WeaponPawn.LocalWeaponAim = QuatToRotator(QuatSlerp(ReloadStartLocalWeaponAim, QuatFromRotator(rot(0, 0, 0)), T));
+            TickForceAim();
         }
     }
 
 Begin:
-    Sleep(FMax(GetAnimDuration(ReloadSequence), ReloadZeroAimTweenSeconds));
+    Sleep(FMax(GetAnimDuration(ReloadSequence), ForceAimTweenSeconds));
     GotoState('');
 }
 
@@ -522,6 +532,23 @@ simulated function bool TryChangeBarrels()
     GotoState('ChangingBarrels');
 
     return true;
+}
+
+simulated function StartForceAim(Rotator AimTarget)
+{
+    local DHMountedMGPawn MGPawn;
+
+    MGPawn = DHMountedMGPawn(WeaponPawn);
+
+    if (MGPawn == none)
+    {
+        return;
+    }
+
+    ForceAimStartSeconds = Level.TimeSeconds;
+    ForceAimEndSeconds = Level.TimeSeconds + ForceAimTweenSeconds;
+    ForceAimLocalWeaponAimStart = QuatFromRotator(MGPawn.LocalWeaponAim);
+    ForceAimLocalWeaponAimTarget = AimTarget;
 }
 
 simulated state ChangingBarrels extends Busy
@@ -545,6 +572,11 @@ simulated state ChangingBarrels extends Busy
             // Zoom out.
             MGPawn.SetIsZoomed(false);
         }
+
+        if (bShouldZeroAimDuringBarrelChange)
+        {
+            StartForceAim(rot(0, 0, 0));
+        }
     }
 
     simulated function bool IsChangingBarrels()
@@ -561,6 +593,17 @@ simulated state ChangingBarrels extends Busy
         if (BarrelBundle != none)
         {
             BarrelBundle.PerformBarrelChange();
+        }
+    }
+
+    simulated function Tick(float DeltaTime)
+    {
+        super.Tick(DeltaTime);
+
+        // TODO: we could also have this run while transitioning out of the gunsight?
+        if (bShouldZeroAimDuringBarrelChange)
+        {
+            TickForceAim();
         }
     }
 
@@ -949,8 +992,9 @@ defaultproperties
 
     BeginningIdleAnim="IDLE"
 
-    ReloadZeroAimTweenSeconds=0.5
+    ForceAimTweenSeconds=0.5
     bShouldZeroAimDuringReload=true
+    bShouldZeroAimDuringBarrelChange=true
 
     bIsWeaponMounted=true
     bOldIsWeaponMounted=true
