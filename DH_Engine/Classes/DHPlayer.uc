@@ -858,6 +858,30 @@ exec function VehicleSay(string Msg)
     super.VehicleSay(Msg);
 }
 
+// Returns the DHPawn that belongs to this player.
+// This is either the directly possessed pawn, or if the player is in a vehicle, the DHPawn of the driver of that vehicle.
+simulated function DHPawn GetDHPawn()
+{
+    local DHPawn P;
+    local Vehicle V;
+
+    P = DHPawn(Pawn);
+
+    if (P != none)
+    {
+        return P;
+    }
+
+    V = Vehicle(Pawn);
+
+    if (V != none)
+    {
+        return DHPawn(V.Driver);
+    }
+
+    return none;
+}
+
 // Overridden to increase max name length from 20 to 32 chars
 // and refuse changes initiated by players with a name restriction.
 function ChangeName(coerce string S)
@@ -8228,6 +8252,24 @@ exec function MapBoundsOffset(int X, int Y)
     }
 
     Level.Game.Broadcast(self, "(X: " $ NorthEastBounds.X $ ", Y: " $ SouthWestBounds.Y $ ")");
+}
+
+// Debug function to attempt to whiz the player's view as though shot at by a bullet.
+exec function WhizMe(int WhizType)
+{
+    local DHPawn P;
+
+    if (!IsDebugModeAllowed())
+    {
+        return;
+    }
+
+    P = GetDHPawn();
+
+    if (P != none)
+    {
+        P.PawnWhizzed(P.Location, WhizType);
+    }
 }
 
 defaultproperties
