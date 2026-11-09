@@ -6,8 +6,6 @@
 class DHConstructionAttachment extends Actor
     abstract;
 
-var float ConstructionForeachRadius;
-
 function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
 {
     local DHConstruction C;
@@ -22,8 +20,6 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
 
 defaultproperties
 {
-    ConstructionForeachRadius=150
-
     DrawType=DT_StaticMesh
     RemoteRole=ROLE_DumbProxy
 
