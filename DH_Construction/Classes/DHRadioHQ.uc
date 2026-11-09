@@ -8,11 +8,16 @@ class DHRadioHQ extends DHRadio;
 simulated function ERadioUsageError GetRadioUsageError(Pawn User)
 {
     local DHSpawnPoint_PlatoonHQ SP;
+    local DHConstruction_PlatoonHQ HQ;
 
-    foreach RadiusActors(Class'DHSpawnPoint_PlatoonHQ', SP, 140, Location)
+    HQ = DHConstruction_PlatoonHQ(Base.Base);
+
+    if (HQ == none)
     {
-        break;
+        return ERROR_Fatal;
     }
+    
+    SP = HQ.SpawnPoint;
 
     if (SP == none)
     {

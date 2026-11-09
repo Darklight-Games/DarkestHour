@@ -12,10 +12,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
 {
     local DHConstruction C;
 
-    foreach RadiusActors(class'DHConstruction', C, ConstructionForeachRadius, Location)
-    {
-        break;
-    }
+    C = DHConstruction(Base);
 
     if (C != none)
     {
