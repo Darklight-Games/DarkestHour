@@ -1913,10 +1913,6 @@ function DrawVehicleIcon(Canvas Canvas, ROVehicle Vehicle, optional ROVehicleWea
             {
                 switch (DHMountedMG(Passenger.Gun).BarrelCondition)
                 {
-                    case BC_Good:
-                        VehicleBarrelReloadIcon.Tints[0] = class'UColor'.default.White;
-                        VehicleBarrelReloadIcon.Tints[1] = class'UColor'.default.White;
-                        break;
                     case BC_Damaged:
                         VehicleBarrelReloadIcon.Tints[0] = class'UColor'.default.Orange;
                         VehicleBarrelReloadIcon.Tints[1] = class'UColor'.default.Orange;

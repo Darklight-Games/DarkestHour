@@ -2,7 +2,7 @@
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
-// Air-cooled, belt-fed version of the Fiat 14/35 MG
+// Air-cooled, belt-fed version.
 //==============================================================================
 
 class DH_Fiat35MG extends DH_Fiat1435MG;

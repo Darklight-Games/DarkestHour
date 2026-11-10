@@ -2,7 +2,7 @@
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
-// Water-cooled, clip-fed version of the Fiat 14/35.
+// Water-cooled, clip-fed version.
 //==============================================================================
 
 class DH_Fiat14MG extends DH_Fiat1435MG;

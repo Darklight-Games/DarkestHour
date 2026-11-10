@@ -5,7 +5,6 @@
 // ART
 //==============================================================================
 // [~] collision shapes (low variant needs a different mesh entirely)
-// [ ] destroyed mesh for all variants
 ///==============================================================================
 // ANIMATIONS
 //==============================================================================
@@ -16,16 +15,12 @@
 // QUALITY OF LIFE IMPROVEMENTS
 //==============================================================================
 // [ ] add click sound when trying to fire while barrel is broken
-// [ ] display the number of barrels on the HUD (flash red when a barrel is
-//     broken and show button prompt to change it, if applicable)
 // [ ] shooting the sight should break it!
 // [ ] should be destroyable by enough explosives, not just direct hits
 //==============================================================================
 // BUGS
 //==============================================================================
-// [ ] some sort of issues with texturing of interior parts of cannons?
-//     (refactoring change regression?)
-// [ ] "exit position not found" error if you try to exit in some places
+// [ ] "exit position not found" error if you try to exit in some places. [add an absolute fallback to use so that you never actually get stuck]
 // [ ] pressing 1 resets the view; this should be disabled for mounted MGs (or
 //      maybe just *all* vehicles where you're changing to the same position?)
 // [ ] sometimes, when getting on the gun for the first time, the gun will
@@ -33,14 +28,9 @@
 // [ ] getting off while reloading then re-entering finishes the reload, with no
 //      anim, starts from the beginning (when the player leaves, reset any state
 //      that would cause this).
-// [ ] the gun probably shouldn't literally explode and smoke when it dies. just toppling over should be enough.
 //==============================================================================
 // BARREL BUGS
 //==============================================================================
-// [ ] smoking barrels stay in place after picking up the gun (probably orphaned
-//      actors)
-// [ ] picking up the gun and putting it down again resets the barrel conditions
-//      [no persistence!]
 // [ ] destoying a barrel also stops you from being able to rotate the gun with
 //      the mouse (this is due to AllowFire being used as a gate for "can the
 //      gun move")
