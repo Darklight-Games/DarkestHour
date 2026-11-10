@@ -76,7 +76,7 @@ var ROMGSteam                       BarrelSteamEmitter;
 var DHWeaponBarrelBundle.EBarrelCondition BarrelCondition;
 var float                           BarrelTemperature;
 var bool                            bBarrelIsSteamActive, bOldBarrelIsSteamActive;
-var int                             IntactBarrelCount;
+var int                             SpareBarrelCount;
 
 // Timing for force-aim during reload and barrel changes.
 var() bool                          bShouldZeroAimDuringReload;
@@ -92,7 +92,7 @@ replication
     reliable if (bNetDirty && Role == ROLE_Authority)
         RangeIndex, bIsWeaponMounted;
     unreliable if (bNetDirty && Role == ROLE_Authority)
-        BarrelCondition, BarrelTemperature, bBarrelIsSteamActive, IntactBarrelCount;
+        BarrelCondition, BarrelTemperature, bBarrelIsSteamActive, SpareBarrelCount;
 }
 
 simulated function Destroyed()
@@ -125,7 +125,7 @@ function SetBarrelBundle(DHWeaponBarrelBundle NewBundle)
         BarrelBundle.OnTemperatureChanged = OnBarrelTemperatureChanged;
         BarrelBundle.OnConditionChanged = OnBarrelConditionChanged;
         BarrelBundle.OnIsSteamActiveChanged = OnBarrelSteamIsActiveChanged;
-        BarrelBundle.OnIntactBarrelCountChanged = OnIntactBarrelCountChanged;
+        BarrelBundle.OnSpareBarrelCountChanged = OnSpareBarrelCountChanged;
         BarrelBundle.ForceUpdateBarrelStatuses();
     }
 }
@@ -160,9 +160,9 @@ function OnBarrelSteamIsActiveChanged(int BarrelIndex, bool bIsSteamActive)
     }
 }
 
-function OnIntactBarrelCountChanged(int NewIntactBarrelCount)
+function OnSpareBarrelCountChanged(int NewSpareBarrelCount)
 {
-    IntactBarrelCount = NewIntactBarrelCount;
+    SpareBarrelCount = NewSpareBarrelCount;
 }
 
 simulated function SetBarrelSteamActive(int BarrelIndex, bool bIsSteamActive)

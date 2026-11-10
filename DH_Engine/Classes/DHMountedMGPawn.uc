@@ -630,7 +630,7 @@ function bool CanFire()
     return super.CanFire();
 }
 
-function int GetIntactBarrelCount()
+function int GetSpareBarrelCount()
 {
     local DHMountedMG MG;
 
@@ -638,7 +638,7 @@ function int GetIntactBarrelCount()
 
     if (MG != none)
     {
-        return MG.IntactBarrelCount;
+        return MG.SpareBarrelCount;
     }
 
     return 0;

@@ -1929,7 +1929,7 @@ function DrawVehicleIcon(Canvas Canvas, ROVehicle Vehicle, optional ROVehicleWea
                 DrawSpriteWidget(Canvas, VehicleBarrelReloadIcon);
             }
 
-            VehicleBarrelIconAmount.Value = Max(0, DHMountedMGPawn(Passenger).GetIntactBarrelCount() - 1);
+            VehicleBarrelIconAmount.Value = DHMountedMGPawn(Passenger).GetSpareBarrelCount();
             DrawNumericWidget(Canvas, VehicleBarrelIconAmount, Digits);
         }
     }

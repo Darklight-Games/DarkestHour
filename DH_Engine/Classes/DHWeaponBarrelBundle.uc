@@ -38,7 +38,7 @@ var private array<int> ActiveBarrelIndices;
 delegate OnConditionChanged(int BarrelIndex, EBarrelCondition Condition);
 delegate OnIsSteamActiveChanged(int BarrelIndex, bool bIsSteamActive);
 delegate OnTemperatureChanged(int BarrelIndex, float Temperature);
-delegate OnIntactBarrelCountChanged(int BarrelCount);
+delegate OnSpareBarrelCountChanged(int BarrelCount);
 
 const BARREL_TIMER_RATE = 3.0;
 
@@ -122,7 +122,7 @@ simulated function Destroyed()
 
         OnConditionChanged(BarrelIndex, BC_Good);
         OnTemperatureChanged(BarrelIndex, 0);
-        OnIntactBarrelCountChanged(0);
+        OnSpareBarrelCountChanged(0);
     }
 
     super.Destroyed();
@@ -250,7 +250,7 @@ function ForceUpdateBarrelStatuses()
         ForceUpdateBarrelStatus(i);
     }
 
-    OnIntactBarrelCountChanged(GetIntactBarrelCount());
+    OnSpareBarrelCountChanged(GetSpareBarrelCount());
 }
 
 function ForceUpdateBarrelStatus(int ActiveBarrelIndex)
@@ -316,17 +316,17 @@ function UpdateBarrelStatus(int BarrelIndex)
             OnConditionChanged(ActiveBarrelIndex, Barrels[BarrelIndex].Condition);
         }
         
-        OnIntactBarrelCountChanged(GetIntactBarrelCount());
+        OnSpareBarrelCountChanged(GetSpareBarrelCount());
     }
 }
 
-function int GetIntactBarrelCount()
+function int GetSpareBarrelCount()
 {
     local int i, Count;
 
     for (i = 0; i < Barrels.Length; ++i)
     {
-        if (Barrels[i].Condition != BC_Failed)
+        if (Barrels[i].Condition != BC_Failed && !IsBarrelActive(i))
         {
             Count++;
         }
@@ -362,7 +362,7 @@ function int ReplaceInactiveFailedBarrels()
         }
     }
 
-    OnIntactBarrelCountChanged(GetIntactBarrelCount());
+    OnSpareBarrelCountChanged(GetSpareBarrelCount());
 
     return Count;
 }
