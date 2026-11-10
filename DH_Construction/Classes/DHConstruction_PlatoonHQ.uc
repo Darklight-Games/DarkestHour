@@ -21,6 +21,12 @@ var class<DHRadioHQAttachment> RadioClass;
 var Vector                     RadioLocationOffset;
 var Rotator                    RadioRotationOffset;
 
+replication
+{
+    reliable if (Role == ROLE_Authority && bNetDirty)
+        SpawnPoint;
+}
+
 simulated state Dummy
 {
     simulated function BeginState()
