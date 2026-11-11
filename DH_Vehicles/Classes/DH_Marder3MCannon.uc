@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_Marder3MCannon extends DHVehicleCannon;
@@ -11,10 +11,13 @@ defaultproperties
     FireEffectScale=1.75 // turret fire is larger & positioned in centre of open superstructure
     FireEffectOffset=(X=-15.0,Y=15.0,Z=0.0)
     Mesh=SkeletalMesh'DH_Marder3M_anm.marder_turret_ext'
-    Skins(0)=Texture'DH_VehiclesGE_tex7.ext_vehicles.marder_turret_ext'
+    Skins(0)=Texture'DH_VehiclesGE_tex7.marder_turret_ext'
+
+    //Give the cannon some basic armor (30mm) so that it can't simply be penetrated by anything (which was previously the case as no armor was modeled)
+    FrontArmorFactor=3.0
 
     // Cannon movement
-//  bHasTurret=false // not a proper turret, but has a floor that means commander moves with cannon, so this makes it work better (& no downside as there's no 'turret' collision)
+    //  bHasTurret=false // not a proper turret, but has a floor that means commander moves with cannon, so this makes it work better (& no downside as there's no 'turret' collision)
     ManualRotationsPerSecond=0.033
     bLimitYaw=true
     MaxPositiveYaw=3822
@@ -25,8 +28,8 @@ defaultproperties
     CustomPitchDownLimit=64625
 
     // Cannon ammo
-    PrimaryProjectileClass=class'DH_Vehicles.DH_Marder3MCannonShell'
-    SecondaryProjectileClass=class'DH_Vehicles.DH_Marder3MCannonShellHE'
+    PrimaryProjectileClass=Class'DH_Marder3MCannonShell'
+    SecondaryProjectileClass=Class'DH_Marder3MCannonShellHE'
 
     nProjectileDescriptions(0)="PzGr.39"
     nProjectileDescriptions(1)="Sprgr.Patr.34"
@@ -43,13 +46,13 @@ defaultproperties
     WeaponFireOffset=0.0
 
     // Sounds
-    CannonFireSound(0)=SoundGroup'Vehicle_Weapons.PanzerIV_F2.75mm_L_fire01'
-    CannonFireSound(1)=SoundGroup'Vehicle_Weapons.PanzerIV_F2.75mm_L_fire02'
-    CannonFireSound(2)=SoundGroup'Vehicle_Weapons.PanzerIV_F2.75mm_L_fire03'
-    ReloadStages(0)=(Sound=Sound'DH_Vehicle_Reloads.Reloads.reload_short_1') //~3.9 seconds reload
-    ReloadStages(1)=(Sound=Sound'DH_Vehicle_Reloads.Reloads.reload_01s_02')
-    ReloadStages(2)=(Sound=Sound'DH_Vehicle_Reloads.Reloads.reload_short_3')
-    ReloadStages(3)=(Sound=Sound'DH_Vehicle_Reloads.Reloads.reload_short_4')
+    CannonFireSound(0)=SoundGroup'Vehicle_Weapons.75mm_L_fire01'
+    CannonFireSound(1)=SoundGroup'Vehicle_Weapons.75mm_L_fire02'
+    CannonFireSound(2)=SoundGroup'Vehicle_Weapons.75mm_L_fire03'
+    ReloadStages(0)=(Sound=Sound'DH_Vehicle_Reloads.reload_short_1') //~3.9 seconds reload
+    ReloadStages(1)=(Sound=Sound'DH_Vehicle_Reloads.reload_01s_02')
+    ReloadStages(2)=(Sound=Sound'DH_Vehicle_Reloads.reload_short_3')
+    ReloadStages(3)=(Sound=Sound'DH_Vehicle_Reloads.reload_short_4')
 
     // Cannon range settings
     RangeSettings(1)=100

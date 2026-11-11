@@ -1,7 +1,7 @@
 
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHGUIProportionalContainer extends DHGUIPlainBackground;
@@ -72,7 +72,7 @@ function bool InternalPreDraw(Canvas C)
         AlignStack[i].WinWidth = RelativeWidth(values.WinWidth * AW);
         AlignStack[i].WinHeight = RelativeHeight(values.WinHeight * AH);
     }
-    
+
     return false;
 }
 

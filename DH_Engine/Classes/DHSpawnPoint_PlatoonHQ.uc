@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHSpawnPoint_PlatoonHQ extends DHSpawnPointBase
@@ -15,6 +15,12 @@ var int     EstablishmentCounterThreshold;
 var int     CapturingEnemiesCount;
 var float   CaptureRadiusInMeters;
 var int     EnemiesNeededToDeconstruct;
+
+replication
+{
+    reliable if (Role == ROLE_Authority && bNetDirty)
+        bIsEstablished;
+}
 
 function PostBeginPlay()
 {
@@ -65,6 +71,21 @@ simulated function int GetSpawnTimePenalty()
 
 function Timer()
 {
+    // Danger Zone
+    if (Construction != none && GRI.IsInDangerZone(Location.X, Location.Y, GetTeamIndex()))
+    {
+        BlockReason = SPBR_InDangerZone;
+
+        if (bIsEstablished)
+        {
+            // "A Command Post has been overrun by the enemy."
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHCommandPostMessage', 2,,, Construction.Class);
+        }
+
+        Construction.BreakMe();
+        return;
+    }
+
     super.Timer();
 
     // Establishment
@@ -80,8 +101,8 @@ function Timer()
         {
             bIsEstablished = true;
 
-            // "A Platoon HQ has been established."
-            class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), class'DHPlatoonHQMessage', 0);
+            // "A Command Post has been established."
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHCommandPostMessage', 0,,, Construction.Class);
         }
     }
 
@@ -99,12 +120,6 @@ function Timer()
         // If any enemies are capturing, spawning must be disabled.
         BlockReason = SPBR_EnemiesNearby;
     }
-
-    // Danger Zone
-    if (GRI.IsInDangerZone(Location.X, Location.Y, GetTeamIndex()))
-    {
-        BlockReason = SPBR_EnemiesNearby;
-    }
 }
 
 simulated function int GetDesirability()
@@ -119,7 +134,7 @@ defaultproperties
     SpawnRadius=60.0
     bCombatSpawn=true
     EstablishmentCounterThreshold=60
-    MapIconAttachmentClass=class'DH_Engine.DHMapIconAttachment_SpawnPoint_PlatoonHQ'
+    MapIconAttachmentClass=Class'DHMapIconAttachment_SpawnPoint_PlatoonHQ'
 
     bCanBeEncroachedUpon=true
     EncroachmentRadiusInMeters=50

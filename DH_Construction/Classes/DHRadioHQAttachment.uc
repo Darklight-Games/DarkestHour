@@ -1,48 +1,33 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHRadioHQAttachment extends Actor;
-
-var byte           TeamIndex;
-var StaticMesh     TeamStaticMeshes[2];
-
-var DHRadio        Radio;
-var class<DHRadio> RadioClass;
-var vector         RadioOffset;
+class DHRadioHQAttachment extends DHRadio;
 
 simulated function MakeVisible();
 simulated function MakeInvisible() { GotoState('Invisible'); }
 
-function Setup()
+simulated function ERadioUsageError GetRadioUsageError(Pawn User)
 {
-    if (Radio == none)
-    {
-        Radio = Spawn(RadioClass, self);
+    local DHSpawnPoint_PlatoonHQ SP;
+
+    foreach RadiusActors(Class'DHSpawnPoint_PlatoonHQ', SP, 115, Location)
+    {   
+        break;
     }
 
-    if (Radio != none)
+    if (SP == none)
     {
-        Radio.TeamIndex = TeamIndex;
-        Radio.SetBase(self);
-        Radio.SetRelativeLocation(RadioOffset);
-        Radio.bShouldShowOnSituationMap = false;
+        return ERROR_Fatal;
+    }
 
-        SetStaticMesh(TeamStaticMeshes[TeamIndex]);
+    if (!SP.bIsEstablished)
+    {   
+        return ERROR_Calibrating;
     }
-    else
-    {
-        Warn("Failed to spawn a radio!");
-    }
-}
 
-simulated function Destroyed()
-{
-    if (Radio != none)
-    {
-        Radio.Destroy();
-    }
+    return super.GetRadioUsageError(User);
 }
 
 simulated state Invisible
@@ -52,24 +37,14 @@ simulated state Invisible
 
     simulated function BeginState()
     {
-        if (Radio != none)
-        {
-            Radio.bHidden = true;
-            Radio.AmbientSound = none;
-        }
-
         bHidden = true;
+        AmbientSound = none;
     }
 
     simulated function EndState()
     {
-        if (Radio != none)
-        {
-            Radio.bHidden = false;
-            Radio.AmbientSound = Radio.default.AmbientSound;
-        }
-
         bHidden = false;
+        AmbientSound = default.AmbientSound;
     }
 }
 
@@ -95,9 +70,7 @@ defaultproperties
     bPathColliding=true
     bWorldGeometry=true
 
-    TeamStaticMeshes(0)=StaticMesh'DH_Construction_stc.Artillery.GER_Artillery_Radio'
-    TeamStaticMeshes(1)=StaticMesh'DH_Construction_stc.Artillery.USA_Artillery_Radio'
+    StaticMesh=StaticMesh'DH_Construction_stc.GER_Artillery_Radio'
 
-    RadioClass=Class'DH_Engine.DHRadio'
-    RadioOffset=(Y=-10,Z=64)
+    bShouldShowOnSituationMap=false
 }

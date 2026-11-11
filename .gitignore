@@ -27,6 +27,7 @@ Red Orchestra.app
 /Web/images
 /Web/ServerAdmin
 AHZ_ROVehicles/
+BDK/
 CC/
 Core/
 DarkestHourDev/*.txt
@@ -108,9 +109,13 @@ XWebAdmin/
 UserLogs
 *.rus
 .vs/
-.vscode/
+.vscode/*
+!.vscode/tasks.json
+!.vscode/extensions.json
+!.vscode/settings.json
 *.log
 umodel.cfg
+steam_appid.txt
 
 # IDA
 *.bak
@@ -118,3 +123,15 @@ umodel.cfg
 *.nam
 *.til
 *.i64
+.bdk
+DH_Engine/Classes/DHBuildManifest.uc
+__pycache__
+
+# Linux
+*.dxvk-cache
+System/GLCache/
+System/libSDL-1.2.so.0
+System/libsteam_api.so
+System/MSVCP71.DLL
+System/openal.so
+System/redorchestra-bin

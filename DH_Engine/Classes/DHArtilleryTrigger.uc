@@ -1,9 +1,11 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // This is now a deprecated pass-through class that spawns a DHRadio in it's
-// place to maintain backwards compatibility with old maps.
+// place to maintain backwards compatibility with old maps. This was done so
+// that we have a unified radio system for both player-carried radios and
+// map triggers.
 //==============================================================================
 
 class DHArtilleryTrigger extends ROArtilleryTrigger;
@@ -16,7 +18,7 @@ function PostBeginPlay()
 
     if (Role == ROLE_Authority)
     {
-        Radio = Spawn(class'DHRadio', Owner, Tag, Location, Rotation);
+        Radio = Spawn(Class'DHRadio', Owner, Tag, Location, Rotation);
 
         if (Radio == none)
         {

@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_Winchester1897Attachment extends DHWeaponAttachment;
@@ -24,12 +24,12 @@ simulated function AnimEnd(int Channel)
 defaultproperties
 {
     Mesh=SkeletalMesh'DH_Winchester1897_anm.Winchester1897_3rd'
-    Skins(0)=Texture'DH_Winchester1897_tex.Winchester.Winchester1897_3rdP'
-    MenuImage=Texture'DH_InterfaceArt_tex.weapon_icons.Winchester1897_icon'
+    Skins(0)=Texture'DH_Winchester1897_tex.Winchester1897_3rdP'
+    MenuImage=Texture'DH_InterfaceArt_tex.Winchester1897_icon'
 
-    mMuzFlashClass=class'ROEffects.MuzzleFlash3rdNagant'
+    mMuzFlashClass=Class'MuzzleFlash3rdNagant'
     MuzzleBoneName="muzzle"
-    ROShellCaseClass=class'DH_Weapons.DH_3rdShellEjectShotgun'
+    ROShellCaseClass=Class'DH_3rdShellEjectShotgun'
     ShellEjectionBoneName="ejector"
     bAnimNotifiedShellEjects=true // 'Pump_action' animation includes an anim notify to spawn an ejected shell that other players see
     bRapidFire=false
@@ -43,10 +43,10 @@ defaultproperties
     WA_ProneReload="idle_1897"
     WA_PostReload="reload_end_1897"
 
-    
+
 
     // bayonet
-    WA_BayonetIdle="idle_bayo_1897" 
+    WA_BayonetIdle="idle_bayo_1897"
     WA_BayonetIdleEmpty="idle_bayo_1897"
     WA_BayonetFire="idle_bayo_1897"
     WA_BayonetReload="idle_bayo_1897"
@@ -55,10 +55,10 @@ defaultproperties
     WA_BayonetProneReloadEmpty="idle_bayo_1897"
     WA_BayonetPreReload="idle_bayo_1897"
     WA_BayonetPostReload="reload_end_bayo_1897"
-    WA_BayonetAttach="stand_bayattach_1897" 
-    WA_BayonetDetach="stand_bayremove_1897" 
-    WA_BayonetAttachProne="prone_bayattach_1897" 
-    WA_BayonetDetachProne="prone_bayremove_1897"   
+    WA_BayonetAttach="stand_bayattach_1897"
+    WA_BayonetDetach="stand_bayremove_1897"
+    WA_BayonetAttachProne="prone_bayattach_1897"
+    WA_BayonetDetachProne="prone_bayremove_1897"
     WA_BayonetWorkBolt="pump_standing_bayo_1897"
 
     //pumping animations
@@ -70,7 +70,7 @@ defaultproperties
 
     //reload anims
     PA_PreReloadAnim="reload_start_1897"
-    PA_PronePreReloadAnim="prone_reload_start_1897" 
+    PA_PronePreReloadAnim="prone_reload_start_1897"
     PA_ReloadAnim="reload_single_1897"
     PA_ReloadEmptyAnim="reload_single_1897"
     PA_ProneReloadAnim="prone_reload_single_1897"
@@ -81,14 +81,14 @@ defaultproperties
     //bayonet attaching animations
     PA_BayonetAttachAnim="stand_bayattach_1897"
     PA_ProneBayonetAttachAnim="prone_Bayattach_1897"
-    PA_BayonetDetachAnim="stand_bayremove_1897" 
+    PA_BayonetDetachAnim="stand_bayremove_1897"
     PA_ProneBayonetDetachAnim="prone_bayremove_1897"
-    
+
     //bayonet stabbing animations
     PA_BayonetAltFire="stand_stab_kar"
     PA_CrouchBayonetAltFire="crouch_idlestrike_bayo"
     PA_ProneBayonetAltFire="prone_idlestrike_bayo"
-    
+
     //movement animations
     PA_MovementAnims(0)="stand_jogF_1897"
     PA_MovementAnims(1)="stand_jogB_1897"
@@ -140,8 +140,8 @@ defaultproperties
     PA_ProneIronAnims(7)="prone_slowcrawlB_1897"
 
     //sprint, anims match up, no change
-    PA_SprintAnims(0)="stand_sprintF_kar" 
-    PA_SprintAnims(1)="stand_sprintB_kar" 
+    PA_SprintAnims(0)="stand_sprintF_kar"
+    PA_SprintAnims(1)="stand_sprintB_kar"
     PA_SprintAnims(2)="stand_sprintL_kar"
     PA_SprintAnims(3)="stand_sprintR_kar"
     PA_SprintAnims(4)="stand_sprintFL_kar"
@@ -165,7 +165,7 @@ defaultproperties
     PA_TurnIronRightAnim="stand_turnRiron_kar"
     PA_TurnIronLeftAnim="stand_turnLiron_kar"
     PA_ProneTurnRightAnim="prone_turnR_1987"
-	PA_ProneTurnLeftAnim="prone_turnL_1987"
+    PA_ProneTurnLeftAnim="prone_turnL_1987"
 
     //intermission anims
     PA_StandToProneAnim="StandtoProne_1897"
@@ -185,7 +185,7 @@ defaultproperties
     PA_IdleIronRestAnim="stand_idleiron_1897"
     PA_IdleIronWeaponAnim="stand_idleiron_1897"
     PA_IdleCrouchIronWeaponAnim="crouch_idleiron_1897"
-    PA_ProneIdleRestAnim="prone_idle_1897"  
+    PA_ProneIdleRestAnim="prone_idle_1897"
     PA_IdleProneAnim="prone_idle_1897"
 
     //shooting

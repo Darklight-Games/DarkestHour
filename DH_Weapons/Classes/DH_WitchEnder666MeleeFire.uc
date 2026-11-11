@@ -1,19 +1,19 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_WitchEnder666MeleeFire extends DHMeleeFire;
 
 defaultproperties
 {
-    DamageType=class'DH_Weapons.DH_WitchEnder666BashDamType'
+    DamageType=Class'DH_WitchEnder666BashDamType'
     BashBackEmptyAnim="bash_pullback_empty"
     BashHoldEmptyAnim="bash_hold_empty"
     BashEmptyAnim="bash_attack_empty"
     BashFinishEmptyAnim="bash_return_empty"
 
     TraceRange=175
-    DamageMin=100
+    DamageMin=230
     DamageMax=380
 }

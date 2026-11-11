@@ -1,3 +1,14 @@
-*.int
 *.u
 *.log
+
+# Localization
+*.int
+*.rus
+*.det
+*.jap
+*.frt
+*.pol
+*.ukr
+*.est
+*.chi
+*.tur

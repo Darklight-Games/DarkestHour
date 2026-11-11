@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_HigginsBoatMGPawn extends DHVehicleMGPawn;
@@ -29,7 +29,7 @@ simulated state LeavingViewTransition
 
 defaultproperties
 {
-    GunClass=class'DH_Vehicles.DH_HigginsBoatMG'
+    GunClass=Class'DH_HigginsBoatMG'
     PositionInArray=0
     bMustBeTankCrew=false
     bKeepDriverAuxCollision=true // necessary for new player hit detection system, which basically uses normal hit detection as for an infantry player pawn
@@ -44,13 +44,13 @@ defaultproperties
     DriveRot=(Yaw=16384)
     DriveAnim="VHalftrack_com_idle"
     CameraBone="Camera_com"
-    HUDOverlayClass=class'DH_Vehicles.DH_30Cal_VehHUDOverlay'
+    HUDOverlayClass=Class'DH_30Cal_VehHUDOverlay'
     HUDOverlayFOV=60.0
     FirstPersonGunRefBone="1stperson_wep"
     FirstPersonGunShakeScale=0.75
     FirstPersonOffsetZScale=1.0
     bHideMuzzleFlashAboveSights=true
-    
+
     HudOverlayIdleAnim="bipod_idle"
     HudOverlayFireLoopAnim="deploy_shoot_loop"
     HudOverlayFireEndAnim="deploy_shoot_end"

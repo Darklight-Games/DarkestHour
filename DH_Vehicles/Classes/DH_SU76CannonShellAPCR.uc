@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_SU76CannonShellAPCR extends DHCannonShellAPDS;
@@ -15,13 +15,13 @@ defaultproperties
 
     //Damage
     ImpactDamage=375 // just a tungsten slug; no explosive filler
-    ShellImpactDamage=class'DH_Engine.DHShellSubCalibreImpactDamageType'
+    ShellImpactDamage=Class'DHShellSubCalibreImpactDamageType'
     HullFireChance=0.26
     EngineFireChance=0.55
 
     //Effects
-    CoronaClass=class'DH_Effects.DHShellTracer_Green'
-    ShellShatterEffectClass=class'DH_Effects.DHShellShatterEffect'
+    CoronaClass=Class'DHShellTracer_Green'
+    ShellShatterEffectClass=Class'DHShellShatterEffect'
 
     //Penetration
     DHPenetrationTable(0)=13.0  // 100m
@@ -37,9 +37,9 @@ defaultproperties
     DHPenetrationTable(10)=1.1  // 3000m
 
     //Gunsight adjustments
-	//adjusted from zis3 because for some weird reason SU76 gun shoots significantly below the cross on 0 meters setting
+    //adjusted from zis3 because for some weird reason SU76 gun shoots significantly below the cross on 0 meters setting
     bMechanicalAiming=true
-	MechanicalRanges(0)=(Range=0,RangeValue=100.0)
+    MechanicalRanges(0)=(Range=0,RangeValue=100.0)
     MechanicalRanges(1)=(Range=200,RangeValue=107.0)
     MechanicalRanges(2)=(Range=400,RangeValue=103.0)
     MechanicalRanges(3)=(Range=600,RangeValue=127.0)

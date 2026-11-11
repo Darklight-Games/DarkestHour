@@ -1,11 +1,12 @@
-import os
-import sys
-import subprocess
 import argparse
+import os
+import subprocess
+import sys
+from collections.abc import Iterable
 from enum import Enum
-from struct import unpack
-from typing import Iterable 
 from pathlib import Path
+from struct import unpack
+
 
 class Flag(Enum):
     AllowDownload: int = 1  # Allow downloading package.
@@ -36,21 +37,29 @@ flags:
 '''.format(packages='\n  '.join(Flag.names()))
 
 
-ro_path = Path(os.getenv('RODIR'))
-ucc_path = ro_path.joinpath('System\\UCC.exe')
+
+ro_path = Path(os.path.dirname(__file__)) / '..' / '..'
+ucc_path = ro_path / 'System' / 'UCC.exe'
+ucc_path = ucc_path.resolve()
+ucc_path = ucc_path.relative_to(Path.cwd())
 
 if not ucc_path.is_file():
     print('UCC.exe not found')
     sys.exit(1)
 
-
 def run_packageflag(input_package: str, output_package: str = '\"\"', flag_line: str = '', mod: str = '') -> subprocess.Popen:
-    cmd = 'ucc packageflag {input} {output}{flag_line}{mod}'.format(input=input_package,
-                                                                    output=output_package,
-                                                                    flag_line=f' {flag_line}' if flag_line else '',
-                                                                    mod=f' -mod={mod}' if mod else '')
-    # print('Running: ' + cmd)
-    return subprocess.Popen(cmd, executable=ucc_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    args = [str(ucc_path), 'packageflag', input_package, output_package]
+
+    if flag_line:
+        args.append(flag_line)
+    
+    if mod:
+        args.append(f'-mod={mod}')
+
+    if sys.platform == 'linux':
+        args  = ['wine', 'cmd', '/c'] + args
+        
+    return subprocess.Popen(args)
 
 
 def read_stdout(process: subprocess.Popen) -> Iterable[str]:
@@ -59,7 +68,7 @@ def read_stdout(process: subprocess.Popen) -> Iterable[str]:
     return out
 
 
-class Package():
+class Package:
     def __init__(self, path: str) -> None:
         self.path = Path(path)
         self.path_relative_to_mod = os.path.relpath(self.path, start=mod_path)
@@ -80,7 +89,8 @@ class Package():
             print(pretty_output)
 
     def apply_flags(self, flag_line: str, replace: bool = True) -> None:
-        if self.flags & (add_mask & ~remove_mask) == self.flags:
+        new_flags = (self.flags | add_mask) & ~remove_mask
+        if new_flags == self.flags:
             print(f'{self.path_relative_to_mod}: No changes')
             return
 
@@ -121,7 +131,7 @@ remove_mask = Flag.from_str(*args.remove_flags)
 found_paths = [*Path(mod_path).rglob(pattern)]
 packages: Iterable[Package] = []
 
-print('\nFound {n} packages:'.format(n=len(found_paths)))
+print(f'\nFound {len(found_paths)} packages:')
 
 for path in found_paths:
     package = Package(path)
@@ -138,10 +148,10 @@ sys.stdout.write('\nDo you want to apply these flags to found packages? [y/n] ')
 
 choice = input().lower()
 
-if not choice == 'y':
+if choice != 'y':
     sys.exit(0)
 
-print('')
+print()
 
 
 # APPLY FLAGS

@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHContextMenu_SquadMembers extends DHContextMenu;
@@ -58,15 +58,19 @@ protected function AssembleMenu(GUIComponent Component)
             {
                 AddEntry(2);     // Kick player
                 AddEntry(3);     // Ban player
-                AddEntry(0);     // --------
-                AddEntry(4);     // Promote to SL
-                AddEntry(0);     // --------
+
+                if (!SelectedPRI.bRestrictLeaderPositions)
+                {
+                    AddEntry(0);     // --------
+                    AddEntry(4);     // Promote to SL
+                    AddEntry(0);     // --------
+                }
 
                 if (SelectedPRI.bIsSquadAssistant)
                 {
                     AddEntry(6); // Rescind assistant
                 }
-                else
+                else if (!SelectedPRI.bRestrictLeaderPositions)
                 {
                     AddEntry(5); // Assign assistant
                 }
@@ -82,7 +86,8 @@ protected function AssembleMenu(GUIComponent Component)
         }
         else if (SelectedPRI.IsSquadLeader() &&
                  PRI.SquadIndex == SquadIndex &&
-                 !SRI.HasAssistant(PC.GetTeamNum(), PRI.SquadIndex))
+                 !SRI.HasAssistant(PC.GetTeamNum(), PRI.SquadIndex) &&
+                 !PRI.bRestrictLeaderPositions)
         {
             AddEntry(7);         // Volunteer to assist
         }
@@ -170,7 +175,7 @@ protected function ProcessEntry(int EntryIndex, GUIComponent Component)
     local DHGUISquadComponent SquadComponent;
     local DHPlayerReplicationInfo PRI, SelectedPRI;
     local DHPlayer PC;
-    local vector ParadropLocation;
+    local Vector ParadropLocation;
 
     PC = GetComponentController(Component);
     PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);

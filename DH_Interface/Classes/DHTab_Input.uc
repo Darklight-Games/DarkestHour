@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHTab_Input extends ROTab_Input;
@@ -9,6 +9,7 @@ var automated DHmoNumericEdit           nu_MousePollRate;
 var automated moFloatEdit               fl_IronSightFactor;
 var automated moFloatEdit               fl_BipodFactor;
 var automated moFloatEdit               fl_ScopedFactor;
+var automated moCheckbox                ch_KeepMovingWhileTyping;
 
 event InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
@@ -18,6 +19,7 @@ event InitComponent(GUIController MyController, GUIComponent MyOwner)
     i_BG3.ManageComponent(fl_IronSightFactor);
     i_BG3.ManageComponent(fl_BipodFactor);
     i_BG3.ManageComponent(fl_ScopedFactor);
+    i_BG1.ManageComponent(ch_KeepMovingWhileTyping);
 }
 
 function InternalOnLoadINI(GUIComponent Sender, string s)
@@ -44,7 +46,17 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
         case fl_ScopedFactor:
             fl_ScopedFactor.SetComponentValue(float(PC.ConsoleCommand("get DH_Engine.DHPlayer DHScopeTurnSpeedFactor")),true);
             break;
-      
+        case ch_KeepMovingWhileTyping:
+            if (DHPlayer(PC) != none)
+            {
+                ch_KeepMovingWhileTyping.Checked(DHPlayer(PC).bKeepMovingWhileTyping);
+            }
+            else
+            {
+                ch_KeepMovingWhileTyping.Checked(Class'DHPlayer'.default.bKeepMovingWhileTyping);
+            }
+            break;
+
         default:
             super.InternalOnLoadINI(Sender, s);
     }
@@ -52,10 +64,11 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
 
 function ResetClicked()
 {
-    class'PlayerInput'.static.ResetConfig("MouseSamplingTime");
-    class'DHPlayer'.static.ResetConfig("DHISTurnSpeedFactor");
-    class'DHPlayer'.static.ResetConfig("DHBipodTurnSpeedFactor");
-    class'DHPlayer'.static.ResetConfig("DHScopeTurnSpeedFactor");
+    Class'PlayerInput'.static.ResetConfig("MouseSamplingTime");
+    Class'DHPlayer'.static.ResetConfig("DHISTurnSpeedFactor");
+    Class'DHPlayer'.static.ResetConfig("DHBipodTurnSpeedFactor");
+    Class'DHPlayer'.static.ResetConfig("DHScopeTurnSpeedFactor");
+    Class'DHPlayer'.static.ResetConfig("bKeepMovingWhileTyping");
 
     super.ResetClicked();
 }
@@ -104,13 +117,24 @@ function OnInputChange(GUIComponent Sender)
             DHPlayer(PC).SaveConfig();
         }
     }
+    else if (Sender == ch_KeepMovingWhileTyping)
+    {
+        PC.ConsoleCommand("set DH_Engine.DHPlayer KeepMovingWhileTyping" @ ch_KeepMovingWhileTyping.IsChecked());
+
+        if (DHPlayer(PC) != none)
+        {
+            DHPlayer(PC).bKeepMovingWhileTyping = ch_KeepMovingWhileTyping.IsChecked();
+            DHPlayer(PC).SaveConfig();
+        }
+    }
 }
 
 // Override to fix Epic Games setting save bug
 function SaveSettings()
 {
     local PlayerController PC;
-    local bool bSave, bInputSave, bIForce;
+    local DHPlayer DHP;
+    local bool bSave, bPlayerSave, bInputSave, bIForce, bKeepMovingWhileTyping;
 
     super(Settings_Tabs).SaveSettings();
 
@@ -120,6 +144,27 @@ function SaveSettings()
     {
         Warn("No player controller detected! - Exiting -");
         return;
+    }
+
+    bKeepMovingWhileTyping = ch_KeepMovingWhileTyping.IsChecked();
+
+    DHP = DHPlayer(PC);
+
+    if (DHP != none)
+    {
+        if (DHP.bKeepMovingWhileTyping != bKeepMovingWhileTyping)
+        {
+            DHP.bKeepMovingWhileTyping = bKeepMovingWhileTyping;
+            bSave = true;
+        }
+    }
+    else
+    {
+        if (Class'DHPlayer'.default.bKeepMovingWhileTyping != bKeepMovingWhileTyping)
+        {
+            Class'DHPlayer'.default.bKeepMovingWhileTyping = bKeepMovingWhileTyping;
+            bPlayerSave = true;
+        }
     }
 
     if (bool(PC.ConsoleCommand("get ini:Engine.Engine.ViewportManager UseJoystick")) != bJoystick)
@@ -171,51 +216,56 @@ function SaveSettings()
         Controller.SaveConfig();
     }
 
-    if (class'PlayerInput'.default.DoubleClickTime != FMax(0.0, fDodge))
+    if (Class'PlayerInput'.default.DoubleClickTime != FMax(0.0, fDodge))
     {
-        class'PlayerInput'.default.DoubleClickTime = fDodge;
+        Class'PlayerInput'.default.DoubleClickTime = fDodge;
         PC.ConsoleCommand("set Engine.PlayerInput bEnableDodging" @ string(fDodge));
         bInputSave = true;
     }
 
-    if (class'PlayerInput'.default.MouseAccelThreshold != FMax(0.0, fAccel))
+    if (Class'PlayerInput'.default.MouseAccelThreshold != FMax(0.0, fAccel))
     {
         PC.SetMouseAccel(fAccel);
         PC.ConsoleCommand("set Engine.PlayerInput MouseAccelThreshold" @ fAccel);
         bInputSave = true;
     }
 
-    if (class'PlayerInput'.default.MouseSmoothingStrength != FMax(0.0, fSmoothing))
+    if (Class'PlayerInput'.default.MouseSmoothingStrength != FMax(0.0, fSmoothing))
     {
         PC.ConsoleCommand("SetSmoothingStrength"@fSmoothing);
         PC.ConsoleCommand("set Engine.PlayerInput MouseSmoothingStrength" @ fSmoothing);
         bInputSave = true;
     }
 
-    if (class'PlayerInput'.default.bInvertMouse != bInvert)
+    if (Class'PlayerInput'.default.bInvertMouse != bInvert)
     {
         PC.InvertMouse(string(bInvert));
         PC.ConsoleCommand("set Engine.PlayerInput bInvertMouse" @ string(bInvert));
         bInputSave = true;
     }
 
-    if (class'PlayerInput'.default.MouseSmoothingMode != byte(bSmoothing))
+    if (Class'PlayerInput'.default.MouseSmoothingMode != byte(bSmoothing))
     {
         PC.SetMouseSmoothing(int(bSmoothing));
         PC.ConsoleCommand("set Engine.PlayerInput MouseSmoothingMode" @ int(bSmoothing));
         bInputSave = true;
     }
 
-    if (class'PlayerInput'.default.MouseSensitivity != FMax(0.0, fSens))
+    if (Class'PlayerInput'.default.MouseSensitivity != FMax(0.0, fSens))
     {
         PC.SetSensitivity(fSens);
         PC.ConsoleCommand("set Engine.PlayerInput MouseSensitivity" @ fSens);
         bInputSave = true;
     }
 
+    if (bPlayerSave)
+    {
+        class'Player'.static.StaticSaveConfig();
+    }
+
     if (bInputSave)
     {
-        class'PlayerInput'.static.StaticSaveConfig();
+        Class'PlayerInput'.static.StaticSaveConfig();
     }
 
     if (bIForce)
@@ -231,6 +281,8 @@ function SaveSettings()
 
 defaultproperties
 {
+    PerformanceWarningMenu="DH_Interface.DHPerformanceWarning"
+
     Begin Object class=DHGUISectionBackground Name=InputBK1
         Caption="Options"
         WinTop=0.18036
@@ -239,17 +291,17 @@ defaultproperties
         WinHeight=0.5
         OnPreDraw=InputBK1.InternalPreDraw
     End Object
-    i_BG1=DHGUISectionBackground'DH_Interface.DHTab_Input.InputBK1'
+    i_BG1=DHGUISectionBackground'DH_Interface.InputBK1'
 
     Begin Object Class=DHGUISectionBackground Name=InputBK3
         Caption="Fine Tuning"
-        WinTop=0.22
+        WinTop=0.18036
         WinLeft=0.451289
         WinWidth=0.527812
-        WinHeight=0.4
+        WinHeight=0.5
         OnPreDraw=InputBK3.InternalPreDraw
     End Object
-    i_BG3=DHGUISectionBackground'DH_Interface.DHTab_Input.InputBK3'
+    i_BG3=DHGUISectionBackground'DH_Interface.InputBK3'
 
     Begin Object Class=DHmoCheckBox Name=InputAutoSlope
         ComponentJustification=TXTA_Left
@@ -265,7 +317,7 @@ defaultproperties
         OnChange=DHTab_Input.InternalOnChange
         OnLoadINI=DHTab_Input.InternalOnLoadINI
     End Object
-    ch_AutoSlope=DHmoCheckBox'DH_Interface.DHTab_Input.InputAutoSlope'
+    ch_AutoSlope=DHmoCheckBox'DH_Interface.InputAutoSlope'
 
     Begin Object Class=DHmoCheckBox Name=InputInvertMouse
         ComponentJustification=TXTA_Left
@@ -281,7 +333,7 @@ defaultproperties
         OnChange=DHTab_Input.InternalOnChange
         OnLoadINI=DHTab_Input.InternalOnLoadINI
     End Object
-    ch_InvertMouse=DHmoCheckBox'DH_Interface.DHTab_Input.InputInvertMouse'
+    ch_InvertMouse=DHmoCheckBox'DH_Interface.InputInvertMouse'
 
     Begin Object Class=DHmoCheckBox Name=InputMouseSmoothing
         ComponentJustification=TXTA_Left
@@ -297,7 +349,7 @@ defaultproperties
         OnChange=DHTab_Input.InternalOnChange
         OnLoadINI=DHTab_Input.InternalOnLoadINI
     End Object
-    ch_MouseSmoothing=DHmoCheckBox'DH_Interface.DHTab_Input.InputMouseSmoothing'
+    ch_MouseSmoothing=DHmoCheckBox'DH_Interface.InputMouseSmoothing'
 
     Begin Object Class=DHmoCheckBox Name=InputUseJoystick
         ComponentJustification=TXTA_Left
@@ -313,7 +365,24 @@ defaultproperties
         OnChange=DHTab_Input.InternalOnChange
         OnLoadINI=DHTab_Input.InternalOnLoadINI
     End Object
-    ch_Joystick=DHmoCheckBox'DH_Interface.DHTab_Input.InputUseJoystick'
+    ch_Joystick=DHmoCheckBox'DH_Interface.InputUseJoystick'
+
+    Begin Object Class=DHmoCheckBox Name=KeepMovingWhileTyping
+        ComponentJustification=TXTA_Left
+        CaptionWidth=0.9
+        Caption="Keep Moving With Chat Open"
+        OnCreateComponent=KeepMovingWhileTyping.InternalOnCreateComponent
+        IniOption="@Internal"
+        Hint="Continue running or driving after opening the chat prompt."
+        WinTop=0.717552
+        WinLeft=0.060938
+        WinWidth=0.3
+        WinHeight=0.04
+        TabOrder=7
+        OnChange=DHTab_Input.InternalOnChange
+        OnLoadINI=DHTab_Input.InternalOnLoadINI
+    End Object
+    ch_KeepMovingWhileTyping=DHmoCheckBox'DH_Interface.DHTab_Input.KeepMovingWhileTyping'
 
     Begin Object Class=DHmoCheckBox Name=InputMouseLag
         ComponentJustification=TXTA_Left
@@ -330,7 +399,7 @@ defaultproperties
         OnChange=DHTab_Input.InternalOnChange
         OnLoadINI=DHTab_Input.InternalOnLoadINI
     End Object
-    ch_MouseLag=DHmoCheckBox'DH_Interface.DHTab_Input.InputMouseLag'
+    ch_MouseLag=DHmoCheckBox'DH_Interface.InputMouseLag'
 
     Begin Object class=DHmoFloatEdit Name=InputMouseSensitivity
         MinValue=0.01
@@ -349,7 +418,7 @@ defaultproperties
         OnChange=DHTab_Input.InternalOnChange
         OnLoadINI=DHTab_Input.InternalOnLoadINI
     End Object
-    fl_Sensitivity=DHmoFloatEdit'DH_Interface.DHTab_Input.InputMouseSensitivity'
+    fl_Sensitivity=DHmoFloatEdit'DH_Interface.InputMouseSensitivity'
 
     Begin Object Class=DHmoFloatEdit Name=InputMenuSensitivity
         MinValue=1.0
@@ -368,7 +437,7 @@ defaultproperties
         OnChange=DHTab_Input.InternalOnChange
         OnLoadINI=DHTab_Input.InternalOnLoadINI
     End Object
-    fl_MenuSensitivity=DHmoFloatEdit'DH_Interface.DHTab_Input.InputMenuSensitivity'
+    fl_MenuSensitivity=DHmoFloatEdit'DH_Interface.InputMenuSensitivity'
 
     Begin Object Class=DHmoFloatEdit Name=InputMouseAccel
         MinValue=0.0
@@ -387,7 +456,7 @@ defaultproperties
         OnChange=DHTab_Input.InternalOnChange
         OnLoadINI=DHTab_Input.InternalOnLoadINI
     End Object
-    fl_MouseAccel=DHmoFloatEdit'DH_Interface.DHTab_Input.InputMouseAccel'
+    fl_MouseAccel=DHmoFloatEdit'DH_Interface.InputMouseAccel'
 
     Begin Object Class=DHmoFloatEdit Name=InputMouseSmoothStr
         MinValue=0.0
@@ -406,7 +475,7 @@ defaultproperties
         OnChange=DHTab_Input.InternalOnChange
         OnLoadINI=DHTab_Input.InternalOnLoadINI
     End Object
-    fl_SmoothingStrength=DHmoFloatEdit'DH_Interface.DHTab_Input.InputMouseSmoothStr'
+    fl_SmoothingStrength=DHmoFloatEdit'DH_Interface.InputMouseSmoothStr'
 
     Begin Object class=DHmoNumericEdit Name=InputMousePollRate
         MinValue=120

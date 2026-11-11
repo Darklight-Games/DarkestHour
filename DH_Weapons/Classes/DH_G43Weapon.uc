@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_G43Weapon extends DHProjectileWeapon;
@@ -9,21 +9,21 @@ defaultproperties
 {
     ItemName="G 43"
     NativeItemName="Gewehr 43"
-    FireModeClass(0)=class'DH_Weapons.DH_G43Fire'
-    FireModeClass(1)=class'DH_Weapons.DH_G43MeleeFire'
-    PickupClass=class'DH_Weapons.DH_G43Pickup'
-    AttachmentClass=class'DH_Weapons.DH_G43Attachment'
+    FireModeClass(0)=Class'DH_G43Fire'
+    FireModeClass(1)=Class'DH_G43MeleeFire'
+    PickupClass=Class'DH_G43Pickup'
+    AttachmentClass=Class'DH_G43Attachment'
 
     Mesh=SkeletalMesh'DH_G43_1st.G-43-Mesh'
-    HighDetailOverlay=Shader'Weapons1st_tex.Rifles.G43_S'
+    HighDetailOverlay=Shader'Weapons1st_tex.G43_S'
     bUseHighDetailOverlayIndex=true
     HighDetailOverlayIndex=2
 
     IronSightDisplayFOV=50.0
     DisplayFOV=85.0
 
-    MaxNumPrimaryMags=10
-    InitialNumPrimaryMags=10
+    MaxNumPrimaryMags=7
+    InitialNumPrimaryMags=7
 
     IronBringUp="iron_in_g43"
     IronPutDown="iron_out_g43"

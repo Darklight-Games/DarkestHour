@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_FG42ScopedFire extends DH_FG42Fire;
@@ -13,7 +13,7 @@ defaultproperties
 
     //spread
     AddedPitch=13 //scope zero found experimentally with debugaddedpitch function, scope zeroed to 100m
-    
+
     BipodDeployFireAnim="deploy_shoot_scoped"
     BipodDeployFireLoopAnim="deploy_shoot_scoped"
     BipodDeployFireLastAnim="deploy_shoot_last_scoped"

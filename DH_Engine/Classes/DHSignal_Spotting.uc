@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHSignal_Spotting extends DHSignal
@@ -9,7 +9,7 @@ class DHSignal_Spotting extends DHSignal
 static function Material GetWorldIconMaterial(optional Object OptionalObject)
 {
     local class<DHMapMarker> MapMarkerClass;
-    
+
     MapMarkerClass = class<DHMapMarker>(OptionalObject);
 
     if (MapMarkerClass != none)
@@ -25,7 +25,7 @@ static function Material GetWorldIconMaterial(optional Object OptionalObject)
 static function Color GetColor(optional Object OptionalObject)
 {
     local class<DHMapMarker> MapMarkerClass;
-    
+
     MapMarkerClass = class<DHMapMarker>(OptionalObject);
 
     if (MapMarkerClass != none)
@@ -38,7 +38,7 @@ static function Color GetColor(optional Object OptionalObject)
     }
 }
 
-static function OnSent(DHPlayer PC, vector Location, optional Object OptionalObject)
+static function OnSent(DHPlayer PC, Vector Location, optional Object OptionalObject)
 {
     local class<DHMapMarker> MapMarkerClass;
 
@@ -46,7 +46,7 @@ static function OnSent(DHPlayer PC, vector Location, optional Object OptionalObj
     {
         return;
     }
-    
+
     MapMarkerClass = class<DHMapMarker>(OptionalObject);
 
     if (MapMarkerClass != none && MapMarkerClass.default.SpottingConsoleCommand != "")

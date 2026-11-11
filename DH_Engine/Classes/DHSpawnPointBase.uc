@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHSpawnPointBase extends Actor
@@ -17,6 +17,7 @@ enum ESpawnPointBlockReason
     SPBR_MissingRequirement,
     SPBR_NotInSafeZone,
     SPBR_Waiting,
+    SPBR_InDangerZone,
 };
 
 var ESpawnPointBlockReason  BlockReason; // any reason why spawn point can't be used currently
@@ -31,13 +32,15 @@ var()   bool            bMainSpawn;      // is a main spawn for gametype: Advanc
 var()   bool            bAirborneSpawn;  // the spawn is located on a plane or in the air
 
 var     string          SpawnPointStyle; // style name to use for spawnpoints (can be overriden in GetMapStyleName())
+var     float           SpawnPointIconOffsetMultiplierX; // offset icon horizontally by a product of its width; TODO: Replace this with pixel size?
+var     float           SpawnPointIconOffsetMultiplierY; // offset icon vertically by a product of its height
 
 var     int             BaseSpawnTimePenalty;    // how many seconds a player will have to addtionally wait to spawn on this spawn point
 var     float           SpawnProtectionTime;     // how many seconds a player will be invulnerable after spawning on this spawn point
 var     float           SpawnKillProtectionTime; // how many seconds a kill on a player will be considered a spawn kill after spawning on this spawn point
 
 // Parameters for spawning in a radius (NOTE: currently only works for infantry!)
-var     vector          SpawnLocationOffset;
+var     Vector          SpawnLocationOffset;
 var     float           SpawnRadius;
 var     int             SpawnRadiusSegmentCount;
 var     bool            bShouldTraceCheckSpawnLocations;
@@ -69,14 +72,19 @@ var bool    bIsLowPriority;                             // When true, this spawn
 var class<DHMapIconAttachment> MapIconAttachmentClass;
 var DHMapIconAttachment        MapIconAttachment;
 
+// Reference to icon of the base actor for syncing map locations
+var DHMapIconAttachment        BaseMapIconAttachment;
+
 // Danger zone
-var(DHDangerZone) float BaseInfluenceModifier;
+var(DHDangerZone)   float BaseInfluenceModifier;
+var                 float InitialBaseInfluenceModifier;
 
 replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
-        SpawnPointIndex, TeamIndex, BlockReason, bIsActive, bIsEncroachedUpon;
+        SpawnPointIndex, TeamIndex, BlockReason, bIsActive, bIsEncroachedUpon,
+        BaseMapIconAttachment;
 }
 
 // Implemented to add this spawn point to the GRI's SpawnPoints array, setting the GRI reference & our index position in that array
@@ -115,6 +123,18 @@ simulated event PostBeginPlay()
         {
             SetTimer(1.0, true);
         }
+
+        InitialBaseInfluenceModifier = BaseInfluenceModifier;
+    }
+}
+
+function Reset()
+{
+    super.Reset();
+
+    if (Role == ROLE_Authority)
+    {
+        BaseInfluenceModifier = InitialBaseInfluenceModifier;
     }
 }
 
@@ -186,8 +206,8 @@ event Destroyed()
 function bool PerformSpawn(DHPlayer PC)
 {
     local DarkestHourGame G;
-    local vector SpawnLocation;
-    local rotator SpawnRotation;
+    local Vector SpawnLocation;
+    local Rotator SpawnRotation;
     local Pawn P;
 
     G = DarkestHourGame(Level.Game);
@@ -214,7 +234,30 @@ function bool PerformSpawn(DHPlayer PC)
 }
 
 // Called when a spawn is spawned from this spawn point.
-function OnPawnSpawned(Pawn P);
+function OnPawnSpawned(Pawn P)
+{
+    local DHPawn DHP;
+    local Vehicle V;
+
+    V = Vehicle(P);
+
+    if (V != none)
+    {
+        DHP = DHPawn(V.Driver);
+    }
+    else
+    {
+        DHP = DHPawn(P);
+    }
+
+    if (DHP != none)
+    {
+        DHP.bCombatSpawned = bCombatSpawn;
+        DHP.SpawnKillTimeEnds = Level.TimeSeconds + SpawnKillProtectionTime;
+        DHP.SpawnProtEnds = Level.TimeSeconds + SpawnProtectionTime;
+        DHP.SpawnPoint = self;
+    }
+}
 
 // Called when a pawn is spawn killed from this spawn point - override in child classes
 function OnSpawnKill(Pawn VictimPawn, Controller KillerController);
@@ -229,10 +272,10 @@ simulated function bool CanSpawnRole(DHRoleInfo RI)
 }
 
 // Override to specify a different spawn pose, otherwise it just uses the spawn point's pose
-function bool GetSpawnPosition(out vector SpawnLocation, out rotator SpawnRotation, int VehiclePoolIndex)
+function bool GetSpawnPosition(out Vector SpawnLocation, out Rotator SpawnRotation, int VehiclePoolIndex)
 {
     local DHPawnCollisionTest CT;
-    local vector              L;
+    local Vector              L;
     local float               Angle, AngleInterval;
     local int                 i, j, k;
 
@@ -253,7 +296,7 @@ function bool GetSpawnPosition(out vector SpawnLocation, out rotator SpawnRotati
             L = Location;
             L.X += Cos(Angle) * SpawnRadius;
             L.Y += Sin(Angle) * SpawnRadius;
-            L.Z += 10.0 + class'DHPawn'.default.CollisionHeight / 2;
+            L.Z += 10.0 + Class'DHPawn'.default.CollisionHeight / 2;
 
             // If enabled, this check ensures we don't spawn in a place that's
             // not visible from the origin. This stops a bug where players could
@@ -265,7 +308,7 @@ function bool GetSpawnPosition(out vector SpawnLocation, out rotator SpawnRotati
                 continue;
             }
 
-            CT = Spawn(class'DHPawnCollisionTest',,, L);
+            CT = Spawn(Class'DHPawnCollisionTest',,, L);
 
             if (CT != none)
             {
@@ -366,17 +409,22 @@ function SetIsActive(bool bIsActive)
     }
 }
 
+simulated function GUIStyles GetStyle(GUIController GUIController, GUI.eFontScale FontScale)
+{
+    return GUIController.GetStyle(GetMapStyleName(), FontScale);
+}
+
 // Override to change the button style for display on the deploy menu.
 simulated function string GetMapStyleName()
 {
-    if (bMainSpawn)
-    {
-        return "DHMainSpawnButtonStyle";
-    }
-
     if (bAirborneSpawn)
     {
         return "DHParatroopersButtonStyle";
+    }
+
+    if (bMainSpawn)
+    {
+        return "DHMainSpawnButtonStyle";
     }
 
     return SpawnPointStyle;
@@ -395,7 +443,7 @@ function GetPlayerCountsWithinRadius(float RadiusInMeters, optional int SquadInd
     EnemyCount = 0;
     TeammateCount = 0;
 
-    foreach RadiusActors(class'Pawn', P, class'DHUnits'.static.MetersToUnreal(RadiusInMeters))
+    foreach RadiusActors(Class'Pawn', P, Class'DHUnits'.static.MetersToUnreal(RadiusInMeters))
     {
         if (P != none && !P.bHidden && !P.bDeleteMe && P.Health > 0 && P.PlayerReplicationInfo != none)
         {
@@ -472,6 +520,7 @@ defaultproperties
     SpawnProtectionTime=2.0
     SpawnKillProtectionTime=7.0
     bAlwaysRelevant=true
+    bReplicateMovement=false
     RemoteRole=ROLE_SimulatedProxy
     bIsActive=false
     bHidden=true

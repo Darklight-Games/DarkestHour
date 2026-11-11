@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_BazookaAttachment extends DHRocketWeaponAttachment;
@@ -8,9 +8,9 @@ class DH_BazookaAttachment extends DHRocketWeaponAttachment;
 defaultproperties
 {
     Mesh=SkeletalMesh'DH_Bazooka_3rd.M1A1Bazooka_3rd'
-    MenuImage=Texture'DH_InterfaceArt_tex.weapon_icons.Bazooka_icon'
-    mExhFlashClass=class'DH_Effects.DH3rdPersonBazookaExhaustFX'
-    mMuzFlashClass=class'DH_Effects.DHMuzzleFlash3rdBazooka'
+    MenuImage=Texture'DH_InterfaceArt_tex.Bazooka_icon'
+    mExhFlashClass=Class'DH3rdPersonBazookaExhaustFX'
+    mMuzFlashClass=Class'DHMuzzleFlash3rdBazooka'
     ExhaustBoneName="exhaust"
     MuzzleBoneName="Muzzle"
     WarheadBoneName="Warhead"
@@ -55,13 +55,13 @@ defaultproperties
     PA_ProneAnims(7)="prone_crawlBR_baz_m1"
 
     PA_ProneIronAnims(0)="prone_slowcrawlF_baz_m1"
-	PA_ProneIronAnims(1)="prone_slowcrawlB_baz_m1"
-	PA_ProneIronAnims(2)="prone_slowcrawlL_baz_m1"
-	PA_ProneIronAnims(3)="prone_slowcrawlR_baz_m1"
-	PA_ProneIronAnims(4)="prone_slowcrawlL_baz_m1"
-	PA_ProneIronAnims(5)="prone_slowcrawlR_baz_m1"
-	PA_ProneIronAnims(6)="prone_slowcrawlB_baz_m1"
-	PA_ProneIronAnims(7)="prone_slowcrawlB_baz_m1"
+    PA_ProneIronAnims(1)="prone_slowcrawlB_baz_m1"
+    PA_ProneIronAnims(2)="prone_slowcrawlL_baz_m1"
+    PA_ProneIronAnims(3)="prone_slowcrawlR_baz_m1"
+    PA_ProneIronAnims(4)="prone_slowcrawlL_baz_m1"
+    PA_ProneIronAnims(5)="prone_slowcrawlR_baz_m1"
+    PA_ProneIronAnims(6)="prone_slowcrawlB_baz_m1"
+    PA_ProneIronAnims(7)="prone_slowcrawlB_baz_m1"
 
     PA_WalkAnims(0)="stand_walkFhip_baz_m1"
     PA_WalkAnims(1)="stand_walkBhip_baz_m1"
@@ -108,8 +108,8 @@ defaultproperties
 
     PA_CrouchTurnIronRightAnim="crouch_turnRiron_baz_m1"
     PA_CrouchTurnIronLeftAnim="crouch_turnRiron_baz_m1"
-	PA_CrouchTurnRightAnim="crouch_turnR_baz_m1"
-	PA_CrouchTurnLeftAnim="crouch_turnL_baz_m1"
+    PA_CrouchTurnRightAnim="crouch_turnR_baz_m1"
+    PA_CrouchTurnLeftAnim="crouch_turnL_baz_m1"
 
     PA_StandToProneAnim="StandtoProne_baz_m1"
     PA_CrouchToProneAnim="CrouchtoProne_baz_m1"

@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHPlayerReplicationInfo extends ROPlayerReplicationInfo;
@@ -31,6 +31,7 @@ enum ERoleSelector
 var     EPatronTier             PatronTier;
 var     bool                    bIsDeveloper;
 var     bool                    bIsIncognito;
+var     bool                    bIsPossesingPawn;
 
 var     float                   NameDrawStartTime;
 var     float                   LastNameDrawTime;
@@ -48,17 +49,21 @@ var     int                     CategoryScores[2];
 var     localized string        SquadLeaderAbbreviation;
 var     localized string        AssistantAbbreviation;
 
-var     int                     CountryIndex;
 var     int                     PlayerIQ;
 
 var     int                     NoRallyPointsTime; // Time when SL lost all rally points
+
+// Restrictions
+var     bool                    bRestrictOutboundVoice;    // Disable ability to speak in voice chat
+var     bool                    bRestrictLeaderPositions;  // Disable access to SL and ASL positions and ability to create squads
 
 replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
         SquadIndex, SquadMemberIndex, PatronTier, bIsDeveloper, DHKills, bIsSquadAssistant,
-        TotalScore, CategoryScores, CountryIndex, PlayerIQ, NoRallyPointsTime, bIsIncognito;
+        TotalScore, CategoryScores, PlayerIQ, NoRallyPointsTime, bIsIncognito, bIsPossesingPawn,
+        bRestrictOutboundVoice, bRestrictLeaderPositions;
 }
 
 simulated function string GetNamePrefix()
@@ -191,6 +196,11 @@ simulated static function bool IsPlayerTankCrew(Pawn P)
         && ROPlayerReplicationInfo(P.PlayerReplicationInfo).RoleInfo.bCanBeTankCrew;
 }
 
+simulated static function bool IsPlayerVehicleAccessRestricted(DHPlayer C)
+{
+    return C != none && C.bRestrictVehicleAccess;
+}
+
 simulated static function bool IsPlayerLicensedToDrive(DHPlayer C)
 {
     return C != none && DHPlayerReplicationInfo(C.PlayerReplicationInfo) != none && DHPlayerReplicationInfo(C.PlayerReplicationInfo).IsSLorASL();
@@ -265,5 +275,4 @@ defaultproperties
     SquadMemberIndex=-1
     SquadLeaderAbbreviation="SL"
     AssistantAbbreviation="A"
-    CountryIndex=-1
 }

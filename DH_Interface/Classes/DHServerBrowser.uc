@@ -1,34 +1,39 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHServerBrowser extends ROUT2k4ServerBrowser;
 
-var     config bool             bDidShowBetaMessage;
-var     localized string        BetaMessageText;
+var     config bool             bDidShowWelcomeMessage;
+var     localized string        WelcomeMessageText;
+var     localized string        WelcomeMessageDiscordButtonText;
+var     localized string        WelcomeMessagePlayButtonText;
 
 function CreateTabs()
 {
     super.CreateTabs();
 
     // Activate the Internet tab immediately
-    c_Tabs.ActivateTabByName(PanelCaption[2], true);
+    // HACK: The Steam Master Server is not responding.
+    // As an emergency measure, put the player in the LAN list.
+    // We are forcibly populating the LAN list from the MainMenu so that the official servers appear.
+    c_Tabs.ActivateTabByName(PanelCaption[0], true);
 }
 
 function InternalOnOpen()
 {
     local GUIQuestionPage QP;
 
-    if (!bDidShowBetaMessage)
+    if (!bDidShowWelcomeMessage)
     {
-        QP = Controller.ShowQuestionDialog(default.BetaMessageText, QBTN_OkCancel, QBTN_OK);
+        QP = Controller.ShowQuestionDialog(default.WelcomeMessageText, QBTN_OkCancel, QBTN_OK);
         QP.OnButtonClick = InternalOnButtonClick;
-        QP.ButtonNames[0] = "Join Discord";
-        QP.ButtonNames[1] = "Just play!";
-        QP.SetupQuestion(default.BetaMessageText, QBTN_OkCancel, QBTN_OK, true);
+        QP.ButtonNames[0] = WelcomeMessageDiscordButtonText;
+        QP.ButtonNames[1] = WelcomeMessagePlayButtonText;
+        QP.SetupQuestion(default.WelcomeMessageText, QBTN_OkCancel, QBTN_OK, true);
 
-        bDidShowBetaMessage = true;
+        bDidShowWelcomeMessage = true;
         SaveConfig();
     }
 }
@@ -38,7 +43,7 @@ function InternalOnButtonClick(byte bButton)
     switch (bButton)
     {
         case QBTN_OK:
-            PlayerOwner().ConsoleCommand("START" @ class'DHMainMenu'.default.DiscordURL);
+            PlayerOwner().ConsoleCommand("START" @ Class'DHMainMenu'.default.DiscordURL);
             break;
     }
 }
@@ -62,7 +67,7 @@ defaultproperties
         OnPreDraw=DHServerBrowser.ComboOnPreDraw
         OnLoadINI=DHServerBrowser.InternalOnLoadINI
     End Object
-    co_GameType=DHmoComboBox'DH_Interface.DHServerBrowser.GameTypeCombo'
+    co_GameType=DHmoComboBox'DH_Interface.GameTypeCombo'
 
     Begin Object Class=DHGUITabControl Name=PageTabs
         bFillSpace=false
@@ -76,14 +81,14 @@ defaultproperties
         OnActivate=PageTabs.InternalOnActivate
         OnChange=DHServerBrowser.InternalOnChange
     End Object
-    c_Tabs=DHGUITabControl'DH_Interface.DHServerBrowser.PageTabs'
+    c_Tabs=DHGUITabControl'DH_Interface.PageTabs'
 
     Begin Object Class=DHGUIHeader Name=ServerBrowserHeader
         bUseTextHeight=true
         Caption="Server Browser"
         StyleName="DHTopper"
     End Object
-    t_Header=DHGUIHeader'DH_Interface.DHServerBrowser.ServerBrowserHeader'
+    t_Header=DHGUIHeader'DH_Interface.ServerBrowserHeader'
 
     Begin Object Class=DHBrowser_Footer Name=FooterPanel
         Spacer=0.01
@@ -92,10 +97,10 @@ defaultproperties
         TabOrder=4
         OnPreDraw=FooterPanel.InternalOnPreDraw
     End Object
-    t_Footer=DHBrowser_Footer'DH_Interface.DHServerBrowser.FooterPanel'
+    t_Footer=DHBrowser_Footer'DH_Interface.FooterPanel'
 
     Begin Object Class=BackgroundImage Name=PageBackground
-        Image=Texture'DH_GUI_Tex.Menu.MultiMenuBack'
+        Image=Texture'DH_GUI_Tex.MultiMenuBack'
         ImageStyle=ISTY_Scaled
         ImageRenderStyle=MSTY_Alpha
         X1=0
@@ -103,7 +108,7 @@ defaultproperties
         X2=1024
         Y2=1024
     End Object
-    i_Background=BackgroundImage'DH_Interface.DHServerBrowser.PageBackground'
+    i_Background=BackgroundImage'DH_Interface.PageBackground'
 
     PanelClass(0)="DH_Interface.DHBrowser_ServerListPageFavorites"
     PanelClass(1)="DH_Interface.DHBrowser_ServerListPageLAN"
@@ -118,7 +123,9 @@ defaultproperties
     PanelCaption(1)="LAN"
     PanelCaption(2)="Internet"
 
-    BetaMessageText="Welcome to the Darkest Hour: Europe '44-'45 live beta! Be sure to join the 500+ strong Discord community to discuss the game, make suggestions, or report any bugs! See you on the battlefield!"
+    WelcomeMessageText="Welcome to Darkest Hour: Europe '44-'45! Be sure to join the 5000+ strong Discord community to discuss the game, make suggestions, or report any bugs! See you on the battlefield!"
+    WelcomeMessageDiscordButtonText="Join Discord"
+    WelcomeMessagePlayButtonText="Just play!"
     OnOpen=InternalOnOpen
 }
 

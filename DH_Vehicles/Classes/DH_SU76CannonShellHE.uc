@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_SU76CannonShellHE extends DHCannonShellHE;
@@ -14,18 +14,18 @@ defaultproperties
 
     //Damage
     ImpactDamage=750
-    ShellImpactDamage=class'DH_Engine.DHShellHEGunImpactDamageType'
+    ShellImpactDamage=Class'DHShellHEGunImpactDamageType'
     PenetrationMag=800.0
     Damage=400.0   //710 gramms TNT
     DamageRadius=1000.0
-    MyDamageType=class'DH_Engine.DHShellHE75mmATDamageType'
+    MyDamageType=Class'DHShellHE75mmATDamageType'
     HullFireChance=0.8
     EngineFireChance=0.8
 
     bDebugInImperial=false
 
     //Effects
-    CoronaClass=class'DH_Effects.DHShellTracer_Green'
+    CoronaClass=Class'DHShellTracer_Green'
 
     //Penetration
     DHPenetrationTable(0)=3.3
@@ -41,9 +41,9 @@ defaultproperties
     DHPenetrationTable(10)=2.4
 
     //Gunsight adjustments
-	//adjusted from zis3 because for some weird reason SU76 gun shoots significantly below the cross on 0 meters setting
+    //adjusted from zis3 because for some weird reason SU76 gun shoots significantly below the cross on 0 meters setting
     bMechanicalAiming=true
-	MechanicalRanges(0)=(Range=0,RangeValue=100.0)
+    MechanicalRanges(0)=(Range=0,RangeValue=100.0)
     MechanicalRanges(1)=(Range=200,RangeValue=107.0)
     MechanicalRanges(2)=(Range=400,RangeValue=103.0)
     MechanicalRanges(3)=(Range=600,RangeValue=127.0)

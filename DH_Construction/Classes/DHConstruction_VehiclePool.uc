@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHConstruction_VehiclePool extends DHConstruction;
@@ -12,7 +12,9 @@ simulated function OnConstructed()
 {
     super.OnConstructed();
 
-    if (Role == ROLE_Authority)
+    // Must ensure that SpawnPoint wasn't created already as this function can
+    // be called multiple times during the lifespan of this actor.
+    if (Role == ROLE_Authority && SpawnPoint == none)
     {
         SpawnPoint = Spawn(SpawnPointClass, self);
 
@@ -41,7 +43,7 @@ simulated function OnBroken()
         }
     }
     // "A Vehicle Pool has been destroyed."
-    class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), class'DHVehiclePoolMessage', 3);
+    Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHVehiclePoolMessage', 3);
 }
 
 simulated event Destroyed()
@@ -61,16 +63,16 @@ simulated event Destroyed()
 defaultproperties
 {
     MenuName="Vehicle Pool"
-    MenuIcon=Texture'DH_InterfaceArt2_tex.icons.motorpool'
+    MenuIcon=Texture'DH_InterfaceArt2_tex.motorpool'
     MenuDescription="Provides a team-wide vehicle spawn point."
-    Stages(0)=(Progress=0,StaticMesh=StaticMesh'DH_Construction_stc.Bases.GER_Light_Vehicle_Pool_undeployed')
+    Stages(0)=(Progress=0,StaticMesh=StaticMesh'DH_Construction_stc.GER_Light_Vehicle_Pool_undeployed')
     ProgressMax=12
     SupplyCost=1500
     MinDamagetoHurt=5
     ExplosionDamageTraceOffset=(Z=40.0)
 
     // Temp
-    StaticMesh=StaticMesh'DH_Construction_stc.Bases.GER_Light_Vehicle_Pool'
+    StaticMesh=StaticMesh'DH_Construction_stc.GER_Light_Vehicle_Pool'
 
     // Placement
     bCanPlaceIndoors=false
@@ -85,7 +87,7 @@ defaultproperties
     GroundSlopeMaxInDegrees=10
     SquadMemberCountMinimum=3
     ArcLengthTraceIntervalInMeters=0.5
-    ProximityRequirements(0)=(ConstructionClass=class'DHConstruction_PlatoonHQ',DistanceMeters=100.0)
+    ProximityRequirements(0)=(ConstructionClass=Class'DHConstruction_PlatoonHQ',DistanceMeters=100.0)
     bCanBePlacedInDangerZone=false
 
     // Collision
@@ -99,8 +101,8 @@ defaultproperties
     bCanTakeImpactDamage=true
 
     // Group Class
-    SpawnPointClass=class'DHSpawnPoint_VehiclePool'
-    GroupClass=class'DHConstructionGroup_Logistics'
+    SpawnPointClass=Class'DHSpawnPoint_VehiclePool'
+    GroupClass=Class'DHConstructionGroup_Logistics'
 
     // Rules
     bCanBeTornDownByFriendlies=false

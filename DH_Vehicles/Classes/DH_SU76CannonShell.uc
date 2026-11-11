@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_SU76CannonShell extends DHSovietCannonShell;
@@ -15,7 +15,7 @@ defaultproperties
 
     //Damage
     ImpactDamage=660  //109 gramms TNT filler
-    ShellImpactDamage=class'DH_Vehicles.DH_ShermanCannonShellDamageAP'
+    ShellImpactDamage=Class'DH_ShermanCannonShellDamageAP'
     HullFireChance=0.55
     EngineFireChance=0.91
 
@@ -33,9 +33,9 @@ defaultproperties
     DHPenetrationTable(10)=4.2 // 3000m
 
     //Gunsight adjustments
-	//adjusted from zis3 because for some weird reason SU76 gun shoots significantly below the cross on 0 meters setting
+    //adjusted from zis3 because for some weird reason SU76 gun shoots significantly below the cross on 0 meters setting
     bMechanicalAiming=true
-	MechanicalRanges(0)=(Range=0,RangeValue=100.0)
+    MechanicalRanges(0)=(Range=0,RangeValue=100.0)
     MechanicalRanges(1)=(Range=200,RangeValue=107.0)
     MechanicalRanges(2)=(Range=400,RangeValue=103.0)
     MechanicalRanges(3)=(Range=600,RangeValue=127.0)

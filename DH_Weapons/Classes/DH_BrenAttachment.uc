@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DH_BrenAttachment extends DHWeaponAttachment;
@@ -8,10 +8,10 @@ class DH_BrenAttachment extends DHWeaponAttachment;
 defaultproperties
 {
     Mesh=SkeletalMesh'DH_Weapons3rd_CC_anm.bren_3rd'
-    MenuImage=Texture'DH_Bren_tex.interface.bren_icon'
-    
-    mMuzFlashClass=class'ROEffects.MuzzleFlash3rdSTG'
-    ROShellCaseClass=class'ROAmmo.RO3rdShellEject762x54mm'
+    MenuImage=Texture'DH_Bren_tex.bren_icon'
+
+    mMuzFlashClass=Class'MuzzleFlash3rdSTG'
+    ROShellCaseClass=Class'RO3rdShellEject762x54mm'
     MuzzleBoneName="tip"
     ShellEjectionBoneName="weapon_eject"
 
@@ -159,10 +159,10 @@ defaultproperties
     PA_IronFireLastShot="stand_shootiron_zb30"
     PA_CrouchFireLastShot="crouch_shoot_zb30"
     PA_ProneFireLastShot="prone_shoot_zb30"
-    
+
     PA_DiveToProneStartAnim="prone_diveF_kar"
     PA_DiveToProneEndAnim="prone_diveend_kar"
-    
+
     WA_Idle="idle_zb30"
     WA_IdleEmpty="idle_zb30"
     WA_Fire="idle_zb30"

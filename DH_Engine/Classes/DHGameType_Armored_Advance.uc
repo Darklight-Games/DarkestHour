@@ -1,6 +1,6 @@
 //==============================================================================
 // Darkest Hour: Europe '44-'45
-// Darklight Games (c) 2008-2023
+// Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
 class DHGameType_Armored_Advance extends DHGameType
@@ -14,7 +14,7 @@ defaultproperties
     bAreRallyPointsEnabled=true
     bAreConstructionsEnabled=true
 
-	bUseInfiniteReinforcements=true
+    bUseInfiniteReinforcements=true
     bSquadSpecialRolesOnly=true
     bHasTemporarySpawnVehicles=true
 

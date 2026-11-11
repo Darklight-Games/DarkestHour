@@ -1,7 +1,8 @@
+import argparse
 import configparser
 import os
 import shutil
-import argparse
+import sys
 
 
 def main():
@@ -17,7 +18,7 @@ def main():
 
     if not os.path.exists(cache_path):
         print(f'Cache file does not exist in directory {root}')
-        exit(1)
+        sys.exit(1)
 
     config.read(cache_path)
     section = config["Cache"]
