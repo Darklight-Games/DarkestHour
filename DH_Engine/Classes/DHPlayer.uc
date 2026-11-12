@@ -229,6 +229,8 @@ var     bool                    bRestrictVehicleAccess;    // Disable entering v
 var     bool                    bRestrictSquadNames;       // Disable editing of squad names
 var     bool                    bRestrictName;             // Player name is enforced by access control
 
+var     config array<string>    ConsoleCommandHistory;
+
 replication
 {
     // Variables the server will replicate to the client that owns this actor

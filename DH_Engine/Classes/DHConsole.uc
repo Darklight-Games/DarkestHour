@@ -1074,8 +1074,103 @@ function bool CanUseVehicleCommands()
     return P != none && (P.IsA('ROVehicle') || P.IsA('ROVehicleWeaponPawn')) && !P.IsA('DHPassengerPawn');
 }
 
+// Loads the console command history from the player and inserts it into this console's history.
+function LoadConsoleCommandHistory()
+{
+    local DHPlayer PC;
+    local int i, Count;
+
+    PC = DHPlayer(ViewportOwner.Actor);
+
+    if (PC == none)
+    {
+        return;
+    }
+
+    for (i = 0; i < arraycount(History); ++i)
+    {
+        History[i] = "";
+    }
+
+    HistoryTop = 0;
+    HistoryBot = -1;
+    HistoryCur = 0;
+
+    Count = Min(PC.ConsoleCommandHistory.Length, arraycount(History));
+
+    for (i = 0; i < Count; ++i)
+    {
+        History[i] = PC.ConsoleCommandHistory[Count - 1 - i];
+    }
+
+    if (Count > 0)
+    {
+        HistoryBot = 0;
+        HistoryTop = Count;
+        HistoryCur = HistoryTop;
+    }
+}
+
+function SaveConsoleCommandHistory(string Command)
+{
+    local DHPlayer PC;
+    local int i;
+
+    if (Command == "")
+    {
+        return;
+    }
+
+    PC = DHPlayer(ViewportOwner.Actor);
+
+    if (PC == none)
+    {
+        return;
+    }
+
+    // Remove any identical commands from the history.
+    for (i = 0; i < PC.ConsoleCommandHistory.Length; ++i)
+    {
+        if (PC.ConsoleCommandHistory[i] ~= Command)
+        {
+            PC.ConsoleCommandHistory.Remove(i, 1);
+            break;
+        }
+    }
+
+    PC.ConsoleCommandHistory.Insert(0, 1);
+    PC.ConsoleCommandHistory[0] = Command;
+    PC.ConsoleCommandHistory.Length = Min(PC.ConsoleCommandHistory.Length, arraycount(History));
+    PC.SaveConfig();
+
+    LoadConsoleCommandHistory();
+}
+
 state ConsoleVisible
 {
+    function BeginState()
+    {
+        super.BeginState();
+
+        LoadConsoleCommandHistory();
+    }
+
+    function bool KeyEvent(EInputKey Key, EInputAction Action, float Delta)
+    {
+        local bool bResult;
+        local string Command;
+
+        if (Action == IST_Press && Key == IK_Enter && TypedStr != "")
+        {
+            Command = TypedStr;
+            bResult = super.KeyEvent(Key, Action, Delta);
+            SaveConsoleCommandHistory(Command);
+            return bResult;
+        }
+
+        return super.KeyEvent(Key, Action, Delta);
+    }
+
     // Modified to change the font, since it's hard-coded in the parent class.
     function PostRender(Canvas Canvas)
     {
