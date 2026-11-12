@@ -14,12 +14,7 @@ var int                         LimitDurationSeconds;
 
 function int GetValue()
 {
-    return default.Value + GetBonusValue();
-}
-
-function int GetBonusValue()
-{
-    return 0;
+    return default.Value;
 }
 
 defaultproperties
