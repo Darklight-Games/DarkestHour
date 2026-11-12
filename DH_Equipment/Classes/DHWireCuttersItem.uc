@@ -162,7 +162,7 @@ simulated state Cutting
 }
 
 simulated state Idle
-{   
+{
     simulated function Fire(float F)
     {
         if (CanCut())
@@ -221,7 +221,7 @@ simulated state Idle
         foreach TraceActors(Class'DHObstacleInstance', O, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0))
         {
             if (O != none && !O.Info.IsCleared() && O.Info.CanBeCut())
-            {   
+            {
                 ObstacleShouldBeCut = O;
                 return true;
             }
@@ -231,7 +231,7 @@ simulated state Idle
         foreach TraceActors(Class'DHConstruction', C, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0))
         {
             if (C != none && C.CanBeCut())
-            {   
+            {
                 ConstructionShouldBeCut = C;
                 return true;
             }
@@ -241,7 +241,7 @@ simulated state Idle
     }
     
     simulated function EndState()
-    {   
+    {
         local DHPawn P;
 
         P = DHPawn(Instigator);
