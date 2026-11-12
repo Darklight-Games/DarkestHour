@@ -25,7 +25,7 @@ final static function CreateCodeIndices()
     }
 }
 
-final static function array<byte> Decode(string S)
+final static function array<byte> Encode(string S)
 {
     local int i, j, b[4];
     local int Length, FirstPadIndex;
@@ -75,7 +75,7 @@ final static function array<byte> Decode(string S)
     return Bytes;
 }
 
-final static function string Encode(array<byte> Bytes)
+final static function string Decode(array<byte> Bytes)
 {
     local int b, i;
     local string S;
