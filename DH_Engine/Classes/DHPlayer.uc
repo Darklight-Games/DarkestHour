@@ -8272,6 +8272,31 @@ exec function WhizMe(int WhizType)
     }
 }
 
+// Debug function to kill the currently occupied vehicle.
+exec function KillMyVehicle()
+{
+    local Vehicle V;
+    local VehicleWeaponPawn VWP;
+
+    if (!IsDebugModeAllowed())
+    {
+        return;
+    }
+
+    VWP = VehicleWeaponPawn(Pawn);
+    V = Vehicle(Pawn);
+
+    if (VWP != none)
+    {
+        V = VWP.VehicleBase;
+    }
+
+    if (V != none)
+    {
+        V.KilledBy(V);
+    }
+}
+
 defaultproperties
 {
     CorpseStayTime=15
