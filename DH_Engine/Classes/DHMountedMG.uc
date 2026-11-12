@@ -2,6 +2,8 @@
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
+// [ ] holding fire while reloading/barrel swapping doesn't cease fire.
+//==============================================================================
 
 class DHMountedMG extends DHVehicleWeapon
     abstract;
@@ -79,13 +81,12 @@ var bool                            bBarrelIsSteamActive, bOldBarrelIsSteamActiv
 var int                             SpareBarrelCount;
 
 // Timing for force-aim during reload and barrel changes.
-var() bool                          bShouldZeroAimDuringReload;
-var() bool                          bShouldZeroAimDuringBarrelChange;
 var float                           ForceAimStartSeconds;
 var float                           ForceAimEndSeconds;
 var Quat                            ForceAimLocalWeaponAimStart;
 var float                           ForceAimTweenSeconds;
-var Rotator                         ForceAimLocalWeaponAimTarget;
+var Quat                            ForceAimLocalWeaponAimTarget;
+var UInterp.EInterpolationType      ForceAimInterpolationType;
 
 replication
 {
@@ -441,7 +442,7 @@ simulated function TickForceAim()
 {
     local float T;
 
-    if (WeaponPawn == none || WeaponPawn.LocalWeaponAim == ForceAimLocalWeaponAimTarget)
+    if (WeaponPawn == none || WeaponPawn.LocalWeaponAim == QuatToRotator(ForceAimLocalWeaponAimTarget))
     {
         return;
     }
@@ -449,8 +450,8 @@ simulated function TickForceAim()
     // Interpolate the weapon aim to zero over a short duration.
     // We do this so that the gun is in the right spot for the third person reload animations.
     T = class'UInterp'.static.MapRangeClamped(Level.TimeSeconds, ForceAimStartSeconds, ForceAimEndSeconds, 0.0, 1.0);
-    T = class'UInterp'.static.Interpolate(T, 0.0, 1.0, INTERP_Deceleration);
-    WeaponPawn.LocalWeaponAim = QuatToRotator(QuatSlerp(ForceAimLocalWeaponAimStart, QuatFromRotator(ForceAimLocalWeaponAimTarget), T));
+    T = class'UInterp'.static.Interpolate(T, 0.0, 1.0, ForceAimInterpolationType);
+    WeaponPawn.LocalWeaponAim = QuatToRotator(QuatSlerp(ForceAimLocalWeaponAimStart, ForceAimLocalWeaponAimTarget, T));
 }
 
 simulated state Reloading extends Busy
@@ -481,12 +482,6 @@ simulated state Reloading extends Busy
             MGPawn.PlayReloadAnim(GetAnimDuration(ReloadSequence));
             MGPawn.SetIsZoomed(false);
         }
-
-        // Initialize the variables for zero-aim tweening during reload.
-        if (bShouldZeroAimDuringReload)
-        {
-            StartForceAim(rot(0, 0, 0));
-        }
     }
 
     simulated function EndState()
@@ -510,15 +505,17 @@ simulated state Reloading extends Busy
     simulated function Tick(float DeltaTime)
     {
         super.Tick(DeltaTime);
-
-        if (bShouldZeroAimDuringReload)
-        {
-            TickForceAim();
-        }
+        
+        TickForceAim();
     }
 
 Begin:
-    Sleep(FMax(GetAnimDuration(ReloadSequence), ForceAimTweenSeconds));
+    // This makes the assumption that the sum of the tween times doesn't
+    // exceed the length of the animation.
+    StartForceAim(rot(0, 0, 0), ForceAimTweenSeconds, INTERP_Deceleration);
+    Sleep(GetAnimDuration(ReloadSequence) - ForceAimTweenSeconds);
+    StopForceAim(ForceAimTweenSeconds, INTERP_Deceleration);
+    Sleep(ForceAimTweenSeconds);
     GotoState('');
 }
 
@@ -541,7 +538,7 @@ simulated function bool TryChangeBarrels()
     return true;
 }
 
-simulated function StartForceAim(Rotator AimTarget)
+simulated function StartForceAim(Rotator AimTarget, float TweenSeconds, UInterp.EInterpolationType InterpolationType)
 {
     local DHMountedMGPawn MGPawn;
 
@@ -553,9 +550,23 @@ simulated function StartForceAim(Rotator AimTarget)
     }
 
     ForceAimStartSeconds = Level.TimeSeconds;
-    ForceAimEndSeconds = Level.TimeSeconds + ForceAimTweenSeconds;
+    ForceAimEndSeconds = Level.TimeSeconds + TweenSeconds;
     ForceAimLocalWeaponAimStart = QuatFromRotator(MGPawn.LocalWeaponAim);
-    ForceAimLocalWeaponAimTarget = AimTarget;
+    ForceAimLocalWeaponAimTarget = QuatFromRotator(AimTarget);
+    ForceAimInterpolationType = InterpolationType;
+}
+
+simulated function StopForceAim(float TweenSeconds, UInterp.EInterpolationType InterpolationType)
+{
+    local Quat T;
+    
+    ForceAimStartSeconds = Level.TimeSeconds;
+    ForceAimEndSeconds = Level.TimeSeconds + TweenSeconds;
+    // Swap the start and target.
+    T = ForceAimLocalWeaponAimStart;
+    ForceAimLocalWeaponAimStart = ForceAimLocalWeaponAimTarget;
+    ForceAimLocalWeaponAimTarget = T;
+    ForceAimInterpolationType = InterpolationType;
 }
 
 simulated state ChangingBarrels extends Busy
@@ -578,11 +589,6 @@ simulated state ChangingBarrels extends Busy
             MGPawn.PlayBarrelChangeAnim(GetAnimDuration(BarrelChangeAnimation));
             // Zoom out.
             MGPawn.SetIsZoomed(false);
-        }
-
-        if (bShouldZeroAimDuringBarrelChange)
-        {
-            StartForceAim(rot(0, 0, 0));
         }
     }
 
@@ -608,15 +614,14 @@ simulated state ChangingBarrels extends Busy
         super.Tick(DeltaTime);
 
         // TODO: we could also have this run while transitioning out of the gunsight?
-        if (bShouldZeroAimDuringBarrelChange)
-        {
-            TickForceAim();
-        }
+        TickForceAim();
     }
 
 Begin:
-    Sleep(GetAnimDuration(BarrelChangeAnimation));
+    StartForceAim(rot(0, 0, 0), ForceAimTweenSeconds, INTERP_Deceleration);
+    Sleep(GetAnimDuration(BarrelChangeAnimation) - ForceAimTweenSeconds);
     PerformBarrelChange();
+    StopForceAim(ForceAimTweenSeconds, INTERP_Deceleration);
     GotoState('');
 }
 
@@ -999,9 +1004,7 @@ defaultproperties
 
     BeginningIdleAnim="IDLE"
 
-    ForceAimTweenSeconds=0.5
-    bShouldZeroAimDuringReload=true
-    bShouldZeroAimDuringBarrelChange=true
+    ForceAimTweenSeconds=0.75
 
     bIsWeaponMounted=true
     bOldIsWeaponMounted=true
