@@ -126,6 +126,7 @@ var     float       FrontLeftAngle, FrontRightAngle, RearRightAngle, RearLeftAng
 var     float       HeavyEngineDamageThreshold;  // proportion of remaining engine health below which the engine is so badly damaged it limits speed
 var     bool        bCanCrash;                   // vehicle can be damaged by static geometry during impacts (damages the engine)
 var     bool        bWheelsAreDamaged;           // if wheels are damaged, the vehicle is slowed down
+var     bool        bCanCrushObstacles;          // vehicle can crush (clear) crushable obstacles by touching them
 var     float       EngineDamageFromGrenadeModifier;  // if engine can be damaged, by grenades (can't check bAPC & bTreaded, because there might be a vehile with engine exposed)
 var     float       DamagedWheelSpeedFactor;     // the max speed the vehicle can go if wheels are damaged (1.0 is no change)
 var     float       ImpactWorldDamageMult;       // multiplier for world geometry impact damage when vehicle bCanCrash
@@ -4838,6 +4839,7 @@ defaultproperties
     VehHitpoints(1)=(PointRadius=0.0,PointBone="",HitPointType=) // no.1 is no longer engine (neutralised by default, or overridden as required in subclass)
     TreadDamageThreshold=0.3
     bCanCrash=true
+    bCanCrushObstacles=true
     SatchelResistance=1.0
     DirectHEImpactDamageMult=1.0
     DamagedWheelSpeedFactor=0.35

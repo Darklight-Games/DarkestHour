@@ -1003,6 +1003,7 @@ defaultproperties
     bSpecialHUD=false
 
     // Damage
+    bCanCrushObstacles=false
     HealthMax=185.0
     Health=185
     EngineHealth=0

@@ -33,8 +33,17 @@ simulated state Intact
     event Touch(Actor Other)
     {
         local DarkestHourGame G;
+        local DHVehicle V;
 
         if (!Info.CanBeCrushed())
+        {
+            return;
+        }
+
+        V = DHVehicle(Other);
+
+        // Some vehicles (e.g. mounted guns) are flagged to not crush obstacles.
+        if (V != none && !V.bCanCrushObstacles)
         {
             return;
         }
