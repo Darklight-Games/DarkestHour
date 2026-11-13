@@ -5309,6 +5309,48 @@ simulated function Vector CalcDrawOffset(Inventory Inv)
     return DrawOffset;
 }
 
+// Returns the base eye height that corresponds to the pawn's current stance.
+simulated function float GetStanceBaseEyeHeight()
+{
+    if (bBipodDeployed && !bIsCrawling)
+    {
+        return DeployedEyeHeight;
+    }
+
+    if (bIsCrawling)
+    {
+        return ProneEyeHeight;
+    }
+
+    if (bIsCrouched)
+    {
+        return CrouchEyeHeightMod * CrouchHeight;
+    }
+
+    return default.BaseEyeHeight;
+}
+
+// Modified to account for the prone & bipod deployed stances, as the RO version only handles standing & crouching.
+simulated function SetBaseEyeheight()
+{
+    BaseEyeHeight = GetStanceBaseEyeHeight();
+    EyeHeight = BaseEyeHeight;
+}
+
+// Modified to re-apply the stance eye height when returning to first person view, as native code can clobber
+// BaseEyeHeight while the pawn is being viewed in behind view (e.g. the eye height would be wrong when prone).
+simulated function POVChanged(PlayerController PC, bool bBehindViewChanged)
+{
+    super.POVChanged(PC, bBehindViewChanged);
+
+    if (!bBehindViewChanged || PC == none || PC.bBehindView || IsProneTransitioning() || bIsMantling)
+    {
+        return;
+    }
+
+    SetBaseEyeheight();
+}
+
 // Returns true if the player can switch the prone state - only valid on the client.
 // Modified to fix prone eye-height bug.
 simulated function bool CanProneTransition()
