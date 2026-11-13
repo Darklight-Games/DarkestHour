@@ -482,6 +482,8 @@ simulated state Reloading extends Busy
             MGPawn.PlayReloadAnim(GetAnimDuration(ReloadSequence));
             MGPawn.SetIsZoomed(false);
         }
+
+        StartForceAim(rot(0, 0, 0), ForceAimTweenSeconds, INTERP_Deceleration);
     }
 
     simulated function EndState()
@@ -512,7 +514,6 @@ simulated state Reloading extends Busy
 Begin:
     // This makes the assumption that the sum of the tween times doesn't
     // exceed the length of the animation.
-    StartForceAim(rot(0, 0, 0), ForceAimTweenSeconds, INTERP_Deceleration);
     Sleep(GetAnimDuration(ReloadSequence) - ForceAimTweenSeconds);
     StopForceAim(ForceAimTweenSeconds, INTERP_Deceleration);
     Sleep(ForceAimTweenSeconds);
@@ -590,6 +591,8 @@ simulated state ChangingBarrels extends Busy
             // Zoom out.
             MGPawn.SetIsZoomed(false);
         }
+
+        StartForceAim(rot(0, 0, 0), ForceAimTweenSeconds, INTERP_Deceleration);
     }
 
     simulated function bool IsChangingBarrels()
@@ -618,10 +621,10 @@ simulated state ChangingBarrels extends Busy
     }
 
 Begin:
-    StartForceAim(rot(0, 0, 0), ForceAimTweenSeconds, INTERP_Deceleration);
     Sleep(GetAnimDuration(BarrelChangeAnimation) - ForceAimTweenSeconds);
     PerformBarrelChange();
     StopForceAim(ForceAimTweenSeconds, INTERP_Deceleration);
+    Sleep(ForceAimTweenSeconds);
     GotoState('');
 }
 
