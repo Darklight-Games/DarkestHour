@@ -288,7 +288,7 @@
                     "DEFAULT_WAIT": "15"
                 }
             },
-            "command": "if command -v nc &>/dev/null; then echo \"Waiting for server on port ${QUERY_PORT}...\"; timeout ${QUERY_TIMEOUT} sh -c \"while ! nc -uvz 127.0.0.1 ${QUERY_PORT}; do sleep 1; done\" || echo \"Failed to find the server!\"; else echo \"Cannot check the server status: 'netcat' is not installed! Waiting ${DEFAULT_WAIT} seconds...\"; sleep ${DEFAULT_WAIT}; fi",
+            "command": "NC=$(command -v nc || command -v ncat || command -v netcat); if [ -n \"$NC\" ]; then echo \"Waiting for server on port ${QUERY_PORT}...\"; timeout ${QUERY_TIMEOUT} sh -c \"while ! $NC -uvz 127.0.0.1 ${QUERY_PORT}; do sleep 1; done\" || echo \"Failed to find the server!\"; else echo \"Cannot check the server status: 'netcat' (nc, ncat or netcat) is not installed! Waiting ${DEFAULT_WAIT} seconds...\"; sleep ${DEFAULT_WAIT}; fi",
             "windows": {
                 // TODO: add proper Windows implementation
                 "command": "timeout 15"
