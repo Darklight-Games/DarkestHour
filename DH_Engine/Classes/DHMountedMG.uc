@@ -209,7 +209,6 @@ simulated function PostNetReceive()
 
     if (bOldBarrelIsSteamActive != bBarrelIsSteamActive)
     {
-        // TODO: turn on or off the steam emitter.
         SetBarrelSteamActive(0, bBarrelIsSteamActive);
     }
 }
@@ -311,7 +310,6 @@ simulated function InitializeAmmoRounds()
     }
 }
 
-// TODO: would be neat to display the barrel damage on the HUD!
 event bool AttemptFire(Controller C, bool bAltFire)
 {
     if (BarrelCondition == BC_Failed)
@@ -360,8 +358,6 @@ function Fire(Controller C)
     
     StartFiringAnimation();
 
-    // TODO: make sure this will work in multiplayer; only have this run on the client.
-    // server doesn't care.
     if (Level.NetMode != NM_DedicatedServer)
     {
         SpawnEjectors();
@@ -616,7 +612,6 @@ simulated state ChangingBarrels extends Busy
     {
         super.Tick(DeltaTime);
 
-        // TODO: we could also have this run while transitioning out of the gunsight?
         TickForceAim();
     }
 
@@ -824,8 +819,10 @@ simulated function StartReload(optional bool bResumingPausedReload)
 {
     super.StartReload(bResumingPausedReload);
 
-    // TODO: only do this if we're locally controlled.
-    GotoState('Reloading');
+    if (WeaponPawn.IsLocallyControlled())
+    {
+        GotoState('Reloading');
+    }
 }
 
 // Called from animation when the clip goes out of view.
@@ -865,7 +862,6 @@ function bool ResupplyAmmo()
         bDidResupply = true;
     }
 
-    // TODO: not sure if this works; double check it.
     // If weapon is waiting to reload & we have a player who doesn't use manual reloading (so must be out of ammo), then try to start a reload
     if (ReloadState == RL_Waiting && WeaponPawn != none && WeaponPawn.Occupied() && !PlayerUsesManualReloading() && bDidResupply)
     {
