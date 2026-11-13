@@ -154,11 +154,7 @@ function OnBarrelSteamIsActiveChanged(int BarrelIndex, bool bIsSteamActive)
     // Sets the variable here on the server. The client will then have this variable replicated to them.
     bBarrelIsSteamActive = bIsSteamActive;
 
-    if (Level.NetMode == NM_Standalone)
-    {
-        // In a standalone game there is no PostNetReceive, so we must trigger the steam update immediately.
-        SetBarrelSteamActive(BarrelIndex, bIsSteamActive);
-    }
+    SetBarrelSteamActive(BarrelIndex, bIsSteamActive);
 }
 
 function OnSpareBarrelCountChanged(int NewSpareBarrelCount)
@@ -210,6 +206,7 @@ simulated function PostNetReceive()
     if (bOldBarrelIsSteamActive != bBarrelIsSteamActive)
     {
         SetBarrelSteamActive(0, bBarrelIsSteamActive);
+        bOldBarrelIsSteamActive = bBarrelIsSteamActive;
     }
 }
 
