@@ -1070,11 +1070,6 @@ static function bool ShouldShowOnMenu(DHActorProxy.Context Context)
 
     PRI = DHPlayerReplicationInfo(Context.PlayerController.PlayerReplicationInfo);
 
-    if (Context.LevelInfo != none && Context.LevelInfo.Level.NetMode != NM_Standalone)
-    {
-        return false;
-    }
-
     // If this type is restricted by the level, don't show it on the menu.
     if (IsConstructionRestricted(Context))
     {
