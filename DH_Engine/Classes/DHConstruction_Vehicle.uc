@@ -54,13 +54,21 @@ simulated function PostNetBeginPlay()
     if (Role < ROLE_Authority)
     {
         // The client already knows what the mesh should be based on the vehicle class.
-        if (VehicleClass.default.ConstructionBaseMesh != none)
+        if (VehicleClass != none)
         {
-            LinkMesh(VehicleClass.default.ConstructionBaseMesh);
-        }
-        else
-        {
-            LinkMesh(VehicleClass.default.Mesh);
+            if (VehicleClass.default.ConstructionBaseMesh != none)
+            {
+                LinkMesh(VehicleClass.default.ConstructionBaseMesh);
+            }
+            else
+            {
+                LinkMesh(VehicleClass.default.Mesh);
+            }
+
+            if (HasAnim(VehicleClass.default.BeginningIdleAnim))
+            {
+                PlayAnim(VehicleClass.default.BeginningIdleAnim);
+            }
         }
 
         // Skins are not replicated, therefore we need to update client's appearance here.
