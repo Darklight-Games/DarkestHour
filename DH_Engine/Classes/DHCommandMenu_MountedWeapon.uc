@@ -89,64 +89,11 @@ function DHActorProxy.Context GetContext()
 
 function PickUpMountedWeapon(DHPawn Pawn, DHMountedGun Gun)
 {
-    local DHMountedWeapon MountedWeapon;
-    local DHMountedMG MG;
-    local int i;
-
-    if (Pawn == none || Gun == none || Gun.MountedWeaponClass == none)
+    if (Pawn != none && Gun != none)
     {
-        return;
+        Pawn.ServerPickUpMountedWeapon(Gun);
     }
 
-    // Give the player the stationary gun, delete the construction.
-    // Make sure to store the state of the weapon in the inventory item.
-    Pawn.GiveWeapon(string(Gun.MountedWeaponClass));
-
-    // Find the reference to the weapon that we just gave the player and transfer the state.
-    MountedWeapon = DHMountedWeapon(Pawn.FindInventoryType(Gun.MountedWeaponClass));
-
-    if (MountedWeapon != none)
-    {
-        if (Gun.MountedWeaponClass.default.ConstructionClass != none)
-        {
-            // Sets the variant and skin indices of the weapon.
-            Gun.MountedWeaponClass.default.ConstructionClass.static.GetIndicesForVehicleClass(
-                GetContext(),
-                Gun.Class, 
-                MountedWeapon.ConstructionVariantIndex,
-                MountedWeapon.ConstructionSkinIndex
-                );
-            
-            // Since we've changed the variant and skin indices, we need to update the proxy
-            // cursor to reflect this, otherwise it will show the default variant and skin.
-            // This probably only needs to be done in standalone, since the
-            // ConstructionVariantIndex and ConstructionSkinIndex are replicated to the client.
-            MountedWeapon.UpdateProxyCursor();
-        }
-
-        MountedWeapon.SetVehicleState(Gun.GetVehicleState());
-
-        // Transfer the barrel bundles to the weapon.
-        for (i = 0; i < Gun.WeaponPawns.Length; ++i)
-        {
-            MG = DHMountedMG(Gun.WeaponPawns[i].Gun);
-
-            if (MG != none)
-            {
-                MountedWeapon.WeaponBarrelBundles[i] = MG.BarrelBundle;
-                MountedWeapon.WeaponBarrelBundles[i].SetOwner(MountedWeapon);
-                MountedWeapon.WeaponBarrelBundles[i].OnConditionChanged = none;
-                MountedWeapon.WeaponBarrelBundles[i].OnIsSteamActiveChanged = none;
-                MountedWeapon.WeaponBarrelBundles[i].OnTemperatureChanged = none;
-
-                // Critical to null this since we destroy it indirectly below.
-                MG.BarrelBundle = none;
-            }
-        }
-    }
-
-    Gun.Destroy();
-    
     // Without this, the menu is holding on to a reference to the gun, which is an actor.
     // There is a bug in the engine where Objects holding on to Actors can cause segfaults when the actor is destroyed.
     // This would result in a crash about 10% of the time when the player picked up a gun.

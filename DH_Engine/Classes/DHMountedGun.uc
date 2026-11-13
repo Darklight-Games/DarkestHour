@@ -955,6 +955,73 @@ event KImpact(Actor Other, Vector Pos, Vector ImpactVel, Vector ImpactNorm)
     }
 }
 
+function PickUpMountedWeapon(DHPawn Pawn)
+{
+    local DHMountedWeapon MountedWeapon;
+    local DHMountedMG MG;
+    local int i;
+
+    if (Role != ROLE_Authority || Pawn == none || MountedWeaponClass == none)
+    {
+        return;
+    }
+
+    // Give the player the stationary gun, delete the construction.
+    // Make sure to store the state of the weapon in the inventory item.
+    Pawn.GiveWeapon(string(MountedWeaponClass));
+
+    // Find the reference to the weapon that we just gave the player and transfer the state.
+    MountedWeapon = DHMountedWeapon(Pawn.FindInventoryType(MountedWeaponClass));
+
+    if (MountedWeapon == none)
+    {
+        Warn("Somehow failed to spawn the mounted weapon for" @ Pawn);
+        return;
+    }
+
+    if (MountedWeaponClass.default.ConstructionClass != none)
+    {
+        // Sets the variant and skin indices of the weapon.
+        MountedWeaponClass.default.ConstructionClass.static.GetIndicesForVehicleClass(
+            MountedWeapon.GetContext(),
+            Class, 
+            MountedWeapon.ConstructionVariantIndex,
+            MountedWeapon.ConstructionSkinIndex
+            );
+        
+        if (Level.NetMode == NM_Standalone)
+        {
+            // Since we've changed the variant and skin indices, we need to update the proxy
+            // cursor to reflect this, otherwise it will show the default variant and skin.
+            // This probably only needs to be done in standalone, since the
+            // ConstructionVariantIndex and ConstructionSkinIndex are replicated to the client.
+            MountedWeapon.UpdateProxyCursor();
+        }
+    }
+
+    MountedWeapon.SetVehicleState(GetVehicleState());
+
+    // Transfer the barrel bundles to the weapon.
+    for (i = 0; i < WeaponPawns.Length; ++i)
+    {
+        MG = DHMountedMG(WeaponPawns[i].Gun);
+
+        if (MG != none)
+        {
+            MountedWeapon.WeaponBarrelBundles[i] = MG.BarrelBundle;
+            MountedWeapon.WeaponBarrelBundles[i].SetOwner(MountedWeapon);
+            MountedWeapon.WeaponBarrelBundles[i].OnConditionChanged = none;
+            MountedWeapon.WeaponBarrelBundles[i].OnIsSteamActiveChanged = none;
+            MountedWeapon.WeaponBarrelBundles[i].OnTemperatureChanged = none;
+
+            // Critical to null this since we destroy it indirectly below.
+            MG.BarrelBundle = none;
+        }
+    }
+    
+    Destroy();
+}
+
 // Functions emptied out as AT gun bases cannot be occupied & have no engine or treads:
 function Fire(optional float F);
 function ServerStartEngine();

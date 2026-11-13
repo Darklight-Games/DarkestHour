@@ -171,7 +171,7 @@ replication
 
     // Functions a client can call on the server
     reliable if (Role < ROLE_Authority)
-        ServerGiveWeapon;
+        ServerGiveWeapon, ServerPickUpMountedWeapon;
 
     // Functions the server can call on the client that owns this actor
     reliable if (Role == ROLE_Authority)
@@ -7256,6 +7256,16 @@ function EnterMountedGunRotation(DHMountedGun Gun)
     WeaponClass = class<DHWeapon>(DynamicLoadObject("DH_Weapons.DH_ATGunRotateWeapon", Class'Class'));
 
     ServerGiveWeapon("DH_Weapons.DH_ATGunRotateWeapon", WeaponClass, false);
+}
+
+function ServerPickUpMountedWeapon(DHMountedGun Gun)
+{
+    if (Gun == none || Gun.bDeleteMe || Gun.GetPickUpError(self) != ERROR_None)
+    {
+        return;
+    }
+
+    Gun.PickUpMountedWeapon(self);
 }
 
 function ServerExitMountedGunRotation()
