@@ -296,7 +296,7 @@ simulated function SpawnWeaponAttachments()
 
         for (j = 0; j < V.WeaponPawns.Length; ++j)
         {
-            if (V.WeaponPawns[j].Gun == self && j == VA.WeaponAttachIndex)
+            if (V.WeaponPawns[j] != none && V.WeaponPawns[j].Gun == self && j == VA.WeaponAttachIndex)
             {
                 if (VA.AttachClass == none)
                 {
