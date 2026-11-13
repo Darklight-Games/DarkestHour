@@ -43,7 +43,7 @@ replication
     reliable if (Role < ROLE_Authority)
         ServerDeployEnd;
     reliable if (Role == ROLE_Authority && (bNetInitial || bNetDirty))
-        ConstructionVariantIndex, ConstructionSkinIndex;
+        ConstructionClass, ConstructionVariantIndex, ConstructionSkinIndex;
     reliable if (bNetOwner && bNetDirty && Role == ROLE_Authority)
         HudAmmoCount;
 }
@@ -112,7 +112,13 @@ simulated state Deploying
 Begin:
     PlayAnim(DeployAnimation);
     Sleep(GetAnimDuration(DeployAnimation));
-    ServerDeployEnd(ProxyCursor.GroundActor, ProxyCursor.Location, ProxyCursor.Rotation);
+    ServerDeployEnd(
+        ProxyCursor.GroundActor,
+        ProxyCursor.Location,
+        ProxyCursor.Rotation,
+        ConstructionVariantIndex,
+        ConstructionSkinIndex
+        );
     GotoState('Idle');
 }
 
@@ -134,7 +140,7 @@ function DHActorProxy.Context GetContext()
     return Context;
 }
 
-function class<DHVehicle> GetVehicleClass()
+simulated function class<DHVehicle> GetVehicleClass()
 {
     local class<DHVehicle> VehicleClass;
 
@@ -335,11 +341,10 @@ simulated function Tick(float DeltaTime)
     if (Instigator != none && Instigator.Weapon != self && Instigator.PendingWeapon != self && Instigator.IsLocallyControlled() && bIsEncumbering)
     {
         Instigator.SwitchWeapon(InventoryGroup);
+        return;
     }
-    else
-    {
-        super.Tick(DeltaTime);
-    }
+
+    super.Tick(DeltaTime);
 
     if (CanConfirmPlacement())
     {
@@ -482,7 +487,7 @@ function bool CanSpawnVehicle(Actor Owner, Vector Location, Rotator Rotation)
 }
 
 // New function to spawn the deployed stationary weapon, which is a Vehicle actor, & to destroy the carried weapon.
-function ServerDeployEnd(Actor Owner, Vector Location, Rotator Rotation)
+function ServerDeployEnd(Actor Owner, Vector Location, Rotator Rotation, int VariantIndex, int SkinIndex)
 {
     local DHVehicle Vehicle;
     local class<DHVehicle> VehicleClass;
@@ -493,6 +498,9 @@ function ServerDeployEnd(Actor Owner, Vector Location, Rotator Rotation)
     {
         return;
     }
+
+    self.ConstructionVariantIndex = VariantIndex;
+    self.ConstructionSkinIndex = SkinIndex;
     
     if (!CanSpawnVehicle(Owner, Location, Rotation))
     {
@@ -510,7 +518,7 @@ function ServerDeployEnd(Actor Owner, Vector Location, Rotator Rotation)
         return;
     }
 
-    Vehicle = Spawn(VehicleClass,,, ProxyCursor.Location, ProxyCursor.Rotation);
+    Vehicle = Spawn(VehicleClass,,, Location, Rotation);
 
     if (Vehicle == none)
     {
@@ -573,7 +581,7 @@ static function string GetInventoryName(bool bUseNativeItemNames)
     return super.GetInventoryName(bUseNativeItemNames);
 }
 
-final function CycleVariant()
+simulated function CycleVariant()
 {
     local DHMountedWeaponProxy Proxy;
 
@@ -599,7 +607,7 @@ exec simulated function SwitchFireMode()
     CycleVariant();
 }
 
-public function bool ShouldShowProxyCursor()
+simulated function bool ShouldShowProxyCursor()
 {
     local DHPawn P;
 

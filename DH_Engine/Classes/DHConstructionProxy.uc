@@ -75,7 +75,7 @@ final function UpdateDefaultSkinIndex()
     DefaultSkinIndex = ConstructionClass.static.GetDefaultSkinIndexForVariant(GetContext(), VariantIndex);
 }
 
-final function CycleVariant()
+simulated function CycleVariant()
 {
     VariantIndex++;
 
@@ -83,7 +83,7 @@ final function CycleVariant()
     UpdateAppearance();
 }
 
-final function CycleSkin()
+simulated function CycleSkin()
 {
     SkinIndex++;
 

@@ -100,7 +100,7 @@ simulated function OnTick(float DeltaTime)
 
         if (IsInState('RaisingWeapon') || IsInState('LoweringWeapon'))
         {
-            ProxyCursor.bHidden=true;
+            ProxyCursor.bHidden = true;
         }
         else if (ProxyCursor.ProxyError.Type != ERROR_None)
         {
@@ -380,12 +380,12 @@ simulated function TraceFromPlayer(
 
 function bool IsSocketValid(DHActorProxySocket Socket);
 
-function float GetTraceDepthMeters()
+simulated function float GetTraceDepthMeters()
 {
     return TraceDepthMeters;
 }
 
-function float GetTraceHeightMeters()
+simulated function float GetTraceHeightMeters()
 {
     return TraceHeightMeters;
 }
