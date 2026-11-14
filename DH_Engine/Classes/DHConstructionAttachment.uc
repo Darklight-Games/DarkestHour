@@ -19,7 +19,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
 }
 
 simulated function bool CanTakeTearDownDamageFromPawn(Pawn P, optional bool bShouldSendErrorMessage)
-{   
+{
     local DHConstruction C;
 
     C = DHConstruction(Base);
