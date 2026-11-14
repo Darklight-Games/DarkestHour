@@ -121,7 +121,7 @@ function DoTrace(Vector Start, Rotator Dir)
     }
 
     // Calculate damage if it's something we could hurt (no damage to world geometry unless it's a destroyable mesh)
-    if (!Other.bWorldGeometry || Other.IsA('RODestroyableStaticMesh') || Other.IsA('DHConstruction'))
+    if (!Other.bWorldGeometry || Other.IsA('RODestroyableStaticMesh') || Other.IsA('DHConstruction') || Other.IsA('DHConstructionAttachment'))
     {
         Scale = (FClamp(HoldTime, MinHoldTime, FullHeldTime) - MinHoldTime) / (FullHeldTime - MinHoldTime);
 
@@ -178,7 +178,7 @@ function DoTrace(Vector Start, Rotator Dir)
     // Hit something other than a player
     else
     {
-        if (!Other.bWorldGeometry || Other.IsA('RODestroyableStaticMesh') || Other.IsA('DHConstruction')) // no damage to world geometry unless it's a destroyable mesh
+        if (!Other.bWorldGeometry || Other.IsA('RODestroyableStaticMesh') || Other.IsA('DHConstruction') || Other.IsA('DHConstructionAttachment')) // no damage to world geometry unless it's a destroyable mesh
         {
             Other.TakeDamage(int(Damage), Instigator, HitLocation, MomentumTransfer * X, ThisDamageType);
         }
@@ -227,7 +227,7 @@ simulated state MeleeAttacking
 
     simulated function EndState()
     {
-         PerformFire();
+        PerformFire();
 
         if (Instigator != none)
         {

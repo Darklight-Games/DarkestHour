@@ -3,31 +3,34 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHRadioHQAttachment extends DHRadio;
+class DHRadioHQAttachment extends DHConstructionAttachment;
+
+var byte                TeamIndex;
+
+var DHRadioHQ           Radio;
+var class<DHRadioHQ>    RadioClass;
+var Vector              RadioOffset;
 
 simulated function MakeVisible();
 simulated function MakeInvisible() { GotoState('Invisible'); }
 
-simulated function ERadioUsageError GetRadioUsageError(Pawn User)
+function Setup()
 {
-    local DHSpawnPoint_PlatoonHQ SP;
-
-    foreach RadiusActors(Class'DHSpawnPoint_PlatoonHQ', SP, 115, Location)
-    {   
-        break;
-    }
-
-    if (SP == none)
+    if (Radio == none)
     {
-        return ERROR_Fatal;
+        Radio = Spawn(RadioClass, self);
     }
 
-    if (!SP.bIsEstablished)
-    {   
-        return ERROR_Calibrating;
+    if (Radio != none)
+    {
+        Radio.TeamIndex = TeamIndex;
+        Radio.SetBase(self);
+        Radio.SetRelativeLocation(RadioOffset);
     }
-
-    return super.GetRadioUsageError(User);
+    else
+    {
+        Warn("Failed to spawn radio!");
+    }
 }
 
 simulated state Invisible
@@ -36,41 +39,40 @@ simulated state Invisible
     simulated function MakeInvisible();
 
     simulated function BeginState()
-    {
+    {   
+        if (Radio != none)
+        {
+            Radio.bHidden = true;
+            Radio.AmbientSound = none;
+        }
+
         bHidden = true;
-        AmbientSound = none;
     }
 
     simulated function EndState()
-    {
+    {   
+        if (Radio != none)
+        {
+            Radio.bHidden = false;
+            Radio.AmbientSound = Radio.default.AmbientSound;
+        }
+
         bHidden = false;
-        AmbientSound = default.AmbientSound;
+    }
+}
+
+simulated function Destroyed()
+{
+    if (Radio != none)
+    {
+        Radio.Destroy();
     }
 }
 
 defaultproperties
 {
-    DrawType=DT_StaticMesh
-    RemoteRole=ROLE_DumbProxy
-
-    NetUpdateFrequency=10.0
-    bAlwaysRelevant=true
-    bOnlyDirtyReplication=true
-
-    bUseCylinderCollision=false
-    bCollideActors=true
-    bCollideWorld=false
-    bBlockActors=true
-    bBlockKarma=true
-
-    bBlockZeroExtentTraces=true
-    bBlockNonZeroExtentTraces=true
-    bBlockProjectiles=true
-    bProjTarget=true
-    bPathColliding=true
-    bWorldGeometry=true
-
     StaticMesh=StaticMesh'DH_Construction_stc.GER_Artillery_Radio'
 
-    bShouldShowOnSituationMap=false
+    RadioClass=Class'DHRadioHQ'
+    RadioOffset=(Y=-10,Z=64)
 }
