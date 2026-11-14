@@ -18,6 +18,20 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
     }
 }
 
+simulated function bool CanTakeTearDownDamageFromPawn(Pawn P, optional bool bShouldSendErrorMessage)
+{   
+    local DHConstruction C;
+
+    C = DHConstruction(Base);
+    
+    if (C == none)
+    {
+        return false;
+    }
+
+    return C.CanTakeTearDownDamageFromPawn(P);
+}
+
 defaultproperties
 {
     DrawType=DT_StaticMesh

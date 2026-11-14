@@ -227,7 +227,7 @@ simulated state MeleeAttacking
 
     simulated function EndState()
     {
-         PerformFire();
+        PerformFire();
 
         if (Instigator != none)
         {
