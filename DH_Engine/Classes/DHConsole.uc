@@ -1096,7 +1096,7 @@ function LoadConsoleCommandHistory()
     HistoryBot = -1;
     HistoryCur = 0;
 
-    Count = Min(PC.ConsoleCommandHistory.Length, arraycount(History));
+    Count = Min(PC.ConsoleCommandHistory.Length, arraycount(History) - 1);
 
     for (i = 0; i < Count; ++i)
     {
@@ -1140,7 +1140,7 @@ function SaveConsoleCommandHistory(string Command)
 
     PC.ConsoleCommandHistory.Insert(0, 1);
     PC.ConsoleCommandHistory[0] = Command;
-    PC.ConsoleCommandHistory.Length = Min(PC.ConsoleCommandHistory.Length, arraycount(History));
+    PC.ConsoleCommandHistory.Length = Min(PC.ConsoleCommandHistory.Length, arraycount(History) - 1);
     PC.SaveConfig();
 
     LoadConsoleCommandHistory();
