@@ -20,6 +20,7 @@ enum ERoleSelector
     ERS_ALL,
     ERS_SL,
     ERS_ASL,
+    ERS_LOGI,
     ERS_SL_OR_ASL,
     ERS_ARTILLERY_OPERATOR,
     ERS_ARTILLERY_SPOTTER,
@@ -41,6 +42,7 @@ var     int                     DHKills;
 var     int                     SquadIndex;
 var     int                     SquadMemberIndex;
 var     bool                    bIsSquadAssistant;
+var     bool                    bIsSquadLogi;
 
 // Scoring
 var     int                     TotalScore;
@@ -48,6 +50,7 @@ var     int                     CategoryScores[2];
 
 var     localized string        SquadLeaderAbbreviation;
 var     localized string        AssistantAbbreviation;
+var     localized string        LogiAbbreviation;
 
 var     int                     PlayerIQ;
 
@@ -61,7 +64,7 @@ replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
-        SquadIndex, SquadMemberIndex, PatronTier, bIsDeveloper, DHKills, bIsSquadAssistant,
+        SquadIndex, SquadMemberIndex, PatronTier, bIsDeveloper, DHKills, bIsSquadAssistant, bIsSquadLogi,
         TotalScore, CategoryScores, PlayerIQ, NoRallyPointsTime, bIsIncognito, bIsPossesingPawn,
         bRestrictOutboundVoice, bRestrictLeaderPositions;
 }
@@ -75,6 +78,10 @@ simulated function string GetNamePrefix()
     else if (bIsSquadAssistant)
     {
         return default.AssistantAbbreviation;
+    }
+    else if (IsLogi())
+    {
+        return default.LogiAbbreviation;
     }
     else if (IsInSquad())
     {
@@ -105,6 +112,11 @@ simulated function bool IsAssistantLeader()
     return IsInSquad() && bIsSquadAssistant;
 }
 
+simulated function bool IsLogi()
+{
+    return IsInSquad() && bIsSquadLogi;
+}
+
 simulated function bool IsASL()
 {
     return IsAssistantLeader();
@@ -113,6 +125,11 @@ simulated function bool IsASL()
 simulated function bool IsSLorASL()
 {
     return IsSL() || IsASL();
+}
+
+simulated function bool IsSLorLogi()
+{
+    return IsSL() || IsLogi();
 }
 
 simulated function bool IsInSquad()
@@ -203,7 +220,7 @@ simulated static function bool IsPlayerVehicleAccessRestricted(DHPlayer C)
 
 simulated static function bool IsPlayerLicensedToDrive(DHPlayer C)
 {
-    return C != none && DHPlayerReplicationInfo(C.PlayerReplicationInfo) != none && DHPlayerReplicationInfo(C.PlayerReplicationInfo).IsSLorASL();
+    return C != none && DHPlayerReplicationInfo(C.PlayerReplicationInfo) != none && DHPlayerReplicationInfo(C.PlayerReplicationInfo).IsSLorLogi();
 }
 
 // Modified to fix bug where the last line was being drawn at top of screen, instead of in vertical sequence, so overwriting info in the 1st screen line
@@ -236,6 +253,8 @@ simulated function bool CheckRole(ERoleSelector RoleSelector)
             return IsSL();
         case ERS_ASL:
             return IsASL();
+        case ERS_LOGI:
+            return IsLogi();
         case ERS_ARTILLERY_SPOTTER:
             return IsArtillerySpotter();
         case ERS_ARTILLERY_OPERATOR:
@@ -275,4 +294,5 @@ defaultproperties
     SquadMemberIndex=-1
     SquadLeaderAbbreviation="SL"
     AssistantAbbreviation="A"
+    LogiAbbreviation="L"
 }

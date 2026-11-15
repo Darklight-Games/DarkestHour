@@ -76,6 +76,12 @@ function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
                 case 4: // Remove assistant
                     PC.ServerSquadMakeAssistant(none);
                     break;
+                case 5: // Make logi
+                    PC.ServerSquadMakeLogi(OtherPRI);
+                    break;
+                case 6: // Remove logi
+                    PC.ServerSquadMakeLogi(none);
+                    break;
                 default:
                     break;
             }
@@ -152,12 +158,21 @@ function bool IsOptionHidden(int OptionIndex)
 
     if (OtherPRI != none)
     {
+        if (OtherPRI.IsSquadLeader() && (OptionIndex == 5 || OptionIndex == 6))
+        {
+            return true;
+        }
+
         switch (OptionIndex)
         {
             case 3: // Make assistant
                 return OtherPRI.bIsSquadAssistant;
             case 4: // Remove assistant
                 return !OtherPRI.bIsSquadAssistant;
+            case 5: // Make logi
+                return OtherPRI.bIsSquadLogi;
+            case 6: // Remove logi
+                return !OtherPRI.bIsSquadLogi;
             default:
                 break;
         }
@@ -173,5 +188,7 @@ defaultproperties
     Options(2)=(SubjectText="Ban from squad",Material=Material'DH_InterfaceArt2_tex.squad_ban')
     Options(3)=(SubjectText="Make assistant",Material=Texture'DH_InterfaceArt2_tex.assistant')
     Options(4)=(SubjectText="Remove assistant",Material=Texture'DH_InterfaceArt2_tex.assistant')
+    Options(5)=(SubjectText="Make logi",Material=Texture'DH_InterfaceArt2_tex.assistant')
+    Options(6)=(SubjectText="Remove logi",Material=Texture'DH_InterfaceArt2_tex.assistant')
 }
 

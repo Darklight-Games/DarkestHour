@@ -52,6 +52,8 @@ var localized string AlreadyInSquad;
 var localized string YouAreNowAssistantMessage;
 var localized string YouAreNoLongerAssistantMessage;
 var localized string NewAssistantMessage;
+var localized string YouAreNowLogiMessage;
+var localized string YouAreNoLongerLogiMessage;
 var localized string NotInSquadMessage;
 var localized string SquadMergedSourceMessage;
 var localized string SquadMergedSourceGenericMessage;
@@ -211,6 +213,10 @@ static function string GetString(optional int S, optional PlayerReplicationInfo 
             return Repl(default.SquadPromotionRequestSentMessage, "{0}", RelatedPRI_1.PlayerName);
         case 85:
             return Repl(default.SquadPromotionRequestDuplicateMessage, "{0}", RelatedPRI_1.PlayerName);
+        case 86:
+            return default.YouAreNowLogiMessage;
+        case 87:
+            return default.YouAreNoLongerLogiMessage;
         default:
             break;
     }
@@ -267,6 +273,8 @@ defaultproperties
     YouAreNowAssistantMessage="You are now the squad leader's assistant."
     YouAreNoLongerAssistantMessage="You are no longer the squad leader's assistant."
     NewAssistantMessage="{0} has been promoted to squad leader's assistant."
+    YouAreNowLogiMessage="You are now the squad's logi."
+    YouAreNoLongerLogiMessage="You are no longer the squad's logi."
     NotInSquadMessage="You are not in a squad. Press [%SQUADMENU%] to enter the squad menu or press [%SQUADJOINAUTO%] to automatically join a squad."
     SquadMergedSourceMessage="Your squad has been merged into {0} squad. Your new squad leader is {1}."
     SquadMergedDestinationMessage="Another squad has been merged into your squad."
