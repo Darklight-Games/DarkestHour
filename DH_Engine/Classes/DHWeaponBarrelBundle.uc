@@ -218,12 +218,14 @@ function WeaponFired(optional int ActiveBarrelIndex)
 // Periodically lowers the barrel temp of all barrels, but no further than the level's ambient temperature.
 function Timer()
 {
-    local float OldTemperature, ActiveBarrelIndex;
-    local int i;
+    local float OldTemperature;
+    local int i, ActiveBarrelIndex;
 
     for (i = 0; i < Barrels.Length; ++i)
     {
         OldTemperature = Barrels[i].Temperature;
+
+        Barrels[i].Temperature = FMax(LevelTempCentigrade, Barrels[i].Temperature - (BarrelClass.default.BarrelCoolingRate * BARREL_TIMER_RATE));
 
         if (OldTemperature != Barrels[i].Temperature)
         {
@@ -234,8 +236,6 @@ function Timer()
                 OnTemperatureChanged(ActiveBarrelIndex, Barrels[i].Temperature);
             }
         }
-
-        Barrels[i].Temperature = FMax(LevelTempCentigrade, Barrels[i].Temperature - (BarrelClass.default.BarrelCoolingRate * BARREL_TIMER_RATE));
 
         UpdateBarrelStatus(i);
     }
