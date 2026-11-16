@@ -838,6 +838,23 @@ simulated function IncrementRange()
     }
 }
 
+// Modified to ignore a request to start a new reload when there are no spare
+// mags but rounds remain in the current mag. Otherwise, the base implementation
+// would put the weapon into the waiting state, which prevents it from firing.
+simulated function AttemptReload()
+{
+    local byte AmmoIndex;
+
+    AmmoIndex = GetAmmoIndex();
+
+    if (ReloadState == RL_ReadyToFire && HasAmmo(AmmoIndex) && !HasAmmoToReload(AmmoIndex))
+    {
+        return;
+    }
+
+    super.AttemptReload();
+}
+
 simulated function StartReload(optional bool bResumingPausedReload)
 {
     super.StartReload(bResumingPausedReload);

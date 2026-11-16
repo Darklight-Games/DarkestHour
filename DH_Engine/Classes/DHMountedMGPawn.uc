@@ -741,8 +741,17 @@ simulated function bool CanReloadInDriverPositionIndex(int DriverPositionIndex)
 // ClientSetReloadState, which starts the clientside reload.
 simulated function AttemptReload()
 {
+    // Don't interrupt a reload or barrel change.
     if (VehWep == none || IsWeaponBusy())
     {
+        return;
+    }
+
+    // Don't start a new reload without a spare mag. The IsReloading() check
+    // allows resuming a paused reload, since its mag was already consumed.
+    if (!VehWep.IsReloading() && !VehWep.HasAmmoToReload(VehWep.GetAmmoIndex()))
+    {
+        PendingAction = ACTION_None;
         return;
     }
 
