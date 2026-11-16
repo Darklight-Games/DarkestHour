@@ -267,10 +267,10 @@ function bool FillAmmo()
             until (MainAmmoResupplyCount == 0 || bDidResupplyCannon == false);
         }
 
-        for (i = 0; i < WeaponBarrelBundles.Length; ++i)
+        for (j = 0; j < WeaponBarrelBundles.Length; ++j)
         {
-            if (WeaponBarrelBundles[i] != none &&
-                WeaponBarrelBundles[i].ReplaceInactiveFailedBarrels() > 0)
+            if (WeaponBarrelBundles[j] != none &&
+                WeaponBarrelBundles[j].ReplaceInactiveFailedBarrels() > 0)
             {
                 bDidResupplyWeapon = true;
             }
