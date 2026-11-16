@@ -126,7 +126,7 @@ function DHActorProxy.Context GetContext()
 {
     local DHActorProxy.Context Context;
 
-    if (Instigator == none)
+    if (Instigator != none)
     {
         Context.TeamIndex = Instigator.GetTeamNum();
         Context.PlayerController = DHPlayer(Instigator.Controller);
