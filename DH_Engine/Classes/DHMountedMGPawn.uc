@@ -492,8 +492,8 @@ function UpdateRocketAcceleration(Float DeltaTime, Float YawChange, Float PitchC
 {
     PitchChange *= 0.5;
 
-    // If we are reloading, don't allow the player to rotate the gun.
-    if (IsReloading())
+    // If we are reloading or changing barrels, don't allow the player to rotate the gun.
+    if (IsWeaponBusy())
     {
         PitchChange = 0;
         YawChange = 0;
@@ -575,20 +575,6 @@ simulated function PrevWeapon()
     SetIsZoomed(false);
 
     super.PrevWeapon();
-}
-
-function bool CanFire()
-{
-    local DHMountedMG MG;
-
-    MG = DHMountedMG(Gun);
-
-    if (MG.BarrelCondition == BC_Failed || MG.IsBusy())
-    {
-        return false;
-    }
-
-    return super.CanFire();
 }
 
 function int GetSpareBarrelCount()

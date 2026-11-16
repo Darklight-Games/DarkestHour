@@ -27,15 +27,6 @@
 //      maybe just *all* vehicles where you're changing to the same position?)
 // [ ] sometimes, when getting on the gun for the first time, the gun will
 //      reload immediately for no reason (with no animation)
-// [ ] getting off while reloading then re-entering finishes the reload, with no
-//      anim, starts from the beginning (when the player leaves, reset any state
-//      that would cause this).
-//==============================================================================
-// BARREL BUGS
-//==============================================================================
-// [ ] destoying a barrel also stops you from being able to rotate the gun with
-//      the mouse (this is due to AllowFire being used as a gate for "can the
-//      gun move")
 //==============================================================================
 
 class DH_MG34LafetteMG extends DHMountedMG;

@@ -310,15 +310,17 @@ simulated function InitializeAmmoRounds()
     }
 }
 
-event bool AttemptFire(Controller C, bool bAltFire)
+// Modified to prevent firing if the barrel has failed.
+// This is checked on both the server (AttemptFire) and the owning client
+// OwnerEffects, so no phantom firing effects are played.
+simulated function bool ReadyToFire(bool bAltFire)
 {
     if (BarrelCondition == BC_Failed)
     {
-        // Do not allow fire if the barrel has failed.
         return false;
     }
 
-    super.AttemptFire(C, bAltFire);
+    return super.ReadyToFire(bAltFire);
 }
 
 simulated function SpawnEjectors()
@@ -421,15 +423,13 @@ simulated state Busy
     // Don't allow the player to change the range while busy.
     simulated function DecrementRange() {}
     simulated function IncrementRange() {}
+    // No firing while busy.
+    simulated function bool ReadyToFire(bool bAltFire);
+    event bool AttemptFire(Controller C, bool bAltFire);
 
     simulated function bool IsBusy()
     {
         return true;
-    }
-
-    event bool AttemptFire(Controller C, bool bAltFire)
-    {
-        return false;
     }
 }
 
