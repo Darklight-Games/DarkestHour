@@ -135,7 +135,6 @@ function DHActorProxy.Context GetContext()
     Context.LevelInfo = class'DH_LevelInfo'.static.GetInstance(Level);
     Context.VariantIndex = ConstructionVariantIndex;
     Context.SkinIndex = ConstructionSkinIndex;
-    Context.bIsInHands = true;
 
     return Context;
 }

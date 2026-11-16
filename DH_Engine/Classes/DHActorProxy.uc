@@ -66,7 +66,6 @@ enum EActorProxyErrorType
     ERROR_NoSquadmatesNearby,       // No squadmates nearby.
     ERROR_Leaning,                  // Cannot be placed if player is leaning
     ERROR_PlayerIsntCrouched,       // Cannot be placed if player is not crouched
-    ERROR_Other,
 };
 
 var struct ActorProxyError
@@ -89,7 +88,6 @@ struct Context
     var Object OptionalObject;
     var int VariantIndex;
     var int SkinIndex;
-    var bool bIsInHands;    // The actor for which this is a proxy is in the player's hands.
 };
 
 protected simulated function bool CanPlaceIndoors() { return true; }
