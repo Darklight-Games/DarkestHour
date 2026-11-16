@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // A management class for a weapon's barrels.
-// Allows for multiple active barrels, automatied barrel cooling.
+// Allows for multiple active barrels, automated barrel cooling.
 //==============================================================================
 
 class DHWeaponBarrelBundle extends Actor;
@@ -128,8 +128,8 @@ simulated function Destroyed()
     super.Destroyed();
 }
 
-// Returns the index of the next best inactive barrel to switch to, sorting first by
-// condition and then by temperature.
+// Returns the index of the next best inactive barrel to switch to.
+// A barrel only replaces the current best candidate if it is no worse in condition and no hotter.
 // Returns -1 if there are no barrels that can be changed to.
 private function int GetNextBestBarrelIndex()
 {
@@ -159,7 +159,7 @@ private function int GetNextBestBarrelIndex()
         }
         
         if (Barrels[i].Condition <= Barrels[NextBestBarrelIndex].Condition &&
-            Barrels[i].Temperature <= Barrels[NextBestBarrelIndex].Condition)
+            Barrels[i].Temperature <= Barrels[NextBestBarrelIndex].Temperature)
         {
             NextBestBarrelIndex = i;
         }
