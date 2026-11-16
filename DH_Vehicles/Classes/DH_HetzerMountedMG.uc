@@ -81,6 +81,8 @@ simulated state Reloading
             bNetIsReloading = true;
         }
 
+        // This forces the pitch and yaw bones back to their default rotation
+        // and stops the game from manipulating the bones.
         PitchBone = '';
         YawBone = '';
 
