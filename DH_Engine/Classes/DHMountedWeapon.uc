@@ -74,7 +74,7 @@ simulated state Deploying
 
         P = DHPawn(Instigator);
 
-        if (P != none)
+        if (P != none && P.Controller != none)
         {
             P.bIsDeployingMountedWeapon = true;
             P.SetLockViewRotation(true, P.Controller.Rotation); // makes the pawn lock view pitch & yaw
@@ -112,17 +112,20 @@ simulated state Deploying
 Begin:
     PlayAnim(DeployAnimation);
     Sleep(GetAnimDuration(DeployAnimation));
-    ServerDeployEnd(
-        ProxyCursor.GroundActor,
-        ProxyCursor.Location,
-        ProxyCursor.Rotation,
-        ConstructionVariantIndex,
-        ConstructionSkinIndex
+    if (ProxyCursor != none)
+    {
+        ServerDeployEnd(
+            ProxyCursor.GroundActor,
+            ProxyCursor.Location,
+            ProxyCursor.Rotation,
+            ConstructionVariantIndex,
+            ConstructionSkinIndex
         );
+    }
     GotoState('Idle');
 }
 
-function DHActorProxy.Context GetContext()
+simulated function DHActorProxy.Context GetContext()
 {
     local DHActorProxy.Context Context;
 
@@ -363,7 +366,10 @@ simulated function BringUp(optional Weapon PrevWeapon)
 
     super.BringUp(PrevWeapon);
 
-    PC = DHPlayer(Instigator.Controller);
+    if (Instigator != none)
+    {
+        PC = DHPlayer(Instigator.Controller);
+    }
 
     if (PC != none)
     {
@@ -428,9 +434,6 @@ simulated state RaisingWeapon
 // Implemented so pressing the deploy key will attempt to deploy a carried stationary weapon
 exec simulated function Deploy()
 {
-    // BUG: player can drop the weapon while in this state, bricking the pawn's movement until it dies.
-    // solution: don't let them drop the weapon while deploying.
-
     if (CanConfirmPlacement())
     {
         GotoState('Deploying');
@@ -447,7 +450,7 @@ simulated function bool CanConfirmPlacement()
     return super.CanConfirmPlacement();
 }
 
-function bool CanSpawnVehicle(Actor Owner, Vector Location, Rotator Rotation)
+function bool CanSpawnVehicle(Actor GroundActor, Vector Location, Rotator Rotation)
 {
     local DHMountedWeaponProxy TestProxy;
     local DHActorProxy.ActorProxyError Error;
@@ -460,7 +463,7 @@ function bool CanSpawnVehicle(Actor Owner, Vector Location, Rotator Rotation)
         return false;
     }
 
-    TestProxy.GroundActor = Owner;
+    TestProxy.GroundActor = GroundActor;
     TestProxy.SetConstructionClass(ConstructionClass, ConstructionVariantIndex, ConstructionSkinIndex);
     TestProxy.SetLocation(Location);
     TestProxy.SetRotation(Rotation);
@@ -477,14 +480,14 @@ function bool CanSpawnVehicle(Actor Owner, Vector Location, Rotator Rotation)
 }
 
 // New function to spawn the deployed stationary weapon, which is a Vehicle actor, & to destroy the carried weapon.
-function ServerDeployEnd(Actor Owner, Vector Location, Rotator Rotation, int VariantIndex, int SkinIndex)
+function ServerDeployEnd(Actor GroundActor, Vector Location, Rotator Rotation, int VariantIndex, int SkinIndex)
 {
     local DHVehicle Vehicle;
     local class<DHVehicle> VehicleClass;
     local DHMountedMG MG;
     local int i;
 
-    if (bDeleteMe)
+    if (bDeleteMe || Instigator == none)
     {
         return;
     }
@@ -492,7 +495,7 @@ function ServerDeployEnd(Actor Owner, Vector Location, Rotator Rotation, int Var
     self.ConstructionVariantIndex = VariantIndex;
     self.ConstructionSkinIndex = SkinIndex;
     
-    if (!CanSpawnVehicle(Owner, Location, Rotation))
+    if (!CanSpawnVehicle(GroundActor, Location, Rotation))
     {
         Log("Can't spawn vehicle for some reason");
 
@@ -563,7 +566,7 @@ exec simulated function ROManualReload();
 
 static function string GetInventoryName(bool bUseNativeItemNames)
 {
-    if (default.ConstructionClass.default.VehicleClass != none)
+    if (default.ConstructionClass != none && default.ConstructionClass.default.VehicleClass != none)
     {
         return default.ConstructionClass.default.VehicleClass.default.VehicleNameString;
     }
