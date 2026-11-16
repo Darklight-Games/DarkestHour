@@ -119,6 +119,7 @@ function PostBeginPlay()
 
     if (PawnOwner == none)
     {
+        Destroy();
         return;
     }
 
@@ -127,6 +128,7 @@ function PostBeginPlay()
     if (PlayerOwner == none)
     {
         Destroy();
+        return;
     }
 
     Projector = Spawn(class'DHActorProxyProjector', self);
