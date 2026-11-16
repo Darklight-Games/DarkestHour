@@ -37,6 +37,12 @@ function QueueCameraTransition(name TargetCameraBone, float StartTimeSeconds, fl
     CameraTransitions[CameraTransitions.Length] = NewTransition;
 }
 
+// Removes all queued camera transitions (e.g., when a reload is cancelled part-way through).
+function ClearTransitions()
+{
+    CameraTransitions.Length = 0;
+}
+
 // Tick function to update the camera location and rotation based on state and active transitions.
 function Tick(Actor Actor, float TimeSeconds)
 {

@@ -28,6 +28,7 @@ function ActorProxyError GetPawnError()
         return E;
     }
 
+    // TODO: have this be dependent on the mounted weapon itself.
     if (!P.bIsCrouched) // Do not allow player to deploy the stationary weapon if he isn't crouched
     {
         E.Type = ERROR_PlayerIsntCrouched;

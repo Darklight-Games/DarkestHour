@@ -3,6 +3,8 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // TODO: let the player move the camera around somehow when using MMGs? (free look)
+// [ ] add third person reload animation (must call DeactivateAllAnimationDrivers,
+//     then restore after the animation is done).
 //==============================================================================
 
 class DH_MG34LafetteMGPawn extends DHMountedMGPawn;
@@ -23,6 +25,7 @@ defaultproperties
     DriverPositionsExtra(1)=(CameraBone="IRONSIGHT_CAMERA")
     DriverPositionsExtra(2)=(CameraBone="")
 
+    // TODO: is this even necessary?
     DriverPositionMeshSkins(0)=Texture'DH_MG34_tex.MG34_1ST'
 
     GunsightCameraBone="GUNSIGHT_CAMERA"

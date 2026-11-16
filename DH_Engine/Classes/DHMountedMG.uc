@@ -16,9 +16,6 @@ var bool                    bOldIsWeaponMounted;
 var name                    MountBoneName;
 var byte                    MountBoneChannel;
 
-// Reload
-var()   name                ReloadSequence;
-
 // TODO: many of these systems should be componentized.
 
 // Firing Animation
@@ -73,7 +70,6 @@ var name                            BarrelChangeAnimation;
 
 // Barrels (RUNTIME)
 var DHWeaponBarrelBundle            BarrelBundle;
-
 var ROMGSteam                       BarrelSteamEmitter;
 var DHWeaponBarrelBundle.EBarrelCondition BarrelCondition;
 var float                           BarrelTemperature;
@@ -87,6 +83,13 @@ var Quat                            ForceAimLocalWeaponAimStart;
 var float                           ForceAimTweenSeconds;
 var Quat                            ForceAimLocalWeaponAimTarget;
 var UInterp.EInterpolationType      ForceAimInterpolationType;
+
+// The reload animation to use for the third-person driver mesh.
+// This should be the same duration as the ReloadSequence.
+var() name  DriverReloadSequence;
+// The reload animation to u se for the turret mesh.
+// This animation should be the same duration as the DriverReloadSequence;
+var() name  ReloadSequence;
 
 replication
 {
@@ -388,7 +391,7 @@ function StartFiringAnimation()
     }
 }
 
-function StopFiringAnimation()
+simulated function StopFiringAnimation()
 {
     if (FiringChannel != 0 && HasAnim(FiringIdleAnim))
     {
@@ -468,6 +471,7 @@ simulated state Reloading extends Busy
         }
 
         PlayAnim(ReloadSequence, 1.0, 0.0, 0.0);
+        PlayThirdPersonAnimations();
 
         // Zoom out.
         if (MGPawn != none)
@@ -504,10 +508,24 @@ simulated state Reloading extends Busy
         TickForceAim();
     }
 
+    simulated function PlayThirdPersonAnimations()
+    {
+        // TODO: We want the animation to start immediately in first person. Wowever,
+        // we probably want to slowly mute the pawn's animation drivers over the
+        // ForceAimTween time.
+        // We have something like this functionality in the base DHVWP class for view
+        // transitioning.
+        if (WeaponPawn != none && WeaponPawn.Driver != none)
+        {
+            WeaponPawn.Driver.PlayAnim(DriverReloadSequence, 1.0, ForceAimTweenSeconds, 0);
+        }
+    }
+
 Begin:
     // This makes the assumption that the sum of the tween times doesn't
     // exceed the length of the animation.
-    Sleep(GetAnimDuration(ReloadSequence) - ForceAimTweenSeconds);
+    Sleep(ForceAimTweenSeconds);
+    Sleep(GetAnimDuration(ReloadSequence) - ForceAimTweenSeconds * 2);
     StopForceAim(ForceAimTweenSeconds, INTERP_Deceleration);
     Sleep(ForceAimTweenSeconds);
     GotoState('');
@@ -526,10 +544,17 @@ simulated function bool TryChangeBarrels()
         return false;
     }
 
-    // TODO: handle different paths for client and server.
-    GotoState('ChangingBarrels');
+    BeginBarrelChange();
 
     return true;
+}
+
+// Enters the barrel change state. Called directly on the owning net client
+// when the server has started a barrel change, since the client has no
+// barrel bundle with which to validate the change itself.
+simulated function BeginBarrelChange()
+{
+    GotoState('ChangingBarrels');
 }
 
 simulated function StartForceAim(Rotator AimTarget, float TweenSeconds, UInterp.EInterpolationType InterpolationType)
@@ -742,6 +767,7 @@ simulated function UpdateClip()
 
 simulated function UpdateClipDriver(int Ammo)
 {
+    // TODO: dependent on weapon, obviously.
     const CLIP_PER_MAG = 10;
     const CLIP_DRIVER_FRAMES = 11;
 
@@ -877,15 +903,73 @@ function bool ResupplyAmmo()
     return bDidResupply;
 }
 
-// Modified to leave the reload or barrel change state when pausing reloads.
-// This is called when a player leaves the gun.
+// Modified to cancel (rather than pause) any in-progress reload or barrel
+// change. This is called on the server and the owning client when a player
+// leaves the gun. We don't call super because we don't want the paused-reload
+// behaviour, which would resume the reload mid-stage on re-entry while the
+// reload animation restarts from the beginning.
 simulated function PauseAnyReloads()
 {
-    super.PauseAnyReloads();
+    CancelReload();
+    CancelBusyState();
+}
 
-    PlayAnim(BeginningIdleAnim);
+// Cancels any in-progress reload, returning the weapon to the state it was in
+// before the reload started. On the authority, the mag that was consumed when the
+// reload started is refunded.
+simulated function CancelReload()
+{
+    if (!bMultiStageReload || ReloadState >= RL_ReadyToFire)
+    {
+        return;
+    }
+
+    SetTimer(0.0, false);
+    bReloadPaused = false;
+    bNewOrResumedReload = false;
+
+    // Refund the mag that was consumed in StartReload().
+    if (Role == ROLE_Authority && bUsesMags && NumMGMags < default.NumMGMags)
+    {
+        NumMGMags++;
+    }
+
+    if (HasAmmo(GetAmmoIndex()))
+    {
+        ReloadState = RL_ReadyToFire;
+    }
+    else
+    {
+        ReloadState = RL_Waiting;
+    }
+}
+
+// Leaves any busy state (reloading or changing barrels) and resets the gun's
+// animations, force-aim and visuals back to idle.
+// Leaving the ChangingBarrels state early aborts its latent code, so the barrel
+// is not swapped.
+simulated function CancelBusyState()
+{
+    local DHMountedMGPawn MGPawn;
 
     GotoState('');
+
+    // Stop any force-aim tween that was in progress.
+    ForceAimEndSeconds = ForceAimStartSeconds;
+
+    PlayAnim(BeginningIdleAnim);
+    StopFiringAnimation();
+
+    // Make sure the clip reflects the actual ammo count, since the reload
+    // animation may have already shown a full clip.
+    UpdateClip();
+
+    MGPawn = DHMountedMGPawn(WeaponPawn);
+
+    if (MGPawn != none)
+    {
+        MGPawn.OnCancelBusyState();
+    }
 }
 
 // Modified because we want mounted MGs to always use manual reloading because

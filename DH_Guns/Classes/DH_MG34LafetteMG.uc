@@ -5,12 +5,14 @@
 // ART
 //==============================================================================
 // [~] collision shapes (low variant needs a different mesh entirely)
+// [ ] detach camera bones from recoil frame (make another bone on the root
+//    lafette mount that copies transforms from the gun's camera bones.) [depencency cycle, tho]
 ///==============================================================================
 // ANIMATIONS
 //==============================================================================
 // [ ] first person reload animation
 // [ ] first person barrel change animation
-// [ ] third person reload animations
+// [~] third person reload animations (drum + belt)
 //==============================================================================
 // QUALITY OF LIFE IMPROVEMENTS
 //==============================================================================
@@ -43,8 +45,10 @@ defaultproperties
     Mesh=SkeletalMesh'DH_MG34_anm.MG34_TURRET_EXT'
     Skins(0)=Texture'DH_MG34_tex.MG34_3RD'
     Skins(1)=Texture'DH_MG34_tex.MG_BIPOD_3RD'
-    Skins(2)=Texture'DH_MG34_tex.Lafette.LAFETTE_TURRET_GRAY_3RD'
-    Skins(3)=Texture'DH_MG34_tex.Lafette.LAFETTE_SIGHT_3RD'
+    Skins(2)=Texture'DH_MG34_tex.LAFETTE_TURRET_GRAY_3RD'
+    Skins(3)=Texture'DH_MG34_tex.LAFETTE_SIGHT_3RD'
+    Skins(4)=Texture'DH_MG34_tex.MG_DRUM_GREEN_3RD'
+
 
     Begin Object Class=DHWeaponRangeParams Name=RangeParams0
         DistanceUnit=DU_Meters
@@ -112,4 +116,6 @@ defaultproperties
     HudAltAmmoIcon=Texture'DH_MG34_tex.MG34_DRUM_AMMO_ICON'
 
     MountBoneName="MG_ROOT"
+
+    DriverReloadSequence="MG34_GUNNER_RELOAD"
 }

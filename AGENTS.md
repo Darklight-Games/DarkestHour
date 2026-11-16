@@ -27,7 +27,7 @@ This repository is written in UnrealScript.
 * Use 4 spaces for indentation. Do not use tab characters.
 * Use braces `{}` for all control structures, even if they are optional.
 * Avoid repetitive casting by storing the result of a cast in a local variable.
-* Blocks of variable declarations usually share the same indentation leve for the name and type. For example:
+* Blocks of variable declarations usually share the same indentation level for the name and type. For example:
 ```
 var     int      VariableOne;
 var()   float    VariableTwo;
@@ -52,17 +52,19 @@ var     string   VariableThree;
 # Arrays
 * Use static arrays (e.g., `var int MyFixedArray[10];`) when the size is known and fixed.
 * Use dynamic arrays (e.g., `var array<int> MyDynamicArray;`) when the size is variable or unknown.
-* When adding items to dynamic arrays, use the syntax `MyDynamicArray[MyDynamicArray.Length] = NewItem;`.
+* When adding items to the end of dynamic arrays, use the syntax `MyDynamicArray[MyDynamicArray.Length] = NewItem;`.
+* In non-private functions, all references must be checked for `None` before being used.
+* In non-private functions, all array indices must be checked to ensure they are within bounds before being accessed.
 
 # Replication
 * Dynamic arrays (`array<T>`) cannot be replicated and should not be used for replicated variables. Use static arrays instead.
-* In public functions, all references must be checked for `None` before being used.
-* In public functions, all array indices must be checked to ensure they are within bounds before being accessed.
+* In multi-player a client-to-server function (e.g., `ServerDeployEnd`) must be called from the "owning" client, otherwise the call is a no-op and will never reach the server.
+* Functions that are intended to be run on non-authoritative actor instances (e.g., a player's game client) must be marked with `simulated`, otherwise their call is skipped and the default return value is returned.
 
 # Comments
 * Functions must have a comment block with a brief description of their purpose, parameters, and return values (if any).
-* Use `//` for single-line comments.
-* Use `/* ... */` for multi-line comments.
+* Use `//` for most comments, even when there are a few lines.
+* Use `/* ... */` only for extensive multi-line comments.
 * All explanatory comments should be complete sentences and use proper punctuation.
 
 # Building
@@ -76,3 +78,6 @@ var     string   VariableThree;
 
 # Debugging
 * Remove unreferenced local variables to avoid compiler warnings.
+
+# Engine Bugs
+* Non-`Actor` `Object` instances must never hold references (in `var`s) to an `Actor` because there is a bug in the engine's garbage collector that can causes crashes when the `Object` is deleted.

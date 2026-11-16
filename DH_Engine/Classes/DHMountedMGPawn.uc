@@ -2,9 +2,8 @@
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
-// [ ] leaving the gun during a reload results in weird shit; the whole reload
-//     needs to be cancelled and dequeued (reset state etc., probably the same
-//     for barrel reloads too.
+// [ ] on MG34/42, the muzzle bone should be parented to the barrel so that
+//     the steam looks correct.
 //==============================================================================
 
 class DHMountedMGPawn extends DHVehicleMGPawn
@@ -62,6 +61,17 @@ var() array<PositionInfoExtra> DriverPositionsExtra;
 
 var Material BarrelHudTexture;
 var Material BarrelHudStatusTexture;
+
+replication
+{
+    // Functions a client can call on the server.
+    reliable if (Role < ROLE_Authority)
+        ServerAttemptReload, ServerAttemptBarrelChange;
+
+    // Functions the server can call on the client that owns this actor.
+    reliable if (Role == ROLE_Authority)
+        ClientBeginBarrelChange;
+}
 
 simulated function bool ShouldViewSnapInPosition(byte PositionIndex)
 {
@@ -258,6 +268,10 @@ simulated function ClientKDriverEnter(PlayerController PC)
         }
     }
 
+    // Clear any stale queued actions and camera transitions from a previous occupant.
+    PendingAction = ACTION_None;
+    DriverPositionIndexTarget = -1;
+    CameraTransitionController.ClearTransitions();
     CameraTransitionController.SetCurrentCameraBone(GetCameraBoneForPosition(DriverPositionIndex));
 }
 
@@ -342,6 +356,27 @@ simulated function PlayBarrelChangeAnim(float AnimationDurationSeconds)
         ReloadCameraBone, Level.TimeSeconds, 0.25, INTERP_SmoothStep);
     CameraTransitionController.QueueCameraTransition(
         GetCameraBoneForPosition(DriverPositionIndex), Level.TimeSeconds + AnimationDurationSeconds, 0.25, INTERP_SmoothStep);
+}
+
+// Resets the queued actions, camera transitions, hands animation and zoom.
+// Called by when a reload or barrel change is cancelled, e.g. when the player leaves the gun.
+simulated function OnCancelBusyState()
+{
+    PendingAction = ACTION_None;
+    DriverPositionIndexTarget = -1;
+
+    if (CameraTransitionController != none)
+    {
+        CameraTransitionController.ClearTransitions();
+        CameraTransitionController.SetCurrentCameraBone(GetCameraBoneForPosition(DriverPositionIndex));
+    }
+
+    if (HandsActor != none && HandsActor.HasAnim(HandsIdleSequence))
+    {
+        HandsActor.PlayAnim(HandsIdleSequence);
+    }
+
+    SetIsZoomed(false);
 }
 
 simulated function bool IsReloading()
@@ -453,7 +488,7 @@ simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor Vie
 }
 
 // Despite the name, this function is used to update the gun's rotation using the mouse.
-public function UpdateRocketAcceleration(Float DeltaTime, Float YawChange, Float PitchChange)
+function UpdateRocketAcceleration(Float DeltaTime, Float YawChange, Float PitchChange)
 {
     PitchChange *= 0.5;
 
@@ -503,82 +538,8 @@ function HandleTurretRotation(Float DeltaTime, Float YawChange, Float PitchChang
     }
 }
 
-// Debugging functions.
-simulated exec function SpawnRangeTarget(int SizeMeters)
-{
-    local Coords MuzzleCoords;
-    local Vector Direction, TargetLocation;
-    local DHMountedMG MG;
-
-    if (Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode())
-    {
-        return;
-    }
-    
-    MG = DHMountedMG(Gun);
-
-    if (Gun == none || MG.RangeParams == none)
-    {
-        return;
-    }
-
-    MuzzleCoords = Gun.GetBoneCoords(Gun.WeaponFireAttachmentBone);
-
-    Direction = MuzzleCoords.XAxis;
-    Direction.Z = 0;
-    Direction = Normal(Direction);
-
-    if (TargetActor != none)
-    {
-        TargetActor.Destroy();
-    }
-
-    TargetLocation = MuzzleCoords.Origin + (Direction * Class'DHUnits'.static.MetersToUnreal(MG.RangeParams.RangeTable[MG.RangeIndex].Range));
-
-    if (SizeMeters == 0)
-    {
-        SizeMeters = 4.0;
-    }
-    
-    TargetActor = Spawn(Class'DHRangeTargetActor', self,, TargetLocation, Rotator(-Direction));
-    TargetActor.SetStaticMesh(TargetStaticMesh);
-    // Set the target size.
-    TargetActor.SetDrawScale(SizeMeters / 4.0);
-}
-
-//  Debugging function for calibrating the range table to the animations.
-simulated exec function SetRangeTheta(float NewTheta)
-{
-    local DHMountedMG MG;
-    MG = DHMountedMG(Gun);
-
-    if (Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode() || MG.RangeParams == none)
-    {
-        return;
-    }
-
-    MG.RangeParams.RangeTable[MG.RangeIndex].AnimationTime = NewTheta;
-    MG.UpdateRangeDriverFrameTarget();
-}
-
-simulated exec function DumpRangeTable()
-{
-    local DHMountedMG MG;
-
-    if (Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode())
-    {
-        return;
-    }
-
-    MG = DHMountedMG(Gun);
-
-    if (MG.RangeParams != none)
-    {
-        MG.RangeParams.DumpRangeTable();
-    }
-}
-
-function bool IsWeaponBusy()
+// Returns true if the weapon is busy (e.g., reloading or changing barrels).
+simulated function bool IsWeaponBusy()
 {
     local DHMountedMG MG;
 
@@ -665,24 +626,92 @@ function DriverDied()
     super.DriverDied();
 }
 
-// Attempt to change barrels. Returns true if the barrel change was initiated.
+
+// Attempt to change barrels. On a net client, this sends a request to the server,
+// which validates and starts the barrel change, then tells the owning client to
+// play it (net clients do not have the barrel bundle, so they cannot do this
+// themselves).
+
+// Returns true if the barrel change was initiated (or requested, on a net client).
 simulated function bool AttemptBarrelChange()
 {
     local DHMountedMG MG;
 
     MG = DHMountedMG(Gun);
 
-    if (MG.TryChangeBarrels())
+    if (MG == none || IsWeaponBusy())
     {
-        // We're changing barrels, so un-zoom.
-        SetIsZoomed(false);
+        return false;
+    }
 
-        PendingAction = ACTION_None;
+    PendingAction = ACTION_None;
+
+    if (Role < ROLE_Authority)
+    {
+        ServerAttemptBarrelChange();
 
         return true;
     }
 
-    return false;
+    if (!MG.TryChangeBarrels())
+    {
+        return false;
+    }
+
+    // We're changing barrels, so un-zoom.
+    SetIsZoomed(false);
+
+    // Tell the owning net client to play the barrel change.
+    if (!IsLocallyControlled())
+    {
+        ClientBeginBarrelChange();
+    }
+
+    return true;
+}
+
+// Client-to-server request to change barrels. If the server's view transition into
+// the reload position hasn't finished yet, the barrel change is queued and started
+// when the transition ends.
+function ServerAttemptBarrelChange()
+{
+    if (VehWep == none || !CanReloadInDriverPositionIndex(DriverPositionIndex))
+    {
+        return;
+    }
+
+    // The server doesn't enter the 'Reloading' state for remote players, so
+    // check the reload state directly to avoid changing barrels mid-reload.
+    if (VehWep.IsReloading() && !VehWep.bReloadPaused)
+    {
+        return;
+    }
+
+    if (IsInState('ViewTransition'))
+    {
+        PendingAction = ACTION_BarrelChange;
+        return;
+    }
+
+    AttemptBarrelChange();
+}
+
+// Server-to-client notification that the server has started a barrel change.
+simulated function ClientBeginBarrelChange()
+{
+    local DHMountedMG MG;
+
+    MG = DHMountedMG(Gun);
+
+    if (MG == none)
+    {
+        return;
+    }
+
+    MG.BeginBarrelChange();
+
+    // We're changing barrels, so un-zoom.
+    SetIsZoomed(false);
 }
 
 // Modified to add barrel change functionality.
@@ -697,6 +726,84 @@ exec function ROMGOperation()
         PendingAction = ACTION_BarrelChange;
         SetDriverPositionIndexTarget(IronSightsPositionIndex);
     }
+}
+
+simulated function bool CanReloadInDriverPositionIndex(int DriverPositionIndex)
+{
+    return DriverPositionIndex == IronSightsPositionIndex;
+}
+
+// Attempt to reload. If the player is not in the reload position, they are moved
+// there first and the reload is started once the transition ends.
+// 
+// Only the server can start a new reload, so a net client sends a request to the
+// server. The server then replicates the new reload state back to the client via
+// ClientSetReloadState, which starts the clientside reload.
+simulated function AttemptReload()
+{
+    if (VehWep == none || IsWeaponBusy())
+    {
+        return;
+    }
+
+    if (!CanReloadInDriverPositionIndex(DriverPositionIndex))
+    {
+        // We are not in the right position to reload. Only the local player
+        // can change position, so flag a reload as pending and move there.
+        if (IsLocallyControlled())
+        {
+            PendingAction = ACTION_Reload;
+            SetDriverPositionIndexTarget(IronSightsPositionIndex);
+        }
+
+        return;
+    }
+
+    PendingAction = ACTION_None;
+
+    if (Role < ROLE_Authority)
+    {
+        ServerAttemptReload();
+    }
+
+    // On a net client, this can only resume a paused reload. New reloads are
+    // started by the server.
+    VehWep.AttemptReload();
+}
+
+// Client-to-server request to reload. If the server's view transition into the
+// reload position hasn't finished yet, the reload is queued and started when the
+// transition ends.
+function ServerAttemptReload()
+{
+    if (VehWep == none || IsWeaponBusy() || !CanReloadInDriverPositionIndex(DriverPositionIndex))
+    {
+        return;
+    }
+
+    if (IsInState('ViewTransition'))
+    {
+        PendingAction = ACTION_Reload;
+        return;
+    }
+
+    AttemptReload();
+}
+
+exec simulated function ROManualReload()
+{
+    AttemptReload();
+}
+
+// Modified so that mounted machine guns can be resupplied by infantry resupply types.
+function bool CanBeResuppliedByType(DHResupplyStrategy.EResupplyType ResupplyType)
+{
+    if (ResupplyType == RT_Players)
+    {
+        return true;
+    }
+    
+    return super.CanBeResuppliedByType(ResupplyType);
 }
 
 //==============================================================================
@@ -727,46 +834,78 @@ exec function SetGunsightPitchOffset(float NewPitchOffset)
     }
 }
 
-simulated function bool CanReloadInDriverPositionIndex(int DriverPositionIndex)
+simulated exec function SpawnRangeTarget(int SizeMeters)
 {
-    return DriverPositionIndex == IronSightsPositionIndex;
-}
+    local Coords MuzzleCoords;
+    local Vector Direction, TargetLocation;
+    local DHMountedMG MG;
 
-simulated function AttemptReload()
-{
-    if (VehWep == none || IsWeaponBusy())
+    if (Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode())
+    {
+        return;
+    }
+    
+    MG = DHMountedMG(Gun);
+
+    if (Gun == none || MG.RangeParams == none)
     {
         return;
     }
 
-    if (CanReloadInDriverPositionIndex(DriverPositionIndex))
-    {
-        PendingAction = ACTION_None;
-        VehWep.AttemptReload();
-    }
-    else
-    {
-        // We are not in the right position to reload.
-        // Set the driver position index target and flag a reload as pending.
-        PendingAction = ACTION_Reload;
-        SetDriverPositionIndexTarget(IronSightsPositionIndex);
-    }
-}
+    MuzzleCoords = Gun.GetBoneCoords(Gun.WeaponFireAttachmentBone);
 
-exec simulated function ROManualReload()
-{
-    AttemptReload();
-}
+    Direction = MuzzleCoords.XAxis;
+    Direction.Z = 0;
+    Direction = Normal(Direction);
 
-// Modified so that mounted machine guns can be resupplied by infantry resupply types.
-function bool CanBeResuppliedByType(DHResupplyStrategy.EResupplyType ResupplyType)
-{
-    if (ResupplyType == RT_Players)
+    if (TargetActor != none)
     {
-        return true;
+        TargetActor.Destroy();
+    }
+
+    TargetLocation = MuzzleCoords.Origin + (Direction * Class'DHUnits'.static.MetersToUnreal(MG.RangeParams.RangeTable[MG.RangeIndex].Range));
+
+    if (SizeMeters == 0)
+    {
+        SizeMeters = 4.0;
     }
     
-    return super.CanBeResuppliedByType(ResupplyType);
+    TargetActor = Spawn(Class'DHRangeTargetActor', self,, TargetLocation, Rotator(-Direction));
+    TargetActor.SetStaticMesh(TargetStaticMesh);
+    // Set the target size.
+    TargetActor.SetDrawScale(SizeMeters / 4.0);
+}
+
+//  Debugging function for calibrating the range table to the animations.
+simulated exec function SetRangeTheta(float NewTheta)
+{
+    local DHMountedMG MG;
+    MG = DHMountedMG(Gun);
+
+    if (Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode() || MG.RangeParams == none)
+    {
+        return;
+    }
+
+    MG.RangeParams.RangeTable[MG.RangeIndex].AnimationTime = NewTheta;
+    MG.UpdateRangeDriverFrameTarget();
+}
+
+simulated exec function DumpRangeTable()
+{
+    local DHMountedMG MG;
+
+    if (Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode())
+    {
+        return;
+    }
+
+    MG = DHMountedMG(Gun);
+
+    if (MG.RangeParams != none)
+    {
+        MG.RangeParams.DumpRangeTable();
+    }
 }
 
 defaultproperties
