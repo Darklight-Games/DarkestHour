@@ -12,7 +12,7 @@ static function bool ShouldShowControl(int Index, optional int Switch, optional 
 
     MW = DHMountedWeapon(OptionalObject);
 
-    if (MW == none)
+    if (MW == none || MW.default.ConstructionClass == none)
     {
         return false;
     }

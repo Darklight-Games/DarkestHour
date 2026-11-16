@@ -3,7 +3,6 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 // This is for a first person belt (i.e. cloth belt) for mounted machine guns.
-// This handles 
 //==============================================================================
 
 class DHFirstPersonBelt extends Actor
@@ -44,8 +43,8 @@ function SpawnBullets()
         }
 
         AttachToBone(Bullets[i], BulletBoneNames[i]);
-        SetRelativeLocation(vect(0, 0, 0));
-        SetRelativeRotation(rot(0, 0, 0));
+        Bullets[i].SetRelativeLocation(vect(0, 0, 0));
+        Bullets[i].SetRelativeRotation(rot(0, 0, 0));
     }
 }
 
@@ -87,9 +86,16 @@ function FreezeAnimAtAmmoCount(int AmmoCount)
     UpdateBullets(SequenceIndex);
 }
 
+// Returns the sequence index for the given amount of ammo.
+// Returns -1 if there are no fire sequence names.
 function int GetSequenceIndexForAmmoCount(int AmmoCount)
 {
     local int Index, C;
+
+    if (FireSequenceNames.Length == 0)
+    {
+        return -1;
+    }
 
     Index = self.BulletCount - AmmoCount;
 
@@ -99,7 +105,7 @@ function int GetSequenceIndexForAmmoCount(int AmmoCount)
 
     C = self.BulletCount - A;
 
-    // If the Index is between B and C, just cycle through the next B animations.
+    // If the Index is between A and C, just cycle through the next B animations.
     // If it's after C, then play the last animations.
     if (Index >= A && Index < C)
     {
@@ -120,8 +126,11 @@ function PlayFiringAnimation(int AmmoCount)
 
     SequenceIndex = GetSequenceIndexForAmmoCount(AmmoCount);
 
-    UpdateBullets(SequenceIndex);
-    PlayAnim(FireSequenceNames[SequenceIndex]);
+    if (SequenceIndex >= 0)
+    {
+        UpdateBullets(SequenceIndex);
+        PlayAnim(FireSequenceNames[SequenceIndex]);
+    }
 }
 
 function UpdateBullets(int SequenceIndex)

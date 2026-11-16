@@ -346,12 +346,12 @@ simulated function Tick(float DeltaTime)
 // Copied from ROWeapon as we don't want to use PutDown from superclass for MMGs and mortars
 simulated function bool PutDown()
 {
- 	GotoState('LoweringWeapon');
+    GotoState('LoweringWeapon');
 
-	if (ROWeaponAttachment(ThirdPersonActor) != None)
-	{
-		ROWeaponAttachment(ThirdPersonActor).AmbientSound = None;
-	}
+    if (ROWeaponAttachment(ThirdPersonActor) != None)
+    {
+        ROWeaponAttachment(ThirdPersonActor).AmbientSound = None;
+    }
 
     OldWeapon = None;
     return true; // return false if preventing weapon switch
@@ -518,7 +518,7 @@ function ServerDeployEnd(Actor Owner, Vector Location, Rotator Rotation, int Var
         return;
     }
 
-    // Set the team, otherwise the team wil default to the team defined vehicle class.
+    // Set the team, otherwise the team will default to the team defined in the vehicle class.
     Vehicle.SetTeamNum(Instigator.GetTeamNum());
 
     // Transfer saved vehicle state to the newly spawned vehicle.

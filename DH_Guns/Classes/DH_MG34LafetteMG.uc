@@ -6,8 +6,8 @@
 //==============================================================================
 // [~] collision shapes (low variant needs a different mesh entirely)
 // [ ] detach camera bones from recoil frame (make another bone on the root
-//    lafette mount that copies transforms from the gun's camera bones.) [depencency cycle, tho]
-///==============================================================================
+//    lafette mount that copies transforms from the gun's camera bones.) [dependency cycle, tho]
+//==============================================================================
 // ANIMATIONS
 //==============================================================================
 // [ ] first person reload animation
@@ -22,7 +22,8 @@
 //==============================================================================
 // BUGS
 //==============================================================================
-// [ ] "exit position not found" error if you try to exit in some places. [add an absolute fallback to use so that you never actually get stuck]
+// [ ] "exit position not found" error if you try to exit in some places. [add
+//     an absolute fallback to use so that you never actually get stuck]
 // [ ] pressing 1 resets the view; this should be disabled for mounted MGs (or
 //      maybe just *all* vehicles where you're changing to the same position?)
 //==============================================================================

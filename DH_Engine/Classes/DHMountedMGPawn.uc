@@ -163,7 +163,7 @@ simulated state LeavingViewTransition
         }
         else
         {
-            // Do normal 
+            // Do normal behaviour.
             super.BeginState();
         }
     }
@@ -359,7 +359,7 @@ simulated function PlayBarrelChangeAnim(float AnimationDurationSeconds)
 }
 
 // Resets the queued actions, camera transitions, hands animation and zoom.
-// Called by when a reload or barrel change is cancelled, e.g. when the player leaves the gun.
+// Called when a reload or barrel change is cancelled, e.g. when the player leaves the gun.
 simulated function OnCancelBusyState()
 {
     PendingAction = ACTION_None;
@@ -842,7 +842,7 @@ simulated exec function SpawnRangeTarget(int SizeMeters)
     
     MG = DHMountedMG(Gun);
 
-    if (Gun == none || MG.RangeParams == none)
+    if (MG == none || MG.RangeParams == none)
     {
         return;
     }
@@ -871,13 +871,14 @@ simulated exec function SpawnRangeTarget(int SizeMeters)
     TargetActor.SetDrawScale(SizeMeters / 4.0);
 }
 
-//  Debugging function for calibrating the range table to the animations.
+// Debugging function for calibrating the range table to the animations.
 simulated exec function SetRangeTheta(float NewTheta)
 {
     local DHMountedMG MG;
+
     MG = DHMountedMG(Gun);
 
-    if (Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode() || MG.RangeParams == none)
+    if ((Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode()) || MG == none || MG.RangeParams == none)
     {
         return;
     }
@@ -897,7 +898,7 @@ simulated exec function DumpRangeTable()
 
     MG = DHMountedMG(Gun);
 
-    if (MG.RangeParams != none)
+    if (MG != none && MG.RangeParams != none)
     {
         MG.RangeParams.DumpRangeTable();
     }

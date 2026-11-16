@@ -87,8 +87,8 @@ var UInterp.EInterpolationType      ForceAimInterpolationType;
 // The reload animation to use for the third-person driver mesh.
 // This should be the same duration as the ReloadSequence.
 var() name  DriverReloadSequence;
-// The reload animation to u se for the turret mesh.
-// This animation should be the same duration as the DriverReloadSequence;
+// The reload animation to use for the turret mesh.
+// This animation should be the same duration as the DriverReloadSequence.
 var() name  ReloadSequence;
 
 replication
@@ -510,7 +510,7 @@ simulated state Reloading extends Busy
 
     simulated function PlayThirdPersonAnimations()
     {
-        // TODO: We want the animation to start immediately in first person. Wowever,
+        // TODO: We want the animation to start immediately in first person. However,
         // we probably want to slowly mute the pawn's animation drivers over the
         // ForceAimTween time.
         // We have something like this functionality in the base DHVWP class for view
@@ -813,13 +813,16 @@ simulated function DecrementRange()
 {
     super.DecrementRange();
 
-    if (RangeIndex > 0)
+    if (RangeParams != none)
     {
-        RangeIndex--;
-        RangeIndexChanged();
-    }
+        if (RangeIndex > 0)
+        {
+            RangeIndex--;
+            RangeIndexChanged();
+        }
 
-    SendRangeMessage();
+        SendRangeMessage();
+    }
 }
 
 simulated function IncrementRange()
@@ -859,7 +862,7 @@ simulated function StartReload(optional bool bResumingPausedReload)
 {
     super.StartReload(bResumingPausedReload);
 
-    if (WeaponPawn.IsLocallyControlled())
+    if (WeaponPawn != none && WeaponPawn.IsLocallyControlled())
     {
         GotoState('Reloading');
     }
@@ -996,7 +999,7 @@ simulated function bool PlayerUsesManualReloading()
     return true;
 }
 
-// Modifed to take the ProjectileRotationMode into account.
+// Modified to take the ProjectileRotationMode into account.
 simulated function CalcWeaponFire(bool bWasAltFire)
 {
     local name      WeaponFireAttachBone;
