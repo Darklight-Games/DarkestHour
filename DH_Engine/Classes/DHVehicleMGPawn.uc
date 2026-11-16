@@ -21,8 +21,6 @@ var     name        HudOverlayIdleAnim;
 var     name        HudOverlayFireLoopAnim;
 var     name        HudOverlayFireEndAnim;
 
-var     name        DriverReloadAnim;
-
 ///////////////////////////////////////////////////////////////////////////////////////
 //  *******************************  VIEW/DISPLAY  ********************************  //
 ///////////////////////////////////////////////////////////////////////////////////////
