@@ -25,8 +25,6 @@
 // [ ] "exit position not found" error if you try to exit in some places. [add an absolute fallback to use so that you never actually get stuck]
 // [ ] pressing 1 resets the view; this should be disabled for mounted MGs (or
 //      maybe just *all* vehicles where you're changing to the same position?)
-// [ ] sometimes, when getting on the gun for the first time, the gun will
-//      reload immediately for no reason (with no animation)
 //==============================================================================
 
 class DH_MG34LafetteMG extends DHMountedMG;

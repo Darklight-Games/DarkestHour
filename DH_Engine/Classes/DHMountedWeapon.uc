@@ -154,20 +154,6 @@ simulated function class<DHVehicle> GetVehicleClass()
     return VehicleClass;
 }
 
-function DHVehicleState EnsureVehicleState()
-{
-    local class<DHVehicle> VehicleClass;
-
-    VehicleClass = GetVehicleClass();
-
-    if (VehicleState == none)
-    {
-        VehicleState = Class'DHVehicleState'.static.GetDefaultVehicleState(VehicleClass);
-    }
-
-    return VehicleState;
-}
-
 function DHVehicleState GetVehicleState()
 {
     return VehicleState;
@@ -207,14 +193,19 @@ function bool FillAmmo()
     local class<DHVehicleCannon> VehicleCannonClass;
     local class<DHVehicle> VehicleClass;
 
+    // If there is no vehicle state, the weapon has never been deployed, so it
+    // will be fully stocked by GiveInitialAmmo() when it is deployed.
+    if (VehicleState == none)
+    {
+        return false;
+    }
+
     VehicleClass = GetVehicleClass();
 
     if (VehicleClass == none)
     {
         return false;
     }
-
-    EnsureVehicleState();
 
     if (Level.TimeSeconds <= LastResupplyTimestamp + ResupplyInterval)
     {
