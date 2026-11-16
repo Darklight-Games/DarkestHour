@@ -397,16 +397,7 @@ function ActorProxyError SetProvisionalLocationAndRotation()
     local ActorProxyError E;
     local TerrainInfo TI;
     local Material HitMaterial;
-    local DHGameReplicationInfo GRI;
     local UCollision.SCylinderCollisionResult CCR;
-
-    GRI = DHGameReplicationInfo(Level.GetLocalPlayerController().GameReplicationInfo);
-
-    if (GRI == none)
-    {
-        E.Type = ERROR_Fatal;
-        return E;
-    }
 
     if (GroundActor == none)
     {
