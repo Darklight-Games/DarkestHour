@@ -379,11 +379,6 @@ function OnConstructionActivate(int TeamIndex, Class<DHConstruction> Constructio
 
     for (i = 0; i < ConstructionIndices.Length; ++i)
     {
-        Log("ConstructionIndices[" $ i $ "]" @ ConstructionIndices[i]);
-    }
-
-    for (i = 0; i < ConstructionIndices.Length; ++i)
-    {
         j = ConstructionIndices[i];
         Constructions[j].Remaining = Max(0, int(Constructions[j].Remaining) - 1);
         Constructions[j].Active += 1;
