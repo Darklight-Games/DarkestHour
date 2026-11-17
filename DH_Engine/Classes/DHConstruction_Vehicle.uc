@@ -282,7 +282,13 @@ static function array<int> GetAvailableIndicesForVariant(DHActorProxy.Context Co
 
     Indices = GetAvailableVariantIndices(Context);
 
-    VariantIndex = Indices[VariantIndex % Indices.Length];
+    if (Indices.Length == 0)
+    {
+        return Indices;
+    }
+
+    // Wrap the index so that out-of-range values (including negative ones) are valid.
+    VariantIndex = Indices[((VariantIndex % Indices.Length) + Indices.Length) % Indices.Length];
 
     Indices.Length = 0;
 
@@ -305,6 +311,7 @@ static function GetIndicesForVehicleClass(
     )
 {
     local int i, j;
+    local array<int> Indices;
 
     VariantIndex = 0;
     SkinIndex = 0;
@@ -316,22 +323,34 @@ static function GetIndicesForVehicleClass(
 
     for (i = 0; i < default.VehicleClasses.Length; ++i)
     {
-        if (default.VehicleClasses[i].VehicleClass == VehicleClass)
+        if (default.VehicleClasses[i].VehicleClass != VehicleClass)
         {
-            VariantIndex = default.VehicleClasses[i].VariantIndex;
-
-            // The skin index is implicit in the ordering of each variant's entries.
-            // Count how many earlier entries share the same variant to determine the skin.
-            for (j = 0; j < i; ++j)
-            {
-                if (default.VehicleClasses[j].VariantIndex == VariantIndex && IsEntryAvailable(Context, j))
-                {
-                    ++SkinIndex;
-                }
-            }
-
-            return;
+            continue;
         }
+        
+        // Find the variant's position among the available variants.
+        Indices = GetAvailableVariantIndices(Context);
+
+        for (j = 0; j < Indices.Length; ++j)
+        {
+            if (Indices[j] == default.VehicleClasses[i].VariantIndex)
+            {
+                VariantIndex = j;
+                break;
+            }
+        }
+
+        // The skin index is implicit in the ordering of each variant's entries.
+        // Count how many earlier entries share the same variant to determine the skin.
+        for (j = 0; j < i; ++j)
+        {
+            if (default.VehicleClasses[j].VariantIndex == default.VehicleClasses[i].VariantIndex && IsEntryAvailable(Context, j))
+            {
+                ++SkinIndex;
+            }
+        }
+
+        return;
     }
 }
 
@@ -340,18 +359,8 @@ static function class<DHVehicle> GetVehicleClass(DHActorProxy.Context Context)
 {
     local array<int> Indices;
 
-    // Count the number of variants.
-    Indices = GetAvailableVariantIndices(Context);
-
-    if (Indices.Length == 0)
-    {
-        // Shouldn't happen, but just in case.
-        Warn("No variants found for construction " @ default.Class);
-        return none;
-    }
-
-    // Get the avaiable skin indices for the variant.
-    Indices = GetAvailableIndicesForVariant(Context, Indices[Context.VariantIndex % Indices.Length]);
+    // Get the available skin indices for the variant.
+    Indices = GetAvailableIndicesForVariant(Context, Context.VariantIndex);
 
     if (Indices.Length == 0)
     {
@@ -360,7 +369,8 @@ static function class<DHVehicle> GetVehicleClass(DHActorProxy.Context Context)
         return none;
     }
 
-    return default.VehicleClasses[Indices[Context.SkinIndex % Indices.Length]].VehicleClass;
+    // Wrap the index so that out-of-range values (including negative ones) are valid.
+    return default.VehicleClasses[Indices[((Context.SkinIndex % Indices.Length) + Indices.Length) % Indices.Length]].VehicleClass;
 }
 
 // Returns whether the entry is available based on the season.
