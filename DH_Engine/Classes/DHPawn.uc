@@ -6192,7 +6192,15 @@ event StartCrouch(float HeightAdjust)
 // (that was one of the ways of reproducing prone invisibility bug).
 simulated state CrouchingFromProne
 {
-    simulated function bool CanProneTransition();
+    simulated function bool CanProneTransition()
+    {
+        if (bIsSprinting)
+        {
+            return false;
+        }
+
+        return global.CanProneTransition();
+    }
 }
 
 // Modified to increase volume & radius of sound if sprinting, & to reduce sound radius if moving slowly
