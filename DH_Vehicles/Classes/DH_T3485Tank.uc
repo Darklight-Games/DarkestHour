@@ -48,7 +48,7 @@ defaultproperties
     RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3)))))
     RandomAttachmentGroups(2)=(Options=((Probability=0.7,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_FUEL_TANK_LATE_L',Offset=(X=-104,Y=-75.3,Z=88.5),SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0))))))
     RandomAttachmentGroups(3)=(Options=((Probability=0.7,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_FUEL_TANK_LATE_R',Offset=(X=-104,Y=75.3,Z=88.5),SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0))))))
-    RandomAttachmentGroups(4)=(Options=((Probability=0.85,Attachment=(AttachBone="gun_yaw",bAttachToWeapon=true,AttachBone="gun_yaw",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP'))))
+    RandomAttachmentGroups(4)=(Options=((Probability=0.85,Attachment=(bAttachToWeapon=true,AttachBone="gun_yaw",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP'))))
     
     // Damage
     // pros: diesel fuel; 5 men crew

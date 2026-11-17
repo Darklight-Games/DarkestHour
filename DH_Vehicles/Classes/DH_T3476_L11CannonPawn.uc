@@ -30,10 +30,15 @@ defaultproperties
     //binocs 
     DriverPositions(4)=(PositionMesh=SkeletalMesh'DH_T3476_L11_anm.T3476_L11_TURRET_EXT',ViewFOV=21.25,DriverTransitionAnim="T3476_COM_BINOCS",ViewPitchUpLimit=5000,ViewPitchDownLimit=59000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bDrawOverlays=true,bExposed=true)
 
+    DrivePos=(X=-17,Y=-20,Z=6)
+    DriveRot=(Yaw=16384)
+
+    //Periscope
+    // PeriscopeOverlay=Texture'DH_VehicleOptics_tex.MG_sight' //emulating the PTK periscope 2.5x 26' FOV TODO: add PTK reticle
+    // PeriscopeSize=0.76
+
     DriveAnim="T3476_COM_IDLE_CLOSE"
     bLockCameraDuringTransition=false
-    DrivePos=(X=-17,Y=-21,Z=6)
-    DriveRot=(Yaw=16384)
 
     GunsightOverlay=Texture'DH_VehicleOptics_tex.T3476_sight_background' // edited RO sight to make edges solid black to avoid graphical smears on sides of sight
     CannonScopeCenter=Texture'Vehicle_Optic.T3476_sight_mover'
