@@ -44,6 +44,14 @@ defaultproperties
         MeshNormal=(Z=0.0)
         UseRotationFrom=PTRS_Actor
         SpinsPerSecondRange=(X=(Min=0.1,Max=1.0),Y=(Min=0.1,Max=1.0),Z=(Min=0.1,Max=1.0))
+        Sounds(0)=(Sound=Sound'DH_ProjectileSounds.ShellCasings.50CalCaseImpact01',Radius=(Min=300.000000,Max=300.000000),Pitch=(Min=1,Max=1.5),Volume=(Min=220.000000,Max=240.000000),Probability=(Min=1.000000,Max=1.000000))
+        Sounds(1)=(Sound=Sound'DH_ProjectileSounds.ShellCasings.50CalCaseImpact02',Radius=(Min=300.000000,Max=300.000000),Pitch=(Min=1,Max=1.5),Volume=(Min=230.000000,Max=240.000000),Probability=(Min=1.000000,Max=1.000000))
+        Sounds(2)=(Sound=Sound'DH_ProjectileSounds.ShellCasings.50CalCaseImpact03',Radius=(Min=300.000000,Max=300.000000),Pitch=(Min=1,Max=1.5),Volume=(Min=218.000000,Max=240.000000),Probability=(Min=1.000000,Max=1.000000))
+        Sounds(3)=(Sound=Sound'DH_ProjectileSounds.ShellCasings.50CalCaseImpact04',Radius=(Min=300.000000,Max=300.000000),Pitch=(Min=1,Max=1.5),Volume=(Min=234.000000,Max=240.000000),Probability=(Min=1.000000,Max=1.000000))
+        Sounds(4)=(Sound=Sound'DH_ProjectileSounds.ShellCasings.50CalCaseImpact05',Radius=(Min=300.000000,Max=300.000000),Pitch=(Min=1,Max=1.5),Volume=(Min=225.000000,Max=240.000000),Probability=(Min=1.000000,Max=1.000000))
+        CollisionSound=PTSC_Random
+        CollisionSoundIndex=(Max=4.000000)
+        CollisionSoundProbability=(Min=0.750000,Max=1.000000)
         LifetimeRange=(Min=1.5,Max=1.5)
         StartVelocityRange=(X=(Min=-1.0,Max=1.0),Y=(Min=25.0,Max=100.0),Z=(Min=0.1,Max=1.0))
         StartVelocityRadialRange=(Min=-250.0,Max=250.0)
