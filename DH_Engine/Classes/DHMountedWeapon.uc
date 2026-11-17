@@ -18,6 +18,8 @@ var int                             ConstructionSkinIndex;
 
 var private DHVehicleState          VehicleState;
 
+// Barrel bundles per weapon. Usually there will only be one,
+// but this should match the size of WeaponPawns.
 var array<DHWeaponBarrelBundle> WeaponBarrelBundles;
 
 var()       Material    HudAmmoIconMaterial;
@@ -259,14 +261,12 @@ function bool FillAmmo()
             }
             until (MainAmmoResupplyCount == 0 || bDidResupplyCannon == false);
         }
-
-        for (j = 0; j < WeaponBarrelBundles.Length; ++j)
+        
+        if (i < WeaponBarrelBundles.Length &&
+            WeaponBarrelBundles[i] != none &&
+            WeaponBarrelBundles[i].ReplaceInactiveFailedBarrels() > 0)
         {
-            if (WeaponBarrelBundles[j] != none &&
-                WeaponBarrelBundles[j].ReplaceInactiveFailedBarrels() > 0)
-            {
-                bDidResupplyWeapon = true;
-            }
+            bDidResupplyWeapon = true;
         }
 
         if (bDidResupplyWeapon)
