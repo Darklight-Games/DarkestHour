@@ -32,8 +32,6 @@ defaultproperties
     UnmountedWeaponClass=Class'DH_MG34Weapon'
     DestroyedVehicleMesh=StaticMesh'DH_MG34_stc.MG34_DESTROYED'
 
-    // DestroyedVehicleMesh=StaticMesh'DH_MG34_stc.MG34_DESTROYED'
-
     ExitPositions(0)=(X=0,Y=0,Z=80)         // Failsafe exit position (ontop of the gun)
     ExitPositions(1)=(X=-80,Y=0,Z=30)       // Main exit position (behind the gun)
     ExitPositions(2)=(X=0,Y=-80.0,Z=30)     // Beside the gun

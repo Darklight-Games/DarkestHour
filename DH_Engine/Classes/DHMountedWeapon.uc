@@ -564,11 +564,15 @@ simulated function ImmediateStopFire();
 simulated function ROIronSights();
 exec simulated function ROManualReload();
 
+// Modified to return the name of the vehicle this weapon constructs.
+// NOTE: This assumes the first vehicle class is representative of the weapon (same as the pickup's map icon).
 static function string GetInventoryName(bool bUseNativeItemNames)
 {
-    if (default.ConstructionClass != none && default.ConstructionClass.default.VehicleClass != none)
+    if (default.ConstructionClass != none &&
+        default.ConstructionClass.default.VehicleClasses.Length > 0 &&
+        default.ConstructionClass.default.VehicleClasses[0].VehicleClass != none)
     {
-        return default.ConstructionClass.default.VehicleClass.default.VehicleNameString;
+        return default.ConstructionClass.default.VehicleClasses[0].VehicleClass.default.VehicleNameString;
     }
 
     return super.GetInventoryName(bUseNativeItemNames);
