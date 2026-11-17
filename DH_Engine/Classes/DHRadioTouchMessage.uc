@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHRadioTouchMessage extends ROTouchMessagePlus
+class DHRadioTouchMessage extends DHHudMessage
     abstract;
 
 var localized string RequestMessage;
@@ -42,6 +42,13 @@ static function string GetString(optional int Switch, optional PlayerReplication
 
 defaultproperties
 {
+    Area=AREA_BottomCenter
+    bFadeMessage=false
+    bIsUnique=true
+    bIsConsoleMessage=false
+    FontSize=0
+    Lifetime=0.25
+    PosY=0.80
     RequestMessage="Hold [%SHOWORDERMENU | ONRELEASE HIDEORDERMENU%] to request artillery"
     NotQualifiedMessage="You are not qualified to use this radio"
     NoTargetMessage="No artillery target marked"

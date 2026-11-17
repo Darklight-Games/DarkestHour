@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHVehicleVoiceSayMessage extends DHLocalMessage
+class DHVehicleVoiceSayMessage extends DHChatMessage
     abstract;
 
 static function string AssembleString(HUD myHUD, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional string MessageString)

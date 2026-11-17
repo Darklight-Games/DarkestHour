@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHFriendlyInformationMsg extends LocalMessage
+class DHFriendlyInformationMsg extends DHHudMessage
     abstract;
 
 var localized string TeamSurrendered;
@@ -25,6 +25,7 @@ static function string GetString(
 
 defaultproperties
 {
+    Area=AREA_TopCenter
     TeamSurrendered="Your team has decided to retreat, the battle will be over shortly!"
 
     bFadeMessage=true

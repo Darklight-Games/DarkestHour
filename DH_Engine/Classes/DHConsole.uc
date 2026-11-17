@@ -886,7 +886,7 @@ function bool CanUseSayType(string SayType)
     return false;
 }
 
-static function class<DHLocalMessage> GetSayTypeMessageClass(string SayType)
+static function class<DHChatMessage> GetSayTypeMessageClass(string SayType)
 {
     // TODO: make struct of saytypes instead
     switch (SayType)

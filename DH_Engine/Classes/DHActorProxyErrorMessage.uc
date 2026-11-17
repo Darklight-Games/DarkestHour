@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHActorProxyErrorMessage extends LocalMessage
+class DHActorProxyErrorMessage extends DHHudMessage
     abstract;
 
 var localized string NoGroundMessage;
@@ -141,6 +141,8 @@ static function RenderComplexMessage(
 
 defaultproperties
 {
+    Area=AREA_BottomCenter
+    Priority=4
     bFadeMessage=false
     bIsUnique=true
     bIsConsoleMessage=false

@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHLocalMessage extends LocalMessage
+class DHChatMessage extends LocalMessage
     abstract;
 
 var localized string MessagePrefix;

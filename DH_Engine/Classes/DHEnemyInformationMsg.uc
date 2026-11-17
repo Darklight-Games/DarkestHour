@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHEnemyInformationMsg extends LocalMessage
+class DHEnemyInformationMsg extends DHHudMessage
     abstract;
 
 var localized string EnemyIsWeak;
@@ -28,6 +28,7 @@ static function string GetString(
 
 defaultproperties
 {
+    Area=AREA_TopCenter
     EnemyIsWeak="The enemy is nearly out of reinforcements, victory is near!"
     EnemyIsSurrendering="The enemy is retreating, the battle will be over shortly!"
 

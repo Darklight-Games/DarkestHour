@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHPawnTouchMessage extends ROTouchMessagePlus
+class DHPawnTouchMessage extends DHHudMessage
     abstract;
 
 var localized array<string> Messages;
@@ -35,6 +35,13 @@ static function string GetString(optional int Switch, optional PlayerReplication
 
 defaultproperties
 {
+    Area=AREA_BottomCenter
+    bFadeMessage=false
+    bIsUnique=true
+    bIsConsoleMessage=false
+    FontSize=0
+    Lifetime=0.25
+    PosY=0.80
     Messages(0)="Press [%THROWMGAMMO%] to resupply {0}"
     Messages(1)="Press [%THROWMGAMMO%] to reload {0}"
     Messages(2)="Press [%THROWMGAMMO%] to resupply and reload {0}"

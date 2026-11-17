@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHWeaponsLockedMessage extends LocalMessage
+class DHWeaponsLockedMessage extends DHHudMessage
     abstract;
 
 var localized string LockedFFMessage;
@@ -74,6 +74,8 @@ static function Color GetColor(optional int Switch, optional PlayerReplicationIn
 
 defaultproperties
 {
+    Area=AREA_BottomCenter
+    Priority=3
     bFadeMessage=true
     bIsConsoleMessage=false
     bIsUnique=true

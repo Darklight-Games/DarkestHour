@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHControlsMessage extends LocalMessage
+class DHControlsMessage extends DHHudMessage
     abstract;
 
 struct Control
@@ -18,11 +18,6 @@ var localized string HeaderText;
 var Color HeaderColor;
 
 var array<Control> Controls;
-
-// When multiple control messages are queued per frame, only the one with the higher weight will be displayed.
-// This avoids having multiple overlapping control prompts at once.
-// When weights are equal, the message received first will not be displaced.
-var byte Weight;
 
 // Override these functions to customize the message based on the context.
 static function string GetHeaderString(
@@ -107,6 +102,7 @@ static function RenderComplexMessage(Canvas Canvas,
 
 defaultproperties
 {
+    Area=AREA_BottomCenter
     PosY=0.8
     bComplexString=true
     bIsConsoleMessage=false

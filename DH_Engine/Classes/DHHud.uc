@@ -388,48 +388,48 @@ function UpdatePrecacheMaterials()
 function Message(PlayerReplicationInfo PRI, coerce string Msg, name MsgType)
 {
     local DHPlayer PC;
-    local class<LocalMessage>   MessageClassType;
-    local class<DHLocalMessage> DHMessageClassType;
+    local class<LocalMessage> MessageClassType;
+    local class<DHChatMessage> ChatMessageType;
 
     PC = DHPlayer(PlayerOwner);
 
     switch (MsgType)
     {
         case 'Say':
-            DHMessageClassType = Class'DHSayMessage';
-            Msg = DHMessageClassType.static.AssembleString(self,, PRI, Msg);
+            ChatMessageType = Class'DHSayMessage';
+            Msg = ChatMessageType.static.AssembleString(self,, PRI, Msg);
             break;
         case 'TeamSay':
-            DHMessageClassType = Class'DHTeamSayMessage';
-            Msg = DHMessageClassType.static.AssembleString(self,, PRI, Msg);
+            ChatMessageType = Class'DHTeamSayMessage';
+            Msg = ChatMessageType.static.AssembleString(self,, PRI, Msg);
             break;
         case 'SquadSay':
             if (PC != none && PC.SquadReplicationInfo.IsASquadLeader(DHPlayerReplicationInfo(PRI)))
             {
-                DHMessageClassType = Class'DHSquadLeaderSayMessage';
+                ChatMessageType = Class'DHSquadLeaderSayMessage';
             }
             else
             {
-                DHMessageClassType = Class'DHSquadSayMessage';
+                ChatMessageType = Class'DHSquadSayMessage';
             }
-            Msg = DHMessageClassType.static.AssembleString(self,, PRI, Msg);
+            Msg = ChatMessageType.static.AssembleString(self,, PRI, Msg);
             break;
         case 'VehicleSay':
-            DHMessageClassType = Class'DHVehicleSayMessage';
-            Msg = DHMessageClassType.static.AssembleString(self,, PRI, Msg);
+            ChatMessageType = Class'DHVehicleSayMessage';
+            Msg = ChatMessageType.static.AssembleString(self,, PRI, Msg);
             break;
         case 'VehicleVoiceSay':
-            DHMessageClassType = Class'DHVehicleVoiceSayMessage';
-            Msg = DHMessageClassType.static.AssembleString(self,, PRI, Msg);
+            ChatMessageType = Class'DHVehicleVoiceSayMessage';
+            Msg = ChatMessageType.static.AssembleString(self,, PRI, Msg);
             break;
         case 'CommandSay':
-            DHMessageClassType = Class'DHCommandSayMessage';
-            Msg = DHMessageClassType.static.AssembleString(self,, PRI, Msg);
+            ChatMessageType = Class'DHCommandSayMessage';
+            Msg = ChatMessageType.static.AssembleString(self,, PRI, Msg);
             break;
         case 'VoiceSay':
             // Voice say type for distinguishing voice commands from real player text.
-            DHMessageClassType = Class'DHVoiceSayMessage';
-            Msg = DHMessageClassType.static.AssembleString(self,, PRI, Msg);
+            ChatMessageType = Class'DHVoiceSayMessage';
+            Msg = ChatMessageType.static.AssembleString(self,, PRI, Msg);
             break;
         case 'CriticalEvent':
             MessageClassType = Class'CriticalEventPlus';
@@ -438,18 +438,18 @@ function Message(PlayerReplicationInfo PRI, coerce string Msg, name MsgType)
         case 'DeathMessage':
             return;
         case 'ServerMessage':
-            DHMessageClassType = Class'DHServerSayMessage';
-            Msg = DHMessageClassType.static.AssembleString(self,, PRI, Msg);
+            ChatMessageType = Class'DHServerSayMessage';
+            Msg = ChatMessageType.static.AssembleString(self,, PRI, Msg);
             break;
         default:
-            DHMessageClassType = Class'DHLocalMessage';
+            ChatMessageType = Class'DHChatMessage';
             break;
     }
 
-    AddDHTextMessage(Msg, DHMessageClassType, PRI);
+    AddDHTextMessage(Msg, ChatMessageType, PRI);
 }
 
-function AddDHTextMessage(string M, class<DHLocalMessage> MessageClass, PlayerReplicationInfo PRI)
+function AddDHTextMessage(string M, class<DHChatMessage> MessageClass, PlayerReplicationInfo PRI)
 {
     local int i;
 
@@ -2675,7 +2675,7 @@ function DrawPlayerNames(Canvas C)
         }
 
         // Text is drawn from the bottom left corner.
-        DrawLocation.Y -= ((TextSize.Y / 2) + ELEMENT_MARGIN);
+        DrawLocation.Y -= (TextSize.Y / 2) + ELEMENT_MARGIN;
         C.SetPos(DrawLocation.X - TextSize.X * 0.5, DrawLocation.Y);
         C.DrawTextClipped(PlayerName);
 
@@ -2687,7 +2687,7 @@ function DrawPlayerNames(Canvas C)
         {
             C.DrawColor = IconMaterialColor;
             C.DrawColor.A = Alpha;
-            DrawLocation.Y -= (TextSize.Y * 0.5 + BADGE_HALF_SIZE + ELEMENT_MARGIN);
+            DrawLocation.Y -= TextSize.Y * 0.5 + BADGE_HALF_SIZE + ELEMENT_MARGIN;
             C.SetPos(DrawLocation.X - BADGE_HALF_SIZE, DrawLocation.Y);
             C.DrawTile(IconMaterial, BADGE_SIZE, BADGE_SIZE, 0.0, 0.0, IconMaterial.MaterialUSize(), IconMaterial.MaterialVSize());
         }
@@ -5235,6 +5235,7 @@ function LocalizedMessage(class<LocalMessage> Message, optional int Switch, opti
 {
     local int i, Count;
     local PlayerReplicationInfo PRI;
+    local class<DHHudMessage> HudMessageClass, ExistingHudMessageClass;
 
     if (Message == none || (bIsCinematic && !ClassIsChildOf(Message, Class'ActionMessage')))
     {
@@ -5329,30 +5330,29 @@ function LocalizedMessage(class<LocalMessage> Message, optional int Switch, opti
     }
 
     i = arraycount(LocalMessages);
+    HudMessageClass = class<DHHudMessage>(Message);
 
-    // We only want to display one controls message at a time.
-    // If this is a control message, compare the weights against any existing control message.
-    // If the new message is a higher weight, replace the existing one.
-    if (ClassIsChildOf(Message, class'DHControlsMessage'))
+    // Only one message per area is displayed at a time. If an existing message shares the
+    // area, the new message replaces it if its weight is greater or equal, otherwise it is discarded.
+    if (HudMessageClass != none && HudMessageClass.default.Area != AREA_None)
     {
         for (i = 0; i < arraycount(LocalMessages); ++i)
         {
-            if (ClassIsChildOf(LocalMessages[i].Message, class'DHControlsMessage'))
+            ExistingHudMessageClass = class<DHHudMessage>(LocalMessages[i].Message);
+
+            if (ExistingHudMessageClass == none || ExistingHudMessageClass.default.Area != HudMessageClass.default.Area)
             {
-                if (class<DHControlsMessage>(Message).default.Weight >=
-                    class<DHControlsMessage>(LocalMessages[i].Message).default.Weight)
-                {
-                    // New message has a higher weight than the existing one. Clear the existing
-                    // message, it will be replaced below.
-                    ClearMessage(LocalMessages[i]);
-                    break;
-                }
-                else
-                {
-                    // New message has a lower weight than the existing one. Do not add this message.
-                    return;
-                }
+                continue;
             }
+
+            if (HudMessageClass.default.Priority < ExistingHudMessageClass.default.Priority)
+            {
+                return;
+            }
+
+            // The existing message will be replaced below.
+            ClearMessage(LocalMessages[i]);
+            break;
         }
     }
     else if (Message.default.bIsUnique)
@@ -5952,7 +5952,7 @@ function DHDrawTypingPrompt(Canvas C)
     local DHConsole Console;
     local Color SayTypeColor;
     local string SayTypeText, PromptText;
-    local class<DHLocalMessage> SayTypeMessageClass;
+    local class<DHChatMessage> SayTypeMessageClass;
     local DHPlayer PC;
 
     Console = DHConsole(PlayerConsole);
