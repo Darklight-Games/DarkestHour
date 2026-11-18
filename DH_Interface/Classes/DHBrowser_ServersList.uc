@@ -60,7 +60,7 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
     local float CellLeft, CellWidth, DrawX;
     local float IconPosX, IconPosY;
     local string Ping, VersionString, LocationString, HealthString, GitCommit;
-    local int k, j, flags, checkFlag;
+    local int k, j, Flags, CheckFlag;
     local Color HealthColor;
     local GUIStyles DStyle;
 
@@ -131,14 +131,14 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
     IconPosY = Y;
 
     // First flag is in the second to most sig bit (dont want to mess with sign bit). Then we work down.
-    checkFlag = 1;
+    CheckFlag = 1;
 
     // While we still have icon, and we can fit another one in.
     for (k = 0; k < Icons.Length && IconPosX < CellLeft + CellWidth; k++)
     {
         if (Icons[k] != none)
         {
-            if ((flags & checkFlag) != 0)
+            if ((Flags & CheckFlag) != 0)
             {
                 DrawX = Min(14, (CellLeft + CellWidth) - IconPosX);
 
@@ -151,7 +151,7 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
             }
         }
 
-        checkFlag = checkFlag << 1;
+        CheckFlag = CheckFlag << 1;
     }
 
     // Server Name

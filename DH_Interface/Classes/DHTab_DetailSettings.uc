@@ -227,7 +227,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             break;
 
         default:
-            super(UT2K4Tab_DetailSettings).InternalOnLoadINI(sender, s);
+            super(UT2K4Tab_DetailSettings).InternalOnLoadINI(Sender, s);
     }
 
     // Post-super checks

@@ -632,7 +632,7 @@ function UpdateScoreBoard(Canvas C)
 
         if (CalcX(1.0, C) + XL > C.ClipX)
         {
-            DHDrawCell(C, s, 0, X, Y, BaseXPos[1] + MaxTeamWidth, LineHeight, HUD.default.WhiteColor);
+            DHDrawCell(C, S, 0, X, Y, BaseXPos[1] + MaxTeamWidth, LineHeight, HUD.default.WhiteColor);
             S = "";
             Y += LineHeight;
 

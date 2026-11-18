@@ -505,7 +505,7 @@ function Died(Controller Killer, class<DamageType> DamageType, Vector HitLocatio
         !bDeleteMe &&
         !Level.bLevelChange &&
         !bVehicleDestroyed &&
-        !Level.Game.PreventDeath(self, Killer, damageType, HitLocation) &&
+        !Level.Game.PreventDeath(self, Killer, DamageType, HitLocation) &&
         DamageType != Class'Suicided')
     {
         RoundTime = GRI.ElapsedTime - GRI.RoundStartTime;
@@ -4658,7 +4658,7 @@ function CreateSpawnPointAttachment(bool bIsTemporary)
     SpawnPointAttachment.SetTeamIndex(default.VehicleTeam);
     SpawnPointAttachment.SetIsActive(true);
     SpawnPointAttachment.bHasSpawnKillPenalty = default.bHasSpawnKillPenalty;
-    SpawnPointattachment.bIsTemporary = bIsTemporary;
+    SpawnPointAttachment.bIsTemporary = bIsTemporary;
 
     if (MapIconAttachment != none && SpawnPointAttachment.BaseMapIconAttachment == none)
     {

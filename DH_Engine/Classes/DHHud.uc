@@ -2813,8 +2813,8 @@ function DrawCompassIcons(Canvas C, float CenterX, float CenterY, float Radius, 
     local Vector Target, Current;
     local int i, Team, Id, Count, TempTeam;
     local ROGameReplicationInfo GRI;
-    local float angle, XL, YL;
-    local Rotator rotAngle;
+    local float Angle, XL, YL;
+    local Rotator RotAngle;
     local array<DHGameReplicationInfo.MapMarker> PersonalMapMarkers;
     local array<DHGameReplicationInfo.MapMarker> MapMarkers;
     local DHPlayer PC;
@@ -2833,11 +2833,11 @@ function DrawCompassIcons(Canvas C, float CenterX, float CenterY, float Radius, 
     }
 
     // Get user's team & position
-    if (Pawn(Viewer) != none)
+    if (Pawn(viewer) != none)
     {
         if (Pawn(viewer).Controller != none)
         {
-            Team = Pawn(Viewer).Controller.PlayerReplicationInfo.Team.TeamIndex;
+            Team = Pawn(viewer).Controller.PlayerReplicationInfo.Team.TeamIndex;
         }
         else
         {
@@ -2846,9 +2846,9 @@ function DrawCompassIcons(Canvas C, float CenterX, float CenterY, float Radius, 
     }
     else
     {
-        if (Controller(Viewer) != none)
+        if (Controller(viewer) != none)
         {
-            Team = Controller(Viewer).PlayerReplicationInfo.Team.TeamIndex;
+            Team = Controller(viewer).PlayerReplicationInfo.Team.TeamIndex;
         }
         else
         {
@@ -2856,7 +2856,7 @@ function DrawCompassIcons(Canvas C, float CenterX, float CenterY, float Radius, 
         }
     }
 
-    Current = Viewer.Location;
+    Current = viewer.Location;
 
     // Get GRI
     GRI = ROGameReplicationInfo(PlayerOwner.GameReplicationInfo);
@@ -3454,7 +3454,7 @@ function DrawMap(Canvas C, AbsoluteCoordsInfo SubCoords, DHPlayer Player, Box Vi
         MapLevelOverlay.TextureCoords.Y1 = Viewport.Min.Y * MapLevelOverlay.WidgetTexture.MaterialVSize();
         MapLevelOverlay.TextureCoords.X2 = (Viewport.Max.X * MapLevelOverlay.WidgetTexture.MaterialUSize()) - 1;
         MapLevelOverlay.TextureCoords.Y2 = (Viewport.Max.Y * MapLevelOverlay.WidgetTexture.MaterialVSize()) - 1;
-        DrawSpriteWidgetClipped(C, MapLevelOverlay, subCoords, true);
+        DrawSpriteWidgetClipped(C, MapLevelOverlay, SubCoords, true);
     }
 
     // Calculate level map constants
@@ -3782,8 +3782,8 @@ function DrawMap(Canvas C, AbsoluteCoordsInfo SubCoords, DHPlayer Player, Box Vi
     }
 
     DrawMapIconAttachments(C, SubCoords, MyMapScale, MapCenter, Viewport);
-    DrawMapMarkersOnMap(C, Subcoords, MyMapScale, MapCenter, Viewport, Player.GetPersonalMarkers());
-    DrawMapMarkersOnMap(C, Subcoords, MyMapScale, MapCenter, Viewport, DHGRI.GetMapMarkers(Player));
+    DrawMapMarkersOnMap(C, SubCoords, MyMapScale, MapCenter, Viewport, Player.GetPersonalMarkers());
+    DrawMapMarkersOnMap(C, SubCoords, MyMapScale, MapCenter, Viewport, DHGRI.GetMapMarkers(Player));
     DrawPlayerIconsOnMap(C, SubCoords, MyMapScale, MapCenter, Viewport);
 
     // DEBUG:
@@ -4840,7 +4840,7 @@ function DrawSpectatingHud(Canvas C)
     local DHPlayer                PC;
     local float  Scale, X, Y, StrX, StrY, NameWidth, SmallH, XL;
     local int    Time;
-    local string s;
+    local string S;
     local bool bShouldFlashText;
 
     PC = DHPlayer(PlayerOwner);
@@ -4863,11 +4863,11 @@ function DrawSpectatingHud(Canvas C)
 
         if (DHGRI.DHRoundDuration == 0)
         {
-            s = default.TimeRemainingText $ default.NoTimeLimitText;
+            S = default.TimeRemainingText $ default.NoTimeLimitText;
         }
         else
         {
-            s = default.TimeRemainingText $ Class'TimeSpan'.static.ToString(CurrentTime);
+            S = default.TimeRemainingText $ Class'TimeSpan'.static.ToString(CurrentTime);
         }
 
         X = 8.0 * Scale;
@@ -4875,16 +4875,16 @@ function DrawSpectatingHud(Canvas C)
 
         C.DrawColor = WhiteColor;
         C.Font = GetConsoleFont(C);
-        C.TextSize(s, StrX, StrY);
+        C.TextSize(S, StrX, StrY);
         C.SetPos(X, Y);
-        C.DrawTextClipped(s);
+        C.DrawTextClipped(S);
 
-        s = "";
+        S = "";
 
         // Draw deploy text
         if (PRI == none || PRI.Team == none)
         {
-            s = default.JoinTeamText; // Press ESC to join a team
+            S = default.JoinTeamText; // Press ESC to join a team
         }
         else if (DHGRI.bReinforcementsComing[PRI.Team.TeamIndex] == 1)
         {
@@ -4896,21 +4896,21 @@ function DrawSpectatingHud(Canvas C)
                     if (DHGRI.SpawningEnableTimes[PRI.Team.TeamIndex] - DHGRI.ElapsedTime > 0)
                     {
                         // Spawning not enabled yet
-                        s = default.NotReadyToSpawnText;
-                        s = Repl(s, "{s}", Class'TimeSpan'.static.ToString(DHGRI.SpawningEnableTimes[PRI.Team.TeamIndex] - DHGRI.ElapsedTime));
+                        S = default.NotReadyToSpawnText;
+                        S = Repl(S, "{s}", Class'TimeSpan'.static.ToString(DHGRI.SpawningEnableTimes[PRI.Team.TeamIndex] - DHGRI.ElapsedTime));
                         bShouldFlashText = true;
                     }
                     else if (Time == 0)
                     {
                         // Press ESC to confirm your role, vehicle, and spawnpoint as something changed that has invalidated your selections
-                        s = default.InvalidSpawnSettingsText;
+                        S = default.InvalidSpawnSettingsText;
                         bShouldFlashText = true;
                     }
                     else if (PC.VehiclePoolIndex != -1 && PC.SpawnPointIndex != -1)
                     {
                         // You will deploy as a {0} driving a {3} at {2} | Press ESC to change
-                        s = default.SpawnVehicleText;
-                        s = Repl(s, "{3}", DHGRI.VehiclePoolVehicleClasses[PC.VehiclePoolIndex].default.VehicleNameString);
+                        S = default.SpawnVehicleText;
+                        S = Repl(S, "{3}", DHGRI.VehiclePoolVehicleClasses[PC.VehiclePoolIndex].default.VehicleNameString);
                     }
                     else if (PC.SpawnPointIndex != -1)
                     {
@@ -4919,26 +4919,26 @@ function DrawSpectatingHud(Canvas C)
                         if (SP == none)
                         {
                             // Press ESC to select a spawn point
-                            s = default.SelectSpawnPointText;
+                            S = default.SelectSpawnPointText;
                             bShouldFlashText = true;
                         }
                         else
                         {
                             // You will deploy as a {0} in {2} | Press ESC to change
-                            s = default.SpawnInfantryText;
+                            S = default.SpawnInfantryText;
                         }
                     }
                     else
                     {
                         // Press ESC to select a spawn point
-                        s = default.SelectSpawnPointText;
+                        S = default.SelectSpawnPointText;
                         bShouldFlashText = true;
                     }
 
                     break;
 
                 case ESM_RedOrchestra:
-                    s = default.ReinforcementText;
+                    S = default.ReinforcementText;
                     break;
             }
 
@@ -4946,19 +4946,19 @@ function DrawSpectatingHud(Canvas C)
             {
                 if (PC.bUseNativeRoleNames)
                 {
-                    s = Repl(s, "{0}", PRI.RoleInfo.AltName);
+                    S = Repl(S, "{0}", PRI.RoleInfo.AltName);
                 }
                 else
                 {
-                    s = Repl(s, "{0}", PRI.RoleInfo.MyName);
+                    S = Repl(S, "{0}", PRI.RoleInfo.MyName);
                 }
             }
             else
             {
-                s = default.SpawnNoRoleText;
+                S = default.SpawnNoRoleText;
             }
 
-            s = Repl(s, "{2}", Class'TimeSpan'.static.ToString(Max(0, Time)));
+            S = Repl(S, "{2}", Class'TimeSpan'.static.ToString(Max(0, Time)));
         }
 
         Y += 4.0 * Scale + StrY;
@@ -4970,7 +4970,7 @@ function DrawSpectatingHud(Canvas C)
         }
 
         C.SetPos(X, Y);
-        C.DrawTextClipped(s);
+        C.DrawTextClipped(S);
     }
 
     // Draw player's name
@@ -5086,7 +5086,7 @@ function DHDrawIconOnMap(
     optional int ObjectiveIndex
     )
 {
-    local FloatBox Label_coords;
+    local FloatBox LabelCoords;
     local Vector   HUDLocation;
     local float    XL, YL, YL_one, OldFontXScale, OldFontYScale;
 
@@ -5156,18 +5156,18 @@ function DHDrawIconOnMap(
         DrawTextWidgetClipped(C, MapTexts, LevelCoords, XL, YL, YL_one, true);
 
         // Update objective floatbox info with desired coords
-        label_coords.X1 = LevelCoords.width * MapTexts.PosX - XL / 2.0;
-        label_coords.Y1 = LevelCoords.height * MapTexts.PosY;
-        label_coords.X2 = label_coords.X1 + XL;
-        label_coords.Y2 = label_coords.Y1 + YL;
+        LabelCoords.X1 = LevelCoords.width * MapTexts.PosX - XL / 2.0;
+        LabelCoords.Y1 = LevelCoords.height * MapTexts.PosY;
+        LabelCoords.X2 = LabelCoords.X1 + XL;
+        LabelCoords.Y2 = LabelCoords.Y1 + YL;
 
         // Iterate through objectives list & check if we should offset label
-        UpdateMapIconLabelCoords(label_coords, GRI, ObjectiveIndex);
+        UpdateMapIconLabelCoords(LabelCoords, GRI, ObjectiveIndex);
 
         // Update Y offset
         if (ObjectiveIndex >= 0)
         {
-            MapTexts.OffsetY += DHGRI.DHObjectives[ObjectiveIndex].LabelCoords.Y1 - label_coords.Y1;
+            MapTexts.OffsetY += DHGRI.DHObjectives[ObjectiveIndex].LabelCoords.Y1 - LabelCoords.Y1;
         }
 
         // Hack to make the text smaller on the overview for objectives
@@ -5443,7 +5443,7 @@ function DisplayVoiceGain(Canvas C)
     C.Style = ERenderStyle.STY_Alpha;
 
     VoiceGain = (1 - 3 * Min(Level.TimeSeconds - LastVoiceGainTime, 0.3333)) * LastVoiceGain;
-    YOffset = 12 * scale;
+    YOffset = 12 * Scale;
     IconSize = VoiceMeterSize * Scale;
     PosY = VoiceMeterY * C.ClipY - IconSize - YOffset;
     PosX = VoiceMeterX * C.ClipX;
@@ -5454,7 +5454,7 @@ function DisplayVoiceGain(Canvas C)
     NeedleRotator.Rotation.Yaw = -1 * ((20000 * VoiceGain) + 55000);
 
     C.SetPos(PosX, PosY);
-    C.DrawTileScaled(NeedleRotator, scale * VoiceMeterSize / 128.0, scale * VoiceMeterSize / 128.0);
+    C.DrawTileScaled(NeedleRotator, Scale * VoiceMeterSize / 128.0, Scale * VoiceMeterSize / 128.0);
 
     if (PlayerOwner != none)
     {

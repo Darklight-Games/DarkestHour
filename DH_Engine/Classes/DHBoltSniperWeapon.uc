@@ -398,7 +398,7 @@ function PerformReload(optional int Count)
 }
 
 // Modified to skip over the Super in DHSniperWeapon that is only relevant to semi-auto & auto weapons
-simulated function AnimEnd(int channel)
+simulated function AnimEnd(int Channel)
 {
     super(DHProjectileWeapon).AnimEnd(Channel);
 }

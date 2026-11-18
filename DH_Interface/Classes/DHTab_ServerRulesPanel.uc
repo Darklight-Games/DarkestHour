@@ -5,8 +5,8 @@
 
 class DHTab_ServerRulesPanel extends UT2K4Tab_ServerRulesPanel;
 
-var GUIController localController;
-var automated GUISectionBackground sb_background;
+var GUIController LocalController;
+var automated GUISectionBackground sb_Background;
 
 // **************************************************************************************************************************************************************************
 // Add a new rule to the GUIMultiOptionList
@@ -127,21 +127,21 @@ function AddRule(PlayInfo.PlayInfoData NewRule, int Index)
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
-        localController = MyController;
+        LocalController = MyController;
         super(IAMultiColumnRulesPanel).InitComponent(MyController, MyOwner);
         RemoveComponent(b_Symbols);
-        sb_background.ManageComponent(lb_Rules);
-        sb_background.ManageComponent(nu_Port);
-        sb_background.ManageComponent(ch_Webadmin);
-        sb_background.ManageComponent(ch_LANServer);
-        sb_background.ManageComponent(ch_Advanced);
+        sb_Background.ManageComponent(lb_Rules);
+        sb_Background.ManageComponent(nu_Port);
+        sb_Background.ManageComponent(ch_Webadmin);
+        sb_Background.ManageComponent(ch_LANServer);
+        sb_Background.ManageComponent(ch_Advanced);
 }
 
 function Refresh()
 {
         super.Refresh();
 
-        sb_background.ManageComponent(lb_Rules);
+        sb_Background.ManageComponent(lb_Rules);
 }
 
 defaultproperties

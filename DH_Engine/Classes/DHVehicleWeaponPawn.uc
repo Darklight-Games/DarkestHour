@@ -1817,7 +1817,7 @@ function Died(Controller Killer, class<DamageType> damageType, Vector HitLocatio
                     }
 
                     // Log the crew/passenger kill.
-                    G.Metrics.OnPlayerFragged(PlayerController(Killer), PC, DamageType, HitLocation, 0, RoundTime);
+                    G.Metrics.OnPlayerFragged(PlayerController(Killer), PC, damageType, HitLocation, 0, RoundTime);
                 }
 
                 if (PC != none && VehicleBase != none)

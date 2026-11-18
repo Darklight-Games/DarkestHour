@@ -206,7 +206,7 @@ function bool CanClose(optional bool bCanceled)
 
 function bool ButtonClick(GUIComponent Sender)
 {
-    switch (sender)
+    switch (Sender)
     {
         case b_Practice:
             Profile("InstantAction");

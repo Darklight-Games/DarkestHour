@@ -16,7 +16,7 @@ var automated DHmoCheckBox      ch_TankThrottle, ch_VehicleThrottle, ch_ManualRe
 var automated GUILabel          l_PlayerROID;     // label showing player's unique ROID
 var automated DHGUIButton       b_CopyPlayerROID; // button to copy player's ROID to clipboard
 var automated DHmoCheckBox      ch_DynamicNetSpeed;
-var automated DHmoComboBox      co_Netspeed, co_PurgeCacheDays, co_AutomaticVehicleAlerts;
+var automated DHmoComboBox      co_NetSpeed, co_PurgeCacheDays, co_AutomaticVehicleAlerts;
 
 var     int                     OriginalNetSpeed, OriginalPurgeCacheDays; // save initial values so can tell later if they have changed & need to be saved
 var     int                     PurgeCacheDaysValues[3]; // deliberately one less than PurgeCacheDaysText array size, as highest text in list is for possible custom value
@@ -52,7 +52,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     i_BG3.ManageComponent(b_CopyPlayerROID);
     i_BG3.ManageComponent(ch_Incognito);
     i_BG3.ManageComponent(ch_DynamicNetSpeed);
-    i_BG3.ManageComponent(co_Netspeed);
+    i_BG3.ManageComponent(co_NetSpeed);
     i_BG3.ManageComponent(co_PurgeCacheDays);
 
     ed_PlayerName.MyEditBox.MaxWidth = 32; // compared to RO, this allows longer player name & no longer converts spaces
@@ -64,7 +64,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 
     for (i = 0; i < arraycount(NetSpeedText); ++i)
     {
-        co_Netspeed.AddItem(Repl(NetSpeedText[i], "{0}", NetSpeedValues[i]));
+        co_NetSpeed.AddItem(Repl(NetSpeedText[i], "{0}", NetSpeedValues[i]));
     }
 
     for (i = 0; i < arraycount(PurgeCacheDaysValues); ++i) // deliberately using PurgeCacheDaysValues array size, as highest list text is reserved for possible custom value
@@ -219,7 +219,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             ch_DynamicNetSpeed.Checked(PC.bDynamicNetSpeed);
             break;
 
-        case co_Netspeed:
+        case co_NetSpeed:
             // Get the ConfiguredInternetSpeed and set it to i
             if (PC.Player != none)
             {
@@ -739,7 +739,7 @@ defaultproperties
         OnChange=InternalOnChange
         OnLoadINI=InternalOnLoadINI
     End Object
-    co_Netspeed=DHmoComboBox'NetSpeed'
+    co_NetSpeed=DHmoComboBox'NetSpeed'
 
     Begin Object Class=DHmoComboBox Name=PurgeCacheDays
         Caption="Purge Cache"

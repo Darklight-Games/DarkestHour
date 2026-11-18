@@ -84,7 +84,7 @@ event Trigger(Actor Other, Pawn EventInstigator)
                 if (P != none && P.GetTeamNum() == ActualSideToModify)
                 {
                     P.TeamMessage(C.PlayerReplicationInfo, Message, MessageType);
-                    p.PlayAnnouncement(sound, 1, true);
+                    P.PlayAnnouncement(Sound, 1, true);
                 }
             }
         }

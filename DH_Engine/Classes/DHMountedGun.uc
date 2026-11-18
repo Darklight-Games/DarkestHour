@@ -842,9 +842,9 @@ simulated event PostNetReceive()
     super.PostNetReceive();
 
     // Rotation is sent as string, process.
-    firstComma = InStr(SentinelString,",");
+    FirstComma = InStr(SentinelString,",");
     UncompressedRotation.Pitch = Int(Left(SentinelString, FirstComma));
-    CutSentinel = Mid(SentinelString,firstComma + 1);
+    CutSentinel = Mid(SentinelString,FirstComma + 1);
     SecondComma = InStr(CutSentinel, ",");
     UncompressedRotation.Yaw = Int(Left(CutSentinel, SecondComma));
     UncompressedRotation.Roll = Int(Mid(CutSentinel, SecondComma + 1));

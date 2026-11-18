@@ -248,7 +248,7 @@ final simulated function Vector GetWorldCoords(DHGameReplicationInfo GRI)
     else if (GRI != none)
     {
         Class'UQuantize'.static.DequantizeClamped2DPose(Quantized2DPose, X, Y);
-        L = GRI.GetWorldCoords(x, Y);
+        L = GRI.GetWorldCoords(X, Y);
     }
 
     return L;

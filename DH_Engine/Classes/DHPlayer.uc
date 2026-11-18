@@ -3144,7 +3144,7 @@ exec function ChangeTeam(int N) { }
 // It would be useful to roll up the "spawning parameters" (role, weapons,
 // spawn point etc.) into a struct so that it's easier to understand what's
 // going on.
-function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte NewWeapon2, int NewSpawnPointIndex, int NewVehiclePoolIndex)
+function ServerSetPlayerInfo(byte NewTeam, byte NewRole, byte NewWeapon1, byte NewWeapon2, int NewSpawnPointIndex, int NewVehiclePoolIndex)
 {
     local bool bDidFail;
     local DarkestHourGame Game;
@@ -3159,7 +3159,7 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
     OldTeamIndex = GetTeamNum();
 
     // Attempt to change teams
-    if (newTeam != 255)
+    if (NewTeam != 255)
     {
         if (NextChangeTeamTime >= GRI.ElapsedTime)
         {
@@ -3167,7 +3167,7 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
         }
 
         // Spectate
-        if (newTeam == 254)
+        if (NewTeam == 254)
         {
             BecomeSpectator();
 
@@ -3200,29 +3200,29 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
         }
         else
         {
-            if (newTeam == 250) // auto select
+            if (NewTeam == 250) // auto select
             {
                 if (PlayerReplicationInfo == none || PlayerReplicationInfo.bOnlySpectator)
                 {
                     BecomeActivePlayer();
                 }
 
-                newTeam = ServerAutoSelectAndChangeTeam();
+                NewTeam = ServerAutoSelectAndChangeTeam();
             }
-            else if (ROTeamGame(Level.Game).PickTeam(newTeam, self) == newTeam)
+            else if (ROTeamGame(Level.Game).PickTeam(NewTeam, self) == NewTeam)
             {
                 if (PlayerReplicationInfo == none || PlayerReplicationInfo.bOnlySpectator)
                 {
                     BecomeActivePlayer();
                 }
 
-                ServerChangeTeam(newTeam);
+                ServerChangeTeam(NewTeam);
             }
 
             // Check if change failed and output results
             if (PlayerReplicationInfo == none ||
                 PlayerReplicationInfo.Team == none ||
-                PlayerReplicationInfo.Team.TeamIndex != newTeam)
+                PlayerReplicationInfo.Team.TeamIndex != NewTeam)
             {
                 if (PlayerReplicationInfo == none)
                 {
@@ -3252,7 +3252,7 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
                 {
                     ClientChangePlayerInfoResult(16);
                 }
-                else if (ROTeamGame(Level.Game) != none && ROTeamGame(Level.Game).PickTeam(newTeam, self) != newTeam)
+                else if (ROTeamGame(Level.Game) != none && ROTeamGame(Level.Game).PickTeam(NewTeam, self) != NewTeam)
                 {
                     if (ROTeamGame(Level.Game).bPlayersVsBots && Level.NetMode != NM_Standalone)
                     {
@@ -3274,17 +3274,17 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
     }
 
     // Attempt to change role
-    if (newRole != 255 && DesiredRole != NewRole)
+    if (NewRole != 255 && DesiredRole != NewRole)
     {
-        ChangeRole(newRole);
+        ChangeRole(NewRole);
 
         // Check if change was successful
-        if (DesiredRole != newRole)
+        if (DesiredRole != NewRole)
         {
             if (ROTeamGame(Level.Game) != none &&
                 PlayerReplicationInfo != none &&
                 PlayerReplicationInfo.Team != none &&
-                ROTeamGame(Level.Game).RoleLimitReached(PlayerReplicationInfo.Team.TeamIndex, newRole))
+                ROTeamGame(Level.Game).RoleLimitReached(PlayerReplicationInfo.Team.TeamIndex, NewRole))
             {
                 ClientChangePlayerInfoResult(100);
             }
@@ -7574,8 +7574,8 @@ simulated function bool IsLoggedInAsAdmin()
 
 function ClientLocationalVoiceMessage(PlayerReplicationInfo Sender,
                                       PlayerReplicationInfo Recipient,
-                                      name messagetype, byte messageID,
-                                      optional Pawn senderPawn, optional Vector senderLocation)
+                                      name MessageType, byte MessageID,
+                                      optional Pawn SenderPawn, optional Vector SenderLocation)
 {
     local VoicePack Voice;
     local ROVoicePack V;
@@ -7713,7 +7713,7 @@ function SendVoiceMessage(PlayerReplicationInfo Sender,
                 {
                     DistanceToOther = VSize(Pawn.Location - ROP.Pawn.Location);
 
-                    if (Class'ROVoicePack'.static.isValidDistanceForMessageType(messagetype,distanceToOther))
+                    if (Class'ROVoicePack'.static.isValidDistanceForMessageType(MessageType,DistanceToOther))
                     {
                         ROP.ClientLocationalVoiceMessage(Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation);
                     }
@@ -7738,11 +7738,11 @@ function SendVoiceMessage(PlayerReplicationInfo Sender,
     {
         if (Recipient == none)
         {
-            ROTeamGame(Level.Game).SetTeamAIObjectives(messageID, PlayerReplicationInfo.Team.TeamIndex);
+            ROTeamGame(Level.Game).SetTeamAIObjectives(MessageID, PlayerReplicationInfo.Team.TeamIndex);
         }
         else
         {
-            ROTeamGame(Level.Game).SetSquadObjectives(messageID, PlayerReplicationInfo.Team.TeamIndex, Recipient);
+            ROTeamGame(Level.Game).SetSquadObjectives(MessageID, PlayerReplicationInfo.Team.TeamIndex, Recipient);
         }
     }
 
@@ -7800,7 +7800,7 @@ function SendVehicleVoiceMessage(PlayerReplicationInfo Sender,
 
         if (ROP != None)
         {
-            ROP.ClientLocationalVoiceMessage(Sender, Recipient, Messagetype, MessageID, Pawn);
+            ROP.ClientLocationalVoiceMessage(Sender, Recipient, MessageType, MessageID, Pawn);
         }
     }
 }
@@ -7913,8 +7913,8 @@ exec function DebugAddMapMarker(string MapMarkerClassName, int X, int Y)
 
     if (IsDebugModeAllowed())
     {
-        XX = float(x) / 10;
-        YY = float(y) / 10;
+        XX = float(X) / 10;
+        YY = float(Y) / 10;
         MapMarkerClass = class<DHMapMarker>(DynamicLoadObject("DH_Engine." $ MapMarkerClassName, Class'Class'));
 
         Log("Adding map marker: MapMarkerClass" @ MapMarkerClass @ "," @ XX @ "," @ YY);

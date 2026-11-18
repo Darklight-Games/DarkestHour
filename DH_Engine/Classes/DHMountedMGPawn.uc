@@ -86,18 +86,18 @@ simulated state ViewTransition
         super.BeginState();
 
         // TODO: this is UGLY.
-        if (LastPositionIndex == IronsightsPositionIndex)
+        if (LastPositionIndex == IronSightsPositionIndex)
         {
             // Transition off of the ironsights position to the normal position.
             CameraTransitionController.QueueCameraTransition(CameraBone, Level.TimeSeconds, 0.125, INTERP_SmoothStep);
         }
-        else if (DriverPositionIndex == IronsightsPositionIndex)
+        else if (DriverPositionIndex == IronSightsPositionIndex)
         {
             // Transition to the transition camera.
             CameraTransitionController.QueueCameraTransition(CameraBone, Level.TimeSeconds, 0.125, INTERP_SmoothStep);
             // Then transition to the ironsights camera at the end of the animation.
             CameraTransitionController.QueueCameraTransition(
-                GetCameraBoneForPosition(IronsightsPositionIndex),
+                GetCameraBoneForPosition(IronSightsPositionIndex),
                 Level.TimeSeconds + ViewTransitionDuration - 0.25, 0.25, INTERP_SmoothStep);
         }
     }
@@ -322,7 +322,7 @@ simulated function SetIsZoomed(bool bNewIsZoomed)
 
 simulated function ToggleZoom()
 {
-    if (IsReloading() || !IsOnIronsights() || IsInState('ViewTransition'))
+    if (IsReloading() || !IsOnIronSights() || IsInState('ViewTransition'))
     {
         return;
     }

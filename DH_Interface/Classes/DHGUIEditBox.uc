@@ -7,7 +7,7 @@ class DHGUIEditBox extends GUIEditBox;
 
 delegate OnEnter();
 
-function bool InternalOnKeyEvent(out byte Key, out byte State, float delta)
+function bool InternalOnKeyEvent(out byte Key, out byte State, float Delta)
 {
     if (Key == 0x0D && State == 3) // IK_Enter
     {

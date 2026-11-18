@@ -2797,7 +2797,7 @@ function bool AddAmmo(int AmmoToAdd, int Mode)
     {
         AmmoCharge[Mode] = MaxAmmo(Mode);
     }
-    else if (AmmoCharge[mode] < MaxAmmo(Mode))
+    else if (AmmoCharge[Mode] < MaxAmmo(Mode))
     {
         AmmoCharge[Mode] = Min(MaxAmmo(Mode), AmmoCharge[Mode] + AmmoToAdd);
     }

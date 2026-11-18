@@ -1413,7 +1413,7 @@ simulated function ProcessHitFX()
 }
 
 // Modified to add extra effects if certain body parts are hit (chest or head), to play a hit sound, & to remove duplicated calls to TakeDamage()
-function ProcessLocationalDamage(int Damage, Pawn InstigatedBy, Vector hitlocation, Vector Momentum, class<DamageType> DamageType, array<int> PointsHit)
+function ProcessLocationalDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, array<int> PointsHit)
 {
     local EPawnHitPointType HitPointType;
     local Vector            HitDirection;
@@ -1515,7 +1515,7 @@ function ProcessLocationalDamage(int Damage, Pawn InstigatedBy, Vector hitlocati
         }
 
         HitDamageType = DamageType;
-        TakeDamage(CumulativeDamage, InstigatedBy, hitlocation, Momentum, DamageType, HighestDamagePoint);
+        TakeDamage(CumulativeDamage, InstigatedBy, HitLocation, Momentum, DamageType, HighestDamagePoint);
     }
 }
 
@@ -1532,7 +1532,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
     {
         if (InstigatedBy != none)
         {
-            Warn("No DamageType for damage by" @ Instigatedby @ "with weapon" @ InstigatedBy.Weapon);
+            Warn("No DamageType for damage by" @ InstigatedBy @ "with weapon" @ InstigatedBy.Weapon);
         }
 
         DamageType = Class'DamageType';
@@ -2402,7 +2402,7 @@ function PlayDyingAnimation(class<DamageType> DamageType, Vector HitLoc)
                     }
                 }
 
-                if (Abs(hitLocRel.Y) > RagMaxSpinAmount)
+                if (Abs(HitLocRel.Y) > RagMaxSpinAmount)
                 {
                     if (HitLocRel.Y < 0)
                     {
@@ -2438,7 +2438,7 @@ function PlayDyingAnimation(class<DamageType> DamageType, Vector HitLoc)
                 SkelParams.KStartLinVel = vect(0,0,0);
             }
 
-            if (Damagetype.default.bKUseTearOffMomentum)
+            if (DamageType.default.bKUseTearOffMomentum)
             {
                 SkelParams.KStartLinVel = GetTearOffMomemtum() + Velocity;
             }
