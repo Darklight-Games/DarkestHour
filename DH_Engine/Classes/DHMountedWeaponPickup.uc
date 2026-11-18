@@ -94,7 +94,7 @@ function InitDroppedPickupFor(Inventory Inv)
     }
 
     // Spawn the map icon attachment.
-    MapIconAttachment = Spawn(class'DHMapIconAttachment_Vehicle', self);
+    MapIconAttachment = Spawn(Class'DHMapIconAttachment_Vehicle', self);
 
     if (MapIconAttachment != none)
     {

@@ -6461,18 +6461,18 @@ simulated function NotifySelected(Pawn User)
     {
         if (bWeaponNeedsReload && bIronSights)
         {
-            P.ReceiveLocalizedMessage(TouchMessageClass, 2, self.PlayerReplicationInfo,, User.Controller);
+            P.ReceiveLocalizedMessage(TouchMessageClass, 2, PlayerReplicationInfo,, User.Controller);
         }
         else
         {
-            P.ReceiveLocalizedMessage(TouchMessageClass, 0, self.PlayerReplicationInfo,, User.Controller);
+            P.ReceiveLocalizedMessage(TouchMessageClass, 0, PlayerReplicationInfo,, User.Controller);
         }
 
         LastNotifyTime = Level.TimeSeconds;
     }
     else if (bWeaponNeedsReload)
     {
-        P.ReceiveLocalizedMessage(TouchMessageClass, 1, self.PlayerReplicationInfo,, User.Controller);
+        P.ReceiveLocalizedMessage(TouchMessageClass, 1, PlayerReplicationInfo,, User.Controller);
         LastNotifyTime = Level.TimeSeconds;
     }
 }

@@ -127,7 +127,7 @@ function ApplyRestrictions(DHPlayer PC, optional bool bOnLogin)
             if (PC.bRestrictVehicleAccess)
             {
                 PC.LeaveVehicleAsDriver();
-                PC.ReceiveLocalizedMessage(class'DHAdminMessage', 11);
+                PC.ReceiveLocalizedMessage(Class'DHAdminMessage', 11);
             }
         }
 
@@ -147,7 +147,7 @@ function ApplyRestrictions(DHPlayer PC, optional bool bOnLogin)
                     PC.SquadReplicationInfo.SetAssistantSquadLeader(PRI.Team.TeamIndex, PRI.SquadIndex, none);
                 }
 
-                PC.ReceiveLocalizedMessage(class'DHAdminMessage', 12);
+                PC.ReceiveLocalizedMessage(Class'DHAdminMessage', 12);
             }
         }
     }

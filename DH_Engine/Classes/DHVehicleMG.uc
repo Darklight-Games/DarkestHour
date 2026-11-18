@@ -58,7 +58,7 @@ function SpawnBarrels()
         BarrelBundle.Destroy();
     }
 
-    BarrelBundle = Spawn(class'DHWeaponBarrelBundle');
+    BarrelBundle = Spawn(Class'DHWeaponBarrelBundle');
     // We don't have barrel changing on this class of vehicle MGs.
     // For that reason, the number of active barrels and starting barrels are always the same.
     // Mounted MGs allow this, but do not inherit from this class.

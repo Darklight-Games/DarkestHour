@@ -137,7 +137,7 @@ simulated function DHActorProxy.Context GetContext()
         Context.PlayerController = DHPlayer(Instigator.Controller);
     }
     
-    Context.LevelInfo = class'DH_LevelInfo'.static.GetInstance(Level);
+    Context.LevelInfo = Class'DH_LevelInfo'.static.GetInstance(Level);
     Context.VariantIndex = ConstructionVariantIndex;
     Context.SkinIndex = ConstructionSkinIndex;
 
@@ -318,7 +318,7 @@ simulated function DHActorProxy CreateProxyCursor()
 {
     local DHMountedWeaponProxy Cursor;
 
-    Cursor = Spawn(class'DHMountedWeaponProxy', Instigator);
+    Cursor = Spawn(Class'DHMountedWeaponProxy', Instigator);
 
     if (Cursor != none)
     {
@@ -341,7 +341,7 @@ simulated function Tick(float DeltaTime)
 
     if (CanConfirmPlacement())
     {
-        Instigator.ReceiveLocalizedMessage(class'DHMountedWeaponControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
+        Instigator.ReceiveLocalizedMessage(Class'DHMountedWeaponControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
     }
 }
 
@@ -456,7 +456,7 @@ function bool CanSpawnVehicle(Actor GroundActor, Vector Location, Rotator Rotati
     local DHActorProxy.ActorProxyError Error;
 
     // Create a proxy to test placement logic on the server-side.
-    TestProxy = Spawn(class'DHMountedWeaponProxy', Instigator);
+    TestProxy = Spawn(Class'DHMountedWeaponProxy', Instigator);
 
     if (TestProxy == none)
     {

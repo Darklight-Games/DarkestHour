@@ -197,13 +197,13 @@ function PostBeginPlay()
 {
     super(HudBase).PostBeginPlay();
 
-    MapIconAttachmentDrawOrderComparator = new class'UComparator';
+    MapIconAttachmentDrawOrderComparator = new Class'UComparator';
     MapIconAttachmentDrawOrderComparator.CompareFunction = MapIconAttachmentDrawOrderCompareFunction;
 
     // Initialize strings
-    TypingPromptText = Repl(TypingPromptText, "{0}", Caps(class'Interactions'.static.GetFriendlyName(IK_Tab)));
-    TypingPromptStopDrivingText = Repl(TypingPromptStopDrivingText, "{0}", Caps(class'Interactions'.static.GetFriendlyName(IK_Ctrl)));
-    TypingPromptStopWalkingText = Repl(TypingPromptStopWalkingText, "{0}", Caps(class'Interactions'.static.GetFriendlyName(IK_Ctrl)));
+    TypingPromptText = Repl(TypingPromptText, "{0}", Caps(Class'Interactions'.static.GetFriendlyName(IK_Tab)));
+    TypingPromptStopDrivingText = Repl(TypingPromptStopDrivingText, "{0}", Caps(Class'Interactions'.static.GetFriendlyName(IK_Ctrl)));
+    TypingPromptStopWalkingText = Repl(TypingPromptStopWalkingText, "{0}", Caps(Class'Interactions'.static.GetFriendlyName(IK_Ctrl)));
 }
 
 // Disabled as the only functionality was in HudBase re the DamageTime array, but that became redundant in RO (no longer gets set in function DisplayHit)
@@ -1914,12 +1914,12 @@ function DrawVehicleIcon(Canvas Canvas, ROVehicle Vehicle, optional ROVehicleWea
                 switch (DHMountedMG(Passenger.Gun).BarrelCondition)
                 {
                     case BC_Damaged:
-                        VehicleBarrelReloadIcon.Tints[0] = class'UColor'.default.Orange;
-                        VehicleBarrelReloadIcon.Tints[1] = class'UColor'.default.Orange;
+                        VehicleBarrelReloadIcon.Tints[0] = Class'UColor'.default.Orange;
+                        VehicleBarrelReloadIcon.Tints[1] = Class'UColor'.default.Orange;
                         break;
                     case BC_Failed:
-                        VehicleBarrelReloadIcon.Tints[0] = class'UColor'.default.Red;
-                        VehicleBarrelReloadIcon.Tints[1] = class'UColor'.default.Red;
+                        VehicleBarrelReloadIcon.Tints[0] = Class'UColor'.default.Red;
+                        VehicleBarrelReloadIcon.Tints[1] = Class'UColor'.default.Red;
                         break;
                 }
 
@@ -3842,7 +3842,7 @@ function DrawMapIconAttachments(Canvas C, AbsoluteCoordsInfo SubCoords, float My
         }
     }
 
-    class'USort'.static.Sort(MapIconAttachments, MapIconAttachmentDrawOrderComparator);
+    Class'USort'.static.Sort(MapIconAttachments, MapIconAttachmentDrawOrderComparator);
 
     for (i = 0; i < MapIconAttachments.Length; ++i)
     {
@@ -5992,7 +5992,7 @@ function DHDrawTypingPrompt(Canvas C)
     C.DrawTextClipped(SayTypeText @ "(>" @ Left(Console.TypedStr, Console.TypedStrPos) $ Chr(4) $ Eval(Console.TypedStrPos < Len(Console.TypedStr), Mid(Console.TypedStr, Console.TypedStrPos), "_"), true);
 
     // Draw the button prompt for cycling chat modes.
-    PromptText = Repl(TypingPromptText, "{0}", Caps(class'Interactions'.static.GetFriendlyName(IK_Tab)));
+    PromptText = Repl(TypingPromptText, "{0}", Caps(Class'Interactions'.static.GetFriendlyName(IK_Tab)));
 
     PC = DHPlayer(PlayerOwner);
 

@@ -49,7 +49,7 @@ static function SetIdentifierByType(Actor AttachmentActor, EIdentifierType Type,
 
     // Get the original skins from the static mesh.
     // TODO: this might be expensive so we want to avoid doing this every time.
-    StaticMeshSkins = (new class'UStaticMesh').FindStaticMeshSkins(AttachmentActor.StaticMesh);
+    StaticMeshSkins = (new Class'UStaticMesh').FindStaticMeshSkins(AttachmentActor.StaticMesh);
 
     for (i = 0; i < default.Identifiers.Length; ++i)
     {
@@ -109,11 +109,11 @@ static function Material CreateGlyphMaterial(Material BaseMaterial, Material Gly
     local Combiner Combiner;
     local TexCoordSource TexCoordSource;
 
-    TexCoordSource = new class'TexCoordSource';
+    TexCoordSource = new Class'TexCoordSource';
     TexCoordSource.TexCoordSource = TCS_Stream1;
     TexCoordSource.Material = GlyphMaterial;
 
-    Combiner = new class'Combiner';
+    Combiner = new Class'Combiner';
     Combiner.CombineOperation = CO_AlphaBlend_With_Mask;
     Combiner.AlphaOperation = AO_Use_Mask;
     Combiner.Material1 = BaseMaterial;

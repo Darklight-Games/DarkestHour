@@ -280,7 +280,7 @@ simulated event WeaponTick(float DeltaTime)
 
     if (bBarrelFailed && bHasSpareBarrel && Instigator != none && !IsBusy())
     {
-        Instigator.ReceiveLocalizedMessage(class'DHBarrelChangeControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
+        Instigator.ReceiveLocalizedMessage(Class'DHBarrelChangeControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
     }
 }
 
@@ -3203,7 +3203,7 @@ function GiveTo(Pawn Other, optional Pickup Pickup)
     if (Pickup == none)
     {
         // This weapon is spawning for this player, so spawn any barrels.
-        BarrelBundle = Spawn(class'DHWeaponBarrelBundle', self);
+        BarrelBundle = Spawn(Class'DHWeaponBarrelBundle', self);
         BarrelBundle.Setup(BarrelClass, InitialBarrels);
     }
     // Player has picked up this weapon from the ground, so transfer any barrels

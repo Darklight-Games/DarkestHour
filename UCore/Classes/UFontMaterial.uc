@@ -67,7 +67,7 @@ private function string GetFontStyle()
 {
     local string FS;
 
-    switch( string( GetEnum( enum'EFontStyle',FontStyle ) ) ) {
+    switch( string( GetEnum( Enum'EFontStyle',FontStyle ) ) ) {
         case "Normal":              FS = " STYLE=500 ITALIC=FALSE"; break;
         case "Italic":              FS = " STYLE=500 ITALIC=TRUE"; break;
         case "Bold":                FS = " STYLE=600 ITALIC=FALSE"; break;
@@ -86,7 +86,7 @@ private function string GetCompression()
 {
     local string CS;
 
-    switch( string( GetEnum( enum'EFormat',TextureFormat ) ) ) {
+    switch( string( GetEnum( Enum'EFormat',TextureFormat ) ) ) {
         case "RGBA8":   CS = ""; break;                 // RGBA8
         case "DXT1":    CS = " COMPRESSION=3"; break;   // DXT1
         case "DXT3":    CS = " COMPRESSION=7"; break;   // DXT3

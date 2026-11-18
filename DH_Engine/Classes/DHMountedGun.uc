@@ -678,7 +678,7 @@ simulated function ClientEnterRotation()
     FinalMaterial.Material = CombinerMaterial;
     FinalMaterial.FallbackMaterial = CombinerMaterial;
 
-    RotationProjector = Spawn(class'DHActorProxyProjector', self,, Location, Rotation);
+    RotationProjector = Spawn(Class'DHActorProxyProjector', self,, Location, Rotation);
     RotationProjector.ProjTexture = FinalMaterial;
     RotationProjector.GotoState('');
     RotationProjector.bHidden = false;

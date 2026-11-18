@@ -542,7 +542,7 @@ function AddOfficialServersToFavorites()
 
     for (i = 0; i < default.StaticFavorites.Length; ++i)
     {
-        class'ExtendedConsole'.static.AddFavorite(StaticFavorites[i]);
+        Class'ExtendedConsole'.static.AddFavorite(StaticFavorites[i]);
     }
 }
 

@@ -57,7 +57,7 @@ simulated function PostBeginPlay()
     if (Role == ROLE_Authority && DarkestHourGame(Level.Game).LevelInfo != none)
     {
         TempFahrenheit = DarkestHourGame(Level.Game).LevelInfo.TempFahrenheit;
-        LevelTempCentigrade = class'DHUnits'.static.FahrenheitToCelcius(TempFahrenheit);
+        LevelTempCentigrade = Class'DHUnits'.static.FahrenheitToCelcius(TempFahrenheit);
 
         SetTimer(BARREL_TIMER_RATE, true);
     }
@@ -376,7 +376,7 @@ simulated function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
     {
         YPos += YL;
         Canvas.SetPos(4.0, YPos);
-        S = "Barrel[" $ i $ "]" @ Barrels[i].Temperature $ "c" @ "(" $ GetEnum(enum'EBarrelCondition', Barrels[i].Condition) $ ")";
+        S = "Barrel[" $ i $ "]" @ Barrels[i].Temperature $ "c" @ "(" $ GetEnum(Enum'EBarrelCondition', Barrels[i].Condition) $ ")";
         
         if (IsBarrelActive(i))
         {

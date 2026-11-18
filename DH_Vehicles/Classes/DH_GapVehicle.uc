@@ -143,7 +143,7 @@ simulated event TeamChanged()
 // Allow behindview for debugging
 exec function ToggleViewLimit()
 {
-    if( !class'ROEngine.ROLevelInfo'.static.RODebugMode() || Level.NetMode != NM_Standalone  )
+    if( !Class'ROEngine.ROLevelInfo'.static.RODebugMode() || Level.NetMode != NM_Standalone  )
         return;
 
     if( bAllowViewChange )

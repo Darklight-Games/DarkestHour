@@ -323,7 +323,7 @@ simulated function TraceFromPlayer(
     // TODO: make a function that evaluates whether sockets are valid.
 
     // Trace for location hints.
-    foreach TraceActors(class'DHActorProxySocket', Socket, HitLocation, HitNormal, TraceStart, TraceEnd)
+    foreach TraceActors(Class'DHActorProxySocket', Socket, HitLocation, HitNormal, TraceStart, TraceEnd)
     {
         if (Socket == none)
         {
@@ -346,7 +346,7 @@ simulated function TraceFromPlayer(
     }
 
     // Trace static actors and (world geometry etc.)
-    foreach TraceActors(class'Actor', TempHitActor, HitLocation, HitNormal, TraceEnd, TraceStart)
+    foreach TraceActors(Class'Actor', TempHitActor, HitLocation, HitNormal, TraceEnd, TraceStart)
     {
         if (TempHitActor.bStatic && !TempHitActor.IsA('ROBulletWhipAttachment') && !TempHitActor.IsA('Volume'))
         {
@@ -362,7 +362,7 @@ simulated function TraceFromPlayer(
         TraceStart = TraceEnd;
         TraceEnd = TraceStart + vect(0, 0, -1) * Class'DHUnits'.static.MetersToUnreal(GetTraceHeightMeters());
 
-        foreach TraceActors(class'Actor', TempHitActor, HitLocation, HitNormal, TraceEnd, TraceStart)
+        foreach TraceActors(Class'Actor', TempHitActor, HitLocation, HitNormal, TraceEnd, TraceStart)
         {
             if (TempHitActor.bStatic && !TempHitActor.IsA('ROBulletWhipAttachment') && !TempHitActor.IsA('Volume'))
             {

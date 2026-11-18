@@ -520,7 +520,7 @@ simulated function EvaluateConstructions()
         {
             LoadoutClass = class<DHConstructionLoadout>(LoadoutClassStack.Pop());
 
-            if (!class'UArray'.static.AddUnique(LoadoutClasses, LoadoutClass))
+            if (!Class'UArray'.static.AddUnique(LoadoutClasses, LoadoutClass))
             {
                 // Loadout was already added to the list, so ignore it.
                 continue;

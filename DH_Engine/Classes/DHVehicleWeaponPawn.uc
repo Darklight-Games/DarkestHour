@@ -1335,13 +1335,13 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
         NewVehiclePosition = VehicleBase;
         bMustBeTankerToSwitch = VehicleBase.bMustBeTankCommander;
 
-        if (DHVehicle(VehicleBase).default.bRequiresDriverLicense && !Class'DHPlayerReplicationInfo'.static.IsPlayerLicensedToDrive(DHPlayer(Self.Controller)) && IsHumanControlled())
+        if (DHVehicle(VehicleBase).default.bRequiresDriverLicense && !Class'DHPlayerReplicationInfo'.static.IsPlayerLicensedToDrive(DHPlayer(Controller)) && IsHumanControlled())
         {
             DisplayVehicleMessage(0); // not qualified to operate vehicle
             return false;
         }
 
-        if (!bMustBeTankerToSwitch && Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(self.Controller)))
+        if (!bMustBeTankerToSwitch && Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(Controller)))
         {
             DisplayVehicleMessage(32); // restricted from operating vehicles
             return false;
@@ -1389,7 +1389,7 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
             return false;
         }
 
-        if (Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(self.Controller)))
+        if (Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(Controller)))
         {
             DisplayVehicleMessage(32); // restricted from operating vehicles
             return false;

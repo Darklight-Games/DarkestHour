@@ -444,7 +444,7 @@ simulated function Tick(float DeltaTime)
 {
     if (ShouldShowBarrelChangeControlsMessage())
     {
-        ReceiveLocalizedMessage(class'DHBarrelChangeControlsMessage', 0, PlayerReplicationInfo, none, self);
+        ReceiveLocalizedMessage(Class'DHBarrelChangeControlsMessage', 0, PlayerReplicationInfo, none, self);
     }
 
     super.Tick(DeltaTime);

@@ -806,7 +806,7 @@ function bool AllowTextMessage(string Msg)
 
     if (bRestrictOutboundMessages)
     {
-        ReceiveLocalizedMessage(class'DHAdminMessage', 8);
+        ReceiveLocalizedMessage(Class'DHAdminMessage', 8);
         return false;
     }
 
@@ -890,7 +890,7 @@ function ChangeName(coerce string S)
 {
     if (bRestrictName)
     {
-        ReceiveLocalizedMessage(class'DHAdminMessage', 10);
+        ReceiveLocalizedMessage(Class'DHAdminMessage', 10);
         return;
     }
 
@@ -5962,7 +5962,7 @@ exec function Speak(string ChannelTitle)
 
     if (PRI.bRestrictOutboundVoice)
     {
-        ReceiveLocalizedMessage(class'DHAdminMessage', 9);
+        ReceiveLocalizedMessage(Class'DHAdminMessage', 9);
         return;
     }
 

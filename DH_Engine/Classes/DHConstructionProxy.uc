@@ -327,7 +327,7 @@ function ActorProxyError GetPositionError()
     }
 
         // Don't allow constructions to overlap restriction volumes that restrict constructions.
-    foreach TouchingActors(class'DHRestrictionVolume', RV)
+    foreach TouchingActors(Class'DHRestrictionVolume', RV)
     {
         if (RV != none)
         {

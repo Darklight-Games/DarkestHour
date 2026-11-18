@@ -118,7 +118,7 @@ function InitPickup()
             // make this pickup the owner of the barrels
             if (W.default.InitialBarrels > 0 && W.default.BarrelClass != none)
             {
-                BarrelBundle = Spawn(class'DHWeaponBarrelBundle', self);
+                BarrelBundle = Spawn(Class'DHWeaponBarrelBundle', self);
                 BarrelBundle.Setup(W.default.BarrelClass, W.default.InitialBarrels);
                 // We don't bother setting up callbacks since this is a brand new
                 // weapon and we don't need to track the barrel status.

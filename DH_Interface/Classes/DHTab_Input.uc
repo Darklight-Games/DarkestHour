@@ -260,7 +260,7 @@ function SaveSettings()
 
     if (bPlayerSave)
     {
-        class'Player'.static.StaticSaveConfig();
+        Class'Player'.static.StaticSaveConfig();
     }
 
     if (bInputSave)

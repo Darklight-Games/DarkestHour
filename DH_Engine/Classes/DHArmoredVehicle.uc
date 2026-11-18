@@ -1760,7 +1760,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
             {
                 if (bLogDebugPenetration)
                 {
-                    Log("We hit VehHitpoints[" $ i $ "]:" @ GetEnum(enum'EHitPointType', VehHitpoints[i].HitPointType));
+                    Log("We hit VehHitpoints[" $ i $ "]:" @ GetEnum(Enum'EHitPointType', VehHitpoints[i].HitPointType));
                 }
 
                 // Engine hit
@@ -1827,7 +1827,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
             {
                 if (bLogDebugPenetration)
                 {
-                    Log("We hit NewVehHitpoints[" $ i $ "]:" @ GetEnum(enum'EHitPointType', NewVehHitpoints[i].NewHitPointType));
+                    Log("We hit NewVehHitpoints[" $ i $ "]:" @ GetEnum(Enum'EHitPointType', NewVehHitpoints[i].NewHitPointType));
                 }
 
                 // Hit periscope optics

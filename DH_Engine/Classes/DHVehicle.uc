@@ -4746,7 +4746,7 @@ static function UpdateProxy(DHActorProxy AP)
 
     for (i = 0; i < default.PassengerWeapons.Length; ++i)
     {
-        APA = AP.Spawn(class'DHActorProxyAttachment', AP);
+        APA = AP.Spawn(Class'DHActorProxyAttachment', AP);
 
         if (APA != none)
         {

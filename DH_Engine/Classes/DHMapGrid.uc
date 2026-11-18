@@ -92,12 +92,12 @@ static function GridCoordinate GetGridCoordinatesFromMapCoordinates(DHGameReplic
 
 static function int GridCoordinateCompress(GridCoordinate Coordinate)
 {
-    return class'UInteger'.static.FromBytes(Coordinate.Column, Coordinate.Row, Coordinate.Keypad);
+    return Class'UInteger'.static.FromBytes(Coordinate.Column, Coordinate.Row, Coordinate.Keypad);
 }
 
 static function GridCoordinate GridCoordinateDecompress(int Compressed)
 {
     local GridCoordinate Coordinate;
-    class'UInteger'.static.ToBytes(Compressed, Coordinate.Column, Coordinate.Row, Coordinate.Keypad);
+    Class'UInteger'.static.ToBytes(Compressed, Coordinate.Column, Coordinate.Row, Coordinate.Keypad);
     return Coordinate;
 }

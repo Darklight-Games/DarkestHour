@@ -263,11 +263,11 @@ simulated function OnProxyChanged()
 
     if (GetProxy() != none)
     {
-        UpdateColor(class'UColor'.default.Green);
+        UpdateColor(Class'UColor'.default.Green);
     }
     else
     {
-        UpdateColor(class'UColor'.default.White);
+        UpdateColor(Class'UColor'.default.White);
     }
 }
 

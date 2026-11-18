@@ -131,7 +131,7 @@ function PostBeginPlay()
         return;
     }
 
-    Projector = Spawn(class'DHActorProxyProjector', self);
+    Projector = Spawn(Class'DHActorProxyProjector', self);
 
     if (Projector != none)
     {
@@ -263,7 +263,7 @@ function Color GetProxyColor()
             return Class'UColor'.default.Black;
         case ERROR_Leaning:
         case ERROR_PlayerIsntCrouched:
-            return class'UColor'.default.Yellow;
+            return Class'UColor'.default.Yellow;
         default:
             return Class'UColor'.default.Red;
     }
@@ -503,14 +503,14 @@ function ActorProxyError SetProvisionalLocationAndRotation()
 
         if (E.Type == ERROR_None)
         {
-            CCR = class'UCollision'.static.CylinderCollisionQuery(
+            CCR = Class'UCollision'.static.CylinderCollisionQuery(
                 self,
                 BaseLocation,
                 Rotator(Forward),
                 CollisionRadius,
                 CollisionHeight,
-                class'DHUnits'.static.MetersToUnreal(GetArcLengthTraceIntervalMeters()),
-                class'DHUnits'.static.MetersToUnreal(GetFloatToleranceMeters()),
+                Class'DHUnits'.static.MetersToUnreal(GetArcLengthTraceIntervalMeters()),
+                Class'DHUnits'.static.MetersToUnreal(GetFloatToleranceMeters()),
                 CanOnlyPlaceOnTerrain()
             );
 
@@ -613,7 +613,7 @@ function ActorProxyError GetPositionError()
 
     if (!CanPlaceInDangerZone())
     {
-        if (class'DHDangerZone'.static.IsIn(GRI, Location.X, Location.Y, Instigator.GetTeamNum()))
+        if (Class'DHDangerZone'.static.IsIn(GRI, Location.X, Location.Y, Instigator.GetTeamNum()))
         {
             E.Type = ERROR_InDangerZone;
             return E;
@@ -623,7 +623,7 @@ function ActorProxyError GetPositionError()
     // Don't allow placement in active minefields.
     if (!CanPlaceInMinefield())
     {
-        foreach TouchingActors(class'ROMineVolume', MV)
+        foreach TouchingActors(Class'ROMineVolume', MV)
         {
             if (MV != none &&
                 MV.bActive &&
@@ -661,7 +661,7 @@ function ActorProxyError GetPositionError()
     // Don't allow the actor to touch blocking actors if we aren't on a socket.
     if (GroundActorSocket == none)
     {
-        foreach TouchingActors(class'Actor', TouchingActor)
+        foreach TouchingActors(Class'Actor', TouchingActor)
         {
             if (TouchingActor != none && TouchingActor.bBlockActors)
             {
@@ -677,7 +677,7 @@ function ActorProxyError GetPositionError()
         // likely combined radius. Using AllActors would be incredibly slow, and
         // keeping a separate list of constructions via replication or some other
         // mechanism would probably be a bad idea.
-        foreach CollidingActors(class'DHConstruction', C, Class'DHUnits'.static.MetersToUnreal(25.0))
+        foreach CollidingActors(Class'DHConstruction', C, Class'DHUnits'.static.MetersToUnreal(25.0))
         {
             C.GetCollisionSize(C.GetContext(), OtherRadius, OtherHeight);
 
@@ -740,13 +740,13 @@ function ActorProxyError GetPositionError()
     }
 
     // Don't allow actors to be placed within 2 meters of spawn points or location hints.
-    foreach RadiusActors(class'DHSpawnPointBase', SP, CollisionRadius + Class'DHUnits'.static.MetersToUnreal(GetSpawnPointDistanceThresholdMeters()))
+    foreach RadiusActors(Class'DHSpawnPointBase', SP, CollisionRadius + Class'DHUnits'.static.MetersToUnreal(GetSpawnPointDistanceThresholdMeters()))
     {
         E.Type = ERROR_NearSpawnPoint;
         return E;
     }
 
-    foreach RadiusActors(class'DHLocationHint', LH, CollisionRadius + Class'DHUnits'.static.MetersToUnreal(GetSpawnPointDistanceThresholdMeters()))
+    foreach RadiusActors(Class'DHLocationHint', LH, CollisionRadius + Class'DHUnits'.static.MetersToUnreal(GetSpawnPointDistanceThresholdMeters()))
     {
         E.Type = ERROR_NearSpawnPoint;
         return E;

@@ -1255,20 +1255,20 @@ exec function LogCannon() // DEBUG (Matt: please use & report the logged result 
 {
     Log("LOGCANNON: Gun =" @ Gun.Tag @ " VehWep =" @ VehWep.Tag @ " VehWep.WeaponPawn =" @ VehWep.WeaponPawn.Tag @ " Gun.Owner =" @ Gun.Owner.Tag);
     Log("Controller =" @ Controller.Tag @ " DriverPositionIndex =" @ DriverPositionIndex @ " ViewTransition =" @ IsInState('ViewTransition'));
-    Log("ReloadState =" @ GetEnum(enum'EReloadState', VehWep.ReloadState) @ " bReloadPaused =" @ VehWep.bReloadPaused
+    Log("ReloadState =" @ GetEnum(Enum'EReloadState', VehWep.ReloadState) @ " bReloadPaused =" @ VehWep.bReloadPaused
         @ " ProjectileClass =" @ VehWep.ProjectileClass @ " HasAmmoToReload() =" @ VehWep.HasAmmoToReload(VehWep.GetAmmoIndex()));
     Log("AmmoIndex =" @ VehWep.GetAmmoIndex() @ " LocalPendingAmmoIndex =" @ Cannon.LocalPendingAmmoIndex
         @ " ServerPendingAmmoIndex =" @ Cannon.ServerPendingAmmoIndex @ " PrimaryAmmoCount() =" @ VehWep.PrimaryAmmoCount());
 
     if (bHasAltFire)
     {
-        Log("AltReloadState =" @ GetEnum(enum'EReloadState', Cannon.AltReloadState) @ " bAltReloadPaused =" @ Cannon.bAltReloadPaused
+        Log("AltReloadState =" @ GetEnum(Enum'EReloadState', Cannon.AltReloadState) @ " bAltReloadPaused =" @ Cannon.bAltReloadPaused
             @ " AltAmmoCharge =" @ VehWep.AltAmmoCharge @ " NumMGMags =" @ VehWep.NumMGMags);
     }
 
     if (Cannon.SmokeLauncherClass != none)
     {
-        Log("SmokeLauncherReloadState =" @ GetEnum(enum'EReloadState', Cannon.SmokeLauncherReloadState) @ " bSmokeLauncherReloadPaused =" @ Cannon.bSmokeLauncherReloadPaused
+        Log("SmokeLauncherReloadState =" @ GetEnum(Enum'EReloadState', Cannon.SmokeLauncherReloadState) @ " bSmokeLauncherReloadPaused =" @ Cannon.bSmokeLauncherReloadPaused
             @ " NumSmokeLauncherRounds =" @ Cannon.NumSmokeLauncherRounds);
     }
 }

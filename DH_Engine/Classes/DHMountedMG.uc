@@ -445,8 +445,8 @@ simulated function TickForceAim()
 
     // Interpolate the weapon aim to zero over a short duration.
     // We do this so that the gun is in the right spot for the third person reload animations.
-    T = class'UInterp'.static.MapRangeClamped(Level.TimeSeconds, ForceAimStartSeconds, ForceAimEndSeconds, 0.0, 1.0);
-    T = class'UInterp'.static.Interpolate(T, 0.0, 1.0, ForceAimInterpolationType);
+    T = Class'UInterp'.static.MapRangeClamped(Level.TimeSeconds, ForceAimStartSeconds, ForceAimEndSeconds, 0.0, 1.0);
+    T = Class'UInterp'.static.Interpolate(T, 0.0, 1.0, ForceAimInterpolationType);
     WeaponPawn.LocalWeaponAim = QuatToRotator(QuatSlerp(ForceAimLocalWeaponAimStart, ForceAimLocalWeaponAimTarget, T));
 }
 
