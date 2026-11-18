@@ -5,7 +5,9 @@
 
 class DH_SatchelCharge10lb10sProjectile extends DHThrowableExplosiveProjectile; // incorporating SatchelCharge10lb10sProjectile & ROSatchelChargeProjectile
 
-var float           UnderneathDamageMultiplier; // Damage Multiplier for when the satchel dets under a vehicle
+const UNDER_VEHICLE_TRACE_HEIGHT = 64.0;
+
+var float           UnderVehicleDamageBonus;  // Extra damage applied on top of normal damage if explosive is under a vehicle
 
 var float           ConstructionDamageRadius;   // A radius that will damage Contructions
 var float           ConstructionDamageMax;
@@ -46,15 +48,15 @@ simulated function BlowUp(Vector HitLocation)
     if (Role == ROLE_Authority)
     {
         DelayedHurtRadius(Damage, DamageRadius, MyDamageType, MomentumTransfer, HitLocation);
-        HandleObjSatchels(HitLocation);
-        HandleVehicles(HitLocation);
-        HandleObstacles(HitLocation);
-        HandleConstructions(HitLocation);
+        HandleObjSatchels();
+        HandleVehicles();
+        HandleObstacles();
+        HandleConstructions();
         MakeNoise(1.0);
     }
 }
 
-function HandleObjSatchels(Vector HitLocation)
+function HandleObjSatchels()
 {
     local DH_ObjSatchel SatchelObjActor;
     local Volume        V;
@@ -78,109 +80,134 @@ function HandleObjSatchels(Vector HitLocation)
     }
 }
 
-function HandleVehicles(Vector HitLocation)
+function HandleVehicles()
 {
-    local Actor         A;
+    local Actor         ActorAbove, ActorBelow;
     local Vector        HitLoc, HitNorm;
     local DHVehicle     Veh;
     local int           TrackNum;
-    local float         Distance, DistanceFactor;
-    local bool          bExplodedOnVehicle, bExplodedUnderVehicle;
+    local float         Distance, DamageFactor;
 
-    // Find out if we are on a vehicle
-    A = Trace(HitLoc, HitNorm, Location - vect(0.0, 0.0, 16.0), Location, true);
-    bExplodedOnVehicle = DHVehicle(A) != none;
-
-    // Find out if we are under a vehicle
-    if (!bExplodedOnVehicle)
-    {
-        A = Trace(HitLoc, HitNorm, Location + vect(0.0, 0.0, 32.0), Location, true);
-        bExplodedUnderVehicle = DHVehicle(A) != none;
-    }
-
-    // Handle vehicle component damage
     foreach RadiusActors(Class'DHVehicle', Veh, DamageRadius)
     {
-        // If this is the vehicle we exploded on or under
-        if (Veh == A)
+        if (Veh.IsA('DHATGun'))
         {
-            // Handle engine damage
-            if (bExplodedOnVehicle && !Veh.IsVehicleBurning())
+            continue;
+        }
+
+        // Trace DOWN to find engine damage recipient
+        if (ActorBelow == none)
+        {
+            ActorBelow = Trace(HitLoc, HitNorm, Location + (vect(0, 0, -1) >> Veh.Rotation) * EngineDamageRadius, Location, true);
+        }
+
+        // Trace UP to find underbody damage bonus recipient
+        if (ActorAbove == none)
+        {
+            ActorAbove = Trace(HitLoc, HitNorm, Location + (vect(0, 0, 1) >> Veh.Rotation) * UNDER_VEHICLE_TRACE_HEIGHT, Location, true);
+        }
+
+        // DEAL UNDERBODY DAMAGE BONUS
+        if (ActorAbove == Veh && ActorAbove != ActorBelow)
+        {
+            Veh.TakeDamage(UnderVehicleDamageBonus, SavedInstigator, vect(0, 0, 0), vect(0, 0, 0), MyDamageType);
+        }
+
+        // DEAL ENGINE DECK DAMAGE
+        if (ActorBelow == Veh && EngineDamageRadius > 0.0 && EngineDamageMax > 0.0 && !Veh.IsVehicleBurning())
+        {
+            Distance = VSize(Location - Veh.GetEngineLocation());
+
+            // NOTE: There's an edge case where Distance is 0 and we can skip to starting the fire,
+            //       but it's practically impossible to get, so taking the shortcut would be more wasteful.
+
+            if (Distance < EngineDamageRadius)
             {
-                Distance = VSize(Location - Veh.GetEngineLocation());
+                DamageFactor = Class'UInterp'.static.SmoothStep(Distance / EngineDamageRadius, 1.0, 0.0);
 
-                // The chance of setting the engine on fire is based on the distance from the engine.
-                // The closer the satchel is to the engine, the higher the chance of setting it on fire.
-                // The chance is 100% at the engine, and 0% at the edge of the EngineDamageRadius, using
-                // a smoothstep function.
-                DistanceFactor = Class'UInterp'.static.SmoothStep(Distance / EngineDamageRadius, 1, 0);
-
-                if (FRand() < DistanceFactor)
+                // Set the engine on fire if we're lucky (chance diminishes with distance);
+                // otherwise, apply damage to the engine (damage falls off with distance).
+                if (FRand() < DamageFactor)
                 {
                     Veh.StartEngineFire(SavedInstigator);
                 }
-                else // Otherwise do minor damage to the engine
+                else
                 {
-                    Veh.DamageEngine(EngineDamageMax * (Distance / EngineDamageRadius), SavedInstigator, vect(0,0,0), vect(0,0,0), MyDamageType);
+                    Veh.DamageEngine(EngineDamageMax * DamageFactor, SavedInstigator, vect(0, 0, 0), vect(0, 0, 0), MyDamageType);
                 }
-            }
-
-            // Handle doing additional damage if exploded underneath vehicle
-            if (bExplodedUnderVehicle)
-            {
-                Veh.TakeDamage(Damage * UnderneathDamageMultiplier, SavedInstigator, vect(0,0,0), vect(0,0,0), MyDamageType);
             }
         }
 
-        // Set Distance to TreadDamageRadius, we don't want TreadDamageRadius to change, but want Distance to be changed in IsTreadInRadius()
-        Distance = TreadDamageRadius;
-
-        // Handle destroying the treads
-        if (Veh.bHasTreads && Veh.IsTreadInRadius(Location, Distance, TrackNum))
+        // DEAL TREAD DAMAGE
+        if (Veh.Health > 0 && Veh.bHasTreads && TreadDamageRadius > 0.0)
         {
-            // If enough strength we can detrack the vehicle instantly
-            if (TreadDamageMassThreshold > Veh.VehicleMass * Veh.SatchelResistance)
+            // Set Distance to TreadDamageRadius, we don't want TreadDamageRadius to change, but want Distance to be changed in IsTreadInRadius()
+            //
+            // TODO: See IsTreadInRadis()
+            //
+            Distance = TreadDamageRadius;
+
+            if (Veh.IsTreadInRadius(Location, Distance, TrackNum))
             {
-                Veh.DestroyTrack(bool(TrackNum));
-            }
-            else // Otherwise do minor damge to the tracks
-            {
-                Veh.DamageTrack(TreadDamageMax * (Distance / TreadDamageRadius), bool(TrackNum));
+                if (TreadDamageMassThreshold > Veh.VehicleMass * Veh.SatchelResistance)
+                {
+                    // If enough strength we can detrack the vehicle instantly
+                    Veh.DestroyTrack(bool(TrackNum));
+                }
+                else if (TreadDamageMax > 0.0 && Distance < TreadDamageRadius)
+                {
+                    // Otherwise do minor damage to the tracks
+                    Veh.DamageTrack(TreadDamageMax * (1 - Distance / TreadDamageRadius), bool(TrackNum));
+                }
             }
         }
     }
 }
 
 // Allows satchels to damage obstacles when behind world geometry
-function HandleObstacles(Vector HitLocation)
+function HandleObstacles()
 {
     local DHObstacleInstance O;
-    local float              Distance;
+
+    if (ObstacleDamageRadius <= 0.0 || ConstructionDamageMax <= 0.0)
+    {
+        return;
+    }
 
     foreach RadiusActors(Class'DHObstacleInstance', O, ObstacleDamageRadius)
     {
         // If we cannot trace the obstacle (because of world geometry), then apply special radius damage
         if (O != none && !FastTrace(O.Location, Location))
         {
-            Distance = VSize(Location - O.Location);
-            O.TakeDamage(ObstacleDamageMax * (Distance / ObstacleDamageRadius), SavedInstigator, vect(0,0,0), vect(0,0,0), MyDamageType);
+            O.TakeDamage(ObstacleDamageMax * (1 - VSize(Location - O.Location) / ObstacleDamageRadius),
+                         SavedInstigator,
+                         vect(0, 0, 0),
+                         vect(0, 0, 0),
+                         MyDamageType);
         }
     }
 }
 
 // Allows satchels to do damage to constructions when traces fail (useful if construction is on the otherside of terrain or origin under world)
-function HandleConstructions(Vector HitLocation)
+function HandleConstructions()
 {
-    local DHConstruction    C;
-    local float             Distance;
+    local DHConstruction C;
+
+    if (ConstructionDamageRadius <= 0.0 || ConstructionDamageMax <= 0.0)
+    {
+        return;
+    }
 
     foreach RadiusActors(Class'DHConstruction', C, ConstructionDamageRadius)
     {
         // If we cannot trace the construction (because trace hit world geometry), then apply special radius damage
         if (C != none && !FastTrace(C.Location, Location))
         {
-            Distance = VSize(Location - C.Location);
-            C.TakeDamage(ConstructionDamageMax * (Distance / ConstructionDamageRadius), SavedInstigator, vect(0,0,0), vect(0,0,0), MyDamageType);
+            C.TakeDamage(ConstructionDamageMax * (1 - VSize(Location - C.Location) / ConstructionDamageRadius),
+                         SavedInstigator,
+                         vect(0, 0, 0),
+                         vect(0, 0, 0),
+                         MyDamageType);
         }
     }
 }
@@ -195,14 +222,13 @@ defaultproperties
     Speed=300.0
     Damage=1200.0
     DamageRadius=1200.0
+    UnderVehicleDamageBonus=8400.0
 
-    UnderneathDamageMultiplier=8.0
+    ConstructionDamageRadius=375.0
+    ConstructionDamageMax=750.0
 
-    ConstructionDamageRadius=375
-    ConstructionDamageMax=750
-
-    ObstacleDamageRadius=500
-    ObstacleDamageMax=1400
+    ObstacleDamageRadius=500.0
+    ObstacleDamageMax=1400.0
 
     EngineDamageMassThreshold=200.0 //3kg TNT should penetrate any top armor or engine desk and severely damage anything under it (even if it is a Maus tank)
     EngineDamageRadius=240.0 //slightly increased because often it seemed like its not close enough even if its on the engine desk
