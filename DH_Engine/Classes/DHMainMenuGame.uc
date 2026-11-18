@@ -21,7 +21,7 @@ var     int             IterationMultiplier;
 
 event Tick(float DeltaTime)
 {
-    local int i, j, x;
+    local int i, j;
 
     ClientFrameRateConsolidated += DeltaTime;
 
@@ -53,7 +53,7 @@ event Tick(float DeltaTime)
         {
             for (j = 0; j < LIMITER_STRENGTH; ++j)
             {
-                x = Sqrt(Rand(10000));
+                Sqrt(Rand(10000));
             }
         }
     }

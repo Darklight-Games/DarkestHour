@@ -12,12 +12,10 @@ function Setup()
 {
     local int i;
     local DHPlayer PC;
-    local DHGameReplicationInfo GRI;
     local array<class<DHConstructionGroup> > Groups;
     local UComparator GroupsComparator;
     local class<DHConstruction> ConstructionClass;
 
-    GRI = DHGameReplicationInfo(Interaction.ViewportOwner.Actor.GameReplicationInfo);
     PC = GetPlayerController();
 
     Context.TeamIndex = PC.GetTeamNum();

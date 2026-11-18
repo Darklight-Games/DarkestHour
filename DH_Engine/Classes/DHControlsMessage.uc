@@ -51,14 +51,13 @@ static function RenderComplexMessage(Canvas Canvas,
                               optional Object OptionalObject)
 {
     local PlayerController PC;
-    local float X, Y;
+    local float Y;
     local string S;
     local int i, j;
     local array<string> Keys;
 
     PC = DHPlayer(RelatedPRI_1.Level.GetLocalPlayerController());
 
-    X = Canvas.ClipX * default.PosX;
     Y = Canvas.ClipY * default.PosY;
 
     // TODO: based the Y-size on the number of controls.

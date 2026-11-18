@@ -715,7 +715,7 @@ function DrawYaw(DHPlayer PC, Canvas C, DHVehicleWeaponPawn VWP, array<STargetIn
 {
     local float TextWidthFloat, TextHeightFloat;
     local int TextWidth, TextHeight, IndicatorTopLeftCornerX, IndicatorTopLeftCornerY, YawUpperBound, YawLowerBound;
-    local int i, Yaw, Quotient, Index, YawSegmentSchemaIndex, VisibleYawSegmentsNumber, IndicatorStep;
+    local int i, Yaw, Quotient, Index, YawSegmentSchemaIndex, VisibleYawSegmentsNumber;
     local int TargetTickCountLeft, TargetTickCountRight;
     local int StrikeThroughStart, StrikeThroughEnd, TickPosition;
     local int StrikeThroughEndIndex, StrikeThroughStartIndex;
@@ -743,7 +743,6 @@ function DrawYaw(DHPlayer PC, Canvas C, DHVehicleWeaponPawn VWP, array<STargetIn
     VisibleYawSegmentsNumber = NumberOfYawSegments * YawSegmentSchema.Length;
     YawLowerBound = CurrentYaw - YawScaleStep * VisibleYawSegmentsNumber * 0.5;
     YawUpperBound = CurrentYaw + YawScaleStep * VisibleYawSegmentsNumber * 0.5;
-    IndicatorStep = YawIndicatorLength / VisibleYawSegmentsNumber;
 
     GunYawMaxTruncated = Class'UMath'.static.Floor(GunYawMax, YawScaleStep);
     GunYawMinTruncated = Class'UMath'.static.Floor(GunYawMin, YawScaleStep);
@@ -943,7 +942,7 @@ function DrawPitch(Canvas C, DHVehicleWeaponPawn VWP)
     local float Pitch, GunPitchMin, GunPitchMax;
     local float PitchUpperBound, PitchLowerBound;
     local int IndicatorTopLeftCornerX, IndicatorTopLeftCornerY;
-    local int Quotient, Index, VisiblePitchSegmentsNumber, PitchSegmentSchemaIndex, IndicatorStep;
+    local int Quotient, Index, VisiblePitchSegmentsNumber, PitchSegmentSchemaIndex;
     local int StrikeThroughStart, StrikeThroughEnd;
     local int StrikeThroughEndIndex, StrikeThroughStartIndex, TickPosition;
     local float CurvatureConstant;
@@ -971,7 +970,6 @@ function DrawPitch(Canvas C, DHVehicleWeaponPawn VWP)
     // TODO: something needs to be fixed in here to handle lower bounds not being astronomical.
     PitchLowerBound = GetPitchLowerBound(CurrentPitch);
     PitchUpperBound = GetPitchUpperBound(CurrentPitch);
-    IndicatorStep = PitchIndicatorLength / VisiblePitchSegmentsNumber;
 
     C.Font = Class'DHHud'.static.GetTinyFont(C);
     C.SetDrawColor(255, 255, 255, 255);

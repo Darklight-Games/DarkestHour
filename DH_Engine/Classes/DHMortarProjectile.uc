@@ -330,7 +330,7 @@ function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> Da
     local DHConstruction C;
     local ROPawn        P;
     local array<ROPawn> CheckedROPawns;
-    local bool          bAlreadyChecked, bAlreadyDead;
+    local bool          bAlreadyChecked;
     local Vector        VictimLocation, Direction, TraceHitLocation, TraceHitNormal;
     local float         DamageScale, Distance, DamageExposure;
     local int           i;
@@ -442,8 +442,6 @@ function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> Da
             {
                 continue;
             }
-
-            bAlreadyDead = P.Health <= 0; // added so we don't score points for a artillery observer unless it's a live kill
         }
 
         // Calculate damage based on distance from explosion

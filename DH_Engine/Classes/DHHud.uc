@@ -849,7 +849,6 @@ function DrawHudPassC(Canvas C)
     local Rotator               CameraRotation;
     local Actor                 ViewActor;
     local DHPawn                P;
-    local DHPlayer              PC;
     local DHVehicle             V;
 
     if (PawnOwner == none)
@@ -1027,7 +1026,6 @@ function DrawHudPassC(Canvas C)
     // Rally
 
     // IQ Widget
-    PC = DHPlayer(PlayerOwner);
     DrawIQWidget(C);
 
     // Player names
@@ -2000,6 +1998,7 @@ function Color GetPlayerColor(PlayerReplicationInfo PRI)
     if (PlayerOwner != none)
     {
         MyPRI = DHPlayerReplicationInfo(PlayerOwner.PlayerReplicationInfo);
+
     }
 
     if (Class'DHPlayerReplicationInfo'.static.IsInSameSquad(MyPRI, OtherPRI))
@@ -2027,7 +2026,6 @@ function DrawSignals(Canvas C)
     local bool      bHasLOS, bIsNew;
     local string    DistanceText, LabelText;
     local Color     SignalColor;
-    local bool      bShouldShowDistance;
 
     PC = DHPlayer(PlayerOwner);
 
@@ -2046,8 +2044,6 @@ function DrawSignals(Canvas C)
     {
         return;
     }
-
-    bShouldShowDistance = !PC.Pawn.IsA('VehicleCannonPawn');
 
     TraceStart = PawnOwner.Location + PawnOwner.EyePosition();
     ViewDirection = Vector(PlayerOwner.CalcViewRotation);
@@ -3403,8 +3399,6 @@ function DrawVehiclePhysiscsWheels()
 // shorten a very lengthy DrawObjectives function)
 function DrawMap(Canvas C, AbsoluteCoordsInfo SubCoords, DHPlayer Player, Box Viewport)
 {
-    local DHPlayerReplicationInfo   PRI;
-    local DHRoleInfo                RI;
     local SpriteWidget              Widget;
     local Vector                    Temp, MapCenter;
     local string                    ObjLabel;
@@ -3525,14 +3519,6 @@ function DrawMap(Canvas C, AbsoluteCoordsInfo SubCoords, DHPlayer Player, Box Vi
 
     if (OwnerTeam != 255)
     {
-        PRI = DHPlayerReplicationInfo(PlayerOwner.PlayerReplicationInfo);
-
-        // Get Role info
-        if (PRI != none)
-        {
-            RI = DHRoleInfo(PRI.RoleInfo);
-        }
-
         if (DHGRI.IsDangerZoneEnabled())
         {
             UpdateDangerZoneOverlay();
@@ -5601,7 +5587,7 @@ function DrawRallyPointStatus(Canvas C)
     local float X, Y, XL, YL;
     local string ErrorString;
     local Material ErrorIcon;
-    local Color IconColor, DrawColor;
+    local Color IconColor;
     local float BaseX, BaseY, CombinedXL, MarginX, IconXL, IconYL, TextXL, TextYL;
     local float OffsetY;
     local AbsoluteCoordsInfo GlobalCoors;
@@ -5649,7 +5635,6 @@ function DrawRallyPointStatus(Canvas C)
         RallyPointGlowWidget.PosX = default.RallyPointGlowWidget.PosX;
     }
 
-    DrawColor = Class'UColor'.default.White;
     GlobalCoors.Width = C.ClipX;
     GlobalCoors.Height = C.ClipY;
 

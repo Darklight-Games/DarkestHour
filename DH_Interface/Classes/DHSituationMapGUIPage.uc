@@ -146,10 +146,8 @@ function OnSpawnPointChanged(int SpawnPointIndex, optional bool bDoubleClick)
 function bool InternalOnKeyEvent(out byte Key, out byte State, float Delta)
 {
     local DHHud HUD;
-    local Interactions.EInputKey InputKey;
     local Interactions.EInputAction InputAction;
 
-    InputKey = EInputKey(Key);
     InputAction = EInputAction(State);
 
     if (InputAction == IST_Press && (Key == 0x1B || IsHideKey(Key)))

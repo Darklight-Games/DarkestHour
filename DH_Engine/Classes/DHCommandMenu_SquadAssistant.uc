@@ -8,7 +8,6 @@ class DHCommandMenu_SquadAssistant extends DHCommandMenu;
 function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
 {
     local DHPlayer PC;
-    local DHPlayerReplicationInfo PRI;
 
     PC = GetPlayerController();
 
@@ -16,8 +15,6 @@ function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
     {
         return;
     }
-
-    PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
 
     switch (OptionIndex)
     {

@@ -43,7 +43,7 @@ static function SetIdentifierByType(Actor AttachmentActor, EIdentifierType Type,
 {
     local int i, j;
     local int StartSkinIndex, SkinIndex;
-    local string TrimmedString, Character;
+    local string TrimmedString;
     local array<Material> StaticMeshSkins;
     local Material GlyphMaterial, CombinerMaterial;
 
@@ -88,8 +88,6 @@ static function SetIdentifierByType(Actor AttachmentActor, EIdentifierType Type,
 
         for (j = 0; j < Len(TrimmedString); ++j)
         {
-            Character = Mid(TrimmedString, j, 1);
-
             GlyphMaterial = default.Identifiers[i].GlyphSetClass.static.GetGlyphMaterial(Mid(TrimmedString, j, 1));
 
             if (GlyphMaterial == none)

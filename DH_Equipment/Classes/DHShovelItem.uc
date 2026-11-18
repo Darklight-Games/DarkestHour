@@ -13,10 +13,6 @@ simulated function bool ShouldUseFreeAim() { return true; }
 
 simulated function Fire(float F)
 {
-    local DHPawn P;
-
-    P = DHPawn(Instigator);
-
     if (Instigator != none && Instigator.bIsCrawling)
     {
         Class'DHShovelWarningMessage'.static.ClientReceive(PlayerController(Instigator.Controller), 0);

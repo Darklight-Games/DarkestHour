@@ -21,12 +21,10 @@ var bool bIsArtilleryTargetValid;
 function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
 {
     local DHPlayer PC;
-    local DHPlayerReplicationInfo PRI;
     local DHGameReplicationInfo GRI;
     local Vector MapLocation;
 
     PC = GetPlayerController();
-    PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
     GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
 
     GRI.GetMapCoords(Location, MapLocation.X, MapLocation.Y);

@@ -25,7 +25,6 @@ final static function string GetMapName(LevelInfo L)
 final static function string GetDurationString(int Seconds, string Format)
 {
     local int TotalYears;
-    local int TotalDays;
     local int TotalHours;
     local int TotalMinutes;
     local int TotalSeconds;
@@ -45,7 +44,6 @@ final static function string GetDurationString(int Seconds, string Format)
     const SECONDS_PER_MINUTE = 60;
 
     TotalYears = Seconds / SECONDS_PER_YEAR;
-    TotalDays = Seconds / SECONDS_PER_DAY;
     TotalHours = Seconds / SECONDS_PER_HOUR;
     TotalMinutes = Seconds / SECONDS_PER_MINUTE;
 

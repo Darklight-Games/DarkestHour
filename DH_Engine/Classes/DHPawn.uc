@@ -2110,7 +2110,7 @@ ignores Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, Falling, 
 
     simulated function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
     {
-        local Vector SelfToHit, SelfToInstigator, CrossPlaneNormal, HitNormal, ShotDir, PushLinVel, PushAngVel;
+        local Vector SelfToInstigator, CrossPlaneNormal, HitNormal, ShotDir, PushLinVel, PushAngVel;
         local float  W, YawDir, HitBoneDist;
         local int    MaxCorpseYawRate;
         local name   HitBone;
@@ -2202,7 +2202,6 @@ ignores Trigger, Bump, HitWall, HeadVolumeChange, PhysicsVolumeChange, Falling, 
                 if (InstigatedBy.Location != Location)
                 {
                     SelfToInstigator = InstigatedBy.Location - Location;
-                    SelfToHit = HitLocation - Location;
 
                     CrossPlaneNormal = Normal(SelfToInstigator cross vect(0.0, 0.0, 1.0));
                     W = CrossPlaneNormal dot Location;
@@ -2511,7 +2510,6 @@ function PlayDyingAnimation(class<DamageType> DamageType, Vector HitLoc)
 function PlayHit(float Damage, Pawn InstigatedBy, Vector HitLocation, class<DamageType> DamageType, Vector Momentum, optional int HitIndex)
 {
     local PlayerController     PC;
-    local ProjectileBloodSplat BloodHit;
     local name                 HitBone;
     local Vector               HitNormal;
     local Rotator              SplatRot;
@@ -2580,7 +2578,7 @@ function PlayHit(float Damage, Pawn InstigatedBy, Vector HitLocation, class<Dama
                 }
             }
 
-            BloodHit = Spawn(ProjectileBloodSplatClass, InstigatedBy,, HitLocation, SplatRot);
+            Spawn(ProjectileBloodSplatClass, InstigatedBy,, HitLocation, SplatRot);
         }
     }
 
@@ -3097,7 +3095,6 @@ function DestroyRadio()
 // Also to add != "none" (string) checks before calling CreateInventory to avoid calling GetInventoryClass("none") on base mutator & the log errors created each time a player spawns
 function AddDefaultInventory()
 {
-    local DHPlayerReplicationInfo PRI;
     local DHPlayer   P;
     local DHBot      B;
     local DHRoleInfo RI;
@@ -3110,7 +3107,6 @@ function AddDefaultInventory()
     }
 
     P = DHPlayer(Controller);
-    PRI = DHPlayerReplicationInfo(PlayerReplicationInfo);
 
     if (IsLocallyControlled())
     {
@@ -3290,9 +3286,6 @@ function CreateInventory(string InventoryClassName)
 function CheckGiveShovel()
 {
     local DHGameReplicationInfo GRI;
-    local DHPlayerReplicationInfo PRI;
-
-    PRI = DHPlayerReplicationInfo(PlayerReplicationInfo);
 
     if (ShovelClass != none && Level.Game != none)
     {
@@ -3327,23 +3320,16 @@ function CheckGiveBinocs()
 function CheckGiveSmoke()
 {
     local DHRoleInfo RI;
-    local DHGameReplicationInfo GRI;
     local DHPlayerReplicationInfo PRI;
     local DHPlayer PC;
-    local DarkestHourGame DHG;
     local byte TeamIndex;
     local int SquadMemberCount;
-    local class<DHNation> NationClass;
 
     RI = GetRoleInfo();
     TeamIndex = GetTeamNum();
 
-    DHG = DarkestHourGame(Level.Game);
-    GRI = DHGameReplicationInfo(Level.Game.GameReplicationInfo);
     PRI = DHPlayerReplicationInfo(PlayerReplicationInfo);
     PC = DHPlayer(Controller);
-
-    NationClass = DHG.DHLevelInfo.GetTeamNationClass(TeamIndex);
 
     // Exclude tank crewmen and mortar operators
     if (RI == none || RI.bCanBeTankCrew)
@@ -6081,7 +6067,6 @@ event StartCrouch(float HeightAdjust)
 // Modified to increase volume & radius of sound if sprinting, & to reduce sound radius if moving slowly
 simulated function FootStepping(int Side)
 {
-    local Actor    A;
     local Vector   HitLocation, HitNormal, Start;
     local Material FloorMaterial;
     local int      SurfaceTypeID, i;
@@ -6138,7 +6123,7 @@ simulated function FootStepping(int Side)
     else
     {
         Start = Location - (vect(0.0, 0.0, 1.0) * CollisionHeight);
-        A = Trace(HitLocation, HitNormal, Start - vect(0.0, 0.0, 16.0), Start, false,, FloorMaterial);
+        Trace(HitLocation, HitNormal, Start - vect(0.0, 0.0, 16.0), Start, false,, FloorMaterial);
 
         if (FloorMaterial != none)
         {
