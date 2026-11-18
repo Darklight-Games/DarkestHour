@@ -191,7 +191,6 @@ defaultproperties
     PanelClass(3)="DH_Interface.DHTab_MutatorSP"
     PanelClass(4)="none"
 
-    bDidShowNoBotsWarning=false
     NoBotsWarningText="Darkest Hour: Europe '44-'45 is focused solely on multi-player and, as a result, does NOT include support for bots in Practice mode."
 
     OnOpen=InternalOnOpen

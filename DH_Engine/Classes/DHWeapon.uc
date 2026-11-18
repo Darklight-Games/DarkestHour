@@ -1206,7 +1206,6 @@ defaultproperties
     bCanHaveInitialNumMagsChanged=true
 
     bUsesIronsightFOV=true
-    bCanResupplyWhenEmpty=false
     ResupplyInterval=2.5
 
     SprintStartAnimRate=1.5

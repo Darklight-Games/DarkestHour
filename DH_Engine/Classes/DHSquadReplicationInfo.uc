@@ -3430,7 +3430,6 @@ defaultproperties
 {
     AlliesSquadSize=10
     AxisSquadSize=10
-    bAllowRallyPointsBehindEnemyLines=false
     RallyPointInitialDelaySeconds=15.0
     RallyPointChangeLeaderDelaySeconds=30.0
     RallyPointRadiusInMeters=100.0

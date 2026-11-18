@@ -162,7 +162,7 @@ simulated function Vector ColourMap(Vector RGB)
     HLS.Y = L * 255.0;
     HLS.Z = 255.0 - (S * 255.0);
 
-    return(HLS);
+    return HLS;
 }
 
 function Trigger(Actor Other, Pawn EventInstigator)

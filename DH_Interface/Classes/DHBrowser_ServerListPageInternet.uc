@@ -86,7 +86,6 @@ defaultproperties
     bStandardized=true
     StandardHeight=0.8
 
-    bDisableWhitelist=false
 
     ServerWhitelist(0)="104.243.41.183"     // Official US
     ServerWhitelist(1)="87.98.237.193"     // RO.PL Fight Nights

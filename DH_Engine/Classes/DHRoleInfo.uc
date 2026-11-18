@@ -366,7 +366,6 @@ defaultproperties
     Limit=255 // unlimited (0 is now deactivated)
     HeadgearProbabilities(0)=1.0
     bCanCarryExtraAmmo=true
-    bSpawnWithExtraAmmo=false
     BareHandTexture=Texture'Weapons1st_tex.hands'
     GlovedHandTexture=Texture'Weapons1st_tex.hands_gergloves'
     HandType=HAND_Bare

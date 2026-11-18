@@ -392,6 +392,5 @@ defaultproperties
     OpenedAnimation="opened"
     ClosedAnimation="closed"
     SavedPickupCount=-1
-    bIsTeamLocked=false
     TeamOwner=TEAM_Neutral
 }

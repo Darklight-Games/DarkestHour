@@ -129,7 +129,6 @@ simulated function Timer()
 defaultproperties
 {
     PrimaryFireDelay=1.700000
-    bDelayActive=false
     DelayedController=none
      AmbientGlow=224
      bUseDynamicLights=true

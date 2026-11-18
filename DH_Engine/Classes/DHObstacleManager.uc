@@ -503,7 +503,6 @@ function SetCleared(DHObstacleInstance Obstacle, bool bIsCleared)
 
 defaultproperties
 {
-    bDebug=false
     bHidden=true
     bAlwaysRelevant=true
     RemoteRole=ROLE_SimulatedProxy

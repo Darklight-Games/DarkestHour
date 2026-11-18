@@ -125,7 +125,6 @@ defaultproperties
     StaticMesh=StaticMesh'DH_Obstacles_stc.fence_farm01'
     RemoteRole=ROLE_None
     TypeIndex=-1
-    bDebug=false
     bNoDelete=false
     bHidden=true
     bHiddenEd=false

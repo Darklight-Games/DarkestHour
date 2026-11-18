@@ -629,7 +629,7 @@ function UpdateGlobalDetails()
             co_Shadows.SetIndex(min(co_Shadows.ItemCount() - 1, 3));  // Range = 0 - 2 (0 - 1 sometimes -- check that!)
             co_MeshLOD.SetIndex(3);         // Range = 0 - 3
 
-            if (((bool(PC.ConsoleCommand("ISNVIDIAGPU"))) && (!bool(PC.ConsoleCommand("SUPPORTEDMULTISAMPLE 4"))) || (!bool(PC.ConsoleCommand("ISNVIDIAGPU"))))
+            if ((bool(PC.ConsoleCommand("ISNVIDIAGPU")) && (!bool(PC.ConsoleCommand("SUPPORTEDMULTISAMPLE 4"))) || (!bool(PC.ConsoleCommand("ISNVIDIAGPU"))))
                 && (MultiSampleModes.Length > 3))
             {
                 co_MultiSamples.SetIndex(3);

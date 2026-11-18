@@ -264,6 +264,5 @@ defaultproperties
     GroupIndex=-1
     Scope=TEAM
     OverwritingRule=OFF
-    bShouldShowOnCompass=false
     CalculatingString="Calculating..."
 }

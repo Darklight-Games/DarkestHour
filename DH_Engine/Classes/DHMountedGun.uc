@@ -1122,7 +1122,6 @@ defaultproperties
     RotateSoundVolume=200
 
     OldRotator=(Pitch=0,Yaw=0,Roll=0)
-    bOldIsRotating=false
     bUpdateSimulatedPosition=true
     bReplicateMovement=true
     bSkipActorPropertyReplication=false
@@ -1154,7 +1153,6 @@ defaultproperties
     bShouldDrawOccupantList=false
     bTeamLocked=false
 
-    bCanBePickedUpWhileCrawling=false
     bCanBePickedUpWhileCrouched=true
     bCanBePickedUpWhileStanding=true
 }

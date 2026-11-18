@@ -522,7 +522,6 @@ defaultproperties
     bAlwaysRelevant=true
     bReplicateMovement=false
     RemoteRole=ROLE_SimulatedProxy
-    bIsActive=false
     bHidden=true
     SpawnRadiusSegmentCount=8
 

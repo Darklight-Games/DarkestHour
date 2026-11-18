@@ -190,7 +190,6 @@ simulated function UpdatePrecacheMaterials()
 
 defaultproperties
 {
-    bRespawn=false
     RespawnTime=120.0 // leveller can override
     Physics=PHYS_None
     bWeaponStay=false

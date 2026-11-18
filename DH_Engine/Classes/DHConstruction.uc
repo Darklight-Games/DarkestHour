@@ -1473,8 +1473,6 @@ defaultproperties
     ExplosionDamageTraceOffset=(Z=10.0)
 
     // Placement
-    bCanPlaceInWater=false
-    bCanPlaceIndoors=false
     FloatToleranceInMeters=0.5
     PlacementSound=Sound'Inf_Player.Gibimpact'
     PlacementEmitterClass=Class'DHConstructionEffect'
@@ -1512,7 +1510,6 @@ defaultproperties
     HarmfulDamageTypes(6)=Class'DHMortarDamageType'                 // Mortar
 
     // Impact
-    bCanTakeImpactDamage=false
     ImpactDamageType=Class'Crushed'
     ImpactDamageModifier=0.1
 
@@ -1534,5 +1531,4 @@ defaultproperties
 
     CompletionPointValue=10
 
-    bIsArtillery=false
 }
