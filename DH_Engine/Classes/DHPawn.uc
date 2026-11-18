@@ -2671,7 +2671,7 @@ function PlayTakeHit(Vector HitLocation, int Damage, class<DamageType> DamageTyp
         && class<ROWeaponDamageType>(DamageType).default.bCauseViewJarring && ROPlayer(Controller) != none)
     {
         // Get the approximate direction that the hit went into the body
-        Direction = self.Location - HitLocation;
+        Direction = Location - HitLocation;
 
         // No up-down jarring effects since I don't have the barrel velocity
         Direction.Z = 0.0;
@@ -5730,7 +5730,7 @@ function SetWalking(bool bNewIsWalking)
 
 simulated function SetLockViewRotation(bool bShouldLockViewRotation, optional Rotator LockViewRotation)
 {
-    self.bLockViewRotation = bShouldLockViewRotation;
+    bLockViewRotation = bShouldLockViewRotation;
     self.LockViewRotation = LockViewRotation;
 }
 

@@ -118,7 +118,7 @@ function int Compare(DateTime Other)
         return -1;
     }
 
-    SelfUnixTimestamp = self.UnixTimestamp();
+    SelfUnixTimestamp = UnixTimestamp();
     OtherUnixTimestamp = Other.UnixTimestamp();
 
     if (SelfUnixTimestamp < OtherUnixTimestamp)

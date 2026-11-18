@@ -220,7 +220,7 @@ simulated function bool IsWeaponMounted()
 
 simulated function SetIsWeaponMounted(bool bNewIsWeaponMounted)
 {
-    self.bIsWeaponMounted = bNewIsWeaponMounted;
+    bIsWeaponMounted = bNewIsWeaponMounted;
 
     if (MountBoneName != '')
     {

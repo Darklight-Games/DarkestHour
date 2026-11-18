@@ -492,8 +492,8 @@ function ServerDeployEnd(Actor GroundActor, Vector Location, Rotator Rotation, i
         return;
     }
 
-    self.ConstructionVariantIndex = VariantIndex;
-    self.ConstructionSkinIndex = SkinIndex;
+    ConstructionVariantIndex = VariantIndex;
+    ConstructionSkinIndex = SkinIndex;
     
     if (!CanSpawnVehicle(GroundActor, Location, Rotation))
     {

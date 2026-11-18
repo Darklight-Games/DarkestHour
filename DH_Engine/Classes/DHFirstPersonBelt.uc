@@ -97,13 +97,13 @@ function int GetSequenceIndexForAmmoCount(int AmmoCount)
         return -1;
     }
 
-    Index = self.BulletCount - AmmoCount;
+    Index = BulletCount - AmmoCount;
 
     // First shot will have 250 rounds. First index comes in as 0.
     const A = 16;
     const B = 4;
 
-    C = self.BulletCount - A;
+    C = BulletCount - A;
 
     // If the Index is between A and C, just cycle through the next B animations.
     // If it's after C, then play the last animations.

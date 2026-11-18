@@ -441,7 +441,7 @@ static function EAutomaticVehicleAlerts GetAutomaticVehicleAlertsFromIndex(int I
 // Client to server function which tells the server the user's setting (also gets called from DHTab_GameSettings, if the user changes the setting mid-game)
 function ServerSetAutomaticVehicleAlerts(byte Mode)
 {
-    self.AutomaticVehicleAlerts = Mode;
+    AutomaticVehicleAlerts = Mode;
 }
 
 // New function to set the normal view FOV for this player, based on their own

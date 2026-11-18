@@ -73,21 +73,21 @@ function static string ToString(int TotalSeconds)
 
 function TimeSpan Add(TimeSpan Other)
 {
-    return FromSeconds(self._TotalSeconds + Other._TotalSeconds);
+    return FromSeconds(_TotalSeconds + Other._TotalSeconds);
 }
 
 function TimeSpan Subtract(TimeSpan Other)
 {
-    return FromSeconds(self._TotalSeconds - Other._TotalSeconds);
+    return FromSeconds(_TotalSeconds - Other._TotalSeconds);
 }
 
 function int Compare(TimeSpan Other)
 {
-    if (self._TotalSeconds > Other._TotalSeconds)
+    if (_TotalSeconds > Other._TotalSeconds)
     {
         return 1;
     }
-    else if (self._TotalSeconds < Other._TotalSeconds)
+    else if (_TotalSeconds < Other._TotalSeconds)
     {
         return -1;
     }

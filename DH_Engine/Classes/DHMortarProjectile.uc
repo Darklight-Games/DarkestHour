@@ -178,7 +178,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
         return;
     }
 
-    self.HitNormal = Normal(HitLocation - Other.Location);
+    HitNormal = Normal(HitLocation - Other.Location);
 
     MortarExplode();
 }

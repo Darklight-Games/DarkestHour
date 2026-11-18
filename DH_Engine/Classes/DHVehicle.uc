@@ -1994,7 +1994,7 @@ function bool PlaceExitingDriver()
 // Modify if you want to have different exit positions depending on context.
 function array<Vector> GetExitPositions()
 {
-    return self.ExitPositions;
+    return ExitPositions;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
