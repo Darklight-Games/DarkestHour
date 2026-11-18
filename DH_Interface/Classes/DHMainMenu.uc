@@ -93,13 +93,6 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
         PlayerOwner().ConsoleCommand("SetName" @ Controller.SteamGetUserName());
     }
 
-    // Fix the player's name if it has been garbled with mojibake.
-    // A previous bug would replace an underscore with this string, so this undoes that.
-    if (InStr(PlayerOwner().GetUrlOption("Name"), "�") >= 0)
-    {
-        PlayerOwner().ConsoleCommand("SetName" @ Repl(PlayerOwner().GetUrlOption("Name"), "�", "_"));
-    }
-
     // The default near-clip is 2.0, which is needlessly close and causes
     // severe z-fighting. Doubling the near-clip to 4.0 alleviates (but does
     // not completely fix) the issue. This value can be increased so long as
