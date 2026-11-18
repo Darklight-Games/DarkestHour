@@ -2606,6 +2606,8 @@ function DamageEngine(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector 
     }
 }
 
+// NOTE: The function uses same parameter to input search radius and output result.
+//       This is a dangerous behaviour that can cause bugs if not used carefully.
 function bool IsTreadInRadius(Vector Location, out float Radius, out int TrackNum)
 {
     local int           i;

@@ -50,6 +50,8 @@ defaultproperties
     FrontLeftAngle=332.0
     RearLeftAngle=208.0
 
+    EngineDeckArmorThickness=40.0
+
     // Movement
     GearRatios(1)=0.25
     GearRatios(3)=0.45

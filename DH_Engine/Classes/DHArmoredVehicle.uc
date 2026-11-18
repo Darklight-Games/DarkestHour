@@ -55,6 +55,7 @@ var     float       TurretPenetrationHullDamageChanceModifier; // chance modifie
 var     float       HullPenetrationTurretDamageChanceModifier; // chance modifier for turret damage when a hull penetration occurs
 var     float       TurretPenetrationDamageModifier; // damage modifier for incoming damage when a turret penetration occurs
 var     bool        bRearHullPenetration;       // shell has penetrated the rear hull (so TakeDamage can tell if an engine hit should stop the round penetrating any further)
+var     float       EngineDeckArmorThickness;   // armor thickness above the engine (determines how vulnerable the engine is to satchels)
 
 // Damage
 var     array<NewHitpoint>  NewVehHitpoints;    // an array of extra hit points (new DH types) that may be hit & damaged
