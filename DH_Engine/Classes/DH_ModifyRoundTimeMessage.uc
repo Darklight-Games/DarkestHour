@@ -23,16 +23,12 @@ static function string GetString(optional int Switch, optional PlayerReplication
     switch (Switch)
     {
         case 0:
-            S = Repl(S, "{0}", default.IncreasedText);
+            return Repl(S, "{0}", default.IncreasedText);
         case 1:
-            S = Repl(S, "{0}", default.DecreasedText);
-        case 2:
-            S = Repl(S, "{0}", default.ChangedText);
+            return Repl(S, "{0}", default.DecreasedText);
         default:
-            S = Repl(S, "{0}", default.ChangedText);
+            return Repl(S, "{0}", default.ChangedText);
     }
-
-    return S;
 }
 
 simulated static function ClientReceive(PlayerController P, optional int Switch,

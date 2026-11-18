@@ -331,6 +331,7 @@ function bool IsOptionHidden(int OptionIndex)
                 // Gun cannot be unmounted. Hide the related options.
                 return true;
             }
+            break;
         default:
             break;
     }

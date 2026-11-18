@@ -1294,19 +1294,12 @@ function int GetTeamIndexFromName(out string TeamName)
 {
     switch (TeamName)
     {
-        case "ToAllies":
-            TeamName = "Allies"; // removes the "To" from TeamName & then 'falls through' to return same value as case "Allies"
         case "Allies":
             return ALLIES_TEAM_INDEX;
-
-        case "ToAxis": // removes the "To" from TeamName & then 'falls through' to return same value as case "Axis"
-            TeamName = "Axis";
         case "Axis":
             return AXIS_TEAM_INDEX;
-
         case "Players":
             return BOTH_TEAMS_INDEX;
-
         default:
             ErrorMessageToSelf(18); // no valid team specified
             return ERROR_INDEX;

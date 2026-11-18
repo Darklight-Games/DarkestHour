@@ -90,12 +90,12 @@ function GetAllRoleNames()
 
 exec function SwitchPlayerToAlliesRole(string PlayerName, string RoleName, string RoleIndex)
 {
-    BuildMutateCommand("SwitchPlayer" @ PlayerName @ "ToAllies" @ RoleName @ RoleIndex, 6);
+    BuildMutateCommand("SwitchPlayer" @ PlayerName @ "Allies" @ RoleName @ RoleIndex, 6);
 }
 
 exec function SwitchPlayerToAxisRole(string PlayerName, string RoleName, string RoleIndex)
 {
-    BuildMutateCommand("SwitchPlayer" @ PlayerName @ "ToAxis" @ RoleName @ RoleIndex, 6);
+    BuildMutateCommand("SwitchPlayer" @ PlayerName @ "Axis" @ RoleName @ RoleIndex, 6);
 }
 
 defaultproperties
