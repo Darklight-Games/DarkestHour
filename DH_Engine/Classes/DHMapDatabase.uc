@@ -51,6 +51,8 @@ static function string GetMapSizeString(EMapSize Size)
             return default.SizeMediumText;
         case SIZE_Large:
             return default.SizeLargeText;
+        default:
+            return "";
     }
 }
 
@@ -68,6 +70,8 @@ static function string GetAlliedNationString(DH_LevelInfo.EAlliedNation AlliedNa
             return "USSR";
         case NATION_Poland:
             return "Poland";
+        default:
+            return "";
     }
 }
 
@@ -79,6 +83,8 @@ static function string GetAxisNationString(DH_LevelInfo.EAxisNation AxisNation)
             return "Germany";
         case NATION_Italy:
             return "Italy";
+        default:
+            return "";
     }
 }
 
@@ -102,7 +108,6 @@ static function GetMapSizePlayerCountRange(EMapSize Size, out int PlayersMin, ou
             PlayersMin = 48;
             PlayersMax = 100;
             break;
-        case SIZE_Any:
         default:
             PlayersMin = 0;
             PlayersMax = 100;

@@ -296,6 +296,8 @@ function string ReadEscape()
             return Chr(0x09);
         case "u":   // Unicode character (eg. \u0820)
             return Chr(Class'UInteger'.static.FromHex(InputBuffer.Read(4)));
+        default:
+            return "";
     }
 }
 

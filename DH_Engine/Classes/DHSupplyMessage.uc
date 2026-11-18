@@ -35,6 +35,8 @@ static function string GetStringFromSwitch(int Switch)
             return default.SupplyCacheFull;
         case 7:
             return default.SuppliesRefunded;
+        default:
+            return "";
     }
 }
 

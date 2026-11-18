@@ -131,6 +131,8 @@ function bool InternalOnKeyEvent(out byte Key, out byte State, float Delta)
         DHMapVoteMultiColumnList(lb_MapListBox.List).SetFilterPattern(ed_Filter.GetText());
         return true;
     }
+
+    return false;
 }
 
 function bool InternalOnClick(GUIComponent Sender)
@@ -140,6 +142,8 @@ function bool InternalOnClick(GUIComponent Sender)
         OnFilterClear();
         return true;
     }
+
+    return false;
 }
 
 delegate OnFilterClear()

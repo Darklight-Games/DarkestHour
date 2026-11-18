@@ -10,6 +10,7 @@ var automated GUIButton b_Main;
 function bool InternalOnClick(GUIComponent Sender)
 {
     local DHPlayer PC;
+    
     if (Sender == b_Main)
     {
         //Open main menu
@@ -20,7 +21,7 @@ function bool InternalOnClick(GUIComponent Sender)
         return true;
     }
 
-    super.InternalOnClick(Sender);
+    return super.InternalOnClick(Sender);
 }
 
 // Override to fix an epic bug that would allow this footer function to play with other UI elements in other GUI pages

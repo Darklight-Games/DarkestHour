@@ -316,6 +316,8 @@ simulated function bool AllowReload()
     {
         return super.AllowReload();
     }
+
+    return false;
 }
 
 // Modified to prevent proning while reloading

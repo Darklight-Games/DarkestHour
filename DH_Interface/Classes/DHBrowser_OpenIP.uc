@@ -79,6 +79,8 @@ function bool InternalOnKeyEvent(out byte Key, out byte State, float Delta)
     {
         return ed_Data.MyEditBox.InternalOnKeyEvent(Key,State,Delta);
     }
+
+    return false;
 }
 
 function string StripProtocol(string s)

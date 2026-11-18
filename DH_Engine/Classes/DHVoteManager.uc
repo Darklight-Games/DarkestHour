@@ -176,6 +176,8 @@ function bool HasPlayerNominatedVote(PlayerController Player)
             return true;
         }
     }
+
+    return false;
 }
 
 // VOTES
@@ -351,6 +353,8 @@ function int GetVoteTime(class<DHVoteInfo> VoteClass, byte TeamIndex)
             return CooldownTimes[i].Timestamps[TeamIndex];
         }
     }
+
+    return 0;
 }
 
 defaultproperties

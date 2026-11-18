@@ -771,6 +771,8 @@ simulated function float GetEffectiveRecoilGain()
 
         return EffectiveRecoilGain;
     }
+
+    return 0.0;
 }
 
 simulated function float GetRecoilGainFalloff(float TimeSeconds)

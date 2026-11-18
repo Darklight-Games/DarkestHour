@@ -72,6 +72,8 @@ function bool OnClick(GUIComponent Sender)
         default:
             break;
     }
+
+    return false;
 }
 
 function InternalOnShow()

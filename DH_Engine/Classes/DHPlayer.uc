@@ -504,6 +504,8 @@ simulated function GUIPage GetGUIPage()
     {
         return GC.FindMenuByClass(Class'GUIPage');
     }
+
+    return none;
 }
 
 // Modified to add hacky fix for problem where player re-joins a server with an active weapon lock saved in his DHPlayerSession
@@ -3669,6 +3671,8 @@ function RORoleInfo GetRoleInfo()
     {
         return ROPlayerReplicationInfo(PlayerReplicationInfo).RoleInfo;
     }
+
+    return none;
 }
 
 // New function for server to tell client to copy string into it's clipboard
@@ -5816,6 +5820,8 @@ simulated function bool GetMarkedParadropLocation(out Vector ParadropLocation)
 
         return true;
     }
+
+    return false;
 }
 
 simulated function bool GetSquadLeaderParadropLocation(out Vector ParadropLocation, DHPlayerReplicationInfo SelectedPRI)
@@ -5904,6 +5910,8 @@ simulated function DHPlayerReplicationInfo GetSquadAssistantVolunteer(int Volunt
     {
         return SquadAssistantVolunteers[VolunteerIndex];
     }
+
+    return none;
 }
 
 simulated function RemoveSquadAssistantVolunteer(int VolunteerIndex)
@@ -6283,6 +6291,8 @@ function bool IsPersonalMarkerPlaced(class<DHMapMarker> MapMarkerClass)
             return true;
         }
     }
+
+    return false;
 }
 
 function AddPersonalMarker(class<DHMapMarker> MapMarkerClass, float MapLocationX, float MapLocationY, Vector WorldLocation)

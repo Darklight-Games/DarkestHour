@@ -17,6 +17,8 @@ protected function DHPlayerReplicationInfo GetSelectedPRI(GUIComponent Component
     {
         return DHPlayerReplicationInfo(SquadComponent.li_Members.GetObject());
     }
+
+    return none;
 }
 
 protected function AssembleMenu(GUIComponent Component)

@@ -1339,6 +1339,8 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
         // Clear the squad ban, if it exists.
         ClearSquadBan(TeamIndex, SquadIndex, PRI);
     }
+
+    return MemberIndex;
 }
 
 // Attempts to kick the specified player from the specified squad.
@@ -2966,6 +2968,8 @@ function bool MaybeLeaveCommandVoiceChannel(DHPlayerReplicationInfo PRI)
     {
         PC.Speak(VRI.LocalChannelName);
     }
+
+    return true;
 }
 
 //==============================================================================
@@ -3339,6 +3343,8 @@ function bool DenySquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionReq
 
     // Remove the request.
     SquadPromotionRequests.Remove(SquadPromotionRequestIndex, 1);
+
+    return true;
 }
 
 function bool AcceptSquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionRequestID)

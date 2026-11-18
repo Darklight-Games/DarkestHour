@@ -297,7 +297,6 @@ simulated function Material GetHandTexture(DH_LevelInfo LI)
         case HAND_Custom:
             HandTexture = CustomHandTexture;
             break;
-        case HAND_Bare:
         default:
             HandTexture = BareHandTexture;
             break;

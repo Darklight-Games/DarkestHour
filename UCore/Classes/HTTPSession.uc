@@ -77,5 +77,7 @@ function HTTPCookie SetCookie(string S)
             Cookie.Extensions[Cookie.Extensions.Length] = Value;
         }
     }
+
+    return Cookie;
 }
 

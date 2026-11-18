@@ -271,6 +271,8 @@ final simulated function float GetMapIconYaw(DHGameReplicationInfo GRI)
     {
         return GRI.GetMapIconYaw(WorldYaw);
     }
+
+    return 0.0;
 }
 
 final function UpdateQuantized2DPose()
@@ -309,6 +311,8 @@ delegate bool IsInDangerZone()
 
         return GRI.IsInDangerZone(L.X, L.Y, TeamIndex);
     }
+
+    return false;
 }
 
 // Override to define who can see the icon

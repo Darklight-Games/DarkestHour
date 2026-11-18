@@ -2043,9 +2043,11 @@ simulated function Vector GetWorldSurfaceCoords(float X, float Y, float TraceHei
     {
         if (HitActor.bStatic && !HitActor.IsA('ROBulletWhipAttachment') && !HitActor.IsA('Volume'))
         {
-            return HitLocation;
+            break;
         }
     }
+
+    return HitLocation;
 }
 
 // This function will adjust a hud map location based on the rotation offset of
@@ -2279,6 +2281,8 @@ simulated function bool IsSurrenderVoteInProgress(byte TeamIndex)
     {
         return bool(SurrenderVotesInProgress[TeamIndex]);
     }
+    
+    return false;
 }
 
 function SetSurrenderVoteInProgress(byte TeamIndex, bool bInProgress)

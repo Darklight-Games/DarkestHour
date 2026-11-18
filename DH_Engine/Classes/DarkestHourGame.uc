@@ -964,6 +964,8 @@ function int GetDHBotNewRole(DHBot ThisBot, int BotTeamNum)
             return i;
         }
     }
+
+    return -1;
 }
 
 // Give player a point for resupplying an MG gunner
@@ -4179,6 +4181,11 @@ function bool BecomeSpectator(PlayerController P)
     P.PlayerReplicationInfo.Team = none;
     P.PlayerReplicationInfo.bIsSpectator = true;
     P.PlayerReplicationInfo.bOnlySpectator = true;
+
+    // NOTE: This is an oddity. So normally, I'd say this should be return true,
+    // but if I do that then the camera doesn't attach to the player's head
+    // when they ragdoll on death, so I'm leaving this as-is.
+    return false;
 }
 
 function PlayerLeftTeam(PlayerController P)

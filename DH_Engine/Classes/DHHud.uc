@@ -4236,6 +4236,8 @@ function float GetMapIconYaw(float WorldYaw)
     {
         return DHGRI.GetMapIconYaw(WorldYaw);
     }
+
+    return 0.0;
 }
 
 function float GetMapMeterScale()

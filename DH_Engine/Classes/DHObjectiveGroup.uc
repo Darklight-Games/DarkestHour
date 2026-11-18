@@ -96,6 +96,8 @@ function float GetOwnedAttritionRate(byte OwnerTeamIndex)
     {
         return OwnedAttritionRate[OwnerTeamIndex];
     }
+
+    return 0.0;
 }
 
 defaultproperties

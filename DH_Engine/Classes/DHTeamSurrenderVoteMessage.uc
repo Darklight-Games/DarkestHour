@@ -63,6 +63,8 @@ static function string GetString(
         default:
             return "";
     }
+
+    return "";
 }
 
 defaultproperties

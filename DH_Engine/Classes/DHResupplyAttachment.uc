@@ -138,6 +138,8 @@ function bool CanResupplyPawn(Pawn P)
 
         return true;
     }
+
+    return false;
 }
 
 function ProcessActorLeave()

@@ -273,9 +273,6 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
             ORI.InfoIcon = Texture'DH_InterfaceArt2_tex.squad';
             ORI.InfoText[0] = default.SquadTooSmallText @ "(" $ string(SquadMembersCount) $ "/" $ FireSupportRequestClass.default.RequiredSquadMembers $ ")";
             break;
-        case FSE_InsufficientPrivileges:
-        case FSE_Disabled:
-        case FSE_Fatal:
         default:
             ORI.InfoColor = Class'UColor'.default.Red;
             ORI.InfoIcon = Texture'DH_GUI_tex.spawn_point_disabled';

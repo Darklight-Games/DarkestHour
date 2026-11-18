@@ -3302,6 +3302,8 @@ simulated function float GetScopePortalFOV()
         case RO_ModelScopeHigh:
             return ScopePortalFOVHigh;
     }
+
+    return 0.0;
 }
 
 simulated function Vector GetScopePlayerViewOffset()
@@ -3312,6 +3314,8 @@ simulated function Vector GetScopePlayerViewOffset()
             return XoffsetScoped;
         case RO_ModelScopeHigh:
             return XoffsetHighDetail;
+        default:
+            return vect(0.0, 0.0, 0.0);
     }
 }
 

@@ -28,6 +28,8 @@ static function string GetSquadName(int TeamIndex, int SquadIndex, DHSquadReplic
     {
         return SRI.GetSquadName(TeamIndex, SquadIndex);
     }
+
+    return "";
 }
 
 static function string GetTeamName(int TeamIndex)
@@ -38,6 +40,8 @@ static function string GetTeamName(int TeamIndex)
             return default.AxisTeamNameGenitive;
         case 1:
             return default.AlliedTeamNameGenitive;
+        default:
+            return "";
     }
 }
 
