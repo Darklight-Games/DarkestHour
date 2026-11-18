@@ -10,16 +10,16 @@ var private   array<int>    EntryIndices;
 var localized array<string> EntryTexts;
 
 final function int GetMenuLength() { return EntryIndices.Length; }
-final protected function Reset() { EntryIndices.Length = 0; }
+protected final function Reset() { EntryIndices.Length = 0; }
 protected function AssembleMenu(GUIComponent Component);
 protected function ProcessEntry(int EntryIndex, GUIComponent Component);
 
-final protected function AddEntry(int CaptionIndex)
+protected final function AddEntry(int CaptionIndex)
 {
     EntryIndices[EntryIndices.Length] = CaptionIndex;
 }
 
-final protected function InsertEntry(int CaptionIndex, int Index)
+protected final function InsertEntry(int CaptionIndex, int Index)
 {
     if (Index >= EntryIndices.Length)
     {

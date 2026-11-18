@@ -13,7 +13,7 @@ var int                 SupplyCountMax;
 var private int         TeamIndex;
 var bool                bIsMainSupplyCache;
 
-var localized private string   HumanReadableName;
+var private localized string   HumanReadableName;
 
 var class<DHMapIconAttachment> MapIconAttachmentClass;
 var DHMapIconAttachment        MapIconAttachment;

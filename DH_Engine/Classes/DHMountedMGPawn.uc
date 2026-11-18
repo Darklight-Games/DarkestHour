@@ -110,14 +110,14 @@ simulated state ViewTransition
     }
 }
 
-simulated private function SetDriverPositionIndexTarget(int NewDriverPositionIndexTarget)
+private simulated function SetDriverPositionIndexTarget(int NewDriverPositionIndexTarget)
 {
     DriverPositionIndexTarget = NewDriverPositionIndexTarget;
 
     MaybeTransitionToTargetDriverPosition();
 }
 
-simulated private function bool MaybeTransitionToTargetDriverPosition()
+private simulated function bool MaybeTransitionToTargetDriverPosition()
 {
     if (DriverPositionIndexTarget == -1)
     {
@@ -829,7 +829,7 @@ exec function SetGunsightPitchOffset(float NewPitchOffset)
     }
 }
 
-simulated exec function SpawnRangeTarget(int SizeMeters)
+exec simulated function SpawnRangeTarget(int SizeMeters)
 {
     local Coords MuzzleCoords;
     local Vector Direction, TargetLocation;
@@ -872,7 +872,7 @@ simulated exec function SpawnRangeTarget(int SizeMeters)
 }
 
 // Debugging function for calibrating the range table to the animations.
-simulated exec function SetRangeTheta(float NewTheta)
+exec simulated function SetRangeTheta(float NewTheta)
 {
     local DHMountedMG MG;
 
@@ -887,7 +887,7 @@ simulated exec function SetRangeTheta(float NewTheta)
     MG.UpdateRangeDriverFrameTarget();
 }
 
-simulated exec function DumpRangeTable()
+exec simulated function DumpRangeTable()
 {
     local DHMountedMG MG;
 

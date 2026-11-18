@@ -785,7 +785,7 @@ simulated function UpdateClipDriver(int Ammo)
     FreezeAnimAt(ClipFrame, ClipChannel);
 }
 
-simulated private function SendRangeMessage()
+private simulated function SendRangeMessage()
 {
     if (WeaponPawn == none || !WeaponPawn.IsLocallyControlled())
     {

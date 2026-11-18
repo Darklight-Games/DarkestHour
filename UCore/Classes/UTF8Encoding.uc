@@ -89,7 +89,7 @@ final static function string FromBytes(array<int> Bytes)
     return S;
 }
 
-final private static function int GetTrailingBytesForUTF8(int B)
+private final static function int GetTrailingBytesForUTF8(int B)
 {
     if (B < 0xC0)
     {
@@ -117,7 +117,7 @@ final private static function int GetTrailingBytesForUTF8(int B)
     }
 }
 
-final private static function int GetFirstByteMark(int BytesToWrite)
+private final static function int GetFirstByteMark(int BytesToWrite)
 {
     switch (BytesToWrite)
     {

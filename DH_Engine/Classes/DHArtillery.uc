@@ -10,7 +10,7 @@ class DHArtillery extends Actor
 
 var DHGameReplicationInfo.EArtilleryType              ArtilleryType;
 
-var localized protected string  MenuName;
+var protected localized string  MenuName;
 var Material                    MenuIcon;
 
 var protected int               TeamIndex;

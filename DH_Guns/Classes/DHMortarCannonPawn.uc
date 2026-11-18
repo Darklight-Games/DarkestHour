@@ -61,7 +61,7 @@ replication
 }
 
 // TODO: move this to the base class, add sanity checks.
-simulated exec function HandsRelPos(float X)
+exec simulated function HandsRelPos(float X)
 {
     HandsRelativeLocation.X = X;
 

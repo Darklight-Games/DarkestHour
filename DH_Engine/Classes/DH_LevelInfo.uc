@@ -405,7 +405,7 @@ simulated function int GetConstructionMaxActive(int TeamIndex, class<DHConstruct
     }
 }
 
-simulated private function bool HasConstruction(int TeamIndex, Class<DHConstruction> ConstructionClass)
+private simulated function bool HasConstruction(int TeamIndex, Class<DHConstruction> ConstructionClass)
 {
     local int i;
 

@@ -34,7 +34,7 @@ final static function bool PointInCylinder(Vector Origin, float Radius, float Ha
     return Sqrt(Point.X * Point.X + Point.Y * Point.Y) < Radius && Abs(Point.Z) < HalfHeight;
 }
 
-final private static function byte ComputeOutCode(float X, float Y, Box Viewport)
+private final static function byte ComputeOutCode(float X, float Y, Box Viewport)
 {
     local byte Code;
 
