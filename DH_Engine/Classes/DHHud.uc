@@ -65,9 +65,9 @@ var     SpriteWidget        VehicleLockedIcon;                  // icon showing 
 var     SpriteWidget        VehicleAltAmmoReloadIcon;           // ammo reload icon for a coax MG, so reload progress can be shown on HUD like a tank cannon reload
 var     SpriteWidget        VehicleMGAmmoReloadIcon;            // ammo reload icon for a vehicle mounted MG position
 
-var(DHHud)  SpriteWidget    VehicleBarrelIcon;
-var(DHHud)  SpriteWidget    VehicleBarrelReloadIcon;
-var(DHHud)  NumericWidget   VehicleBarrelIconAmount;
+var()   SpriteWidget        VehicleBarrelIcon;
+var()   SpriteWidget        VehicleBarrelReloadIcon;
+var()   NumericWidget       VehicleBarrelIconAmount;
 
 var     SpriteWidget        VehicleSmokeLauncherAmmoIcon;       // ammo icon for a vehicle mounted smoke launcher
 var     SpriteWidget        VehicleSmokeLauncherAmmoReloadIcon; // ammo reload icon for vehicle smoke launcher
