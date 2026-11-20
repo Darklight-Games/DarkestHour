@@ -187,7 +187,7 @@ simulated state Idle
 
         P = DHPawn(Instigator);
 
-        if (P != none)
+        if (P != none && Level.NetMode != NM_DedicatedServer)
         {
             P.bCanCutWire = CanCut();
         }
@@ -201,11 +201,6 @@ simulated state Idle
         local DHObstacleInstance O;
         local DHPawn P;
         local Vector HitLocation, HitNormal, TraceEnd, TraceStart;
-
-        if (Level.NetMode == NM_DedicatedServer)
-        {
-            return false;
-        }
 
         P = DHPawn(Instigator);
 
