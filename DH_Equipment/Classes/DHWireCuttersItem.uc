@@ -185,11 +185,14 @@ simulated state Idle
     {
         local DHPawn P;
 
-        P = DHPawn(Instigator);
+        if (Level.NetMode != NM_DedicatedServer)
+        {   
+            P = DHPawn(Instigator);
 
-        if (P != none && Level.NetMode != NM_DedicatedServer)
-        {
-            P.bCanCutWire = CanCut();
+            if (P != none)
+            {
+                P.bCanCutWire = CanCut();
+            }
         }
 
         super.Tick(DeltaTime);
