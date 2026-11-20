@@ -6430,6 +6430,12 @@ simulated function NotifySelected(Pawn User)
 {
     local DHPawn P;
 
+    // Carried radios have no collision, so forward the selection to our radio.
+    if (Radio != none)
+    {
+        Radio.NotifySelected(User);
+    }
+
     P = DHPawn(User);
 
     if (P == none ||
