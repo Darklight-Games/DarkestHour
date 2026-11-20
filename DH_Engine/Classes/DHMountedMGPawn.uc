@@ -904,6 +904,8 @@ exec simulated function DumpRangeTable()
     }
 }
 
+simulated function bool CanSwitchToVehiclePosition(byte F);
+
 defaultproperties
 {
     HandsAttachBone="HANDS_ATTACHMENT"
