@@ -1136,7 +1136,7 @@ static function bool ShouldShowOnMenu(DHActorProxy.Context Context)
 
 static function bool IsPlaceableByPlayer(DHPlayerReplicationInfo PRI)
 {
-    return PRI.IsSLorASL();
+    return PRI.IsSLorLogi();
 }
 
 static function bool IsConstructionRestricted(DHActorProxy.Context Context)

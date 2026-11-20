@@ -74,6 +74,15 @@ protected function AssembleMenu(GUIComponent Component)
                 {
                     AddEntry(5); // Assign assistant
                 }
+
+                if (SelectedPRI.IsLogi())
+                {
+                    AddEntry(17); // Rescind logi
+                }
+                else
+                {
+                    AddEntry(16); // Assign logi
+                }
             }
             else if (SelectedPRI.IsSquadLeader())
             {
@@ -90,6 +99,13 @@ protected function AssembleMenu(GUIComponent Component)
                  !PRI.bRestrictLeaderPositions)
         {
             AddEntry(7);         // Volunteer to assist
+        }
+
+        if (SelectedPRI.IsSquadLeader() &&
+            PRI.SquadIndex == SquadIndex &&
+            !SRI.HasLogi(PC.GetTeamNum(), PRI.SquadIndex))
+        {
+            AddEntry(18);        // Volunteer to be logi
         }
     }
 
@@ -228,6 +244,18 @@ protected function ProcessEntry(int EntryIndex, GUIComponent Component)
         case 8:
             PC.ServerSendSquadMergeRequest(SquadComponent.SquadIndex);
             return;
+
+        case 16:
+            PC.ServerSquadMakeLogi(SelectedPRI);
+            return;
+
+        case 17:
+            PC.ServerSquadMakeLogi(none);
+            return;
+
+        case 18:
+            PC.ServerSquadVolunteerToBeLogi();
+            return;
     }
 
     if (PRI.IsLoggedInAsAdmin())
@@ -325,4 +353,9 @@ defaultproperties
     EntryTexts(13)="{1} Paradrop unassigned players to marker"
     EntryTexts(14)="{1} Promote {0} to squad leader"
     EntryTexts(15)="{1} Kick {0} from squad"
+
+    // Squad leader logi commands
+    EntryTexts(16)="Assign {0} as logi"
+    EntryTexts(17)="Unassign {0} as logi"
+    EntryTexts(18)="Volunteer as logi"
 }

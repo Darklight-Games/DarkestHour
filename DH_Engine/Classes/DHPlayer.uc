@@ -156,6 +156,8 @@ var     bool                    bIgnoreSquadPromotionRequestPrompts;
 // Squad assistant volunteers
 var         bool                           bIgnoreSquadLeaderAssistantVolunteerPrompts;
 var private array<DHPlayerReplicationInfo> SquadAssistantVolunteers;
+var         bool                           bIgnoreSquadLeaderLogiVolunteerPrompts;
+var private array<DHPlayerReplicationInfo> SquadLogiVolunteers;
 
 var     DHCommandInteraction    CommandInteraction;
 
@@ -259,7 +261,7 @@ replication
         ServerSetPatronTier, ServerSquadLeaderVolunteer, ServerForgiveLastFFKiller,
         ServerSendSquadMergeRequest, ServerAcceptSquadMergeRequest, ServerDenySquadMergeRequest,
         ServerSendSquadPromotionRequest, ServerAcceptSquadPromotionRequest, ServerDenySquadPromotionRequest,
-        ServerSquadVolunteerToAssist, ServerSetIncognitoMode,
+        ServerSquadVolunteerToAssist, ServerSquadVolunteerToBeLogi, ServerSquadMakeLogi, ServerSetIncognitoMode,
         ServerPunishLastFFKiller, ServerRequestArtillery, ServerCancelArtillery, /*ServerVote,*/
         ServerDoLog, ServerLeaveBody, ServerPossessBody, ServerDebugObstacles, ServerLockWeapons, // these ones in debug mode only
         ServerTeamSurrenderRequest, ServerParadropPlayer, ServerParadropSquad, ServerParadropTeam,
@@ -275,6 +277,7 @@ replication
         ClientSquadInvite, ClientSignal, ClientSquadLeaderVolunteerPrompt,
         ClientTeamKillPrompt, ClientOpenLogFile, ClientLogToFile, ClientCloseLogFile,
         ClientSquadAssistantVolunteerPrompt,
+        ClientSquadLogiVolunteerPrompt,
         ClientReceiveSquadMergeRequest, ClientSendSquadMergeRequestResult,
         ClientReceiveSquadPromotionRequest, ClientSendSquadPromotionRequestResult,
         ClientTeamSurrenderResponse,
@@ -5684,6 +5687,44 @@ function ServerSquadVolunteerToAssist()
     }
 }
 
+function ServerSquadVolunteerToBeLogi()
+{
+    local int TeamIndex, SquadIndex;
+    local DHPlayerReplicationInfo PRI, SLPRI;
+    local DHPlayer SLPC;
+    local DHBot SLBot;
+
+    TeamIndex = GetTeamNum();
+    SquadIndex = GetSquadIndex();
+    PRI = DHPlayerReplicationInfo(PlayerReplicationInfo);
+
+    if (SquadReplicationInfo == none || PRI == none || !PRI.IsInSquad() ||
+        PRI.IsSquadLeader() || PRI.IsLogi() ||
+        SquadReplicationInfo.HasLogi(TeamIndex, SquadIndex))
+    {
+        return;
+    }
+
+    SLPRI = SquadReplicationInfo.GetSquadLeader(TeamIndex, SquadIndex);
+
+    if (SLPRI == none)
+    {
+        return;
+    }
+
+    SLPC = DHPlayer(SLPRI.Owner);
+    SLBot = DHBot(SLPRI.Owner);
+
+    if (SLPC != none)
+    {
+        SLPC.ClientSquadLogiVolunteerPrompt(TeamIndex, SquadIndex, PRI);
+    }
+    else if (SLBot != none)
+    {
+        SquadReplicationInfo.SetSquadLogi(TeamIndex, SquadIndex, PRI);
+    }
+}
+
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 // PARADROPS
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -5892,6 +5933,34 @@ simulated function ClientSquadAssistantVolunteerPrompt(int TeamIndex, int SquadI
     Player.InteractionMaster.AddInteraction("DH_Engine.DHSquadLeaderAssistantVolunteerInteraction", Player);
 }
 
+simulated function ClientSquadLogiVolunteerPrompt(int TeamIndex, int SquadIndex, DHPlayerReplicationInfo VolunteerPRI)
+{
+    local int VolunteerIndex, i;
+
+    if (bIgnoreSquadLeaderLogiVolunteerPrompts)
+    {
+        return;
+    }
+
+    VolunteerIndex = SquadLogiVolunteers.Length;
+
+    for (i = 0; i < SquadLogiVolunteers.Length; ++i)
+    {
+        if (SquadLogiVolunteers[i] == none)
+        {
+            VolunteerIndex = i;
+        }
+    }
+
+    SquadLogiVolunteers[VolunteerIndex] = VolunteerPRI;
+
+    Class'DHSquadLeaderLogiVolunteerInteraction'.default.TeamIndex = TeamIndex;
+    Class'DHSquadLeaderLogiVolunteerInteraction'.default.SquadIndex = SquadIndex;
+    Class'DHSquadLeaderLogiVolunteerInteraction'.default.VolunteerIndex = VolunteerIndex;
+
+    Player.InteractionMaster.AddInteraction("DH_Engine.DHSquadLeaderLogiVolunteerInteraction", Player);
+}
+
 simulated function DHPlayerReplicationInfo GetSquadAssistantVolunteer(int VolunteerIndex)
 {
     if (VolunteerIndex >= 0 && VolunteerIndex < SquadAssistantVolunteers.Length)
@@ -5916,6 +5985,31 @@ simulated function RemoveSquadAssistantVolunteer(int VolunteerIndex)
     }
 
     SquadAssistantVolunteers.Length = 0;
+}
+
+simulated function DHPlayerReplicationInfo GetSquadLogiVolunteer(int VolunteerIndex)
+{
+    if (VolunteerIndex >= 0 && VolunteerIndex < SquadLogiVolunteers.Length)
+    {
+        return SquadLogiVolunteers[VolunteerIndex];
+    }
+}
+
+simulated function RemoveSquadLogiVolunteer(int VolunteerIndex)
+{
+    local int i;
+
+    if (VolunteerIndex >= 0 && VolunteerIndex < SquadLogiVolunteers.Length)
+    {
+        SquadLogiVolunteers[VolunteerIndex] = none;
+    }
+
+    for (i = 0; i < SquadLogiVolunteers.Length; ++i)
+    {
+        if (SquadLogiVolunteers[i] != none) return;
+    }
+
+    SquadLogiVolunteers.Length = 0;
 }
 
 function UnsetActiveRoom()
@@ -6149,6 +6243,18 @@ function ServerSquadMakeAssistant(DHPlayerReplicationInfo NewAssistant)
     if (SquadReplicationInfo != none && PRI != none)
     {
         SquadReplicationInfo.SetAssistantSquadLeader(GetTeamNum(), GetSquadIndex(), NewAssistant);
+    }
+}
+
+function ServerSquadMakeLogi(DHPlayerReplicationInfo NewLogi)
+{
+    local DHPlayerReplicationInfo PRI;
+
+    PRI = DHPlayerReplicationInfo(PlayerReplicationInfo);
+
+    if (SquadReplicationInfo != none && PRI != none && PRI.IsSquadLeader())
+    {
+        SquadReplicationInfo.SetSquadLogi(GetTeamNum(), GetSquadIndex(), NewLogi);
     }
 }
 
@@ -6789,6 +6895,11 @@ function bool GetCommandInteractionMenu(out string MenuClassName, out Object Men
     else if (PRI.IsPatron())
     {
         MenuClassName = "DH_Engine.DHCommandMenu_Patron";
+        return true;
+    }
+    else if (PRI.IsLogi())
+    {
+        MenuClassName = "DH_Engine.DHCommandMenu_Logistics";
         return true;
     }
 

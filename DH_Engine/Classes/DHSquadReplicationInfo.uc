@@ -28,6 +28,7 @@ const SQUAD_MERGE_REQUEST_INTERVAL = 15.0;
 // arrays of structs.
 var private DHPlayerReplicationInfo AxisMembers[TEAM_SQUAD_MEMBERS_MAX];
 var private byte                    AxisAssistantSquadLeaderMemberIndices[TEAM_SQUADS_MAX];
+var private byte                    AxisSquadLogiMemberIndices[TEAM_SQUADS_MAX];
 var private string                  AxisNames[TEAM_SQUADS_MAX];
 var private byte                    AxisLocked[TEAM_SQUADS_MAX];
 var private int                     AxisNextRallyPointTimes[TEAM_SQUADS_MAX];   // Stores the next time (in relation to Level.TimeSeconds) that a squad can place a new rally point.
@@ -45,6 +46,7 @@ var config  bool                    bAllowRallyPointsBehindEnemyLines;
 
 var private DHPlayerReplicationInfo AlliesMembers[TEAM_SQUAD_MEMBERS_MAX];
 var private byte                    AlliesAssistantSquadLeaderMemberIndices[TEAM_SQUADS_MAX];
+var private byte                    AlliesSquadLogiMemberIndices[TEAM_SQUADS_MAX];
 var private string                  AlliesNames[TEAM_SQUADS_MAX];
 var private byte                    AlliesLocked[TEAM_SQUADS_MAX];
 var private int                     AlliesNextRallyPointTimes[TEAM_SQUADS_MAX]; // Stores the next time (in relation to Level.TimeSeconds) that a squad can place a new rally point.
@@ -172,6 +174,82 @@ replication
         AxisMembers, AxisNames, AxisLocked, AlliesMembers, AlliesNames,
         AlliesLocked, bAreRallyPointsEnabled, RallyPoints,
         AxisNextRallyPointTimes, AlliesNextRallyPointTimes;
+}
+
+function SetSquadLogi(int TeamIndex, int SquadIndex, DHPlayerReplicationInfo PRI)
+{
+    local DHPlayerReplicationInfo CurrentLogi;
+    local DHPlayerReplicationInfo CurrentASL;
+    local DHPlayer PC;
+    local int SquadLogiMemberIndex;
+
+    if (!IsSquadActive(TeamIndex, SquadIndex))
+    {
+        return;
+    }
+
+    if (PRI != none)
+    {
+        if (!IsInSquad(PRI, TeamIndex, SquadIndex) ||
+            IsSquadLeader(PRI, TeamIndex, SquadIndex) ||
+            IsSquadLogi(PRI, TeamIndex, SquadIndex))
+        {
+            return;
+        }
+
+        SquadLogiMemberIndex = PRI.SquadMemberIndex;
+    }
+    else
+    {
+        SquadLogiMemberIndex = -1;
+    }
+
+    CurrentLogi = GetSquadLogi(TeamIndex, SquadIndex);
+
+    if (CurrentLogi != none)
+    {
+        CurrentLogi.bIsSquadLogi = false;
+
+        PC = DHPlayer(CurrentLogi.Owner);
+
+        if (PC != none)
+        {
+            PC.ReceiveLocalizedMessage(Class'DHSquadMessage', 87);
+        }
+    }
+
+    // If the new logi is currently the ASL, remove that role
+    if (PRI != none)
+    {
+        CurrentASL = GetAssistantSquadLeader(TeamIndex, SquadIndex);
+
+        if (CurrentASL == PRI)
+        {
+            SetAssistantSquadLeader(TeamIndex, SquadIndex, none);
+        }
+    }
+
+    switch (TeamIndex)
+    {
+        case AXIS_TEAM_INDEX:
+            AxisSquadLogiMemberIndices[SquadIndex] = SquadLogiMemberIndex;
+            break;
+        case ALLIES_TEAM_INDEX:
+            AlliesSquadLogiMemberIndices[SquadIndex] = SquadLogiMemberIndex;
+            break;
+    }
+
+    if (PRI != none)
+    {
+        PRI.bIsSquadLogi = true;
+
+        PC = DHPlayer(PRI.Owner);
+
+        if (PC != none)
+        {
+            PC.ReceiveLocalizedMessage(Class'DHSquadMessage', 86);
+        }
+    }
 }
 
 simulated function PostBeginPlay()
@@ -534,6 +612,7 @@ protected function ResetPlayerSquadInfo(DHPlayerReplicationInfo PRI)
         PRI.SquadIndex = PRI.default.SquadIndex;
         PRI.SquadMemberIndex = PRI.default.SquadMemberIndex;
         PRI.bIsSquadAssistant = PRI.default.bIsSquadAssistant;
+        PRI.bIsSquadLogi = PRI.default.bIsSquadLogi;
     }
 }
 
@@ -593,6 +672,7 @@ function ResetSquadInfo()
     for (i = 0; i < arraycount(AxisAssistantSquadLeaderMemberIndices); ++i)
     {
         AxisAssistantSquadLeaderMemberIndices[i] = -1;
+        AxisSquadLogiMemberIndices[i] = -1;
     }
 
     for (i = 0; i < arraycount(AxisNames); ++i)
@@ -608,6 +688,7 @@ function ResetSquadInfo()
     for (i = 0; i < arraycount(AlliesAssistantSquadLeaderMemberIndices); ++i)
     {
         AlliesAssistantSquadLeaderMemberIndices[i] = -1;
+        AlliesSquadLogiMemberIndices[i] = -1;
     }
 
     for (i = 0; i < arraycount(AlliesNames); ++i)
@@ -703,6 +784,43 @@ simulated function bool HasAssistant(int TeamIndex, int SquadIndex)
     return GetAssistantSquadLeader(TeamIndex, SquadIndex) != none;
 }
 
+simulated function int GetSquadLogiMemberIndex(int TeamIndex, int SquadIndex)
+{
+    switch (TeamIndex)
+    {
+        case AXIS_TEAM_INDEX:
+            return AxisSquadLogiMemberIndices[SquadIndex];
+        case ALLIES_TEAM_INDEX:
+            return AlliesSquadLogiMemberIndices[SquadIndex];
+    }
+
+    return -1;
+}
+
+simulated function DHPlayerReplicationInfo GetSquadLogi(int TeamIndex, int SquadIndex)
+{
+    local int MemberIndex;
+
+    if (!IsSquadActive(TeamIndex, SquadIndex))
+    {
+        return none;
+    }
+
+    MemberIndex = GetSquadLogiMemberIndex(TeamIndex, SquadIndex);
+
+    if (MemberIndex > 0)
+    {
+        return GetMember(TeamIndex, SquadIndex, MemberIndex);
+    }
+
+    return none;
+}
+
+simulated function bool HasLogi(int TeamIndex, int SquadIndex)
+{
+    return GetSquadLogi(TeamIndex, SquadIndex) != none;
+}
+
 // Returns true if the specified player is the squad leader of the specified squad.
 simulated function bool IsSquadLeader(DHPlayerReplicationInfo PRI, int TeamIndex, int SquadIndex)
 {
@@ -718,6 +836,11 @@ simulated function bool IsSquadLeader(DHPlayerReplicationInfo PRI, int TeamIndex
 simulated function bool IsSquadAssistant(DHPlayerReplicationInfo PRI, int TeamIndex, int SquadIndex)
 {
     return GetAssistantSquadLeader(TeamIndex, SquadIndex) == PRI;
+}
+
+simulated function bool IsSquadLogi(DHPlayerReplicationInfo PRI, int TeamIndex, int SquadIndex)
+{
+    return PRI != none && GetSquadLogi(TeamIndex, SquadIndex) == PRI;
 }
 
 // Swaps the position of squad members in the same squad by index.
@@ -810,6 +933,7 @@ function int CreateSquad(DHPlayerReplicationInfo PRI, optional string Name)
 
             // Clear out the assistant squad leader role.
             SetAssistantSquadLeader(TeamIndex, i, none);
+            SetSquadLogi(TeamIndex, i, none);
 
             SetMember(TeamIndex, i, SQUAD_LEADER_INDEX, PRI);
 
@@ -895,6 +1019,11 @@ function bool ChangeSquadLeader(DHPlayerReplicationInfo PRI, int TeamIndex, int 
     if (GetAssistantSquadLeader(TeamIndex, SquadIndex) == NewSquadLeader)
     {
         SetAssistantSquadLeader(TeamIndex, SquadIndex, none);
+    }
+
+    if (GetSquadLogi(TeamIndex, SquadIndex) == NewSquadLeader)
+    {
+        SetSquadLogi(TeamIndex, SquadIndex, none);
     }
 
     // Rescind squad leader volunteer application.
@@ -1022,6 +1151,11 @@ function bool LeaveSquad(DHPlayerReplicationInfo PRI, optional bool bShouldShowL
         SetAssistantSquadLeader(TeamIndex, SquadIndex, none);
     }
 
+    if (GetSquadLogi(TeamIndex, SquadIndex) == PRI)
+    {
+        SetSquadLogi(TeamIndex, SquadIndex, none);
+    }
+
     // Remove squad member.
     SetMember(TeamIndex, SquadIndex, SquadMemberIndex, none);
     ResetPlayerSquadInfo(PRI);
@@ -1136,6 +1270,11 @@ function bool CommandeerSquad(DHPlayerReplicationInfo PRI, int TeamIndex, int Sq
     if (GetAssistantSquadLeader(TeamIndex, SquadIndex) == PRI)
     {
         SetAssistantSquadLeader(TeamIndex, SquadIndex, none);
+    }
+
+    if (GetSquadLogi(TeamIndex, SquadIndex) == PRI)
+    {
+        SetSquadLogi(TeamIndex, SquadIndex, none);
     }
 
     bResult = SwapSquadMembersByIndex(TeamIndex, SquadIndex, PRI.SquadMemberIndex, SQUAD_LEADER_INDEX);
@@ -2830,6 +2969,7 @@ function SetAssistantSquadLeader(int TeamIndex, int SquadIndex, DHPlayerReplicat
 {
     local DHPlayer PC;
     local DHPlayerReplicationInfo ASL;
+    local DHPlayerReplicationInfo CurrentLogi;
     local int AssistantSquadLeaderMemberIndex;
 
     if (!IsSquadActive(TeamIndex, SquadIndex))
@@ -2897,6 +3037,14 @@ function SetAssistantSquadLeader(int TeamIndex, int SquadIndex, DHPlayerReplicat
 
         // "{0} is now the assistant squad leader."
         BroadcastSquadLocalizedMessage(TeamIndex, SquadIndex, Class'DHSquadMessage', 72, PRI);
+
+        // If the new ASL is currently the Logi, remove that role
+        CurrentLogi = GetSquadLogi(TeamIndex, SquadIndex);
+
+        if (CurrentLogi == PRI)
+        {
+            SetSquadLogi(TeamIndex, SquadIndex, none);
+        }
     }
 }
 
