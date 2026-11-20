@@ -6188,6 +6188,21 @@ event StartCrouch(float HeightAdjust)
     }
 }
 
+// Modified to do not allow player go prone while he is crouching from prone
+// (that was one of the ways of reproducing prone invisibility bug).
+simulated state CrouchingFromProne
+{
+    simulated function bool CanProneTransition()
+    {
+        if (bIsSprinting)
+        {
+            return false;
+        }
+
+        return global.CanProneTransition();
+    }
+}
+
 // Modified to increase volume & radius of sound if sprinting, & to reduce sound radius if moving slowly
 simulated function FootStepping(int Side)
 {
