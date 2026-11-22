@@ -1872,6 +1872,55 @@ simulated function SetWeaponAttachment(ROWeaponAttachment NewAtt)
     }
 }
 
+// New function to make the back attachment take on the appearance of a weapon.
+// The existing back attachment actor is re-used if there is one, to avoid needlessly destroying & re-spawning a replicated actor.
+// W is the weapon to show on the pawn's back.
+simulated function AttachWeaponToBack(Weapon W)
+{
+    if (W == none || !W.bCanAttachOnBack)
+    {
+        return;
+    }
+
+    if (AttachedBackItem == none)
+    {
+        AttachedBackItem = Spawn(Class'DHBackAttachment', self);
+
+        if (AttachedBackItem == none)
+        {
+            return;
+        }
+    }
+
+    AttachedBackItem.InitFor(W);
+}
+
+// New function to show a spare weapon on the pawn's back when equipping a weapon without putting one away (e.g. on spawn).
+// Otherwise nothing would appear on the back until the spare weapon had been drawn & put away.
+// An existing back item is only replaced if it represents NewWeapon, which would otherwise be removed when it is equipped.
+// NewWeapon is the weapon being equipped (or currently held), which is excluded.
+function AttachSpareWeaponToBack(Weapon NewWeapon)
+{
+    local Inventory Inv;
+    local Weapon W;
+
+    if (AttachedBackItem != none && (NewWeapon == none || AttachedBackItem.InventoryClass != NewWeapon.Class))
+    {
+        return;
+    }
+
+    for (Inv = Inventory; Inv != none; Inv = Inv.Inventory)
+    {
+        W = Weapon(Inv);
+
+        if (W != none && W != NewWeapon && W.bCanAttachOnBack)
+        {
+            AttachWeaponToBack(W);
+            return;
+        }
+    }
+}
+
 // Modified to avoid errors if trying to play animations that don't exist
 simulated function PlayBoltAction()
 {
@@ -3345,6 +3394,10 @@ function AddDefaultInventory()
         Inventory.OwnerEvent('LoadOut');
     }
 
+    // Now that all inventory has been given, show any spare weapon on the back.
+    // This is needed because the first weapon may have been equipped before the rest of the inventory was given.
+    AttachSpareWeaponToBack(Weapon);
+
     if (Level.NetMode == NM_Standalone || (Level.NetMode == NM_ListenServer && IsLocallyControlled()))
     {
         bRecievedInitialLoadout = true;
@@ -3462,6 +3515,12 @@ function CheckGiveWirecutters()
 // Also slightly re-factored to optimise
 function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon)
 {
+    // If not putting a weapon away (e.g. on spawn), show any spare weapon on the back.
+    if (OldWeapon == none)
+    {
+        AttachSpareWeaponToBack(NewWeapon);
+    }
+
     // If single player mode or a hosting listen server player, & in 1st person view, then just switch the attachment
     // Don't worry about playing all the third person player stuff (that was borking up the first person weapon switches)
     if (IsFirstPerson()) // replacing following checks as does same thing quicker: if (IsLocallyControlled() && IsHumanControlled() && !PlayerController(Controller).bBehindView)
@@ -3478,25 +3537,7 @@ function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon)
         // Put away any currently held weapon
         if (OldWeapon != none)
         {
-            if (OldWeapon.bCanAttachOnBack)
-            {
-                // Originally the replicated BackAttachment actor was needlessly destroyed & re-spawned just to switch to a different weapon mesh
-                // That caused unnecessary network load by requiring server to destroy existing actor, instruct all clients to do same, then close the net channels
-                // Only to immediately spawn the same BackAttachment actor, initialise it to have the new weapon mesh, then replicate it to all relevant clients
-                // BackAttachment actor is completely generic & is only made to take on the appearance of new weapon by calling InitFor() to swap its mesh
-                // So we can keep the existing BackAttachment actor, which is already attached, & simply call InitFor() on it
-                if (AttachedBackItem == none)
-                {
-                    AttachedBackItem = Spawn(Class'DHBackAttachment', self);
-
-                    if (AttachedBackItem != none)
-                    {
-                        AttachToBone(AttachedBackItem, AttachedBackItem.AttachmentBone);
-                    }
-                }
-
-                AttachedBackItem.InitFor(OldWeapon);
-            }
+            AttachWeaponToBack(OldWeapon);
 
             OldWeapon.SetDefaultDisplayProperties();
             OldWeapon.DetachFromPawn(self);
@@ -3686,25 +3727,7 @@ state PutWeaponAway
 
         if (SwapWeapon != none)
         {
-            if (SwapWeapon.bCanAttachOnBack)
-            {
-                // Originally the replicated BackAttachment actor was needlessly destroyed & re-spawned just to switch to a different weapon mesh
-                // That caused unnecessary network load by requiring server to destroy existing actor, instruct all clients to do same, then close the net channels
-                // Only to immediately spawn the same BackAttachment actor, initialise it to have the new weapon mesh, then replicate it to all relevant clients
-                // BackAttachment actor is completely generic & is only made to take on the appearance of new weapon by calling InitFor() to swap its mesh
-                // So we can keep the existing BackAttachment actor, which is already attached, & simply call InitFor() on it
-                if (AttachedBackItem == none)
-                {
-                    AttachedBackItem = Spawn(Class'DHBackAttachment', self);
-
-                    if (AttachedBackItem != none)
-                    {
-                        AttachToBone(AttachedBackItem, AttachedBackItem.AttachmentBone);
-                    }
-                }
-
-                AttachedBackItem.InitFor(SwapWeapon);
-            }
+            AttachWeaponToBack(SwapWeapon);
 
             SwapWeapon.SetDefaultDisplayProperties();
             SwapWeapon.DetachFromPawn(self);
