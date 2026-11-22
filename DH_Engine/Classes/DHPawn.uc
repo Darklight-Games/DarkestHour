@@ -1869,6 +1869,31 @@ simulated function SetWeaponAttachment(ROWeaponAttachment NewAtt)
         }
 
         WeaponAttachment.AnimEnd(0);
+
+        // The attachment may replicate after StartDriving() has already run on a net client, so hide it here too.
+        if (DrivenVehicle != none)
+        {
+            WeaponAttachment.Hide(true);
+        }
+    }
+}
+
+// New function to attach the current weapon's 3rd person attachment to the pawn.
+// The attachment is kept hidden if the player is in a vehicle (e.g. if a weapon switch completes after entering).
+function AttachWeaponToPawn()
+{
+    if (Weapon == none)
+    {
+        return;
+    }
+
+    if (DrivenVehicle != none)
+    {
+        Weapon.AttachToPawnHidden(self);
+    }
+    else
+    {
+        Weapon.AttachToPawn(self);
     }
 }
 
@@ -3556,7 +3581,7 @@ function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon)
             }
 
             Weapon.NetUpdateFrequency = 100.0;
-            Weapon.AttachToPawn(self);
+            AttachWeaponToPawn();
             Weapon.BringUp(OldWeapon);
             PlayWeaponSwitch(NewWeapon);
         }
@@ -3603,7 +3628,7 @@ function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon)
                 }
 
                 Weapon.NetUpdateFrequency = 100.0;
-                Weapon.AttachToPawn(self);
+                AttachWeaponToPawn();
                 Weapon.BringUp();
                 PlayWeaponSwitch(NewWeapon);
             }
@@ -3896,7 +3921,7 @@ state PutWeaponAway
             }
             else
             {
-                Weapon.AttachToPawn(self);
+                AttachWeaponToPawn();
             }
         }
 
