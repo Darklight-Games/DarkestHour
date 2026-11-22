@@ -5858,6 +5858,21 @@ simulated function DHRoleInfo GetRoleInfo()
     return none;
 }
 
+// Modified so a sprint started by the server is also started locally on the owning client.
+// If the client refused a sprint (e.g. its replicated bCanStartSprint was stale) but the server started it, the replicated
+// bIsSprinting makes the super think the sprint already started, so StartSprint() would never be called locally and the
+// weapon would stay in ironsights while sprinting.
+function SetSprinting(bool bNewIsSprinting)
+{
+    super.SetSprinting(bNewIsSprinting);
+
+    if (bNewIsSprinting && bIsSprinting && !bOldSprinting)
+    {
+        bOldSprinting = true;
+        StartSprint();
+    }
+}
+
 simulated function bool AllowSprint()
 {
     if (bIsWalking && (Weapon != none && !Weapon.bUsingSights))
