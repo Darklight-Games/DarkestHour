@@ -13,9 +13,9 @@ protected function DHPlayerReplicationInfo GetSelectedPRI(GUIComponent Component
 
     SquadComponent = DHGUISquadComponent(Component);
 
-    if (SquadComponent != none && SquadComponent.li_Members != none)
+    if (SquadComponent != none)
     {
-        return DHPlayerReplicationInfo(SquadComponent.li_Members.GetObject());
+        return SquadComponent.GetSelectedPRI();
     }
 }
 
