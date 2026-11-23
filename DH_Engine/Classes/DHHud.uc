@@ -3779,7 +3779,7 @@ function DrawMapIconAttachments(Canvas C, AbsoluteCoordsInfo SubCoords, float My
     local DHPlayer PC;
     local DHMapIconAttachment MIA;
     local array<DHMapIconAttachment> MapIconAttachments;
-    local int i;
+    local int i, OwnerTeam;
 
     PC = DHPlayer(PlayerOwner);
 
@@ -3787,6 +3787,9 @@ function DrawMapIconAttachments(Canvas C, AbsoluteCoordsInfo SubCoords, float My
     {
         return;
     }
+
+    OwnerTeam = PC.GetTeamNum();
+
     foreach DynamicActors(Class'DHMapIconAttachment', MIA)
     {
         if (MIA == none || MIA.GetVisibilityIndex() == 255)
@@ -3794,7 +3797,9 @@ function DrawMapIconAttachments(Canvas C, AbsoluteCoordsInfo SubCoords, float My
             continue;
         }
 
-        if (MIA.GetVisibilityIndex() == PC.GetTeamNum() || MIA.GetVisibilityIndex() == NEUTRAL_TEAM_INDEX)
+        // Team-owned icons that are made visible to all (e.g. in a danger zone) are meant for both teams only, not players without a team.
+        if (MIA.GetVisibilityIndex() == OwnerTeam ||
+            (MIA.GetVisibilityIndex() == NEUTRAL_TEAM_INDEX && (OwnerTeam < 2 || MIA.GetTeamIndex() == NEUTRAL_TEAM_INDEX)))
         {
             MapIconAttachments[MapIconAttachments.Length] = MIA;
         }
