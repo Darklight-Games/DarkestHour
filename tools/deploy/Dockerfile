@@ -22,7 +22,7 @@ RUN apt-get install -y wine
 RUN apt-get install -y curl build-essential
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
 ENV PATH="$PATH:/root/.cargo/bin"
-RUN cargo install usagi-cli --version 0.4.0 --locked
+RUN cargo install usagi-cli --version 0.4.1 --locked
 
 # Run steamcmd once to update it.
 RUN /usr/games/steamcmd +exit
