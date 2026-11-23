@@ -9,6 +9,5 @@ class DHExitMovingVehicleDamageType extends DamageType
 defaultproperties
 {
     bLocationalHit=false
-    bCausedByWorld=true
     GibModifier=0.0
 }
