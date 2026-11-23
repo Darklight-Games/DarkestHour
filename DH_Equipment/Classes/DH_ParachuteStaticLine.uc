@@ -89,7 +89,9 @@ simulated function Tick(float DeltaTime)
             }
         }
 
-        if (Level.NetMode != NM_DedicatedServer)
+        // Switch away from the parachute. On a server this is replicated to the owning client, so it doesn't rely
+        // solely on the client's own copy of the static line detecting the landing.
+        if (Instigator.Controller != none)
         {
             Instigator.Controller.ClientSwitchToBestWeapon();
         }

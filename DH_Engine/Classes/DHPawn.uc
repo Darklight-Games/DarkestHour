@@ -3204,43 +3204,11 @@ simulated event Destroyed()
     super.Destroyed();
 }
 
-// Called by DH_GiveChuteTrigger, adds parachute items to player's inventory
-singular function GiveChute()
+// Adds parachute items to the player's inventory. GiveWeapon does nothing if the item is already in the inventory.
+function GiveChute()
 {
-    local DHRoleInfo RI;
-    local int        i;
-    local string     ItemString;
-    local bool       bHasPSL, bHasPI;
-
-    RI = GetRoleInfo();
-
-    // Make sure player doesn't already have a parachute
-    if (RI != none)
-    {
-        for (i = RI.GivenItems.Length - 1; i >= 0; --i)
-        {
-            ItemString = RI.GivenItems[i];
-
-            if (ItemString == "DH_Equipment.DH_ParachuteStaticLine")
-            {
-                bHasPSL = true;
-            }
-            else if (ItemString == "DH_Equipment.DH_ParachuteItem")
-            {
-                bHasPI = true;
-            }
-        }
-    }
-
-    if (!bHasPSL)
-    {
-        GiveWeapon("DH_Equipment.DH_ParachuteStaticLine");
-    }
-
-    if (!bHasPI)
-    {
-        GiveWeapon("DH_Equipment.DH_ParachuteItem");
-    }
+    GiveWeapon("DH_Equipment.DH_ParachuteStaticLine");
+    GiveWeapon("DH_Equipment.DH_ParachuteItem");
 }
 
 // Destroys carried radio triggers and removes them from the minimap
