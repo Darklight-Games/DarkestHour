@@ -57,7 +57,8 @@ def main():
         f'pktloss={int(args.pktloss)}'
     ]
 
-    rodir = os.environ['RODIR']
+    # The game directory is the parent of this script's directory.
+    rodir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     os.chdir(rodir)
     p = subprocess.Popen(server_args)
 

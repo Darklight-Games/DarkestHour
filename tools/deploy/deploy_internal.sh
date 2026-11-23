@@ -13,7 +13,7 @@ echo "Cleaning localization..."
 
 # Build the game (requires wine, UCC etc.)
 echo "Building the game..."
-../make/clean.sh
+usagi build --clean
 
 # Sync localizations.
 echo "Syncing localizations"

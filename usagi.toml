@@ -1,0 +1,10 @@
+# `usagi` settings for DarkestHourDev (include, lint, build) are in DarkestHourDev/usagi.toml.
+[build]
+mod = "DarkestHourDev"
+
+# Builds without a mod (`usagi build --no-mod`) use this INI's EditPackages.
+ini = "RedOrchestra.ini"
+
+# Never delete or rebuild a compiled package in System/. Mod builds still
+# build the mod's own packages, which live in the mod's System folder.
+locked = ["*"]

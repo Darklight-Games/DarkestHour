@@ -1,0 +1,8 @@
+# Only lint our own packages. The base Red Orchestra and UE2 engine packages
+# (Core, Engine, RO*, X*, ...) and third-party code are read-only.
+include = ["DH_*", "UCore"]
+
+# `usagi build` settings for DarkestHourDev.
+[build]
+version = "12.2.7"
+version-class = "DH_Engine/Classes/DHBuildManifest.uc"
