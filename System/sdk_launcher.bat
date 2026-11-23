@@ -32,7 +32,7 @@ goto parse_args
 echo Mod: %MOD_NAME%
 if "%BUILD%"=="1" (
     echo Building...
-    call python ..\tools\make\make.py -mod %MOD_NAME% ..
+    call usagi build --mod %MOD_NAME%
     if %ERRORLEVEL% GEQ 1 (
         pause
         exit /b %ERRORLEVEL%

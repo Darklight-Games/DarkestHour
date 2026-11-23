@@ -11,7 +11,8 @@ Before cloning this repository, all of the following requirements must be satisf
 
 ### Dependencies & Tools
 * [Git for Windows](https://git-scm.com/downloads)
-* [Python ≥3.11.0](https://www.python.org/downloads/) (we use Python to supplement our various build processes)
+* [usagi](TODO) (builds the game's code; it must be on your `PATH`)
+* [Python ≥3.11.0](https://www.python.org/downloads/) (optional; only needed for some auxiliary tools, such as localization and deployment)
 
 ### Base game & SDK
 This game is a modification for *Red Orchestra: Ostfront 41-45* and requires you to own the base game. You'll need to have the following apps installed:
@@ -54,3 +55,17 @@ After completing the steps above and successfully cloning the repository, you ca
 * Run the development version of the SDK via `%RODIR%/System/DHEd.bat`.
 
 Be aware that these batch files will compile the game's code files if necessary. Compilation can fail if there are errors in your code.
+
+## Building
+To compile the game's code, run the following from anywhere inside `%RODIR%` (except the `DarkestHourDev` folder):
+```batch
+usagi build
+```
+Only out-of-date packages are rebuilt. Useful options:
+* `usagi build --clean` rebuilds every package and regenerates localization files.
+* `usagi build --dumpint` exports localization (`.int`) files for the packages that changed.
+* `usagi build --debug` compiles debug packages for UDebugger.
+
+Run `usagi build --help` for the full list. Build settings live in `usagi.toml` and `DarkestHourDev/usagi.toml`; the game's version number is set in the latter.
+
+In VS Code, the `Build` task (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>B</kbd>) runs `usagi build`.
