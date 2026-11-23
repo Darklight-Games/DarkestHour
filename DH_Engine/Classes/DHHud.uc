@@ -5085,10 +5085,6 @@ function DrawObjectiveLockTimerOnMap(Canvas C, DHObjective Objective, float Icon
 
     // Bottom of the text sits on top of the flag (the icon texture has empty space at the top).
     C.Style = ERenderStyle.STY_Alpha;
-    C.DrawColor = Class'UColor'.default.Black;
-    C.SetPos(IconX - XL * 0.5 + 1.0, IconY - IconYL * 0.31 - YL + 1.0);
-    C.DrawText(UnlockTimeText);
-
     C.DrawColor = Class'UColor'.default.White;
     C.SetPos(IconX - XL * 0.5, IconY - IconYL * 0.31 - YL);
     C.DrawText(UnlockTimeText);
@@ -5187,6 +5183,7 @@ function DHDrawIconOnMap(
         MapTexts.PosY = Icon.PosY;
         MapTexts.Tints[TeamIndex].A = Icon.Tints[TeamIndex].A;
         MapTexts.OffsetY = YL * 0.35;
+        MapTexts.bDrawShadow = false;
 
         // Fake render to get desired label pos
         DrawTextWidgetClipped(C, MapTexts, LevelCoords, XL, YL, YL_one, true);
