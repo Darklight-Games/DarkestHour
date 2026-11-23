@@ -104,6 +104,10 @@ var     Sound   MantleSound;
 // Digging
 var     bool    bCanDig;
 
+// Parachuting
+var     bool    bIsParachuting;      // parachute is deployed, so descent speed is clamped (replicated so all clients simulate it)
+var     float   ParachuteFallSpeed;  // constant descent speed while parachuting
+
 // Burning player
 var     bool                bOnFire;                       // whether Pawn is on fire or not
 var     bool                bBurnFXOn;                     // whether Fire FX are enabled or not
@@ -171,7 +175,7 @@ replication
 
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
-        bOnFire, bCrouchMantle, MantleHeight, Radio, BackpackClass;
+        bOnFire, bCrouchMantle, MantleHeight, Radio, BackpackClass, bIsParachuting;
 
     // Functions a client can call on the server
     reliable if (Role < ROLE_Authority)
@@ -369,6 +373,13 @@ simulated function Tick(float DeltaTime)
     local int i;
 
     super.Tick(DeltaTime);
+
+    // Clamp descent speed while parachuting. This must run on all machines, otherwise simulated proxies
+    // accelerate under gravity between server updates and visibly snap back up when corrected.
+    if (bIsParachuting && Physics == PHYS_Falling && Health > 0)
+    {
+        Velocity.Z = -ParachuteFallSpeed;
+    }
 
     // If player is on fire, cause fire damage every second & force him to drop any weapon in his hands
     // Would prefer to do this in a Timer but too many states hijack timer and reset it on us
@@ -2156,7 +2167,7 @@ function HandleStamina(float DeltaTime)
         bCanStartSprint = Stamina > 2.0;
     }
 
-    if (Stamina == 0.0 || Acceleration == vect(0.0, 0.0, 0.0))
+    if (Stamina == 0.0 || Acceleration == vect(0.0, 0.0, 0.0) || bIsParachuting)
     {
         SetSprinting(false);
     }
@@ -3193,43 +3204,11 @@ simulated event Destroyed()
     super.Destroyed();
 }
 
-// Called by DH_GiveChuteTrigger, adds parachute items to player's inventory
-singular function GiveChute()
+// Adds parachute items to the player's inventory. GiveWeapon does nothing if the item is already in the inventory.
+function GiveChute()
 {
-    local DHRoleInfo RI;
-    local int        i;
-    local string     ItemString;
-    local bool       bHasPSL, bHasPI;
-
-    RI = GetRoleInfo();
-
-    // Make sure player doesn't already have a parachute
-    if (RI != none)
-    {
-        for (i = RI.GivenItems.Length - 1; i >= 0; --i)
-        {
-            ItemString = RI.GivenItems[i];
-
-            if (ItemString == "DH_Equipment.DH_ParachuteStaticLine")
-            {
-                bHasPSL = true;
-            }
-            else if (ItemString == "DH_Equipment.DH_ParachuteItem")
-            {
-                bHasPI = true;
-            }
-        }
-    }
-
-    if (!bHasPSL)
-    {
-        GiveWeapon("DH_Equipment.DH_ParachuteStaticLine");
-    }
-
-    if (!bHasPI)
-    {
-        GiveWeapon("DH_Equipment.DH_ParachuteItem");
-    }
+    GiveWeapon("DH_Equipment.DH_ParachuteStaticLine");
+    GiveWeapon("DH_Equipment.DH_ParachuteItem");
 }
 
 // Destroys carried radio triggers and removes them from the minimap
@@ -5875,6 +5854,11 @@ function SetSprinting(bool bNewIsSprinting)
 
 simulated function bool AllowSprint()
 {
+    if (bIsParachuting)
+    {
+        return false;
+    }
+
     if (bIsWalking && (Weapon != none && !Weapon.bUsingSights))
     {
         return false;
@@ -7735,6 +7719,9 @@ defaultproperties
     MantleSound=SoundGroup'DH_Inf_Player.Mantle'
     HelmetHitSounds(0)=SoundGroup'DH_ProjectileSounds.Helmet_Hit'
     PlayerHitSounds(0)=SoundGroup'ProjectileSounds.Impact_Player'
+
+    // Parachuting
+    ParachuteFallSpeed=400.0
 
     // Burning player
     FireDamage=10
