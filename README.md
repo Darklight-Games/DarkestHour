@@ -11,7 +11,7 @@ Before cloning this repository, all of the following requirements must be satisf
 
 ### Dependencies & Tools
 * [Git for Windows](https://git-scm.com/downloads)
-* [usagi](TODO) (builds the game's code; it must be on your `PATH`)
+* [usagi](https://crates.io/crates/usagi-cli) (builds the game's code). Install [Rust](https://rustup.rs/), then run `cargo install usagi-cli`.
 * [Python ≥3.11.0](https://www.python.org/downloads/) (optional; only needed for some auxiliary tools, such as localization and deployment)
 
 ### Base game & SDK

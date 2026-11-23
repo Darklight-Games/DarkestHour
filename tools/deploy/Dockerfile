@@ -18,6 +18,12 @@ RUN apt-get install -y steamcmd
 RUN apt-get install -y python3-virtualenv
 RUN apt-get install -y wine
 
+# Install usagi (builds the game), using a Rust toolchain from rustup.
+RUN apt-get install -y curl build-essential
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+ENV PATH="$PATH:/root/.cargo/bin"
+RUN cargo install usagi-cli --version 0.4.0 --locked
+
 # Run steamcmd once to update it.
 RUN /usr/games/steamcmd +exit
 
