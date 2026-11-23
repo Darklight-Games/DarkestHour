@@ -3710,7 +3710,7 @@ function DrawMap(Canvas C, AbsoluteCoordsInfo SubCoords, DHPlayer Player, Box Vi
         }
         else
         {
-            DHDrawIconOnMap(C, SubCoords, Widget, MyMapScale, DHGRI.DHObjectives[i].Location, MapCenter, Viewport, 1, ObjLabel, DHGRI, i);
+            DHDrawIconOnMap(C, SubCoords, Widget, MyMapScale, DHGRI.DHObjectives[i].Location, MapCenter, Viewport, 1, ObjLabel, DHGRI, i, true);
         }
 
         // If both teams are present in the capture, then overlay a flashing (rifles crossing) icon
@@ -5054,6 +5054,49 @@ function DrawObjectiveCaptureBarOnMap(Canvas C, DHObjective Objective, float Ico
     C.DrawTile(Texture'Engine.WhiteTexture', BarWidth * Objective.GetCaptureProgress(), BarHeight, 0.0, 0.0, 4.0, 4.0);
 }
 
+// Draws the time remaining until a locked objective can be captured again, on top of the objective's map icon.
+// IconX & IconY are the screen coordinates of the icon's center; IconYL is its screen height.
+function DrawObjectiveLockTimerOnMap(Canvas C, DHObjective Objective, float IconX, float IconY, float IconYL)
+{
+    local string UnlockTimeText;
+    local int    SecondsRemaining;
+    local float  XL, YL, OldFontXScale, OldFontYScale;
+
+    // Don't draw anything for inactive objectives, or if the elapsed or unlock time hasn't been set (e.g. not yet replicated), as the result would be nonsense.
+    if (C == none || Objective == none || !Objective.bActive || DHGRI == none || DHGRI.ElapsedTime <= 0 || Objective.UnfreezeTime <= 0)
+    {
+        return;
+    }
+
+    SecondsRemaining = Objective.UnfreezeTime - DHGRI.ElapsedTime;
+
+    if (SecondsRemaining <= 0)
+    {
+        return;
+    }
+
+    UnlockTimeText = Class'TimeSpan'.static.ToString(SecondsRemaining);
+
+    OldFontXScale = C.FontScaleX;
+    OldFontYScale = C.FontScaleY;
+    C.FontScaleX = 0.66;
+    C.FontScaleY = 0.66;
+    C.StrLen(UnlockTimeText, XL, YL);
+
+    // Bottom of the text sits on top of the flag (the icon texture has empty space at the top).
+    C.Style = ERenderStyle.STY_Alpha;
+    C.DrawColor = Class'UColor'.default.Black;
+    C.SetPos(IconX - XL * 0.5 + 1.0, IconY - IconYL * 0.31 - YL + 1.0);
+    C.DrawText(UnlockTimeText);
+
+    C.DrawColor = Class'UColor'.default.White;
+    C.SetPos(IconX - XL * 0.5, IconY - IconYL * 0.31 - YL);
+    C.DrawText(UnlockTimeText);
+
+    C.FontScaleX = OldFontXScale;
+    C.FontScaleY = OldFontYScale;
+}
+
 // Modified to make objective title's smaller on the overview
 function DHDrawIconOnMap(
     Canvas C,
@@ -5067,12 +5110,12 @@ function DHDrawIconOnMap(
     optional string Title,
     optional ROGameReplicationInfo GRI,
     optional int ObjectiveIndex,
-    optional bool bDrawCaptureProgress
+    optional bool bDrawObjectiveStatus
     )
 {
     local FloatBox    Label_coords;
     local Vector      HUDLocation;
-    local float       XL, YL, YL_one, OldFontXScale, OldFontYScale;
+    local float       XL, YL, YL_one, OldFontXScale, OldFontYScale, IconX, IconY;
 
     // Calculate the screen position
     HUDLocation = Location - MapCenter;
@@ -5121,12 +5164,13 @@ function DHDrawIconOnMap(
     // Draw icon
     DrawSpriteWidgetClipped(C, Icon, LevelCoords, true, XL, YL, true);
 
-    if (bDrawCaptureProgress && DHGRI != none && ObjectiveIndex >= 0 && ObjectiveIndex < arraycount(DHGRI.DHObjectives))
+    if (bDrawObjectiveStatus && DHGRI != none && ObjectiveIndex >= 0 && ObjectiveIndex < arraycount(DHGRI.DHObjectives))
     {
-        DrawObjectiveCaptureBarOnMap(C, DHGRI.DHObjectives[ObjectiveIndex],
-                                     LevelCoords.PosX + LevelCoords.Width * Icon.PosX,
-                                     LevelCoords.PosY + LevelCoords.Height * Icon.PosY,
-                                     XL, YL);
+        IconX = LevelCoords.PosX + LevelCoords.Width * Icon.PosX;
+        IconY = LevelCoords.PosY + LevelCoords.Height * Icon.PosY;
+
+        DrawObjectiveCaptureBarOnMap(C, DHGRI.DHObjectives[ObjectiveIndex], IconX, IconY, XL, YL);
+        DrawObjectiveLockTimerOnMap(C, DHGRI.DHObjectives[ObjectiveIndex], IconX, IconY, YL);
     }
 
     // Draw title
@@ -5142,7 +5186,7 @@ function DHDrawIconOnMap(
         MapTexts.PosX = Icon.PosX;
         MapTexts.PosY = Icon.PosY;
         MapTexts.Tints[TeamIndex].A = Icon.Tints[TeamIndex].A;
-        MapTexts.OffsetY = YL * 0.3;
+        MapTexts.OffsetY = YL * 0.35;
 
         // Fake render to get desired label pos
         DrawTextWidgetClipped(C, MapTexts, LevelCoords, XL, YL, YL_one, true);
