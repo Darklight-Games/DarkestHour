@@ -100,6 +100,10 @@ var     Sound   MantleSound;
 // Digging
 var     bool    bCanDig;
 
+// Parachuting
+var     bool    bIsParachuting;      // parachute is deployed, so descent speed is clamped (replicated so all clients simulate it)
+var     float   ParachuteFallSpeed;  // constant descent speed while parachuting
+
 // Burning player
 var     bool                bOnFire;                       // whether Pawn is on fire or not
 var     bool                bBurnFXOn;                     // whether Fire FX are enabled or not
@@ -167,7 +171,7 @@ replication
 
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
-        bOnFire, bCrouchMantle, MantleHeight, Radio, BackpackClass;
+        bOnFire, bCrouchMantle, MantleHeight, Radio, BackpackClass, bIsParachuting;
 
     // Functions a client can call on the server
     reliable if (Role < ROLE_Authority)
@@ -365,6 +369,13 @@ simulated function Tick(float DeltaTime)
     local int i;
 
     super.Tick(DeltaTime);
+
+    // Clamp descent speed while parachuting. This must run on all machines, otherwise simulated proxies
+    // accelerate under gravity between server updates and visibly snap back up when corrected.
+    if (bIsParachuting && Physics == PHYS_Falling && Health > 0)
+    {
+        Velocity.Z = -ParachuteFallSpeed;
+    }
 
     // If player is on fire, cause fire damage every second & force him to drop any weapon in his hands
     // Would prefer to do this in a Timer but too many states hijack timer and reset it on us
@@ -1799,6 +1810,80 @@ simulated function SetWeaponAttachment(ROWeaponAttachment NewAtt)
         }
 
         WeaponAttachment.AnimEnd(0);
+
+        // The attachment may replicate after StartDriving() has already run on a net client, so hide it here too.
+        if (DrivenVehicle != none)
+        {
+            WeaponAttachment.Hide(true);
+        }
+    }
+}
+
+// New function to attach the current weapon's 3rd person attachment to the pawn.
+// The attachment is kept hidden if the player is in a vehicle (e.g. if a weapon switch completes after entering).
+function AttachWeaponToPawn()
+{
+    if (Weapon == none)
+    {
+        return;
+    }
+
+    if (DrivenVehicle != none)
+    {
+        Weapon.AttachToPawnHidden(self);
+    }
+    else
+    {
+        Weapon.AttachToPawn(self);
+    }
+}
+
+// New function to make the back attachment take on the appearance of a weapon.
+// The existing back attachment actor is re-used if there is one, to avoid needlessly destroying & re-spawning a replicated actor.
+// W is the weapon to show on the pawn's back.
+simulated function AttachWeaponToBack(Weapon W)
+{
+    if (W == none || !W.bCanAttachOnBack)
+    {
+        return;
+    }
+
+    if (AttachedBackItem == none)
+    {
+        AttachedBackItem = Spawn(Class'DHBackAttachment', self);
+
+        if (AttachedBackItem == none)
+        {
+            return;
+        }
+    }
+
+    AttachedBackItem.InitFor(W);
+}
+
+// New function to show a spare weapon on the pawn's back when equipping a weapon without putting one away (e.g. on spawn).
+// Otherwise nothing would appear on the back until the spare weapon had been drawn & put away.
+// An existing back item is only replaced if it represents NewWeapon, which would otherwise be removed when it is equipped.
+// NewWeapon is the weapon being equipped (or currently held), which is excluded.
+function AttachSpareWeaponToBack(Weapon NewWeapon)
+{
+    local Inventory Inv;
+    local Weapon W;
+
+    if (AttachedBackItem != none && (NewWeapon == none || AttachedBackItem.InventoryClass != NewWeapon.Class))
+    {
+        return;
+    }
+
+    for (Inv = Inventory; Inv != none; Inv = Inv.Inventory)
+    {
+        W = Weapon(Inv);
+
+        if (W != none && W != NewWeapon && W.bCanAttachOnBack)
+        {
+            AttachWeaponToBack(W);
+            return;
+        }
     }
 }
 
@@ -2012,7 +2097,7 @@ function HandleStamina(float DeltaTime)
         bCanStartSprint = Stamina > 2.0;
     }
 
-    if (Stamina == 0.0 || Acceleration == vect(0.0, 0.0, 0.0))
+    if (Stamina == 0.0 || Acceleration == vect(0.0, 0.0, 0.0) || bIsParachuting)
     {
         SetSprinting(false);
     }
@@ -3042,43 +3127,11 @@ simulated event Destroyed()
     super.Destroyed();
 }
 
-// Called by DH_GiveChuteTrigger, adds parachute items to player's inventory
-singular function GiveChute()
+// Adds parachute items to the player's inventory. GiveWeapon does nothing if the item is already in the inventory.
+function GiveChute()
 {
-    local DHRoleInfo RI;
-    local int        i;
-    local string     ItemString;
-    local bool       bHasPSL, bHasPI;
-
-    RI = GetRoleInfo();
-
-    // Make sure player doesn't already have a parachute
-    if (RI != none)
-    {
-        for (i = RI.GivenItems.Length - 1; i >= 0; --i)
-        {
-            ItemString = RI.GivenItems[i];
-
-            if (ItemString == "DH_Equipment.DH_ParachuteStaticLine")
-            {
-                bHasPSL = true;
-            }
-            else if (ItemString == "DH_Equipment.DH_ParachuteItem")
-            {
-                bHasPI = true;
-            }
-        }
-    }
-
-    if (!bHasPSL)
-    {
-        GiveWeapon("DH_Equipment.DH_ParachuteStaticLine");
-    }
-
-    if (!bHasPI)
-    {
-        GiveWeapon("DH_Equipment.DH_ParachuteItem");
-    }
+    GiveWeapon("DH_Equipment.DH_ParachuteStaticLine");
+    GiveWeapon("DH_Equipment.DH_ParachuteItem");
 }
 
 // Destroys carried radio triggers and removes them from the minimap
@@ -3266,6 +3319,10 @@ function AddDefaultInventory()
         Inventory.OwnerEvent('LoadOut');
     }
 
+    // Now that all inventory has been given, show any spare weapon on the back.
+    // This is needed because the first weapon may have been equipped before the rest of the inventory was given.
+    AttachSpareWeaponToBack(Weapon);
+
     if (Level.NetMode == NM_Standalone || (Level.NetMode == NM_ListenServer && IsLocallyControlled()))
     {
         bRecievedInitialLoadout = true;
@@ -3373,6 +3430,12 @@ function CheckGiveWirecutters()
 // Also slightly re-factored to optimise
 function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon)
 {
+    // If not putting a weapon away (e.g. on spawn), show any spare weapon on the back.
+    if (OldWeapon == none)
+    {
+        AttachSpareWeaponToBack(NewWeapon);
+    }
+
     // If single player mode or a hosting listen server player, & in 1st person view, then just switch the attachment
     // Don't worry about playing all the third person player stuff (that was borking up the first person weapon switches)
     if (IsFirstPerson()) // replacing following checks as does same thing quicker: if (IsLocallyControlled() && IsHumanControlled() && !PlayerController(Controller).bBehindView)
@@ -3389,25 +3452,7 @@ function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon)
         // Put away any currently held weapon
         if (OldWeapon != none)
         {
-            if (OldWeapon.bCanAttachOnBack)
-            {
-                // Originally the replicated BackAttachment actor was needlessly destroyed & re-spawned just to switch to a different weapon mesh
-                // That caused unnecessary network load by requiring server to destroy existing actor, instruct all clients to do same, then close the net channels
-                // Only to immediately spawn the same BackAttachment actor, initialise it to have the new weapon mesh, then replicate it to all relevant clients
-                // BackAttachment actor is completely generic & is only made to take on the appearance of new weapon by calling InitFor() to swap its mesh
-                // So we can keep the existing BackAttachment actor, which is already attached, & simply call InitFor() on it
-                if (AttachedBackItem == none)
-                {
-                    AttachedBackItem = Spawn(Class'DHBackAttachment', self);
-
-                    if (AttachedBackItem != none)
-                    {
-                        AttachToBone(AttachedBackItem, AttachedBackItem.AttachmentBone);
-                    }
-                }
-
-                AttachedBackItem.InitFor(OldWeapon);
-            }
+            AttachWeaponToBack(OldWeapon);
 
             OldWeapon.SetDefaultDisplayProperties();
             OldWeapon.DetachFromPawn(self);
@@ -3426,7 +3471,7 @@ function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon)
             }
 
             Weapon.NetUpdateFrequency = 100.0;
-            Weapon.AttachToPawn(self);
+            AttachWeaponToPawn();
             Weapon.BringUp(OldWeapon);
             PlayWeaponSwitch(NewWeapon);
         }
@@ -3473,7 +3518,7 @@ function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon)
                 }
 
                 Weapon.NetUpdateFrequency = 100.0;
-                Weapon.AttachToPawn(self);
+                AttachWeaponToPawn();
                 Weapon.BringUp();
                 PlayWeaponSwitch(NewWeapon);
             }
@@ -3597,25 +3642,7 @@ state PutWeaponAway
 
         if (SwapWeapon != none)
         {
-            if (SwapWeapon.bCanAttachOnBack)
-            {
-                // Originally the replicated BackAttachment actor was needlessly destroyed & re-spawned just to switch to a different weapon mesh
-                // That caused unnecessary network load by requiring server to destroy existing actor, instruct all clients to do same, then close the net channels
-                // Only to immediately spawn the same BackAttachment actor, initialise it to have the new weapon mesh, then replicate it to all relevant clients
-                // BackAttachment actor is completely generic & is only made to take on the appearance of new weapon by calling InitFor() to swap its mesh
-                // So we can keep the existing BackAttachment actor, which is already attached, & simply call InitFor() on it
-                if (AttachedBackItem == none)
-                {
-                    AttachedBackItem = Spawn(Class'DHBackAttachment', self);
-
-                    if (AttachedBackItem != none)
-                    {
-                        AttachToBone(AttachedBackItem, AttachedBackItem.AttachmentBone);
-                    }
-                }
-
-                AttachedBackItem.InitFor(SwapWeapon);
-            }
+            AttachWeaponToBack(SwapWeapon);
 
             SwapWeapon.SetDefaultDisplayProperties();
             SwapWeapon.DetachFromPawn(self);
@@ -3784,7 +3811,7 @@ state PutWeaponAway
             }
             else
             {
-                Weapon.AttachToPawn(self);
+                AttachWeaponToPawn();
             }
         }
 
@@ -5686,8 +5713,28 @@ simulated function DHRoleInfo GetRoleInfo()
     return none;
 }
 
+// Modified so a sprint started by the server is also started locally on the owning client.
+// If the client refused a sprint (e.g. its replicated bCanStartSprint was stale) but the server started it, the replicated
+// bIsSprinting makes the super think the sprint already started, so StartSprint() would never be called locally and the
+// weapon would stay in ironsights while sprinting.
+function SetSprinting(bool bNewIsSprinting)
+{
+    super.SetSprinting(bNewIsSprinting);
+
+    if (bNewIsSprinting && bIsSprinting && !bOldSprinting)
+    {
+        bOldSprinting = true;
+        StartSprint();
+    }
+}
+
 simulated function bool AllowSprint()
 {
+    if (bIsParachuting)
+    {
+        return false;
+    }
+
     if (bIsWalking && (Weapon != none && !Weapon.bUsingSights))
     {
         return false;
@@ -7559,6 +7606,9 @@ defaultproperties
     MantleSound=SoundGroup'DH_Inf_Player.Mantle'
     HelmetHitSounds(0)=SoundGroup'DH_ProjectileSounds.Helmet_Hit'
     PlayerHitSounds(0)=SoundGroup'ProjectileSounds.Impact_Player'
+
+    // Parachuting
+    ParachuteFallSpeed=400.0
 
     // Burning player
     FireDamage=10

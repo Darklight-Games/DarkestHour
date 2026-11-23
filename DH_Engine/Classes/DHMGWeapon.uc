@@ -113,9 +113,9 @@ Begin:
 
 simulated state StartSprinting
 {
-// Take the player out of ironsights
+// Take the player out of ironsights (see DHProjectileWeapon's StartSprinting for why the server doesn't for a remote client)
 Begin:
-    if (bUsingSights)
+    if (bUsingSights && (Role < ROLE_Authority || InstigatorIsLocallyControlled()))
     {
         ZoomOut();
     }

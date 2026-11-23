@@ -1628,9 +1628,8 @@ function bool InternalOnKeyEvent(out byte Key, out byte State, float Delta)
 function UpdateSquads()
 {
     local array<DHPlayerReplicationInfo> Members;
-    local DHPlayerReplicationInfo        SavedPRI;
     local DHGUISquadComponent            C;
-    local int TeamIndex, SquadLimit, i, j, k;
+    local int TeamIndex, SquadLimit, i, j;
     local bool bIsInSquad, bIsInASquad, bIsSquadLeader, bIsSquadLocked, bCanJoinSquad, bCanSquadBeLocked;
 
     super.Timer();
@@ -1759,29 +1758,7 @@ function UpdateSquads()
 
         SRI.GetMembers(TeamIndex, i, Members);
 
-        // Save the current PRI that is selected.
-        SavedPRI = DHPlayerReplicationInfo(C.li_Members.GetObject());
-
-        // Add or remove entries to match the member count.
-        while (C.li_Members.ItemCount < Members.Length)
-        {
-            C.li_Members.Add("");
-        }
-
-        while (C.li_Members.ItemCount > Members.Length)
-        {
-            C.li_Members.Remove(0, 1);
-        }
-
-        // Update the text and associated object for each item.
-        for (k = 0; k < Members.Length; ++k)
-        {
-            C.li_Members.SetItemAtIndex(k, Members[k].GetNamePrefix() $ "." @ Members[k].PlayerName);
-            C.li_Members.SetObjectAtIndex(k, Members[k]);
-        }
-
-        // Re-select the previous selection.
-        C.li_Members.SelectByObject(SavedPRI);
+        C.SetMembers(Members, true);
 
         ++j;
     }
@@ -1835,28 +1812,7 @@ function UpdateSquads()
         SetVisible(C.i_LockSquad, false);
         SetVisible(C.i_NoRallyPoints, false);
 
-        SavedPRI = DHPlayerReplicationInfo(C.li_Members.GetObject());
-
-        // Add or remove entries to match the member count.
-        while (C.li_Members.ItemCount < Members.Length)
-        {
-            C.li_Members.Add("");
-        }
-
-        while (C.li_Members.ItemCount > Members.Length)
-        {
-            C.li_Members.Remove(0, 1);
-        }
-
-        // Update the text and associated object for each item.
-        for (k = 0; k < Members.Length; ++k)
-        {
-            C.li_Members.SetItemAtIndex(k, Members[k].PlayerName);
-            C.li_Members.SetObjectAtIndex(k, Members[k]);
-        }
-
-        // Re-select the previous selection.
-        C.li_Members.SelectByObject(SavedPRI);
+        C.SetMembers(Members, false);
     }
     else
     {

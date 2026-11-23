@@ -1010,7 +1010,7 @@ function Timer()
     local DHGameReplicationInfo GRI;
     local float                 OldCapProgress, Rate[2];
     local int                   NumTotal[2], Num[2], NumForCheck[2], i;
-    local byte                  CurrentCapAxisCappers, CurrentCapAlliesCappers, CP;
+    local byte                  CurrentCapAxisCappers, CurrentCapAlliesCappers;
 
     if (ROTeamGame(Level.Game) == none || !ROTeamGame(Level.Game).IsInState('RoundInPlay') || (!bActive && !bUsePostCaptureOperations))
     {
@@ -1151,19 +1151,6 @@ function Timer()
                     P.CurrentCapArea = ObjNum;
                 }
 
-                CP = byte(Ceil(CurrentCapProgress * 100));
-
-                // Hack to save on variables replicated (if Allies, add 100 so the range is 101-200 instead of 1-100, or just 0 if it is 0)
-                if (CurrentCapTeam == ALLIES_TEAM_INDEX && CurrentCapProgress != 0.0)
-                {
-                    CP += 100;
-                }
-
-                if (P.CurrentCapProgress != CP)
-                {
-                    P.CurrentCapProgress = CP;
-                }
-
                 // Replicate # of players in capture zone
                 if (P.CurrentCapAxisCappers != CurrentCapAxisCappers)
                 {
@@ -1194,19 +1181,6 @@ function Timer()
                     ROVeh.CurrentCapArea = ObjNum;
                 }
 
-                CP = byte(Ceil(CurrentCapProgress * 100));
-
-                // Hack to save on variables replicated (if Allies, add 100 so the range is 101-200 instead of 1-100, or just 0 if it is 0)
-                if (CurrentCapTeam == ALLIES_TEAM_INDEX && CurrentCapProgress != 0.0)
-                {
-                    CP += 100;
-                }
-
-                if (ROVeh.CurrentCapProgress != CP)
-                {
-                    ROVeh.CurrentCapProgress = CP;
-                }
-
                 // Replicate # of players in capture zone
                 if (ROVeh.CurrentCapAxisCappers != CurrentCapAxisCappers)
                 {
@@ -1234,19 +1208,6 @@ function Timer()
                 if (VehWepPawn.CurrentCapArea != ObjNum)
                 {
                     VehWepPawn.CurrentCapArea = ObjNum;
-                }
-
-                CP = byte(Ceil(CurrentCapProgress * 100));
-
-                // Hack to save on variables replicated (if Allies, add 100 so the range is 101-200 instead of 1-100, or just 0 if it is 0)
-                if (CurrentCapTeam == ALLIES_TEAM_INDEX && CurrentCapProgress != 0.0)
-                {
-                    CP += 100;
-                }
-
-                if (VehWepPawn.CurrentCapProgress != CP)
-                {
-                    VehWepPawn.CurrentCapProgress = CP;
                 }
 
                 // Replicate # of players in capture zone
@@ -1493,7 +1454,13 @@ simulated function bool HasRequiredObjectives(coerce DHGameReplicationInfo GRI, 
     return true;
 }
 
-// Modified to make way simpler and remove redundant if-statement checks.
+// Returns the replicated capture progress of the capturing team (CurrentCapTeam) on a 0-1 scale.
+simulated function float GetCaptureProgress()
+{
+    return float(CompressedCapProgress) / 100.0;
+}
+
+// Modified to replicate progress as 0-100 (instead of 0-5) so that every client can display it precisely.
 function UpdateCompressedCapProgress()
 {
     if (!bActive || CurrentCapProgress ~= 0.0)
@@ -1502,7 +1469,7 @@ function UpdateCompressedCapProgress()
     }
     else
     {
-        CompressedCapProgress = Max(1, CurrentCapProgress * 5);
+        CompressedCapProgress = Max(1, Ceil(CurrentCapProgress * 100));
     }
 }
 

@@ -5,68 +5,35 @@
 
 class DH_GiveChuteTrigger extends Trigger;
 
-// Modified to give a touching player a parachute & static line
+// Modified to give a touching player a parachute & static line. This is done regardless of ReTriggerDelay, which is
+// trigger-wide rather than per-player, so it would otherwise deny a chute to anyone touching within the delay of another
+// player (e.g. a group of paratroopers spawning in or jumping from a plane together).
 function Touch(Actor Other)
 {
-    local Pawn P;
-    local int  i;
+    local Actor  Inst;
+    local DHPawn P;
 
-    // Do nothing unless a little time has passed since last trigger, to avoid spamming
-    if (ReTriggerDelay > 0.0 && (Level.TimeSeconds - TriggerTime) < ReTriggerDelay)
+    super.Touch(Other);
+
+    if (!IsRelevant(Other))
     {
         return;
     }
 
-    if (IsRelevant(Other))
+    Inst = FindInstigator(Other);
+
+    if (Inst != none)
     {
-        if (ReTriggerDelay > 0.0)
-        {
-            TriggerTime = Level.TimeSeconds;
-        }
+        P = DHPawn(Inst.Instigator);
+    }
 
-        Other = FindInstigator(Other);
-
-        // Broadcast the Trigger message to all matching actors
-        TriggerEvent(Event, self, Other.Instigator);
-
-        P = Pawn(Other);
-
-        if (P != none && P.Controller != none)
-        {
-            for (i = 0; i < 4; ++i)
-            {
-                if (P.Controller.GoalList[i] == self)
-                {
-                    P.Controller.GoalList[i] = none;
-                    break;
-                }
-            }
-        }
-
-        // Send a string message to the toucher
-        if (Message != "" && Other.Instigator != none)
-        {
-            Other.Instigator.ClientMessage(Message);
-        }
-
-        if (bTriggerOnceOnly)
-        {
-            SetCollision(false); // ignore future touches
-        }
-        else if (RepeatTriggerTime > 0.0)
-        {
-            SetTimer(RepeatTriggerTime, false);
-        }
-
-        // Give the player a parachute & static line
-        if (DHPawn(Other.Instigator) != none)
-        {
-            DHPawn(Other.Instigator).GiveChute();
-        }
+    if (P != none)
+    {
+        P.GiveChute();
     }
 }
 
 defaultproperties
 {
-    ReTriggerDelay=0.5 // added to prevent spamming calls to pawn's GiveChute, each of which checks through inventory
+    ReTriggerDelay=0.5 // throttles the trigger's event & message only; chutes are always given
 }

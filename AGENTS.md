@@ -4,18 +4,27 @@ This is Darkest Hour: Europe '44-'45's agent guidelines document.
 
 This repository is written in UnrealScript.
 
+# Principles
+* A solution that accomplishes the same thing by removing code is better than one that adds more code.
+
 # Localization
 * Use `localized string` for any text that will be shown to the player.
 * Debug or logging text does not need to be localized.
 
+# Building
+* Use `usagi build` to build the game.
+* Use `usagi lint --format=concise` to linter errors.
+
+# Package Inspection
+* Use `usagi pkg` when you need to do deep package file inspection.
+
+# LFS
+* Our Git LFS bandwidth is metered, do not run operations that could use LFS bandwidth unless absolutely necessary.
+
 # UnrealScript
 * This project uses UnrealScript 2 syntax and conventions.
-* `local` variables must be declared at the top of functions.
-* `var` variables are class or struct member variables.
 * All `*.uc` files must be encoded with Windows-1252.
-* NEVER use em-dashes (—) in code comments. Always use double hyphens (--).
-* All `Object` and `Actor` references can be `None`, so always check for `None` before using them.
-* The names of classes must correspond to the filenames exactly, including capitalization.
+* All `Object` and `Actor` references can be `none`, so always check for `None` before using them.
 * If no return statement is provided in a function, it will implicity return a default value based on the return type:
     * `int` and `float` return types default to `0` and `0.0` respectively.
     * `bool` return types default to `false`.
@@ -62,14 +71,11 @@ var     string   VariableThree;
 * Functions that are intended to be run on non-authoritative actor instances (e.g., a player's game client) must be marked with `simulated`, otherwise their call is skipped and the default return value is returned.
 
 # Comments
+* Comments should not be overly verbose.
 * Functions must have a comment block with a brief description of their purpose, parameters, and return values (if any).
 * Use `//` for most comments, even when there are a few lines.
 * Use `/* ... */` only for extensive multi-line comments.
 * All explanatory comments should be complete sentences and use proper punctuation.
-
-# Building
-* Use `./tools/make/make` to build the project on Linux.
-* Use `./tools/make/make.bat` to build the project on Windows.
 
 # Testing & Debugging
 * The game code has no built-in unit testing framework and relies on manual testing.

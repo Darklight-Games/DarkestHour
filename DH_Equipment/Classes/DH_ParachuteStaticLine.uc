@@ -45,62 +45,77 @@ simulated function Tick(float DeltaTime)
         if (Instigator.Physics == PHYS_Falling && Instigator.Velocity.Z < -1.0 * Instigator.MaxFallSpeed)
         {
             bChuteDeployed = true;
+            SetIsParachuting(true);
 
             Instigator.Controller.bCrawl = 0;
             Instigator.ShouldProne(false);
-            Instigator.Switchweapon(12);
 
             if (Role == ROLE_Authority)
             {
-                if (ROPawn(Instigator) != none)
-                {
-                    ROPawn(Instigator).Stamina = 0.0; // this is set back to default in DH_ParachuteItem.RaisingWeapon so that any sprinting is forcibly stopped, allowing a weaponswap
-                }
-
                 AttachChute(Instigator);
                 Instigator.PlaySound(DeploySound, SLOT_Misc, 512.0, true, 128.0);
                 Instigator.AirControl = 1.0;
                 Instigator.AccelRate = 60.0;
-                Instigator.Velocity.Z = -400.0;
             }
+        }
+    }
+    else if (Instigator.Physics == PHYS_Falling)
+    {
+        // Keep trying to switch to the parachute item, as the current weapon ignores PutDown while it is busy (e.g.
+        // sprinting or reloading), so a single attempt can be lost. Only done where the switch is driven from.
+        if (Instigator.IsLocallyControlled() && DH_ParachuteItem(Instigator.Weapon) == none &&
+            (Instigator.Weapon == none || Instigator.Weapon.IsInState('Idle')))
+        {
+            Instigator.SwitchWeapon(12);
         }
     }
     else
     {
-        if (Instigator.Physics == PHYS_Falling)
+        SetIsParachuting(false);
+
+        if (Role == ROLE_Authority)
         {
-            Instigator.Velocity.Z = -400.0;
-        }
-        else
-        {
-            if (Role == ROLE_Authority)
+            Instigator.AccelRate = Instigator.default.AccelRate;
+            Instigator.AirControl = Instigator.default.AirControl;
+
+            // Using GetSound function to get a landing sound appropriate to the surface we landed on
+            if (ROPawn(Instigator) != none)
             {
-                Instigator.AccelRate = Instigator.default.AccelRate;
-                Instigator.AirControl = Instigator.default.AirControl;
+                Instigator.PlaySound(ROPawn(Instigator).GetSound(EST_Land), SLOT_Misc, 512.0, true, 128.0);
+            }
 
-                // Using GetSound function to get a landing sound appropriate to the surface we landed on
-                if (ROPawn(Instigator) != none)
-                {
-                    Instigator.PlaySound(ROPawn(Instigator).GetSound(EST_Land), SLOT_Misc, 512.0, true, 128.0);
-                }
+            RemoveChute(Instigator);
 
+            // Make 100% sure that the chute is gone, as it occasionally isn't being removed the first time
+            if (ThirdPersonActor != none)
+            {
                 RemoveChute(Instigator);
-
-                // Make 100% sure that the chute is gone, as it occasionally isn't being removed the first time
-                if (ThirdPersonActor != none)
-                {
-                    RemoveChute(Instigator);
-                }
             }
-
-            if (Level.NetMode != NM_DedicatedServer)
-            {
-                Instigator.Controller.ClientSwitchToBestWeapon();
-            }
-
-            Instigator.DeleteInventory(self);
-            Destroy(); // moved further down to avoid errors
         }
+
+        // Switch away from the parachute. On a server this is replicated to the owning client, so it doesn't rely
+        // solely on the client's own copy of the static line detecting the landing.
+        if (Instigator.Controller != none)
+        {
+            Instigator.Controller.ClientSwitchToBestWeapon();
+        }
+
+        Instigator.DeleteInventory(self);
+        Destroy(); // moved further down to avoid errors
+    }
+}
+
+// Sets whether the pawn's descent is clamped by its parachute. Called on the server and owning client;
+// the flag replicates from the server to all other clients.
+simulated function SetIsParachuting(bool bIsParachuting)
+{
+    local DHPawn P;
+
+    P = DHPawn(Instigator);
+
+    if (P != none)
+    {
+        P.bIsParachuting = bIsParachuting;
     }
 }
 

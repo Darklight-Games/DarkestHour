@@ -8,4 +8,5 @@ class DHRadioHQAttachment_Italy extends DHRadioHQAttachment;
 defaultproperties
 {
     StaticMesh=StaticMesh'DH_Military_Italy.ITA_HQ_RadioTableau'
+    RadioOffset=(Y=-10,Z=70)
 }

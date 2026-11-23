@@ -165,6 +165,22 @@ simulated function bool PutDown()
     return super.PutDown();
 }
 
+// Modified to always unload a loaded rocket when the weapon is holstered if weapon is flagged as bDoesNotRetainLoadedMag.
+// The server's PutDown() can be ignored if the weapon is in a busy state (e.g. sprinting or zooming) when the switch
+// arrives, which would leave the server loaded & the client unloaded, & that desync would never be corrected by replication.
+state Hidden
+{
+    function BeginState()
+    {
+        if (bDoesNotRetainLoadedMag)
+        {
+            AmmoCharge[0] = 0;
+        }
+
+        super.BeginState();
+    }
+}
+
 // Modified so if player has entered vehicle, we unload a loaded rocket if weapon is flagged as bDoesNotRetainLoadedMag (pawn's StartDriving event calls this function)
 simulated function NotifyOwnerJumped()
 {

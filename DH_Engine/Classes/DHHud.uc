@@ -3723,22 +3723,18 @@ function DrawMap(Canvas C, AbsoluteCoordsInfo SubCoords, DHPlayer Player, Box Vi
         // Draw flashing icon if objective is disputed
         if (DHGRI.DHObjectives[i].CompressedCapProgress != 0 && DHGRI.DHObjectives[i].CurrentCapTeam != NEUTRAL_TEAM_INDEX)
         {
-            if (DHGRI.DHObjectives[i].CompressedCapProgress <= 2)
+            if (DHGRI.DHObjectives[i].CompressedCapProgress < 60)
             {
-                DHDrawIconOnMap(C, SubCoords, Widget, MyMapScale, DHGRI.DHObjectives[i].Location, MapCenter, Viewport, 2, ObjLabel, DHGRI, i);
-            }
-            else if (DHGRI.DHObjectives[i].CompressedCapProgress <= 4)
-            {
-                DHDrawIconOnMap(C, SubCoords, Widget, MyMapScale, DHGRI.DHObjectives[i].Location, MapCenter, Viewport, 3, ObjLabel, DHGRI, i);
+                DHDrawIconOnMap(C, SubCoords, Widget, MyMapScale, DHGRI.DHObjectives[i].Location, MapCenter, Viewport, 2, ObjLabel, DHGRI, i, true);
             }
             else
             {
-                DHDrawIconOnMap(C, SubCoords, Widget, MyMapScale, DHGRI.DHObjectives[i].Location, MapCenter, Viewport, 1, ObjLabel, DHGRI, i);
+                DHDrawIconOnMap(C, SubCoords, Widget, MyMapScale, DHGRI.DHObjectives[i].Location, MapCenter, Viewport, 3, ObjLabel, DHGRI, i, true);
             }
         }
         else
         {
-            DHDrawIconOnMap(C, SubCoords, Widget, MyMapScale, DHGRI.DHObjectives[i].Location, MapCenter, Viewport, 1, ObjLabel, DHGRI, i);
+            DHDrawIconOnMap(C, SubCoords, Widget, MyMapScale, DHGRI.DHObjectives[i].Location, MapCenter, Viewport, 1, ObjLabel, DHGRI, i, true);
         }
 
         // If both teams are present in the capture, then overlay a flashing (rifles crossing) icon
@@ -3807,7 +3803,7 @@ function DrawMapIconAttachments(Canvas C, AbsoluteCoordsInfo SubCoords, float My
     local DHPlayer PC;
     local DHMapIconAttachment MIA;
     local array<DHMapIconAttachment> MapIconAttachments;
-    local int i;
+    local int i, OwnerTeam;
 
     PC = DHPlayer(PlayerOwner);
 
@@ -3815,6 +3811,9 @@ function DrawMapIconAttachments(Canvas C, AbsoluteCoordsInfo SubCoords, float My
     {
         return;
     }
+
+    OwnerTeam = PC.GetTeamNum();
+
     foreach DynamicActors(Class'DHMapIconAttachment', MIA)
     {
         if (MIA == none || MIA.GetVisibilityIndex() == 255)
@@ -3822,7 +3821,9 @@ function DrawMapIconAttachments(Canvas C, AbsoluteCoordsInfo SubCoords, float My
             continue;
         }
 
-        if (MIA.GetVisibilityIndex() == PC.GetTeamNum() || MIA.GetVisibilityIndex() == NEUTRAL_TEAM_INDEX)
+        // Team-owned icons that are made visible to all (e.g. in a danger zone) are meant for both teams only, not players without a team.
+        if (MIA.GetVisibilityIndex() == OwnerTeam ||
+            (MIA.GetVisibilityIndex() == NEUTRAL_TEAM_INDEX && (OwnerTeam < 2 || MIA.GetTeamIndex() == NEUTRAL_TEAM_INDEX)))
         {
             MapIconAttachments[MapIconAttachments.Length] = MIA;
         }
@@ -4513,7 +4514,7 @@ function DrawCaptureBar(Canvas Canvas)
     local ROVehicle             Veh;
     local ROVehicleWeaponPawn   WpnPwn;
     local int                   OwnTeam, EnemyTeam;
-    local byte                  ObjectiveIndex, PawnCapProgress, PlayersInCap[2];
+    local byte                  ObjectiveIndex, PlayersInCap[2];
     local float                 CaptureProgress[2], XL, YL, XPos, YPos;
     local string                S, StatusText;
     local Material              StatusIcon;
@@ -4535,7 +4536,6 @@ function DrawCaptureBar(Canvas Canvas)
 
         if (ObjectiveIndex != 255)
         {
-            PawnCapProgress = P.CurrentCapProgress;
             PlayersInCap[AXIS_TEAM_INDEX] = P.CurrentCapAxisCappers;
             PlayersInCap[ALLIES_TEAM_INDEX] = P.CurrentCapAlliesCappers;
         }
@@ -4550,7 +4550,6 @@ function DrawCaptureBar(Canvas Canvas)
 
             if (ObjectiveIndex != 255)
             {
-                PawnCapProgress = Veh.CurrentCapProgress;
                 PlayersInCap[AXIS_TEAM_INDEX] = Veh.CurrentCapAxisCappers;
                 PlayersInCap[ALLIES_TEAM_INDEX] = Veh.CurrentCapAlliesCappers;
             }
@@ -4572,7 +4571,6 @@ function DrawCaptureBar(Canvas Canvas)
 
                 if (ObjectiveIndex != 255)
                 {
-                    PawnCapProgress = WpnPwn.CurrentCapProgress;
                     PlayersInCap[AXIS_TEAM_INDEX] = WpnPwn.CurrentCapAxisCappers;
                     PlayersInCap[ALLIES_TEAM_INDEX] = WpnPwn.CurrentCapAlliesCappers;
                 }
@@ -4604,7 +4602,7 @@ function DrawCaptureBar(Canvas Canvas)
     }
 
     // Get cap progress on a 0 - 1 scale for each team
-    if (PawnCapProgress == 0)
+    if (Objective.CompressedCapProgress == 0 || Objective.CurrentCapTeam == NEUTRAL_TEAM_INDEX)
     {
         if (Objective.IsAxis())
         {
@@ -4615,9 +4613,9 @@ function DrawCaptureBar(Canvas Canvas)
             CaptureProgress[ALLIES_TEAM_INDEX] = 1.0;
         }
     }
-    else if (PawnCapProgress > 100)
+    else if (Objective.CurrentCapTeam == ALLIES_TEAM_INDEX)
     {
-        CaptureProgress[ALLIES_TEAM_INDEX] = float(PawnCapProgress - 100) / 100.0;
+        CaptureProgress[ALLIES_TEAM_INDEX] = Objective.GetCaptureProgress();
 
         if (!Objective.IsNeutral())
         {
@@ -4626,7 +4624,7 @@ function DrawCaptureBar(Canvas Canvas)
     }
     else
     {
-        CaptureProgress[AXIS_TEAM_INDEX] = float(PawnCapProgress) / 100.0;
+        CaptureProgress[AXIS_TEAM_INDEX] = Objective.GetCaptureProgress();
 
         if (!Objective.IsNeutral())
         {
@@ -5071,6 +5069,77 @@ function DrawSpectatingHud(Canvas C)
     DrawHudPassA(C);
 }
 
+// Draws a small capture progress bar, in the capturing team's color, stacked on top of an objective's map icon.
+// IconX & IconY are the screen coordinates of the icon's center; IconXL & IconYL are its screen size.
+function DrawObjectiveCaptureBarOnMap(Canvas C, DHObjective Objective, float IconX, float IconY, float IconXL, float IconYL)
+{
+    local float BarX, BarY, BarWidth, BarHeight;
+
+    if (C == none || Objective == none || Objective.CompressedCapProgress == 0)
+    {
+        return;
+    }
+
+    if (Objective.CurrentCapTeam != AXIS_TEAM_INDEX && Objective.CurrentCapTeam != ALLIES_TEAM_INDEX)
+    {
+        return;
+    }
+
+    BarWidth = IconXL;
+    BarHeight = FMax(1.0, IconYL * 0.15);
+    BarX = IconX - BarWidth * 0.5;
+    BarY = IconY - IconYL * 0.31 - BarHeight; // Sits snugly on top of the flag (the icon texture has empty space at the top).
+
+    C.Style = ERenderStyle.STY_Alpha;
+    C.DrawColor = Class'UColor'.default.Black;
+    C.DrawColor.A = 160;
+    C.SetPos(BarX, BarY);
+    C.DrawTile(Texture'Engine.WhiteTexture', BarWidth, BarHeight, 0.0, 0.0, 4.0, 4.0);
+
+    C.DrawColor = Class'DHColor'.default.TeamColors[Objective.CurrentCapTeam];
+    C.SetPos(BarX, BarY);
+    C.DrawTile(Texture'Engine.WhiteTexture', BarWidth * Objective.GetCaptureProgress(), BarHeight, 0.0, 0.0, 4.0, 4.0);
+}
+
+// Draws the time remaining until a locked objective can be captured again, on top of the objective's map icon.
+// IconX & IconY are the screen coordinates of the icon's center; IconYL is its screen height.
+function DrawObjectiveLockTimerOnMap(Canvas C, DHObjective Objective, float IconX, float IconY, float IconYL)
+{
+    local string UnlockTimeText;
+    local int    SecondsRemaining;
+    local float  XL, YL, OldFontXScale, OldFontYScale;
+
+    // Don't draw anything for inactive objectives, or if the elapsed or unlock time hasn't been set (e.g. not yet replicated), as the result would be nonsense.
+    if (C == none || Objective == none || !Objective.bActive || DHGRI == none || DHGRI.ElapsedTime <= 0 || Objective.UnfreezeTime <= 0)
+    {
+        return;
+    }
+
+    SecondsRemaining = Objective.UnfreezeTime - DHGRI.ElapsedTime;
+
+    if (SecondsRemaining <= 0)
+    {
+        return;
+    }
+
+    UnlockTimeText = Class'TimeSpan'.static.ToString(SecondsRemaining);
+
+    OldFontXScale = C.FontScaleX;
+    OldFontYScale = C.FontScaleY;
+    C.FontScaleX = 0.66;
+    C.FontScaleY = 0.66;
+    C.StrLen(UnlockTimeText, XL, YL);
+
+    // Bottom of the text sits on top of the flag (the icon texture has empty space at the top).
+    C.Style = ERenderStyle.STY_Alpha;
+    C.DrawColor = Class'UColor'.default.White;
+    C.SetPos(IconX - XL * 0.5, IconY - IconYL * 0.31 - YL);
+    C.DrawText(UnlockTimeText);
+
+    C.FontScaleX = OldFontXScale;
+    C.FontScaleY = OldFontYScale;
+}
+
 // Modified to make objective title's smaller on the overview
 function DHDrawIconOnMap(
     Canvas C,
@@ -5083,12 +5152,13 @@ function DHDrawIconOnMap(
     optional int FlashMode,
     optional string Title,
     optional ROGameReplicationInfo GRI,
-    optional int ObjectiveIndex
+    optional int ObjectiveIndex,
+    optional bool bDrawObjectiveStatus
     )
 {
-    local FloatBox LabelCoords;
-    local Vector   HUDLocation;
-    local float    XL, YL, YL_one, OldFontXScale, OldFontYScale;
+    local FloatBox    LabelCoords;
+    local Vector      HUDLocation;
+    local float       XL, YL, YL_one, OldFontXScale, OldFontYScale, IconX, IconY;
 
     // Calculate the screen position
     HUDLocation = Location - MapCenter;
@@ -5137,6 +5207,15 @@ function DHDrawIconOnMap(
     // Draw icon
     DrawSpriteWidgetClipped(C, Icon, LevelCoords, true, XL, YL, true);
 
+    if (bDrawObjectiveStatus && DHGRI != none && ObjectiveIndex >= 0 && ObjectiveIndex < arraycount(DHGRI.DHObjectives))
+    {
+        IconX = LevelCoords.PosX + LevelCoords.Width * Icon.PosX;
+        IconY = LevelCoords.PosY + LevelCoords.Height * Icon.PosY;
+
+        DrawObjectiveCaptureBarOnMap(C, DHGRI.DHObjectives[ObjectiveIndex], IconX, IconY, XL, YL);
+        DrawObjectiveLockTimerOnMap(C, DHGRI.DHObjectives[ObjectiveIndex], IconX, IconY, YL);
+    }
+
     // Draw title
     if (Title != "" &&
         DHGRI != none &&
@@ -5150,7 +5229,8 @@ function DHDrawIconOnMap(
         MapTexts.PosX = Icon.PosX;
         MapTexts.PosY = Icon.PosY;
         MapTexts.Tints[TeamIndex].A = Icon.Tints[TeamIndex].A;
-        MapTexts.OffsetY = YL * 0.3;
+        MapTexts.OffsetY = YL * 0.35;
+        MapTexts.bDrawShadow = false;
 
         // Fake render to get desired label pos
         DrawTextWidgetClipped(C, MapTexts, LevelCoords, XL, YL, YL_one, true);
