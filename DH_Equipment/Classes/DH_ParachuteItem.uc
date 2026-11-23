@@ -107,11 +107,9 @@ simulated state RaisingWeapon
         local Inventory Inv;
         local DHWeapon W;
 
-        // If player is falling, this resets stamina to full (stamina removed when chute deploys in ParachuteStaticLine)
         if (Instigator != none && Instigator.Physics == PHYS_Falling)
         {
             bUsedParachute = true;
-            DHPawn(Instigator).Stamina = DHPawn(Instigator).default.Stamina;
         }
 
         if (ClientState == WS_Hidden)

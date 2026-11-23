@@ -49,15 +49,9 @@ simulated function Tick(float DeltaTime)
 
             Instigator.Controller.bCrawl = 0;
             Instigator.ShouldProne(false);
-            Instigator.Switchweapon(12);
 
             if (Role == ROLE_Authority)
             {
-                if (ROPawn(Instigator) != none)
-                {
-                    ROPawn(Instigator).Stamina = 0.0; // this is set back to default in DH_ParachuteItem.RaisingWeapon so that any sprinting is forcibly stopped, allowing a weaponswap
-                }
-
                 AttachChute(Instigator);
                 Instigator.PlaySound(DeploySound, SLOT_Misc, 512.0, true, 128.0);
                 Instigator.AirControl = 1.0;
@@ -65,7 +59,17 @@ simulated function Tick(float DeltaTime)
             }
         }
     }
-    else if (Instigator.Physics != PHYS_Falling)
+    else if (Instigator.Physics == PHYS_Falling)
+    {
+        // Keep trying to switch to the parachute item, as the current weapon ignores PutDown while it is busy (e.g.
+        // sprinting or reloading), so a single attempt can be lost. Only done where the switch is driven from.
+        if (Instigator.IsLocallyControlled() && DH_ParachuteItem(Instigator.Weapon) == none &&
+            (Instigator.Weapon == none || Instigator.Weapon.IsInState('Idle')))
+        {
+            Instigator.SwitchWeapon(12);
+        }
+    }
+    else
     {
         SetIsParachuting(false);
 

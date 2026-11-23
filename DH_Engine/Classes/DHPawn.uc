@@ -2167,7 +2167,7 @@ function HandleStamina(float DeltaTime)
         bCanStartSprint = Stamina > 2.0;
     }
 
-    if (Stamina == 0.0 || Acceleration == vect(0.0, 0.0, 0.0))
+    if (Stamina == 0.0 || Acceleration == vect(0.0, 0.0, 0.0) || bIsParachuting)
     {
         SetSprinting(false);
     }
@@ -5854,6 +5854,11 @@ function SetSprinting(bool bNewIsSprinting)
 
 simulated function bool AllowSprint()
 {
+    if (bIsParachuting)
+    {
+        return false;
+    }
+
     if (bIsWalking && (Weapon != none && !Weapon.bUsingSights))
     {
         return false;
