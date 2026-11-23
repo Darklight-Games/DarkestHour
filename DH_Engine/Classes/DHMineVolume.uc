@@ -201,7 +201,7 @@ function ProcessTouch(Actor Other, optional bool bUnTouch)
         {
             // If pawn has exited this MV, check it isn't still inside another active MV - if it is, we do nothing more (e.g. don't zero pawn's MineAreaEnterTime)
             // This can happen where MVs overlap, especially boundary MVs around map edges
-            foreach TouchingActors(Class'ROMineVolume', MV)
+            foreach P.TouchingActors(Class'ROMineVolume', MV)
             {
                 if (MV != self && MV.bActive)
                 {
