@@ -10,7 +10,7 @@ Before cloning this repository, all of the following requirements must be satisf
 
 ### Dependencies & Tools
 * [Git](https://git-scm.com/downloads) with [Git LFS](https://git-lfs.com/) (on Windows, [Git for Windows](https://git-scm.com/downloads) includes both)
-* [usagi](https://crates.io/crates/usagi-cli) (builds the game's code). Install [Rust](https://rustup.rs/), then run `cargo install usagi-cli`.
+* [usagi](https://crates.io/crates/usagi-cli) (0.4.1 or later; builds the game's code). Install [Rust](https://rustup.rs/), then run `cargo install usagi-cli`.
 * [Python ≥3.11.0](https://www.python.org/downloads/) (optional; only needed for some auxiliary tools, such as localization and deployment)
 
 ### Base game & SDK
@@ -61,7 +61,7 @@ After completing the steps above and successfully cloning the repository, you ca
 Be aware that these batch files will compile the game's code files if necessary. Compilation can fail if there are errors in your code.
 
 ## Building
-To compile the game's code, run the following from anywhere inside the *Red Orchestra* installation folder (except the `DarkestHourDev` folder):
+To compile the game's code, run the following from anywhere inside the *Red Orchestra* installation folder:
 ```batch
 usagi build
 ```
