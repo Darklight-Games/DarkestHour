@@ -152,6 +152,12 @@ struct SAnimationDriver
 
 var() array<SAnimationDriver> AnimationDrivers;
 
+// Yaw-dependent depression limits, used to stop the gun clipping into the hull (e.g. over the engine deck).
+// InVal is the signed gun yaw & OutVal is the minimum signed gun pitch, both in Unreal units (-32768 to 32767).
+// The curve holds its end values beyond the first & last points, so a zone around the rear needs points at both -32768 & 32768.
+var()   InterpCurve     YawPitchDownLimitCurve;     // empty = disabled
+var()   bool            bBlockTraverseAtPitchLimit; // if true, traverse is blocked instead of the gun being raised to clear the limit
+
 
 replication
 {
@@ -338,6 +344,74 @@ simulated function int GetGunPitchMin()
 simulated function int GetGunPitchMax()
 {
     return CustomPitchUpLimit;
+}
+
+// Returns whether this weapon has a yaw-dependent depression limit.
+simulated function bool HasYawPitchDownLimit()
+{
+    return YawPitchDownLimitCurve.Points.Length > 0;
+}
+
+// Returns the minimum signed pitch allowed at the specified yaw, combining the normal depression limit with the yaw-dependent limit.
+// Yaw can be in either signed or wrapped (0 to 65535) units.
+simulated function int GetPitchDownLimitForYaw(int Yaw)
+{
+    local int MinPitch;
+
+    MinPitch = GetGunPitchMin();
+
+    if (!HasYawPitchDownLimit())
+    {
+        return MinPitch;
+    }
+
+    MinPitch = Max(MinPitch, int(InterpCurveEval(YawPitchDownLimitCurve, Class'URotator'.static.UnwindAngle(Yaw))));
+
+    return Min(MinPitch, GetGunPitchMax());
+}
+
+// Constrains an aim rotation (relative to the vehicle) so the gun's pitch respects the yaw-dependent depression limit.
+// If the gun is too low, either the traverse is undone (bBlockTraverseAtPitchLimit) or the gun is raised to the limit.
+// Returns true if the aim was changed.
+simulated function bool ConstrainAim(out Rotator Aim, Rotator PreviousAim)
+{
+    local int MinPitch;
+
+    if (!HasYawPitchDownLimit())
+    {
+        return false;
+    }
+
+    MinPitch = GetPitchDownLimitForYaw(Aim.Yaw);
+
+    if (Class'URotator'.static.UnwindAngle(Aim.Pitch) >= MinPitch)
+    {
+        return false;
+    }
+
+    if (bBlockTraverseAtPitchLimit)
+    {
+        Aim.Yaw = PreviousAim.Yaw;
+        MinPitch = GetPitchDownLimitForYaw(Aim.Yaw);
+
+        // The gun may still be too low at the previous yaw (e.g. it started inside the zone), so fall through & raise it.
+        if (Class'URotator'.static.UnwindAngle(Aim.Pitch) >= MinPitch)
+        {
+            return true;
+        }
+    }
+
+    // Write the pitch back in the same encoding it came in (wrapped 0 to 65535, or signed).
+    if (Aim.Pitch >= 32768)
+    {
+        Aim.Pitch = Class'URotator'.static.WrapAngle(MinPitch);
+    }
+    else
+    {
+        Aim.Pitch = MinPitch;
+    }
+
+    return true;
 }
 
 simulated function AttachCollisionMeshes()
@@ -1562,6 +1636,11 @@ simulated function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
     if (WeaponPawn != none && WeaponPawn.bCustomAiming)
     {
         s @= " CustomAim =" @ WeaponPawn.CustomAim;
+    }
+
+    if (HasYawPitchDownLimit())
+    {
+        s @= " YawPitchDownLimit =" @ GetPitchDownLimitForYaw(CurrentAim.Yaw);
     }
 
     Canvas.DrawText(s);

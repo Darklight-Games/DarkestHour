@@ -2166,6 +2166,43 @@ function int LocalLimitPitch(int pitch)
     return pitch;
 }
 
+// Modified to apply any yaw-dependent depression limit after the native aim update.
+simulated function UpdateTurretRotation(float DeltaTime, float YawChange, float PitchChange)
+{
+    local Rotator PreviousAim;
+
+    PreviousAim = LocalWeaponAim;
+    super.UpdateTurretRotation(DeltaTime, YawChange, PitchChange);
+    ConstrainWeaponAim(PreviousAim);
+}
+
+// Modified to apply any yaw-dependent depression limit after the native aim update.
+simulated function UpdateSpecialCustomAim(float DeltaTime, float YawChange, float PitchChange)
+{
+    local Rotator PreviousAim;
+
+    PreviousAim = LocalWeaponAim;
+    super.UpdateSpecialCustomAim(DeltaTime, YawChange, PitchChange);
+    ConstrainWeaponAim(PreviousAim);
+}
+
+// Constrains the weapon's aim to its yaw-dependent depression limit, if it has one.
+// LocalWeaponAim is the vehicle-relative aim that the native code keeps across frames, so that is what gets constrained.
+// CustomAim (world space) is rebuilt from it so the constraint also applies this frame.
+// PreviousAim is the LocalWeaponAim before this update, used to undo the traverse if the weapon blocks traverse at the limit.
+simulated function ConstrainWeaponAim(Rotator PreviousAim)
+{
+    if (VehWep == none || !VehWep.HasYawPitchDownLimit())
+    {
+        return;
+    }
+
+    if (VehWep.ConstrainAim(LocalWeaponAim, PreviousAim))
+    {
+        CustomAim = Rotator(Vector(LocalWeaponAim) >> VehWep.Rotation);
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////
 //  *******************************  MISCELLANEOUS ********************************  //
 ///////////////////////////////////////////////////////////////////////////////////////
