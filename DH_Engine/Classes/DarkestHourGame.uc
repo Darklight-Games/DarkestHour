@@ -2000,7 +2000,7 @@ function Killed(Controller Killer, Controller Killed, Pawn KilledPawn, class<Dam
     local Controller P;
     local float      FFPenalty;
     local int        i;
-    local bool       bHasAPlayerAlive, bInformedKillerOfWeaponLock;
+    local bool       bHasAPlayerAlive, bInformedKillerOfWeaponLock, bIsFriendlyFire;
     local array<DHGameReplicationInfo.MapMarker> FireSupportMapMarkers;
 
     if (Killed == none)
@@ -2028,6 +2028,8 @@ function Killed(Controller Killer, Controller Killed, Pawn KilledPawn, class<Dam
 
         DHKilled = DHPlayer(Killed);
         DHKiller = DHPlayer(Killer);
+
+        bIsFriendlyFire = bTeamGame && Killer != none && Killer != Killed && Killer.PlayerReplicationInfo != none && Killed.PlayerReplicationInfo != none && Killer.PlayerReplicationInfo.Team == Killed.PlayerReplicationInfo.Team;
 
         if (DHKiller != none && IsArtilleryKill(DHKiller, DamageType) && Killer.GetTeamNum() != Killed.GetTeamNum())
         {
@@ -2081,8 +2083,7 @@ function Killed(Controller Killer, Controller Killed, Pawn KilledPawn, class<Dam
                 {
                     DHKiller.WeaponLockViolations++;
 
-                    // If friendly fire
-                    if (bTeamGame && Killer.PlayerReplicationInfo != none && Killed.PlayerReplicationInfo != none && Killer.PlayerReplicationInfo.Team == Killed.PlayerReplicationInfo.Team)
+                    if (bIsFriendlyFire)
                     {
                         DHKiller.LockWeapons(Min(WeaponLockTimeSecondsMaximum, DHKiller.WeaponLockViolations * WeaponLockTimeSecondsInterval) + 1);
                         DHKiller.ReceiveLocalizedMessage(Class'DHWeaponsLockedMessage', 5); // "Your weapons have been locked due to spawn killing a friendly!"
@@ -2095,7 +2096,8 @@ function Killed(Controller Killer, Controller Killed, Pawn KilledPawn, class<Dam
                     }
                 }
 
-                if (DHPawn(KilledPawn) != none && DHPawn(KilledPawn).SpawnPoint != none)
+                // Friendly fire kills don't count towards the spawn point's spawn kill penalty.
+                if (!bIsFriendlyFire && DHPawn(KilledPawn).SpawnPoint != none)
                 {
                     DHPawn(KilledPawn).SpawnPoint.OnSpawnKill(KilledPawn, Killer);
                 }
@@ -2120,8 +2122,7 @@ function Killed(Controller Killer, Controller Killed, Pawn KilledPawn, class<Dam
         }
         else
         {
-            // Friendly fire
-            if (bTeamGame && Killer.PlayerReplicationInfo != none && Killed.PlayerReplicationInfo != none && Killer.PlayerReplicationInfo.Team == Killed.PlayerReplicationInfo.Team)
+            if (bIsFriendlyFire)
             {
                 // Allow server admins an option of reducing damage from different types of friendly fire
                 if (DamageType != none)
