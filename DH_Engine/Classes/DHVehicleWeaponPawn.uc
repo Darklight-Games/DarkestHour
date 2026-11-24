@@ -270,16 +270,12 @@ simulated function DrawSpottingScopeOverlay(Canvas C)
 // Primarily for use in drawing the spotting scope knobs.
 simulated function int GetGunYaw()
 {
-    local int Yaw;
-
-    Yaw = VehWep.CurrentAim.Yaw;
-
-    if (Yaw >= 32768)
+    if (VehWep == none)
     {
-        Yaw -= 65536;
+        return 0;
     }
 
-    return Yaw;
+    return Class'URotator'.static.UnwindAngle(VehWep.CurrentAim.Yaw);
 }
 
 simulated function int GetGunYawMin()
@@ -299,7 +295,7 @@ simulated function int GetGunPitch()
         return 0;
     }
 
-    return Normalize(VehWep.CurrentAim).Pitch + GunPitchOffset;
+    return Class'URotator'.static.UnwindAngle(VehWep.CurrentAim.Pitch) + GunPitchOffset;
 }
 
 simulated function int GetGunPitchMin()

@@ -43,6 +43,28 @@ static function string ToString(Rotator  R)
     return "(" $ R.Pitch $ "," $ R.Yaw $ "," $ R.Roll $ ")";
 }
 
+// Returns a rotator axis value (e.g. Pitch or Yaw) in the signed range of
+// -32768 to 32767. Accepts any input, including values outside of the range
+// of 0 to 65535.
+final static function int UnwindAngle(int Angle)
+{
+    Angle = Angle & 0xFFFF;
+
+    if (Angle >= 32768)
+    {
+        Angle -= 65536;
+    }
+
+    return Angle;
+}
+
+// Returns a rotator axis value (e.g. Pitch or Yaw) in the wrapped range of
+// 0 to 65535. Accepts any input, including negative values.
+final static function int WrapAngle(int Angle)
+{
+    return Angle & 0xFFFF;
+}
+
 // Check whether two rotators are close to each other within given tolerance.
 final static function bool IsClose(Rotator  LHS, Rotator RHS, int Tolerance)
 {

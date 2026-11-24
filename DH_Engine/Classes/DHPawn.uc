@@ -5203,22 +5203,12 @@ function int LimitPitch(int Pitch, optional float DeltaTime)
     local int MaxBipodPitch;
     local int MinBipodPitch;
 
-    Pitch = Pitch & 65535;
+    Pitch = Class'URotator'.static.WrapAngle(Pitch);
 
     if (bBipodDeployed)
     {
-        MaxBipodPitch = InitialDeployedRotation.Pitch + DeployedPitchUpLimit;
-        MinBipodPitch = InitialDeployedRotation.Pitch + DeployedPitchDownLimit;
-
-        if (MaxBipodPitch > 65535)
-        {
-            MaxBipodPitch -= 65535;
-        }
-
-        if (MinBipodPitch < 0)
-        {
-            MinBipodPitch += 65535;
-        }
+        MaxBipodPitch = Class'URotator'.static.WrapAngle(InitialDeployedRotation.Pitch + DeployedPitchUpLimit);
+        MinBipodPitch = Class'URotator'.static.WrapAngle(InitialDeployedRotation.Pitch + DeployedPitchDownLimit);
 
         if (MaxBipodPitch > PitchUpLimit && MaxBipodPitch < PitchDownLimit)
         {

@@ -643,14 +643,8 @@ simulated state KnobRaised
         // If adjusting traverse, make sure we haven't gone beyond the traverse limits (zero YawChange if we have)
         if (YawChange != 0.0 && Gun != none)
         {
-            CurrentYaw = Gun.CurrentAim.Yaw;
-
-            if (CurrentYaw > 32768) // convert to +/- yaw format
-            {
-                CurrentYaw -= 65536;
-            }
-
-            CurrentYaw = -CurrentYaw; // yaw/traverse has to be reversed because in the mortar skeletal meshes the root bone rotation is screwed up, so weapon aim ends up reversed!
+            // yaw/traverse has to be reversed because in the mortar skeletal meshes the root bone rotation is screwed up, so weapon aim ends up reversed!
+            CurrentYaw = -Class'URotator'.static.UnwindAngle(Gun.CurrentAim.Yaw);
 
             // Block traverse if within 10 rotational units of yaw limit - a fudge factor, as sometimes Gun stops slightly short of limit
             if (YawChange > 0.0)
