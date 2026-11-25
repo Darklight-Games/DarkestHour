@@ -1,5 +1,8 @@
 {
   "[unrealscript]": {
     "files.encoding": "windows1252"
+  },
+  "files.associations": {
+    "*.inc": "html",
   }
 }

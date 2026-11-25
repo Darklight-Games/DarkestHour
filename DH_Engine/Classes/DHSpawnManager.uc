@@ -219,7 +219,7 @@ function ROVehicle SpawnVehicle(DHPlayer PC, Vector SpawnLocation, Rotator Spawn
     // Make sure the player is in a squad if the vehicle requires them to be
     DHVC = class<DHVehicle>(VehiclePools[PC.VehiclePoolIndex].VehicleClass);
 
-    if (DHVC != none && DHVC.default.bRequiresDriverLicense && PRI != none && !PRI.IsPlayerLicensedToDrive(PC))
+    if (DHVC != none && DHVC.default.bRequiresDriverLicense && PRI != none && !PRI.IsPlayerLicensedToDrive(PC) && PC.bRestrictVehicleAccess)
     {
         GRI.UnreserveVehicle(PC);
         return none;
@@ -356,7 +356,9 @@ event VehicleDestroyed(Vehicle V)
         // Find out if the vehicle was spawned killed
         if (DHV.IsSpawnKillProtected())
         {
-            if (DHV.SpawnPoint != none)
+            // Only penalize the spawn point if the vehicle was last damaged by the enemy.
+            // This excludes friendly fire & self-inflicted destruction (e.g. crashing).
+            if (DHV.SpawnPoint != none && DHV.LastHitBy != none && DHV.LastHitBy.GetTeamNum() != DHV.VehicleTeam)
             {
                 DHV.SpawnPoint.OnSpawnKill(V, none);
             }

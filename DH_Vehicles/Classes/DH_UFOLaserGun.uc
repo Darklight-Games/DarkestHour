@@ -5,6 +5,57 @@
 
 class DH_UFOLaserGun extends DHVehicleAutoCannon;
 
+// Override the main fire command to apply the safety vector push instantly
+function Fire(Controller C)
+{
+    local coords BoneCoords;
+    local vector ForwardVector;
+    local float SafetyDistance;
+
+    // 1. Calculate the real-time forward push vector right as the trigger is pulled
+    if (Base != none && WeaponFireAttachmentBone != 'None')
+    {
+        BoneCoords = Base.GetBoneCoords(WeaponFireAttachmentBone);
+        
+        ForwardVector = Normal(Vector(WeaponFireRotation)); 
+        if (ForwardVector == vect(0,0,0)) 
+        {
+            ForwardVector = BoneCoords.XAxis; 
+        }
+
+        // Safety offset in Unreal Units to clear the vehicle structure instantly
+        SafetyDistance = 400.000000; 
+
+        // Update the internal firing location variable before passing control up
+        WeaponFireLocation = BoneCoords.Origin + (ForwardVector * SafetyDistance);
+    }
+
+    // 2. Pass control to the engine to execute the shot, play visuals, and spawn the shell instantly
+    super.Fire(C);
+}
+
+// Intercept the projectile precisely as it spawns to strip its ability to hit the vehicle hull
+function Projectile SpawnProjectile(class<Projectile> ProjClass, bool bAltFire)
+{
+    local Projectile SpawnedProj;
+
+    // A. Run the native spawning logic
+    SpawnedProj = super.SpawnProjectile(ProjClass, bAltFire);
+
+    // B. Inject the collision pass-through logic (with zero effect on AmbientSound)
+    if (SpawnedProj != none && Base != none)
+    {
+        SpawnedProj.Instigator = Instigator;
+        
+        if (Instigator != none)
+        {
+            SpawnedProj.Disable('Touch'); // Bypasses immediate frame-0 contact checks
+        }
+    }
+
+    return SpawnedProj;
+}
+
 defaultproperties
 {
     // mesh

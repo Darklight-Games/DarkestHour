@@ -1,8 +1,8 @@
 import tempfile
-
-from typing import Optional
-from unicode_ranges import UnicodeRanges
 from enum import Enum
+from typing import Optional
+
+from unicode_ranges import UnicodeRanges
 
 
 class Compression(Enum):
@@ -21,7 +21,7 @@ class Compression(Enum):
 
 
 class TrueTypeFont:
-    def __init__(self, fontname: str, height: int, anti_alias: bool, drop_shadow_x: int, drop_shadow_y: int, u_size: int, v_size: int, x_pad: int, y_pad: int, extend_box_bottom: int, extend_box_top: int, extend_box_left: int, extend_box_right: int, kerning: int, style: int, italic: bool, compression: Compression, resolution: Optional[int] = None, package: Optional[str] = None, group: Optional[str] = None):
+    def __init__(self, fontname: str, height: int, anti_alias: bool, drop_shadow_x: int, drop_shadow_y: int, u_size: int, v_size: int, x_pad: int, y_pad: int, extend_box_bottom: int, extend_box_top: int, extend_box_left: int, extend_box_right: int, kerning: int, style: int, italic: bool, compression: Compression, resolution: int | None = None, package: str | None = None, group: str | None = None):
         self.package = package
         self.group = group
         self.fontname = fontname

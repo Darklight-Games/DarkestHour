@@ -16,6 +16,11 @@ var localized string AlliedTeamNameGenitive;
 var localized string AxisTeamNameGenitive;
 var localized string AdminLoggedInMessage;
 var localized string AdminLoggedOutMessage;
+var localized string MessagesRestrictionMessage;
+var localized string VoiceRestrictionMessage;
+var localized string NameRestrictionMesssage;
+var localized string VehicleAccessRestrictionMessage;
+var localized string LeaderPositionsRestrictionMessage;
 
 static function string GetSquadName(int TeamIndex, int SquadIndex, DHSquadReplicationInfo SRI)
 {
@@ -66,6 +71,16 @@ static function string GetString(optional int S, optional PlayerReplicationInfo 
             return Repl(default.AdminLoggedInMessage, "{0}", RelatedPRI_1.PlayerName);
         case 7:
             return Repl(default.AdminLoggedOutMessage, "{0}", RelatedPRI_1.PlayerName);
+        case 8:
+            return default.MessagesRestrictionMessage;
+        case 9:
+            return default.VoiceRestrictionMessage;
+        case 10:
+            return default.NameRestrictionMesssage;
+        case 11:
+            return default.VehicleAccessRestrictionMessage;
+        case 12:
+            return default.LeaderPositionsRestrictionMessage;
         default:
             break;
     }
@@ -87,6 +102,11 @@ defaultproperties
     AdminLoggedOutMessage="{0} gave up administrator abilities."
     AlliedTeamNameGenitive="Allied"
     AxisTeamNameGenitive="Axis"
+    MessagesRestrictionMessage="You're not allowed to send messages on this server."
+    VoiceRestrictionMessage="You're not allowed to speak in the voice chat on this server."
+    NameRestrictionMesssage="You're not allowed to change your name on this server."
+    VehicleAccessRestrictionMessage="Your access to vehicles has been revoked on this server."
+    LeaderPositionsRestrictionMessage="Your ability to occupy leadership positions in squads has been revoked on this server."
 
     bIsSpecial=false
     bIsConsoleMessage=true

@@ -302,7 +302,7 @@ defaultproperties
     StaticMesh=StaticMesh'WeaponPickupSM.76mm_Shell'
     CoronaClass=Class'DHShellTracer_RedLarge'
     ShellTrailClass=Class'DHShellTrail_Red'
-    ShellImpactDamage=Class'DHShellImpactDamageType'
+    ShellImpactDamage=Class'DHShellAPImpactDamageType'
     ImpactDamage=400
 
     Speed=22000.0

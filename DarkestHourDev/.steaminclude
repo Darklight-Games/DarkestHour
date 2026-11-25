@@ -30,5 +30,6 @@ bdk-default.json
 !DarkestHourDev/ChangeLogs/*
 !DarkestHourDev/BDK/*
 !DarkestHourDev/localization.yml
-!DarkestHourDev/make-config.json
+!DarkestHourDev/usagi.toml
+!DarkestHourDev/.usagi-build.toml
 !DarkestHourDev/bdk-default.json

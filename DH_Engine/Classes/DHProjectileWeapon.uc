@@ -277,6 +277,11 @@ simulated event WeaponTick(float DeltaTime)
     {
         BipodPhysicsSimulation.PhysicsTick(self, DeltaTime);
     }
+
+    if (bBarrelFailed && bHasSpareBarrel && Instigator != none && !IsBusy())
+    {
+        Instigator.ReceiveLocalizedMessage(class'DHBarrelChangeControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
+    }
 }
 
 // Modified so works in DHDebugMode, & to log barrels & their current temperature & state
@@ -1044,7 +1049,7 @@ simulated state LoweringWeapon
         // Important if player switchs weapon while IS
         if (bUsingSights && Role == ROLE_Authority)
         {
-            ServerZoomOut();
+            ZoomOut(true);
         }
 
         // Destroy any barrel steam emitter
@@ -1641,11 +1646,6 @@ simulated function PerformZoom(bool bZoomIn)
     else
     {
         ZoomOut(true);
-
-        if (Role < ROLE_Authority)
-        {
-            ServerZoomOut();
-        }
     }
 }
 
@@ -1687,9 +1687,17 @@ function ServerZoomIn()
     ZoomIn(true);
 }
 
-// Zoom out of ironsights view
+// Zoom out of ironsights view.
+// On a client this also tells the server, as many things zoom the client out locally (e.g. sprinting, going prone)
+// and the server may not do the same, e.g. if it refused the sprint or handled the stance change before ServerZoomIn.
+// Otherwise the server stays zoomed in and replicates bUsingSights back to the client, desyncing it.
 simulated function ZoomOut(optional bool bAnimateTransition)
 {
+    if (bUsingSights && Role < ROLE_Authority)
+    {
+        ServerZoomOut(bAnimateTransition);
+    }
+
     ResetPlayerFOV();
 
     if (bAnimateTransition)
@@ -1705,9 +1713,9 @@ simulated function ZoomOut(optional bool bAnimateTransition)
     }
 }
 
-function ServerZoomOut()
+function ServerZoomOut(bool bAnimateTransition)
 {
-    ZoomOut(true);
+    ZoomOut(bAnimateTransition);
 }
 
 simulated state IronSightZoomIn extends WeaponBusy
@@ -2024,8 +2032,13 @@ simulated state StartSprinting
 
 // Take the player out of ironsights
 Begin:
-    ZoomOut();  // There are some cases where bUsingIronSights can be false, but the player is still zoomed in,
-                // so lets not check it and just call ZoomOut() regardless
+    // A remote client predicts its own sprint & tells the server via ServerZoomOut if it zoomed out, so the server
+    // must not zoom out by itself, as the client may have refused the sprint (e.g. its stamina differs slightly).
+    if (Role < ROLE_Authority || InstigatorIsLocallyControlled())
+    {
+        ZoomOut();  // There are some cases where bUsingIronSights can be false, but the player is still zoomed in,
+                    // so lets not check it and just call ZoomOut() regardless
+    }
 
     if (InstigatorIsLocalHuman())
     {

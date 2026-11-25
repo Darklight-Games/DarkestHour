@@ -32,7 +32,6 @@ defaultproperties
     TatteredHealthThreshold=300
 
     // Damage
-    bCanTakeImpactDamage=false
     DamageTypeScales(0)=(DamageType=Class'DHArtilleryDamageType',Scale=1.5)         // Artillery
     DamageTypeScales(1)=(DamageType=Class'ROTankShellExplosionDamage',Scale=0.5)    // HE Splash
     DamageTypeScales(2)=(DamageType=Class'DHShellHEImpactDamageType',Scale=0.8)     // HE Impact

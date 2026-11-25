@@ -109,7 +109,7 @@ function OnSquadNameEditBoxEnter()
 
     PC = DHPlayer(PlayerOwner());
 
-    if (PC != none)
+    if (PC != none && !PC.bRestrictSquadNames)
     {
         l_SquadName.Caption = eb_SquadName.TextStr;
 
@@ -148,6 +148,68 @@ function MembersListContextMenuSelect(GUIContextMenu Sender, int ClickIndex)
     {
         MembersListContextMenuWrapper.OnClick(Sender, self, ClickIndex);
     }
+}
+
+// Populates the members list. Each element stores the member's PlayerID in
+// its extra string data instead of the PRI itself, since GUI objects must not
+// hold references to actors.
+function SetMembers(array<DHPlayerReplicationInfo> Members, bool bShowNamePrefix)
+{
+    local string SavedPlayerID;
+    local int i;
+
+    // Save the PlayerID of the current selection.
+    SavedPlayerID = li_Members.GetExtra();
+
+    // Add or remove entries to match the member count.
+    while (li_Members.ItemCount < Members.Length)
+    {
+        li_Members.Add("");
+    }
+
+    while (li_Members.ItemCount > Members.Length)
+    {
+        li_Members.Remove(0, 1);
+    }
+
+    // Update the text and associated PlayerID for each item.
+    for (i = 0; i < Members.Length; ++i)
+    {
+        if (Members[i] == none)
+        {
+            continue;
+        }
+
+        if (bShowNamePrefix)
+        {
+            li_Members.SetItemAtIndex(i, Members[i].GetNamePrefix() $ "." @ Members[i].PlayerName);
+        }
+        else
+        {
+            li_Members.SetItemAtIndex(i, Members[i].PlayerName);
+        }
+
+        li_Members.SetExtraAtIndex(i, string(Members[i].PlayerID));
+    }
+
+    // Re-select the previous selection.
+    li_Members.SetIndex(li_Members.FindIndex(SavedPlayerID, true, true));
+}
+
+// Returns the PRI of the currently selected member, or none if there is no
+// selection or the player no longer exists.
+function DHPlayerReplicationInfo GetSelectedPRI()
+{
+    local PlayerController PC;
+
+    PC = PlayerOwner();
+
+    if (PC == none || PC.GameReplicationInfo == none || li_Members == none || !li_Members.IsValid())
+    {
+        return none;
+    }
+
+    return DHPlayerReplicationInfo(PC.GameReplicationInfo.FindPlayerByID(int(li_Members.GetExtra())));
 }
 
 function UpdateBackgroundColor(DHPlayerReplicationInfo PRI)

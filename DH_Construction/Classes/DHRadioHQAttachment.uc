@@ -3,13 +3,13 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHRadioHQAttachment extends Actor;
+class DHRadioHQAttachment extends DHConstructionAttachment;
 
-var byte           TeamIndex;
+var byte                TeamIndex;
 
-var DHRadio        Radio;
-var class<DHRadio> RadioClass;
-var Vector         RadioOffset;
+var DHRadioHQ           Radio;
+var class<DHRadioHQ>    RadioClass;
+var Vector              RadioOffset;
 
 simulated function MakeVisible();
 simulated function MakeInvisible() { GotoState('Invisible'); }
@@ -26,11 +26,38 @@ function Setup()
         Radio.TeamIndex = TeamIndex;
         Radio.SetBase(self);
         Radio.SetRelativeLocation(RadioOffset);
-        Radio.bShouldShowOnSituationMap = false;
     }
     else
     {
-        Warn("Failed to spawn a radio!");
+        Warn("Failed to spawn radio!");
+    }
+}
+
+simulated state Invisible
+{
+    simulated function MakeVisible() { GotoState(''); }
+    simulated function MakeInvisible();
+
+    simulated function BeginState()
+    {   
+        if (Radio != none)
+        {
+            Radio.bHidden = true;
+            Radio.AmbientSound = none;
+        }
+
+        bHidden = true;
+    }
+
+    simulated function EndState()
+    {   
+        if (Radio != none)
+        {
+            Radio.bHidden = false;
+            Radio.AmbientSound = Radio.default.AmbientSound;
+        }
+
+        bHidden = false;
     }
 }
 
@@ -42,58 +69,10 @@ simulated function Destroyed()
     }
 }
 
-simulated state Invisible
-{
-    simulated function MakeVisible() { GotoState(''); }
-    simulated function MakeInvisible();
-
-    simulated function BeginState()
-    {
-        if (Radio != none)
-        {
-            Radio.bHidden = true;
-            Radio.AmbientSound = none;
-        }
-
-        bHidden = true;
-    }
-
-    simulated function EndState()
-    {
-        if (Radio != none)
-        {
-            Radio.bHidden = false;
-            Radio.AmbientSound = Radio.default.AmbientSound;
-        }
-
-        bHidden = false;
-    }
-}
-
 defaultproperties
 {
-    DrawType=DT_StaticMesh
-    RemoteRole=ROLE_DumbProxy
-
-    NetUpdateFrequency=10.0
-    bAlwaysRelevant=true
-    bOnlyDirtyReplication=true
-
-    bUseCylinderCollision=false
-    bCollideActors=true
-    bCollideWorld=false
-    bBlockActors=true
-    bBlockKarma=true
-
-    bBlockZeroExtentTraces=true
-    bBlockNonZeroExtentTraces=true
-    bBlockProjectiles=true
-    bProjTarget=true
-    bPathColliding=true
-    bWorldGeometry=true
-
     StaticMesh=StaticMesh'DH_Construction_stc.GER_Artillery_Radio'
 
-    RadioClass=Class'DHRadio'
+    RadioClass=Class'DHRadioHQ'
     RadioOffset=(Y=-10,Z=64)
 }

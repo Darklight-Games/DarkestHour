@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_EyeWGun extends DHVehicleAutoCannon;
+class DH_EyeWGun extends DH_EyeEGun;
 
 defaultproperties
 {

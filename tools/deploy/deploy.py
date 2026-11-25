@@ -1,17 +1,18 @@
 import argparse
-import os
 import fnmatch
+import os
 import re
 import shutil
-import sys
 import subprocess
+import sys
+
 import vdf
 
 
 # Get the git tag, branch and commit hash.
 def get_git_info(path: str):
     p = subprocess.Popen(['git', '-C', path, 'tag', '--points-at', 'HEAD'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    tag, err = p.communicate()
+    tag, _err = p.communicate()
     tag = tag.decode().strip()
     if p.returncode != 0:
         print('Unable to get git tag')
@@ -19,14 +20,14 @@ def get_git_info(path: str):
     tag = tag if tag != '' else None
 
     p = subprocess.Popen(['git', '-C', path, 'rev-parse', '--abbrev-ref', 'HEAD'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    branch, err = p.communicate()
+    branch, _err = p.communicate()
     branch = branch.decode().strip()
     if p.returncode != 0:
         print('Unable to get git branch')
         sys.exit(1)
 
     p = subprocess.Popen(['git', '-C', path, 'rev-parse', '--short', 'HEAD'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    commit, err = p.communicate()
+    commit, _err = p.communicate()
     commit = commit.decode().strip()
     if p.returncode != 0:
         print('Unable to get git commit')
@@ -82,7 +83,7 @@ if __name__ == '__main__':
     with open(steaminclude_path, 'rb') as f:
         include_patterns = []
         ignore_patterns = []
-        for line in filter(lambda x: len(x) > 0, map(lambda x: x.decode().strip(), f.read().splitlines())):
+        for line in filter(lambda x: len(x) > 0, (x.decode().strip() for x in f.read().splitlines())):
             m = re.match(r'!(.+)', line)
             if m is not None:
                 ignore_patterns.append(m.groups()[0])

@@ -19,8 +19,6 @@ var automated       ROGUIProportionalContainerNoSkin c_MOTD;
 
 var array<ExtendedConsole.ServerFavorite> StaticFavorites;
 
-var     HTTPRequest             MOTDRequest;
-
 var     string                  MOTDURL;
 var     string                  FacebookURL;
 var     string                  GitHubURL;
@@ -496,8 +494,6 @@ function OnMOTDResponse(HTTPRequest Request, int Status, TreeMap_string_string H
         tb_MOTDContent.MyScrollText.SetContent(Repl(default.MOTDErrorString, "{0}", Status));
     }
 
-    MOTDRequest = none;
-
     i_MOTDLoading.SetVisibility(false);
 }
 
@@ -519,12 +515,15 @@ event Timer()
 
 function GetMOTD()
 {
-    if (MOTDRequest != none)
+    local HTTPRequest MOTDRequest;
+
+    MOTDRequest = PlayerOwner().Spawn(Class'HTTPRequest');
+
+    if (MOTDRequest == none)
     {
         return;
     }
 
-    MOTDRequest = PlayerOwner().Spawn(Class'HTTPRequest');
     MOTDRequest.Host = "api.darklightgames.com";
     MOTDRequest.Path = "/announcements/latest/";
     MOTDRequest.OnResponse = OnMOTDResponse;
@@ -551,6 +550,7 @@ defaultproperties
     StaticFavorites(1)=(IP="104.243.41.183",Port=7777,ServerName="Official Server #2")
     StaticFavorites(2)=(IP="104.243.41.183",Port=7817,ServerName="Official Server #3")
     StaticFavorites(3)=(IP="104.243.41.183",Port=7797,ServerName="Official Armored Server #1")
+    StaticFavorites(4)=(IP="87.98.237.193",Port=7757,ServerName="Red Orchestra Poland Server")
 
     // Render Entry.rom instead of background
     bRenderWorld=true

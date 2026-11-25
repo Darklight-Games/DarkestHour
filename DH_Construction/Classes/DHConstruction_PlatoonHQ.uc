@@ -21,6 +21,12 @@ var class<DHRadioHQAttachment> RadioClass;
 var Vector                     RadioLocationOffset;
 var Rotator                    RadioRotationOffset;
 
+replication
+{
+    reliable if (Role == ROLE_Authority && bNetDirty)
+        SpawnPoint;
+}
+
 simulated state Dummy
 {
     simulated function BeginState()
@@ -99,8 +105,6 @@ function DHSpawnPoint_PlatoonHQ InitializeSpawnPoint()
 
 simulated function OnConstructed()
 {
-    local Vector HitLocation, HitNormal, TraceEnd, TraceStart;
-
     super.OnConstructed();
 
     if (Role == ROLE_Authority)
@@ -109,16 +113,6 @@ simulated function OnConstructed()
         {
             // "A Command Post has been constructed and will be established in N seconds."
             Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHCommandPostMessage', 4,,, Class);
-
-            TraceStart = Location + vect(0, 0, 32);
-            TraceEnd = Location - vect(0, 0, 32);
-            HitLocation = Location;
-
-            if (Trace(HitLocation, HitNormal, TraceEnd, TraceStart) == none)
-            {
-                Warn("Hey yo something done fucked up, bad spawn locations afoot");
-                Destroy();
-            }
         }
 
         if (Radio == none)

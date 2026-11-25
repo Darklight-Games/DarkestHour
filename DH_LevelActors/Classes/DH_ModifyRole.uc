@@ -24,10 +24,20 @@ event Trigger(Actor Other, Pawn EventInstigator)
         switch (RoleAction)
         {
             case ACTION_Lock:
+                if (RoleInfo.bIsLocked)
+                {
+                    // Role already locked.
+                    return;
+                }
                 RoleInfo.bIsLocked = true;
                 MessageId = 25;
                 break;
             case ACTION_Unlock:
+                if (!RoleInfo.bIsLocked)
+                {
+                    // Role already unlocked.
+                    return;
+                }
                 RoleInfo.bIsLocked = false;
                 MessageId = 26;
                 break;

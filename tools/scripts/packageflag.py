@@ -1,11 +1,12 @@
-import os
-import sys
-import subprocess
 import argparse
+import os
+import subprocess
+import sys
+from collections.abc import Iterable
 from enum import Enum
-from struct import unpack
-from typing import Iterable 
 from pathlib import Path
+from struct import unpack
+
 
 class Flag(Enum):
     AllowDownload: int = 1  # Allow downloading package.
@@ -67,7 +68,7 @@ def read_stdout(process: subprocess.Popen) -> Iterable[str]:
     return out
 
 
-class Package():
+class Package:
     def __init__(self, path: str) -> None:
         self.path = Path(path)
         self.path_relative_to_mod = os.path.relpath(self.path, start=mod_path)
@@ -130,7 +131,7 @@ remove_mask = Flag.from_str(*args.remove_flags)
 found_paths = [*Path(mod_path).rglob(pattern)]
 packages: Iterable[Package] = []
 
-print('\nFound {n} packages:'.format(n=len(found_paths)))
+print(f'\nFound {len(found_paths)} packages:')
 
 for path in found_paths:
     package = Package(path)
@@ -147,10 +148,10 @@ sys.stdout.write('\nDo you want to apply these flags to found packages? [y/n] ')
 
 choice = input().lower()
 
-if not choice == 'y':
+if choice != 'y':
     sys.exit(0)
 
-print('')
+print()
 
 
 # APPLY FLAGS

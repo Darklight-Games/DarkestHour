@@ -1,7 +1,8 @@
+from typing import Literal
+
+import yaml
 from ttf import Compression
 from unicode_ranges import UnicodeRanges
-from typing import Optional, Dict, List, Literal
-import yaml
 
 FontSizeMethod = Literal['proportial', 'fixed']
 
@@ -33,8 +34,8 @@ class FontSize:
     def __init__(self):
         self.method: FontSizeMethod = 'proportional'
         self.baseline: int = 1080
-        self.resolution_group: Optional[str] = None
-        self.sizes: List[int] = []
+        self.resolution_group: str | None = None
+        self.sizes: list[int] = []
     
     @staticmethod
     def from_data(data: dict) -> 'FontSize':
@@ -48,17 +49,17 @@ class FontSize:
 
 class FontStyle:
     def __init__(self):
-        self.font: Optional[str] = None
-        self.texture_size: Optional[Vec2] = None
-        self.size: Optional[FontSize] = None
-        self.weight: Optional[int] = None
-        self.padding: Optional[Vec2] = None
-        self.margin: Optional[Box] = None
-        self.anti_alias: Optional[bool] = None
-        self.kerning: Optional[int] = None
-        self.italic: Optional[bool] = None
-        self.drop_shadow: Optional[Vec2] = None
-        self.compression: Optional[Compression] = None
+        self.font: str | None = None
+        self.texture_size: Vec2 | None = None
+        self.size: FontSize | None = None
+        self.weight: int | None = None
+        self.padding: Vec2 | None = None
+        self.margin: Box | None = None
+        self.anti_alias: bool | None = None
+        self.kerning: int | None = None
+        self.italic: bool | None = None
+        self.drop_shadow: Vec2 | None = None
+        self.compression: Compression | None = None
     
     @staticmethod
     def from_data(data: dict) -> 'FontStyle':
@@ -96,9 +97,9 @@ class FontStyle:
 
 class Package:
     def __init__(self):
-        self.languages: List[str] = []
+        self.languages: list[str] = []
         self.ensure_all_used_characters: bool = False
-        self.font_substitutions: Dict[str, str] = {}
+        self.font_substitutions: dict[str, str] = {}
         self.unicode_ranges = UnicodeRanges()
     
     @staticmethod
@@ -107,14 +108,14 @@ class Package:
         package.languages = data.get('languages', [])
         package.ensure_all_used_characters = data.get('ensure_all_used_characters', False)
         package.unicode_ranges = UnicodeRanges(data.get('unicode_ranges', None))
-        package.font_substitutions = data.get('font_substitutions', dict())
+        package.font_substitutions = data.get('font_substitutions', {})
         return package
 
 
 class Resolution:
     def __init__(self):
         self.baseline: int
-        self.groups: Dict[str, List[int]] = {}
+        self.groups: dict[str, list[int]] = {}
     
     @staticmethod
     def from_data(data: dict) -> 'Resolution':
@@ -123,14 +124,14 @@ class Resolution:
         resolution.groups = data['groups']
 
         if resolution.groups is not None and not isinstance(resolution.groups, dict):
-            raise Exception('resolution_groups must be a dictionary')
+            raise RuntimeError('resolution_groups must be a dictionary')
         
         if any(not isinstance(key, str) or not isinstance(value, list) for (key, value) in resolution.groups.items()):
-            raise Exception('resolution_groups must be a dictionary of strings to lists')
+            raise RuntimeError('resolution_groups must be a dictionary of strings to lists')
 
         for key, value in resolution.groups.items():
             if any(not isinstance(i, int) for i in value):
-                raise Exception(f'Values in resolution_group "{key}" must only be integers')
+                raise RuntimeError(f'Values in resolution_group "{key}" must only be integers')
 
         return resolution
 
@@ -139,7 +140,7 @@ class Defaults:
     def __init__(self):
         self.unicode_ranges = UnicodeRanges()
         self.font_style = FontStyle()
-        self.resolution_group: Optional[str] = None
+        self.resolution_group: str | None = None
     
     @staticmethod
     def from_data(data: dict) -> 'Defaults':
@@ -181,8 +182,8 @@ class FontConfiguration:
         self.package_name: str
         self.defaults = Defaults()
         self.unrealscript = UnrealScript()
-        self.font_styles: Dict[str, FontStyle] = dict()
-        self.packages: Dict[str, Package] = dict()
+        self.font_styles: dict[str, FontStyle] = {}
+        self.packages: dict[str, Package] = {}
         self.resolution = Resolution()
 
     @staticmethod

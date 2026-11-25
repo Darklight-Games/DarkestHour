@@ -260,7 +260,7 @@ function GiveTo(Pawn Other, optional Pickup Pickup)
     // MODIFICATION:
     // Do not switch to this weapon if the user cannot switch from their current
     // weapon!
-    ROW = ROWeapon(Instigator.Inventory);
+    ROW = ROWeapon(Instigator.Weapon);
 
     if (ROW != none && !ROW.WeaponCanSwitch())
     {
