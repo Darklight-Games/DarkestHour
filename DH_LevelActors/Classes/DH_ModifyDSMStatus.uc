@@ -18,6 +18,7 @@ enum DSMModifyType
 
 var()   DSMModifyType       HowToModify;            // the way in which we will modify the specified destroyable static mesh (DSM) when this actor gets triggered
 var()   name                DSMToModify;            // the Tag of the DSM that we are set up to modify
+// usagi:ignore[bool-name-prefix]
 var()   bool                UseRandomness;          // option for random chance of modifying the DSM each time this modify actor is triggered
 var()   int                 RandomPercent;          // percentage chance of modifying the DSM if the UseRandomness option is enabled
 var()   bool                bRepairIfNotFullHealth; // extra option to restore DSM to full health if it's been damaged but not destroyed (used with DSM_Repair option)

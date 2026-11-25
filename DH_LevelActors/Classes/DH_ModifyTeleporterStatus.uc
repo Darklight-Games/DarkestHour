@@ -8,6 +8,7 @@ class DH_ModifyTeleporterStatus extends DH_ModifyActors;
 var()   array<name>         TeleportersToModify;
 var     array<teleporter>   TeleReferences;
 var()   string              NewURL; // if set will change the URL of the teleporter
+// usagi:ignore[bool-name-prefix]
 var()   bool                UseRandomness;
 var()   int                 RandomPercent; // 100 for always succeed, 0 for always fail
 // usagi:ignore[enum-name-prefix]

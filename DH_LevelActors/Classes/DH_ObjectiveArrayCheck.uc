@@ -20,6 +20,7 @@ var()   name                        EventToTrigger; //will call this tag if succ
 var()   name                        EventToTriggerForFail; //will call this event if fail
 var()   EObjectiveState             StateToCheckFor;
 var()   bool                        bStatusToModifyTo;
+// usagi:ignore[bool-name-prefix]
 var()   bool                        UseRandomness;
 var()   int                         RandomPercent; // 100 for always succeed, 0 for always fail
 var()   bool                        bAutoStartCheck;

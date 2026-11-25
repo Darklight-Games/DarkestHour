@@ -7,6 +7,7 @@ class DH_ModifyMineVolumeStatus extends DH_ModifyActors;
 
 var()   name                    MineVolumeToModify; // the tag that the minefield uses
 var     array<ROMineVolume>     MineVolumes;
+// usagi:ignore[bool-name-prefix]
 var()   bool                    UseRandomness;
 var()   int                     RandomPercent; // 100 for always succeed, 0 for always fail
 var()   StatusModifyType        HowToModify;

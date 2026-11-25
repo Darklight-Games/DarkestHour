@@ -7,6 +7,7 @@ class DH_ModifyReinforcements extends DH_ModifyActors;
 
 var()   bool            bModifyIfDepleted;
 var()   ROSideIndex     TeamToModify; //Neutral will modify both teams
+// usagi:ignore[bool-name-prefix]
 var()   bool            UseRandomness;
 var()   int             RandomPercent; // 100 for always succeed, 0 for always fail
 var()   int             ModifyNum;

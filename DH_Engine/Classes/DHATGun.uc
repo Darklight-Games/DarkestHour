@@ -49,13 +49,10 @@ var float               CrushMomentumThreshold;
 replication
 {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        bIsBeingRotated;
+        bIsBeingRotated, SentinelString, RotatingActor;
 
     reliable if (bNetDirty && Role == ROLE_Authority && !IsInState('Rotating'))
         NextRotationTime;
-
-    reliable if (bNetDirty && Role == ROLE_Authority)
-        SentinelString, RotatingActor;
 }
 
 // Disabled as nothing in Tick is relevant to an AT gun (to be on the safe side, MinBrakeFriction is set very high in default properties, so gun won't slide down a hill)

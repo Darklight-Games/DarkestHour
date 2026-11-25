@@ -2810,6 +2810,7 @@ simulated function float GetAnimationDriverTheta(EAnimationDriverType Type)
             break;
         case ADT_Pitch:
             Theta = 0.5; // TODO: figure this out
+            break;
         default:
             break;
     }

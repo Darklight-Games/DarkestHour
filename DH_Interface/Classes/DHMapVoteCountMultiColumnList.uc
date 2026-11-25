@@ -109,6 +109,7 @@ function string GetSortString(int i)
             {
                 return string(int(MI.Size));
             }
+            break;
         default:
             break;
     }

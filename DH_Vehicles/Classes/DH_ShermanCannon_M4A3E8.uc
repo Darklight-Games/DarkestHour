@@ -3,6 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
+// usagi: ignore[class-name-ends-in-digit]
 class DH_ShermanCannon_M4A3E8 extends DH_ShermanCannonA_76mm;
 
 defaultproperties

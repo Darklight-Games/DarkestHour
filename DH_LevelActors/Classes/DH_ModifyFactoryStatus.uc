@@ -10,6 +10,7 @@ var()   bool                    bChangeUseSpawnArea;
 var()   bool                    bUseSpawnArea;
 var     array<ROVehicleFactory> FactoryReference;
 var()   bool                    bInstantDestroyEmpty; //Will instantly destroy vehicle if empty
+// usagi:ignore[bool-name-prefix]
 var()   bool                    UseRandomness;
 var()   int                     RandomPercent; // 100 for always succeed, 0 for always fail
 var()   StatusModifyType        HowToModify;

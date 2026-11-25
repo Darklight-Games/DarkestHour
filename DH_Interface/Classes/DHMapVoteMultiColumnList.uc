@@ -227,21 +227,25 @@ function string GetSortString(int i)
             {
                 return Class'DHMapDatabase'.static.GetAlliedNationString(MI.AlliedNation);
             }
+            break;
         case 2: // Axis country
             if (bHasMapInfo)
             {
                 return Class'DHMapDatabase'.static.GetAxisNationString(MI.AxisNation);
             }
+            break;
         case 3: // Game Type
             if (bHasMapInfo)
             {
                 return MI.GameTypeClass.default.GameTypeName;
             }
+            break;
         case 4: // Map Size
             if (bHasMapInfo)
             {
                 return string(int(MI.Size));
             }
+            break;
         default:
             break;
     }

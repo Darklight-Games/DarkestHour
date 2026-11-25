@@ -278,6 +278,7 @@ function bool ButtonClick(GUIComponent Sender)
 
         case b_Weblate:
             PlayerOwner().ConsoleCommand("START" @ default.WeblateURL);
+            break;
 
         case i_Overlay:
             HideAnnouncement();

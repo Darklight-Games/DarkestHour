@@ -421,7 +421,7 @@ function DrawTargetWidget(DHPlayer PC, Canvas C, float X, float Y, STargetInfo T
                     case MT_Measurement:
                         Labels[0] = MeasurementToolText;
                         break;
-                    case MT_Measurement:
+                    default:
                         break;
                 }
                 LineOffsetX = TargetWidgetLayout.HeaderOffsetX;

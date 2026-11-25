@@ -33,6 +33,7 @@ function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
     {
         case 0: // Leave Squad
             PC.ServerSquadLeave();
+            break;
         default:
             break;
     }
