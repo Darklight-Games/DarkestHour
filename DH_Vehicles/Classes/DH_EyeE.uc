@@ -131,14 +131,7 @@ simulated function PrevWeapon()
 }
 
 // Subclassed to remove onslaught functionality we don't need. This actually never happens in our game yet.
-simulated event TeamChanged()
-{
-/*    local int i;
-
-    // MergeTODO: Don't think we need any of this
-    for (i = 0; i < Weapons.Length; i++)
-        Weapons[i].SetTeam(Team); */
-}
+simulated event TeamChanged();
 
 // Allow behindview for debugging
 exec function ToggleViewLimit()

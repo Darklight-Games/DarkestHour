@@ -1003,10 +1003,8 @@ simulated state Broken
         OnBroken();
     }
 
-    event TakeDamage(int Damage, Pawn EventInstigator, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
-    {
-        // Do nothing, since we're broken already!
-    }
+    // Do nothing, since we're broken already!
+    event TakeDamage(int Damage, Pawn EventInstigator, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex);
 
     simulated function bool IsBroken()
     {

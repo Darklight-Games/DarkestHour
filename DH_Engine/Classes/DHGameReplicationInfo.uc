@@ -1256,11 +1256,6 @@ simulated function GetRoleCounts(RORoleInfo RI, out int Count, out int BotCount,
 // Artillery Functions
 //------------------------------------------------------------------------------
 
-simulated function bool IsArtilleryEnabled(int TeamIndex)
-{
-    return bOffMapArtilleryEnabled[TeamIndex] == 1 || bOffMapArtilleryEnabled[TeamIndex] == 1;
-}
-
 function AddArtillery(DHArtillery Artillery)
 {
     local int i;

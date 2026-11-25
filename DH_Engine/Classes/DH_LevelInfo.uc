@@ -95,6 +95,7 @@ var(DH_SpecialEvents) float                         ZombieHealthMultiplier;
 var() Material              LoadingScreenRef;        // Used to stop loading screen image from being removed on save (not otherwise used)
                                                      // Must be set to myLevel.GUI.LoadingScreen to work!
 
+// TODO: remove this, since we never use this thing when debugging.
 var const bool              bDHDebugMode;            // flag for whether debug commands can be run
 
 struct SConstruction
@@ -456,8 +457,6 @@ simulated static function DH_LevelInfo GetInstance(LevelInfo Level)
 
 defaultproperties
 {
-    bDHDebugMode=false // TEMPDEBUG - revert to false before any release
-
     AlliesToAxisRatio=0.5
     Texture=Texture'DHEngine_Tex.LevelInfo'
     AlliesWinsMusic=Sound'DH_win.DH_AlliesGroup'
