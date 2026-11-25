@@ -675,4 +675,7 @@ defaultproperties
     PA_IdleIronWeaponAnim="stand_idleiron_kar"
 
     PA_StandToProneAnim="StandtoProne_kar"
+    PA_ProneToStandAnim="PronetoStand_kar"
+    PA_ProneToCrouchAnim="PronetoCrouch_kar"
+    PA_CrouchToProneAnim="CrouchtoProne_kar"
 }
