@@ -42,7 +42,7 @@ function AddNomination(PlayerController Player, class<DHVoteInfo> VoteClass)
 
     if (VoteClass.default.bIsGlobalVote)
     {
-        TeamIndex = -1;
+        TeamIndex = 255;
     }
     else
     {
