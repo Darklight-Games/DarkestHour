@@ -16,6 +16,7 @@ static function class<DHVoicePack> GetVoicePackClass(class<DHNation> EnemyNation
     return default.Class;
 }
 
+// usagi:ignore[function-name-case]
 static function xPlayerSpeech(name Type, int Index, PlayerReplicationInfo SquadLeader, Actor PackOwner)
 {
     local Vector MyLocation;

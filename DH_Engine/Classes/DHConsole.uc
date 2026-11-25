@@ -237,7 +237,7 @@ state SpeechMenuVisible
     //--------------------------------------------------------------------------
     // build voice command array for attack voices
     //--------------------------------------------------------------------------
-    function buildSMAttackArray()
+    function BuildSMAttackArray()
     {
        local DHGameReplicationInfo DHGRI;
        local DHPlayerReplicationInfo DHPRI;
@@ -285,7 +285,7 @@ state SpeechMenuVisible
     //--------------------------------------------------------------------------
     // build voice command array for defend voices
     //--------------------------------------------------------------------------
-    function buildSMDefendArray()
+    function BuildSMDefendArray()
     {
        local DHGameReplicationInfo DHGRI;
        local DHPlayerReplicationInfo DHPRI;
@@ -332,7 +332,7 @@ state SpeechMenuVisible
 
     }
 
-    function buildSMGotoArray()
+    function BuildSMGotoArray()
     {
        local DHGameReplicationInfo DHGRI;
        local int i;
@@ -421,7 +421,7 @@ state SpeechMenuVisible
         }
     }
 
-    function buildSMVehicleDirectionArray()
+    function BuildSMVehicleDirectionArray()
     {
         local int i;
         local class<ROVoicePack> VoicePack;
