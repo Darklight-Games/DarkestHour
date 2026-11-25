@@ -265,8 +265,10 @@ var int SkinIndex;
 var private bool bIsActive;
 
 // Debugging
-var bool bSinglePlayerOnly;  // If true, this construction can only be placed in single player mode.
-                             // Used to prevent players from placing constructions that are not yet ready for multiplayer.
+
+// If true, this construction can only be placed in single player mode.
+// Used to prevent players from placing constructions that are not yet ready for multiplayer.
+var bool bSinglePlayerOnly;
 
 replication
 {

@@ -159,20 +159,21 @@ var()   bool            bMustBeDeployedToBolt;  // if true, the weapon must be d
 
 enum EWeaponComponentAnimationDriverType
 {
-    DRIVER_MagazineAmmunition,  // Drives the animation based on the number of rounds in the magazine.
-                                // The animation MUST have the N+1 frames, where N is the number of bullets in the magazine.
-                                // For example, if a weapon has a 20 round magazine, there should be 21 frames of the animation.
-                                // The first frame (frame 0) should be an empty magazine, whereas frame N+1 is a full magazine.
-
-    DRIVER_Bayonet,             // Drives the animation based on the state of the bayonet (e.g., attached or unattached)
-
-    DRIVER_Bolt,                // Drives the animation based on the state of the bolt (i.e., whether or not bWaitingToBolt is true or false)
-                                // This driver is only forcibly updated when a shot is fired (when bWaitingToBolt becomes true).
-                                // Animation triggers must be used to lock the bolt/hammer back in place (using a Theta value of 1.0).
-
-    DRIVER_Slide,               // Drives a pistol slide or equivalent state. The animation only needs to have one frame, where the slide is in
-                                // the locked back position. This driver is forcibly unmuted when the last round is fired and when the weapon is
-                                // first drawn. The driver will be unmuted when an empty reload plays.
+    // Drives the animation based on the number of rounds in the magazine.
+    // The animation MUST have the N+1 frames, where N is the number of bullets in the magazine.
+    // For example, if a weapon has a 20 round magazine, there should be 21 frames of the animation.
+    // The first frame (frame 0) should be an empty magazine, whereas frame N+1 is a full magazine.
+    DRIVER_MagazineAmmunition,
+    // Drives the animation based on the state of the bayonet (e.g., attached or unattached)
+    DRIVER_Bayonet,
+    // Drives the animation based on the state of the bolt (i.e., whether or not bWaitingToBolt is true or false)
+    // This driver is only forcibly updated when a shot is fired (when bWaitingToBolt becomes true).
+    // Animation triggers must be used to lock the bolt/hammer back in place (using a Theta value of 1.0).
+    DRIVER_Bolt,
+    // Drives a pistol slide or equivalent state. The animation only needs to have one frame, where the slide is in
+    // the locked back position. This driver is forcibly unmuted when the last round is fired and when the weapon is
+    // first drawn. The driver will be unmuted when an empty reload plays.
+    DRIVER_Slide,
     DRIVER_Empty,
 };
 
@@ -1997,8 +1998,9 @@ Begin:
     // must not zoom out by itself, as the client may have refused the sprint (e.g. its stamina differs slightly).
     if (Role < ROLE_Authority || InstigatorIsLocallyControlled())
     {
-        ZoomOut();  // There are some cases where bUsingIronSights can be false, but the player is still zoomed in,
-                    // so lets not check it and just call ZoomOut() regardless
+        // There are some cases where bUsingIronSights can be false, but the player is still zoomed in,
+        // so lets not check it and just call ZoomOut() regardless
+        ZoomOut();
     }
 
     if (InstigatorIsLocalHuman())

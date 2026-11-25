@@ -38,8 +38,7 @@ var     int             NumRoundsToLoad;    // how many rounds to be loaded to f
 
 var     bool            bShouldSkipBolt;
 var     bool            bCanUseUnfiredRounds; // add ejected unfired rounds back into the ammo pile
-var     bool            bEjectRoundOnReload;  // eject the chambered round when reloading
-                                              // (overrides bCanUseUnfiredRounds when disabled)
+var     bool            bEjectRoundOnReload;  // eject the chambered round when reloading (overrides bCanUseUnfiredRounds when disabled)
 
 var     bool            bShouldZoomWhenBolting; // if true, do a zoom cycle when working the bolt (similar to reloads)
 

@@ -8,9 +8,9 @@ class DHResupplyAttachment extends RODummyAttachment
   notplaceable;
 
 var     private int     TeamIndex;      // Team this volume resupplies
-var     private int     SquadIndex;     // Squad this volume resupplies. When
-                                        // set, vehicles are only resupplied
-                                        // when controlled by a squad memeber.
+
+
+var     private int     SquadIndex; // Squad this volume resupplies. When set, vehicles are only resupplied when controlled by a squad memeber.
 var     DHResupplyStrategy.EResupplyType   ResupplyType;   // Who this volume will resupply
 var     array<Pawn>     ResupplyActors;
 var     float           UpdateTime;     // How often this thing needs to do it's business

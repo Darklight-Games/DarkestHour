@@ -1013,8 +1013,9 @@ simulated function SetEngineFireEffects()
             if (DamagedEffectHealthFireFactor != 1.0)
             {
                 DamagedEffectHealthFireFactor = 1.0;
-                DamagedEffectHealthSmokeFactor = 1.0; // appears necessary to get native code to spawn a DamagedEffect if it doesn't already exist
-                                                      // (presumably doesn't check for fire unless vehicle is at least damaged enough to smoke)
+                // appears necessary to get native code to spawn a DamagedEffect if it doesn't already exist
+                // (presumably doesn't check for fire unless vehicle is at least damaged enough to smoke)
+                DamagedEffectHealthSmokeFactor = 1.0;
 
                 if (DamagedEffect == none && Health == HealthMax) // clientside Health hack to get native code to spawn DamagedEffect (it won't unless vehicle has taken some damage)
                 {
@@ -1027,8 +1028,9 @@ simulated function SetEngineFireEffects()
         {
             DamagedEffectHealthFireFactor = 0.0;
             DamagedEffectHealthHeavySmokeFactor = 1.0;
-            DamagedEffectHealthSmokeFactor = 1.0; // appears necessary to get native code to spawn a DamagedEffect if it doesn't already exist
-                                                  // (presumably doesn't check for fire or dark smoke unless vehicle is at least damaged enough to lightly smoke)
+            // appears necessary to get native code to spawn a DamagedEffect if it doesn't already exist
+            // (presumably doesn't check for fire or dark smoke unless vehicle is at least damaged enough to lightly smoke)
+            DamagedEffectHealthSmokeFactor = 1.0;
             if (DamagedEffect != none)
             {
                 DamagedEffect.UpdateDamagedEffect(false, 0.0, false, false); // reset existing effect

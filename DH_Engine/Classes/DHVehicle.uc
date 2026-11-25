@@ -104,8 +104,11 @@ var     bool        bIsArtilleryVehicle;         // is an artillery support vehi
 var     float       PointValue;                  // used for scoring
 var     int         ReinforcementCost;           // reinforcement loss for losing this vehicle
 var     float       FriendlyResetDistance;       // used in CheckReset() as maximum range to check for friendly pawns, to avoid re-spawning empty vehicle
-var     bool        bClientInitialized;          // clientside flag that replicated actor has completed initialization (set at end of PostNetBeginPlay)
-                                                 // (allows client code to determine whether actor is just being received through replication, e.g. in PostNetReceive)
+
+// clientside flag that replicated actor has completed initialization (set at end of PostNetBeginPlay)
+// (allows client code to determine whether actor is just being received through replication, e.g. in PostNetReceive)
+var     bool        bClientInitialized;
+
 var     int         WeaponLockTimeForTK;         // Number of seconds a player's weapons are locked for TKing this vehicle
 var     int         PreventTeamChangeForTK;      // Number of seconds a player cannot team change after TKing this vehicle
 var     bool        bIsAmphibious;               // Vehicle can spawn at both boat and non-boat spawn points
@@ -138,8 +141,9 @@ var     float       SpawnProtEnds;               // is set when a player spawns 
 var     float       SpawnKillTimeEnds;           // is set when a player spawns the vehicle for spawn kill protection in DarkestHour spawn type maps
 var     array<int>  TrackHealth[2];              // Amount of health each track has remaining
 var     float       SatchelResistance;           // 1.0 default (0.5 means less resistance to satchels)
-var class<DamageType> LastHitByDamageType;       // Stores the last damage type this vehicle was hit by.
-                                                 // Unlike `HitDamageType`, this variable is not replicated.
+// Stores the last damage type this vehicle was hit by.
+// Unlike `HitDamageType`, this variable is not replicated.
+var class<DamageType> LastHitByDamageType;
 
 // Engine
 var     bool        bEngineOff;                  // vehicle engine is simply switched off
@@ -2100,8 +2104,9 @@ simulated function SetEngine()
         if (IsVehicleBurning())
         {
             DamagedEffectHealthFireFactor = 1.0;
-            DamagedEffectHealthSmokeFactor = 1.0; // appears necessary to get native code to spawn a DamagedEffect if it doesn't already exist
-                                                  // (presumably doesn't check for fire unless vehicle is at least damaged enough to smoke)
+            // appears necessary to get native code to spawn a DamagedEffect if it doesn't already exist
+            // (presumably doesn't check for fire unless vehicle is at least damaged enough to smoke)
+            DamagedEffectHealthSmokeFactor = 1.0;
 
             if (DamagedEffect == none && Health == HealthMax) // clientside Health hack to get native code to spawn DamagedEffect (it won't unless vehicle has taken some damage)
             {
@@ -4668,8 +4673,9 @@ defaultproperties
     MinRunOverSpeed=586.75 // increased from 0 to 35km/h so players don't get run over so easily by vehicles
     ObjectiveGetOutDist=1500.0
     CenterSpringForce="SpringONSSRV"
-    bReplicateAnimations=false // override strange inherited property from ROWheeledVehicle - no reason for server to replicate anims & now we play transition anims on
-                               // server it seems to sometimes override the client's anim & leave it 1 frame short of its end position, glitching the camera view
+    // override strange inherited property from ROWheeledVehicle - no reason for server to replicate anims & now we play transition anims on
+    // server it seems to sometimes override the client's anim & leave it 1 frame short of its end position, glitching the camera view
+    bReplicateAnimations=false
     // Driver & positions
     DriverAttachmentBone="Driver_attachment"
     DriverPositions(0)=(ViewFOV=0.0) // override inherited FOV values from ROWheeledVehicle - zero just means it uses player's default view FOV (unless overridden in subclass)

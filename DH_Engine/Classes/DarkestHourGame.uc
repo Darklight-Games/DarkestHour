@@ -40,9 +40,10 @@ var     class<DHObstacleManager>    ObstacleManagerClass;
 
 var()   config bool                 bAllowAllChat;                          // optional bool to disable public text chat on the server
 
-var()   config int                  ChangeTeamInterval;                     // Server setting determines how long before a player can change teams again after doing so
-                                                                            // Also currently is the length of time for which a player can change teams for free at the beginning of a round
-                                                                            // Note: if bPlayersBalanceTeams is false, players will still be able to change teams
+// Server setting determines how long before a player can change teams again after doing so
+// Also currently is the length of time for which a player can change teams for free at the beginning of a round
+// Note: if bPlayersBalanceTeams is false, players will still be able to change teams
+var()   config int                  ChangeTeamInterval;
 
 var()   config int                  DisableAllChatThreshold;                // Player count to disallow all chat at
 var()   config int                  EnableIdleKickingThreshold;             // Player count required before idle kicking is turned on

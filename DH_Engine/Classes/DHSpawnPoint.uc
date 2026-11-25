@@ -33,8 +33,9 @@ var()   name            InfantryLocationHintTag;       // the Tag for associated
 var()   name            VehicleLocationHintTag;        // the Tag for associated LocationHint actors used to spawn players in vehicles
 var     array<DHLocationHint>   InfantryLocationHints; // saved references to linked location hint actors
 var     array<DHLocationHint>   VehicleLocationHints;
-var()   float           LocationHintDeferDistance;     // the spawn manager will try to avoid spawning players at location hints where there are enemies within this distance
-                                                       // (it will defer evaluation of any location hints that have enemies nearby)
+// the spawn manager will try to avoid spawning players at location hints where there are enemies within this distance
+// (it will defer evaluation of any location hints that have enemies nearby)
+var()   float           LocationHintDeferDistance;
 var()   bool            bUseLocationAsFallback;        // If true, then use the location of this actor as a fallback location in the event that all location hints are blocked
 
 // Options to link various types of actors to this SP, so they are only active when the SP is active

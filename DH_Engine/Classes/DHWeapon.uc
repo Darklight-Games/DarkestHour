@@ -8,8 +8,9 @@ class DHWeapon extends ROWeapon
 
 var     localized string NativeItemName;        // The designation name used by the nation that created it (not translated to English)
 
-var     int     TeamIndex;                      // Which team this weapon "belongs" to, used for ammo giving, you can't give enemy weapons ammo
-                                                // Default: 2 which is neutral and allows anyone to reupply it
+// Which team this weapon "belongs" to, used for ammo giving, you can't give enemy weapons ammo
+// Default: 2 which is neutral and allows anyone to reupply it
+var     int     TeamIndex;
 
 var     bool    bCanHaveInitialNumMagsChanged;  // Determines if the weapon will have initial number of magazines affected by the game's variables
 

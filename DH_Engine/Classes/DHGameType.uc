@@ -25,9 +25,11 @@ var int                 ObjSpawnMinimumDepth;                   // Used in calcu
 var int                 OutOfReinfLimitForTimeChange;           // Threshold for the bTimeCanChangeAtZeroReinf, the team with reinforcements remaining must have <= this amount
 var int                 OutOfReinfRoundTime;                    // The round time to set when a team runs out of reinforcements, if bTimeCanChangeAtZeroReinf
 
-var InterpCurve         ElapsedTimeAttritionCurve;              // Curve which inputs elapsed time and outputs attrition amount
-                                                                // used to setup a pseudo time limit for Advance/Attrition game modes
-                                                                // this way if there are too many reinforcements, the round will end in a sane amount of time
+// Curve which inputs elapsed time and outputs attrition amount
+// used to setup a pseudo time limit for Advance/Attrition game modes
+// this way if there are too many reinforcements, the round will end in a sane amount of time
+var InterpCurve         ElapsedTimeAttritionCurve;
+
 defaultproperties
 {
     GameTypeName="Unknown Game Type"

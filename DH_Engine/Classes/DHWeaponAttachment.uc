@@ -22,8 +22,8 @@ var     name        WA_ProneIdle;
 var     name        WA_DeployedIdle;
 var     name        WA_DeployedFire;
 
-var     bool        bStaticReload; // Reload animations will take over the
-                                   // entire body (useful for deployed weapons).
+// Reload animations will take over the entire body (useful for deployed weapons).
+var     bool        bStaticReload;
 
 var     name        PA_BarrelChangeStandAnim;
 var     name        PA_BarrelChangeCrouchAnim;

@@ -26,8 +26,10 @@ var     bool    bCanPickupWeapons;
 var     array<Material> FaceSkins;        // list of body & face skins to be randomly selected for pawn
 var     array<Material> BodySkins;
 var     byte    PackedSkinIndexes;        // server packs selected index numbers for body & face skins into a single byte for most efficient replication to net clients
-var     bool    bReversedSkinsSlots;      // some player meshes have the typical body & face skin slots reversed, so this allows it to be assigned per pawn class
-                                          // TODO: fix the reversed skins indexing in player meshes to standardise with body is 0 & face is 1 (as in RO), then delete this
+
+// some player meshes have the typical body & face skin slots reversed, so this allows it to be assigned per pawn class
+// TODO: fix the reversed skins indexing in player meshes to standardise with body is 0 & face is 1 (as in RO), then delete this
+var     bool    bReversedSkinsSlots;
 
 var     class<DHPawnFootstepSounds> FootstepSoundsClass;
 
