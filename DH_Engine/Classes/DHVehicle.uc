@@ -4423,6 +4423,8 @@ simulated static function DHVehicle GetDrivenVehicleBase(Pawn P)
 
         return DHVehicle(V);
     }
+
+    return none;
 }
 
 // Override in subclasses to handle the change in the number of rounds remaining.

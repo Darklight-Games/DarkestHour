@@ -190,6 +190,8 @@ final static function String GetServerHealthString(byte Tick, optional out Color
             return default.ServerHealthStages[i].Text;
         }
     }
+
+    return "";
 }
 
 defaultproperties

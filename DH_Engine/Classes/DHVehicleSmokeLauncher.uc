@@ -38,6 +38,8 @@ static function Rotator GetFireRotation(optional byte LauncherIndex)
     {
         return default.FireRotation[LauncherIndex];
     }
+
+    return rot(0, 0, 0);
 }
 
 static function Sound GetReloadStageSound(byte StageIndex)
@@ -46,6 +48,8 @@ static function Sound GetReloadStageSound(byte StageIndex)
     {
         return default.ReloadStages[StageIndex].Sound;
     }
+
+    return none;
 }
 
 static function float GetReloadStageDuration(byte StageIndex)
@@ -54,6 +58,8 @@ static function float GetReloadStageDuration(byte StageIndex)
     {
         return default.ReloadStages[StageIndex].Duration;
     }
+
+    return 0.0;
 }
 
 static function float GetReloadHUDProportion(byte StageIndex)
@@ -62,6 +68,8 @@ static function float GetReloadHUDProportion(byte StageIndex)
     {
         return default.ReloadStages[StageIndex].HUDProportion;
     }
+
+    return 0.0;
 }
 
 static function bool CanRotate()
@@ -86,6 +94,8 @@ static function float GetLaunchSpeedModifier(byte RangeSetting)
     {
         return default.RangeSettingSpeedModifier[RangeSetting];
     }
+
+    return 0.0;
 }
 
 static function StaticPrecache(LevelInfo L)

@@ -44,6 +44,8 @@ final function DHPlayer GetComponentController(GUIComponent Component)
     {
         return DHPlayer(Component.PlayerOwner());
     }
+
+    return none;
 }
 
 final function bool OnOpen(GUIContextMenu Sender, GUIComponent Component)

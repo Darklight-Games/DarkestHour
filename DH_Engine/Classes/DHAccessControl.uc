@@ -273,6 +273,8 @@ static function bool IsGloballyBanned(string ROID)
             return true;
         }
     }
+
+    return false;
 }
 
 // This only gets the patron level off the PatreonIDs array in the default properties below, not from the webserver

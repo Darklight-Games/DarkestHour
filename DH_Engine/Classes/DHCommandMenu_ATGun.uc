@@ -127,6 +127,8 @@ function bool IsOptionDisabled(int OptionIndex)
             return false;
             break;
     }
+
+    return false;
 }
 
 simulated function UpdateRotationError()

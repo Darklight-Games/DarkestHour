@@ -1994,6 +1994,8 @@ simulated function Vector GetWorldSurfaceCoords(float X, float Y, float TraceHei
             return HitLocation;
         }
     }
+
+    return vect(0.0, 0.0, 0.0);
 }
 
 // This function will adjust a hud map location based on the rotation offset of
@@ -2227,6 +2229,8 @@ simulated function bool IsSurrenderVoteInProgress(byte TeamIndex)
     {
         return bool(SurrenderVotesInProgress[TeamIndex]);
     }
+
+    return false;
 }
 
 function SetSurrenderVoteInProgress(byte TeamIndex, bool bInProgress)

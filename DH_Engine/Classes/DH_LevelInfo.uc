@@ -417,6 +417,8 @@ simulated function class<DHArtillery> GetArtilleryClass(int ArtilleryTypeIndex)
     {
         return ArtilleryTypes[ArtilleryTypeIndex].ArtilleryClass;
     }
+
+    return none;
 }
 
 simulated static function DH_LevelInfo GetInstance(LevelInfo Level)

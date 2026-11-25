@@ -378,6 +378,8 @@ simulated function WeaponFire GetFiringMode()
             return FireMode[i];
         }
     }
+
+    return none;
 }
 
 // Modified to include states PostFiring & AutoLoweringWeapon

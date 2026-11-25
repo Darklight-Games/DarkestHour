@@ -133,6 +133,8 @@ function EOperationError UpdateRestriction(WebRequest Request)
     DHAC.Restrictions[i].ForcedName = Request.GetVariable("ForcedName", "");
     DHAC.ApplyRestrictionsByID(PlayerID);
     DHAC.SaveConfig();
+
+    return ERR_OK;
 }
 
 function EOperationError DeleteRestriction(WebRequest Request)
@@ -154,6 +156,8 @@ function EOperationError DeleteRestriction(WebRequest Request)
     DHAC.Restrictions.Remove(i, 1);
     DHAC.ApplyRestrictionsByID(PlayerID);
     DHAC.SaveConfig();
+
+    return ERR_OK;
 }
 
 function QueryDefaultsRestrictions(WebRequest Request, WebResponse Response)

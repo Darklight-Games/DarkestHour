@@ -70,6 +70,8 @@ function bool ResetPlayerIQ()
         ScaleMultiplier = default.ScaleMultiplier;
         return true;
     }
+
+    return false;
 }
 
 state Pending
@@ -231,6 +233,8 @@ state Managed
 
         // DebugLog("+ AWOL 2");
         Reason = REASON_AWOL;
+
+        return false;
     }
 
     protected function ChangeIQ(int Increment, EReason Reason)
