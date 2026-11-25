@@ -539,7 +539,7 @@ function GetDefaultMap(out int MapIdx, out int GameIdx)
 {
     local array<string> PrefixList;
     local bool          bLoop;
-    local int           GCIdx, i, p, r, x, y;
+    local int           GCIdx, i, r, x, y;
 
     if (MapCount <= 0)
     {
@@ -558,7 +558,7 @@ function GetDefaultMap(out int MapIdx, out int GameIdx)
 
     // Parse Prefix list for default game type
     PrefixList.Length = 0;
-    p = Split(GameConfig[GCIdx].Prefix, ",", PrefixList);
+    Split(GameConfig[GCIdx].Prefix, ",", PrefixList);
 
     if (PrefixList.Length == 0)
     {
@@ -619,7 +619,7 @@ function GetDefaultMap(out int MapIdx, out int GameIdx)
                         {
                             // Parse Prefix list for game type
                             PrefixList.Length = 0;
-                            p = Split(GameConfig[y].Prefix, ",", PrefixList);
+                            Split(GameConfig[y].Prefix, ",", PrefixList);
 
                             if (PrefixList.Length > 0)
                             {

@@ -988,10 +988,7 @@ function bool LeaveSquad(DHPlayerReplicationInfo PRI, optional bool bShouldShowL
     local DHBot Bot;
     local DHVoiceReplicationInfo VRI;
     local VoiceChatRoom SquadVCR;
-    local DarkestHourGame G;
     local bool bHasActiveChannelChanged;
-
-    G = DarkestHourGame(Level.Game);
 
     if (PRI == none || PRI.Team == none || GRI == none)
     {
@@ -1467,7 +1464,6 @@ function bool BanFromSquad(DHPlayerReplicationInfo PRI, int TeamIndex, int Squad
 {
     local DHPlayer PC, OtherPC;
     local SquadBan Ban;
-    local DHBot Bot;
 
     if (!KickFromSquad(PRI, TeamIndex, SquadIndex, PlayerToBan))
     {
@@ -1489,7 +1485,6 @@ function bool BanFromSquad(DHPlayerReplicationInfo PRI, int TeamIndex, int Squad
         SquadBans[SquadBans.Length] = Ban;
 
         PC = DHPlayer(PRI.Owner);
-        Bot = DHBot(PRI.Owner);
 
         if (PC != none)
         {

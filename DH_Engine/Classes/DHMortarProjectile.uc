@@ -328,7 +328,10 @@ function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> Da
     local DHConstruction C;
     local ROPawn        P;
     local array<ROPawn> CheckedROPawns;
-    local bool          bAlreadyChecked, bAlreadyDead;
+    local bool          bAlreadyChecked;
+    // NOTE: investigate if this is missing functionality.
+    // usagi:ignore[local-set-but-never-used]
+    local bool          bAlreadyDead;
     local Vector        VictimLocation, Direction, TraceHitLocation, TraceHitNormal;
     local float         DamageScale, Distance, DamageExposure;
     local int           i;

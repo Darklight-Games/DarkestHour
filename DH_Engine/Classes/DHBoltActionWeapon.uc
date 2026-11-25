@@ -665,10 +665,6 @@ simulated function name GetSingleReloadAnim()
 
 simulated function PlayFullReload()
 {
-    local float Duration;
-
-    Duration = GetAnimDuration(FullReloadAnim, 1.0);
-
     SetTimer(GetAnimDuration(FullReloadAnim, 1.0), false);
 
     if (InstigatorIsLocallyControlled() && HasAnim(FullReloadAnim))

@@ -825,7 +825,7 @@ function Bot SpawnBot(optional string botName)
 function byte PickTeam(byte num, Controller C)
 {
     local UnrealTeamInfo NewTeam;
-    local int            SmallTeam, BigTeam, TeamSizes[2], IdealTeamSizes[2];
+    local int            SmallTeam, TeamSizes[2], IdealTeamSizes[2];
     local float          TeamSizeRatings[2];
 
     if (bPlayersVsBots && (Level.NetMode != NM_Standalone))
@@ -844,12 +844,10 @@ function byte PickTeam(byte num, Controller C)
     if (TeamSizeRatings[0] > TeamSizeRatings[1])
     {
         SmallTeam = 1;
-        BigTeam = 0;
     }
     else
     {
         SmallTeam = 0;
-        BigTeam = 1;
     }
 
     if (num < 2)
@@ -1191,7 +1189,7 @@ event PlayerController Login(string Portal, string Options, out string Error)
     local DHPlayer         PC;
     local Controller       C;
     local NavigationPoint  StartSpot;
-    local string           InName, InAdminName, InPassword, InChecksum, InCharacter, InSex;
+    local string           InName, InAdminName, InPassword, InCharacter, InSex;
     local byte             InTeam;
     local bool             bSpectator, bAdmin;
     local class<Security>  MySecurityClass;
@@ -1223,7 +1221,6 @@ event PlayerController Login(string Portal, string Options, out string Error)
     InTeam      = GetIntOption(Options, "Team", 255); // default to "no team"
     InAdminName = ParseOption(Options, "AdminName");
     InPassword  = ParseOption(Options, "Password");
-    InChecksum  = ParseOption(Options, "Checksum");
 
     // TODO: we don't support save games, this could probably go bye bye also
     if (HasOption(Options, "Load"))
@@ -2497,9 +2494,6 @@ state RoundInPlay
         local Actor A;
         local int i;
         local ROVehicleFactory ROV;
-        local DH_LevelInfo LI;
-
-        LI = DHLevelInfo;
 
         // Begin reseting all round properties!!!
         RoundStartTime = ElapsedTime;
@@ -4133,11 +4127,8 @@ function UpdateObjectiveSpawns()
 // Functionally identical to ROTeamGame.ChangeTeam except we reset additional parameters in DHPlayer
 function bool ChangeTeam(Controller Other, int Num, bool bNewTeam)
 {
-    local int OldTeam;
     local UnrealTeamInfo NewTeam;
     local DHPlayer       PC;
-
-    OldTeam = Other.GetTeamNum();
 
     if (bMustJoinBeforeStart && GameReplicationInfo.bMatchHasBegun)
     {

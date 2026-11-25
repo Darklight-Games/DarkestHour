@@ -21,6 +21,7 @@ var     int             IterationMultiplier;
 
 event Tick(float DeltaTime)
 {
+    // usagi:ignore[local-set-but-never-used]
     local int i, j, x;
 
     ClientFrameRateConsolidated += DeltaTime;

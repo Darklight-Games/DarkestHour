@@ -1493,7 +1493,6 @@ state PlayerWalking
     // Added a test for mantling
     function ProcessMove(float DeltaTime, Vector NewAccel, eDoubleClickDir DoubleClickMove, Rotator DeltaRot)
     {
-        local Vector  OldAccel;
         local DHPawn P;
 
         P = DHPawn(Pawn);
@@ -1502,8 +1501,6 @@ state PlayerWalking
         {
             return;
         }
-
-        OldAccel = Pawn.Acceleration;
 
         if (Pawn.Acceleration != NewAccel)
         {
@@ -2217,10 +2214,7 @@ ignores SeePlayer, HearNoise, Bump;
     // Modified so moving into a shallow water volume also triggers NotifyPhysicsVolumeChange(), same as if they move into a non-water volume
     function ProcessMove(float DeltaTime, Vector NewAccel, eDoubleClickDir DoubleClickMove, Rotator DeltaRot)
     {
-        local Vector OldAccel;
         local bool   bUpAndOut;
-
-        OldAccel = Pawn.Acceleration;
 
         if (Pawn.Acceleration != NewAccel)
         {
@@ -2450,13 +2444,12 @@ simulated function bool IsRadioman()
 
 function ServerNotifyRoles(DHPlayerReplicationInfo.ERoleSelector RoleSelector, class<ROCriticalMessage> Message, int MessageIndex, optional Object OptionalObject)
 {
-    local int                     TeamIndex, SquadIndex;
+    local int                     TeamIndex;
     local Controller              C;
     local DHPlayer                OtherPlayer;
     local DHPlayerReplicationInfo PRI;
 
     TeamIndex = GetTeamNum();
-    SquadIndex = GetSquadIndex();
 
     for (C = Level.ControllerList; C != none; C = C.NextController)
     {

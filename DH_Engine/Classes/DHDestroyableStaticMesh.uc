@@ -67,13 +67,12 @@ state Broken // NOTE: can't name it "Destroyed" because that's the name of a fun
 
 simulated function ClientPlayDestroyedEffects()
 {
-    local Emitter DestroyedEmitter;
     local Vector SpawnLocation;
 
     if (DestroyedEmitterClass != none)
     {
         SpawnLocation = Location + (DestroyedEmitterOffset << Rotation);
-        DestroyedEmitter = Spawn(DestroyedEmitterClass,,, SpawnLocation, Rotation);
+        Spawn(DestroyedEmitterClass,,, SpawnLocation, Rotation);
     }
 }
 

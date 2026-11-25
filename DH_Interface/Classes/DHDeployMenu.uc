@@ -1630,7 +1630,7 @@ function UpdateSquads()
     local array<DHPlayerReplicationInfo> Members;
     local DHGUISquadComponent            C;
     local int TeamIndex, SquadLimit, i, j;
-    local bool bIsInSquad, bIsInASquad, bIsSquadLeader, bIsSquadFull, bIsSquadLocked, bCanJoinSquad, bCanSquadBeLocked;
+    local bool bIsInSquad, bIsInASquad, bIsSquadLeader, bIsSquadLocked, bCanJoinSquad, bCanSquadBeLocked;
 
     super.Timer();
 
@@ -1694,7 +1694,6 @@ function UpdateSquads()
         SetVisible(C, true);
 
         bIsInSquad = SRI.IsInSquad(PRI, TeamIndex, i);
-        bIsSquadFull = SRI.IsSquadFull(TeamIndex, i);
         bIsSquadLeader = SRI.IsSquadLeader(PRI, TeamIndex, i);
         bIsSquadLocked = SRI.IsSquadLocked(TeamIndex, i);
         bCanSquadBeLocked = SRI.CanSquadBeLocked(TeamIndex, i);

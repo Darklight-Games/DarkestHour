@@ -713,11 +713,6 @@ auto simulated state Constructing
     {
         local int i;
         local int OldStageIndex;
-        local DHGameReplicationInfo GRI;
-        local DH_LevelInfo LI;
-
-        GRI = DHGameReplicationInfo(Level.Game.GameReplicationInfo);
-        LI = Class'DH_LevelInfo'.static.GetInstance(Level);
 
         if (bCanDieOfStagnation)
         {

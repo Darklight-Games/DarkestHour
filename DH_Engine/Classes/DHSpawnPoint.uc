@@ -362,9 +362,6 @@ function bool GetSpawnPosition(out Vector SpawnLocation, out Rotator SpawnRotati
     local Pawn                  P;
     local bool                  bIsBlocked;
     local float                 TestCollisionRadius;
-    local DHSpawnManager        SM;
-
-    SM = DarkestHourGame(Level.Game).SpawnManager;
 
     if (VehiclePoolIndex >= 0)
     {

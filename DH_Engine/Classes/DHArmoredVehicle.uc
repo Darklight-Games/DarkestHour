@@ -793,18 +793,9 @@ function CancelAnyVehicleUnlockTimer()
 // This is based on their position in the vehicle - any commander is most senior, then any driver, then any other crew (i.e. MG position)
 simulated function bool CanPlayerLockVehicle(Vehicle PlayersVehiclePosition)
 {
-    local DHPlayer     PC;
-    local DH_LevelInfo LI;
     local int          FailMessageNumber;
 
     FailMessageNumber = -1; // start with an invalid number, so later we know if a genuine failure has occured
-
-    PC = DHPlayer(PlayersVehiclePosition.Controller);
-
-    if (PC != none)
-    {
-        LI = PC.GetLevelInfo();
-    }
 
     // Not if this armored vehicle isn't for tank crew only (very unlikely for an armored vehicle, but possible - perhaps for a scenario map)
     if (!bMustBeTankCommander)
