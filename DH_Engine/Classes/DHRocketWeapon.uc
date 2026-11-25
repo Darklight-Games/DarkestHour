@@ -328,10 +328,13 @@ simulated function bool AllowReload()
         return false;
     }
 
-    if (!IsLoaded())
+    if (IsLoaded())
     {
-        return super.AllowReload();
+        // Already loaded.
+        return false;
     }
+
+    return super.AllowReload();
 }
 
 // Modified to prevent proning while reloading

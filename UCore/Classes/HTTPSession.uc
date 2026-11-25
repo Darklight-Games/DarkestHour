@@ -8,7 +8,7 @@ class HTTPSession extends Object;
 
 var TreeMap_string_Object Cookies;
 
-function HTTPCookie SetCookie(string S)
+function SetCookie(string S)
 {
     local int i;
     local array<string> Crumbs;
@@ -22,7 +22,7 @@ function HTTPCookie SetCookie(string S)
     if (Crumbs.Length <= 0)
     {
         Warn("Invalid Set-Cookie value:" @ S);
-        return none;
+        return;
     }
 
     Divide(Crumbs[0], "=", CookieName, Value);

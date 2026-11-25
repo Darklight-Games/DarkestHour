@@ -983,6 +983,8 @@ function int GetDHBotNewRole(DHBot ThisBot, int BotTeamNum)
             return i;
         }
     }
+
+    return -1;
 }
 
 // Give player a point for resupplying an MG gunner
@@ -4214,6 +4216,8 @@ function bool BecomeSpectator(PlayerController P)
     P.PlayerReplicationInfo.Team = none;
     P.PlayerReplicationInfo.bIsSpectator = true;
     P.PlayerReplicationInfo.bOnlySpectator = true;
+
+    return true;
 }
 
 function PlayerLeftTeam(PlayerController P)

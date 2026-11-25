@@ -1190,29 +1190,28 @@ simulated function bool IsAnySquadJoinable(int TeamIndex)
 }
 
 // Attempt to make the specified player join the most populous open squad.
-// Returns the squad index of the newly joined squad, or -1 if it failed.
-function int JoinSquadAuto(DHPlayerReplicationInfo PRI)
+function bool JoinSquadAuto(DHPlayerReplicationInfo PRI)
 {
     local int i, SquadIndex, MaxMemberCount, MemberCount;
     local DHPlayer PC;
 
     if (PRI == none || PRI.Team == none)
     {
-        return -1;
+        return false;
     }
 
     PC = DHPlayer(PRI.Owner);
 
     if (PC == none)
     {
-        return -1;
+        return false;
     }
 
     if (PRI.IsInSquad())
     {
         // "You are already in a squad."
         PC.ReceiveLocalizedMessage(SquadMessageClass, 69);
-        return -1;
+        return false;
     }
 
     SquadIndex = -1;
@@ -1234,15 +1233,15 @@ function int JoinSquadAuto(DHPlayerReplicationInfo PRI)
         }
     }
 
-    if (SquadIndex >= 0)
+    if (SquadIndex < 0)
     {
-        return JoinSquad(PRI, PRI.Team.TeamIndex, SquadIndex);
+        // "There are no squads that you are eligible to join."
+        PC.ReceiveLocalizedMessage(SquadMessageClass, 63);
+
+        return false;
     }
 
-    // "There are no squads that you are eligible to join."
-    PC.ReceiveLocalizedMessage(SquadMessageClass, 63);
-
-    return -1;
+    return JoinSquad(PRI, PRI.Team.TeamIndex, SquadIndex);
 }
 
 private function int GetEmptySquadMemberIndex(byte TeamIndex, int SquadIndex)
@@ -1261,9 +1260,7 @@ private function int GetEmptySquadMemberIndex(byte TeamIndex, int SquadIndex)
 }
 
 // Attempts to make the specified player join the specified squad.
-// Returns the index of the player's new SquadMemberIndex or -1 if
-// they were unable to join the squad.
-function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadIndex, optional bool bWasInvited, optional bool bIsQuiet)
+function bool JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadIndex, optional bool bWasInvited, optional bool bIsQuiet)
 {
     local int MemberIndex;
     local DHPlayer PC;
@@ -1272,7 +1269,7 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
 
     if (PRI == none || PRI.Team == none || PRI.Team.TeamIndex != TeamIndex)
     {
-        return -1;
+        return false;
     }
 
     PC = DHPlayer(PRI.Owner);
@@ -1280,12 +1277,12 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
 
     if (PC == none && Bot == none)
     {
-        return -1;
+        return false;
     }
 
     if (!IsSquadActive(TeamIndex, SquadIndex) || IsInSquad(PRI, TeamIndex, SquadIndex) || GetSquadLeader(TeamIndex, SquadIndex) == none)
     {
-        return -1;
+        return false;
     }
 
     if (!bWasInvited)
@@ -1294,12 +1291,12 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
         {
             // "You are unable to join this squad as you have been banned."
             PC.ReceiveLocalizedMessage(Class'DHSquadMessage', 62);
-            return -1;
+            return false;
         }
 
         if (IsSquadLocked(TeamIndex, SquadIndex))
         {
-            return -1;
+            return false;
         }
     }
 
@@ -1336,6 +1333,8 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
         // Clear the squad ban, if it exists.
         ClearSquadBan(TeamIndex, SquadIndex, PRI);
     }
+
+    return true;
 }
 
 // Attempts to kick the specified player from the specified squad.
@@ -2961,6 +2960,8 @@ function bool MaybeLeaveCommandVoiceChannel(DHPlayerReplicationInfo PRI)
     {
         PC.Speak(VRI.LocalChannelName);
     }
+
+    return true;
 }
 
 //==============================================================================
@@ -3304,7 +3305,7 @@ function bool IsSquadPromotionRequestValid(SquadPromotionRequest SPR)
            !IsSquadLeader(SPR.Recipient, SPR.TeamIndex, SPR.SquadIndex);
 }
 
-function bool DenySquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionRequestID)
+function DenySquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionRequestID)
 {
     local int SquadPromotionRequestIndex;
     local SquadPromotionRequest SPR;
@@ -3314,7 +3315,7 @@ function bool DenySquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionReq
 
     if (SquadPromotionRequestIndex == -1)
     {
-        return false;
+        return;
     }
 
     SPR = SquadPromotionRequests[SquadPromotionRequestIndex];
