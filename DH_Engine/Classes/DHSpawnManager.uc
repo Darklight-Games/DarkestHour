@@ -356,7 +356,9 @@ event VehicleDestroyed(Vehicle V)
         // Find out if the vehicle was spawned killed
         if (DHV.IsSpawnKillProtected())
         {
-            if (DHV.SpawnPoint != none)
+            // Only penalize the spawn point if the vehicle was last damaged by the enemy.
+            // This excludes friendly fire & self-inflicted destruction (e.g. crashing).
+            if (DHV.SpawnPoint != none && DHV.LastHitBy != none && DHV.LastHitBy.GetTeamNum() != DHV.VehicleTeam)
             {
                 DHV.SpawnPoint.OnSpawnKill(V, none);
             }
