@@ -440,7 +440,7 @@ simulated function DrawPeriscopeOverlay(Canvas C)
 // Modified to prevent entry if either vehicle or engine is on fire (with message if own team's vehicle)
 function Vehicle FindEntryVehicle(Pawn P)
 {
-    if ((IsVehicleBurning()) || (IsEngineBurning()))
+    if (IsVehicleBurning() || IsEngineBurning())
     {
         if (P != none && (P.GetTeamNum() == VehicleTeam || !bTeamLocked))
         {

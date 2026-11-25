@@ -242,7 +242,6 @@ final static function Color HSV2RGB(HSV HSV)
         RGB.G = P * 255;
         RGB.B = HSV.V * 255;
         break;
-    case 5:
     default:
         RGB.R = HSV.V * 255;
         RGB.G = P * 255;

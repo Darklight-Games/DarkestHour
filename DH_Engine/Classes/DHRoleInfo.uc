@@ -297,7 +297,6 @@ simulated function Material GetHandTexture(DH_LevelInfo LI)
         case HAND_Custom:
             HandTexture = CustomHandTexture;
             break;
-        case HAND_Bare:
         default:
             HandTexture = BareHandTexture;
             break;
@@ -366,7 +365,6 @@ defaultproperties
     Limit=255 // unlimited (0 is now deactivated)
     HeadgearProbabilities(0)=1.0
     bCanCarryExtraAmmo=true
-    bSpawnWithExtraAmmo=false
     BareHandTexture=Texture'Weapons1st_tex.hands'
     GlovedHandTexture=Texture'Weapons1st_tex.hands_gergloves'
     HandType=Hand_Bare

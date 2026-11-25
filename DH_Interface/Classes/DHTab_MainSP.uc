@@ -100,9 +100,7 @@ function InitGameType() // TODO: this is being called twice in single player (cu
     li_Maps.Expand(i);
 }
 
-function CheckGameTutorial()
-{
-}
+function CheckGameTutorial();
 
 function MapListChange(GUIComponent Sender)
 {

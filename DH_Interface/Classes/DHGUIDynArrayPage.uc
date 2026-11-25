@@ -5,7 +5,7 @@
 
 class DHGUIDynArrayPage extends GUIDynArrayPage;
 
-function AddSystemMenu(){}
+function AddSystemMenu();
 
 defaultproperties
 {

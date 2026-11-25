@@ -258,5 +258,5 @@ defaultproperties
     MouseCursorIndex=2
 
     HideExecs(0)="SHOWOBJECTIVES"
-    Hideexecs(1)="JUMP"
+    HideExecs(1)="JUMP"
 }

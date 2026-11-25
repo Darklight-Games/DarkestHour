@@ -134,12 +134,12 @@ function Timer()
                         if (U != none)
                         {
                             R = Spawn(Class'HTTPRequest');
-                            R.Method = self.Method;
+                            R.Method = Method;
                             R.Host = U.Host;
                             R.Path = U.Path;
                             R.Protocol = U.Scheme;
-                            R.bAllowRedirects = self.bAllowRedirects;
-                            R.Headers = self.Headers;
+                            R.bAllowRedirects = bAllowRedirects;
+                            R.Headers = Headers;
                             R.Send();
                         }
                         else

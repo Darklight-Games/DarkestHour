@@ -220,10 +220,7 @@ simulated state PostFiring
         return true;
     }
 
-    simulated function bool CanStartCrawlMoving()
-    {
-        return false;
-    }
+    simulated function bool CanStartCrawlMoving();
 
     simulated function Timer()
     {
@@ -250,10 +247,7 @@ simulated state PostFiring
 // This helps prevent grenades from getting thrown instantly after another one was thrown when rapidly alternating fire/altfire buttons
 simulated state RaisingWeapon
 {
-    simulated function bool CanStartCrawlMoving()
-    {
-        return false;
-    }
+    simulated function bool CanStartCrawlMoving();
 
     simulated function BeginState()
     {
@@ -340,10 +334,7 @@ simulated state AutoLoweringWeapon
         return ClientState == WS_PutDown || super.WeaponCanSwitch();
     }
 
-    simulated function bool CanStartCrawlMoving()
-    {
-        return false;
-    }
+    simulated function bool CanStartCrawlMoving();
 
     simulated function BeginState()
     {

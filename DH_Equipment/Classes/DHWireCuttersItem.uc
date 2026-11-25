@@ -10,12 +10,12 @@ var     DHObstacleInstance  ObstacleBeingCut, ObstacleShouldBeCut;
 var     DHConstruction      ConstructionBeingCut, ConstructionShouldBeCut;
 
 // Functions emptied out or returning false, as wire cutters aren't a real weapon
-simulated function bool IsFiring(){return false;}
-function bool FillAmmo(){return false;}
-function bool ResupplyAmmo(){return false;}
-exec simulated function ROManualReload() {return;}
-simulated function bool IsBusy() {return false;}
-simulated function bool ShouldUseFreeAim() {return false;}
+simulated function bool IsFiring();
+function bool FillAmmo();
+function bool ResupplyAmmo();
+exec simulated function ROManualReload();
+simulated function bool IsBusy();
+simulated function bool ShouldUseFreeAim();
 
 // Overriden in Idle state
 simulated function Fire(float F);

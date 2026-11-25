@@ -218,15 +218,11 @@ simulated function ShakeView(bool bWasAltFire)
 }
 
 // Emptied out as mortar doesn't use FlashCount to trigger firing effects on all net clients, nor does it use any of the effects functionality
-simulated function FlashMuzzleFlash(bool bWasAltFire)
-{
-}
+simulated function FlashMuzzleFlash(bool bWasAltFire);
 
 // Emptied out as mortar doesn't use FlashCount to trigger firing effects on all net clients, so there's no point briefly sending a server into state ServerCeaseFire
 // And mortar doesn't use any of the other effects functionality
-function CeaseFire(Controller C, bool bWasAltFire)
-{
-}
+function CeaseFire(Controller C, bool bWasAltFire);
 
 // New function to toggle current ammo type, with click sound
 // This only happens locally on a net client & any changed ammo type is only passed to the server on firing or the player exiting the mortar
@@ -246,10 +242,7 @@ simulated function ToggleRoundType()
 
 // Emptied out as a mortar re-spawns every time a player deploys it, & we can't have it restored to full ammo every time
 // Instead its ammo gets transferred between the mortar & the DHPawn, so when the player acts as the ammo record
-function bool GiveInitialAmmo()
-{
-    return false;
-}
+function bool GiveInitialAmmo();
 
 // Implemented to handle mortar resupply based on specified resupply quantities, but only for an occupied mortar (ammo is transferred to player when he exits & mortar will be empty)
 function bool ResupplyAmmo()
@@ -305,7 +298,7 @@ simulated function Timer();
 function PassReloadStateToClient();
 simulated function ClientSetReloadState(byte NewState);
 simulated function PauseReload();
-simulated function bool HasAmmoToReload(byte AmmoIndex) { return false; }
+simulated function bool HasAmmoToReload(byte AmmoIndex);
 simulated function StartHatchFire();
 
 defaultproperties

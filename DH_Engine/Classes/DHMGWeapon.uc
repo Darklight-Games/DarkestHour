@@ -87,9 +87,7 @@ simulated function bool ShouldUseFreeAim()
 // Modified to avoid ironsights stuff because an 'ironsighted' MG is actually just hipped fire mode
 simulated state IronSightZoomIn
 {
-    simulated function EndState() // avoids setting DisplayFOV & PlayerViewOffset
-    {
-    }
+    simulated function EndState() // avoids setting DisplayFOV & PlayerViewOffset;
 
 Begin: // do nothing (avoids calling SmoothZoom)
 }
@@ -162,10 +160,7 @@ function SetServerOrientation(Rotator  NewRotation)
 }
 
 // Overridden because we have no melee attack
-simulated function bool IsBusy()
-{
-    return false;
-}
+simulated function bool IsBusy();
 
 // Modified to add BeltBulletClass static mesh
 static function StaticPrecache(LevelInfo L)

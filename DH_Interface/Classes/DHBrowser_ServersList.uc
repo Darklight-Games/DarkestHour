@@ -124,7 +124,7 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
     // Vac Secured     16       //  Was Instagib        16
     // Standard        32
     // UT CLassic      64
-    Flags = Servers[SortData[i].SortItem].Flags;
+    flags = Servers[SortData[i].SortItem].Flags;
 
     GetCellLeftWidth( 0, CellLeft, CellWidth );
     IconPosX = CellLeft;

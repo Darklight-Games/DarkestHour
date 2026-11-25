@@ -571,9 +571,9 @@ simulated event PostNetReceive()
     super.PostNetReceive();
 
     // Rotation is sent as string, process.
-    firstComma = InStr(SentinelString,",");
+    FirstComma = InStr(SentinelString,",");
     UncompressedRotation.Pitch = Int(Left(SentinelString, FirstComma));
-    CutSentinel = Mid(SentinelString,firstComma + 1);
+    CutSentinel = Mid(SentinelString,FirstComma + 1);
     SecondComma = InStr(CutSentinel, ",");
     UncompressedRotation.Yaw = Int(Left(CutSentinel, SecondComma));
     UncompressedRotation.Roll = Int(Mid(CutSentinel, SecondComma + 1));
@@ -688,12 +688,12 @@ function ServerChangeViewPoint(bool bForward);
 simulated function NextViewPoint();
 simulated function SwitchWeapon(byte F);
 function ServerChangeDriverPosition(byte F);
-simulated function bool CanSwitchToVehiclePosition(byte F) { return false; }
-function bool KDriverLeave(bool bForceLeave) { return false; }
+simulated function bool CanSwitchToVehiclePosition(byte F);
+function bool KDriverLeave(bool bForceLeave);
 function DriverDied();
 function DriverLeft();
-simulated function bool CanExit() { return false; }
-function bool PlaceExitingDriver() { return false; }
+simulated function bool CanExit();
+function bool PlaceExitingDriver();
 simulated function Destroyed_HandleDriver();
 simulated function SetPlayerPosition();
 simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation);
@@ -702,9 +702,9 @@ simulated function DrawPeriscopeOverlay(Canvas C);
 simulated function POVChanged(PlayerController PC, bool bBehindViewChanged);
 simulated function int LimitYaw(int yaw) { return yaw; }
 function int LimitPawnPitch(int pitch) { return pitch; }
-simulated function float GetViewFOV(int PositionIndex) { return 0.0; }
+simulated function float GetViewFOV(int PositionIndex);
 simulated function SetViewFOV(int PositionIndex, optional PlayerController PC);
-function bool ResupplyAmmo() { return false; }
+function bool ResupplyAmmo();
 
 defaultproperties
 {
@@ -768,7 +768,6 @@ defaultproperties
     RotateSoundVolume=200
 
     OldRotator=(Pitch=0,Yaw=0,Roll=0)
-    bOldIsRotating=false
     bUpdateSimulatedPosition=true
     bReplicateMovement=true
     bSkipActorPropertyReplication=false

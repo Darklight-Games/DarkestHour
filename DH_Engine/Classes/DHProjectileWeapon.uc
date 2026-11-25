@@ -387,15 +387,9 @@ simulated function Destroyed()
 // New state containing common function overrides from states that extend state Busy, so instead they extend WeaponBusy to reduce code repetition
 simulated state WeaponBusy extends Busy
 {
-    simulated function bool ReadyToFire(int Mode)
-    {
-        return false;
-    }
+    simulated function bool ReadyToFire(int Mode);
 
-    simulated function bool ShouldUseFreeAim()
-    {
-        return false;
-    }
+    simulated function bool ShouldUseFreeAim();
 
     simulated function Timer()
     {
@@ -404,9 +398,7 @@ simulated state WeaponBusy extends Busy
 }
 
 // Implemented in subclasses
-function ServerWorkBolt()
-{
-}
+function ServerWorkBolt();
 
 // Debug logging to show how much ammo we have in our mags
 exec simulated function LogAmmo()
@@ -863,10 +855,7 @@ simulated function bool PutDown()
 // Modified to prevent a reload if we're putting the weapon away
 state Hidden
 {
-    simulated function bool AllowReload()
-    {
-        return false;
-    }
+    simulated function bool AllowReload();
 }
 
 simulated function UpdateBayonet()
@@ -969,20 +958,13 @@ simulated state Idle
 simulated state LoweringWeapon
 {
     // Don't zoom in when we're lowering the weapon
-    simulated function PerformZoom(bool bZoomIn)
-    {
-    }
+    simulated function PerformZoom(bool bZoomIn);
 
     // Don't allow a reload if we're putting the weapon away
-    simulated function bool AllowReload()
-    {
-        return false;
-    }
+    simulated function bool AllowReload();
 
     // Don't allow the bayo to be attached while lowering the weapon
-    exec simulated function Deploy()
-    {
-    }
+    exec simulated function Deploy();
 
     simulated function BeginState()
     {
@@ -1330,15 +1312,9 @@ function ServerChangeBayoStatus(bool bBayoStatus)
 
 simulated state AttachingBayonet extends WeaponBusy
 {
-    simulated function bool CanStartCrawlMoving()
-    {
-        return false;
-    }
+    simulated function bool CanStartCrawlMoving();
 
-    simulated function bool WeaponAllowSprint()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowSprint();
 
     simulated function BeginState()
     {
@@ -1387,10 +1363,7 @@ Begin:
 
 simulated state DetachingBayonet extends WeaponBusy
 {
-    simulated function bool CanStartCrawlMoving()
-    {
-        return false;
-    }
+    simulated function bool CanStartCrawlMoving();
 
     simulated function BeginState()
     {
@@ -1496,15 +1469,9 @@ simulated function bool WeaponAllowCrouchChange()
 
 simulated state DeployingBipod extends WeaponBusy
 {
-    simulated function bool WeaponAllowSprint()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowSprint();
 
-    simulated function bool WeaponAllowCrouchChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowCrouchChange();
 
     simulated function BeginState()
     {
@@ -1552,10 +1519,7 @@ Begin:
 
 simulated state UndeployingBipod extends WeaponBusy
 {
-    simulated function bool WeaponAllowSprint()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowSprint();
 
     simulated function BeginState()
     {
@@ -1720,10 +1684,7 @@ function ServerZoomOut(bool bAnimateTransition)
 
 simulated state IronSightZoomIn extends WeaponBusy
 {
-    simulated function bool CanStartCrawlMoving()
-    {
-        return false;
-    }
+    simulated function bool CanStartCrawlMoving();
 
     simulated function BeginState()
     {
@@ -2210,15 +2171,9 @@ simulated function bool ReadyToFire(int Mode)
 
 simulated state Reloading extends WeaponBusy
 {
-    simulated function bool WeaponAllowSprint()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowSprint();
 
-    simulated function bool CanStartCrawlMoving()
-    {
-        return false;
-    }
+    simulated function bool CanStartCrawlMoving();
 
     simulated function BeginState()
     {
@@ -2318,15 +2273,9 @@ Begin:
 // State for reloading with bipod deployed
 simulated state ReloadingBipod extends Reloading
 {
-    simulated function bool WeaponAllowCrouchChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowCrouchChange();
 
-    simulated function bool WeaponAllowProneChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowProneChange();
 
     simulated function BeginState()
     {
@@ -2389,15 +2338,9 @@ Begin:
 // Once the server verifies they can start the action, the server will take the client out of this state
 simulated state PendingAction extends Busy
 {
-    simulated function bool ReadyToFire(int Mode)
-    {
-        return false;
-    }
+    simulated function bool ReadyToFire(int Mode);
 
-    simulated function bool WeaponAllowSprint()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowSprint();
 
 // Take the player out of ironsights
 Begin:
@@ -2817,7 +2760,7 @@ function bool AddAmmo(int AmmoToAdd, int Mode)
     {
         AmmoCharge[Mode] = MaxAmmo(Mode);
     }
-    else if (AmmoCharge[mode] < MaxAmmo(Mode))
+    else if (AmmoCharge[Mode] < MaxAmmo(Mode))
     {
         AmmoCharge[Mode] = Min(MaxAmmo(Mode), AmmoCharge[Mode] + AmmoToAdd);
     }
@@ -2999,20 +2942,11 @@ simulated function bool AllowBarrelChange()
 // State where we are changing the barrel
 simulated state ChangingBarrels extends WeaponBusy
 {
-    simulated function bool WeaponAllowSprint()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowSprint();
 
-    simulated function bool WeaponAllowProneChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowProneChange();
 
-    simulated function bool WeaponAllowCrouchChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowCrouchChange();
 
     simulated function Timer()
     {

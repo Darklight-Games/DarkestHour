@@ -182,9 +182,7 @@ function SetKeyBindIfAvailable(string BindKeyName, string NewBoundCommand, optio
     else log(BindKeyName @ "is already assigned to" @ ExistingBoundCommand); // TEMPDEBUG
 }
 
-function OnClose(optional bool bCanceled)
-{
-}
+function OnClose(optional bool bCanceled);
 
 function bool MyKeyEvent(out byte Key, out byte State, float delta)
 {
@@ -218,7 +216,7 @@ function bool ButtonClick(GUIComponent Sender)
         selected = GUIButton(Sender);
     }
 
-    switch (sender)
+    switch (Sender)
     {
         case b_Practice:
             Profile("InstantAction");

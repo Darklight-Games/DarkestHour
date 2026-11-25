@@ -555,13 +555,13 @@ simulated state Idle
 // New base state for various new states where mortar is busy doing something, so several operations are disabled (functions emptied out)
 simulated state Busy
 {
-    function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange) { }
-    simulated function Fire(optional float F) { }
-    exec simulated function SwitchFireMode() { }
-    exec function Deploy() { }
-    function bool KDriverLeave(bool bForceLeave) { return false; }
-    simulated function NextWeapon() { }
-    simulated function PrevWeapon() { }
+    function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange);
+    simulated function Fire(optional float F);
+    exec simulated function SwitchFireMode();
+    exec function Deploy();
+    function bool KDriverLeave(bool bForceLeave);
+    simulated function NextWeapon();
+    simulated function PrevWeapon();
 }
 
 // New state where player's hand is raising to traverse adjustment knob
@@ -1077,7 +1077,7 @@ simulated function UpdatePrecacheMaterials()
 
 // Functions emptied out as not relevant to a mortar:
 simulated function SwitchWeapon(byte F);
-simulated function bool CanSwitchToVehiclePosition(byte F) { return false; }
+simulated function bool CanSwitchToVehiclePosition(byte F);
 exec simulated function ToggleVehicleLock();
 function ServerToggleVehicleLock();
 

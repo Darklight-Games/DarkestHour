@@ -17,10 +17,7 @@ function int GetValue()
     return default.Value + GetBonusValue();
 }
 
-function int GetBonusValue()
-{
-    return 0;
-}
+function int GetBonusValue();
 
 defaultproperties
 {

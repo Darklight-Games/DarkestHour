@@ -16,11 +16,11 @@ var config    bool      bUseSwapVote;
 var private bool        bIsReapplyingVotes; // HACK: Flag to stop admin votes from force-switching the map upon reapplication of votes
 
 // Deprecated functions
-function SaveAccVotes(int WinningMapIndex, int WinningGameIndex){}
-function SubmitKickVote(int PlayerID, Actor Voter){}
-function UpdateKickVoteCount(int PlayerID, int VoteCountDelta){}
-function TallyKickVotes(){}
-function KickPlayer(int PlayerIndex){}
+function SaveAccVotes(int WinningMapIndex, int WinningGameIndex);
+function SubmitKickVote(int PlayerID, Actor Voter);
+function UpdateKickVoteCount(int PlayerID, int VoteCountDelta);
+function TallyKickVotes();
+function KickPlayer(int PlayerIndex);
 
 // Overriden to allow map voting in single-player (for debug purposes)
 function PostBeginPlay()

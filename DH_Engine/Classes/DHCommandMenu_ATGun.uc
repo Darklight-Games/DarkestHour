@@ -150,7 +150,6 @@ simulated function UpdateRotationError()
     }
 
     RotationError = ERROR_Fatal;
-    return;
 }
 
 defaultproperties

@@ -167,7 +167,6 @@ function Material CreateMaterial( Object InOuter, string InPackage, string InGro
 defaultproperties
 {
     MaterialClass=Engine.Texture
-    bAntiAlias=false
     Chars=" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`~!@#$%^&*()_+-=[]\\{}|;:',./?><\"¡«°»¿ÀÁÄÈÉÊËÌÍÑÒÓÖÙÚÜ‗אבגהחטיךכלםמןסעףפצשתûüזרו"
     Count=256
     FontName="Arial"

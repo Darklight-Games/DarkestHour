@@ -8,15 +8,15 @@ class DH_ParachuteItem extends DHWeapon;
 var     bool    bUsedParachute;
 
 // Functions emptied out or returning false, as parachute isn't a real weapon
-simulated function Fire(float F) {return;}
-simulated event ClientStartFire(int Mode) {return;}
-simulated event StopFire(int Mode) {return;}
-simulated function bool IsFiring(){return false;}
-function bool FillAmmo(){return false;}
-function bool ResupplyAmmo(){return false;}
-exec simulated function ROManualReload() {return;}
-simulated function bool IsBusy() {return false;} // not busy in the idle state because we never fire
-simulated function bool ShouldUseFreeAim() {return false;}
+simulated function Fire(float F);
+simulated event ClientStartFire(int Mode);
+simulated event StopFire(int Mode);
+simulated function bool IsFiring();
+function bool FillAmmo();
+function bool ResupplyAmmo();
+exec simulated function ROManualReload();
+simulated function bool IsBusy(); // not busy in the idle state because we never fire
+simulated function bool ShouldUseFreeAim();
 
 // Modified so can't switch away from chute while in the air
 simulated function bool WeaponCanSwitch()
@@ -25,10 +25,7 @@ simulated function bool WeaponCanSwitch()
 }
 
 // Modified to prevent sprinting as it interrupts the parachute un/deploy animation
-simulated function bool WeaponAllowSprint()
-{
-    return false;
-}
+simulated function bool WeaponAllowSprint();
 
 // Modified to remove firing stuff
 simulated function ClientWeaponSet(bool bPossiblySwitch)

@@ -76,7 +76,7 @@ function GUITabPanel AddTab(string InCaption, string PanelClass, optional GUITab
         NewTabPanel.InitPanel();
         TabStack[TabStack.Length] = NewTabPanel.MyButton;
 
-        if ((TabStack.Length==1 && bVisible) || (bForceActive))
+        if ((TabStack.Length==1 && bVisible) || bForceActive)
         {
             ActivateTab(NewTabPanel.MyButton, true);
         }

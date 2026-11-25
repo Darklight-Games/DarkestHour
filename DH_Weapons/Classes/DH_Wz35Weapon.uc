@@ -61,15 +61,9 @@ simulated state WorkingBolt
     // Fire button does nothing while working the bolt.
     simulated function Fire(float F);
 
-    simulated function bool WeaponAllowCrouchChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowCrouchChange();
 
-    simulated function bool WeaponAllowProneChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowProneChange();
 }
 
 simulated state ReloadingBipod

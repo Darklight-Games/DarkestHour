@@ -42,9 +42,7 @@ var     Rotator InitialViewRotationOffset;
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // Emptied out as the Super in ROVehicleWeaponPawn only tries to spawn a non-existent GunClass
-function BeginPlay()
-{
-}
+function BeginPlay();
 
 // Modified to set bTearOff to true on a server, which stops this rider pawn being replicated to clients (until entered, when we unset bTearOff)
 simulated function PostBeginPlay()
@@ -263,8 +261,8 @@ function float ModifyThreat(float Current, Pawn Threat)
 // Functions emptied out as a passenger pawn has no VehicleWeapon:
 simulated function InitializeVehicleWeapon();
 simulated function InitializeVehicleAndWeapon();
-function bool CanFire() { return false; }
-function bool ArePlayersWeaponsLocked(optional bool bNoScreenMessage) { return false; }
+function bool CanFire();
+function bool ArePlayersWeaponsLocked(optional bool bNoScreenMessage);
 function Fire(optional float F); // prevents unnecessary replicated VehicleFire() function calls to server
 function VehicleFire(bool bWasAltFire);
 event FiredPendingPrimary();
@@ -272,13 +270,13 @@ event ApplyFireImpulse(bool bAlt);
 function VehicleCeaseFire(bool bWasAltFire);
 function ClientVehicleCeaseFire(bool bWasAltFire);
 function ClientOnlyVehicleCeaseFire(bool bWasAltFire);
-function bool StopWeaponFiring() { return false; }
+function bool StopWeaponFiring();
 simulated function IncrementRange();
 simulated function DecrementRange();
-simulated function bool CanReload() { return false; }
+simulated function bool CanReload();
 function CheckResumeReloadingOnEntry();
-function float GetAmmoReloadState() { return 0.0; }
-function bool ResupplyAmmo() { return false; }
+function float GetAmmoReloadState();
+function bool ResupplyAmmo();
 simulated event SetRotatingStatus(byte NewRotationStatus);
 simulated function ServerSetRotatingStatus(byte NewRotatingStatus);
 

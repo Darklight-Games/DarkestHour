@@ -5,9 +5,7 @@
 
 class DH_Nagant1895BramitAttachment extends DHWeaponAttachment;
 
-simulated function WeaponLight() //emptying this out to remove muzzle flash light
-{
-}
+simulated function WeaponLight() //emptying this out to remove muzzle flash light;
 
 defaultproperties
 {

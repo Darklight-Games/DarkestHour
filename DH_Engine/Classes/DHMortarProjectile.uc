@@ -178,7 +178,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
         return;
     }
 
-    self.HitNormal = Normal(HitLocation - Other.Location);
+    HitNormal = Normal(HitLocation - Other.Location);
 
     MortarExplode();
 }
@@ -294,9 +294,7 @@ simulated function SpawnImpactEffects(Vector HitLocation, Vector HitNormal)
 }
 
 // New function to spawn explosion effects - implement is subclasses as required
-simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal)
-{
-}
+simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal);
 
 // New function to spawn a firing effect, allowing a net client to calculate correct location for effect, rather than just use projectile's location
 // This is because (1) client & server locations of weapon differ, & (2) projectile will have travelled upwards some distance before replicating to client

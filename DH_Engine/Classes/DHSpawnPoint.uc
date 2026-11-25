@@ -326,7 +326,7 @@ function bool PerformSpawn(DHPlayer PC)
 
     G = DarkestHourGame(Level.Game);
 
-    if (CanSpawnWithParameters(GRI, PC.GetTeamNum(), Pc.GetRoleIndex(), PC.GetSquadIndex(), PC.VehiclePoolIndex) &&
+    if (CanSpawnWithParameters(GRI, PC.GetTeamNum(), PC.GetRoleIndex(), PC.GetSquadIndex(), PC.VehiclePoolIndex) &&
         GetSpawnPosition(SpawnLocation, SpawnRotation, PC.VehiclePoolIndex) && G != none)
     {
         if (PC.VehiclePoolIndex >= 0)

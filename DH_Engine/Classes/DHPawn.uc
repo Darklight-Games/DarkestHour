@@ -809,9 +809,7 @@ simulated function ClientPawnWhizzed(Vector WhizLocation, byte WhizType)
 // Emptied out to prevent playing old whiz sounds over the top of the new
 // This event is called by native code when net client receives a changed replicated value of SpawnWhizCount,
 // but should no longer be called as I've stopped PawnWhizzed from replicating whiz variables
-simulated event HandleWhizSound()
-{
-}
+simulated event HandleWhizSound();
 
 // Modified so player pawn's AuxCollisionCylinder (the bullet whip attachment) only retains its collision if player is entering a VehicleWeaponPawn in an exposed position
 // Part of new vehicle occupant hit detection system, which basically keeps normal hit detection as for an infantry player pawn, if the player is exposed
@@ -1401,7 +1399,7 @@ simulated function ProcessHitFX()
 }
 
 // Modified to add extra effects if certain body parts are hit (chest or head), to play a hit sound, & to remove duplicated calls to TakeDamage()
-function ProcessLocationalDamage(int Damage, Pawn InstigatedBy, Vector hitlocation, Vector Momentum, class<DamageType> DamageType, array<int> PointsHit)
+function ProcessLocationalDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, array<int> PointsHit)
 {
     local EPawnHitPointType HitPointType;
     local Vector            HitDirection;
@@ -1503,7 +1501,7 @@ function ProcessLocationalDamage(int Damage, Pawn InstigatedBy, Vector hitlocati
         }
 
         HitDamageType = DamageType;
-        TakeDamage(CumulativeDamage, InstigatedBy, hitlocation, Momentum, DamageType, HighestDamagePoint);
+        TakeDamage(CumulativeDamage, InstigatedBy, HitLocation, Momentum, DamageType, HighestDamagePoint);
     }
 }
 
@@ -1520,7 +1518,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
     {
         if (InstigatedBy != none)
         {
-            Warn("No DamageType for damage by" @ Instigatedby @ "with weapon" @ InstigatedBy.Weapon);
+            Warn("No DamageType for damage by" @ InstigatedBy @ "with weapon" @ InstigatedBy.Weapon);
         }
 
         DamageType = Class'DamageType';
@@ -2558,7 +2556,7 @@ function PlayDyingAnimation(class<DamageType> DamageType, Vector HitLoc)
                     }
                 }
 
-                if (Abs(hitLocRel.Y) > RagMaxSpinAmount)
+                if (Abs(HitLocRel.Y) > RagMaxSpinAmount)
                 {
                     if (HitLocRel.Y < 0)
                     {
@@ -2594,7 +2592,7 @@ function PlayDyingAnimation(class<DamageType> DamageType, Vector HitLoc)
                 SkelParams.KStartLinVel = vect(0,0,0);
             }
 
-            if (Damagetype.default.bKUseTearOffMomentum)
+            if (DamageType.default.bKUseTearOffMomentum)
             {
                 SkelParams.KStartLinVel = GetTearOffMomemtum() + Velocity;
             }
@@ -2826,7 +2824,7 @@ function PlayTakeHit(Vector HitLocation, int Damage, class<DamageType> DamageTyp
         && class<ROWeaponDamageType>(DamageType).default.bCauseViewJarring && ROPlayer(Controller) != none)
     {
         // Get the approximate direction that the hit went into the body
-        Direction = self.Location - HitLocation;
+        Direction = Location - HitLocation;
 
         // No up-down jarring effects since I don't have the barrel velocity
         Direction.Z = 0.0;
@@ -5024,10 +5022,7 @@ simulated state Mantling
         }
     }
 
-    simulated function bool WeaponAllowSprint()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowSprint();
 }
 
 simulated function MantleLowerWeapon()
@@ -5887,7 +5882,7 @@ function SetWalking(bool bNewIsWalking)
 
 simulated function SetLockViewRotation(bool bShouldLockViewRotation, optional Rotator LockViewRotation)
 {
-    self.bLockViewRotation = bShouldLockViewRotation;
+    bLockViewRotation = bShouldLockViewRotation;
     self.LockViewRotation = LockViewRotation;
 }
 
@@ -6618,18 +6613,18 @@ simulated function NotifySelected(Pawn User)
     {
         if (bWeaponNeedsReload && bIronSights)
         {
-            P.ReceiveLocalizedMessage(TouchMessageClass, 2, self.PlayerReplicationInfo,, User.Controller);
+            P.ReceiveLocalizedMessage(TouchMessageClass, 2, PlayerReplicationInfo,, User.Controller);
         }
         else
         {
-            P.ReceiveLocalizedMessage(TouchMessageClass, 0, self.PlayerReplicationInfo,, User.Controller);
+            P.ReceiveLocalizedMessage(TouchMessageClass, 0, PlayerReplicationInfo,, User.Controller);
         }
 
         LastNotifyTime = Level.TimeSeconds;
     }
     else if (bWeaponNeedsReload)
     {
-        P.ReceiveLocalizedMessage(TouchMessageClass, 1, self.PlayerReplicationInfo,, User.Controller);
+        P.ReceiveLocalizedMessage(TouchMessageClass, 1, PlayerReplicationInfo,, User.Controller);
         LastNotifyTime = Level.TimeSeconds;
     }
 }
@@ -7190,9 +7185,7 @@ simulated function NextWeapon()
 }
 
 // Emptied out as irrelevant to RO/DH (concerns UT2004 PowerUps) & can just cause "accessed none" log errors if keybound & used (if player has no inventory)
-exec function NextItem()
-{
-}
+exec function NextItem();
 
 // Overridden from ROPawn to fix "sequence not found" bugs when a weapon simply
 // does not have a WA_Idle or WA_IdleEmpty.

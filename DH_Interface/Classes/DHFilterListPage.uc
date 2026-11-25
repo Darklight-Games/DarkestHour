@@ -5,7 +5,7 @@
 
 class DHFilterListPage extends UT2K4_FilterListPage;
 
-function AddSystemMenu(){}
+function AddSystemMenu();
 
 function InitFilterList()
 {

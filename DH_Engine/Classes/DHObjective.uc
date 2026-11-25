@@ -544,7 +544,7 @@ function HandleGroupActions(int Team)
     }
 }
 
-function GetCapturingControllers(int Teamindex, out array<Controller> Controllers)
+function GetCapturingControllers(int TeamIndex, out array<Controller> Controllers)
 {
     local Controller C;
     local Pawn P;

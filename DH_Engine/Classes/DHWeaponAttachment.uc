@@ -347,10 +347,7 @@ simulated function GetHitInfo()
 }
 
 // Emptied out as deprecated
-simulated function Actor GetVehicleHitInfo()
-{
-    return none;
-}
+simulated function Actor GetVehicleHitInfo();
 
 // Modified to fix UT2004 bug affecting non-owning net players in any vehicle with bPCRelativeFPRotation (nearly all), often causing effects to be skipped
 // Vehicle's rotation was not being factored into calcs using the PlayerController's rotation, which effectively randomised the result of this function
@@ -392,9 +389,7 @@ simulated function bool EffectIsRelevant(Vector SpawnLocation, bool bForceDedica
 
 // Emptied out as is never called in RO/DHBullet
 // In the unused 'XPawn' class it was called in PlayTakeHit() function, but in ROPawn Ramm removed that call, commenting "this doesn't really fit our system")
-simulated function PlayDirectionalHit(Vector HitLoc)
-{
-}
+simulated function PlayDirectionalHit(Vector HitLoc);
 
 simulated function PlayIdle()
 {
@@ -607,7 +602,6 @@ defaultproperties
 
     CullDistance=8192.0 // 136m - was originally 4000 UU (approx 66m), but when the 3rd person weapon attachment gets culled, player's can't see a muzzle flash, which is important
     bNetNotify=true
-    bSpawnShellsOutBottom=false
     ROMGSteamEmitterClass=Class'DHMGSteam'
     SplashEffect=Class'DHBulletHitWaterEffect'
 

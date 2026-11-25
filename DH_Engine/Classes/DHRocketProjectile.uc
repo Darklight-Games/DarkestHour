@@ -139,7 +139,6 @@ defaultproperties
 
     //Effects
     bHasTracer=true
-    bHasSmokeTrail=false
     bHasShellTrail=false
     CoronaClass=Class'DHShellTracer_Orange'
     RocketSmokeTrailClass=Class'PanzerfaustTrail'

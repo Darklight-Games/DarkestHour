@@ -1092,7 +1092,7 @@ state ConsoleVisible
         Canvas.SetDrawColor(255, 255, 255, 200);
         Canvas.Style = 4;
 
-        Canvas.DrawTileStretched(Texture'InterfaceArt_tex.console_background',Canvas.ClipX,yClip);
+        Canvas.DrawTileStretched(Texture'InterfaceArt_tex.console_background',Canvas.ClipX,YClip);
         Canvas.Style = 1;
 
         Canvas.SetPos(0, YClip - 1);

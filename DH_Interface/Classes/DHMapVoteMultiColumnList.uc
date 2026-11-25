@@ -63,7 +63,7 @@ function LoadList(VotingReplicationInfo LoadVRI, int GameTypeIndex)
     // Iterate through all maps in the map list
     for (m = 0; m < VRI.MapList.Length; m++)
     {
-        for (p = 0; p < PreFixList.Length; p++)
+        for (p = 0; p < PrefixList.Length; p++)
         {
             if (Left(VRI.MapList[m].MapName, Len(PrefixList[p])) ~= PrefixList[p])
             {

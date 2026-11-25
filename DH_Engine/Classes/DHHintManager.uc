@@ -166,9 +166,7 @@ function NonStaticReset()
 }
 
 // Empty as implemented only in DisplayingHint state
-function NotifyHintRenderingDone()
-{
-}
+function NotifyHintRenderingDone();
 
 // Just used in other classes (DHPlayer) to get a member of the Hints array, avoiding "context expression: variable is too large" compiler errors
 function HintInfo GetHint(int Index)

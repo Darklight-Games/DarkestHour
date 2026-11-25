@@ -492,10 +492,7 @@ final function SetTeamIndex(int TeamIndex)
     }
 }
 
-simulated function bool CanPlayerSpawnImmediately(DHPlayer PC)
-{
-    return false;
-}
+simulated function bool CanPlayerSpawnImmediately(DHPlayer PC);
 
 // Desirability of the spawn point. Higher value means more desireable.
 // Used for determining whether or not to invalidate the player's spawn
@@ -522,7 +519,6 @@ defaultproperties
     bAlwaysRelevant=true
     bReplicateMovement=false
     RemoteRole=ROLE_SimulatedProxy
-    bIsActive=false
     bHidden=true
     SpawnRadiusSegmentCount=8
 

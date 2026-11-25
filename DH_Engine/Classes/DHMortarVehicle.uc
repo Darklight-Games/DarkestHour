@@ -117,9 +117,7 @@ function KDriverEnter(Pawn P)
 }
 
 // No possibility of damage to mortar base
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
-{
-}
+function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex);
 
 // From ROWheeledVehicle, to use VehicleTeam, same as all other vehicles
 simulated function int GetTeamNum()
@@ -166,10 +164,10 @@ simulated function PrevWeapon();
 function ServerChangeViewPoint(bool bForward);
 simulated function SwitchWeapon(byte F);
 function ServerChangeDriverPosition(byte F);
-function bool KDriverLeave(bool bForceLeave) { return false; }
+function bool KDriverLeave(bool bForceLeave);
 function DriverDied();
 function DriverLeft();
-function bool PlaceExitingDriver() { return false; }
+function bool PlaceExitingDriver();
 simulated function SetPlayerPosition();
 simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation);
 simulated function DrawHUD(Canvas C);

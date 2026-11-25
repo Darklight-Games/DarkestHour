@@ -5,9 +5,9 @@
 
 class DHIAMultiColumnRulesPanel extends IAMultiColumnRulesPanel;
 
-var GUIController localController;
-var automated GUISectionBackground sb_background;
-delegate OnDifficultyChanged(int index, int tag);
+var GUIController LocalController;
+var automated GUISectionBackground sb_Background;
+delegate OnDifficultyChanged(int Index, int Tag);
 
 // **************************************************************************************************************************************************************************
 // Add a new rule to the GUIMultiOptionList
@@ -130,11 +130,11 @@ function AddRule(PlayInfo.PlayInfoData NewRule, int Index)
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
-        localController = MyController;
+        LocalController = MyController;
         super.InitComponent(MyController, MyOwner);
         RemoveComponent(b_Symbols);
-        sb_background.ManageComponent(ch_Advanced);
-        sb_background.ManageComponent(lb_Rules);
+        sb_Background.ManageComponent(ch_Advanced);
+        sb_Background.ManageComponent(lb_Rules);
 }
 
 function UpdateSymbolButton()

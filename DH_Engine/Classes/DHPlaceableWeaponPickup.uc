@@ -18,14 +18,10 @@ replication
 }
 
 // Emptied out as net client won't yet have InventoryType (have to wait until PostNetBeginPlay, when client receives replicated WeaponType)
-simulated function PreBeginPlay()
-{
-}
+simulated function PreBeginPlay();
 
 // Emptied out as net client won't yet have InventoryType (have to wait until PostNetBeginPlay, when client receives replicated WeaponType)
-simulated event PostBeginPlay()
-{
-}
+simulated event PostBeginPlay();
 
 // Modified to set InventoryType from the replicated WeaponType, then setting other properties from that weapon's normal PickupClass
 // A smart leveller using this generic placeable pickup will at least set StaticMesh in the editor, so it displays correctly in editor & can be positioned accurately
@@ -194,7 +190,6 @@ simulated function UpdatePrecacheMaterials()
 
 defaultproperties
 {
-    bRespawn=false
     RespawnTime=120.0 // leveller can override
     Physics=PHYS_None
     bWeaponStay=false

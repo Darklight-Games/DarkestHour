@@ -28,7 +28,7 @@ var array<CacheManager.MutatorRecord>           MutRecords;
 
 var bool bInitialized;
 
-function AddSystemMenu(){}
+function AddSystemMenu();
 
 function InitComponent(GUIController MyC, GUIComponent MyO)
 {
@@ -68,11 +68,11 @@ function InitComponent(GUIController MyC, GUIComponent MyO)
 
     for (i = 0; i < MutRecords.Length; ++i)
     {
-        cb = moComboBox(li_Mutators.AddItem("DH_Interface.DHmoCombobox",,MutREcords[i].FriendlyName));
-        cb.AddItem(ComboOpts[0]);
-        cb.AddItem(ComboOpts[1]);
-        cb.AddItem(ComboOpts[2]);
-        cb.ReadOnly(true);
+        CB = moComboBox(li_Mutators.AddItem("DH_Interface.DHmoCombobox",,MutRecords[i].FriendlyName));
+        CB.AddItem(ComboOpts[0]);
+        CB.AddItem(ComboOpts[1]);
+        CB.AddItem(ComboOpts[2]);
+        CB.ReadOnly(true);
     }
 
     cb_Mutators.OnChange = MutChange;
@@ -119,7 +119,7 @@ event HandleParameters(string Param1, string Param2)
 
         if (FilterItem.Key~="stats") //(&& FilterITem.Value=="true")
         {
-             if (FilterITem.Value~="true")
+             if (FilterItem.Value~="true")
                 cb_Stats.MyComboBox.SetIndex(1);
             else
                 cb_Stats.MyComboBox.SetIndex(2);
@@ -148,7 +148,7 @@ event HandleParameters(string Param1, string Param2)
         {
             cb_Mutators.MyComboBox.SetIndex(2);
 
-            if (FilterITem.QueryType==QT_Equals)
+            if (FilterItem.QueryType==QT_Equals)
                 SetMutator(FilterItem.Value, 1);
             else if (FilterItem.QueryType==QT_NotEquals)
                 SetMutator(FilterItem.Value,2);
@@ -156,18 +156,18 @@ event HandleParameters(string Param1, string Param2)
     }
 }
 
-function SetMutator(string ClassName, int index)
+function SetMutator(string ClassName, int Index)
 {
     local int i,j;
-    local string s;
-    local moComboBox box;
+    local string S;
+    local moComboBox Box;
 
     for (i = 0; i < MutRecords.Length; ++i)
     {
         j = Instr(MutRecords[i].ClassName,".");
-        s = mid(MutRecords[i].ClassName,j+1);
+        S = mid(MutRecords[i].ClassName,j+1);
 
-        if (s ~= ClassName)
+        if (S ~= ClassName)
         {
             for (j = 0; j < li_Mutators.ItemCount; ++j)
             {
@@ -202,13 +202,13 @@ function bool CancelClick(GUIComponent Sender)
     return true;
 }
 
-function CustomFilter.AFilterRule BuildRule(string Key, string Value, MasterServerClient.EQueryType qType)
+function CustomFilter.AFilterRule BuildRule(string Key, string Value, MasterServerClient.EQueryType QueryType)
 {
     local CustomFilter.AFilterRule NewRule;
 
-    NewRule.FilterItem.Key          = key;
-    NewRule.FilterItem.Value        = value;
-    NewRule.FilterItem.QueryType    = qtype;
+    NewRule.FilterItem.Key          = Key;
+    NewRule.FilterItem.Value        = Value;
+    NewRule.FilterItem.QueryType    = QueryType;
 
     if (Key=="mutator")
         NewRule.FilterType = DT_Multiple;
@@ -223,34 +223,34 @@ function CustomFilter.AFilterRule BuildRule(string Key, string Value, MasterServ
 function bool OkClick(GUIComponent Server)
 {
     local array<CustomFilter.AFilterRule> Rules;
-    local int cnt,i;
+    local int Count,i;
     local moComboBox CB;
 
-    cnt = 0;
+    Count = 0;
 
     // Build Query lists
     if (ck_Empty.IsChecked())
-        Rules[Cnt++] = BuildRule("currentplayers","0",QT_GreaterThan);
+        Rules[Count++] = BuildRule("currentplayers","0",QT_GreaterThan);
 
     if (ck_Full.IsChecked())
-        Rules[Cnt++] = BuildRule("freespace","0",QT_GreaterThan);
+        Rules[Count++] = BuildRule("freespace","0",QT_GreaterThan);
 
     if (ck_Passworded.IsChecked())
-        Rules[Cnt++] = BuildRule("password","false",QT_Equals);
+        Rules[Count++] = BuildRule("password","false",QT_Equals);
 
     if (ck_Bots.IsChecked())
-        Rules[Cnt++] = BuildRule("nobots","true", QT_Equals);
+        Rules[Count++] = BuildRule("nobots","true", QT_Equals);
 
     if (ck_VACOnly.IsChecked())
-        Rules[Cnt++] = BuildRule("vacsecure","true", QT_Equals);
+        Rules[Count++] = BuildRule("vacsecure","true", QT_Equals);
 
     if (cb_Stats.GetIndex()==1)
-        Rules[Cnt++] = BuildRule("stats","true", QT_Equals);
+        Rules[Count++] = BuildRule("stats","true", QT_Equals);
     else if (cb_Stats.GetIndex()==2)
-        Rules[Cnt++] = BuildRule("stats","false", QT_Equals);
+        Rules[Count++] = BuildRule("stats","false", QT_Equals);
 
     if (cb_Mutators.GetIndex()==0)
-        Rules[Cnt++] = BuildRule("nomutators","true", QT_Equals);
+        Rules[Count++] = BuildRule("nomutators","true", QT_Equals);
 
     else if (cb_Mutators.GetIndex()==2)
     {
@@ -258,10 +258,10 @@ function bool OkClick(GUIComponent Server)
         {
             CB = moComboBox(li_Mutators.GetItem(i));
 
-            if (cb.GetIndex() == 1)
-                Rules[Cnt++] = BuildRule("mutator",FindMutClassFromFriendly(cb.Caption),QT_Equals);
-            else if (cb.GetIndex() == 2)
-                Rules[Cnt++] = BuildRule("mutator",FindMutClassFromFriendly(cb.Caption),QT_NotEquals);
+            if (CB.GetIndex() == 1)
+                Rules[Count++] = BuildRule("mutator",FindMutClassFromFriendly(CB.Caption),QT_Equals);
+            else if (CB.GetIndex() == 2)
+                Rules[Count++] = BuildRule("mutator",FindMutClassFromFriendly(CB.Caption),QT_NotEquals);
         }
     }
 
@@ -274,19 +274,19 @@ function bool OkClick(GUIComponent Server)
     return true;
 }
 
-function string FindMutClassFromFriendly(string friendly)
+function string FindMutClassFromFriendly(string Friendly)
 {
-    local string cls;
+    local string Cls;
     local int i, p;
 
     for (i = 0; i < MutRecords.Length; ++i)
     {
         if (MutRecords[i].FriendlyName ~= Friendly)
         {
-            cls = MutRecords[i].ClassName;
+            Cls = MutRecords[i].ClassName;
             p = Instr(Cls,".");
 
-            return Mid(cls, p + 1);
+            return Mid(Cls, p + 1);
         }
     }
 
@@ -444,7 +444,7 @@ defaultproperties
         OnClick=DHFilterEdit.OkClick
         OnKeyEvent=bOk.InternalOnKeyEvent
     End Object
-    b_OK=GUIButton'DH_Interface.bOk'
+    b_Ok=GUIButton'DH_Interface.bOk'
     Begin Object Class=GUIButton Name=bCancel
         Caption="Cancel"
         StyleName="DHMenuTextButtonStyle"

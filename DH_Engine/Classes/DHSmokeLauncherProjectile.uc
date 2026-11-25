@@ -47,7 +47,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
     }
 
     HitWall(Normal(HitLocation - Other.Location), Other);
-    self.HitNormal = Normal(HitLocation - Other.Location);
+    HitNormal = Normal(HitLocation - Other.Location);
 }
 
 // Modified so remove mortar shell's 'Whistle' state, with its descending sound & delayed impact effects

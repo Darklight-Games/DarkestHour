@@ -19,9 +19,9 @@ var class<WeaponPickup> PickupClass;               // pickup class if grenade is
 var     bool    bIsStickGrenade; // if true then the grenade's spin, when thrown, will be tumbling end over end
 
 // Functions entered out as not relevant to grenade
-simulated static function int GetPitchForRange(int Range) { return 0; }
-simulated static function float GetYAdjustForRange(int Range) { return 0; }
-simulated function bool ShouldDrawDebugLines() { return false; }
+simulated static function int GetPitchForRange(int Range);
+simulated static function float GetYAdjustForRange(int Range);
+simulated function bool ShouldDrawDebugLines();
 function DebugShotDistanceAndSpeed();
 simulated function HandleShellDebug(Vector RealHitLocation);
 

@@ -43,9 +43,7 @@ function SpawnGasHurtRadius()
 }
 
 // Function emptied out to remove everything relating to explosion, as not an exploding grenade
-simulated function Destroyed()
-{
-}
+simulated function Destroyed();
 
 function SpawnSmokeAttachment()
 {

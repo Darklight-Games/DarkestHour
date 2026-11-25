@@ -45,7 +45,7 @@ event Trigger(Actor Other, Pawn EventInstigator)
 
         if (bSendMessage)
         {
-            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, int(RoleInfo.Side), Class'DHGameMessage', MessageID,,, RoleInfo);
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, int(RoleInfo.Side), Class'DHGameMessage', MessageId,,, RoleInfo);
         }
     }
 }

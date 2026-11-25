@@ -59,5 +59,4 @@ defaultproperties
     DurationSeconds=10.0
     WorldIconScale=1.0
     SignalRadiusInMeters=25.0
-    bSquadMembersOnly=false
 }

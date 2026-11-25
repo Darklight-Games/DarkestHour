@@ -112,9 +112,7 @@ simulated function ClientDoReload(optional byte NumRounds)
 }
 
 // Out of state this does nothing & should never be called anyway - it is only effective in state Reloading
-function ServerSetInterruptReload()
-{
-}
+function ServerSetInterruptReload();
 
 // Modified to handle substantially different one round at a time reload system
 simulated state Reloading
@@ -400,7 +398,7 @@ function PerformReload(optional int Count)
 // Modified to skip over the Super in DHSniperWeapon that is only relevant to semi-auto & auto weapons
 simulated function AnimEnd(int channel)
 {
-    super(DHProjectileWeapon).AnimEnd(Channel);
+    super(DHProjectileWeapon).AnimEnd(channel);
 }
 
 // Modified to skip over the Super in DHSniperWeapon that is only relevant to semi-auto & auto weapons

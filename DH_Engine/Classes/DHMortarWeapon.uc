@@ -60,25 +60,13 @@ simulated function BringUp(optional Weapon PrevWeapon)
 }
 
 // Functions always returning false as carried mortar is too heavy & bulky to put away, or to sprint, crawl, or mantle with
-simulated function bool WeaponCanSwitch()
-{
-    return false;
-}
+simulated function bool WeaponCanSwitch();
 
-simulated function bool WeaponAllowSprint()
-{
-    return false;
-}
+simulated function bool WeaponAllowSprint();
 
-simulated function bool WeaponAllowProneChange()
-{
-    return false;
-}
+simulated function bool WeaponAllowProneChange();
 
-simulated function bool WeaponAllowMantle()
-{
-    return false;
-}
+simulated function bool WeaponAllowMantle();
 
 // Implemented so pressing the deploy key will attempt to deploy a carried mortar
 exec simulated function Deploy()
@@ -290,10 +278,7 @@ function bool ResupplyAmmo()
 }
 
 // Emptied out as mortar uses a different system in ammo resupply area, based on DHPawn.ResupplyMortarAmmunition(), with check whether the resupply area can resupply mortars
-function bool FillAmmo()
-{
-    return false;
-}
+function bool FillAmmo();
 
 // Functions emptied out as carried mortar weapons cannot be fired, ironsighted or reloaded:
 simulated function Fire(float F);
@@ -303,7 +288,7 @@ simulated event ClientStartFire(int Mode);
 simulated event ClientStopFire(int Mode);
 event ServerStartFire(byte Mode);
 function ServerStopFire(byte Mode);
-simulated function bool StartFire(int Mode) { return false; }
+simulated function bool StartFire(int Mode);
 simulated event StopFire(int Mode);
 simulated function ImmediateStopFire();
 simulated function ROIronSights();

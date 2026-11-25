@@ -33,7 +33,7 @@ simulated function OnConstructed()
 
         Spawner = Spawn(SpawnerClass, Level,, Location, Rotation);
         Spawner.SetTeamIndex(GetTeamIndex());
-        Spawner.OnExhausted = self.OnExhausted;
+        Spawner.OnExhausted = OnExhausted;
         Spawner.bShouldDestroyOnExhaustion = true;
     }
 }

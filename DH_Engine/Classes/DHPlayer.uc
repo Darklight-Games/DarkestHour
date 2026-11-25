@@ -285,7 +285,7 @@ replication
         VehicleVoiceMessage;
 }
 
-function ServerChangePlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte NewWeapon2) { } // no longer used
+function ServerChangePlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte NewWeapon2); // no longer used
 
 // Modified to use DH's InputClass instead of the RO version
 // Class is enforced here because InputClass is a config variable & so can easily be changed in the player's .ini file
@@ -439,7 +439,7 @@ static function EAutomaticVehicleAlerts GetAutomaticVehicleAlertsFromIndex(int I
 // Client to server function which tells the server the user's setting (also gets called from DHTab_GameSettings, if the user changes the setting mid-game)
 function ServerSetAutomaticVehicleAlerts(byte Mode)
 {
-    self.AutomaticVehicleAlerts = Mode;
+    AutomaticVehicleAlerts = Mode;
 }
 
 // New function to set the normal view FOV for this player, based on their own
@@ -1227,7 +1227,7 @@ function bool IsArtilleryTargetValid(Vector ArtilleryLocation, Vector HitNormal)
 }
 
 // Emptied out, as this funcionality has been moved to DHRadio.
-function HitThis(ROArtilleryTrigger RAT) { return; }
+function HitThis(ROArtilleryTrigger RAT);
 
 // New function to determine if the player is operating a vehicle that is marked as artillery
 // TODO: suggest exclude passenger positions, so riders don't see arty targets
@@ -3134,8 +3134,8 @@ exec function Suicide()
     }
 }
 
-exec function SwitchTeam() { }
-exec function ChangeTeam(int N) { }
+exec function SwitchTeam();
+exec function ChangeTeam(int N);
 
 // Modified to not join the opposite team if it fails to join the one passed (fixes a nasty exploit)
 // This function verifies the spawn parameters (spawn point et al.) that
@@ -3147,7 +3147,7 @@ exec function ChangeTeam(int N) { }
 // It would be useful to roll up the "spawning parameters" (role, weapons,
 // spawn point etc.) into a struct so that it's easier to understand what's
 // going on.
-function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte NewWeapon2, int NewSpawnPointIndex, int NewVehiclePoolIndex)
+function ServerSetPlayerInfo(byte NewTeam, byte NewRole, byte NewWeapon1, byte NewWeapon2, int NewSpawnPointIndex, int NewVehiclePoolIndex)
 {
     local bool bDidFail;
     local DarkestHourGame Game;
@@ -3162,7 +3162,7 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
     OldTeamIndex = GetTeamNum();
 
     // Attempt to change teams
-    if (newTeam != 255)
+    if (NewTeam != 255)
     {
         if (NextChangeTeamTime >= GRI.ElapsedTime)
         {
@@ -3170,7 +3170,7 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
         }
 
         // Spectate
-        if (newTeam == 254)
+        if (NewTeam == 254)
         {
             BecomeSpectator();
 
@@ -3203,29 +3203,29 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
         }
         else
         {
-            if (newTeam == 250) // auto select
+            if (NewTeam == 250) // auto select
             {
                 if (PlayerReplicationInfo == none || PlayerReplicationInfo.bOnlySpectator)
                 {
                     BecomeActivePlayer();
                 }
 
-                newTeam = ServerAutoSelectAndChangeTeam();
+                NewTeam = ServerAutoSelectAndChangeTeam();
             }
-            else if (ROTeamGame(Level.Game).PickTeam(newTeam, self) == newTeam)
+            else if (ROTeamGame(Level.Game).PickTeam(NewTeam, self) == NewTeam)
             {
                 if (PlayerReplicationInfo == none || PlayerReplicationInfo.bOnlySpectator)
                 {
                     BecomeActivePlayer();
                 }
 
-                ServerChangeTeam(newTeam);
+                ServerChangeTeam(NewTeam);
             }
 
             // Check if change failed and output results
             if (PlayerReplicationInfo == none ||
                 PlayerReplicationInfo.Team == none ||
-                PlayerReplicationInfo.Team.TeamIndex != newTeam)
+                PlayerReplicationInfo.Team.TeamIndex != NewTeam)
             {
                 if (PlayerReplicationInfo == none)
                 {
@@ -3255,7 +3255,7 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
                 {
                     ClientChangePlayerInfoResult(16);
                 }
-                else if (ROTeamGame(Level.Game) != none && ROTeamGame(Level.Game).PickTeam(newTeam, self) != newTeam)
+                else if (ROTeamGame(Level.Game) != none && ROTeamGame(Level.Game).PickTeam(NewTeam, self) != NewTeam)
                 {
                     if (ROTeamGame(Level.Game).bPlayersVsBots && Level.NetMode != NM_Standalone)
                     {
@@ -3277,17 +3277,17 @@ function ServerSetPlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte N
     }
 
     // Attempt to change role
-    if (newRole != 255 && DesiredRole != NewRole)
+    if (NewRole != 255 && DesiredRole != NewRole)
     {
-        ChangeRole(newRole);
+        ChangeRole(NewRole);
 
         // Check if change was successful
-        if (DesiredRole != newRole)
+        if (DesiredRole != NewRole)
         {
             if (ROTeamGame(Level.Game) != none &&
                 PlayerReplicationInfo != none &&
                 PlayerReplicationInfo.Team != none &&
-                ROTeamGame(Level.Game).RoleLimitReached(PlayerReplicationInfo.Team.TeamIndex, newRole))
+                ROTeamGame(Level.Game).RoleLimitReached(PlayerReplicationInfo.Team.TeamIndex, NewRole))
             {
                 ClientChangePlayerInfoResult(100);
             }
@@ -3631,19 +3631,13 @@ function PawnDied(Pawn P)
 }
 
 // Emptied out as irrelevant to RO/DH (concerns UT2004 PowerUps) & can just cause "accessed none" log errors if keybound & used (if player in vehicle or has no inventory)
-exec function PrevItem()
-{
-}
+exec function PrevItem();
 
 // Emptied out so human player doesn't receive "you picked up the [weapon name]" messages when they pick up a weapon
-function HandlePickup(Pickup pick)
-{
-}
+function HandlePickup(Pickup pick);
 
 // Function emptied out as replaced by ClientAddHudDeathMessage()
-function AddHudDeathMessage(PlayerReplicationInfo Killer, PlayerReplicationInfo Victim, class<DamageType> DamageType)
-{
-}
+function AddHudDeathMessage(PlayerReplicationInfo Killer, PlayerReplicationInfo Victim, class<DamageType> DamageType);
 
 // New function replacing RO's AddHudDeathMessage - only change is that it doesn't have the bNetOwner replication condition
 // That seemed to sometimes prevent this replicated function being called on a net client, meaning that client didn't get the death message
@@ -5618,9 +5612,7 @@ simulated function DestroyPlaneAttachments(DHVehicle V)
 }
 
 // Emptied out as the system of using coded hit points to represent vehicle occupants has been abandoned
-exec function DriverCollisionDebug()
-{
-}
+exec function DriverCollisionDebug();
 
 // TEMPDEBUG (Matt, v8.0): for problem where player in any vehicle position is visibly attached in the wrong position
 // The problem seems to be a net client very occasionally appears to get the player attached without the default PrePivot -42 Z adjustment to his RelativeLocation
@@ -7563,8 +7555,8 @@ simulated function bool IsLoggedInAsAdmin()
 
 function ClientLocationalVoiceMessage(PlayerReplicationInfo Sender,
                                       PlayerReplicationInfo Recipient,
-                                      name messagetype, byte messageID,
-                                      optional Pawn senderPawn, optional Vector senderLocation)
+                                      name MessageType, byte MessageID,
+                                      optional Pawn SenderPawn, optional Vector SenderLocation)
 {
     local VoicePack Voice;
     local ROVoicePack V;
@@ -7702,7 +7694,7 @@ function SendVoiceMessage(PlayerReplicationInfo Sender,
                 {
                     DistanceToOther = VSize(Pawn.Location - ROP.Pawn.Location);
 
-                    if (Class'ROVoicePack'.static.isValidDistanceForMessageType(messagetype,distanceToOther))
+                    if (Class'ROVoicePack'.static.isValidDistanceForMessageType(MessageType,DistanceToOther))
                     {
                         ROP.ClientLocationalVoiceMessage(Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation);
                     }
@@ -7727,11 +7719,11 @@ function SendVoiceMessage(PlayerReplicationInfo Sender,
     {
         if (Recipient == none)
         {
-            ROTeamGame(Level.Game).SetTeamAIObjectives(messageID, PlayerReplicationInfo.Team.TeamIndex);
+            ROTeamGame(Level.Game).SetTeamAIObjectives(MessageID, PlayerReplicationInfo.Team.TeamIndex);
         }
         else
         {
-            ROTeamGame(Level.Game).SetSquadObjectives(messageID, PlayerReplicationInfo.Team.TeamIndex, Recipient);
+            ROTeamGame(Level.Game).SetSquadObjectives(MessageID, PlayerReplicationInfo.Team.TeamIndex, Recipient);
         }
     }
 
@@ -7789,7 +7781,7 @@ function SendVehicleVoiceMessage(PlayerReplicationInfo Sender,
 
         if (ROP != None)
         {
-            ROP.ClientLocationalVoiceMessage(Sender, Recipient, Messagetype, MessageID, Pawn);
+            ROP.ClientLocationalVoiceMessage(Sender, Recipient, MessageType, MessageID, Pawn);
         }
     }
 }
@@ -7902,8 +7894,8 @@ exec function DebugAddMapMarker(string MapMarkerClassName, int X, int Y)
 
     if (IsDebugModeAllowed())
     {
-        XX = float(x) / 10;
-        YY = float(y) / 10;
+        XX = float(X) / 10;
+        YY = float(Y) / 10;
         MapMarkerClass = class<DHMapMarker>(DynamicLoadObject("DH_Engine." $ MapMarkerClassName, Class'Class'));
 
         Log("Adding map marker: MapMarkerClass" @ MapMarkerClass @ "," @ XX @ "," @ YY);

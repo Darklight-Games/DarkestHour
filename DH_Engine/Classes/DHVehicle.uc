@@ -502,7 +502,7 @@ function Died(Controller Killer, class<DamageType> DamageType, Vector HitLocatio
         !bDeleteMe &&
         !Level.bLevelChange &&
         !bVehicleDestroyed &&
-        !Level.Game.PreventDeath(self, Killer, damageType, HitLocation) &&
+        !Level.Game.PreventDeath(self, Killer, DamageType, HitLocation) &&
         DamageType != Class'Suicided')
     {
         RoundTime = GRI.ElapsedTime - GRI.RoundStartTime;
@@ -1627,9 +1627,7 @@ simulated state ViewTransition
     }
 
     // Emptied out so that Sleep is the sole timing for exiting this state
-    simulated function AnimEnd(int channel)
-    {
-    }
+    simulated function AnimEnd(int channel);
 
     // Reverted to global Timer as Sleep is now the sole means of exiting this state
     simulated function Timer()
@@ -2015,7 +2013,7 @@ function bool PlaceExitingDriver()
 // Modify if you want to have different exit positions depending on context.
 function array<Vector> GetExitPositions()
 {
-    return self.ExitPositions;
+    return ExitPositions;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -2666,9 +2664,7 @@ function DestroyTrack(bool bLeftTrack)
 }
 
 // Emptied out as blast damage to exposed vehicle occupants is now handled from HurtRadius() in the projectile class
-function DriverRadiusDamage(float DamageAmount, float DamageRadius, Controller EventInstigator, class<DamageType> DamageType, float Momentum, Vector HitLocation)
-{
-}
+function DriverRadiusDamage(float DamageAmount, float DamageRadius, Controller EventInstigator, class<DamageType> DamageType, float Momentum, Vector HitLocation);
 
 // Modified to call Destroyed_HandleDriver(), the same as would happen in original UT2004 Vehicle code or a RO/DH VehicleWeaponPawn when vehicle is killed
 // RO added this state in between when the vehicle is 'destroyed' in an everyday sense and when the Vehicle actor gets Destroyed()
@@ -4046,10 +4042,7 @@ function bool ResupplyAmmo()
 // Modified to prevent players from dying so easily when near a slightly moving vehicle
 // Supposedly the system tries to move the pawn over slightly & if it fails it calls this function
 // Which before just slayed the player into full gibs (10000 damage) - let's not do that
-function bool EncroachingOn(Actor Other)
-{
-    return false;
-}
+function bool EncroachingOn(Actor Other);
 
 // New function to handle switching between external & internal mesh (just saves code repetition)
 simulated function SwitchMesh(int PositionIndex, optional bool bUpdateAnimations)
@@ -4253,10 +4246,7 @@ function bool IsFactorysLastVehicle()
 
 // New helper function to check whether tank crew positions in this vehicle have been locked, preventing a player from entering them
 // Implemented in armored vehicle subclass, but useful here to facilitate a generic entry functions in this class
-function bool AreCrewPositionsLockedForPlayer(Pawn P)
-{
-    return false;
-}
+function bool AreCrewPositionsLockedForPlayer(Pawn P);
 
 // New function to determine if it has wheels that can be damaged
 function bool HasDamageableWheels()
@@ -4441,34 +4431,34 @@ simulated function OnTotalRoundsRemainingChanged(int Count);
 // Functions emptied out as not relevant to a vehicle in RO/DH (that doesn't have any DriverWeapons):
 simulated event StartDriving(Vehicle V);
 simulated event StopDriving(Vehicle V);
-function bool IsHeadShot(Vector Loc, Vector Ray, float AdditionalScale) { return false; }
+function bool IsHeadShot(Vector Loc, Vector Ray, float AdditionalScale);
 function AttachFlag(Actor FlagActor);
 function ShouldCrouch(bool Crouch);
 function ShouldProne(bool Prone);
 event EndCrouch(float HeightAdjust);
 event StartCrouch(float HeightAdjust);
-function bool DoJump(bool bUpdating) { return false; }
-function bool CheckWaterJump(out Vector WallNormal) { return false; }
+function bool DoJump(bool bUpdating);
+function bool CheckWaterJump(out Vector WallNormal);
 function JumpOutOfWater(Vector JumpDir);
 function ClimbLadder(LadderVolume L);
 function EndClimbLadder(LadderVolume OldLadder);
 simulated function AltFire(optional float F);
-function bool StopWeaponFiring() { return false; }
+function bool StopWeaponFiring();
 simulated event StopPlayFiring();
 function ChooseFireAt(Actor A);
-function Actor ShootSpecial(Actor A) { return none; }
+function Actor ShootSpecial(Actor A);
 function ShouldTargetMissile(Projectile P);
 function ShootMissile(Projectile P);
 function GiveWeapon(string aClassName);
-simulated function bool CanThrowWeapon() { return false; }
+simulated function bool CanThrowWeapon();
 function TossWeapon(Vector TossVel);
 exec function SwitchToLastWeapon();
 simulated function ChangedWeapon();
 function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon);
-function bool AddInventory(Inventory NewItem) { return false; }
+function bool AddInventory(Inventory NewItem);
 function DeleteInventory(Inventory Item);
-function Inventory FindInventoryType(class DesiredClass) { return none; }
-simulated function Weapon GetDemoRecordingWeapon() { return none; }
+function Inventory FindInventoryType(class DesiredClass);
+simulated function Weapon GetDemoRecordingWeapon();
 exec function NextItem(); // only concerns UT2004 PowerUps) & just causes "accessed none" log errors if keybound & used
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -4643,7 +4633,7 @@ function CreateSpawnPointAttachment(bool bIsTemporary)
     SpawnPointAttachment.SetTeamIndex(default.VehicleTeam);
     SpawnPointAttachment.SetIsActive(true);
     SpawnPointAttachment.bHasSpawnKillPenalty = default.bHasSpawnKillPenalty;
-    SpawnPointattachment.bIsTemporary = bIsTemporary;
+    SpawnPointAttachment.bIsTemporary = bIsTemporary;
 
     if (MapIconAttachment != none && SpawnPointAttachment.BaseMapIconAttachment == none)
     {

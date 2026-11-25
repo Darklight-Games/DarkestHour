@@ -7,7 +7,7 @@ class DHCommandMenu_Spotting extends DHCommandMenu;
 
 function Setup()
 {
-    local int i, J;
+    local int i, j;
     local DHGameReplicationInfo GRI;
     local DHPlayer PC;
 

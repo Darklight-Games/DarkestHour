@@ -347,10 +347,7 @@ simulated state Reloading
         }
     }
 
-    simulated function bool WeaponAllowProneChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowProneChange();
 }
 
 // Server-to-client function to send client into state AssistedReloading

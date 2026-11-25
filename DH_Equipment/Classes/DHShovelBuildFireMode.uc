@@ -100,10 +100,7 @@ simulated state Building
         }
     }
 
-    simulated function bool AllowFire()
-    {
-        return false;
-    }
+    simulated function bool AllowFire();
 
     simulated function Timer()
     {

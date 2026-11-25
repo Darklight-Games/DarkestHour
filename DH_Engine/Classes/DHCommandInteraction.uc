@@ -211,10 +211,7 @@ state FadeOut
         }
     }
 
-    function bool KeyEvent(out EInputKey Key, out EInputAction Action, float Delta)
-    {
-        return false;
-    }
+    function bool KeyEvent(out EInputKey Key, out EInputAction Action, float Delta);
 }
 
 function TearDown()

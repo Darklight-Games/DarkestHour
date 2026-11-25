@@ -138,7 +138,7 @@ function Lower()
     SetControllerState(STATE_Lowered);
 }
 
-simulated function bool IsTransitioning() { return false; }
+simulated function bool IsTransitioning();
 simulated function bool IsRaised() { return GetControllerState() == STATE_Raised; }
 simulated function bool IsLowered() { return GetControllerState() == STATE_Lowered; }
 

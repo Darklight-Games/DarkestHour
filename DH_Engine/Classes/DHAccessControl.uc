@@ -168,7 +168,7 @@ function bool AdminLogin(PlayerController P, string Username, string Password)
 
     if (User == none)
     {
-        User = Users.FindByName(UserName);
+        User = Users.FindByName(Username);
         bValidLogin = User != none && User.Password == Password;
     }
 
@@ -176,8 +176,8 @@ function bool AdminLogin(PlayerController P, string Username, string Password)
     {
         Index = LoggedAdmins.Length;
         LoggedAdmins.Length = Index + 1;
-        LoggedAdmins[index].User = User;
-        LoggedAdmins[index].PRI = P.PlayerReplicationInfo;
+        LoggedAdmins[Index].User = User;
+        LoggedAdmins[Index].PRI = P.PlayerReplicationInfo;
         P.PlayerReplicationInfo.bAdmin = User.bMasterAdmin || User.HasPrivilege("Kp") || User.HasPrivilege("Bp");
         return true;
     }

@@ -25,10 +25,7 @@ simulated function ROIronSights()
 
 // Overridden because we have no melee attack
 // (this, apparently, is needed together with the mg34's single fire mode in order to avoid a bug where weapon breaks when emptied)
-simulated function bool IsBusy()
-{
-    return false;
-}
+simulated function bool IsBusy();
 
 defaultproperties
 {

@@ -293,12 +293,12 @@ simulated function OnTeamIndexChanged();
 function OnProgressChanged(Pawn InstigatedBy);
 function OnHealthChanged();
 
-simulated function bool IsBroken() { return false; }
-simulated function bool IsConstructed() { return false; }
-simulated function bool IsTattered() { return false; }
-simulated function bool CanBeBuilt() { return false; }
-simulated function bool CanBeCut() { return false; }
-simulated function bool IsDummy() { return false; }
+simulated function bool IsBroken();
+simulated function bool IsConstructed();
+simulated function bool IsTattered();
+simulated function bool CanBeBuilt();
+simulated function bool CanBeCut();
+simulated function bool IsDummy();
 
 final simulated function int GetTeamIndex()
 {
@@ -1540,8 +1540,6 @@ defaultproperties
     ExplosionDamageTraceOffset=(Z=10.0)
 
     // Placement
-    bCanPlaceInWater=false
-    bCanPlaceIndoors=false
     FloatToleranceInMeters=0.5
     PlacementSound=Sound'Inf_Player.Gibimpact'
     PlacementEmitterClass=Class'DHConstructionEffect'
@@ -1581,7 +1579,6 @@ defaultproperties
     HarmfulDamageTypes(6)=Class'DHMortarDamageType'                 // Mortar
 
     // Impact
-    bCanTakeImpactDamage=false
     ImpactDamageType=Class'Crushed'
     ImpactDamageModifier=0.1
 
@@ -1603,5 +1600,4 @@ defaultproperties
 
     CompletionPointValue=10
 
-    bIsArtillery=false
 }

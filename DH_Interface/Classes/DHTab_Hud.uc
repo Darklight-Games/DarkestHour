@@ -148,7 +148,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             co_Hints.SilentSetIndex(HintLevel);
             break;
         default:
-            super(UT2K4Tab_HudSettings).InternalOnLoadINI(sender, s);
+            super(UT2K4Tab_HudSettings).InternalOnLoadINI(Sender, s);
     }
 }
 

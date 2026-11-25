@@ -14,7 +14,7 @@ var()   NumModifyType   HowToModify;
 var()   bool            bUseTeamMessage; //Default = true
 var() localized string  Message; //Message to send to team when door is opened
 var()   name            MessageType; //Say,TeamSay,SayDead,TeamSayDead,VehicleSay,CriticalEvent,DeathMessage,
-var()   sound           sound; //sound to play when door is opened
+var()   sound           Sound; //sound to play when door is opened
 
 event Trigger(Actor Other, Pawn EventInstigator)
 {
@@ -84,7 +84,7 @@ event Trigger(Actor Other, Pawn EventInstigator)
                 if (P != none && P.GetTeamNum() == ActualSideToModify)
                 {
                     P.TeamMessage(C.PlayerReplicationInfo, Message, MessageType);
-                    p.PlayAnnouncement(sound, 1, true);
+                    P.PlayAnnouncement(Sound, 1, true);
                 }
             }
         }

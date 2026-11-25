@@ -706,9 +706,7 @@ simulated singular function Touch(Actor Other)
 
 // Emptied out as produces unwanted impact effects on a ragdoll body, i.e. grenade impact makes dead bodies jump around
 // No longer even called as has been removed from Touch()
-simulated function ClientSideTouch(Actor Other, Vector HitLocation)
-{
-}
+simulated function ClientSideTouch(Actor Other, Vector HitLocation);
 
 // Modified from ROThrowableExplosiveProjectile to call HitWall for all hit actors, so grenades etc bounce off things like turrets or other players
 simulated function ProcessTouch(Actor Other, Vector HitLocation)
@@ -954,9 +952,7 @@ simulated function GetDampenAndSoundValue(ESurfaceTypes ST)
 }
 
 // From ROGrenadeProjectile/ROSatchelChargeProjectile - empty but can be subclassed
-simulated function WeaponLight()
-{
-}
+simulated function WeaponLight();
 
 // Modified from ROGrenadeProjectile so if thrown projectile hits water we play a splash effect
 simulated function PhysicsVolumeChange(PhysicsVolume NewVolume)

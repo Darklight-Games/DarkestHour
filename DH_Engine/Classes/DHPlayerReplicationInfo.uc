@@ -176,8 +176,8 @@ simulated function bool IsArtillerySpotter()
 
 simulated function bool IsAdmin()
 {
-    return self.bAdmin || self.bSilentAdmin
-      || (self.Level != none && self.Level.NetMode == NM_Standalone);
+    return bAdmin || bSilentAdmin
+      || (Level != none && Level.NetMode == NM_Standalone);
 }
 
 // Will return true if passed two players that are in the same squad.

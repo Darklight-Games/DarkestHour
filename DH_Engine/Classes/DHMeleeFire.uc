@@ -248,10 +248,7 @@ simulated state MeleeAttacking
         }
     }
 
-    simulated function bool AllowFire()
-    {
-        return false;
-    }
+    simulated function bool AllowFire();
 
     simulated function Timer()
     {
@@ -474,7 +471,7 @@ defaultproperties
     AmmoPerFire=0
 
     FireRate=0.25
-    MinHoldtime=0.1
+    MinHoldTime=0.1
     FullHeldTime=0.3
     TraceRange=85.0
     BayonetTraceRange=140.0

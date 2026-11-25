@@ -182,8 +182,8 @@ state FireLoop
     }
 
     // Emptied out because we play an ambient fire sound
-    function PlayFiring() { }
-    function ServerPlayFiring() { }
+    function PlayFiring();
+    function ServerPlayFiring();
 
     function EndState()
     {

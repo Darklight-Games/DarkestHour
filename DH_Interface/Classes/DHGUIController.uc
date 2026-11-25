@@ -256,7 +256,7 @@ event bool CloseMenu(optional bool bCancelled)
     return true;
 }
 
-function PurgeObjectReferences() { }
+function PurgeObjectReferences();
 
 simulated static event Validate()
 {

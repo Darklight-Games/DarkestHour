@@ -116,15 +116,9 @@ simulated state WorkingBolt extends WeaponBusy
         return global.ShouldUseFreeAim();
     }
 
-    simulated function bool WeaponAllowSprint()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowSprint();
 
-    simulated function bool CanStartCrawlMoving()
-    {
-        return false;
-    }
+    simulated function bool CanStartCrawlMoving();
 
     simulated function AnimEnd(int Channel)
     {
@@ -227,10 +221,7 @@ simulated function PostFire()
 // State where the weapon has just been fired
 simulated state PostFiring
 {
-    simulated function bool ReadyToFire(int Mode)
-    {
-        return false;
-    }
+    simulated function bool ReadyToFire(int Mode);
 
     simulated function Timer()
     {
@@ -347,13 +338,11 @@ simulated function ClientDoReload(optional byte NumRounds)
 }
 
 // Out of state this does nothing & should never be called anyway - it is only effective in state Reloading
-function ServerSetInterruptReload()
-{
-}
+function ServerSetInterruptReload();
 
-simulated function PostPreReload() {}
-simulated function PostFullReloadEnd() {}
-simulated function PostLoop() {}
+simulated function PostPreReload();
+simulated function PostFullReloadEnd();
+simulated function PostLoop();
 
 // Modified to handle substantially different one round at a time reload system
 simulated state Reloading

@@ -228,10 +228,7 @@ static function OnMapMarkerPlaced(DHPlayer PC, DHGameReplicationInfo.MapMarker M
 static function OnMapMarkerRemoved(DHPlayer PC, DHGameReplicationInfo.MapMarker Marker);
 
 // Override this to have a caption accompany the marker.
-static function string GetCaptionString(DHPlayer PC, DHGameReplicationInfo.MapMarker Marker)
-{
-    return "";
-}
+static function string GetCaptionString(DHPlayer PC, DHGameReplicationInfo.MapMarker Marker);
 
 static function string GetDistanceString(DHPlayer PC, DHGameReplicationInfo.MapMarker Marker)
 {
@@ -264,6 +261,5 @@ defaultproperties
     GroupIndex=-1
     Scope=TEAM
     OverwritingRule=OFF
-    bShouldShowOnCompass=false
     CalculatingString="Calculating..."
 }

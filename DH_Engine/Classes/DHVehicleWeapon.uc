@@ -906,9 +906,7 @@ simulated function FlashMuzzleFlash(bool bWasAltFire)
     super(VehicleWeapon).FlashMuzzleFlash(bWasAltFire);
 }
 
-simulated function UpdateTracer()
-{
-}
+simulated function UpdateTracer();
 
 // Modified to avoid resetting FlashCount immediately, instead briefly entering a new state 'ServerCeaseFire', to use state timing to introduce a slight delay
 // This gives time for the changed value of FlashCount to be replicated to non-owning net clients, triggering 3rd person firing effects in their FlashMuzzleFlash()
@@ -1012,10 +1010,7 @@ function bool GiveInitialAmmo()
 }
 
 // New function (in VehicleWeapon class) to use DH's new incremental resupply system - implement functionality in subclasses
-function bool ResupplyAmmo()
-{
-    return false;
-}
+function bool ResupplyAmmo();
 
 // Modified to prevent firing if weapon uses a multi-stage reload & is not loaded
 simulated function bool ReadyToFire(bool bAltFire)
@@ -1177,9 +1172,7 @@ simulated function ClientSetReloadState(byte NewState)
 }
 
 // New function to start or resume an alt fire reload process - implement functionality in subclasses as required, e.g. cannon's coaxial MG
-simulated function AttemptAltReload()
-{
-}
+simulated function AttemptAltReload();
 
 // New helper function to play reloading sound for current reloading stage (separate function allows easy subclassing)
 // Using PlayOwnedSound() to avoid broadcasting over network to owning net client as it will play locally there anyway
@@ -1219,10 +1212,7 @@ simulated function bool HasAmmoToReload(byte AmmoIndex)
 }
 
 // New helper function to check if player uses manual reloading - implement functionality in subclasses as required
-simulated function bool PlayerUsesManualReloading()
-{
-    return false;
-}
+simulated function bool PlayerUsesManualReloading();
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //  **************************  HIT DETECTION & DAMAGE  ***************************  //
@@ -1232,20 +1222,12 @@ simulated function bool PlayerUsesManualReloading()
 // Note that shell's ProcessTouch also now calls TakeDamage on VehicleWeapon instead of Vehicle itself, so this function decides what to do with that damage
 // Add here if want to pass damage on to vehicle (& if DamageType is bDelayedDamage, need to call SetDelayedDamageInstigatorController(InstigatedBy.Controller) on relevant pawn)
 // Can also add any desired functionality in subclasses, e.g. a shell impact could wreck an exposed MG
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
-{
-}
+function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex);
 
 // Deprecated functions - return false just in case they get called
-simulated function bool HitDriverArea(Vector HitLocation, Vector Momentum)
-{
-    return false;
-}
+simulated function bool HitDriverArea(Vector HitLocation, Vector Momentum);
 
-simulated function bool HitDriver(Vector HitLocation, Vector Momentum)
-{
-    return false;
-}
+simulated function bool HitDriver(Vector HitLocation, Vector Momentum);
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //  ******************  SETUP, UPDATE, CLEAN UP, MISCELLANEOUS  *******************  //

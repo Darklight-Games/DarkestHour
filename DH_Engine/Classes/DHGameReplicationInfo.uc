@@ -2450,7 +2450,7 @@ defaultproperties
     MapMarkerClassNames(3)="DH_Engine.DHMapMarker_Squad_Attention"
     MapMarkerClassNames(4)="DH_Engine.DHMapMarker_Enemy_CommandPost"
     MapMarkerClassNames(5)="DH_Engine.DHMapMarker_Enemy_Infantry"
-    MapMarkerClassNameS(6)="DH_Engine.DHMapMarker_Enemy_Vehicle"
+    MapMarkerClassNames(6)="DH_Engine.DHMapMarker_Enemy_Vehicle"
     MapMarkerClassNames(7)="DH_Engine.DHMapMarker_Enemy_Tank"
     MapMarkerClassNames(8)="DH_Engine.DHMapMarker_Enemy_ATGun"
     MapMarkerClassNames(9)="DH_Engine.DHMapMarker_Enemy_Artillery"

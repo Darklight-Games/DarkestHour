@@ -259,10 +259,7 @@ event ModeHoldFire()
     }
 }
 
-simulated function bool IsPlayerHipFiring()
-{
-    return false;
-}
+simulated function bool IsPlayerHipFiring();
 
 defaultproperties
 {

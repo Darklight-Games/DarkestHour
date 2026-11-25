@@ -153,7 +153,7 @@ function OnPop()
 
 function bool IsOptionDisabled(int OptionIndex);
 function bool ShouldHideMenu();
-function bool IsOptionHidden(int OptionIndex) { return false; } // This will only get run once when the menu is pushed onto the stack.
+function bool IsOptionHidden(int OptionIndex); // This will only get run once when the menu is pushed onto the stack.
 
 function OnActive();                    // Called when a menu becomes the topmost menu on the stack
 function OnPassive();                   // Called when a menu is no longer the topmost menu on the stack
@@ -167,6 +167,5 @@ defaultproperties
 {
     SpottingMarkerDisabledColor=(B=0,G=0,R=255,A=255)
     SpottingMarkerEnabledColor=(B=0,G=255,R=0,A=255)
-    bShouldTick=false
 }
 

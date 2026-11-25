@@ -340,12 +340,12 @@ function ServerPlayThirdPersonFiringAnim(class<Projectile> ProjectileClass)
 simulated state Firing
 {
     // Don't let the user move, leave, or change the round type while firing.
-    simulated function Fire(optional float F) { }
-    function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange) { }
-    exec simulated function SwitchFireMode() { }
-    function bool KDriverLeave(bool bForceLeave) { return false; }
-    simulated function NextWeapon() { }
-    simulated function PrevWeapon() { }
+    simulated function Fire(optional float F);
+    function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange);
+    exec simulated function SwitchFireMode();
+    function bool KDriverLeave(bool bForceLeave);
+    simulated function NextWeapon();
+    simulated function PrevWeapon();
 
     // Calculate the linear interpolation value for the camera position and rotation.
     simulated function float GetCameraInterpolationTheta()

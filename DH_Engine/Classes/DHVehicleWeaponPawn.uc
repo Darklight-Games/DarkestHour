@@ -431,10 +431,7 @@ simulated function float GetViewFOV(int PositionIndex)
 }
 
 // Modified so when player possesses a weapon pawn, he never starts in behind view (used in PC's Possess/Restart functions)
-simulated function bool PointOfView()
-{
-    return false;
-}
+simulated function bool PointOfView();
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //  ******************************* FIRING & AMMO  ********************************  //
@@ -450,9 +447,7 @@ function Fire(optional float F)
 }
 
 // Emptied out so we have no alt fire by default - implement functionality in subclass if has alt fire, e.g. cannon with coaxial MG
-function AltFire(optional float F)
-{
-}
+function AltFire(optional float F);
 
 // Modified for server verification that player's weapons aren't locked due to spawn killing (belt & braces as similar clientside check stops it reaching this point anyway)
 function VehicleFire(bool bWasAltFire)
@@ -1185,9 +1180,7 @@ simulated state ViewTransition
     }
 
     // Emptied out so that Sleep is the sole timing for exiting this state
-    simulated function AnimEnd(int channel)
-    {
-    }
+    simulated function AnimEnd(int channel);
 
     // Reverted to global Timer as Sleep is now the sole means of exiting this state
     simulated function Timer()
@@ -1337,13 +1330,13 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
         NewVehiclePosition = VehicleBase;
         bMustBeTankerToSwitch = VehicleBase.bMustBeTankCommander;
 
-        if (DHVehicle(VehicleBase).default.bRequiresDriverLicense && !Class'DHPlayerReplicationInfo'.static.IsPlayerLicensedToDrive(DHPlayer(Self.Controller)) && IsHumanControlled())
+        if (DHVehicle(VehicleBase).default.bRequiresDriverLicense && !Class'DHPlayerReplicationInfo'.static.IsPlayerLicensedToDrive(DHPlayer(Controller)) && IsHumanControlled())
         {
             DisplayVehicleMessage(0); // not qualified to operate vehicle
             return false;
         }
 
-        if (!bMustBeTankerToSwitch && Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(self.Controller)))
+        if (!bMustBeTankerToSwitch && Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(Controller)))
         {
             DisplayVehicleMessage(32); // restricted from operating vehicles
             return false;
@@ -1391,7 +1384,7 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
             return false;
         }
 
-        if (Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(self.Controller)))
+        if (Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(Controller)))
         {
             DisplayVehicleMessage(32); // restricted from operating vehicles
             return false;
@@ -1819,7 +1812,7 @@ function Died(Controller Killer, class<DamageType> damageType, Vector HitLocatio
                     }
 
                     // Log the crew/passenger kill.
-                    G.Metrics.OnPlayerFragged(PlayerController(Killer), PC, DamageType, HitLocation, 0, RoundTime);
+                    G.Metrics.OnPlayerFragged(PlayerController(Killer), PC, damageType, HitLocation, 0, RoundTime);
                 }
 
                 if (PC != none && VehicleBase != none)
@@ -2371,36 +2364,34 @@ simulated function HandleBinoculars(bool bMovingOntoBinocs)
 }
 
 // Emptied out as blast damage to exposed vehicle occupants is now handled from HurtRadius() in the projectile class
-function DriverRadiusDamage(float DamageAmount, float DamageRadius, Controller EventInstigator, class<DamageType> DamageType, float Momentum, Vector HitLocation)
-{
-}
+function DriverRadiusDamage(float DamageAmount, float DamageRadius, Controller EventInstigator, class<DamageType> DamageType, float Momentum, Vector HitLocation);
 
 // Functions emptied out as not relevant to a VehicleWeaponPawn in RO/DH:
 simulated event StartDriving(Vehicle V);
 simulated event StopDriving(Vehicle V);
-function bool IsHeadShot(Vector Loc, Vector Ray, float AdditionalScale) { return false; }
+function bool IsHeadShot(Vector Loc, Vector Ray, float AdditionalScale);
 function AttachFlag(Actor FlagActor);
 function ShouldCrouch(bool Crouch);
 function ShouldProne(bool Prone);
 event EndCrouch(float HeightAdjust);
 event StartCrouch(float HeightAdjust);
-function bool DoJump(bool bUpdating) { return false; }
-function bool CheckWaterJump(out Vector WallNormal) { return false; }
+function bool DoJump(bool bUpdating);
+function bool CheckWaterJump(out Vector WallNormal);
 function JumpOutOfWater(Vector JumpDir);
 function ClimbLadder(LadderVolume L);
 function EndClimbLadder(LadderVolume OldLadder);
 function ShouldTargetMissile(Projectile P);
 function ShootMissile(Projectile P);
 function GiveWeapon(string aClassName);
-simulated function bool CanThrowWeapon() { return false; }
+simulated function bool CanThrowWeapon();
 function TossWeapon(Vector TossVel);
 exec function SwitchToLastWeapon();
 simulated function ChangedWeapon();
 function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon);
-function bool AddInventory(Inventory NewItem) { return false; }
+function bool AddInventory(Inventory NewItem);
 function DeleteInventory(Inventory Item);
-function Inventory FindInventoryType(class DesiredClass) { return none; }
-simulated function Weapon GetDemoRecordingWeapon() { return none; }
+function Inventory FindInventoryType(class DesiredClass);
+simulated function Weapon GetDemoRecordingWeapon();
 exec function NextItem(); // only concerns UT2004 PowerUps) & just causes "accessed none" log errors if keybound & used
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -2843,7 +2834,7 @@ simulated function UpdateAnimationDrivers()
         // The theta value must be normalized to the range of the sequence. A theta value of 1.0
         // is not the end of the sequence, as you might expect, but is in fact the beginning of
         // the sequence.
-        Theta *= float(AnimationDrivers[i].FrameCount - 1) / (AnimationDrivers[i].FrameCount);
+        Theta *= float(AnimationDrivers[i].FrameCount - 1) / AnimationDrivers[i].FrameCount;
 
         Driver.SetAnimFrame(Theta, AnimationDrivers[i].Channel);
     }

@@ -236,7 +236,7 @@ function InternalOnMessage(coerce string Msg, float MsgLife)
                 return;
 
             default: // Couldn't change teams: get error msg
-                ErrorMessage = Class'ROGUIRoleSelection'.static.GetErrorMessageForId(result);
+                ErrorMessage = Class'ROGUIRoleSelection'.static.GetErrorMessageForId(Result);
         }
 
         SetButtonsState(false);

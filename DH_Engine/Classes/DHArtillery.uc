@@ -111,10 +111,7 @@ function SetTeamIndex(int TeamIndex)
     }
 }
 
-simulated function bool IsParadrop()
-{
-    return false;
-}
+simulated function bool IsParadrop();
 
 defaultproperties
 {

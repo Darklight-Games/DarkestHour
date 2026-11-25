@@ -476,8 +476,8 @@ function SortPRIArray();
 function bool InOrder(PlayerReplicationInfo P1, PlayerReplicationInfo P2) { return true;}
 
 // Emptied out as these ROScoreBoard functions were never used, so just to de-clutter & avoid possible confusion
-function float DrawTeam(Canvas C, int TeamNum, float YPos, int PlayerCount) { return 0.0;}
-function float DrawHeaders(Canvas C) { return 0.0;}
+function float DrawTeam(Canvas C, int TeamNum, float YPos, int PlayerCount);
+function float DrawHeaders(Canvas C);
 
 // TODO: A lot of this doesn't need to happen every frame.
 // Modified to re-factor to substantially reduce repetition & use of literals,
@@ -632,7 +632,7 @@ function UpdateScoreBoard(Canvas C)
 
         if (CalcX(1.0, C) + XL > C.ClipX)
         {
-            DHDrawCell(C, s, 0, X, Y, BaseXPos[1] + MaxTeamWidth, LineHeight, HUD.default.WhiteColor);
+            DHDrawCell(C, S, 0, X, Y, BaseXPos[1] + MaxTeamWidth, LineHeight, HUD.default.WhiteColor);
             S = "";
             Y += LineHeight;
 

@@ -231,7 +231,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             }
 
             // Remove the NetSpeed User Defined value (last value), we will add it back only if it is actually defined by the user
-            co_NetSpeed.RemoveItem(arraycount(NetSpeedText) - 1);
+            co_Netspeed.RemoveItem(arraycount(NetSpeedText) - 1);
 
             // Select the setting based on the NetSpeed value
             for (j = 0; j < arraycount(NetSpeedValues); ++j)
@@ -240,14 +240,14 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
                 {
                     if (j == arraycount(NetSpeedValues) - 1)
                     {
-                        co_NetSpeed.AddItem(Repl(default.NetSpeedText[arraycount(NetSpeedText) - 1], "%NetSpeed%", i));
+                        co_Netspeed.AddItem(Repl(default.NetSpeedText[arraycount(NetSpeedText) - 1], "%NetSpeed%", i));
                     }
 
                     OriginalNetSpeed = j;
                 }
             }
 
-            co_NetSpeed.SetIndex(OriginalNetSpeed);
+            co_Netspeed.SetIndex(OriginalNetSpeed);
             break;
 
         // Purge cache
@@ -444,7 +444,7 @@ function SaveSettings()
 
     // Net speed
     bDynamicNetSpeed = ch_DynamicNetSpeed.IsChecked();
-    NetSpeed = co_NetSpeed.GetIndex();
+    NetSpeed = co_Netspeed.GetIndex();
 
     if (PC.bDynamicNetSpeed != bDynamicNetSpeed)
     {

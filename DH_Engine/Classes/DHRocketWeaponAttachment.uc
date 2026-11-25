@@ -141,6 +141,5 @@ simulated event ThirdPersonEffects()
 
 defaultproperties
 {
-    bPanzerfaustAttachment=false
     bRapidFire=false
 }
