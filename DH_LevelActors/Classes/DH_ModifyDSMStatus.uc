@@ -5,6 +5,7 @@
 
 class DH_ModifyDSMStatus extends DH_ModifyActors;
 
+// usagi:ignore[enum-name-prefix]
 enum DSMModifyType
 {
     DSM_Destroy,

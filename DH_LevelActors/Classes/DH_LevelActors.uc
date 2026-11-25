@@ -8,6 +8,7 @@ class DH_LevelActors extends Actor
     placeable;
 
 //Setup some common enums used throughout the child actors
+// usagi:ignore[enum-name-prefix]
 enum ROSideIndex
 {
     AXIS,
@@ -15,6 +16,7 @@ enum ROSideIndex
     NEUTRAL //Either side can use this vehicle
 };
 
+// usagi:ignore[enum-name-prefix]
 enum NumModifyType
 {
     NMT_Add,
@@ -22,6 +24,7 @@ enum NumModifyType
     NMT_Set //Will set the value instead of modify it
 };
 
+// usagi:ignore[enum-name-prefix]
 enum StatusModifyType
 {
     SMT_Activate,

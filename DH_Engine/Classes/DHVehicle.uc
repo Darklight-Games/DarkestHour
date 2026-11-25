@@ -57,6 +57,7 @@ struct GroupDepency
     var() int OptionIndex;  // The index of the option that must be met, or -1 if any option in the group is valid.
 };
 
+// usagi:ignore[enum-name-prefix]
 enum GroupDependencyType
 {
     GDT_All,
