@@ -35,7 +35,7 @@ defaultproperties
     Skins(1)=Texture'DH_MG34_tex.MG_BIPOD_3RD'
     Skins(2)=Texture'DH_MG34_tex.LAFETTE_TURRET_GRAY_3RD'
     Skins(3)=Texture'DH_MG34_tex.LAFETTE_SIGHT_3RD'
-    Skins(4)=Texture'DH_MG34_tex.MG_DRUM_GREEN_3RD'
+    // Skins(4)=Texture'DH_MG34_tex.MG_DRUM_GREEN_3RD'
 
 
     Begin Object Class=DHWeaponRangeParams Name=RangeParams0
