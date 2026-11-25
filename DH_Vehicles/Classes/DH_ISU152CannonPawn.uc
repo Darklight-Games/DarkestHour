@@ -79,7 +79,7 @@ defaultproperties
     CannonScopeCenter=Texture'Vehicle_Optic.T3476_sight_mover'
     GunsightSize=0.424 // 18 degrees visible FOV at 2x magnification (ST-10 sight)
     DestroyedGunsightOverlay=Texture'DH_VehicleOpticsDestroyed_tex.PZ4_sight_destroyed' // matches size of gunsight
-    PeriscopeOverlay=Texture'DH_VehicleOptics_tex.PERISCOPE_overlay_Allied
+    PeriscopeOverlay=Texture'DH_VehicleOptics_tex.PERISCOPE_overlay_Allied'
     SecondaryPeriscopeOverlay=Texture'DH_VehicleOptics_tex.Soviet.TNK-1_periscope'
     AmmoShellTexture=Texture'DH_InterfaceArt_tex.ISU152_shell'
     AmmoShellReloadTexture=Texture'DH_InterfaceArt_tex.ISU152_shell_reload'

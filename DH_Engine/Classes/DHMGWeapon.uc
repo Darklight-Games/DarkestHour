@@ -87,7 +87,7 @@ simulated function bool ShouldUseFreeAim()
 // Modified to avoid ironsights stuff because an 'ironsighted' MG is actually just hipped fire mode
 simulated state IronSightZoomIn
 {
-    simulated function EndState() // avoids setting DisplayFOV & PlayerViewOffset;
+    simulated function EndState(); // avoids setting DisplayFOV & PlayerViewOffset;
 
 Begin: // do nothing (avoids calling SmoothZoom)
 }
