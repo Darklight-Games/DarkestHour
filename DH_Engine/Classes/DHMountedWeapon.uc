@@ -379,42 +379,17 @@ simulated function BringUp(optional Weapon PrevWeapon)
 
 simulated function bool WeaponAllowSprint()
 {
-    if (bIsEncumbering)
-    {
-        return false;
-    }
-    
-    return super.WeaponAllowSprint();
+    return !bIsEncumbering && super.WeaponAllowSprint();
 }
-
-simulated function bool WeaponAllowProneChange()
-{
-    if (bIsEncumbering)
-    {
-        return false;
-    }
-
-    return super.WeaponAllowProneChange();
-}      
     
 simulated function bool WeaponCanSwitch()
 {
-    if (bIsEncumbering)
-    {
-        return false;
-    }
-    
-    return super.WeaponCanSwitch();
+    return !bIsEncumbering && super.WeaponCanSwitch();
 }
 
 simulated function bool WeaponAllowMantle()
 {
-    if (bIsEncumbering)
-    {   
-        return false;
-    }
-    
-    return super.WeaponAllowMantle();
+    return !bIsEncumbering && super.WeaponAllowMantle();
 }
 
 // Modified to unhide cursor when player raised his weapon
