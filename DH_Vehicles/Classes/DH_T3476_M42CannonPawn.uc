@@ -12,15 +12,15 @@ defaultproperties
 
     //Driver's positions and anims
 
-    //gunsight    
+    //gunsight
     DriverPositions(0)=(PositionMesh=SkeletalMesh'DH_T34M42_anm.T34M42_TURRET_INT',ViewFOV=30.0,TransitionUpAnim="gunsight_out",bDrawOverlays=true)
-    //periscope 
+    //periscope
     DriverPositions(1)=(PositionMesh=SkeletalMesh'DH_T34M42_anm.T34M42_TURRET_INT',ViewFOV=30.0,TransitionUpAnim="periscope_out",TransitionDownAnim="gunsight_in",ViewPitchUpLimit=5460,ViewPitchDownLimit=62790,ViewPositiveYawLimit=65536,ViewNegativeYawLimit=-65536,bDrawOverlays=true)
     //turret view
     DriverPositions(2)=(PositionMesh=SkeletalMesh'DH_T34M42_anm.T34M42_TURRET_INT',ViewFOV=90.0,DriverTransitionAnim="T34M42_COM_HATCH_CLOSE",TransitionUpAnim="com_hatch_open",TransitionDownAnim="periscope_in",ViewPitchUpLimit=5000,ViewPitchDownLimit=64000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bDrawOverlays=false)
     //exposed
     DriverPositions(3)=(PositionMesh=SkeletalMesh'DH_T34M42_anm.T34M42_TURRET_INT',DriverTransitionAnim="T34M42_COM_HATCH_OPEN",TransitionDownAnim="com_hatch_close",ViewPitchUpLimit=5000,ViewPitchDownLimit=62000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bExposed=true)
-    //binocs 
+    //binocs
     DriverPositions(4)=(PositionMesh=SkeletalMesh'DH_T34M42_anm.T34M42_TURRET_INT',ViewFOV=21.25,DriverTransitionAnim="T34M42_COM_BINOCS",ViewPitchUpLimit=5000,ViewPitchDownLimit=59000,ViewPositiveYawLimit=6000,ViewNegativeYawLimit=-10000,bDrawOverlays=true,bExposed=true)
 
     GunsightPositions=1

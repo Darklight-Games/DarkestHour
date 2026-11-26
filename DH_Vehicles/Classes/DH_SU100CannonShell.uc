@@ -22,16 +22,16 @@ defaultproperties
     StaticMesh=StaticMesh'WeaponPickupSM.122mm_Shell'
 
     //Penetration - BR-471B (capped)
-    DHPenetrationTable(0)=17.8 // 100m  
-    DHPenetrationTable(1)=16.8 // 250m  
+    DHPenetrationTable(0)=17.8 // 100m
+    DHPenetrationTable(1)=16.8 // 250m
     DHPenetrationTable(2)=16.0 // 500m - real value
-    DHPenetrationTable(3)=15.8 // 750m  
+    DHPenetrationTable(3)=15.8 // 750m
     DHPenetrationTable(4)=15.0 // 1000m - real value
-    DHPenetrationTable(5)=14.3 // 1250m 
+    DHPenetrationTable(5)=14.3 // 1250m
     DHPenetrationTable(6)=13.5 // 1500m - real value
-    DHPenetrationTable(7)=13.0 // 1750m 
+    DHPenetrationTable(7)=13.0 // 1750m
     DHPenetrationTable(8)=12.5 // 2000m - real value
-    DHPenetrationTable(9)=11.5 // 2500m 
+    DHPenetrationTable(9)=11.5 // 2500m
     DHPenetrationTable(10)=10.5 // 3000m - real value
 
     bMechanicalAiming=true

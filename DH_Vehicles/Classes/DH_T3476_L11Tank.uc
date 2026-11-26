@@ -32,8 +32,8 @@ defaultproperties
     Skins(2)=Texture'DH_T34_tex.T34_TRACK_EARLY'
     // Skins(3)=Texture'DH_T34_85_tex.T34_85_INT'
     // DestroyedVehicleMesh=StaticMesh'DH_T34_85_stc.T34_85_DESTROYED'
-    
-    //Interface 
+
+    //Interface
     VehicleHudImage=Texture'DH_T34_76_L11_tex.T3476_L11_BODY'
     VehicleHudTurret=TexRotator'DH_T34_76_L11_tex.T3476_L11_TURRET_rot'
     VehicleHudTurretLook=TexRotator'DH_T34_76_L11_tex.T3476_L11_TURRET_look'
@@ -51,7 +51,7 @@ defaultproperties
 
     // Collision Attachments
     CollisionAttachments(0)=(StaticMesh=StaticMesh'DH_T3476_L11_stc.T3476_L11_DRIVER_HATCH_COLLISION',AttachBone="driver_hatch")
-    
+
     // Attachments
     RandomAttachmentGroups(0)=(Options=((Probability=0.8,Attachment=(StaticMesh=StaticMesh'DH_T3476_L11_stc.T3476_L11_TOWING_CABLES',Offset=(Z=66.5),AttachBone="body"))))
     RandomAttachmentGroups(1)=(Options=((Probability=0.4,Attachment=(StaticMesh=StaticMesh'DH_T3476_L11_stc.T3476_L11_SEARCHLIGHT',SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0)),bAttachToWeapon=true,AttachBone="gun_pitch"))))

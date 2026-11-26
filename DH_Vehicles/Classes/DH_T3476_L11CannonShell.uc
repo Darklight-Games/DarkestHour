@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_T3476_L11CannonShell extends DHSovietCannonShell;  //BR-350A
+class DH_T3476_L11CannonShell extends DHSovietCannonShell; // BR-350A
 
 defaultproperties
 {

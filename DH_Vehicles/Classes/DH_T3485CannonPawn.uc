@@ -28,7 +28,7 @@ defaultproperties
     DrivePos=(X=-2.5,Z=58.5)
     DriveAnim="T34_85_IDLE_CLOSE"
     //PeriscopeSize=0.5
-    
+
 
     GunsightOverlay=Texture'Vehicle_Optic.t3485_sight'
     GunsightSize=0.753 // 16 degrees visible FOV at 4x magnification (TSh-16 sight)

@@ -62,7 +62,7 @@ defaultproperties
 
     MaxPrimaryAmmo=27
     MaxSecondaryAmmo=50
-    
+
     SecondarySpread=0.002
 
     // Coaxial MG ammo

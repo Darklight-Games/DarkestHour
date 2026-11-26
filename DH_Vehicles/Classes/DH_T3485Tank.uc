@@ -2,7 +2,7 @@
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
-// TODO 
+// TODO
 // Figure out driver controlled smoke system (or maybe it was controlled by commander?)
 // Add spawn icon
 // Add hatch sounds
@@ -49,7 +49,7 @@ defaultproperties
     RandomAttachmentGroups(2)=(Options=((Probability=0.7,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_FUEL_TANK_LATE_L',Offset=(X=-104,Y=-75.3,Z=88.5),SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0))))))
     RandomAttachmentGroups(3)=(Options=((Probability=0.7,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_FUEL_TANK_LATE_R',Offset=(X=-104,Y=75.3,Z=88.5),SkinIndexMap=((VehicleSkinIndex=0,AttachmentSkinIndex=0))))))
     RandomAttachmentGroups(4)=(Options=((Probability=0.85,Attachment=(bAttachToWeapon=true,AttachBone="gun_yaw",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP'))))
-    
+
     // Damage
     // pros: diesel fuel; 5 men crew
     // cons: fuel tanks in crew compartment

@@ -307,9 +307,11 @@ simulated function SpawnWeaponAttachments()
                 {
                     VA.AttachClass = Class'DHDecoAttachment';
                 }
-                
+
                 // We pass ourself into this function as the AttachTarget.
-                Attachment = V.SpawnAttachment(VA.AttachClass, VA.AttachBone, VA.StaticMesh, VA.Offset, VA.Rotation, self);
+                Attachment = V.SpawnAttachment(
+                    VA.AttachClass, VA.AttachBone, VA.StaticMesh, VA.Offset, VA.Rotation, self
+                    );
 
                 for (k = 0; k < VA.Skins.Length; ++k)
                 {

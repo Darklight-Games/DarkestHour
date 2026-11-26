@@ -24,7 +24,7 @@ defaultproperties
 
     // Vehicle weapons
     PassengerWeapons(0)=(WeaponPawnClass=Class'DH_SU100CannonPawn',WeaponBone="TURRET_PLACEMENT")
-    
+
     // Hull mesh
     Mesh=SkeletalMesh'DH_SU100_anm.SU100_BODY_EXT'
     Skins(0)=Texture'DH_SU100_tex.SU100_EXT'
@@ -38,7 +38,7 @@ defaultproperties
     // Destroyed Treads
     DamagedTrackStaticMeshLeft=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_L'
     DamagedTrackStaticMeshRight=StaticMesh'DH_T34_stc.T34_TRACK_DAMAGED_R'
- 
+
     // Periscope
     PeriscopePositionIndex=0
     PeriscopeCameraBone="DRIVER_PERISCOPE"
@@ -62,7 +62,7 @@ defaultproperties
     // RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3)))))
     // RandomAttachmentGroups(2)=(Options=((Probability=0.8,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',Offset=(X=5,Y=68.5,Z=79.6),Rotation=(Pitch=7826,Yaw=-16380)))))
 
-    //Interface 
+    //Interface
     VehicleHudImage=Texture'DH_SU100_tex.SU100_BODY_ICON'
     VehicleHudTurret=TexRotator'DH_SU100_tex.SU100_TURRET_ROT'
     VehicleHudTurretLook=TexRotator'DH_SU100_tex.SU100_TURRET_LOOK'
@@ -231,5 +231,5 @@ defaultproperties
          BoneRollAxis=AXIS_Y
          WheelRadius=33.0
      End Object
-     Wheels(5)=Right_Drive_Wheel    
+     Wheels(5)=Right_Drive_Wheel
 }

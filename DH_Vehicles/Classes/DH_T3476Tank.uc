@@ -58,12 +58,12 @@ defaultproperties
     RandomAttachmentGroups(1)=(Options=((Probability=0.9,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TOWING_CABLES',Offset=(Z=52.3)))))
     RandomAttachmentGroups(2)=(Options=((Probability=0.8,Attachment=(AttachBone="body",StaticMesh=StaticMesh'DH_T34_stc.T34_TARP',Offset=(X=5,Y=68.5,Z=80),Rotation=(Pitch=7826,Yaw=-16926,Roll=-728)))))
 
-    //Interface 
+    //Interface
     VehicleHudImage=Texture'DH_T34_76_tex.T3476_body'
     VehicleHudTurret=TexRotator'DH_T34_76_tex.T3476_turret_rot'
     VehicleHudTurretLook=TexRotator'DH_T34_76_tex.T3476_turret_look'
     SpawnOverlay(0)=Material'DH_InterfaceArt_tex.T34_76'
-    
+
     // Riders
     PassengerPawns(0)=(AttachBone="Body",DrivePos=(X=-70,Y=-50.0,Z=104.5),DriveRot=(Yaw=-16384),DriveAnim="VHalftrack_Rider1_idle")
     PassengerPawns(1)=(AttachBone="body",DrivePos=(X=-100.0,Y=-25.0,Z=158),DriveAnim="crouch_idle_binoc") // kneeling, as can't sit in usual position due to fuel drum

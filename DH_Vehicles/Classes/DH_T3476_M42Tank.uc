@@ -26,7 +26,7 @@ defaultproperties
     Skins(3)=Texture'DH_T34_76_M42_tex.T34M42_INT'
     DestroyedVehicleMesh=StaticMesh'DH_T34M42_stc.T34M42_DESTROYED'
 
-    //Interface images 
+    //Interface images
     VehicleHudImage=Texture'DH_T34_76_M42_tex.T34M42_body'
     VehicleHudTurret=TexRotator'DH_T34_76_M42_tex.T34M42_turret_rot'
     VehicleHudTurretLook=TexRotator'DH_T34_76_M42_tex.T34M42_turret_look'

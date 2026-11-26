@@ -29,12 +29,12 @@ defaultproperties
     ShootAnim="SHOOT"
     ShootAnimBoneName="BARREL"
     GunnerAttachmentBone="TURRET"
-    
+
     ManualRotationsPerSecond=0.02
 
     MaxPositiveYaw=1820 // +10/-10 degrees
     MaxNegativeYaw=-1820
-    
+
     YawStartConstraint=-3000.0
     YawEndConstraint=3000.0
 

@@ -9,4 +9,4 @@ defaultproperties
 {
     Skins(0)=Texture'DH_T34_85_tex.T34_85_EXT_RUDY'
     CannonSkins(0)=Texture'DH_T34_85_tex.T34_85_EXT_RUDY'
-} 
+}

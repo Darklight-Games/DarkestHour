@@ -3243,9 +3243,9 @@ simulated function UpdatePrecacheStaticMeshes()
 simulated function PopulateVehicleAttachments()
 {
     local VehicleAttachment VA;
-    local float             RandomNumber, ProbabilitySum;
-    local int               i, j, k, DependenciesMet;
-    local bool              bDidMeetDependencies;
+    local float RandomNumber, ProbabilitySum;
+    local int i, j, k, DependenciesMet;
+    local bool bDidMeetDependencies;
 
     if (!bDoRandomAttachments)
     {
@@ -3272,14 +3272,19 @@ simulated function PopulateVehicleAttachments()
             if (RandomAttachmentGroups[i].Dependencies[j].GroupIndex >= i)
             {
                 // Give detailed error with indices.
-                Warn("Random attachment group" @ i @ "has a dependency on group" @ RandomAttachmentGroups[i].Dependencies[j].GroupIndex @ "which is higher than the current group index.");
+                Warn(
+                    "Random attachment group" @ i @ "has a dependency on group"
+                        @ RandomAttachmentGroups[i].Dependencies[j].GroupIndex
+                        @ "which is higher than the current group index."
+                    );
                 break;
             }
 
             if (RandomAttachmentGroups[i].Dependencies[j].OptionIndex == OPTION_INDEX_ANY)
             {
                 // Any non-empty option in the group will satisfy the dependency.
-                if (RandomAttachmentGroupOptions[RandomAttachmentGroups[i].Dependencies[j].GroupIndex] != OPTION_INDEX_NONE)
+                if (RandomAttachmentGroupOptions[RandomAttachmentGroups[i].Dependencies[j].GroupIndex]
+                    != OPTION_INDEX_NONE)
                 {
                     DependenciesMet++;
                 }
@@ -3287,7 +3292,8 @@ simulated function PopulateVehicleAttachments()
             else
             {
                 // We are looking for a specific option in the group to satisfy the dependency.
-                if (RandomAttachmentGroupOptions[RandomAttachmentGroups[i].Dependencies[j].GroupIndex] == byte(RandomAttachmentGroups[i].Dependencies[j].OptionIndex))
+                if (RandomAttachmentGroupOptions[RandomAttachmentGroups[i].Dependencies[j].GroupIndex]
+                    == byte(RandomAttachmentGroups[i].Dependencies[j].OptionIndex))
                 {
                     DependenciesMet++;
                 }
@@ -3330,7 +3336,8 @@ simulated function PopulateVehicleAttachments()
 
     for (i = 0; i < Min(MAX_RANDOM_ATTACHMENT_GROUPS, RandomAttachmentGroups.Length); ++i)
     {
-        if (RandomAttachmentGroupOptions[i] >= 0 && RandomAttachmentGroupOptions[i] < RandomAttachmentGroups[i].Options.Length)
+        if (RandomAttachmentGroupOptions[i] >= 0
+            && RandomAttachmentGroupOptions[i] < RandomAttachmentGroups[i].Options.Length)
         {
             VA = RandomAttachmentGroups[i].Options[RandomAttachmentGroupOptions[i]].Attachment;
 
@@ -3360,9 +3367,9 @@ simulated function PopulateVehicleAttachments()
 simulated function SpawnVehicleAttachments()
 {
     local VehicleAttachment VA;
-    local class<Actor>      AttachClass;
-    local Actor             A;
-    local int               i, j;
+    local class<Actor> AttachClass;
+    local Actor A;
+    local int i, j;
 
     // Treads & movement sound attachments
     if (Level.NetMode != NM_DedicatedServer)

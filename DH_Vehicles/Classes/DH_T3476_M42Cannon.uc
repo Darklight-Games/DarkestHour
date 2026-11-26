@@ -56,7 +56,7 @@ defaultproperties
 
     ProjectileDescriptions(0)="APBC"
     ProjectileDescriptions(1)="HE"
-    
+
     nProjectileDescriptions(0)="BR-350BSP" // 1942 solid shell, after A and before the "proper" B
     nProjectileDescriptions(1)="OF-350"
 
@@ -65,7 +65,7 @@ defaultproperties
 
     MaxPrimaryAmmo=27
     MaxSecondaryAmmo=50
-    
+
     SecondarySpread=0.002
 
     // Coaxial MG ammo
