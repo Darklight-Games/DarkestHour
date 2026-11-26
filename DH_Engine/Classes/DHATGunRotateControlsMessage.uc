@@ -11,7 +11,8 @@ class DHATGunRotateControlsMessage extends DHControlsMessage
 static function string GetHeaderString(
     optional PlayerReplicationInfo RelatedPRI_1,
     optional PlayerReplicationInfo RelatedPRI_2,
-    optional Object OptionalObject)
+    optional Object OptionalObject
+    )
 {
     return Vehicle(OptionalObject).VehicleNameString;
 }

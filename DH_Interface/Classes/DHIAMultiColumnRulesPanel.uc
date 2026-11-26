@@ -5,24 +5,25 @@
 
 class DHIAMultiColumnRulesPanel extends IAMultiColumnRulesPanel;
 
-var GUIController localController;
+var GUIController LocalController;
 var automated GUISectionBackground sb_Background;
-delegate OnDifficultyChanged(int index, int tag);
+
+delegate OnDifficultyChanged(int Index, int Tag);
 
 // **************************************************************************************************************************************************************************
 // Add a new rule to the GUIMultiOptionList
 function AddRule(PlayInfo.PlayInfoData NewRule, int Index)
 {
     local bool bTemp;
-    local string        Width, Op;
+    local string Width, Op;
     local array<string> Range;
-    local moComboBox    co;
-    local moFloatEdit   fl;
-    local moEditBox     ed;
-    local moCheckbox    ch;
+    local moComboBox co;
+    local moFloatEdit fl;
+    local moEditBox ed;
+    local moCheckbox ch;
     local moNumericEdit nu;
-    local moButton      bu;
-    local int           i, pos;
+    local moButton bu;
+    local int i, pos;
 
     bTemp = Controller.bCurMenuInitialized;
     Controller.bCurMenuInitialized = false;
@@ -30,95 +31,142 @@ function AddRule(PlayInfo.PlayInfoData NewRule, int Index)
     switch (NewRule.RenderType)
     {
         case PIT_Check:
-            ch = moCheckbox(li_Rules.AddItem("DH_Interface.DHmoCheckbox",,NewRule.DisplayName, true));
+            ch = moCheckbox(li_Rules.AddItem("DH_Interface.DHmoCheckbox",, NewRule.DisplayName, true));
+
             if (ch == none)
+            {
                 break;
+            }
 
             ch.Tag = Index;
             ch.bAutoSizeCaption = true;
             break;
 
         case PIT_Select:
-            co = moCombobox(li_Rules.AddItem("DH_Interface.DHmoComboBox",,NewRule.DisplayName, true));
+            co = moCombobox(li_Rules.AddItem("DH_Interface.DHmoComboBox",, NewRule.DisplayName, true));
+
             if (co == none)
+            {
                 break;
+            }
 
             co.ReadOnly(true);
             co.bAutoSizeCaption = true;
             co.Tag = Index;
             co.CaptionWidth = 0.5;
             GamePI.SplitStringToArray(Range, NewRule.Data, ";");
-            for (i = 0; i+1 < Range.Length; i += 2)
-                co.AddItem(Range[i+1],,Range[i]);
+
+            for (i = 0; i + 1 < Range.Length; i += 2)
+            {
+                co.AddItem(Range[i + 1],, Range[i]);
+            }
 
             break;
 
         case PIT_Text:
             if (!Divide(NewRule.Data, ";", Width, Op))
+            {
                 Width = NewRule.Data;
+            }
 
             pos = InStr(Width, ",");
+
             if (pos != -1)
+            {
                 Width = Left(Width, pos);
+            }
 
             if (Width != "")
+            {
                 i = int(Width);
-            else i = -1;
+            }
+            else
+            {
+                i = -1;
+            }
             GamePI.SplitStringToArray(Range, Op, ":");
+
             if (Range.Length > 1)
             {
                 // Ranged data
                 if (InStr(Range[0], ".") != -1)
                 {
                     // float edit
-                    fl = moFloatEdit(li_Rules.AddItem("DH_Interface.DHmoFloatEdit",,NewRule.DisplayName, true));
-                    if (fl == none) break;
+                    fl = moFloatEdit(li_Rules.AddItem("DH_Interface.DHmoFloatEdit",, NewRule.DisplayName, true));
+
+                    if (fl == none)
+                    {
+                        break;
+                    }
                     fl.Tag = Index;
                     fl.bAutoSizeCaption = true;
                     fl.ComponentWidth = 0.25;
-                    if (i != -1)
-                        fl.Setup(float(Range[0]), float(Range[1]), fl.MyNumericEdit.Step);
-                }
 
+                    if (i != -1)
+                    {
+                        fl.Setup(float(Range[0]), float(Range[1]), fl.MyNumericEdit.Step);
+                    }
+                }
                 else
                 {
-                    nu = moNumericEdit(li_Rules.AddItem("DH_Interface.DHmoNumericEdit",,NewRule.DisplayName, true));
-                    if (nu == none) break;
+                    nu = moNumericEdit(li_Rules.AddItem("DH_Interface.DHmoNumericEdit",, NewRule.DisplayName, true));
+
+                    if (nu == none)
+                    {
+                        break;
+                    }
                     nu.Tag = Index;
                     nu.bAutoSizeCaption = true;
                     nu.ComponentWidth = 0.25;
+
                     if (i != -1)
+                    {
                         nu.Setup(int(Range[0]), int(Range[1]), nu.MyNumericEdit.Step);
+                    }
                 }
             }
             else if (NewRule.ArrayDim != -1)
             {
-                bu = moButton(li_Rules.AddItem("DH_Interface.DHmoButton",,NewRule.DisplayName, true));
-                if (bu == none) break;
+                bu = moButton(li_Rules.AddItem("DH_Interface.DHmoButton",, NewRule.DisplayName, true));
+
+                if (bu == none)
+                {
+                    break;
+                }
                 bu.Tag = Index;
                 bu.bAutoSizeCaption = true;
-    bu.ButtonStyleName = "DHSmallTextButtonStyle";
+                bu.ButtonStyleName = "DHSmallTextButtonStyle";
                 bu.ComponentWidth = 0.25;
                 bu.OnChange = ArrayPropClicked;
             }
-
             else
             {
-                ed = moEditbox(li_Rules.AddItem("DH_Interface.DHmoEditBox",,NewRule.DisplayName, true));
-                if (ed == none) break;
+                ed = moEditbox(li_Rules.AddItem("DH_Interface.DHmoEditBox",, NewRule.DisplayName, true));
+
+                if (ed == none)
+                {
+                    break;
+                }
                 ed.Tag = Index;
                 ed.bAutoSizeCaption = true;
+
                 if (i != -1)
+                {
                     ed.MyEditBox.MaxWidth = i;
+                }
             }
             break;
 
         default:
-            bu = moButton(li_Rules.AddItem("DH_Interface.DHmoButton",,NewRule.DisplayName, true));
-            if (bu == none) break;
+            bu = moButton(li_Rules.AddItem("DH_Interface.DHmoButton",, NewRule.DisplayName, true));
+
+            if (bu == none)
+            {
+                break;
+            }
             bu.Tag = Index;
             bu.bAutoSizeCaption = true;
-    bu.ButtonStyleName = "DHSmallTextButtonStyle";
+            bu.ButtonStyleName = "DHSmallTextButtonStyle";
             bu.ComponentWidth = 0.25;
             bu.OnChange = CustomClicked;
     }
@@ -130,11 +178,11 @@ function AddRule(PlayInfo.PlayInfoData NewRule, int Index)
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
-        localController = MyController;
-        super.InitComponent(MyController, MyOwner);
-        RemoveComponent(b_Symbols);
-        sb_Background.ManageComponent(ch_Advanced);
-        sb_Background.ManageComponent(lb_Rules);
+    LocalController = MyController;
+    super.InitComponent(MyController, MyOwner);
+    RemoveComponent(b_Symbols);
+    sb_Background.ManageComponent(ch_Advanced);
+    sb_Background.ManageComponent(lb_Rules);
 }
 
 function UpdateSymbolButton()
@@ -144,18 +192,21 @@ function UpdateSymbolButton()
 
 function InternalOnChange(GUIComponent Sender)
 {
-        local DHmoComboBox combo;
+    local DHmoComboBox combo;
 
-        if (GUIMultiOptionList(Sender) != none)
+    if (GUIMultiOptionList(Sender) != none)
     {
         if (Controller.bCurMenuInitialized)
         {
             combo = DHmoComboBox(GUIMultiOptionList(Sender).Get());
+
             if (combo != none)
+            {
                 OnDifficultyChanged(combo.getIndex(), combo.tag);
+            }
         }
-        }
-        super.InternalOnChange(Sender);
+    }
+    super.InternalOnChange(Sender);
 }
 
 defaultproperties

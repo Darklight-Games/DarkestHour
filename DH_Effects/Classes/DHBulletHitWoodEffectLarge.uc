@@ -5,7 +5,7 @@
 
 class DHBulletHitWoodEffectLarge extends Emitter;
 
-//particles: 45
+// particles: 45
 
 defaultproperties
 {

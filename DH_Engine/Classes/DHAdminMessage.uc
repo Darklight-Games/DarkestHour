@@ -43,9 +43,16 @@ static function string GetTeamName(int TeamIndex)
         default:
             return "";
     }
+
+    return "";
 }
 
-static function string GetString(optional int S, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int S,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local int ExtraValue;
 
@@ -54,21 +61,43 @@ static function string GetString(optional int S, optional PlayerReplicationInfo 
     switch (S)
     {
         case 0:
-            return Repl(Repl(Repl(default.KickedFromSquadMessage,
-                                  "{0}", RelatedPRI_1.PlayerName),
-                                  "{1}", RelatedPRI_2.PlayerName),
-                                  "{2}", static.GetSquadName(RelatedPRI_2.Team.TeamIndex, ExtraValue, DHSquadReplicationInfo(OptionalObject)));
+            return Repl(
+                Repl(
+                    Repl(default.KickedFromSquadMessage, "{0}", RelatedPRI_1.PlayerName),
+                    "{1}",
+                    RelatedPRI_2.PlayerName
+                    ),
+                "{2}",
+                static.GetSquadName(RelatedPRI_2.Team.TeamIndex, ExtraValue, DHSquadReplicationInfo(OptionalObject))
+                );
         case 1:
-            return Repl(Repl(Repl(default.PromotedToSquadLeaderMessage,
-                                  "{0}", RelatedPRI_1.PlayerName),
-                                  "{1}", RelatedPRI_2.PlayerName),
-                                  "{2}", static.GetSquadName(RelatedPRI_2.Team.TeamIndex, ExtraValue, DHSquadReplicationInfo(OptionalObject)));
+            return Repl(
+                Repl(
+                    Repl(default.PromotedToSquadLeaderMessage, "{0}", RelatedPRI_1.PlayerName),
+                    "{1}",
+                    RelatedPRI_2.PlayerName
+                    ),
+                "{2}",
+                static.GetSquadName(RelatedPRI_2.Team.TeamIndex, ExtraValue, DHSquadReplicationInfo(OptionalObject))
+                );
         case 2:
-            return Repl(Repl(default.PlacedSpawnMessage, "{0}", RelatedPRI_1.PlayerName), "{1}", static.GetTeamName(ExtraValue));
+            return Repl(
+                Repl(default.PlacedSpawnMessage, "{0}", RelatedPRI_1.PlayerName),
+                "{1}",
+                static.GetTeamName(ExtraValue)
+                );
         case 3:
-            return Repl(Repl(default.DestroyedSpawnMessage, "{0}", RelatedPRI_1.PlayerName), "{1}", static.GetTeamName(ExtraValue));
+            return Repl(
+                Repl(default.DestroyedSpawnMessage, "{0}", RelatedPRI_1.PlayerName),
+                "{1}",
+                static.GetTeamName(ExtraValue)
+                );
         case 4:
-            return Repl(Repl(default.DestroyedAllSpawnsMessage, "{0}", RelatedPRI_1.PlayerName), "{1}", static.GetTeamName(ExtraValue));
+            return Repl(
+                Repl(default.DestroyedAllSpawnsMessage, "{0}", RelatedPRI_1.PlayerName),
+                "{1}",
+                static.GetTeamName(ExtraValue)
+                );
         case 5:
             return Repl(default.AdminTeleportedMessage, "{0}", RelatedPRI_1.PlayerName);
         case 6:

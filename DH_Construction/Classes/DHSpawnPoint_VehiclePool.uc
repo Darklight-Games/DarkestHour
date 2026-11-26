@@ -26,7 +26,12 @@ function Timer()
                 HQSpawnPoint = SP;
 
                 // "A Vehicle Pool has been activated."
-                Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHVehiclePoolMessage', 0);
+                Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                    Level,
+                    GetTeamIndex(),
+                    Class'DHVehiclePoolMessage',
+                    0
+                    );
                 break;
             }
         }
@@ -83,4 +88,3 @@ defaultproperties
     SpawnTimeInterval=10
     SpawnKillProtectionTime=15
 }
-

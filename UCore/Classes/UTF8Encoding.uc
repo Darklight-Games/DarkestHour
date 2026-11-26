@@ -12,7 +12,7 @@ const BYTE_MARK = 0x80;
 
 final static function array<int> ToBytes(string S)
 {
-    local int i, j, k, c, BytesToWrite;
+    local int i, j, c, BytesToWrite;
     local array<int> UTF32Bytes;
     local array<int> UTF8Bytes;
 
@@ -44,14 +44,25 @@ final static function array<int> ToBytes(string S)
             c = 0xFFFD;
         }
 
-        // Write the continuation bytes from last to first, then the lead byte.
-        for (k = BytesToWrite - 1; k > 0; --k)
-        {
-            UTF8Bytes[j + k] = ((c | BYTE_MARK) & BYTE_MASK) & 0xFF;
-            c = c >> 6;
-        }
+        j += BytesToWrite;
 
-        UTF8Bytes[j] = (c | GetFirstByteMark(BytesToWrite)) & 0xFF;
+        switch (BytesToWrite)
+        {
+            // usagi:ignore[switch-case-fallthrough]
+            case 4:
+                UTF8Bytes[--j] = ((c | BYTE_MARK) & BYTE_MASK) & 0xFF;
+                c = c >> 6;
+            // usagi:ignore[switch-case-fallthrough]
+            case 3:
+                UTF8Bytes[--j] = ((c | BYTE_MARK) & BYTE_MASK) & 0xFF;
+                c = c >> 6;
+            // usagi:ignore[switch-case-fallthrough]
+            case 2:
+                UTF8Bytes[--j] = ((c | BYTE_MARK) & BYTE_MASK) & 0xFF;
+                c = c >> 6;
+            case 1:
+                UTF8Bytes[--j] = (c | GetFirstByteMark(BytesToWrite)) & 0xFF;
+        }
 
         j += BytesToWrite;
     }
@@ -62,7 +73,7 @@ final static function array<int> ToBytes(string S)
 final static function string FromBytes(array<int> Bytes)
 {
     local string S;
-    local int i, k, c, ExtraBytesToRead;
+    local int i, c, ExtraBytesToRead;
 
     while (i < Bytes.Length)
     {
@@ -75,13 +86,31 @@ final static function string FromBytes(array<int> Bytes)
             break;
         }
 
-        for (k = 0; k < ExtraBytesToRead; ++k)
+        switch (ExtraBytesToRead)
         {
-            c += Bytes[i++];
-            c = c << 6;
+            // usagi:ignore[switch-case-fallthrough]
+            case 5:
+                c += Bytes[i++];
+                c = c << 6;
+            // usagi:ignore[switch-case-fallthrough]
+            case 4:
+                c += Bytes[i++];
+                c = c << 6;
+            // usagi:ignore[switch-case-fallthrough]
+            case 3:
+                c += Bytes[i++];
+                c = c << 6;
+            // usagi:ignore[switch-case-fallthrough]
+            case 2:
+                c += Bytes[i++];
+                c = c << 6;
+            // usagi:ignore[switch-case-fallthrough]
+            case 1:
+                c += Bytes[i++];
+                c = c << 6;
+            case 0:
+                c += Bytes[i++];
         }
-
-        c += Bytes[i++];
 
         S $= Chr(c);
     }
@@ -138,4 +167,3 @@ private final static function int GetFirstByteMark(int BytesToWrite)
             return 0x00;
     }
 }
-

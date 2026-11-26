@@ -6,7 +6,7 @@
 class DHMountedWeaponPickup extends DHWeaponPickup
     abstract;
 
-var DHVehicleState              VehicleState;
+var DHVehicleState VehicleState;
 var array<DHWeaponBarrelBundle> WeaponBarrelBundles;
 var DHMapIconAttachment_Vehicle MapIconAttachment;
 
@@ -26,7 +26,7 @@ simulated function Destroyed()
 // Modified to transfer vehicle state to the new inventory item.
 function Inventory SpawnCopy(Pawn Other)
 {
-	local Inventory Copy;
+    local Inventory Copy;
     local DHMountedWeapon MW;
     local int i;
 
@@ -49,7 +49,7 @@ function Inventory SpawnCopy(Pawn Other)
 
             WeaponBarrelBundles[i] = none;
         }
-        
+
         MW.ConstructionSkinIndex = SkinIndex;
         MW.ConstructionVariantIndex = VariantIndex;
         MW.UpdateProxyCursor();
@@ -83,7 +83,7 @@ function InitDroppedPickupFor(Inventory Inv)
     // Transfer barrel bundle.
     for (i = 0; i < MountedWeapon.WeaponBarrelBundles.Length; ++i)
     {
-        WeaponBarrelBundles[i] = MountedWeapon.WeaponBarrelBundles[i]; 
+        WeaponBarrelBundles[i] = MountedWeapon.WeaponBarrelBundles[i];
         WeaponBarrelBundles[i].SetOwner(self);
         WeaponBarrelBundles[i].OnConditionChanged = none;
         WeaponBarrelBundles[i].OnTemperatureChanged = none;

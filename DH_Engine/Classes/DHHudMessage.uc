@@ -13,9 +13,9 @@ class DHHudMessage extends LocalMessage
 
 enum EHudArea
 {
-    AREA_None,            // No arbitration (normal LocalMessage behavior).
-    AREA_BottomCenter,    // Prompts and errors around the bottom-center of the screen.
-    AREA_TopCenter        // Team information banners at the top-center of the screen.
+    AREA_None, // No arbitration (normal LocalMessage behavior).
+    AREA_BottomCenter, // Prompts and errors around the bottom-center of the screen.
+    AREA_TopCenter, // Team information banners at the top-center of the screen.
 };
 
 var EHudArea Area;

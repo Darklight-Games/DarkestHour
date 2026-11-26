@@ -6,8 +6,8 @@
 class DHConstruction_InventorySpawner extends DHConstruction
     abstract;
 
-var class<DHInventorySpawner>   SpawnerClass;
-var DHInventorySpawner          Spawner;
+var class<DHInventorySpawner> SpawnerClass;
+var DHInventorySpawner Spawner;
 
 static function DHActorProxy.ActorProxyError GetContextError(DHActorProxy.Context Context)
 {
@@ -94,7 +94,7 @@ function Reset()
     }
 }
 
-simulated function OnExhausted(DHInventorySpawner Spawner)
+simulated function OnExhausted(DHInventorySpawner ExhaustedSpawner)
 {
     if (Owner != none)
     {
@@ -113,4 +113,3 @@ defaultproperties
 
     CompletionPointValue=100
 }
-

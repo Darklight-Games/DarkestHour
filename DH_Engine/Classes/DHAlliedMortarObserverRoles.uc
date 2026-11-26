@@ -5,4 +5,3 @@
 
 class DHAlliedMortarObserverRoles extends DHDeprecated
     abstract;
-

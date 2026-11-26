@@ -5,18 +5,18 @@
 
 class DHMetricsVehicleFrag extends JSONSerializable;
 
-var class<DamageType>   DamageType;
-var int                 RoundTime;
+var class<DamageType> DamageType;
+var int RoundTime;
 
-var string              KillerID;
-var class<Pawn>         KillerPawn;
-var Vector              KillerLocation;
-var byte                KillerTeam;
-var class<DHVehicle>    KillerVehicle;
+var string KillerID;
+var class<Pawn> KillerPawn;
+var Vector KillerLocation;
+var byte KillerTeam;
+var class<DHVehicle> KillerVehicle;
 
-var class<DHVehicle>    Vehicle;
-var byte                VehicleTeam;
-var Vector              VehicleLocation;
+var class<DHVehicle> Vehicle;
+var byte VehicleTeam;
+var Vector VehicleLocation;
 
 function JSONValue ToJSON()
 {
@@ -36,14 +36,20 @@ function JSONValue ToJSON()
     return (new Class'JSONObject')
         .PutString("damage_type", DamageType.Name)
         .PutInteger("time", RoundTime)
-        .Put("killer", (new Class'JSONObject')
-            .PutString("id", KillerID)
-            .PutInteger("team", KillerTeam)
-            .Put("pawn", KillerPawnObject)
-            .PutIVector("location", KillerLocation)
-            .Put("vehicle", KillerVehicleObject))
-        .Put("destroyed_vehicle", (new Class'JSONObject')
-            .PutString("vehicle", Vehicle.Name)
-            .PutInteger("team", VehicleTeam)
-            .PutIVector("location", VehicleLocation));
+        .Put(
+            "killer",
+            (new Class'JSONObject')
+                .PutString("id", KillerID)
+                .PutInteger("team", KillerTeam)
+                .Put("pawn", KillerPawnObject)
+                .PutIVector("location", KillerLocation)
+                .Put("vehicle", KillerVehicleObject)
+            )
+        .Put(
+            "destroyed_vehicle",
+            (new Class'JSONObject')
+                .PutString("vehicle", Vehicle.Name)
+                .PutInteger("team", VehicleTeam)
+                .PutIVector("location", VehicleLocation)
+            );
 }

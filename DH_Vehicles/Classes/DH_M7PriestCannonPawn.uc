@@ -12,7 +12,9 @@ function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChang
 
     super.HandleTurretRotation(DeltaTime, YawChange, PitchChange);
 
-    if (Level.NetMode != NM_DedicatedServer && ((YawChange != 0.0 && !bTraverseDamaged) || (PitchChange != 0.0 && !bElevationDamaged)) && Gun != none)
+    if (Level.NetMode != NM_DedicatedServer
+        && ((YawChange != 0.0 && !bTraverseDamaged) || (PitchChange != 0.0 && !bElevationDamaged))
+        && Gun != none)
     {
         R = Gun.GetBoneRotation('gun');
         R.Yaw = 0;
@@ -51,4 +53,3 @@ defaultproperties
     FireImpulse=(X=-110000.0)
     ArtillerySpottingScopeClass=Class'DHArtillerySpottingScope_M7Priest'
 }
-

@@ -5,19 +5,19 @@ class DHSpawnProtectMineVolume extends DHMineVolume;
 // Alternatively, leveller can set initial duration to zero, meaning protection isn't time-limited for enemies already inside MV, so they have to be winkled out
 // Any new enemies who enter the MV don't get any safe period, it's live for them immediately (same applies to a protected enemy who exits & re-enters)
 
-var     bool    bInTimedSafePeriod;     // mine volume is in a time-limited, initial safe period & at least 1 protected enemy is still inside
-var     bool    bSetInitialProtection;  // we need to set up the initial protection for enemy pawns already inside the mine volume when it activated
-var     bool    bSafePeriodWarningDue;  // a periodic warning is due for all protected pawns during a timed safe period
-var     float   NextSafePeriodWarnTime; // the time that the next periodic warning is due during a timed safe period
-var     int     SafeSecondsRemaining;   // how many seconds until end of a timed safe period
+var bool bInTimedSafePeriod; // mine volume is in a time-limited, initial safe period & at least 1 protected enemy is still inside
+var bool bSetInitialProtection; // we need to set up the initial protection for enemy pawns already inside the mine volume when it activated
+var bool bSafePeriodWarningDue; // a periodic warning is due for all protected pawns during a timed safe period
+var float NextSafePeriodWarnTime; // the time that the next periodic warning is due during a timed safe period
+var int SafeSecondsRemaining; // how many seconds until end of a timed safe period
 
 // Mine volume properties that the leveller can set (default values are set but the leveller can choose to override):
-var()   float               TimedSafePeriodDuration;   // duration in seconds of timed safe period, giving enemies time to get out (if set to zero, protection isn't time-limited)
-var()   float               SafePeriodWarnInterval;    // interval in seconds between warning messages during timed safe period
-var()   localized string    SafePeriodWarningMessage;  // warning message to display during timed safe period, telling enemies they must get away from the new spawn
-var()   localized string    SpawnMFActivatedMessage;   // notification message to enemy already inside mine volume when it activates & there's no time limit on their protection
-var()   localized string    ExitedMinefieldMessage;    // notification message to a protected enemy who exits the spawn protection mine volume & so loses protection
-var()   localized string    UnprotectedVehicleWarning; // warning message telling player that although they are protected, the vehicle they are in is not & will soon be blown up
+var() float TimedSafePeriodDuration; // duration in seconds of timed safe period, giving enemies time to get out (if set to zero, protection isn't time-limited)
+var() float SafePeriodWarnInterval; // interval in seconds between warning messages during timed safe period
+var() localized string SafePeriodWarningMessage; // warning message to display during timed safe period, telling enemies they must get away from the new spawn
+var() localized string SpawnMFActivatedMessage; // notification message to enemy already inside mine volume when it activates & there's no time limit on their protection
+var() localized string ExitedMinefieldMessage; // notification message to a protected enemy who exits the spawn protection mine volume & so loses protection
+var() localized string UnprotectedVehicleWarning; // warning message telling player that although they are protected, the vehicle they are in is not & will soon be blown up
 
 // Modified to round off the specified TimedSafePeriodDuration, as a whole number will work better with the 1 second repeating timer
 function PostBeginPlay()
@@ -162,7 +162,8 @@ function SetProtectionForPawn(Pawn P)
 // Uses (ActivationTime + TimedSafePeriodDuration) as a special flag, set by SetProtectionForPawn() function
 function bool ProtectionActiveForPawn(Pawn P)
 {
-    return (bInTimedSafePeriod || TimedSafePeriodDuration == 0.0) && P.MineAreaEnterTime == (ActivationTime + TimedSafePeriodDuration);
+    return (bInTimedSafePeriod || TimedSafePeriodDuration == 0.0)
+        && P.MineAreaEnterTime == (ActivationTime + TimedSafePeriodDuration);
 }
 
 // Modified so pawn is safe if it has protection from this mine volume

@@ -4,31 +4,31 @@
 //==============================================================================
 
 class DHObstacleInfo extends Info
-    hidecategories(Object,Movement,Collision,Lighting,LightColor,Karma,Force,Events,Advanced,Sound)
+    hidecategories(Object, Movement, Collision, Lighting, LightColor, Karma, Force, Events, Advanced, Sound)
     placeable;
 
 struct Type
 {
-    var()   StaticMesh              IntactStaticMesh;
-    var()   array<StaticMesh>       ClearedStaticMeshes;
-    var()   Sound                   ClearSound;
-    var()   float                   ClearSoundRadius;
-    var()   array<class<Emitter> >  ClearEmitterClasses;
-    var()   bool                    bCanBeCut;
-    var()   bool                    bCanBeMantled;
-    var()   bool                    bCanBeCrushed;
-    var()   bool                    bCanBeDestroyedByExplosives;
-    var()   bool                    bCanBeDestroyedByWeapons;
-    var()   int                     ExplosionDamageThreshold;
-    var()   int                     DamageThreshold;
-    var()   float                   CutDuration;
+    var() StaticMesh IntactStaticMesh;
+    var() array<StaticMesh> ClearedStaticMeshes;
+    var() Sound ClearSound;
+    var() float ClearSoundRadius;
+    var() array<class<Emitter> > ClearEmitterClasses;
+    var() bool bCanBeCut;
+    var() bool bCanBeMantled;
+    var() bool bCanBeCrushed;
+    var() bool bCanBeDestroyedByExplosives;
+    var() bool bCanBeDestroyedByWeapons;
+    var() int ExplosionDamageThreshold;
+    var() int DamageThreshold;
+    var() float CutDuration;
 };
 
-var()   array<Type>                 Types;
+var() array<Type> Types;
 
-var     array<Type>                 DefaultTypes;
+var array<Type> DefaultTypes;
 
-var     array<DHObstacleInstance>   Obstacles;
+var array<DHObstacleInstance> Obstacles;
 
 simulated function StaticMesh GetIntactStaticMesh(int Index, bool bIsDefault)
 {
@@ -53,7 +53,8 @@ simulated function StaticMesh GetClearedStaticMesh(int Index, int InstanceIndex,
     {
         if (DefaultTypes[Index].ClearedStaticMeshes.Length > 0)
         {
-            return DefaultTypes[Index].ClearedStaticMeshes[InstanceIndex % DefaultTypes[Index].ClearedStaticMeshes.Length];
+            return DefaultTypes[Index].ClearedStaticMeshes[InstanceIndex
+                % DefaultTypes[Index].ClearedStaticMeshes.Length];
         }
     }
     else
@@ -201,7 +202,8 @@ simulated function class<Emitter> GetClearEmitterClass(int Index, int InstanceIn
     {
         if (DefaultTypes[Index].ClearEmitterClasses.Length > 0)
         {
-            return DefaultTypes[Index].ClearEmitterClasses[InstanceIndex % DefaultTypes[Index].ClearEmitterClasses.Length];
+            return DefaultTypes[Index].ClearEmitterClasses[InstanceIndex
+                % DefaultTypes[Index].ClearEmitterClasses.Length];
         }
     }
     else

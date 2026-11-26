@@ -4,23 +4,23 @@
 //==============================================================================
 
 class DHVehicleMG extends DHVehicleWeapon
-    dependson(DHWeaponBarrel)
-    abstract;
+    abstract
+    dependson(DHWeaponBarrel);
 
-var     bool    bMatchSkinToVehicle;    // Option to automatically match MG skin zero to vehicle skin zero (e.g. for gunshield), avoiding need for separate MG pawn & MG classes.
-var     name    HUDOverlayReloadAnim;   // Reload animation to play if the MG uses a HUDOverlay.
-var     bool    bShouldBaseTakeDamage;  // When true, damage will be transferred to the base vehicle. Used for things like the external MG on the StuG and Hetzer.
+var bool bMatchSkinToVehicle; // Option to automatically match MG skin zero to vehicle skin zero (e.g. for gunshield), avoiding need for separate MG pawn & MG classes.
+var name HUDOverlayReloadAnim; // Reload animation to play if the MG uses a HUDOverlay.
+var bool bShouldBaseTakeDamage; // When true, damage will be transferred to the base vehicle. Used for things like the external MG on the StuG and Hetzer.
 
-var DHWeaponBarrelBundle    BarrelBundle;
-var class<DHWeaponBarrel>   BarrelClass;    // Class for the barrel actor to spawn (if any)
+var DHWeaponBarrelBundle BarrelBundle;
+var class<DHWeaponBarrel> BarrelClass; // Class for the barrel actor to spawn (if any)
 
 // Barrels
 struct SBarrel
 {
-    var name                        MuzzleBone;             // bone name for this barrel
-    var WeaponAmbientEmitter        EffectEmitter;          // separate emitter for this barrel, for muzzle flash & ejected shell cases
-    var class<WeaponAmbientEmitter> EffectEmitterClass;     // class for the barrel firing effect emitters
-    var DHMGSteam                   SteamEmitter;
+    var name MuzzleBone; // bone name for this barrel
+    var WeaponAmbientEmitter EffectEmitter; // separate emitter for this barrel, for muzzle flash & ejected shell cases
+    var class<WeaponAmbientEmitter> EffectEmitterClass; // class for the barrel firing effect emitters
+    var DHMGSteam SteamEmitter;
 };
 
 struct SBarrelState
@@ -30,15 +30,15 @@ struct SBarrelState
     var DHWeaponBarrelBundle.EBarrelCondition Condition;
 };
 
-var class<DHMGSteam>    BarrelSteamEmitterClass;
+var class<DHMGSteam> BarrelSteamEmitterClass;
 
-var bool            bHasMultipleBarrels;
-var byte            FiringBarrelIndex;        // Barrel index that is due to fire next.
-var array<SBarrel>  Barrels;
+var bool bHasMultipleBarrels;
+var byte FiringBarrelIndex; // Barrel index that is due to fire next.
+var array<SBarrel> Barrels;
 
 // For weapons with multiple active barrels (i.e. quad maxim guns etc.)
 const BARRELS_MAX = 4;
-var SBarrelState    BarrelStates[BARRELS_MAX];
+var SBarrelState BarrelStates[BARRELS_MAX];
 
 replication
 {
@@ -115,8 +115,12 @@ simulated function AttemptReload()
 {
     super.AttemptReload();
 
-    if ((ReloadState == RL_Waiting || (bReloadPaused && ReloadState < RL_ReadyToFire)) && DHVehicleMGPawn(WeaponPawn) != none && WeaponPawn.IsLocallyControlled()
-        && DHVehicleMGPawn(WeaponPawn).bMustUnbuttonToReload && !WeaponPawn.CanReload() && DHPlayer(WeaponPawn.Controller) != none)
+    if ((ReloadState == RL_Waiting || (bReloadPaused && ReloadState < RL_ReadyToFire))
+        && DHVehicleMGPawn(WeaponPawn) != none
+        && WeaponPawn.IsLocallyControlled()
+        && DHVehicleMGPawn(WeaponPawn).bMustUnbuttonToReload
+        && !WeaponPawn.CanReload()
+        && DHPlayer(WeaponPawn.Controller) != none)
     {
         DHPlayer(WeaponPawn.Controller).QueueHint(48, true);
     }
@@ -126,7 +130,7 @@ simulated function AttemptReload()
 simulated function StartReload(optional bool bResumingPausedReload)
 {
     local float ReloadSecondsElapsed, TotalReloadDuration;
-    local int   i;
+    local int i;
 
     super.StartReload(bResumingPausedReload);
 
@@ -211,7 +215,8 @@ function Vector GetProjectileFireLocation(class<Projectile> ProjClass)
 {
     if (bHasMultipleBarrels && Barrels.Length > 0)
     {
-        return GetBoneCoords(Barrels[FiringBarrelIndex].MuzzleBone).Origin + ((WeaponFireOffset * vect(1.0, 0.0, 0.0)) >> WeaponFireRotation);
+        return GetBoneCoords(Barrels[FiringBarrelIndex].MuzzleBone).Origin
+            + ((WeaponFireOffset * vect(1.0, 0.0, 0.0)) >> WeaponFireRotation);
     }
 
     return super.GetProjectileFireLocation(ProjClass);
@@ -230,7 +235,7 @@ simulated function InitEffects()
 
     super.InitEffects();
 
-    if (bHasMultipleBarrels)    // TODO: why only multi-barrels?
+    if (bHasMultipleBarrels) // TODO: why only multi-barrels?
     {
         for (i = 0; i < Barrels.Length; ++i)
         {
@@ -240,7 +245,10 @@ simulated function InitEffects()
 
                 if (Emitter == none)
                 {
-                    Warn("DHVehicleMG.InitEffects() - Failed to spawn BarrelEffectEmitter for barrel " $ string(i) $ " of " $ string(Barrels.Length) $ " barrels");
+                    Warn(
+                        "DHVehicleMG.InitEffects() - Failed to spawn BarrelEffectEmitter for barrel " $ string(i)
+                            $ " of " $ string(Barrels.Length) $ " barrels"
+                        );
                     continue;
                 }
 
@@ -330,7 +338,14 @@ simulated function DestroyBarrelEffects()
 
 // Modified to pass damage on to vehicle base, same as a vehicle cannon
 // TODO: should we just put this in the base class?
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+function TakeDamage(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     super.TakeDamage(Damage, InstigatedBy, HitLocation, Momentum, DamageType, HitIndex);
 

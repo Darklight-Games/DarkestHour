@@ -7,9 +7,14 @@ class DHPawnTouchMessage extends DHHudMessage
     abstract;
 
 var localized array<string> Messages;
-var localized string        FallbackPlayerName;
+var localized string FallbackPlayerName;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string S;
     local PlayerController PC;
@@ -47,4 +52,3 @@ defaultproperties
     Messages(2)="Press [%THROWMGAMMO%] to resupply and reload {0}"
     FallbackPlayerName="friendly soldier"
 }
-

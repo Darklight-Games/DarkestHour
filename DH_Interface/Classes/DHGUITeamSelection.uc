@@ -5,14 +5,14 @@
 
 class DHGUITeamSelection extends ROGUITeamSelection;
 
-var array<Texture>                          GermanyBackgroundTextures;
-var array<Texture>                          ItalyBackgroundTextures;
+var array<Texture> GermanyBackgroundTextures;
+var array<Texture> ItalyBackgroundTextures;
 
-var automated GUIButton                     b_Disconnect, b_Settings;
+var automated GUIButton b_Disconnect, b_Settings;
 
-var DHPlayer                                PC;
+var DHPlayer PC;
 
-var localized   string                      SizeBonusText;
+var localized string SizeBonusText;
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
@@ -46,7 +46,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     }
 
     Timer();
-    SetTimer(0.25, true); //changed to 0.25 (4 times a second 10 times prob too much)
+    SetTimer(0.25, true); // changed to 0.25 (4 times a second 10 times prob too much)
 
     SetBackground(); // this is added in DH
 }
@@ -178,13 +178,16 @@ function SelectTeam(int Team)
     }
 
     // Check to make sure we actually can "change" teams
-    if (PC.PlayerReplicationInfo != none &&
-        PC.PlayerReplicationInfo.Team != none &&
-        PC.PlayerReplicationInfo.Team.TeamIndex != Team &&
-        PC.NextChangeTeamTime >= GRI.ElapsedTime)
+    if (PC.PlayerReplicationInfo != none
+        && PC.PlayerReplicationInfo.Team != none
+        && PC.PlayerReplicationInfo.Team.TeamIndex != Team
+        && PC.NextChangeTeamTime >= GRI.ElapsedTime)
     {
         // Trying to change teams, but recently did (give an error)
-        Controller.ShowQuestionDialog(Repl(Class'DHDeployMenu'.default.CantChangeTeamYetText, "{s}", PC.NextChangeTeamTime - GRI.ElapsedTime), QBTN_OK);
+        Controller.ShowQuestionDialog(
+            Repl(Class'DHDeployMenu'.default.CantChangeTeamYetText, "{s}", PC.NextChangeTeamTime - GRI.ElapsedTime),
+            QBTN_OK
+            );
 
         return;
     }

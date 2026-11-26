@@ -86,8 +86,8 @@ simulated state Reloading
         PitchBone = '';
         YawBone = '';
 
-        SetBoneRotation(default.PitchBone, Rot(0, 0, 0));
-        SetBoneRotation(default.YawBone, Rot(0, 0, 0));
+        SetBoneRotation(default.PitchBone, rot(0, 0, 0));
+        SetBoneRotation(default.YawBone, rot(0, 0, 0));
 
         PlayAnim(GunReloadAnim, 1.0, 0.0, GunReloadChannel);
 
@@ -110,9 +110,10 @@ simulated state Reloading
 
         PlayAnim(IdleAnim, 1.0, 0.0, GunReloadChannel);
     }
+
 Begin:
-Sleep(GetAnimDuration(GunReloadAnim));
-GotoState('');
+    Sleep(GetAnimDuration(GunReloadAnim));
+    GotoState('');
 }
 
 defaultproperties

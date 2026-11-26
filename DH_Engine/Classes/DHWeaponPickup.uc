@@ -7,29 +7,29 @@ class DHWeaponPickup extends ROWeaponPickup
     abstract;
 
 // General
-var     int                     PlayerNearbyRadiusMeters;
-var     int                     PlayerNearbyRetryTime;
+var int PlayerNearbyRadiusMeters;
+var int PlayerNearbyRetryTime;
 
 // Ammo
-var     array<int>              AmmoMags;
-var     int                     LoadedMagazineIndex;
+var array<int> AmmoMags;
+var int LoadedMagazineIndex;
 
 // Barrels
-var     DHWeaponBarrelBundle    BarrelBundle;             // bundle of carried barrels for this weapon
-var     bool                    bBarrelSteamActive;       // barrel is steaming
-var     bool                    bOldBarrelSteamActive;    // clientside record, so PostNetReceive can tell when bBarrelSteamActive changes
-var     class<ROMGSteam>        BarrelSteamEmitterClass;
-var     ROMGSteam               BarrelSteamEmitter;
-var     Vector                  BarrelSteamEmitterOffset; // offset for the emitter to position correctly on the pickup static mesh
+var DHWeaponBarrelBundle BarrelBundle; // bundle of carried barrels for this weapon
+var bool bBarrelSteamActive; // barrel is steaming
+var bool bOldBarrelSteamActive; // clientside record, so PostNetReceive can tell when bBarrelSteamActive changes
+var class<ROMGSteam> BarrelSteamEmitterClass;
+var ROMGSteam BarrelSteamEmitter;
+var Vector BarrelSteamEmitterOffset; // offset for the emitter to position correctly on the pickup static mesh
 
-var     StaticMesh              EmptyStaticMesh;
+var StaticMesh EmptyStaticMesh;
 
-var    bool                     bWaitingToBolt;
+var bool bWaitingToBolt;
 
 // This is a bit of a hack; the stationary weapons will be forced to be brought up as soon
 // as they are added to the inventory. However, if the player is busy (reloading, etc) then
 // the weapon will not be brought up. In future, replace this with a more elegant solution.
-var     bool                    bCanPickupWhileBusy;
+var bool bCanPickupWhileBusy;
 
 replication
 {
@@ -122,7 +122,7 @@ auto state Pickup
 // New function that returns true if players are nearby
 function bool ArePlayersNearby()
 {
-    local DHPawn    DHP;
+    local DHPawn DHP;
 
     foreach RadiusActors(Class'DHPawn', DHP, Class'DHUnits'.static.MetersToUnreal(PlayerNearbyRadiusMeters))
     {
@@ -232,7 +232,10 @@ simulated function Tick(float DeltaTime)
 
 simulated event NotifySelected(Pawn User)
 {
-    if (Level.NetMode != NM_DedicatedServer && User != none && User.IsHumanControlled() && ((Level.TimeSeconds - LastNotifyTime) >= TouchMessageClass.default.LifeTime))
+    if (Level.NetMode != NM_DedicatedServer
+        && User != none
+        && User.IsHumanControlled()
+        && ((Level.TimeSeconds - LastNotifyTime) >= TouchMessageClass.default.LifeTime))
     {
         User.ReceiveLocalizedMessage(TouchMessageClass, 1, User.PlayerReplicationInfo,, InventoryType);
         LastNotifyTime = Level.TimeSeconds;

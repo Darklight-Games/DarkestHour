@@ -9,7 +9,7 @@ enum ESeekDirection
 {
     SEEK_Begin,
     SEEK_End,
-    SEEK_Current
+    SEEK_Current,
 };
 
 var private string Buffer;

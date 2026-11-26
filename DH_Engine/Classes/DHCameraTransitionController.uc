@@ -16,6 +16,7 @@ struct CameraTransition
     var float EndTimeSeconds;
     var UInterp.EInterpolationType InterpolationType;
 };
+
 // The list of currently queued camera transitions.
 var private array<CameraTransition> CameraTransitions;
 
@@ -25,7 +26,12 @@ function SetCurrentCameraBone(name NewCameraBone)
 }
 
 // Queuing assumes that the caller will ensure that transitions are correctly ordered and do not overlap in time.
-function QueueCameraTransition(name TargetCameraBone, float StartTimeSeconds, float DurationSeconds, UInterp.EInterpolationType InterpolationType)
+function QueueCameraTransition(
+    name TargetCameraBone,
+    float StartTimeSeconds,
+    float DurationSeconds,
+    UInterp.EInterpolationType InterpolationType
+    )
 {
     local CameraTransition NewTransition;
 
@@ -80,7 +86,8 @@ function Tick(Actor Actor, float TimeSeconds)
     TargetRotation = Actor.GetBoneRotation(ActiveTransition.TargetCameraBone);
 
     // Calculate interpolation alpha based on time and interpolation type.
-    Alpha = (TimeSeconds - ActiveTransition.StartTimeSeconds) / (ActiveTransition.EndTimeSeconds - ActiveTransition.StartTimeSeconds);
+    Alpha = (TimeSeconds - ActiveTransition.StartTimeSeconds)
+        / (ActiveTransition.EndTimeSeconds - ActiveTransition.StartTimeSeconds);
     Alpha = FClamp(Alpha, 0.0, 1.0);
     Alpha = Class'UInterp'.static.Interpolate(Alpha, 0.0, 1.0, ActiveTransition.InterpolationType);
 

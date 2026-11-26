@@ -12,32 +12,32 @@ class DHMountedWeapon extends DHActorProxyWeapon
 // Construction classes here are meant to be used to toggle the mount being used.
 // This method was chosen because different mounts will have different placement
 // rules and mechanics (a role best suited for being handled in constructions).
-var class<DHConstruction_Vehicle>   ConstructionClass;
-var int                             ConstructionVariantIndex;
-var int                             ConstructionSkinIndex;
+var class<DHConstruction_Vehicle> ConstructionClass;
+var int ConstructionVariantIndex;
+var int ConstructionSkinIndex;
 
-var private DHVehicleState          VehicleState;
+var private DHVehicleState VehicleState;
 
 // Barrel bundles per weapon. Usually there will only be one,
 // but this should match the size of WeaponPawns.
 var array<DHWeaponBarrelBundle> WeaponBarrelBundles;
 
-var()       Material    HudAmmoIconMaterial;
-var         int         HudAmmoCount;
+var() Material HudAmmoIconMaterial;
+var int HudAmmoCount;
 
 // Deploying
-var     bool    bDeploying;
-var()   name    DeployAnimation;
+var bool bDeploying;
+var() name DeployAnimation;
 
-var()   bool    bCanDeployWhileStanding;
-var()   bool    bCanDeployWhileCrouched;
-var()   bool    bCanDeployWhileCrawling;
+var() bool bCanDeployWhileStanding;
+var() bool bCanDeployWhileCrouched;
+var() bool bCanDeployWhileCrawling;
 
-var()   bool    bShouldAlignToGround;
+var() bool bShouldAlignToGround;
 
-var     bool    bIsEncumbering; // When true, player cannot run, go prone or switch weapons
+var bool bIsEncumbering; // When true, player cannot run, go prone or switch weapons
 
-var     bool    bHasDeployed;
+var bool bHasDeployed;
 
 replication
 {
@@ -88,7 +88,7 @@ simulated state Deploying
         local DHPawn P;
 
         super.EndState();
-        
+
         P = DHPawn(Instigator);
 
         if (P != none)
@@ -98,11 +98,7 @@ simulated state Deploying
         }
     }
 
-    exec simulated function Deploy()
-    {
-        return;
-    }
-
+    exec simulated function Deploy();
     // Modified to prevent player from changing stance while he is crouched & deploying the weapon
     simulated function bool CanThrow();
     simulated function bool WeaponAllowJump();
@@ -110,19 +106,17 @@ simulated state Deploying
     simulated function bool WeaponAllowProneChange();
     simulated function bool WeaponCanSwitch();
     function DropFrom(vector StartLocation);
-    
+
 Begin:
     PlayAnim(DeployAnimation);
     Sleep(GetAnimDuration(DeployAnimation));
+
     if (ProxyCursor != none)
     {
         ServerDeployEnd(
-            ProxyCursor.GroundActor,
-            ProxyCursor.Location,
-            ProxyCursor.Rotation,
-            ConstructionVariantIndex,
+            ProxyCursor.GroundActor, ProxyCursor.Location, ProxyCursor.Rotation, ConstructionVariantIndex,
             ConstructionSkinIndex
-        );
+            );
     }
     GotoState('Idle');
 }
@@ -136,7 +130,7 @@ simulated function DHActorProxy.Context GetContext()
         Context.TeamIndex = Instigator.GetTeamNum();
         Context.PlayerController = DHPlayer(Instigator.Controller);
     }
-    
+
     Context.LevelInfo = Class'DH_LevelInfo'.static.GetInstance(Level);
     Context.VariantIndex = ConstructionVariantIndex;
     Context.SkinIndex = ConstructionSkinIndex;
@@ -248,9 +242,11 @@ function bool FillAmmo()
             do
             {
                 bDidResupplyCannon = false;
+
                 for (j = 0; j < arraycount(VehicleWeaponState.MainAmmoCharge); ++j)
                 {
-                    if (MainAmmoResupplyCount > 0 && VehicleWeaponState.MainAmmoCharge[j] < VehicleCannonClass.static.GetMaxAmmo(j))
+                    if (MainAmmoResupplyCount > 0
+                        && VehicleWeaponState.MainAmmoCharge[j] < VehicleCannonClass.static.GetMaxAmmo(j))
                     {
                         ++VehicleWeaponState.MainAmmoCharge[j];
                         --MainAmmoResupplyCount;
@@ -261,10 +257,10 @@ function bool FillAmmo()
             }
             until (MainAmmoResupplyCount == 0 || bDidResupplyCannon == false);
         }
-        
-        if (i < WeaponBarrelBundles.Length &&
-            WeaponBarrelBundles[i] != none &&
-            WeaponBarrelBundles[i].ReplaceInactiveFailedBarrels() > 0)
+
+        if (i < WeaponBarrelBundles.Length
+            && WeaponBarrelBundles[i] != none
+            && WeaponBarrelBundles[i].ReplaceInactiveFailedBarrels() > 0)
         {
             bDidResupplyWeapon = true;
         }
@@ -331,7 +327,11 @@ simulated function DHActorProxy CreateProxyCursor()
 // Implemented to force player to equip the stationary weapon if it isn't already his current weapon
 simulated function Tick(float DeltaTime)
 {
-    if (Instigator != none && Instigator.Weapon != self && Instigator.PendingWeapon != self && Instigator.IsLocallyControlled() && bIsEncumbering)
+    if (Instigator != none
+        && Instigator.Weapon != self
+        && Instigator.PendingWeapon != self
+        && Instigator.IsLocallyControlled()
+        && bIsEncumbering)
     {
         Instigator.SwitchWeapon(InventoryGroup);
         return;
@@ -341,7 +341,9 @@ simulated function Tick(float DeltaTime)
 
     if (CanConfirmPlacement())
     {
-        Instigator.ReceiveLocalizedMessage(Class'DHMountedWeaponControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self);
+        Instigator.ReceiveLocalizedMessage(
+            Class'DHMountedWeaponControlsMessage', 0, Instigator.PlayerReplicationInfo, none, self
+            );
     }
 }
 
@@ -350,12 +352,12 @@ simulated function bool PutDown()
 {
     GotoState('LoweringWeapon');
 
-    if (ROWeaponAttachment(ThirdPersonActor) != None)
+    if (ROWeaponAttachment(ThirdPersonActor) != none)
     {
-        ROWeaponAttachment(ThirdPersonActor).AmbientSound = None;
+        ROWeaponAttachment(ThirdPersonActor).AmbientSound = none;
     }
 
-    OldWeapon = None;
+    OldWeapon = none;
     return true; // return false if preventing weapon switch
 }
 
@@ -381,7 +383,7 @@ simulated function bool WeaponAllowSprint()
 {
     return !bIsEncumbering && super.WeaponAllowSprint();
 }
-    
+
 simulated function bool WeaponCanSwitch()
 {
     return !bIsEncumbering && super.WeaponCanSwitch();
@@ -469,7 +471,7 @@ function ServerDeployEnd(Actor GroundActor, Vector Location, Rotator Rotation, i
 
     ConstructionVariantIndex = VariantIndex;
     ConstructionSkinIndex = SkinIndex;
-    
+
     if (!CanSpawnVehicle(GroundActor, Location, Rotation))
     {
         Log("Can't spawn vehicle for some reason");
@@ -520,7 +522,7 @@ function ServerDeployEnd(Actor GroundActor, Vector Location, Rotator Rotation, i
             WeaponBarrelBundles[i] = none;
         }
     }
-    
+
     // Destroy the carried weapon, as it's now been replaced by the deployed weapon.
     Destroy();
 }
@@ -533,7 +535,7 @@ simulated event ClientStartFire(int Mode);
 simulated event ClientStopFire(int Mode);
 event ServerStartFire(byte Mode);
 function ServerStopFire(byte Mode);
-simulated function bool StartFire(int Mode) { return false; }
+simulated function bool StartFire(int Mode);
 simulated event StopFire(int Mode);
 simulated function ImmediateStopFire();
 simulated function ROIronSights();
@@ -543,9 +545,9 @@ exec simulated function ROManualReload();
 // NOTE: This assumes the first vehicle class is representative of the weapon (same as the pickup's map icon).
 static function string GetInventoryName(bool bUseNativeItemNames)
 {
-    if (default.ConstructionClass != none &&
-        default.ConstructionClass.default.VehicleClasses.Length > 0 &&
-        default.ConstructionClass.default.VehicleClasses[0].VehicleClass != none)
+    if (default.ConstructionClass != none
+        && default.ConstructionClass.default.VehicleClasses.Length > 0
+        && default.ConstructionClass.default.VehicleClasses[0].VehicleClass != none)
     {
         return default.ConstructionClass.default.VehicleClasses[0].VehicleClass.default.VehicleNameString;
     }
@@ -565,7 +567,7 @@ simulated function CycleVariant()
         {
             return;
         }
-        
+
         ++ConstructionVariantIndex;
 
         Proxy.SetVariantAndSkin(ConstructionVariantIndex, ConstructionSkinIndex);

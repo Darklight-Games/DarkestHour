@@ -5,7 +5,7 @@
 
 class DH_SU76CannonPawn extends DHAssaultGunCannonPawn;
 
-//to do: periscope and/or DT machinegun
+// to do: periscope and/or DT machinegun
 
 defaultproperties
 {

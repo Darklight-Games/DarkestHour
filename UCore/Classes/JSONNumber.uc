@@ -70,4 +70,3 @@ static function JSONNumber FCreate(float F)
 
     return N;
 }
-

@@ -5,10 +5,10 @@
 
 class DHArtilleryRequest extends Object;
 
-var int                 TeamIndex;
-var int                 ArtilleryTypeIndex;
-var Vector              Location;
-var DHPlayer            Sender; // TODO: objects holding refs to actors = bad news, use ROID?
+var int TeamIndex;
+var int ArtilleryTypeIndex;
+var Vector Location;
+var DHPlayer Sender; // TODO: objects holding refs to actors = bad news, use ROID?
 
 simulated function class<DHArtillery> GetArtilleryClass()
 {

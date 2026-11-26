@@ -14,4 +14,3 @@ defaultproperties
     bShouldDrawBeeLine=true
     BroadcastedMessageIndex=2
 }
-

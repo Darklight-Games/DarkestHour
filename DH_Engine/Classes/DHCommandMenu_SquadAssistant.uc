@@ -47,10 +47,10 @@ function bool IsOptionDisabled(int OptionIndex)
 
     switch (OptionIndex)
     {
-    case 0: // Construction
-        return DHPawn(PC.Pawn) == none || GRI == none || !GRI.bAreConstructionsEnabled;
-    default:
-        return false;
+        case 0: // Construction
+            return DHPawn(PC.Pawn) == none || GRI == none || !GRI.bAreConstructionsEnabled;
+        default:
+            return false;
     }
 }
 

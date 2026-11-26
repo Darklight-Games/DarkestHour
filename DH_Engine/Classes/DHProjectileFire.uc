@@ -7,60 +7,60 @@ class DHProjectileFire extends DHWeaponFire;
 
 struct WhizInfo
 {
-    var DHPawn  Player;
-    var Vector  SoundLocation;
-    var byte    Type;
+    var DHPawn Player;
+    var Vector SoundLocation;
+    var byte Type;
 };
 
 // Projectile spawning & pre-launch trace
-var     int             ProjPerFire;                 // how many projectiles are spawned each fire (normally 1)
-var     Vector          ProjSpawnOffset;             // positional offset to spawn projectile
-var     Vector          FAProjSpawnOffset;           // positional offset to spawn projectile for free-aim mode
-var     int             AddedYaw;                    // additional yaw to add to firing calculations (added as the scoped enfield seemed to fire to the left)
-var     int             AddedPitch;                  // additional pitch to add to firing calculations (primarily used for rocket launchers)
-var     bool            bUsePreLaunchTrace;          // use pre-projectile spawn trace to see if we hit anything close before launching projectile (saves CPU and net usage)
-var     float           PreLaunchTraceDistance;      // length of a pre-launch trace, in Unreal units (calculated automatically, based on bullet's maximum speed)
-var     float           PreLaunchTraceLengthFactor;  // determines pre launch trace length, as a factor to be multiplied by the bullet's speed
-var     bool            bTraceHitBulletProofColMesh; // bullet has hit a collision mesh actor that is bullet proof, so we can handle vehicle hits accordingly
+var int ProjPerFire; // how many projectiles are spawned each fire (normally 1)
+var Vector ProjSpawnOffset; // positional offset to spawn projectile
+var Vector FAProjSpawnOffset; // positional offset to spawn projectile for free-aim mode
+var int AddedYaw; // additional yaw to add to firing calculations (added as the scoped enfield seemed to fire to the left)
+var int AddedPitch; // additional pitch to add to firing calculations (primarily used for rocket launchers)
+var bool bUsePreLaunchTrace; // use pre-projectile spawn trace to see if we hit anything close before launching projectile (saves CPU and net usage)
+var float PreLaunchTraceDistance; // length of a pre-launch trace, in Unreal units (calculated automatically, based on bullet's maximum speed)
+var float PreLaunchTraceLengthFactor; // determines pre launch trace length, as a factor to be multiplied by the bullet's speed
+var bool bTraceHitBulletProofColMesh; // bullet has hit a collision mesh actor that is bullet proof, so we can handle vehicle hits accordingly
 
 // Weapon spread/inaccuracy
-var     float           CrouchSpreadModifier;        // modifier applied when player is crouched
-var     float           ProneSpreadModifier;         // modifier applied when player is prone
-var     float           BipodDeployedSpreadModifier; // modifier applied when player is using a bipod deployed weapon
-var     float           RestDeploySpreadModifier;    // modifier applied when players weapon is rest deployed
-var     float           HipSpreadModifier;           // modifier applied when player is firing from the hip
-var     float           LeanSpreadModifier;          // modifier applied when player is firing while leaning
-var     bool            bDebugSpread;                // debug option to show limits of spread as red lines
+var float CrouchSpreadModifier; // modifier applied when player is crouched
+var float ProneSpreadModifier; // modifier applied when player is prone
+var float BipodDeployedSpreadModifier; // modifier applied when player is using a bipod deployed weapon
+var float RestDeploySpreadModifier; // modifier applied when players weapon is rest deployed
+var float HipSpreadModifier; // modifier applied when player is firing from the hip
+var float LeanSpreadModifier; // modifier applied when player is firing while leaning
+var bool bDebugSpread; // debug option to show limits of spread as red lines
 
 // Recoil system
-var     InterpCurve     RecoilCurve;                 // A curve to determine the recoil modifier for RecoilGain (shots fired recently)
-var     float           RecoilGain;                  // The input for the RecoilCurve, RecoilGain is higher if a lot of rounds have been fired recently
-var     float           RecoilGainIncrementAmount;   // The value to increase RecoilGain by every time recoil happens
-var     float           RecoilFallOffFactor;         // (TimeSinceLastRecoil ^ RecoilFallOffExponent) * RecoilFallOffFactor
-var     float           RecoilFallOffExponent;
-var     float           PctHipMGPenalty;             // Amount of recoil to add when the player firing an MG from the hip
+var InterpCurve RecoilCurve; // A curve to determine the recoil modifier for RecoilGain (shots fired recently)
+var float RecoilGain; // The input for the RecoilCurve, RecoilGain is higher if a lot of rounds have been fired recently
+var float RecoilGainIncrementAmount; // The value to increase RecoilGain by every time recoil happens
+var float RecoilFallOffFactor; // (TimeSinceLastRecoil ^ RecoilFallOffExponent) * RecoilFallOffFactor
+var float RecoilFallOffExponent;
+var float PctHipMGPenalty; // Amount of recoil to add when the player firing an MG from the hip
 
 // Tracers
-var     bool            bUsesTracers;                // true if the weapon uses tracers
-var     int             TracerFrequency;             // how often a tracer is loaded in (as in, 1 in TracerFrequency)
-var     byte            NextTracerCounter;           // count up shots fired, so we know when it's time to fire a tracer round
-var class<Projectile>   TracerProjectileClass;       // class for the tracer bullet for this weapon (now a real bullet that does damage, as well as tracer effects)
+var bool bUsesTracers; // true if the weapon uses tracers
+var int TracerFrequency; // how often a tracer is loaded in (as in, 1 in TracerFrequency)
+var byte NextTracerCounter; // count up shots fired, so we know when it's time to fire a tracer round
+var class<Projectile> TracerProjectileClass; // class for the tracer bullet for this weapon (now a real bullet that does damage, as well as tracer effects)
 
 // Ironsight animations
-var     name            FireIronAnim;                // firing animation for firing in ironsights
-var     name            FireIronLoopAnim;            // looping fire animation for firing in ironsights
-var     name            FireIronEndAnim;             // end anim for firing in ironsights
+var name FireIronAnim; // firing animation for firing in ironsights
+var name FireIronLoopAnim; // looping fire animation for firing in ironsights
+var name FireIronEndAnim; // end anim for firing in ironsights
 
 // Screen blur when firing
-var     bool            bShouldBlurOnFire;           // whether or not to add slight screen blur upon firing
-var     float           BlurTime;                    // how long to blur when firing non-ironsighted
-var     float           BlurTimeIronsight;           // how long to blur when firing ironsighted
-var     float           BlurScale;                   // blur effect scale when firing non-ironsighted
-var     float           BlurScaleIronsight;          // blur effect scale when firing ironsighted
+var bool bShouldBlurOnFire; // whether or not to add slight screen blur upon firing
+var float BlurTime; // how long to blur when firing non-ironsighted
+var float BlurTimeIronsight; // how long to blur when firing ironsighted
+var float BlurScale; // blur effect scale when firing non-ironsighted
+var float BlurScaleIronsight; // blur effect scale when firing ironsighted
 
 // Different firing animations if the weapon is firing its last round
-var     name    FireLastAnim;
-var     name    FireIronLastAnim;
+var name FireLastAnim;
+var name FireIronLastAnim;
 
 // Modified to set pre-launch trace distance, based on bullet's maximum speed, so slower bullets that drop sooner use a shorter trace
 simulated function PostBeginPlay()
@@ -80,12 +80,12 @@ function float MaxRange()
 
 function DoFireEffect()
 {
-    local Actor   TracedActor;
-    local Coords  MuzzlePosition;
-    local Vector  StartTrace, FireLocation, HitLocation, HitNormal, FireDirection, X, Y, Z;
+    local Actor TracedActor;
+    local Coords MuzzlePosition;
+    local Vector StartTrace, FireLocation, HitLocation, HitNormal, FireDirection, X, Y, Z;
     local Rotator RandomSpread;
-    local float   AppliedSpread;
-    local int     NumProjectiles, i, j, k;
+    local float AppliedSpread;
+    local int NumProjectiles, i, j, k;
 
     if (Weapon == none)
     {
@@ -123,7 +123,11 @@ function DoFireEffect()
 
     // Get the direction for the projectile
     // If player is hip firing (& is the default free-aim type), use where the muzzle bone is pointing
-    if (IsPlayerHipFiring() && Instigator != none && Instigator.IsHumanControlled() && Weapon != none && Weapon.bUsesFreeAim)
+    if (IsPlayerHipFiring()
+        && Instigator != none
+        && Instigator.IsHumanControlled()
+        && Weapon != none
+        && Weapon.bUsesFreeAim)
     {
         FireDirection = MuzzlePosition.XAxis;
     }
@@ -174,7 +178,9 @@ function DoFireEffect()
                     RandomSpread.Yaw = AppliedSpread * (((float(i) / 2.0) - 0.5) / 1.5);
                     RandomSpread.Pitch = AppliedSpread * ((float(j) / 2.0) - 0.5);
                     RandomSpread.Roll = AppliedSpread * ((float(k) / 2.0) - 0.5);
-                    Weapon.DrawStayingDebugLine(FireLocation, FireLocation + (25000.0 * (FireDirection >> RandomSpread)), 255, 0, 0);
+                    Weapon.DrawStayingDebugLine(
+                        FireLocation, FireLocation + (25000.0 * (FireDirection >> RandomSpread)), 255, 0, 0
+                        );
                 }
             }
         }
@@ -183,10 +189,13 @@ function DoFireEffect()
 
 simulated function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 {
-    Canvas.SetDrawColor(250,180,180);
-    Canvas.DrawText("===FIREMODE===" @ Name @ "RecoilGain:" @ GetEffectiveRecoilGain() @ "IsFiring:" @ bIsFiring @ "In state:" @ GetStateName());
+    Canvas.SetDrawColor(250, 180, 180);
+    Canvas.DrawText(
+        "===FIREMODE===" @ Name @ "RecoilGain:" @ GetEffectiveRecoilGain() @ "IsFiring:" @ bIsFiring @ "In state:"
+            @ GetStateName()
+        );
     YPos += YL;
-    Canvas.SetPos(4,YPos);
+    Canvas.SetPos(4, YPos);
 }
 
 simulated function bool IsInstigatorBipodDeployed()
@@ -197,7 +206,7 @@ simulated function bool IsInstigatorBipodDeployed()
 function CalcSpreadModifiers()
 {
     local DHPawn P;
-    local float  PlayerSpeed, MovementPctModifier;
+    local float PlayerSpeed, MovementPctModifier;
 
     P = DHPawn(Instigator);
 
@@ -250,9 +259,9 @@ function CalcSpreadModifiers()
 // If we do then we can avoid spawning the projectile if we'd hit something so close that the ballistics wouldn't matter anyway (don't use this for things like rocket launchers)
 function Projectile SpawnProjectile(Vector Start, Rotator Dir)
 {
-    local class<Projectile>     ProjectileClassToSpawn;
-    local ROWeaponAttachment    WeapAttach;
-    local bool                  bIsSpawningTracer;
+    local class<Projectile> ProjectileClassToSpawn;
+    local ROWeaponAttachment WeapAttach;
+    local bool bIsSpawningTracer;
 
     // Do any additional pitch/yaw changes before launching the projectile
     Dir.Pitch += AddedPitch;
@@ -262,7 +271,9 @@ function Projectile SpawnProjectile(Vector Start, Rotator Dir)
 
     // Spawn a tracer projectile if one is due
     // But don't bother on a dedicated server if weapon uses the 'high ROF' system, as net clients will handle tracers independently
-    if (bUsesTracers && TracerProjectileClass != none && !(Level.NetMode == NM_DedicatedServer && DHHighROFWeaponAttachment(Weapon.ThirdPersonActor) != none))
+    if (bUsesTracers
+        && TracerProjectileClass != none
+        && !(Level.NetMode == NM_DedicatedServer && DHHighROFWeaponAttachment(Weapon.ThirdPersonActor) != none))
     {
         NextTracerCounter++;
 
@@ -312,11 +323,11 @@ function Projectile SpawnProjectile(Vector Start, Rotator Dir)
 // In multiplayer, this only happens on server, so have to record players that would have been whizzed & play whizzes after trace, if we are going to stop bullet spawning[
 function bool PreLaunchTrace(Vector Start, Vector Direction)
 {
-    local Actor           Other, A;
-    local DHPawn          HitPlayer, WhizzedPlayer;
-    local Vector          HitLocation, HitPlayerLocation, TempHitLocation, HitNormal;
-    local int             WhizType, i;
-    local array<int>      HitPoints;
+    local Actor Other, A;
+    local DHPawn HitPlayer, WhizzedPlayer;
+    local Vector HitLocation, HitPlayerLocation, TempHitLocation, HitNormal;
+    local int WhizType, i;
+    local array<int> HitPoints;
     local array<WhizInfo> SavedWhizzes;
 
     bTraceHitBulletProofColMesh = false; // reset
@@ -326,10 +337,14 @@ function bool PreLaunchTrace(Vector Start, Vector Direction)
     // Our Instigator pawn doesn't work, as it has bBlockHitPointTraces=false, meaning it won't detect hits on bullet whip attachments, which we need
     Weapon.bUseCollisionStaticMesh = ProjectileClass.default.bUseCollisionStaticMesh;
 
-    foreach Weapon.TraceActors(Class'Actor', A, HitLocation, HitNormal, Start + (PreLaunchTraceDistance * Direction), Start)
+    foreach Weapon.TraceActors(
+        Class'Actor', A, HitLocation, HitNormal, Start + (PreLaunchTraceDistance * Direction), Start
+        )
     {
         // Ignore this traced actor, as it's not something that would trigger HitWall or ProcessTouch for a bullet (i.e. a possible hit)
-        if (!A.bWorldGeometry && (A.Physics != PHYS_Karma && A.Physics != PHYS_MovingBrush) && !((A.bBlockActors || A.bProjTarget) && A.bBlockHitPointTraces))
+        if (!A.bWorldGeometry
+            && (A.Physics != PHYS_Karma && A.Physics != PHYS_MovingBrush)
+            && !((A.bBlockActors || A.bProjTarget) && A.bBlockHitPointTraces))
         {
             continue;
         }
@@ -353,7 +368,11 @@ function bool PreLaunchTrace(Vector Start, Vector Direction)
         }
 
         // Ignore anything anything a bullet's ProcessTouch would normally ignore
-        if (A == Instigator || A.Base == Instigator || A.Owner == Instigator || A.bDeleteMe || (A.IsA('Projectile') && !A.bProjTarget))
+        if (A == Instigator
+            || A.Base == Instigator
+            || A.Owner == Instigator
+            || A.bDeleteMe
+            || (A.IsA('Projectile') && !A.bProjTarget))
         {
             bTraceHitBulletProofColMesh = false; // reset
             continue;
@@ -404,7 +423,9 @@ function bool PreLaunchTrace(Vector Start, Vector Direction)
 
             // Trace to see if bullet path will actually hit one of the player pawn's various body hit points
             // HitPointTraces don't work well with short traces, so we have to do long trace first, then if we hit player we check whether he was within the whip attachment
-            A = Weapon.HitPointTrace(TempHitLocation, HitNormal, HitLocation + (65535.0 * Direction), HitPoints, HitLocation,, WhizType);
+            A = Weapon.HitPointTrace(
+                TempHitLocation, HitNormal, HitLocation + (65535.0 * Direction), HitPoints, HitLocation,, WhizType
+                );
 
             // If we've set WhizType 255, server server needs to replicate whiz to owning net client
             // So as soon as we've done HitPointTracewe, we grab WhizLocation calculated by native code for 'dummy' PawnWhizzed event we triggered
@@ -414,9 +435,9 @@ function bool PreLaunchTrace(Vector Start, Vector Direction)
             }
 
             // We're primarily interested if we hit a player, but also need to check if hit an awkward collision or destroyable mesh that doesn't stop a bullet
-            if (DHPawn(A) != none ||
-                (DHCollisionMeshActor(A) != none && DHCollisionMeshActor(A).bWontStopBullet) ||
-                (RODestroyableStaticMesh(A) != none && RODestroyableStaticMesh(A).bWontStopBullets))
+            if (DHPawn(A) != none
+                || (DHCollisionMeshActor(A) != none && DHCollisionMeshActor(A).bWontStopBullet)
+                || (RODestroyableStaticMesh(A) != none && RODestroyableStaticMesh(A).bWontStopBullets))
             {
                 // Only count hit if traced actor is within extent of bullet whip (we had to do an artificially long HitPointTrace, so may have traced something far away)
                 if (VSizeSquared(TempHitLocation - HitLocation) <= 180000.0) // 180k is square of max distance across whip 'diagonally'
@@ -473,15 +494,17 @@ function bool PreLaunchTrace(Vector Start, Vector Direction)
 
     // We hit a special collision mesh or destroyable mesh (e.g. glass) that doesn't stop bullets
     // These are very rare & cause too many complications to be worth handling in pre-launch trace, so we'll just exit & let bullet spawn & handle things
-    if ((DHCollisionMeshActor(A) != none && DHCollisionMeshActor(A).bWontStopBullet) ||
-        (RODestroyableStaticMesh(Other) != none && RODestroyableStaticMesh(Other).bWontStopBullets) ||
-        (DHThrowableExplosiveProjectile(Other) != none))
+    if ((DHCollisionMeshActor(A) != none && DHCollisionMeshActor(A).bWontStopBullet)
+        || (RODestroyableStaticMesh(Other) != none && RODestroyableStaticMesh(Other).bWontStopBullets)
+        || (DHThrowableExplosiveProjectile(Other) != none))
     {
         return false;
     }
 
     // This is a bit of a hack, but it prevents bots from killing other players in most instances (by preventing the shot from taking place)
-    if (!Instigator.IsHumanControlled() && Pawn(Other) != none && Instigator.Controller.SameTeamAs(Pawn(Other).Controller))
+    if (!Instigator.IsHumanControlled()
+        && Pawn(Other) != none
+        && Instigator.Controller.SameTeamAs(Pawn(Other).Controller))
     {
         return true;
     }
@@ -493,10 +516,11 @@ function bool PreLaunchTrace(Vector Start, Vector Direction)
     }
 
     // Update hit effect (not if we hit a player, as blood effects etc get handled in ProcessLocationalDamage/TakeDamage)
-    if (HitPlayer == none &&
-        ROWeaponAttachment(Weapon.ThirdPersonActor) != none &&
-        Other != none &&
-        (Other.bWorldGeometry || Other.IsA('Vehicle') || Other.IsA('VehicleWeapon')) || Other.Physics == PHYS_MovingBrush)
+    if (HitPlayer == none
+        && ROWeaponAttachment(Weapon.ThirdPersonActor) != none
+        && Other != none
+        && (Other.bWorldGeometry || Other.IsA('Vehicle') || Other.IsA('VehicleWeapon'))
+        || Other.Physics == PHYS_MovingBrush)
     {
         ROWeaponAttachment(Weapon.ThirdPersonActor).UpdateHit(Other, HitLocation, HitNormal);
     }
@@ -504,13 +528,19 @@ function bool PreLaunchTrace(Vector Start, Vector Direction)
     // Finally handle damage on whatever we've hit
     if (HitPlayer != none)
     {
-        HitPlayer.ProcessLocationalDamage(ProjectileClass.default.Damage, Instigator, HitPlayerLocation,
-            ProjectileClass.default.MomentumTransfer * Direction, ProjectileClass.default.MyDamageType, HitPoints);
+        HitPlayer.ProcessLocationalDamage(
+            ProjectileClass.default.Damage, Instigator, HitPlayerLocation,
+            ProjectileClass.default.MomentumTransfer * Direction, ProjectileClass.default.MyDamageType, HitPoints
+            );
     }
-    else if (Other != none && (!Other.bWorldGeometry || Other.IsA('RODestroyableStaticMesh')) && !bTraceHitBulletProofColMesh)
+    else if (Other != none
+        && (!Other.bWorldGeometry || Other.IsA('RODestroyableStaticMesh'))
+        && !bTraceHitBulletProofColMesh)
     {
-        Other.TakeDamage(ProjectileClass.default.Damage, Instigator, HitLocation,
-            ProjectileClass.default.MomentumTransfer * Direction, ProjectileClass.default.MyDamageType);
+        Other.TakeDamage(
+            ProjectileClass.default.Damage, Instigator, HitLocation,
+            ProjectileClass.default.MomentumTransfer * Direction, ProjectileClass.default.MyDamageType
+            );
     }
 
     return true;
@@ -535,7 +565,9 @@ function ServerPlayFiring()
 {
     if (FireSounds.Length > 0)
     {
-        Weapon.PlayOwnedSound(FireSounds[Rand(FireSounds.Length)],SLOT_None,FireVolume,,, GetFiringSoundPitch(), false);
+        Weapon.PlayOwnedSound(
+            FireSounds[Rand(FireSounds.Length)], SLOT_None, FireVolume,,, GetFiringSoundPitch(), false
+            );
     }
 }
 
@@ -601,7 +633,9 @@ function PlayFiring()
 
         if (FireSounds.Length > 0)
         {
-            Weapon.PlayOwnedSound(FireSounds[Rand(FireSounds.Length)], SLOT_None, FireVolume,,, GetFiringSoundPitch(), false);
+            Weapon.PlayOwnedSound(
+                FireSounds[Rand(FireSounds.Length)], SLOT_None, FireVolume,,, GetFiringSoundPitch(), false
+                );
         }
     }
 
@@ -654,9 +688,9 @@ simulated function float CustomHandleRecoil()
 
 simulated function HandleRecoil()
 {
-    local Rotator       NewRecoilRotation;
-    local DHPlayer      PC;
-    local DHPawn        P;
+    local Rotator NewRecoilRotation;
+    local DHPlayer PC;
+    local DHPawn P;
 
     if (Instigator != none)
     {
@@ -743,7 +777,10 @@ simulated function HandleRecoil()
     }
 
     // Handle blur from the recoil
-    if (Level.NetMode != NM_DedicatedServer && default.bShouldBlurOnFire && Instigator != none && ROPlayer(Instigator.Controller) != none)
+    if (Level.NetMode != NM_DedicatedServer
+        && default.bShouldBlurOnFire
+        && Instigator != none
+        && ROPlayer(Instigator.Controller) != none)
     {
         if (Weapon.bUsingSights)
         {

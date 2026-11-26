@@ -20,7 +20,7 @@ defaultproperties
     VehicleHudImage=Texture'DH_M1919A4_tex.HUD.M1919A4_M1917_BODY'
     VehicleHudTurret=TexRotator'DH_M1919A4_tex.HUD.M1919A4_M1917_TURRET_ROT'
     VehicleHudTurretLook=TexRotator'DH_M1919A4_tex.HUD.M1919A4_M1917_TURRET_LOOK'
-    VehicleTeam=1    
+    VehicleTeam=1
     MountedWeaponClass=Class'DH_M1919A4_M1917_Weapon'
     DestroyedVehicleMesh=StaticMesh'DH_M1919A4_stc.M1919A4_M2_DESTROYED'
 }

@@ -5,7 +5,7 @@
 
 class DH_ConstructionWeapon extends DHActorProxyWeapon;
 
-var class<DHConstruction>       ConstructionClass;
+var class<DHConstruction> ConstructionClass;
 
 replication
 {
@@ -172,11 +172,7 @@ simulated function OnConfirmPlacement()
     if (CP != none)
     {
         ServerCreateConstruction(
-            CP.ConstructionClass, 
-            CP.GroundActor, 
-            ProxyCursor.Location, 
-            ProxyCursor.Rotation, 
-            CP.VariantIndex, 
+            CP.ConstructionClass, CP.GroundActor, ProxyCursor.Location, ProxyCursor.Rotation, CP.VariantIndex,
             CP.SkinIndex
             );
     }
@@ -197,7 +193,14 @@ simulated function float GetRotationSnapAngle()
     return ConstructionClass.default.RotationSnapAngle;
 }
 
-function DHConstruction ServerCreateConstruction(class<DHConstruction> ConstructionClass, Actor Owner, Vector Location, Rotator Rotation, int VariantIndex, int SkinIndex)
+function DHConstruction ServerCreateConstruction(
+    class<DHConstruction> NewConstructionClass,
+    Actor Owner,
+    Vector Location,
+    Rotator Rotation,
+    int VariantIndex,
+    int SkinIndex
+    )
 {
     local DHConstruction C;
     local DHPawn P;
@@ -218,7 +221,7 @@ function DHConstruction ServerCreateConstruction(class<DHConstruction> Construct
     Context.VariantIndex = VariantIndex;
     Context.SkinIndex = SkinIndex;
 
-    if (ConstructionClass.static.GetContextError(Context).Type != ERROR_None)
+    if (NewConstructionClass.static.GetContextError(Context).Type != ERROR_None)
     {
         return none;
     }
@@ -232,7 +235,7 @@ function DHConstruction ServerCreateConstruction(class<DHConstruction> Construct
     }
 
     TestProxy.GroundActor = Owner;
-    TestProxy.SetConstructionClass(ConstructionClass, VariantIndex, SkinIndex);
+    TestProxy.SetConstructionClass(NewConstructionClass, VariantIndex, SkinIndex);
     TestProxy.SetLocation(Location);
     TestProxy.SetRotation(Rotation);
 
@@ -251,12 +254,12 @@ function DHConstruction ServerCreateConstruction(class<DHConstruction> Construct
 
     P = DHPawn(Instigator);
 
-    if (P == none || !P.UseSupplies(ConstructionClass.static.GetSupplyCost(Context), Withdrawals))
+    if (P == none || !P.UseSupplies(NewConstructionClass.static.GetSupplyCost(Context), Withdrawals))
     {
         return none;
     }
 
-    C = Spawn(ConstructionClass, Owner,, Location, Rotation);
+    C = Spawn(NewConstructionClass, Owner,, Location, Rotation);
 
     if (C == none)
     {
@@ -354,7 +357,7 @@ simulated function ROIronSights()
 simulated function NewDrawWeaponInfo(Canvas C, float YPos)
 {
     super.NewDrawWeaponInfo(C, YPos);
-    
+
     if (DHConstructionProxy(ProxyCursor) != none)
     {
         DHConstructionProxy(ProxyCursor).DebugRenderCollisionQueries();

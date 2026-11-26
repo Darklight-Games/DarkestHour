@@ -203,7 +203,7 @@ final static function URL FromString(string S)
 
     if (i != -1)
     {
-        URL.Query = Mid(S, i+Len(TOKEN_QUERY));
+        URL.Query = Mid(S, i + Len(TOKEN_QUERY));
         S = left(S, i);
     }
     else

@@ -6,57 +6,57 @@
 class DHVehicleCannonPawn extends DHVehicleWeaponPawn
     abstract;
 
-var DHVehicleCannon Cannon;                      // just a convenience to save an awful lot of casts
+var DHVehicleCannon Cannon; // just a convenience to save an awful lot of casts
 
 // Player view positions
-var     int         GunsightPositions;           // the number of gunsight positions - 1 for normal optics or 2 for dual-magnification optics
-var     int         PeriscopePositionIndex;      // index position of commander's periscope
-var     int         IntermediatePositionIndex;   // optional 'intermediate' animation position, i.e. between closed & open/raised positions (used to play special firing anim)
-var     int         RaisedPositionIndex;         // lowest position where commander is raised up (unbuttoned in enclosed turret, or standing in open turret or on AT gun)
+var int GunsightPositions; // the number of gunsight positions - 1 for normal optics or 2 for dual-magnification optics
+var int PeriscopePositionIndex; // index position of commander's periscope
+var int IntermediatePositionIndex; // optional 'intermediate' animation position, i.e. between closed & open/raised positions (used to play special firing anim)
+var int RaisedPositionIndex; // lowest position where commander is raised up (unbuttoned in enclosed turret, or standing in open turret or on AT gun)
 
 // Camera & display
-var     name        PlayerCameraBone;            // just to avoid using literal references to 'Camera_com' bone & allow extra flexibility
-var     bool        bCamOffsetRelToGunPitch;     // camera position offset (ViewLocation) is always relative to cannon's pitch, e.g. for open sights in some AT guns
-var()   bool        bLockCameraDuringTransition; // lock the camera's rotation to the camera bone during transitions
-var     Texture     PeriscopeOverlay;            // overlay for commander's periscope
-var     float       PeriscopeSize;               // so we can adjust the "exterior" FOV of the periscope overlay, just like Gunsights, if needed
-var     Texture     AltAmmoReloadTexture;        // used to show coaxial MG reload progress on the HUD, like the cannon reload
+var name PlayerCameraBone; // just to avoid using literal references to 'Camera_com' bone & allow extra flexibility
+var bool bCamOffsetRelToGunPitch; // camera position offset (ViewLocation) is always relative to cannon's pitch, e.g. for open sights in some AT guns
+var() bool bLockCameraDuringTransition; // lock the camera's rotation to the camera bone during transitions
+var Texture PeriscopeOverlay; // overlay for commander's periscope
+var float PeriscopeSize; // so we can adjust the "exterior" FOV of the periscope overlay, just like Gunsights, if needed
+var Texture AltAmmoReloadTexture; // used to show coaxial MG reload progress on the HUD, like the cannon reload
 
 // Projectile shell textures.
 // RO only allowed a single texture for all shells, but DH allows different textures for different shell types.
 // If any of these are set, they are used in place of the AmmoShellTexture.
-var     Texture     AmmoShellTextures[3];
-var     Texture     AmmoShellReloadTextures[3];
+var Texture AmmoShellTextures[3];
+var Texture AmmoShellReloadTextures[3];
 
 // Gunsight overlay
-var     Texture             CannonScopeCenter;          // gunsight reticle overlay (really only for a moving range indicator, but many DH sights use a pretty pointless 2nd static overlay)
-var     float               RangePositionX;             // X & Y positioning of range text (0.0 to 1.0)
-var     float               RangePositionY;
-var     DHUnits.EDistanceUnit   RangeUnit;
-var     bool                bIsPeriscopicGunsight;      // cannon uses a periscopic gunsight instead of the more common coaxially mounted telescopic sight
+var Texture CannonScopeCenter; // gunsight reticle overlay (really only for a moving range indicator, but many DH sights use a pretty pointless 2nd static overlay)
+var float RangePositionX; // X & Y positioning of range text (0.0 to 1.0)
+var float RangePositionY;
+var DHUnits.EDistanceUnit RangeUnit;
+var bool bIsPeriscopicGunsight; // cannon uses a periscopic gunsight instead of the more common coaxially mounted telescopic sight
 
 // Manual & powered turret movement
-var     bool        bManualTraverseOnly;
-var     Sound       ManualRotateSound;
-var     Sound       ManualPitchSound;
-var     Sound       ManualRotateAndPitchSound;
-var     Sound       PoweredRotateSound;
-var     Sound       PoweredPitchSound;
-var     Sound       PoweredRotateAndPitchSound;
-var     float       ManualMinRotateThreshold;
-var     float       ManualMaxRotateThreshold;
-var     float       PoweredMinRotateThreshold;
-var     float       PoweredMaxRotateThreshold;
+var bool bManualTraverseOnly;
+var Sound ManualRotateSound;
+var Sound ManualPitchSound;
+var Sound ManualRotateAndPitchSound;
+var Sound PoweredRotateSound;
+var Sound PoweredPitchSound;
+var Sound PoweredRotateAndPitchSound;
+var float ManualMinRotateThreshold;
+var float ManualMaxRotateThreshold;
+var float PoweredMinRotateThreshold;
+var float PoweredMaxRotateThreshold;
 
 // Debug
-var     bool        bDebugSights; // shows centering cross in gunsight for testing purposes
+var bool bDebugSights; // shows centering cross in gunsight for testing purposes
 
 // Optics
-var     class<DHGunOptics>  GunOpticsClass;
-var     int                 ProjectileGunOpticRangeTableIndices[3]; // The index of what optical range table to use based on the projectile index.
+var class<DHGunOptics> GunOpticsClass;
+var int ProjectileGunOpticRangeTableIndices[3]; // The index of what optical range table to use based on the projectile index.
 
 // Periscope
-var     name        PeriscopeCameraBone;
+var name PeriscopeCameraBone;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //  ********************** ACTOR INITIALISATION & DESTRUCTION  ********************  //
@@ -89,11 +89,16 @@ exec function SetCamPos(int X, int Y, int Z)
 
 // Modified so player's view turns with a turret, to properly handle vehicle roll, to handle dual-magnification optics,
 // to handle FPCamPos camera offset for any position (not just overlays), & to optimise & simplify generally
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    )
 {
-    local Quat    RelativeQuat, VehicleQuat, NonRelativeQuat;
+    local Quat RelativeQuat, VehicleQuat, NonRelativeQuat;
     local Rotator BaseRotation;
-    local bool    bOnGunsight;
+    local bool bOnGunsight;
 
     ViewActor = self;
 
@@ -191,9 +196,9 @@ simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor Vie
 // Also to remove irrelevant stuff about crosshair & to optimise
 simulated function DrawHUD(Canvas C)
 {
-    local DHPlayer                  PC;
-    local float                     SavedOpacity;
-    local DHPlayerReplicationInfo   PRI;
+    local DHPlayer PC;
+    local float SavedOpacity;
+    local DHPlayerReplicationInfo PRI;
 
     PC = DHPlayer(Controller);
 
@@ -217,7 +222,7 @@ simulated function DrawHUD(Canvas C)
                 C.DrawColor.A = 255;
                 C.Style = ERenderStyle.STY_Alpha;
 
-                if (DriverPositionIndex < GunsightPositions)   // TODO: this variable (GunsightPositions) is TERRIBLE
+                if (DriverPositionIndex < GunsightPositions) // TODO: this variable (GunsightPositions) is TERRIBLE
                 {
                     // Draw the gunsight overlay
                     DrawGunsightOverlay(C);
@@ -244,7 +249,12 @@ simulated function DrawHUD(Canvas C)
             {
                 HUDOverlay.SetLocation(PC.CalcViewLocation + (HUDOverlayOffset >> PC.CalcViewRotation));
                 HUDOverlay.SetRotation(PC.CalcViewRotation);
-                C.DrawActor(HUDOverlay, false, false, FClamp(HUDOverlayFOV * (PC.DesiredFOV / PC.DefaultFOV), 1.0, 170.0));
+                C.DrawActor(
+                    HUDOverlay,
+                    false,
+                    false,
+                    FClamp(HUDOverlayFOV * (PC.DesiredFOV / PC.DefaultFOV), 1.0, 170.0)
+                    );
             }
         }
 
@@ -287,7 +297,9 @@ simulated function DrawGunsightOverlay(Canvas C)
         RangeTableIndex = Clamp(RangeTableIndex, 0, GunOpticsClass.default.OpticalRangeTables.Length - 1);
 
         // Draw the gunsight using the optics class if it exists.
-        GunOpticsClass.static.DrawGunsightOverlay(C, Gun.GetRange(), OverlayCorrectionX, OverlayCorrectionY, RangeTableIndex);
+        GunOpticsClass.static.DrawGunsightOverlay(
+            C, Gun.GetRange(), OverlayCorrectionX, OverlayCorrectionY, RangeTableIndex
+            );
     }
     else if (GunsightOverlay != none)
     {
@@ -309,7 +321,9 @@ simulated function DrawGunsightOverlay(Canvas C)
         if (CannonScopeCenter != none)
         {
             C.SetPos(0.0, 0.0);
-            C.DrawTile(CannonScopeCenter, C.SizeX, C.SizeY, TileStartPosU, TileStartPosV, TilePixelWidth, TilePixelHeight);
+            C.DrawTile(
+                CannonScopeCenter, C.SizeX, C.SizeY, TileStartPosU, TileStartPosV, TilePixelWidth, TilePixelHeight
+                );
         }
     }
 
@@ -589,8 +603,8 @@ exec simulated function ROManualReload()
         return;
     }
 
-    if ((Cannon.ReloadState == RL_Waiting && Cannon.PlayerUsesManualReloading()) ||
-        (Cannon.ReloadState == RL_ReadyToFire && Cannon.LocalPendingAmmoIndex != Cannon.GetAmmoIndex()))
+    if ((Cannon.ReloadState == RL_Waiting && Cannon.PlayerUsesManualReloading())
+        || (Cannon.ReloadState == RL_ReadyToFire && Cannon.LocalPendingAmmoIndex != Cannon.GetAmmoIndex()))
     {
         if (Role < ROLE_Authority || Level.NetMode == NM_Standalone)
         {
@@ -615,7 +629,8 @@ function CheckResumeReloadingOnEntry()
         OldSmokeLauncherReloadState = Cannon.SmokeLauncherReloadState;
 
         // Try to resume any paused cannon reload, or start a new reload if in waiting state & the player does not use manual reloading
-        if (Cannon.ReloadState < RL_ReadyToFire || (Cannon.ReloadState == RL_Waiting && !Cannon.PlayerUsesManualReloading()))
+        if (Cannon.ReloadState < RL_ReadyToFire
+            || (Cannon.ReloadState == RL_Waiting && !Cannon.PlayerUsesManualReloading()))
         {
             Cannon.AttemptReload();
         }
@@ -633,7 +648,9 @@ function CheckResumeReloadingOnEntry()
         }
 
         // Replicate the weapon's current reload state, unless attempted reloading changed the state, in which case it will have already done this
-        if (Cannon.ReloadState == OldReloadState && Cannon.AltReloadState == OldAltReloadState && Cannon.SmokeLauncherReloadState == OldSmokeLauncherReloadState)
+        if (Cannon.ReloadState == OldReloadState
+            && Cannon.AltReloadState == OldAltReloadState
+            && Cannon.SmokeLauncherReloadState == OldSmokeLauncherReloadState)
         {
             Cannon.PassReloadStateToClient();
         }
@@ -671,7 +688,8 @@ function float GetSmokeLauncherAmmoReloadState()
             {
                 return 0.0;
             }
-            else if (Cannon.SmokeLauncherReloadState == RL_Waiting || Cannon.SmokeLauncherReloadState == RL_ReloadingPart1)
+            else if (Cannon.SmokeLauncherReloadState == RL_Waiting
+                || Cannon.SmokeLauncherReloadState == RL_ReloadingPart1)
             {
                 return 1.0;
             }
@@ -745,7 +763,7 @@ simulated function ClientKDriverEnter(PlayerController PC)
 // ClientKDriverEnter would be the obvious choice, but client is only just becoming owner of this cannon, triggering replication of proj class, & that doesn't happen in time for CKDE
 simulated state EnteringVehicle
 {
-ignores SwitchFireMode; // added so no possibility of switching while entering
+    ignores SwitchFireMode; // added so no possibility of switching while entering
 
 Begin:
     if (bMultiPosition) // added 'if' because it's now possible a single position autocannon has been sent to this state (very obscure, but being thorough!)
@@ -815,7 +833,11 @@ simulated state ViewTransition
 // Modified to include a periscope overlay position & to allow for a cannon having more than 1 gunsight position
 simulated function bool ShouldViewSnapInPosition(byte PositionIndex)
 {
-    return DriverPositions[PositionIndex].bDrawOverlays && (PositionIndex < GunsightPositions || PositionIndex == PeriscopePositionIndex || PositionIndex == BinocPositionIndex || PositionIndex == SpottingScopePositionIndex);
+    return DriverPositions[PositionIndex].bDrawOverlays
+        && (PositionIndex < GunsightPositions
+            || PositionIndex == PeriscopePositionIndex
+            || PositionIndex == BinocPositionIndex
+            || PositionIndex == SpottingScopePositionIndex);
 }
 
 // Modified so if player exits while on the gunsight, his view rotation is zeroed so he exits facing forwards
@@ -946,7 +968,10 @@ simulated function InitializeVehicleWeapon()
 
     if (Cannon == none)
     {
-        Warn("ERROR:" @ Tag @ "somehow spawned without an owned DHVehicleCannon, so lots of things are not going to work!");
+        Warn(
+            "ERROR:" @ Tag
+                @ "somehow spawned without an owned DHVehicleCannon, so lots of things are not going to work!"
+            );
     }
 
     super.InitializeVehicleWeapon();
@@ -1029,8 +1054,8 @@ function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChang
             PlayerController(Controller).WeaponBufferRotation.Pitch = CustomAim.Pitch;
         }
 
-        if (Level.NetMode != NM_DedicatedServer &&
-            ((YawChange != 0.0 && !bTraverseDamaged) || (PitchChange != 0.0 && !bElevationDamaged)))
+        if (Level.NetMode != NM_DedicatedServer
+            && ((YawChange != 0.0 && !bTraverseDamaged) || (PitchChange != 0.0 && !bElevationDamaged)))
         {
             Cannon.UpdateGunWheels();
             Cannon.UpdateAnimationDrivers();
@@ -1043,7 +1068,8 @@ function UpdateRocketAcceleration(float DeltaTime, float YawChange, float PitchC
 {
     local float TurnSpeedFactor;
 
-    if ((DriverPositionIndex == PeriscopePositionIndex || DriverPositionIndex == BinocPositionIndex) && DHPlayer(Controller) != none)
+    if ((DriverPositionIndex == PeriscopePositionIndex || DriverPositionIndex == BinocPositionIndex)
+        && DHPlayer(Controller) != none)
     {
         TurnSpeedFactor = DHPlayer(Controller).DHScopeTurnSpeedFactor;
         YawChange *= TurnSpeedFactor;
@@ -1061,7 +1087,7 @@ function UpdateRocketAcceleration(float DeltaTime, float YawChange, float PitchC
 function float ModifyThreat(float Current, Pawn Threat)
 {
     local Vector to, t;
-    local float  r;
+    local float r;
 
     if (Vehicle(Threat) != none)
     {
@@ -1223,7 +1249,10 @@ exec function ShellImpulse(string NewX, string NewY, string NewZ)
 {
     if (float(NewX) != 0.0 || float(NewY) != 0.0 || float(NewZ) != 0.0)
     {
-        Log("DHAnimNotify_SpawnKActor: DebugImpulse =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " (was" @ Class'DHAnimNotify_SpawnKActor'.default.DebugImpulse $ ")");
+        Log(
+            "DHAnimNotify_SpawnKActor: DebugImpulse =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " (was"
+                @ Class'DHAnimNotify_SpawnKActor'.default.DebugImpulse $ ")"
+            );
         Class'DHAnimNotify_SpawnKActor'.default.DebugImpulse.X = float(NewX);
         Class'DHAnimNotify_SpawnKActor'.default.DebugImpulse.Y = float(NewY);
         Class'DHAnimNotify_SpawnKActor'.default.DebugImpulse.Z = float(NewZ);
@@ -1239,7 +1268,10 @@ exec function ShellAngImpulse(string NewX, string NewY, string NewZ)
 {
     if (float(NewX) != 0.0 || float(NewY) != 0.0 || float(NewZ) != 0.0)
     {
-        Log("DHAnimNotify_SpawnKActor: DebugAngularImpulse =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " (was" @ Class'DHAnimNotify_SpawnKActor'.default.DebugAngularImpulse $ ")");
+        Log(
+            "DHAnimNotify_SpawnKActor: DebugAngularImpulse =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " (was"
+                @ Class'DHAnimNotify_SpawnKActor'.default.DebugAngularImpulse $ ")"
+            );
         Class'DHAnimNotify_SpawnKActor'.default.DebugAngularImpulse.X = float(NewX);
         Class'DHAnimNotify_SpawnKActor'.default.DebugAngularImpulse.Y = float(NewY);
         Class'DHAnimNotify_SpawnKActor'.default.DebugAngularImpulse.Z = float(NewZ);
@@ -1253,23 +1285,41 @@ exec function ShellAngImpulse(string NewX, string NewY, string NewZ)
 
 exec function LogCannon() // DEBUG (Matt: please use & report the logged result if you ever find you can't fire cannon, coax or SL, or do a reload, when you should be able to)
 {
-    Log("LOGCANNON: Gun =" @ Gun.Tag @ " VehWep =" @ VehWep.Tag @ " VehWep.WeaponPawn =" @ VehWep.WeaponPawn.Tag @ " Gun.Owner =" @ Gun.Owner.Tag);
-    Log("Controller =" @ Controller.Tag @ " DriverPositionIndex =" @ DriverPositionIndex @ " ViewTransition =" @ IsInState('ViewTransition'));
-    Log("ReloadState =" @ GetEnum(Enum'EReloadState', VehWep.ReloadState) @ " bReloadPaused =" @ VehWep.bReloadPaused
-        @ " ProjectileClass =" @ VehWep.ProjectileClass @ " HasAmmoToReload() =" @ VehWep.HasAmmoToReload(VehWep.GetAmmoIndex()));
-    Log("AmmoIndex =" @ VehWep.GetAmmoIndex() @ " LocalPendingAmmoIndex =" @ Cannon.LocalPendingAmmoIndex
-        @ " ServerPendingAmmoIndex =" @ Cannon.ServerPendingAmmoIndex @ " PrimaryAmmoCount() =" @ VehWep.PrimaryAmmoCount());
+    Log(
+        "LOGCANNON: Gun =" @ Gun.Tag @ " VehWep =" @ VehWep.Tag @ " VehWep.WeaponPawn =" @ VehWep.WeaponPawn.Tag
+            @ " Gun.Owner =" @ Gun.Owner.Tag
+        );
+    Log(
+        "Controller =" @ Controller.Tag @ " DriverPositionIndex =" @ DriverPositionIndex @ " ViewTransition ="
+            @ IsInState('ViewTransition')
+        );
+    Log(
+        "ReloadState =" @ GetEnum(Enum'EReloadState', VehWep.ReloadState) @ " bReloadPaused =" @ VehWep.bReloadPaused
+            @ " ProjectileClass =" @ VehWep.ProjectileClass @ " HasAmmoToReload() ="
+            @ VehWep.HasAmmoToReload(VehWep.GetAmmoIndex())
+        );
+    Log(
+        "AmmoIndex =" @ VehWep.GetAmmoIndex() @ " LocalPendingAmmoIndex =" @ Cannon.LocalPendingAmmoIndex
+            @ " ServerPendingAmmoIndex =" @ Cannon.ServerPendingAmmoIndex @ " PrimaryAmmoCount() ="
+            @ VehWep.PrimaryAmmoCount()
+        );
 
     if (bHasAltFire)
     {
-        Log("AltReloadState =" @ GetEnum(Enum'EReloadState', Cannon.AltReloadState) @ " bAltReloadPaused =" @ Cannon.bAltReloadPaused
-            @ " AltAmmoCharge =" @ VehWep.AltAmmoCharge @ " NumMGMags =" @ VehWep.NumMGMags);
+        Log(
+            "AltReloadState =" @ GetEnum(Enum'EReloadState', Cannon.AltReloadState) @ " bAltReloadPaused ="
+                @ Cannon.bAltReloadPaused @ " AltAmmoCharge =" @ VehWep.AltAmmoCharge @ " NumMGMags ="
+                @ VehWep.NumMGMags
+            );
     }
 
     if (Cannon.SmokeLauncherClass != none)
     {
-        Log("SmokeLauncherReloadState =" @ GetEnum(Enum'EReloadState', Cannon.SmokeLauncherReloadState) @ " bSmokeLauncherReloadPaused =" @ Cannon.bSmokeLauncherReloadPaused
-            @ " NumSmokeLauncherRounds =" @ Cannon.NumSmokeLauncherRounds);
+        Log(
+            "SmokeLauncherReloadState =" @ GetEnum(Enum'EReloadState', Cannon.SmokeLauncherReloadState)
+                @ " bSmokeLauncherReloadPaused =" @ Cannon.bSmokeLauncherReloadPaused @ " NumSmokeLauncherRounds ="
+                @ Cannon.NumSmokeLauncherRounds
+            );
     }
 }
 

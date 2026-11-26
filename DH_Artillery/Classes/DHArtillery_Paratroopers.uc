@@ -57,4 +57,3 @@ defaultproperties
     LifeSpan=90
     ArtilleryType=ArtyType_Paradrop
 }
-

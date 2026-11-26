@@ -14,7 +14,7 @@ const SIGNALS_MAX = 4;
 enum EMapMode
 {
     MODE_Map,
-    MODE_Squads
+    MODE_Squads,
 };
 
 enum ERoleEnabledResult
@@ -33,13 +33,13 @@ enum EAutomaticVehicleAlerts
 {
     AVAM_Never,
     AVAM_OnlyWithCrew,
-    AVAM_Always
+    AVAM_Always,
 };
 
 enum EMapMarkerCooldownType
 {
     MMCT_Class,
-    MMCT_Group
+    MMCT_Group,
 };
 
 struct MapMarkerCooldown
@@ -50,123 +50,122 @@ struct MapMarkerCooldown
     var int ExpiryTime;
 };
 
-var     array<class<DHMapMarker> >                              PersonalMapMarkerClasses;
-var     private array<DHGameReplicationInfo.MapMarker>          PersonalMapMarkers;
+var array<class<DHMapMarker> > PersonalMapMarkerClasses;
+var private array<DHGameReplicationInfo.MapMarker> PersonalMapMarkers;
 
 const MAX_MAP_MARKER_COOLDOWNS = 8;
-var     private MapMarkerCooldown                               MapMarkerCooldowns[MAX_MAP_MARKER_COOLDOWNS];
+var private MapMarkerCooldown MapMarkerCooldowns[MAX_MAP_MARKER_COOLDOWNS];
 
-var     input float             aBaseFire;
-var     bool                    bToggleRun;          // user activated toggle run
+var input float aBaseFire;
+var bool bToggleRun; // user activated toggle run
 
 // Continue automatically running or driving after opening chat
-var     globalconfig bool       bKeepMovingWhileTyping;
-var                  float      aForwardWhileTyping;
-var                  float      aStrafeWhileTyping;
-var                  byte       bSprintWhileTyping;
+var globalconfig bool bKeepMovingWhileTyping;
+var float aForwardWhileTyping;
+var float aStrafeWhileTyping;
+var byte bSprintWhileTyping;
 
-var     EMapMode                DeployMenuStartMode; // what the deploy menu is supposed to start out on
-var     DH_LevelInfo            ClientLevelInfo;
-var     DHHintManager           DHHintManager;
-var     DHConstructionManager   ConstructionManager; // client only!
-var     float                   MapVoteTime;
-var     globalconfig bool       bLockTankOnEntry;    // option to automatically lock an armored vehicle on entering, providing it contains no other tank crew
-var     globalconfig bool       bSpawnWithBayonet;   // option to automatically spawn with a bayonet attached if applicable
-var     globalconfig int        CorpseStayTime;      // determines how long corpses should stay around (default 30)
-var     globalconfig byte       AutomaticVehicleAlerts; // option to automatically alert other crew members of certain events (e.g., shell loaded, on fire etc.)
-var     int                     CorpseStayTimeMin;
-var     int                     CorpseStayTimeMax;
-var     globalconfig string     ROIDHash;            // client ROID hash (this gets set/updated when a player joins a server)
-var     globalconfig bool       bDynamicFogRatio;    // client option to have their fog distance dynamic based on FPS and MinDesiredFPS
-var     globalconfig int        MinDesiredFPS;       // client option used to calculate fog ratio when dynamic fog ratio is true
-var     config       bool       bUseNativeItemNames; // client option to display native item names instead of translated ones
-var     globalconfig bool       bIsIncognito;        // when true, patron & developer tags are not displayed on the scoreboard
+var EMapMode DeployMenuStartMode; // what the deploy menu is supposed to start out on
+var DH_LevelInfo ClientLevelInfo;
+var DHHintManager DHHintManager;
+var DHConstructionManager ConstructionManager; // client only!
+var float MapVoteTime;
+var globalconfig bool bLockTankOnEntry; // option to automatically lock an armored vehicle on entering, providing it contains no other tank crew
+var globalconfig bool bSpawnWithBayonet; // option to automatically spawn with a bayonet attached if applicable
+var globalconfig int CorpseStayTime; // determines how long corpses should stay around (default 30)
+var globalconfig byte AutomaticVehicleAlerts; // option to automatically alert other crew members of certain events (e.g., shell loaded, on fire etc.)
+var int CorpseStayTimeMin;
+var int CorpseStayTimeMax;
+var globalconfig string ROIDHash; // client ROID hash (this gets set/updated when a player joins a server)
+var globalconfig bool bDynamicFogRatio; // client option to have their fog distance dynamic based on FPS and MinDesiredFPS
+var globalconfig int MinDesiredFPS; // client option used to calculate fog ratio when dynamic fog ratio is true
+var config bool bUseNativeItemNames; // client option to display native item names instead of translated ones
+var globalconfig bool bIsIncognito; // when true, patron & developer tags are not displayed on the scoreboard
 
-var     byte                    ArtillerySupportSquadIndex;
+var byte ArtillerySupportSquadIndex;
 
 // View FOV
-var     globalconfig float      ConfigViewFOV;       // allows player to set their own preferred view FOV, within acceptable limits
-var     float                   ViewFOVMin;
-var     float                   ViewFOVMax;
+var globalconfig float ConfigViewFOV; // allows player to set their own preferred view FOV, within acceptable limits
+var float ViewFOVMin;
+var float ViewFOVMax;
 
 // Sway
-var     float                   DHSwayElasticFactor;
-var     float                   DHSwayDampingFactor;
+var float DHSwayElasticFactor;
+var float DHSwayDampingFactor;
 
 // Mouse sensitivity
-var     float                   DHStandardTurnSpeedFactor;
-var     float                   DHHalfTurnSpeedFactor;
-var     globalconfig float      DHISTurnSpeedFactor;        // 0.0 to 1.0
-var     globalconfig float      DHBipodTurnSpeedFactor;     // 0.0 to 1.0
-var     globalconfig float      DHScopeTurnSpeedFactor;     // 0.0 to 1.0
+var float DHStandardTurnSpeedFactor;
+var float DHHalfTurnSpeedFactor;
+var globalconfig float DHISTurnSpeedFactor; // 0.0 to 1.0
+var globalconfig float DHBipodTurnSpeedFactor; // 0.0 to 1.0
+var globalconfig float DHScopeTurnSpeedFactor; // 0.0 to 1.0
 
 // Player flinch
-var     Vector                  FlinchRotMag;
-var     Vector                  FlinchRotRate;
-var     float                   FlinchRotTime;
-var     Vector                  FlinchOffsetMag;
-var     Vector                  FlinchOffsetRate;
-var     float                   FlinchOffsetTime;
-var     float                   FlinchMaxOffset;
-var     float                   FlinchMeterSwayMultiplier;
-var     float                   FlinchMeterValue;
-var     float                   FlinchMeterIncrement;
-var     float                   FlinchMeterFallOffStrength;
-var     float                   LastFlinchTime;
+var Vector FlinchRotMag;
+var Vector FlinchRotRate;
+var float FlinchRotTime;
+var Vector FlinchOffsetMag;
+var Vector FlinchOffsetRate;
+var float FlinchOffsetTime;
+var float FlinchMaxOffset;
+var float FlinchMeterSwayMultiplier;
+var float FlinchMeterValue;
+var float FlinchMeterIncrement;
+var float FlinchMeterFallOffStrength;
+var float LastFlinchTime;
 
 // Mantling
-var     float                   MantleCheckTimer;           // makes sure client doesn't try to start mantling without the server
-var     float                   MantleFailTimer;            // makes sure we don't get stuck floating in an object unable to end a mantle
-var     bool                    bDidMantle;                 // is the mantle complete?
-var     bool                    bDidCrouchCheck;
-var     bool                    bWaitingToMantle;
-var     bool                    bLockJump;
-var     bool                    bMantleDebug;
-var     int                     MantleLoopCount;
+var float MantleCheckTimer; // makes sure client doesn't try to start mantling without the server
+var float MantleFailTimer; // makes sure we don't get stuck floating in an object unable to end a mantle
+var bool bDidMantle; // is the mantle complete?
+var bool bDidCrouchCheck;
+var bool bWaitingToMantle;
+var bool bLockJump;
+var bool bMantleDebug;
+var int MantleLoopCount;
 
 // Spawning
-var     int                     SpawnPointIndex;
-var     int                     VehiclePoolIndex;
-var     bool                    bIsInSpawnMenu;             // player is in spawn menu and should not be auto-spawned
-var     bool                    bSpawnedKilled;             // player was spawn killed (set to false, when the spawn time is reduced)
-var     int                     NextSpawnTime;              // the next time the player will be able to spawn
-var     int                     LastKilledTime;             // the time at which last death occured
-var     int                     NextVehicleSpawnTime;       // the time at which a player can spawn a vehicle next (this gets set when a player spawns a vehicle)
-var     int                     DHPrimaryWeapon;            // Picking up RO's slack, this should have been replicated from the outset
-var     int                     DHSecondaryWeapon;
-var     bool                    bSpawnParametersInvalidated;
-var     int                     NextChangeTeamTime;         // the time at which a player can change teams next
-                                                            // it resets whenever an objective is taken
+var int SpawnPointIndex;
+var int VehiclePoolIndex;
+var bool bIsInSpawnMenu; // player is in spawn menu and should not be auto-spawned
+var bool bSpawnedKilled; // player was spawn killed (set to false, when the spawn time is reduced)
+var int NextSpawnTime; // the next time the player will be able to spawn
+var int LastKilledTime; // the time at which last death occured
+var int NextVehicleSpawnTime; // the time at which a player can spawn a vehicle next (this gets set when a player spawns a vehicle)
+var int DHPrimaryWeapon; // Picking up RO's slack, this should have been replicated from the outset
+var int DHSecondaryWeapon;
+var bool bSpawnParametersInvalidated;
+var int NextChangeTeamTime; // the time at which a player can change teams next. it resets whenever an objective is taken.
 // Weapon locking (punishment for spawn killing)
-var     float                   LastTeamKillTimeSeconds;    // the last time this player got a team-kill
-var     int                     WeaponUnlockTime;           // the time at which the player's weapons will be unlocked (being the round's future ElapsedTime in whole seconds)
-var     int                     PendingWeaponLockSeconds;   // fix for problem where player re-joins server with saved weapon lock, but client doesn't yet have GRI
-var     int                     WeaponLockViolations;       // the number of violations this player has, used to increase the locked period for multiple offences
+var float LastTeamKillTimeSeconds; // the last time this player got a team-kill
+var int WeaponUnlockTime; // the time at which the player's weapons will be unlocked (being the round's future ElapsedTime in whole seconds)
+var int PendingWeaponLockSeconds; // fix for problem where player re-joins server with saved weapon lock, but client doesn't yet have GRI
+var int WeaponLockViolations; // the number of violations this player has, used to increase the locked period for multiple offences
 
 // Squads
-var     DHSquadReplicationInfo  SquadReplicationInfo;
-var     bool                    bIgnoreSquadInvitations;
-var     bool                    bIgnoreSquadLeaderVolunteerPrompts;
-var     bool                    bIgnoreSquadMergeRequestPrompts;
-var     int                     SquadMemberLocations[12];   // SQUAD_SIZE_MAX
-var     int                     SquadLeaderLocations[8];    // TEAM_SQUADS_MAX
-var     float                   NextSquadMergeRequestTimeSeconds;  // The time (relative to TimeSeconds) that this player can send another squad merge request.
-var     bool                    bIgnoreSquadPromotionRequestPrompts;
+var DHSquadReplicationInfo SquadReplicationInfo;
+var bool bIgnoreSquadInvitations;
+var bool bIgnoreSquadLeaderVolunteerPrompts;
+var bool bIgnoreSquadMergeRequestPrompts;
+var int SquadMemberLocations[12]; // SQUAD_SIZE_MAX
+var int SquadLeaderLocations[8]; // TEAM_SQUADS_MAX
+var float NextSquadMergeRequestTimeSeconds; // The time (relative to TimeSeconds) that this player can send another squad merge request.
+var bool bIgnoreSquadPromotionRequestPrompts;
 
 // Squad assistant volunteers
-var         bool                           bIgnoreSquadLeaderAssistantVolunteerPrompts;
+var bool bIgnoreSquadLeaderAssistantVolunteerPrompts;
 var private array<DHPlayerReplicationInfo> SquadAssistantVolunteers;
 
-var     DHCommandInteraction    CommandInteraction;
+var DHCommandInteraction CommandInteraction;
 
-var     Actor                   LookTarget;
+var Actor LookTarget;
 
 // Log File
-var     FileLog                 ClientLogFile;
+var FileLog ClientLogFile;
 
-var     bool                    bHasReceivedSquadJoinRecommendationMessage; // True when we have displayed the "you should probably join a squad" message.
+var bool bHasReceivedSquadJoinRecommendationMessage; // True when we have displayed the "you should probably join a squad" message.
 
-var     DHMapDatabase           MapDatabase;
+var DHMapDatabase MapDatabase;
 
 struct Signal
 {
@@ -176,118 +175,106 @@ struct Signal
     var Object OptionalObject;
 };
 
-var     Signal             Signals[SIGNALS_MAX];
+var Signal Signals[SIGNALS_MAX];
 
 // Squad Leader HUD Info
-var     DHSquadReplicationInfo.RallyPointPlacementResult    RallyPointPlacementResult;
-var     int                                                 NextSquadRallyPointTime;
-var     byte                                                SquadRallyPointCount;
+var DHSquadReplicationInfo.RallyPointPlacementResult RallyPointPlacementResult;
+var int NextSquadRallyPointTime;
+var byte SquadRallyPointCount;
 
 // This is used to skip ResetInput calls in the GUIController.
 // Useful when you want to show a menu over top of the game (e.g. situation map)
 // without interrupting player input.
-var     bool                    bShouldSkipResetInput;
+var bool bShouldSkipResetInput;
 
 // Toggle Duck timing
-var     float                   ToggleDuckIntervalSeconds;
-var     float                   NextToggleDuckTimeSeconds;
+var float ToggleDuckIntervalSeconds;
+var float NextToggleDuckTimeSeconds;
 
 // Spectating stuff
-var     bool                    bSpectateAllowViewPoints;
+var bool bSpectateAllowViewPoints;
 
-var     DHScoreManager          ScoreManager;
+var DHScoreManager ScoreManager;
 
 // "Lazy" camera controls
-var     bool                    bLazyCam;
-var     float                   LazyCamLaziness;
-var     Rotator                 LazyCamRotationTarget;
+var bool bLazyCam;
+var float LazyCamLaziness;
+var Rotator LazyCamRotationTarget;
 
 // Surrender
-var     bool                    bSurrendered;
+var bool bSurrendered;
 
 // Admin-initialed paradrops
-var     class<DHMapMarker>      ParadropMarkerClass;
-var     float                   ParadropHeight;
-var     float                   ParadropSpreadModifier;
+var class<DHMapMarker> ParadropMarkerClass;
+var float ParadropHeight;
+var float ParadropSpreadModifier;
 
 // Spotting
-var     DHSpottingMarker        SpottingMarker;
-var     DHIQManager             IQManager;
-var     int                     MinIQToGrowHead;
-var     bool                    bIQManaged;
+var DHSpottingMarker SpottingMarker;
+var DHIQManager IQManager;
+var int MinIQToGrowHead;
+var bool bIQManaged;
 
 // Client GUID
-var globalconfig GUID           ClientGUID;
-var     float                   LastListClientGUIDTime;
+var globalconfig GUID ClientGUID;
+var float LastListClientGUIDTime;
 
 // I'd love to put this elsewhere, but I can't seem to poll any relevant state in the HUD.
-var     bool                    bHideMapActivateMousePrompt;
+var bool bHideMapActivateMousePrompt;
 
 // Restrictions
-var     bool                    bRestrictOutboundMessages; // Disable ability to send text messages
-var     bool                    bRestrictVehicleAccess;    // Disable entering vehicles as driver or gunner
-var     bool                    bRestrictSquadNames;       // Disable editing of squad names
-var     bool                    bRestrictName;             // Player name is enforced by access control
+var bool bRestrictOutboundMessages; // Disable ability to send text messages
+var bool bRestrictVehicleAccess; // Disable entering vehicles as driver or gunner
+var bool bRestrictSquadNames; // Disable editing of squad names
+var bool bRestrictName; // Player name is enforced by access control
 
-var     config array<string>    ConsoleCommandHistory;
+var config array<string> ConsoleCommandHistory;
 
 replication
 {
     // Variables the server will replicate to the client that owns this actor
     reliable if (bNetOwner && bNetDirty && Role == ROLE_Authority)
-        SpawnPointIndex, VehiclePoolIndex, bSpawnParametersInvalidated,
-        NextSpawnTime, NextVehicleSpawnTime, NextChangeTeamTime, LastKilledTime,
-        DHPrimaryWeapon, DHSecondaryWeapon, bSpectateAllowViewPoints,
-        SquadReplicationInfo, SquadMemberLocations, bSpawnedKilled,
-        SquadLeaderLocations, NextSquadRallyPointTime, SquadRallyPointCount,
-        bSurrendered, bIQManaged, ArtillerySupportSquadIndex,
-        MapMarkerCooldowns, bRestrictOutboundMessages, bRestrictVehicleAccess, bRestrictSquadNames;
+        SpawnPointIndex, VehiclePoolIndex, bSpawnParametersInvalidated, NextSpawnTime, NextVehicleSpawnTime,
+        NextChangeTeamTime, LastKilledTime, DHPrimaryWeapon, DHSecondaryWeapon, bSpectateAllowViewPoints,
+        SquadReplicationInfo, SquadMemberLocations, bSpawnedKilled, SquadLeaderLocations, NextSquadRallyPointTime,
+        SquadRallyPointCount, bSurrendered, bIQManaged, ArtillerySupportSquadIndex, MapMarkerCooldowns,
+        bRestrictOutboundMessages, bRestrictVehicleAccess, bRestrictSquadNames;
 
     reliable if (bNetInitial && bNetOwner && bNetDirty && Role == ROLE_Authority)
         MinIQToGrowHead;
 
     // Functions a client can call on the server
     reliable if (Role < ROLE_Authority)
-        ServerSetPlayerInfo, ServerSetIsInSpawnMenu, ServerSetLockTankOnEntry,
-        ServerLoadATAmmo, ServerSetBayonetAtSpawn,
-        ServerClearObstacle, ServerCutConstruction,
-        ServerAddMapMarker, ServerRemoveMapMarker,
-        ServerSquadCreate, ServerSquadRename,
-        ServerSquadJoin, ServerSquadJoinAuto, ServerSquadLeave,
-        ServerSquadInvite, ServerSquadKick, ServerSquadBan,
-        ServerSquadMakeAssistant, ServerSendVote,
-        ServerSquadSay, ServerCommandSay, ServerSquadLock, ServerSignal,
-        ServerSquadSpawnRallyPoint, ServerSquadDestroyRallyPoint, ServerSquadSwapRallyPoints,
-        ServerSetPatronTier, ServerSquadLeaderVolunteer, ServerForgiveLastFFKiller,
+        ServerSetPlayerInfo, ServerSetIsInSpawnMenu, ServerSetLockTankOnEntry, ServerLoadATAmmo,
+        ServerSetBayonetAtSpawn, ServerClearObstacle, ServerCutConstruction, ServerAddMapMarker, ServerRemoveMapMarker,
+        ServerSquadCreate, ServerSquadRename, ServerSquadJoin, ServerSquadJoinAuto, ServerSquadLeave, ServerSquadInvite,
+        ServerSquadKick, ServerSquadBan, ServerSquadMakeAssistant, ServerSendVote, ServerSquadSay, ServerCommandSay,
+        ServerSquadLock, ServerSignal, ServerSquadSpawnRallyPoint, ServerSquadDestroyRallyPoint,
+        ServerSquadSwapRallyPoints, ServerSetPatronTier, ServerSquadLeaderVolunteer, ServerForgiveLastFFKiller,
         ServerSendSquadMergeRequest, ServerAcceptSquadMergeRequest, ServerDenySquadMergeRequest,
         ServerSendSquadPromotionRequest, ServerAcceptSquadPromotionRequest, ServerDenySquadPromotionRequest,
-        ServerSquadVolunteerToAssist, ServerSetIncognitoMode,
-        ServerPunishLastFFKiller, ServerRequestArtillery, ServerCancelArtillery, /*ServerVote,*/
-        ServerDoLog, ServerLeaveBody, ServerPossessBody, ServerDebugObstacles, ServerLockWeapons, // these ones in debug mode only
-        ServerTeamSurrenderRequest, ServerParadropPlayer, ServerParadropSquad, ServerParadropTeam,
-        ServerNotifyRoles, ServerSaveArtilleryTarget, ServerSaveArtillerySupportSquadIndex,
-        ServerSetAutomaticVehicleAlerts, ServerSetClientGUID, ServerListClientGUIDs,
-        ServerPlaceAdminSpawn, ServerDestroyAdminSpawn, ServerDestroyAllAdminSpawns, ServerTeleportToMapLocation;
+        ServerSquadVolunteerToAssist, ServerSetIncognitoMode, ServerPunishLastFFKiller, ServerRequestArtillery,
+        ServerCancelArtillery, /*ServerVote,*/ ServerDoLog, ServerLeaveBody, ServerPossessBody, ServerDebugObstacles,
+        ServerLockWeapons, // these ones in debug mode only
+        ServerTeamSurrenderRequest, ServerParadropPlayer, ServerParadropSquad, ServerParadropTeam, ServerNotifyRoles,
+        ServerSaveArtilleryTarget, ServerSaveArtillerySupportSquadIndex, ServerSetAutomaticVehicleAlerts,
+        ServerSetClientGUID, ServerListClientGUIDs, ServerPlaceAdminSpawn, ServerDestroyAdminSpawn,
+        ServerDestroyAllAdminSpawns, ServerTeleportToMapLocation;
 
     // Functions the server can call on the client that owns this actor
     reliable if (Role == ROLE_Authority)
-        ClientProne, ClientToggleDuck, ClientLockWeapons,
-        ClientAddHudDeathMessage, ClientFadeFromBlack, ClientProposeMenu,
-        ClientConsoleCommand, ClientCopyToClipboard, ClientSaveROIDHash,
-        ClientSquadInvite, ClientSignal, ClientSquadLeaderVolunteerPrompt,
-        ClientTeamKillPrompt, ClientOpenLogFile, ClientLogToFile, ClientCloseLogFile,
-        ClientSquadAssistantVolunteerPrompt,
-        ClientReceiveSquadMergeRequest, ClientSendSquadMergeRequestResult,
-        ClientReceiveSquadPromotionRequest, ClientSendSquadPromotionRequestResult,
-        ClientTeamSurrenderResponse,
-        ClientReceiveVotePrompt, ClientMapVoteResponse,
-        ClientAddPersonalMapMarker;
+        ClientProne, ClientToggleDuck, ClientLockWeapons, ClientAddHudDeathMessage, ClientFadeFromBlack,
+        ClientProposeMenu, ClientConsoleCommand, ClientCopyToClipboard, ClientSaveROIDHash, ClientSquadInvite,
+        ClientSignal, ClientSquadLeaderVolunteerPrompt, ClientTeamKillPrompt, ClientOpenLogFile, ClientLogToFile,
+        ClientCloseLogFile, ClientSquadAssistantVolunteerPrompt, ClientReceiveSquadMergeRequest,
+        ClientSendSquadMergeRequestResult, ClientReceiveSquadPromotionRequest, ClientSendSquadPromotionRequestResult,
+        ClientTeamSurrenderResponse, ClientReceiveVotePrompt, ClientMapVoteResponse, ClientAddPersonalMapMarker;
 
     unreliable if (Role < ROLE_Authority)
         VehicleVoiceMessage;
 }
 
-function ServerChangePlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte NewWeapon2) { } // no longer used
+function ServerChangePlayerInfo(byte newTeam, byte newRole, byte NewWeapon1, byte NewWeapon2); // no longer used
 
 // Modified to use DH's InputClass instead of the RO version
 // Class is enforced here because InputClass is a config variable & so can easily be changed in the player's .ini file
@@ -410,19 +397,19 @@ simulated function GenerateClientGUID()
     SaveConfig();
 }
 
-function ServerSetClientGUID(GUID ClientGUID)
+function ServerSetClientGUID(GUID NewClientGUID)
 {
     local DarkestHourGame G;
 
     // Send the client tag to the server.
-    self.ClientGUID = ClientGUID;
+    ClientGUID = NewClientGUID;
 
     // Send a metrics event.
     G = DarkestHourGame(Level.Game);
 
     if (G != none && G.Metrics != none)
     {
-        G.Metrics.OnPlayerClientGUIDReceived(self, ClientGUID);
+        G.Metrics.OnPlayerClientGUIDReceived(self, NewClientGUID);
     }
 }
 
@@ -563,7 +550,9 @@ function EnterStartState()
 {
     local name NewState;
 
-    if (Pawn.PhysicsVolume != none && Pawn.PhysicsVolume.bWaterVolume && !(Pawn.PhysicsVolume.IsA('DHWaterVolume') && DHWaterVolume(Pawn.PhysicsVolume).bIsShallowWater))
+    if (Pawn.PhysicsVolume != none
+        && Pawn.PhysicsVolume.bWaterVolume
+        && !(Pawn.PhysicsVolume.IsA('DHWaterVolume') && DHWaterVolume(Pawn.PhysicsVolume).bIsShallowWater))
     {
         NewState = Pawn.WaterMovementState;
     }
@@ -588,11 +577,11 @@ function EnterStartState()
 }
 
 // Calculate free-aim and process recoil
-simulated function Rotator FreeAimHandler(Rotator  NewRotation, float DeltaTime)
+simulated function Rotator FreeAimHandler(Rotator NewRotation, float DeltaTime)
 {
     local Rotator NewPlayerRotation;
-    local int     YawAdjust;
-    local int     PitchAdjust;
+    local int YawAdjust;
+    local int PitchAdjust;
     local Rotator AppliedRecoil;
 
     if (Pawn == none || ROWeapon(Pawn.Weapon) == none || !ROWeapon(Pawn.Weapon).ShouldUseFreeAim())
@@ -614,7 +603,7 @@ simulated function Rotator FreeAimHandler(Rotator  NewRotation, float DeltaTime)
             {
                 WeaponBufferRotation.Yaw -= YawTweenRate * DeltaTime;
 
-                if (WeaponBufferRotation.Yaw <  0)
+                if (WeaponBufferRotation.Yaw < 0)
                 {
                     WeaponBufferRotation.Yaw = 0;
                 }
@@ -636,7 +625,7 @@ simulated function Rotator FreeAimHandler(Rotator  NewRotation, float DeltaTime)
             {
                 WeaponBufferRotation.Pitch -= PitchTweenRate * DeltaTime;
 
-                if (WeaponBufferRotation.Pitch <  0)
+                if (WeaponBufferRotation.Pitch < 0)
                 {
                     WeaponBufferRotation.Pitch = 0;
                 }
@@ -645,7 +634,7 @@ simulated function Rotator FreeAimHandler(Rotator  NewRotation, float DeltaTime)
 
         if (Level.TimeSeconds - LastRecoilTime <= RecoilSpeed)
         {
-            NewRotation += (RecoilRotator/RecoilSpeed) * DeltaTime;
+            NewRotation += (RecoilRotator / RecoilSpeed) * DeltaTime;
         }
         else
         {
@@ -666,7 +655,7 @@ simulated function Rotator FreeAimHandler(Rotator  NewRotation, float DeltaTime)
 
     if (Level.TimeSeconds - LastRecoilTime <= RecoilSpeed)
     {
-        AppliedRecoil = (RecoilRotator/RecoilSpeed) * DeltaTime;
+        AppliedRecoil = (RecoilRotator / RecoilSpeed) * DeltaTime;
         WeaponBufferRotation += AppliedRecoil;
     }
     else
@@ -721,10 +710,11 @@ simulated function Rotator FreeAimHandler(Rotator  NewRotation, float DeltaTime)
 function Rotator AdjustAim(FireProperties FiredAmmunition, Vector ProjStart, int AimError)
 {
     // These are the rare situations where we call the Super as we may be aiming at a bot with a relevant weapon that could result in it receiving a warning
-    if (Level.Game.NumBots > 0 &&       // only need to consider this if there are some bots in the game
-        (FiredAmmunition.bInstantHit || // if we're using an instant hit weapon (very rare in DH), a targeted bot will get a warning when InstantWarnTarget() gets called
-        (FiredAmmunition.ProjectileClass != none && class<ROBallisticProjectile>(FiredAmmunition.ProjectileClass) == none))) // a non-ballistic projectile warns a bot that gets
-    {                                                                                                                        // recorded as the ShotTarget pawn in the Super
+    if (Level.Game.NumBots > 0 // only need to consider this if there are some bots in the game
+        && (FiredAmmunition.bInstantHit // if we're using an instant hit weapon (very rare in DH), a targeted bot will get a warning when InstantWarnTarget() gets called
+            || (FiredAmmunition.ProjectileClass != none
+                && class<ROBallisticProjectile>(FiredAmmunition.ProjectileClass) == none))) // a non-ballistic projectile warns a bot that gets
+    { // recorded as the ShotTarget pawn in the Super
         return super.AdjustAim(FiredAmmunition, ProjStart, AimError);
     }
 
@@ -825,9 +815,10 @@ function bool AllowTextMessage(string Msg)
             }
         }
     }
+
     for (i = 3; i > 0; --i)
     {
-        LastBroadcastString[i] = LastBroadcastString[i-1];
+        LastBroadcastString[i] = LastBroadcastString[i - 1];
     }
 
     LastBroadcastTime = Level.TimeSeconds;
@@ -837,10 +828,11 @@ function bool AllowTextMessage(string Msg)
 // Modified to prevent broadcast of public chat if "all chat" is disabled
 exec function Say(string Msg)
 {
-    Msg = Left(Msg,128);
+    Msg = Left(Msg, 128);
 
     // If all chat is not allowed, then don't broadcast (serversay) and tell the user
-    if (DHGameReplicationInfo(GameReplicationInfo) != none && !DHGameReplicationInfo(GameReplicationInfo).bAllChatEnabled)
+    if (DHGameReplicationInfo(GameReplicationInfo) != none
+        && !DHGameReplicationInfo(GameReplicationInfo).bAllChatEnabled)
     {
         ReceiveLocalizedMessage(Class'DHCommunicationMessage', 0); // "Public chat is currently disabled"
         return;
@@ -935,7 +927,7 @@ simulated function PlayerWhizzed(float DistSquared)
 simulated function PlayerFlinched(float Intensity)
 {
     local Rotator AfterFlinchRotation;
-    local float   FlinchRate, FlinchIntensity;
+    local float FlinchRate, FlinchIntensity;
 
     if (!Pawn.bBipodDeployed)
     {
@@ -948,6 +940,7 @@ simulated function PlayerFlinched(float Intensity)
         {
             AfterFlinchRotation.Pitch *= -1;
         }
+
         if (Rand(2) == 1)
         {
             AfterFlinchRotation.Yaw *= -1;
@@ -967,6 +960,7 @@ simulated function PlayerFlinched(float Intensity)
             FlinchRotMag.X *= -1.0;
             FlinchOffsetMag.X *= -1.0;
         }
+
         if (Rand(2) == 1)
         {
             FlinchRotMag.Z *= -1.0;
@@ -1007,11 +1001,11 @@ exec function LazyCam(float Laziness)
     }
 }
 
-function SetLazyCam(bool bLazyCam)
+function SetLazyCam(bool bNewLazyCam)
 {
-    self.bLazyCam = bLazyCam;
+    bLazyCam = bNewLazyCam;
 
-    if (bLazyCam)
+    if (bNewLazyCam)
     {
         LazyCamRotationTarget = Rotation;
     }
@@ -1021,13 +1015,13 @@ function SetLazyCam(bool bLazyCam)
 // Also to disable sway on bolt rifles between shots (while weapon is lowered from face)
 function UpdateRotation(float DeltaTime, float MaxPitch)
 {
-    local DHPawn    DHPwn;
-    local ROWeapon  ROWeap;
-    local DHProjectileWeapon  DHPW;
+    local DHPawn DHPwn;
+    local ROWeapon ROWeap;
+    local DHProjectileWeapon DHPW;
     local ROVehicle ROVeh;
-    local Rotator   NewRotation, ViewRotation;
-    local float     TurnSpeedFactor;
-    local Quat      A, B;
+    local Rotator NewRotation, ViewRotation;
+    local float TurnSpeedFactor;
+    local Quat A, B;
 
     if (Pawn != none)
     {
@@ -1038,7 +1032,13 @@ function UpdateRotation(float DeltaTime, float MaxPitch)
     }
 
     // Handle any sway if ironsighted
-    if (bSway && Pawn != none && !Pawn.bBipodDeployed && ROWeap != none && ROWeap.bCanSway && ROWeap.bUsingSights && !ROWeap.bWaitingToBolt)
+    if (bSway
+        && Pawn != none
+        && !Pawn.bBipodDeployed
+        && ROWeap != none
+        && ROWeap.bCanSway
+        && ROWeap.bUsingSights
+        && !ROWeap.bWaitingToBolt)
     {
         SwayHandler(DeltaTime);
     }
@@ -1095,7 +1095,9 @@ function UpdateRotation(float DeltaTime, float MaxPitch)
         }
         else
         {
-            ViewRotation = QuatToRotator(QuatSlerp(A, B, DeltaTime * ((1.0 - FClamp(LazyCamLaziness, 0.0, 1.0)) * 32.0)));
+            ViewRotation = QuatToRotator(
+                QuatSlerp(A, B, DeltaTime * ((1.0 - FClamp(LazyCamLaziness, 0.0, 1.0)) * 32.0))
+                );
         }
 
         SetRotation(ViewRotation);
@@ -1118,11 +1120,13 @@ function UpdateRotation(float DeltaTime, float MaxPitch)
         // Ensure we are not setting the pawn to a rotation beyond its desired
         if (Pawn != none && Pawn.Physics != PHYS_Flying)
         {
-            if (Pawn.DesiredRotation.Roll < 65535 && (ViewRotation.Roll < Pawn.DesiredRotation.Roll || ViewRotation.Roll > 0))
+            if (Pawn.DesiredRotation.Roll < 65535
+                && (ViewRotation.Roll < Pawn.DesiredRotation.Roll || ViewRotation.Roll > 0))
             {
                 ViewRotation.Roll = 0;
             }
-            else if (Pawn.DesiredRotation.Roll > 0 && (ViewRotation.Roll > Pawn.DesiredRotation.Roll || ViewRotation.Roll < 65535))
+            else if (Pawn.DesiredRotation.Roll > 0
+                && (ViewRotation.Roll > Pawn.DesiredRotation.Roll || ViewRotation.Roll < 65535))
             {
                 ViewRotation.Roll = 0;
             }
@@ -1159,8 +1163,11 @@ function UpdateRotation(float DeltaTime, float MaxPitch)
                 TurnSpeedFactor *= DHISTurnSpeedFactor; // reduce if player is using ironsights
             }
         }
-        else if (ROVeh != none && ROVeh.DriverPositions[ROVeh.DriverPositionIndex].bDrawOverlays && ROVeh.HUDOverlay == none
-            && DHArmoredVehicle(ROVeh) != none && DHArmoredVehicle(ROVeh).PeriscopeOverlay != none)
+        else if (ROVeh != none
+            && ROVeh.DriverPositions[ROVeh.DriverPositionIndex].bDrawOverlays
+            && ROVeh.HUDOverlay == none
+            && DHArmoredVehicle(ROVeh) != none
+            && DHArmoredVehicle(ROVeh).PeriscopeOverlay != none)
         {
             TurnSpeedFactor *= DHISTurnSpeedFactor; // reduce if player is driving an armored vehicle & using a periscope
         }
@@ -1235,7 +1242,7 @@ function ServerSaveArtillerySupportSquadIndex(int Index)
 function bool IsArtilleryTargetValid(Vector ArtilleryLocation, Vector HitNormal)
 {
     local DHVolumeTest VT;
-    local bool         bValidTarget;
+    local bool bValidTarget;
 
     if (HitNormal == vect(0, 0, 0) || HitNormal.Z == -1)
     {
@@ -1255,7 +1262,7 @@ function bool IsArtilleryTargetValid(Vector ArtilleryLocation, Vector HitNormal)
 }
 
 // Emptied out, as this funcionality has been moved to DHRadio.
-function HitThis(ROArtilleryTrigger RAT) { return; }
+function HitThis(ROArtilleryTrigger RAT);
 
 // New function to determine if the player is operating a vehicle that is marked as artillery
 // TODO: suggest exclude passenger positions, so riders don't see arty targets
@@ -1282,22 +1289,26 @@ simulated function bool IsInArtilleryVehicle()
 
 simulated function bool IsInSquad()
 {
-    return DHPlayerReplicationInfo(PlayerReplicationInfo) != none && DHPlayerReplicationInfo(PlayerReplicationInfo).IsInSquad();
+    return DHPlayerReplicationInfo(PlayerReplicationInfo) != none
+        && DHPlayerReplicationInfo(PlayerReplicationInfo).IsInSquad();
 }
 
 simulated function bool IsSLorASL()
 {
-    return DHPlayerReplicationInfo(PlayerReplicationInfo) != none && DHPlayerReplicationInfo(PlayerReplicationInfo).IsSLorASL();
+    return DHPlayerReplicationInfo(PlayerReplicationInfo) != none
+        && DHPlayerReplicationInfo(PlayerReplicationInfo).IsSLorASL();
 }
 
 simulated function bool IsSL()
 {
-    return DHPlayerReplicationInfo(PlayerReplicationInfo) != none && DHPlayerReplicationInfo(PlayerReplicationInfo).IsSL();
+    return DHPlayerReplicationInfo(PlayerReplicationInfo) != none
+        && DHPlayerReplicationInfo(PlayerReplicationInfo).IsSL();
 }
 
 simulated function bool IsASL()
 {
-    return DHPlayerReplicationInfo(PlayerReplicationInfo) != none && DHPlayerReplicationInfo(PlayerReplicationInfo).IsASL();
+    return DHPlayerReplicationInfo(PlayerReplicationInfo) != none
+        && DHPlayerReplicationInfo(PlayerReplicationInfo).IsASL();
 }
 
 simulated function bool HasLimitedRole()
@@ -1409,7 +1420,7 @@ function HandleWalking()
 
     P = ROPawn(Pawn);
 
-    if (P == None)
+    if (P == none)
     {
         return;
     }
@@ -1470,7 +1481,10 @@ auto state PlayerWaiting
         {
             SetTimer(0, false);
         }
-        else if (Player != none && GUIController(Player.GUIController) != none && !GUIController(Player.GUIController).bActive && PlayerReplicationInfo != none)
+        else if (Player != none
+            && GUIController(Player.GUIController) != none
+            && !GUIController(Player.GUIController).bActive
+            && PlayerReplicationInfo != none)
         {
             bPendingMapDisplay = false;
             SetTimer(0, false);
@@ -1482,7 +1496,7 @@ auto state PlayerWaiting
         }
     }
 
-    exec function Jump( optional float F )
+    exec function Jump(optional float F)
     {
         TryToActivateSituationMap();
     }
@@ -1578,11 +1592,11 @@ state PlayerWalking
     // Client side
     function PlayerMove(float DeltaTime)
     {
-        local Vector          X, Y, Z, NewAccel;
+        local Vector X, Y, Z, NewAccel;
         local eDoubleClickDir DoubleClickMove;
-        local Rotator         OldRotation, ViewRotation;
-        local bool            bSaveJump;
-        local DHPawn          P;
+        local Rotator OldRotation, ViewRotation;
+        local bool bSaveJump;
+        local DHPawn P;
 
         P = DHPawn(Pawn);
 
@@ -1861,10 +1875,10 @@ state Mantling
 
     function PlayerMove(float DeltaTime)
     {
-        local Vector          NewAccel;
+        local Vector NewAccel;
         local eDoubleClickDir DoubleClickMove;
-        local Rotator         OldRotation, ViewRotation;
-        local DHPawn          DHP;
+        local Rotator OldRotation, ViewRotation;
+        local DHPawn DHP;
 
         DHP = DHPawn(Pawn);
 
@@ -1973,7 +1987,7 @@ state Mantling
 
 state PlayerDriving
 {
-ignores SeePlayer, HearNoise, Bump;
+    ignores SeePlayer, HearNoise, Bump;
 
     // Modified to ignore bDisableThrottle & bWantsToThrottle, which relate to waiting for crew & are now effectively deprecated
     function ProcessDrive(float InForward, float InStrafe, float InUp, bool InJump)
@@ -1994,10 +2008,10 @@ ignores SeePlayer, HearNoise, Bump;
     // Modified to use DHArmoredVehicle instead of deprecated ROTreadCraft
     function PlayerMove(float DeltaTime)
     {
-        local Vehicle          CurrentVehicle;
+        local Vehicle CurrentVehicle;
         local DHArmoredVehicle AV;
-        local float            NewPing, AppliedThrottle;
-        local bool             bIncrementalThrottle;
+        local float NewPing, AppliedThrottle;
+        local bool bIncrementalThrottle;
 
         CurrentVehicle = Vehicle(Pawn);
 
@@ -2098,14 +2112,13 @@ ignores SeePlayer, HearNoise, Bump;
                 ServerUpdatePing(1000 * ExactPing);
             }
 
-            if (!bSkippedLastUpdate &&                              // in order to skip this update we must not have skipped the last one
-                Player.CurrentNetSpeed < 10000 &&                   // and netspeed must be low
-                (Level.TimeSeconds - ClientUpdateTime) < 0.0222 &&  // and time since last update must be short
-                bPressedJump == bLastPressedJump &&                 // and update must not contain major changes
-                (aUp - aLastUp) < 0.01 &&                           // "
-                (aForward - aLastForward) < 0.01 &&                 // "
-                (aStrafe - aLastStrafe) < 0.01                      // "
-                )
+            if (!bSkippedLastUpdate // in order to skip this update we must not have skipped the last one
+                && Player.CurrentNetSpeed < 10000 // and netspeed must be low
+                && (Level.TimeSeconds - ClientUpdateTime) < 0.0222 // and time since last update must be short
+                && bPressedJump == bLastPressedJump // and update must not contain major changes
+                && (aUp - aLastUp) < 0.01 // "
+                && (aForward - aLastForward) < 0.01 // "
+                && (aStrafe - aLastStrafe) < 0.01) // "
             {
                 bSkippedLastUpdate = true;
 
@@ -2129,7 +2142,10 @@ ignores SeePlayer, HearNoise, Bump;
                     CurrentVehicle.Rise = FClamp(aUp / 5000.0, -1.0, 1.0);
                 }
 
-                ServerDrive(AppliedThrottle, aStrafe, aUp, bPressedJump, (32767 & (Rotation.Pitch / 2)) * 32768 + (32767 & (Rotation.Yaw / 2)));
+                ServerDrive(
+                    AppliedThrottle, aStrafe, aUp, bPressedJump,
+                    (32767 & (Rotation.Pitch / 2)) * 32768 + (32767 & (Rotation.Yaw / 2))
+                    );
             }
         }
         else
@@ -2155,7 +2171,7 @@ ignores SeePlayer, HearNoise, Bump;
 
 state PlayerSwimming
 {
-ignores SeePlayer, HearNoise, Bump;
+    ignores SeePlayer, HearNoise, Bump;
 
     // Modified so if player moves into a shallow water volume, they exit swimming state, same as if they move into a non-water volume
     function bool NotifyPhysicsVolumeChange(PhysicsVolume NewVolume)
@@ -2207,7 +2223,9 @@ ignores SeePlayer, HearNoise, Bump;
     // Modified so landing in a shallow water volume doesn't send player into swimming state
     function bool NotifyLanded(Vector HitNormal)
     {
-        if (Pawn.PhysicsVolume != none && Pawn.PhysicsVolume.bWaterVolume && !(Pawn.PhysicsVolume.IsA('DHWaterVolume') && DHWaterVolume(Pawn.PhysicsVolume).bIsShallowWater))
+        if (Pawn.PhysicsVolume != none
+            && Pawn.PhysicsVolume.bWaterVolume
+            && !(Pawn.PhysicsVolume.IsA('DHWaterVolume') && DHWaterVolume(Pawn.PhysicsVolume).bIsShallowWater))
         {
             Pawn.SetPhysics(PHYS_Swimming);
         }
@@ -2222,21 +2240,23 @@ ignores SeePlayer, HearNoise, Bump;
     // Modified so moving into a shallow water volume also triggers NotifyPhysicsVolumeChange(), same as if they move into a non-water volume
     function ProcessMove(float DeltaTime, Vector NewAccel, eDoubleClickDir DoubleClickMove, Rotator DeltaRot)
     {
-        local bool   bUpAndOut;
+        local bool bUpAndOut;
 
         if (Pawn.Acceleration != NewAccel)
         {
             Pawn.Acceleration = NewAccel;
         }
 
-        bUpAndOut = (Pawn.Acceleration.Z > 0.0 || Rotation.Pitch > 2048) && (Vector(Rotation) Dot Pawn.Acceleration) > 0.0;
+        bUpAndOut = (Pawn.Acceleration.Z > 0.0 || Rotation.Pitch > 2048)
+            && (Vector(Rotation) Dot Pawn.Acceleration) > 0.0;
 
         if (Pawn.bUpAndOut != bUpAndOut)
         {
             Pawn.bUpAndOut = bUpAndOut;
         }
 
-        if (!Pawn.PhysicsVolume.bWaterVolume || (Pawn.PhysicsVolume.IsA('DHWaterVolume') && DHWaterVolume(Pawn.PhysicsVolume).bIsShallowWater))
+        if (!Pawn.PhysicsVolume.bWaterVolume
+            || (Pawn.PhysicsVolume.IsA('DHWaterVolume') && DHWaterVolume(Pawn.PhysicsVolume).bIsShallowWater))
         {
             NotifyPhysicsVolumeChange(Pawn.PhysicsVolume);
         }
@@ -2245,7 +2265,7 @@ ignores SeePlayer, HearNoise, Bump;
     // Modified to use VSizeSquared instead of VSize for more efficient processing, as this is a many-times-a-second function
     function PlayerMove(float DeltaTime)
     {
-        local Vector  NewAccel, X, Y, Z;
+        local Vector NewAccel, X, Y, Z;
         local Rotator OldRotation;
 
         GetAxes(Rotation, X, Y, Z);
@@ -2281,7 +2301,9 @@ ignores SeePlayer, HearNoise, Bump;
     // Modified so if player is in a shallow water volume, they exit swimming state, same as if they are in a non-water volume
     function Timer()
     {
-        if ((!Pawn.PhysicsVolume.bWaterVolume || (Pawn.PhysicsVolume.IsA('DHWaterVolume') && DHWaterVolume(Pawn.PhysicsVolume).bIsShallowWater)) && Role == ROLE_Authority)
+        if ((!Pawn.PhysicsVolume.bWaterVolume
+                || (Pawn.PhysicsVolume.IsA('DHWaterVolume') && DHWaterVolume(Pawn.PhysicsVolume).bIsShallowWater))
+            && Role == ROLE_Authority)
         {
             GotoState(Pawn.LandMovementState);
         }
@@ -2292,12 +2314,15 @@ ignores SeePlayer, HearNoise, Bump;
 
 state PlayerClimbing
 {
-ignores SeePlayer, HearNoise, Bump;
+    ignores SeePlayer, HearNoise, Bump;
 
     // Modified so moving into a shallow water volume doesn't send player into swimming state
     function bool NotifyPhysicsVolumeChange(PhysicsVolume NewVolume)
     {
-        if (NewVolume != none && NewVolume.bWaterVolume && !(NewVolume.IsA('DHWaterVolume') && DHWaterVolume(NewVolume).bIsShallowWater) && Pawn != none)
+        if (NewVolume != none
+            && NewVolume.bWaterVolume
+            && !(NewVolume.IsA('DHWaterVolume') && DHWaterVolume(NewVolume).bIsShallowWater)
+            && Pawn != none)
         {
             GotoState(Pawn.WaterMovementState);
         }
@@ -2330,8 +2355,8 @@ function LeaveVehicleAsDriver()
 // In particular this makes it much easier to enter AT guns, which can have a very small base & a large 'turret'
 function ServerUse()
 {
-    local Vehicle   EntryVehicle;
-    local Actor     LookedAtActor, A;
+    local Vehicle EntryVehicle;
+    local Actor LookedAtActor, A;
 
     if (Role < ROLE_Authority)
     {
@@ -2446,11 +2471,16 @@ simulated function bool IsRadioman()
     return RI != none && RI.bCarriesRadio;
 }
 
-function ServerNotifyRoles(DHPlayerReplicationInfo.ERoleSelector RoleSelector, class<ROCriticalMessage> Message, int MessageIndex, optional Object OptionalObject)
+function ServerNotifyRoles(
+    DHPlayerReplicationInfo.ERoleSelector RoleSelector,
+    class<ROCriticalMessage> Message,
+    int MessageIndex,
+    optional Object OptionalObject
+    )
 {
-    local int                     TeamIndex;
-    local Controller              C;
-    local DHPlayer                OtherPlayer;
+    local int TeamIndex;
+    local Controller C;
+    local DHPlayer OtherPlayer;
     local DHPlayerReplicationInfo PRI;
 
     TeamIndex = GetTeamNum();
@@ -2468,7 +2498,9 @@ function ServerNotifyRoles(DHPlayerReplicationInfo.ERoleSelector RoleSelector, c
 
         if (PRI != none && PRI.CheckRole(RoleSelector))
         {
-            OtherPlayer.ReceiveLocalizedMessage(Message, MessageIndex, PlayerReplicationInfo, OtherPlayer.PlayerReplicationInfo, OptionalObject);
+            OtherPlayer.ReceiveLocalizedMessage(
+                Message, MessageIndex, PlayerReplicationInfo, OtherPlayer.PlayerReplicationInfo, OptionalObject
+                );
         }
     }
 }
@@ -2482,9 +2514,9 @@ function bool IsPositionOfArtillery(Vector Position)
 
     for (i = 0; i < arraycount(GRI.DHArtillery); i++)
     {
-        if (GRI.DHArtillery[i] != none &&
-            GRI.DHArtillery[i].GetTeamIndex() == GetTeamNum() &&
-            !GRI.DHArtillery[i].IsParadrop())
+        if (GRI.DHArtillery[i] != none
+            && GRI.DHArtillery[i].GetTeamIndex() == GetTeamNum()
+            && !GRI.DHArtillery[i].IsParadrop())
         {
             // to do: refactor checking if GRI.DHArtillery[i].Location == Position
             // GRI.DHArtillery[i].Location == Position is false because of round-up errors...
@@ -2506,9 +2538,9 @@ function bool IsPositionOfParadrop(Vector Position)
 
     for (i = 0; i < arraycount(GRI.DHArtillery); i++)
     {
-        if (GRI.DHArtillery[i] != none &&
-            GRI.DHArtillery[i].GetTeamIndex() == GetTeamNum() &&
-            GRI.DHArtillery[i].IsParadrop())
+        if (GRI.DHArtillery[i] != none
+            && GRI.DHArtillery[i].GetTeamIndex() == GetTeamNum()
+            && GRI.DHArtillery[i].IsParadrop())
         {
             if (VSize(GRI.DHArtillery[i].Location - Position) < 1)
             {
@@ -2529,10 +2561,10 @@ function int GetActiveOffMapSupportNumber()
     GRI = DHGameReplicationInfo(GameReplicationInfo);
 
     Counter = 0;
+
     for (i = 0; i < arraycount(GRI.DHArtillery); ++i)
     {
-        if (GRI.DHArtillery[i] != none &&
-            GRI.DHArtillery[i].GetTeamIndex() == GetTeamNum())
+        if (GRI.DHArtillery[i] != none && GRI.DHArtillery[i].GetTeamIndex() == GetTeamNum())
         {
             Counter++;
         }
@@ -2541,18 +2573,23 @@ function int GetActiveOffMapSupportNumber()
 }
 
 // Modified to allow mortar operator to make a resupply request
-function AttemptToAddHelpRequest(PlayerReplicationInfo PRI, int ObjID, int RequestType, optional Vector RequestLocation)
+function AttemptToAddHelpRequest(
+    PlayerReplicationInfo PRI,
+    int ObjID,
+    int RequestType,
+    optional Vector RequestLocation
+    )
 {
     local DHRoleInfo RI;
 
     RI = DHRoleInfo(GetRoleInfo());
 
     // Only allow if requesting player is a leader role or if he's a machine gunner or mortar operator requesting resupply
-    if (RI != none &&
-        (RI.bIsLeader || (RequestType == 3 && RI.bIsGunner)) &&
-        ROGameReplicationInfo(GameReplicationInfo) != none &&
-        PRI != none &&
-        PRI.Team != none)
+    if (RI != none
+        && (RI.bIsLeader || (RequestType == 3 && RI.bIsGunner))
+        && ROGameReplicationInfo(GameReplicationInfo) != none
+        && PRI != none
+        && PRI.Team != none)
     {
         ROGameReplicationInfo(GameReplicationInfo).AddHelpRequest(PRI, ObjID, RequestType, RequestLocation); // add to team's HelpRequests array
 
@@ -2617,7 +2654,7 @@ function AdjustView(float DeltaTime)
 // Also a network optimisation as avoids a pointless replicated function call
 function Possess(Pawn aPawn)
 {
-    local Pawn    OldPawn;
+    local Pawn OldPawn;
     local Vehicle V;
 
     if (PlayerReplicationInfo == none || PlayerReplicationInfo.bOnlySpectator || aPawn == none)
@@ -2807,7 +2844,11 @@ function bool CanRestartPlayer()
     {
         return false;
     }
-    else if ((bIsInSpawnMenu && VehiclePoolIndex == -1) || !HasSelectedTeam() || !HasSelectedRole() || !HasSelectedWeapons() || !HasSelectedSpawn())
+    else if ((bIsInSpawnMenu && VehiclePoolIndex == -1)
+        || !HasSelectedTeam()
+        || !HasSelectedRole()
+        || !HasSelectedWeapons()
+        || !HasSelectedSpawn())
     {
         return false;
     }
@@ -2850,7 +2891,9 @@ simulated function ClientForcedTeamChange(int NewTeamIndex, int NewRoleIndex)
 // Modified to avoid "accessed none" errors
 function bool HasSelectedTeam()
 {
-    return PlayerReplicationInfo != none && PlayerReplicationInfo.Team != none && PlayerReplicationInfo.Team.TeamIndex < 2;
+    return PlayerReplicationInfo != none
+        && PlayerReplicationInfo.Team != none
+        && PlayerReplicationInfo.Team.TeamIndex < 2;
 }
 
 // Modified to fix nasty server crash and fix other bugs
@@ -2917,25 +2960,25 @@ exec function CommunicationMenu()
 
 // This function returns the time the player will be able to spawn next
 // given some spawn parameters (DHRoleInfo and VehiclePoolIndex).
-simulated function int GetNextSpawnTime(int SpawnPointIndex, DHRoleInfo RI, int VehiclePoolIndex)
+simulated function int GetNextSpawnTime(int TargetSpawnPointIndex, DHRoleInfo RI, int TargetVehiclePoolIndex)
 {
     local int T;
     local DHGameReplicationInfo GRI;
 
     GRI = DHGameReplicationInfo(GameReplicationInfo);
 
-    if (RI == none ||
-        GRI == none ||
-        PlayerReplicationInfo == none ||
-        PlayerReplicationInfo.Team == none ||
-        SpawnPointIndex < 0 ||
-        SpawnPointIndex >= arraycount(GRI.SpawnPoints) ||
-        GRI.SpawnPoints[SpawnPointIndex] == none)
+    if (RI == none
+        || GRI == none
+        || PlayerReplicationInfo == none
+        || PlayerReplicationInfo.Team == none
+        || TargetSpawnPointIndex < 0
+        || TargetSpawnPointIndex >= arraycount(GRI.SpawnPoints)
+        || GRI.SpawnPoints[TargetSpawnPointIndex] == none)
     {
         return 0;
     }
 
-    if (GRI.SpawnPoints[SpawnPointIndex].CanPlayerSpawnImmediately(self))
+    if (GRI.SpawnPoints[TargetSpawnPointIndex].CanPlayerSpawnImmediately(self))
     {
         // Spawn point is allowing this player to spawn immediately!
         return -1;
@@ -2950,12 +2993,15 @@ simulated function int GetNextSpawnTime(int SpawnPointIndex, DHRoleInfo RI, int 
     {
         // LastKilledTime is 0 the first time a player joins a server, but if he leaves, the time is stored (using the sessions thing)
         // this means the player can pretty much spawn right away the first time connecting, but from then on he will be subject to the respawn time factors
-        T = LastKilledTime + GRI.ReinforcementInterval[PlayerReplicationInfo.Team.TeamIndex] + RI.AddedRoleRespawnTime + GRI.SpawnPoints[SpawnPointIndex].GetSpawnTimePenalty();
+        T = LastKilledTime
+            + GRI.ReinforcementInterval[PlayerReplicationInfo.Team.TeamIndex]
+            + RI.AddedRoleRespawnTime
+            + GRI.SpawnPoints[TargetSpawnPointIndex].GetSpawnTimePenalty();
     }
 
-    if (VehiclePoolIndex != -1)
+    if (TargetVehiclePoolIndex != -1)
     {
-        T = Max(T, GRI.VehiclePoolNextAvailableTimes[VehiclePoolIndex]);
+        T = Max(T, GRI.VehiclePoolNextAvailableTimes[TargetVehiclePoolIndex]);
         T = Max(T, NextVehicleSpawnTime);
     }
 
@@ -2973,7 +3019,8 @@ simulated function SwayHandler(float DeltaTime)
 {
     local DHPawn P;
     local DHWeapon W;
-    local float  WeaponSwayYawAcc, WeaponSwayPitchAcc, StaminaFactor, TimeFactor, DeltaSwayYaw, DeltaSwayPitch, FlinchFactor;
+    local float WeaponSwayYawAcc, WeaponSwayPitchAcc, StaminaFactor, TimeFactor, DeltaSwayYaw, DeltaSwayPitch,
+        FlinchFactor;
 
     P = DHPawn(Pawn);
 
@@ -3071,7 +3118,9 @@ simulated function SwayHandler(float DeltaTime)
 
     // Add an elastic factor to get sway near the original aim-point, & a damping factor to keep elastic factor from causing wild oscillations
     WeaponSwayYawAcc = WeaponSwayYawAcc - (DHSwayElasticFactor * SwayYaw) - (DHSwayDampingFactor * WeaponSwayYawRate);
-    WeaponSwayPitchAcc = WeaponSwayPitchAcc - (DHSwayElasticFactor * SwayPitch) - (DHSwayDampingFactor * WeaponSwayPitchRate);
+    WeaponSwayPitchAcc = WeaponSwayPitchAcc
+        - (DHSwayElasticFactor * SwayPitch)
+        - (DHSwayDampingFactor * WeaponSwayPitchRate);
 
     // If weapon is rested, SwayYaw & SwayPitch are zero
     if (P.bRestingWeapon)
@@ -3131,8 +3180,8 @@ exec function Suicide()
     }
 }
 
-exec function SwitchTeam() { }
-exec function ChangeTeam(int N) { }
+exec function SwitchTeam();
+exec function ChangeTeam(int N);
 
 // Modified to not join the opposite team if it fails to join the one passed (fixes a nasty exploit)
 // This function verifies the spawn parameters (spawn point et al.) that
@@ -3144,7 +3193,14 @@ exec function ChangeTeam(int N) { }
 // It would be useful to roll up the "spawning parameters" (role, weapons,
 // spawn point etc.) into a struct so that it's easier to understand what's
 // going on.
-function ServerSetPlayerInfo(byte NewTeam, byte NewRole, byte NewWeapon1, byte NewWeapon2, int NewSpawnPointIndex, int NewVehiclePoolIndex)
+function ServerSetPlayerInfo(
+    byte NewTeam,
+    byte NewRole,
+    byte NewWeapon1,
+    byte NewWeapon2,
+    int NewSpawnPointIndex,
+    int NewVehiclePoolIndex
+    )
 {
     local bool bDidFail;
     local DarkestHourGame Game;
@@ -3220,9 +3276,9 @@ function ServerSetPlayerInfo(byte NewTeam, byte NewRole, byte NewWeapon1, byte N
             }
 
             // Check if change failed and output results
-            if (PlayerReplicationInfo == none ||
-                PlayerReplicationInfo.Team == none ||
-                PlayerReplicationInfo.Team.TeamIndex != NewTeam)
+            if (PlayerReplicationInfo == none
+                || PlayerReplicationInfo.Team == none
+                || PlayerReplicationInfo.Team.TeamIndex != NewTeam)
             {
                 if (PlayerReplicationInfo == none)
                 {
@@ -3281,10 +3337,10 @@ function ServerSetPlayerInfo(byte NewTeam, byte NewRole, byte NewWeapon1, byte N
         // Check if change was successful
         if (DesiredRole != NewRole)
         {
-            if (ROTeamGame(Level.Game) != none &&
-                PlayerReplicationInfo != none &&
-                PlayerReplicationInfo.Team != none &&
-                ROTeamGame(Level.Game).RoleLimitReached(PlayerReplicationInfo.Team.TeamIndex, NewRole))
+            if (ROTeamGame(Level.Game) != none
+                && PlayerReplicationInfo != none
+                && PlayerReplicationInfo.Team != none
+                && ROTeamGame(Level.Game).RoleLimitReached(PlayerReplicationInfo.Team.TeamIndex, NewRole))
             {
                 ClientChangePlayerInfoResult(100);
             }
@@ -3325,10 +3381,10 @@ function ServerSetPlayerInfo(byte NewTeam, byte NewRole, byte NewWeapon1, byte N
     {
         Game = DarkestHourGame(Level.Game);
 
-        if (Game != none &&
-            Game.DHLevelInfo != none &&
-            Game.DHLevelInfo.SpawnMode == ESM_DarkestHour &&
-            Game.SpawnManager != none)
+        if (Game != none
+            && Game.DHLevelInfo != none
+            && Game.DHLevelInfo.SpawnMode == ESM_DarkestHour
+            && Game.SpawnManager != none)
         {
             // This map uses the DH deploy system, not an RO spawn room
             if (PlayerReplicationInfo != none && PlayerReplicationInfo.Team != none)
@@ -3336,7 +3392,10 @@ function ServerSetPlayerInfo(byte NewTeam, byte NewRole, byte NewWeapon1, byte N
                 RI = DHRoleInfo(Game.GetRoleInfo(PlayerReplicationInfo.Team.TeamIndex, DesiredRole));
             }
 
-            if (GRI != none && GRI.CanSpawnWithParameters(NewSpawnPointIndex, GetTeamNum(), DesiredRole, PRI.SquadIndex, NewVehiclePoolIndex, true))
+            if (GRI != none
+                && GRI.CanSpawnWithParameters(
+                    NewSpawnPointIndex, GetTeamNum(), DesiredRole, PRI.SquadIndex, NewVehiclePoolIndex, true
+                    ))
             {
                 if (NewVehiclePoolIndex != VehiclePoolIndex)
                 {
@@ -3452,9 +3511,9 @@ function Reset()
     LastFlinchTime = 0.0;
 }
 
-function ServerSetIsInSpawnMenu(bool bIsInSpawnMenu)
+function ServerSetIsInSpawnMenu(bool bNewIsInSpawnMenu)
 {
-    self.bIsInSpawnMenu = bIsInSpawnMenu;
+    bIsInSpawnMenu = bNewIsInSpawnMenu;
 }
 
 // Modified to add 'Begin:' label, to avoid "label not found" error on ClientGotoState calls to send client to state 'Spectating' or 'PlayerWaiting' (both child states of this)
@@ -3465,7 +3524,8 @@ Begin:
 
 state DeadSpectating
 {
-    ignores SwitchWeapon, RestartLevel, ClientRestart, Suicide, ThrowWeapon, NotifyPhysicsVolumeChange, NotifyHeadVolumeChange;
+    ignores SwitchWeapon, RestartLevel, ClientRestart, Suicide, ThrowWeapon, NotifyPhysicsVolumeChange,
+        NotifyHeadVolumeChange;
 
     function BeginState()
     {
@@ -3532,7 +3592,7 @@ state Dead
             }
 
             // Apply personal message from server strings
-            //ClientMessage(DarkestHourGame(Level.Game).GetServerMessage(PlayerReplicationInfo.Deaths - 1), 'ServerMessage');
+            // ClientMessage(DarkestHourGame(Level.Game).GetServerMessage(PlayerReplicationInfo.Deaths - 1), 'ServerMessage');
         }
     }
 }
@@ -3628,24 +3688,20 @@ function PawnDied(Pawn P)
 }
 
 // Emptied out as irrelevant to RO/DH (concerns UT2004 PowerUps) & can just cause "accessed none" log errors if keybound & used (if player in vehicle or has no inventory)
-exec function PrevItem()
-{
-}
-
+exec function PrevItem();
 // Emptied out so human player doesn't receive "you picked up the [weapon name]" messages when they pick up a weapon
-function HandlePickup(Pickup pick)
-{
-}
-
+function HandlePickup(Pickup pick);
 // Function emptied out as replaced by ClientAddHudDeathMessage()
-function AddHudDeathMessage(PlayerReplicationInfo Killer, PlayerReplicationInfo Victim, class<DamageType> DamageType)
-{
-}
+function AddHudDeathMessage(PlayerReplicationInfo Killer, PlayerReplicationInfo Victim, class<DamageType> DamageType);
 
 // New function replacing RO's AddHudDeathMessage - only change is that it doesn't have the bNetOwner replication condition
 // That seemed to sometimes prevent this replicated function being called on a net client, meaning that client didn't get the death message
 // Also avoids showing a console death message at this stage - instead that gets handled in DHHud.AddDeathMessage() & is delayed until the screen DM is shown
-simulated function ClientAddHudDeathMessage(PlayerReplicationInfo Killer, PlayerReplicationInfo Victim, class<DamageType> DamageType)
+simulated function ClientAddHudDeathMessage(
+    PlayerReplicationInfo Killer,
+    PlayerReplicationInfo Victim,
+    class<DamageType> DamageType
+    )
 {
     if (ROHud(myHud) != none)
     {
@@ -3688,7 +3744,8 @@ function ServerListClientGUIDs()
 
         if (PC != none)
         {
-            Message = PC.GetPlayerIDHash() @ Caps(Class'MD5Hash'.static.GetHashString(PC.ClientGUID)) @ C.PlayerReplicationInfo.PlayerName;
+            Message = PC.GetPlayerIDHash() @ Caps(Class'MD5Hash'.static.GetHashString(PC.ClientGUID))
+                @ C.PlayerReplicationInfo.PlayerName;
 
             ClipboardString $= Message @ Class'UString'.static.CRLF();
 
@@ -3723,28 +3780,32 @@ function ServerListPlayers()
     LastPlayerListTime = Level.TimeSeconds;
     Level.Game.GameReplicationInfo.GetPRIArray(AllPRI);
 
-    ClientOpenLogFile("listplayers"); //Open the logfile on the client
+    ClientOpenLogFile("listplayers"); // Open the logfile on the client
 
     for (i = 0; i < AllPRI.Length; ++i)
     {
         if (PlayerController(AllPRI[i].Owner) != none && AllPRI[i].PlayerName != "WebAdmin")
         {
-            ClientMessage(Right("   " $ AllPRI[i].PlayerID, 3) $ ")" @ AllPRI[i].PlayerName @ " " $ PlayerController(AllPRI[i].Owner).GetPlayerIDHash());
-            ParseString $= PlayerController(AllPRI[i].Owner).GetPlayerIDHash() @ AllPRI[i].PlayerName @ Class'UString'.static.CRLF();
+            ClientMessage(
+                Right("   " $ AllPRI[i].PlayerID, 3) $ ")" @ AllPRI[i].PlayerName @ " "
+                    $ PlayerController(AllPRI[i].Owner).GetPlayerIDHash()
+                );
+            ParseString $= PlayerController(AllPRI[i].Owner).GetPlayerIDHash() @ AllPRI[i].PlayerName
+                @ Class'UString'.static.CRLF();
         }
         else
         {
             ClientMessage(Right("   " $ AllPRI[i].PlayerID, 3) $ ")" @ AllPRI[i].PlayerName);
         }
 
-        ClientLogToFile(ParseString); //Write the name and ROID to the logfile
+        ClientLogToFile(ParseString); // Write the name and ROID to the logfile
     }
 
-    ClientCloseLogFile(); //Close and destroy the logfile
+    ClientCloseLogFile(); // Close and destroy the logfile
 }
 
 // Server to client function which has the client open a logfile with name = FileNameString
-simulated function ClientOpenLogFile(String FileNameString)
+simulated function ClientOpenLogFile(string FileNameString)
 {
     if (ClientLogFile == none)
     {
@@ -3758,7 +3819,7 @@ simulated function ClientOpenLogFile(String FileNameString)
 }
 
 // Server to client function which will output a log file on the client with LogString outputted
-simulated function ClientLogToFile(String LogString)
+simulated function ClientLogToFile(string LogString)
 {
     if (ClientLogFile != none)
     {
@@ -3863,7 +3924,7 @@ function ServerSetManualTankShellReloading(bool bUseManualReloading)
 // New function to set the bLockTankOnEntry option, which is enabled/disabled from the game settings menu
 simulated function SetLockTankOnEntry(bool bEnabled)
 {
-    local DHArmoredVehicle    AV;
+    local DHArmoredVehicle AV;
     local DHVehicleWeaponPawn WP;
 
     bLockTankOnEntry = bEnabled;
@@ -3930,7 +3991,7 @@ simulated function LockWeapons(int Seconds)
     // If we don't yet have GRI, we record a PendingWeaponLockSeconds  on client, then PostNetReceive() uses it to set weapon lock as soon as it receives GRI
     else if (GameReplicationInfo == none)
     {
-        PendingWeaponLockSeconds  = Seconds;
+        PendingWeaponLockSeconds = Seconds;
     }
 }
 
@@ -4039,7 +4100,8 @@ exec function FOV(float F)
 exec function DoLog(string LogMessage)
 {
     // Note bSilentAdmin won't work on a net client as bSilentAdmin isn't replicated (unlike bAdmin), so client can't tell that player is logged in
-    if (LogMessage != "" && (IsDebugModeAllowed() || (PlayerReplicationInfo.bAdmin || PlayerReplicationInfo.bSilentAdmin)))
+    if (LogMessage != ""
+        && (IsDebugModeAllowed() || (PlayerReplicationInfo.bAdmin || PlayerReplicationInfo.bSilentAdmin)))
     {
         Log(GetHumanReadableName() @ ":" @ LogMessage);
 
@@ -4052,7 +4114,8 @@ exec function DoLog(string LogMessage)
 
 function ServerDoLog(string LogMessage)
 {
-    if (LogMessage != "" && (IsDebugModeAllowed() || (PlayerReplicationInfo.bAdmin || PlayerReplicationInfo.bSilentAdmin)))
+    if (LogMessage != ""
+        && (IsDebugModeAllowed() || (PlayerReplicationInfo.bAdmin || PlayerReplicationInfo.bSilentAdmin)))
     {
         Log(GetHumanReadableName() @ ":" @ LogMessage);
     }
@@ -4093,13 +4156,18 @@ exec function DebugHints()
     {
         if (DHHintManager != none)
         {
-            Log("DHHintManager: CurrentHintIndex =" @ DHHintManager.CurrentHintIndex @ " QueuedHintIndices.Length =" @ DHHintManager.QueuedHintIndices.Length
-                @ " state =" @ DHHintManager.GetStateName());
+            Log(
+                "DHHintManager: CurrentHintIndex =" @ DHHintManager.CurrentHintIndex @ " QueuedHintIndices.Length ="
+                    @ DHHintManager.QueuedHintIndices.Length @ " state =" @ DHHintManager.GetStateName()
+                );
 
             for (i = 0; i < DHHintManager.QueuedHintIndices.Length; ++i)
             {
                 Hint = DHHintManager.GetHint(DHHintManager.QueuedHintIndices[i]);
-                Log("QueuedHintIndices[" $ i $ "] =" @ DHHintManager.QueuedHintIndices[i] @ Left(Hint.Title, 40) @ Left(Hint.Text, 80));
+                Log(
+                    "QueuedHintIndices[" $ i $ "] =" @ DHHintManager.QueuedHintIndices[i] @ Left(Hint.Title, 40)
+                        @ Left(Hint.Text, 80)
+                    );
             }
 
             for (i = 0; i < DHHintManager.HINT_COUNT; ++i)
@@ -4111,7 +4179,9 @@ exec function DebugHints()
                 }
             }
 
-            Log("=====================================================================================================");
+            Log(
+                "====================================================================================================="
+                );
         }
     }
 }
@@ -4173,8 +4243,8 @@ exec function ClearArrows()
 exec function LeaveBody(optional bool bKeepPRI)
 {
     local DHVehicleWeaponPawn WP;
-    local DHVehicle           V;
-    local Pawn                OldPawn;
+    local DHVehicle V;
+    local Pawn OldPawn;
 
     if (IsDebugModeAllowed() && Pawn != none)
     {
@@ -4213,7 +4283,7 @@ exec function LeaveBody(optional bool bKeepPRI)
 
 function ServerLeaveBody(optional bool bKeepPRI)
 {
-    local Vehicle           V;
+    local Vehicle V;
     local VehicleWeaponPawn WP;
 
     if (IsDebugModeAllowed() && Pawn != none)
@@ -4274,14 +4344,15 @@ exec function FixPinHead()
 // New exec that reverses LeaveBody(), allowing the player 'reclaim' their old pawn body (& killing off their current pawn)
 exec function PossessBody()
 {
-    local Pawn   TargetPawn;
+    local Pawn TargetPawn;
 
     if (IsDebugModeAllowed() && ROPawn(Pawn) != none)
     {
         TargetPawn = ROPawn(ROPawn(Pawn).AutoTraceActor);
 
         // Only proceed if body's PRI matches the player (so must have been their old body, left using bKeepPRI option), or if body belongs to no one
-        if (TargetPawn != none && (TargetPawn.PlayerReplicationInfo == PlayerReplicationInfo || TargetPawn.PlayerReplicationInfo == none))
+        if (TargetPawn != none
+            && (TargetPawn.PlayerReplicationInfo == PlayerReplicationInfo || TargetPawn.PlayerReplicationInfo == none))
         {
             ServerPossessBody(TargetPawn);
 
@@ -4338,9 +4409,7 @@ exec simulated function DebugRaptor()
 
     foreach AllActors(Class'Actor', A)
     {
-        if (A.Location == vect(0, 0, 0) &&
-            A.DrawType == DT_Sprite &&
-            !A.bHidden)
+        if (A.Location == vect(0, 0, 0) && A.DrawType == DT_Sprite && !A.bHidden)
         {
             Log(A);
         }
@@ -4379,7 +4448,7 @@ exec function SetMyLocation(Vector NewLocation)
     }
 }
 
-exec function SetMyRotation(Rotator  NewRotation)
+exec function SetMyRotation(Rotator NewRotation)
 {
     if (IsDebugModeAllowed())
     {
@@ -4412,10 +4481,10 @@ simulated function bool IsVehicleDebugModeAllowed(out DHVehicle V)
 // New debug exec to turn player's vehicle translucent, which is very useful for debugging things like vehicle hit points
 exec function VehicleTranslucent(optional bool bRevert)
 {
-    local DHVehicle     V;
+    local DHVehicle V;
     local array<Shader> TranslucentSkins;
-    local Material      NormalSkin;
-    local int           Index, i, j;
+    local Material NormalSkin;
+    local int Index, i, j;
 
     if (IsVehicleDebugModeAllowed(V))
     {
@@ -4452,11 +4521,15 @@ exec function VehicleTranslucent(optional bool bRevert)
             {
                 for (i = 0; i < V.WeaponPawns[j].Gun.Skins.Length; ++i)
                 {
-                    if (V.WeaponPawns[j].Gun.IsA('DHVehicleCannon') && i < V.CannonSkins.Length && V.CannonSkins[i] != none)
+                    if (V.WeaponPawns[j].Gun.IsA('DHVehicleCannon')
+                        && i < V.CannonSkins.Length
+                        && V.CannonSkins[i] != none)
                     {
                         NormalSkin = V.CannonSkins[i];
                     }
-                    else if (i == 0 && V.WeaponPawns[j].Gun.IsA('DHVehicleMG') && DHVehicleMG(V.WeaponPawns[j].Gun).bMatchSkinToVehicle)
+                    else if (i == 0
+                        && V.WeaponPawns[j].Gun.IsA('DHVehicleMG')
+                        && DHVehicleMG(V.WeaponPawns[j].Gun).bMatchSkinToVehicle)
                     {
                         NormalSkin = V.Skins[i];
                     }
@@ -4493,12 +4566,13 @@ exec function VehicleTranslucent(optional bool bRevert)
 exec function LogVehDamage()
 {
     local DHVehicle V;
-    local string    DamageText;
+    local string DamageText;
 
     if (IsVehicleDebugModeAllowed(V))
     {
         DamageText = V.VehicleNameString @ "Health =" @ V.Health @ " EngineHealth =" @ V.EngineHealth
-            @ " bLeftTrackDamaged =" @ V.bLeftTrackDamaged @ " bRightTrackDamaged =" @ V.bRightTrackDamaged @ " IsDisabled =" @ V.IsDisabled();
+            @ " bLeftTrackDamaged =" @ V.bLeftTrackDamaged @ " bRightTrackDamaged =" @ V.bRightTrackDamaged
+            @ " IsDisabled =" @ V.IsDisabled();
 
         Pawn.ClientMessage(DamageText);
         Log(DamageText);
@@ -4509,7 +4583,7 @@ exec function LogVehDamage()
 exec function LogVehAttach(optional bool bIncludeAttachedArray)
 {
     local DHVehicle V;
-    local int       i;
+    local int i;
 
     if (IsVehicleDebugModeAllowed(V))
     {
@@ -4596,7 +4670,10 @@ exec function SetExitPos(byte Index, int NewX, int NewY, int NewZ)
 
     if (IsVehicleDebugModeAllowed(V) && Index < V.ExitPositions.Length)
     {
-        Log(V.VehicleNameString @ "ExitPositions[" $ Index $ "] =" @ NewX @ NewY @ NewZ @ "(was" @ V.ExitPositions[Index] $ ")");
+        Log(
+            V.VehicleNameString @ "ExitPositions[" $ Index $ "] =" @ NewX @ NewY @ NewZ @ "(was"
+                @ V.ExitPositions[Index] $ ")"
+            );
         V.ExitPositions[Index].X = NewX;
         V.ExitPositions[Index].Y = NewY;
         V.ExitPositions[Index].Z = NewZ;
@@ -4607,14 +4684,17 @@ exec function SetExitPos(byte Index, int NewX, int NewY, int NewZ)
 exec function ExitPosTool()
 {
     local ROVehicle NearbyVeh;
-    local Vector    Offset;
+    local Vector Offset;
 
     if (IsDebugModeAllowed())
     {
         foreach RadiusActors(Class'ROVehicle', NearbyVeh, 300.0, Pawn.Location)
         {
             Offset = (Pawn.Location - NearbyVeh.Location) << NearbyVeh.Rotation;
-            Log("Vehicle:" @ NearbyVeh.GetHumanReadableName() @ "(X=" $ Round(Offset.X) $ ",Y=" $ Round(Offset.Y) $ ",Z=" $ Round(Offset.Z) $ ")");
+            Log(
+                "Vehicle:" @ NearbyVeh.GetHumanReadableName() @ "(X=" $ Round(Offset.X) $ ",Y=" $ Round(Offset.Y)
+                    $ ",Z=" $ Round(Offset.Z) $ ")"
+                );
         }
     }
 }
@@ -4623,9 +4703,9 @@ exec function ExitPosTool()
 exec function DrawExits(optional bool bClearScreen)
 {
     local DHVehicle V;
-    local Vector    ExitPosition, ZOffset, X, Y, Z;
-    local Color     C;
-    local int       i;
+    local Vector ExitPosition, ZOffset, X, Y, Z;
+    local Color C;
+    local int i;
 
     ClearLines();
 
@@ -4664,7 +4744,10 @@ exec function DrawExits(optional bool bClearScreen)
             }
 
             ExitPosition = V.Location + (V.ExitPositions[i] >> V.Rotation) + ZOffset;
-            Class'DHLib'.static.DrawStayingDebugCylinder(V, ExitPosition, X, Y, Z, Class'DHPawn'.default.CollisionRadius, Class'DHPawn'.default.CollisionHeight, 10, C.R, C.G, C.B);
+            Class'DHLib'.static.DrawStayingDebugCylinder(
+                V, ExitPosition, X, Y, Z, Class'DHPawn'.default.CollisionRadius, Class'DHPawn'.default.CollisionHeight,
+                10, C.R, C.G, C.B
+                );
         }
     }
 }
@@ -4732,9 +4815,9 @@ exec function SetDriveAnim(name NewAnim)
 // New debug exec to set a vehicle position's 1st person camera position offset
 exec function SetCamPos(string NewX, string NewY, string NewZ)
 {
-    local Vehicle             V;
+    local Vehicle V;
     local ROVehicleWeaponPawn WP;
-    local Vector              OldCamPos;
+    local Vector OldCamPos;
 
     if (IsDebugModeAllowed())
     {
@@ -4751,7 +4834,10 @@ exec function SetCamPos(string NewX, string NewY, string NewZ)
             if (WP != none && WP.bMultiPosition)
             {
                 WP.DriverPositions[WP.DriverPositionIndex].ViewLocation = V.FPCamPos;
-                Log(WP.Tag @ "DriverPositions[" $ WP.DriverPositionIndex $ "].ViewLocation =" @ WP.DriverPositions[WP.DriverPositionIndex].ViewLocation @ "(old was" @ OldCamPos $ ")");
+                Log(
+                    WP.Tag @ "DriverPositions[" $ WP.DriverPositionIndex $ "].ViewLocation ="
+                        @ WP.DriverPositions[WP.DriverPositionIndex].ViewLocation @ "(old was" @ OldCamPos $ ")"
+                    );
             }
             else
             {
@@ -4802,11 +4888,11 @@ exec function VehCamLookAt(int X, int Y, int Z)
 exec function DebugPenetration(bool bEnable)
 {
     local class<DHArmoredVehicle> AVClass;
-    local class<DHVehicleCannon>  VCClass;
-    local DHArmoredVehicle        AV;
-    local DHVehicleCannon         VC;
-    local DHGameReplicationInfo   GRI;
-    local int                     i;
+    local class<DHVehicleCannon> VCClass;
+    local DHArmoredVehicle AV;
+    local DHVehicleCannon VC;
+    local DHGameReplicationInfo GRI;
+    local int i;
 
     if (IsDebugModeAllowed())
     {
@@ -4846,7 +4932,8 @@ exec function DebugPenetration(bool bEnable)
                     AVClass.default.bDebugPenetration = bEnable;
                     AVClass.default.bLogDebugPenetration = bEnable;
 
-                    if (AVClass.default.PassengerWeapons.Length > 0 && class<DHVehicleCannonPawn>(AVClass.default.PassengerWeapons[0].WeaponPawnClass) != none)
+                    if (AVClass.default.PassengerWeapons.Length > 0
+                        && class<DHVehicleCannonPawn>(AVClass.default.PassengerWeapons[0].WeaponPawnClass) != none)
                     {
                         VCClass = class<DHVehicleCannon>(AVClass.default.PassengerWeapons[0].WeaponPawnClass.default.GunClass);
 
@@ -4866,11 +4953,14 @@ exec function DebugPenetration(bool bEnable)
 exec function SetTreadDir(int NewPitch, int NewYaw, int NewRoll)
 {
     local DHVehicle V;
-    local Rotator   NewPanDirection;
+    local Rotator NewPanDirection;
 
     if (IsVehicleDebugModeAllowed(V) && V.bHasTreads)
     {
-        Log(V.VehicleNameString @ "TreadPanDirection =" @ NewPitch @ NewYaw @ NewRoll @ "(was" @ V.LeftTreadPanDirection $ ")");
+        Log(
+            V.VehicleNameString @ "TreadPanDirection =" @ NewPitch @ NewYaw @ NewRoll @ "(was"
+                @ V.LeftTreadPanDirection $ ")"
+            );
         NewPanDirection.Pitch = NewPitch;
         NewPanDirection.Yaw = NewYaw;
         NewPanDirection.Roll = NewRoll;
@@ -4928,7 +5018,10 @@ exec function SetOccPos(byte Index, string NewX, string NewY)
 
     if (IsVehicleDebugModeAllowed(V) && Index < V.VehicleHudOccupantsX.Length)
     {
-        Log(V.VehicleNameString @ "VehicleHudOccupantsX[" $ Index $ "] =" @ float(NewX) @ "Y =" @ float(NewY) @ "(was" @ V.VehicleHudOccupantsX[Index] @ V.VehicleHudOccupantsY[Index]);
+        Log(
+            V.VehicleNameString @ "VehicleHudOccupantsX[" $ Index $ "] =" @ float(NewX) @ "Y =" @ float(NewY) @ "(was"
+                @ V.VehicleHudOccupantsX[Index] @ V.VehicleHudOccupantsY[Index]
+            );
         V.VehicleHudOccupantsX[Index] = float(NewX);
         V.VehicleHudOccupantsY[Index] = float(NewY);
     }
@@ -4941,9 +5034,12 @@ exec function SetHUDTreads(string NewPosX0, string NewPosX1, string NewPosY, str
 
     if (IsVehicleDebugModeAllowed(V))
     {
-        Log(V.VehicleNameString @ "VehicleHudTreadsPosX[0] =" @ float(NewPosX0) @ "VehicleHudTreadsPosX[1] =" @ float(NewPosX1)
-            @ "VehicleHudTreadsPosY =" @ float(NewPosY) @ "VehicleHudTreadsScale =" @ float(NewScale)
-            @ "(was" @ V.VehicleHudTreadsPosX[0] @ V.VehicleHudTreadsPosX[1] @ V.VehicleHudTreadsPosY @ V.VehicleHudTreadsScale $ ")");
+        Log(
+            V.VehicleNameString @ "VehicleHudTreadsPosX[0] =" @ float(NewPosX0) @ "VehicleHudTreadsPosX[1] ="
+                @ float(NewPosX1) @ "VehicleHudTreadsPosY =" @ float(NewPosY) @ "VehicleHudTreadsScale ="
+                @ float(NewScale) @ "(was" @ V.VehicleHudTreadsPosX[0] @ V.VehicleHudTreadsPosX[1]
+                @ V.VehicleHudTreadsPosY @ V.VehicleHudTreadsScale $ ")"
+            );
 
         V.VehicleHudTreadsPosX[0] = float(NewPosX0);
         V.VehicleHudTreadsPosX[1] = float(NewPosX1);
@@ -4971,14 +5067,19 @@ exec function SetExhPos(int Index, int NewX, int NewY, int NewZ)
 
     if (IsVehicleDebugModeAllowed(V) && Index < V.ExhaustPipes.Length)
     {
-        Log(V.VehicleNameString @ "ExhaustPipes[" $ Index $ "].ExhaustPosition =" @ NewX @ NewY @ NewZ @ "(was" @ V.ExhaustPipes[Index].ExhaustPosition $ ")");
+        Log(
+            V.VehicleNameString @ "ExhaustPipes[" $ Index $ "].ExhaustPosition =" @ NewX @ NewY @ NewZ @ "(was"
+                @ V.ExhaustPipes[Index].ExhaustPosition $ ")"
+            );
         V.ExhaustPipes[Index].ExhaustPosition.X = NewX;
         V.ExhaustPipes[Index].ExhaustPosition.Y = NewY;
         V.ExhaustPipes[Index].ExhaustPosition.Z = NewZ;
 
         if (V.ExhaustPipes[Index].ExhaustEffect != none)
         {
-            V.ExhaustPipes[Index].ExhaustEffect.SetLocation(V.Location + (V.ExhaustPipes[Index].ExhaustPosition >> V.Rotation));
+            V.ExhaustPipes[Index].ExhaustEffect.SetLocation(
+                V.Location + (V.ExhaustPipes[Index].ExhaustPosition >> V.Rotation)
+                );
             V.ExhaustPipes[Index].ExhaustEffect.SetBase(V);
         }
     }
@@ -4991,7 +5092,10 @@ exec function SetExhRot(int Index, int NewPitch, int NewYaw, int NewRoll)
 
     if (IsVehicleDebugModeAllowed(V) && Index < V.ExhaustPipes.Length)
     {
-        Log(V.VehicleNameString @ "ExhaustPipes[" $ Index $ "].ExhaustRotation =" @ NewPitch @ NewYaw @ NewRoll @ "(was" @ V.ExhaustPipes[Index].ExhaustRotation $ ")");
+        Log(
+            V.VehicleNameString @ "ExhaustPipes[" $ Index $ "].ExhaustRotation =" @ NewPitch @ NewYaw @ NewRoll
+                @ "(was" @ V.ExhaustPipes[Index].ExhaustRotation $ ")"
+            );
         V.ExhaustPipes[Index].ExhaustRotation.Pitch = NewPitch;
         V.ExhaustPipes[Index].ExhaustRotation.Yaw = NewYaw;
         V.ExhaustPipes[Index].ExhaustRotation.Roll = NewRoll;
@@ -5008,7 +5112,7 @@ exec function SetExhRot(int Index, int NewPitch, int NewYaw, int NewRoll)
 exec function SetWheelRadius(string NewValue, optional byte FirstWheelIndex, optional byte LastWheelIndex)
 {
     local DHVehicle V;
-    local int       i;
+    local int i;
 
     if (IsVehicleDebugModeAllowed(V) && FirstWheelIndex < V.Wheels.Length)
     {
@@ -5019,7 +5123,10 @@ exec function SetWheelRadius(string NewValue, optional byte FirstWheelIndex, opt
 
         for (i = FirstWheelIndex; i <= LastWheelIndex; ++i)
         {
-            Log(V.VehicleNameString @ "Wheels[" $ i $ "].WheelRadius =" @ float(NewValue) @ "(was" @ V.Wheels[i].WheelRadius $ ")");
+            Log(
+                V.VehicleNameString @ "Wheels[" $ i $ "].WheelRadius =" @ float(NewValue) @ "(was"
+                    @ V.Wheels[i].WheelRadius $ ")"
+                );
             V.Wheels[i].WheelRadius = float(NewValue);
         }
     }
@@ -5027,11 +5134,17 @@ exec function SetWheelRadius(string NewValue, optional byte FirstWheelIndex, opt
 
 // New debug exec to adjust the attachment bone offset of a vehicle's physics wheels
 // Include no numbers to adjust all wheels, otherwise add index numbers of first & last wheels to adjust
-exec function SetWheelOffset(string NewX, string NewY, string NewZ, optional byte FirstWheelIndex, optional byte LastWheelIndex)
+exec function SetWheelOffset(
+    string NewX,
+    string NewY,
+    string NewZ,
+    optional byte FirstWheelIndex,
+    optional byte LastWheelIndex
+    )
 {
     local DHVehicle V;
-    local Vector    NewBoneOffset;
-    local int       i;
+    local Vector NewBoneOffset;
+    local int i;
 
     if (IsVehicleDebugModeAllowed(V) && FirstWheelIndex < V.Wheels.Length)
     {
@@ -5046,7 +5159,10 @@ exec function SetWheelOffset(string NewX, string NewY, string NewZ, optional byt
 
         for (i = FirstWheelIndex; i <= LastWheelIndex; ++i)
         {
-            Log(V.VehicleNameString @ "Wheels[" $ i $ "].BoneOffset =" @ NewBoneOffset @ "(was" @ V.Wheels[i].BoneOffset $ ")");
+            Log(
+                V.VehicleNameString @ "Wheels[" $ i $ "].BoneOffset =" @ NewBoneOffset @ "(was"
+                    @ V.Wheels[i].BoneOffset $ ")"
+                );
             V.Wheels[i].WheelPosition += NewBoneOffset - V.Wheels[i].BoneOffset; // this updates a native code setting (experimentation showed it's a relative offset)
             V.Wheels[i].BoneOffset = NewBoneOffset;
         }
@@ -5056,11 +5172,17 @@ exec function SetWheelOffset(string NewX, string NewY, string NewZ, optional byt
 // New debug exec to adjust maximum travel distance of the suspension of a vehicle's physics wheels
 // Allows adjustment of individual wheels, but note that on entering a vehicle, native code calls SVehicleUpdateParams(), which will undo individual settings
 // Settings for all wheels get matched to values of WheelSuspensionTravel & WheelSuspensionMaxRenderTravel, so if individual settings are required, SVehicleUpdateParams must be overridden
-exec function SetSuspTravel(string NewValue, optional byte FirstWheelIndex, optional byte LastWheelIndex, optional bool bDontSetSuspensionTravel, optional bool bDontSetMaxRenderTravel)
+exec function SetSuspTravel(
+    string NewValue,
+    optional byte FirstWheelIndex,
+    optional byte LastWheelIndex,
+    optional bool bDontSetSuspensionTravel,
+    optional bool bDontSetMaxRenderTravel
+    )
 {
     local DHVehicle V;
-    local float     OldTravel, OldRenderTravel;
-    local int       i;
+    local float OldTravel, OldRenderTravel;
+    local int i;
 
     if (IsVehicleDebugModeAllowed(V) && FirstWheelIndex < V.Wheels.Length)
     {
@@ -5094,8 +5216,11 @@ exec function SetSuspTravel(string NewValue, optional byte FirstWheelIndex, opti
                 V.Wheels[i].SuspensionMaxRenderTravel = float(NewValue);
             }
 
-            Log(V.VehicleNameString @ "Wheels[" $ i $ "].SuspensionTravel =" @ V.Wheels[i].SuspensionTravel @ "(was" @ OldTravel $
-                ") MaxRenderTravel =" @ V.Wheels[i].SuspensionMaxRenderTravel @ "(was" @ OldRenderTravel $ ")");
+            Log(
+                V.VehicleNameString @ "Wheels[" $ i $ "].SuspensionTravel =" @ V.Wheels[i].SuspensionTravel @ "(was"
+                    @ OldTravel $ ") MaxRenderTravel =" @ V.Wheels[i].SuspensionMaxRenderTravel @ "(was"
+                    @ OldRenderTravel $ ")"
+                );
         }
     }
 }
@@ -5106,7 +5231,7 @@ exec function SetSuspTravel(string NewValue, optional byte FirstWheelIndex, opti
 exec function SetSuspOffset(string NewValue, optional byte FirstWheelIndex, optional byte LastWheelIndex)
 {
     local DHVehicle V;
-    local int       i;
+    local int i;
 
     if (IsVehicleDebugModeAllowed(V) && FirstWheelIndex < V.Wheels.Length)
     {
@@ -5119,7 +5244,10 @@ exec function SetSuspOffset(string NewValue, optional byte FirstWheelIndex, opti
 
         for (i = FirstWheelIndex; i <= LastWheelIndex; ++i)
         {
-            Log(V.VehicleNameString @ "Wheels[" $ i $ "].SuspensionOffset =" @ float(NewValue) @ "(was" @ V.Wheels[i].SuspensionOffset $ ")");
+            Log(
+                V.VehicleNameString @ "Wheels[" $ i $ "].SuspensionOffset =" @ float(NewValue) @ "(was"
+                    @ V.Wheels[i].SuspensionOffset $ ")"
+                );
             V.Wheels[i].SuspensionOffset = float(NewValue);
         }
     }
@@ -5142,7 +5270,7 @@ exec function SetMass(float NewValue)
 exec function DrawCOM(optional bool bClearScreen)
 {
     local DHVehicle V;
-    local Vector    COM, X, Y, Z;
+    local Vector COM, X, Y, Z;
 
     ClearLines();
 
@@ -5160,7 +5288,7 @@ exec function DrawCOM(optional bool bClearScreen)
 exec function SetCOM(string NewX, string NewY, string NewZ)
 {
     local DHVehicle V;
-    local Vector    COM, OldCOM;
+    local Vector COM, OldCOM;
 
     if (IsVehicleDebugModeAllowed(V))
     {
@@ -5183,7 +5311,10 @@ exec function SetMaxAngSpeed(float NewValue)
 
     if (IsVehicleDebugModeAllowed(V) && KarmaParams(V.KParams) != none)
     {
-        Log(V.VehicleNameString @ "KMaxAngularSpeed =" @ NewValue @ "(old was" @ KarmaParams(V.KParams).KMaxAngularSpeed $ ")");
+        Log(
+            V.VehicleNameString @ "KMaxAngularSpeed =" @ NewValue @ "(old was"
+                @ KarmaParams(V.KParams).KMaxAngularSpeed $ ")"
+            );
         KarmaParams(V.KParams).KMaxAngularSpeed = NewValue;
         V.SetPhysics(PHYS_None);
         V.SetPhysics(PHYS_Karma);
@@ -5197,7 +5328,10 @@ exec function SetAngDamp(float NewValue)
 
     if (IsVehicleDebugModeAllowed(V) && KarmaParams(V.KParams) != none)
     {
-        Log(V.VehicleNameString @ "KAngularDamping =" @ NewValue @ "(old was" @ KarmaParams(V.KParams).KAngularDamping $ ")");
+        Log(
+            V.VehicleNameString @ "KAngularDamping =" @ NewValue @ "(old was" @ KarmaParams(V.KParams).KAngularDamping
+                $ ")"
+            );
         KarmaParams(V.KParams).KAngularDamping = NewValue;
         V.SetPhysics(PHYS_None);
         V.SetPhysics(PHYS_Karma);
@@ -5205,10 +5339,17 @@ exec function SetAngDamp(float NewValue)
 }
 
 // New debug exec to adjust position & radius if vehicle hit points
-exec function SetHitPoint(byte Index, string NewX, string NewY, string NewZ, optional string NewRadius, optional bool bIsDHNewHitPoint)
+exec function SetHitPoint(
+    byte Index,
+    string NewX,
+    string NewY,
+    string NewZ,
+    optional string NewRadius,
+    optional bool bIsDHNewHitPoint
+    )
 {
     local DHArmoredVehicle AV;
-    local DHVehicle        V;
+    local DHVehicle V;
 
     if (IsVehicleDebugModeAllowed(V))
     {
@@ -5223,8 +5364,11 @@ exec function SetHitPoint(byte Index, string NewX, string NewY, string NewZ, opt
                     NewRadius = string(AV.NewVehHitpoints[Index].PointRadius);
                 }
 
-                Log(AV.Tag @ "NewVehHitpoints[" $ Index $ "] Offset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " Radius =" @ float(NewRadius)
-                    @ "(was" @ AV.NewVehHitpoints[Index].PointOffset $ ", radius" @ AV.NewVehHitpoints[Index].PointRadius $ ")");
+                Log(
+                    AV.Tag @ "NewVehHitpoints[" $ Index $ "] Offset =" @ float(NewX) @ float(NewY) @ float(NewZ)
+                        @ " Radius =" @ float(NewRadius) @ "(was" @ AV.NewVehHitpoints[Index].PointOffset $ ", radius"
+                        @ AV.NewVehHitpoints[Index].PointRadius $ ")"
+                    );
 
                 AV.NewVehHitpoints[Index].PointOffset.X = float(NewX);
                 AV.NewVehHitpoints[Index].PointOffset.Y = float(NewY);
@@ -5239,8 +5383,11 @@ exec function SetHitPoint(byte Index, string NewX, string NewY, string NewZ, opt
                 NewRadius = string(V.VehHitpoints[Index].PointRadius);
             }
 
-            Log(V.Tag @ "VehHitpoints[" $ Index $ "] Offset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " Radius =" @ float(NewRadius)
-                @ "(was" @ V.VehHitpoints[Index].PointOffset $ ", radius" @ V.VehHitpoints[Index].PointRadius $ ")");
+            Log(
+                V.Tag @ "VehHitpoints[" $ Index $ "] Offset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " Radius ="
+                    @ float(NewRadius) @ "(was" @ V.VehHitpoints[Index].PointOffset $ ", radius"
+                    @ V.VehHitpoints[Index].PointRadius $ ")"
+                );
 
             V.VehHitpoints[Index].PointOffset.X = float(NewX);
             V.VehHitpoints[Index].PointOffset.Y = float(NewY);
@@ -5254,8 +5401,8 @@ exec function SetHitPoint(byte Index, string NewX, string NewY, string NewZ, opt
 exec function SetDEOffset(int NewX, int NewY, int NewZ, optional bool bEngineFire, optional string NewScale)
 {
     local DHVehicle V;
-    local Vector    OldOffset;
-    local float     OldScale;
+    local Vector OldOffset;
+    local float OldScale;
 
     if (IsVehicleDebugModeAllowed(V) && Level.NetMode != NM_DedicatedServer)
     {
@@ -5279,11 +5426,16 @@ exec function SetDEOffset(int NewX, int NewY, int NewZ, optional bool bEngineFir
         // Log settings
         if (V.DamagedEffectOffset != OldOffset || V.DamagedEffectScale != OldScale)
         {
-            Log(V.VehicleNameString @ "DamagedEffectOffset =" @ V.DamagedEffectOffset @ "scale =" @ V.DamagedEffectScale @ "(old was" @ OldOffset @ "scale =" @ OldScale $ ")");
+            Log(
+                V.VehicleNameString @ "DamagedEffectOffset =" @ V.DamagedEffectOffset @ "scale ="
+                    @ V.DamagedEffectScale @ "(old was" @ OldOffset @ "scale =" @ OldScale $ ")"
+                );
         }
         else
         {
-            Log(V.VehicleNameString @ "DamagedEffectOffset =" @ V.DamagedEffectOffset @ "scale =" @ V.DamagedEffectScale);
+            Log(
+                V.VehicleNameString @ "DamagedEffectOffset =" @ V.DamagedEffectOffset @ "scale =" @ V.DamagedEffectScale
+                );
         }
 
         // Appears necessary to get native code to spawn a DamagedEffect if it doesn't already exist
@@ -5341,9 +5493,9 @@ exec function SetShadowZOffset(float NewValue)
 // Spawns an angle plane attachment representing the height setting (run again with no side specified to remove this)
 exec function SetArmorHeight(optional string Side, optional byte Index, optional float NewValue)
 {
-    local DHVehicle        V;
+    local DHVehicle V;
     local DHArmoredVehicle AV;
-    local bool             bDontChangeValue;
+    local bool bDontChangeValue;
 
     if (IsVehicleDebugModeAllowed(V) && V.IsA('DHArmoredVehicle'))
     {
@@ -5383,7 +5535,15 @@ exec function SetArmorHeight(optional string Side, optional byte Index, optional
 }
 
 // New helper function for debug exec SetArmorHeight
-function ProcessSetArmorHeight(DHVehicle V, out array<DHArmoredVehicle.ArmorSection> ArmorArray, byte Index, float NewValue, string SideText, int PlaneYaw, optional bool bDontChangeValue)
+function ProcessSetArmorHeight(
+    DHVehicle V,
+    out array<DHArmoredVehicle.ArmorSection> ArmorArray,
+    byte Index,
+    float NewValue,
+    string SideText,
+    int PlaneYaw,
+    optional bool bDontChangeValue
+    )
 {
     local Rotator PlaneRotation;
 
@@ -5395,8 +5555,11 @@ function ProcessSetArmorHeight(DHVehicle V, out array<DHArmoredVehicle.ArmorSect
             return; // invalid index no. (minus 1 because we don't draw a height plane for the highest armor band as it isn't supposed to have a max height)
         }
 
-        Log(V.VehicleNameString $ ":" @ SideText $ "Armor[" $ Index $ "].MaxRelativeHeight =" @ ArmorArray[Index].MaxRelativeHeight
-            $ ", thickness =" @ ArmorArray[Index].Thickness $ "mm, slope =" @ ArmorArray[Index].Slope @ "degrees");
+        Log(
+            V.VehicleNameString $ ":" @ SideText $ "Armor[" $ Index $ "].MaxRelativeHeight ="
+                @ ArmorArray[Index].MaxRelativeHeight $ ", thickness =" @ ArmorArray[Index].Thickness $ "mm, slope ="
+                @ ArmorArray[Index].Slope @ "degrees"
+            );
     }
     // Default is to set a new max height value
     else
@@ -5406,8 +5569,11 @@ function ProcessSetArmorHeight(DHVehicle V, out array<DHArmoredVehicle.ArmorSect
             ArmorArray.Length = Index + 1; // extend armor array if a higher index no. has been specified
         }
 
-        Log(V.VehicleNameString $ ":" @ SideText $ "Armor[" $ Index $ "].MaxRelativeHeight =" @ NewValue @ "(was" @ ArmorArray[Index].MaxRelativeHeight
-            $ "), thickness =" @ ArmorArray[Index].Thickness $ "mm, slope =" @ ArmorArray[Index].Slope @ "degrees");
+        Log(
+            V.VehicleNameString $ ":" @ SideText $ "Armor[" $ Index $ "].MaxRelativeHeight =" @ NewValue @ "(was"
+                @ ArmorArray[Index].MaxRelativeHeight $ "), thickness =" @ ArmorArray[Index].Thickness $ "mm, slope ="
+                @ ArmorArray[Index].Slope @ "degrees"
+            );
 
         ArmorArray[Index].MaxRelativeHeight = NewValue;
     }
@@ -5443,11 +5609,11 @@ exec function SetTreadHeight(float NewValue)
 // "DebugAngles FR 33" would set FrontRightAngle to 33 degrees, "DebugAngles off" clears any angle attachments, "DebugAngles" just lists the current angles
 exec function DebugAngles(optional string Option, optional float NewAngle)
 {
-    local DHVehicle       V;
+    local DHVehicle V;
     local DHVehicleCannon Cannon;
-    local Actor           BaseActor;
-    local Rotator         NewRotation;
-    local string          AnglesList;
+    local Actor BaseActor;
+    local Rotator NewRotation;
+    local string AnglesList;
 
     if (IsVehicleDebugModeAllowed(V))
     {
@@ -5545,8 +5711,9 @@ exec function DebugAngles(optional string Option, optional float NewAngle)
         // List the angles on screen & in the log
         if (BaseActor == Cannon)
         {
-            AnglesList = "Cannon angles: FrontRightAngle =" @ Cannon.FrontRightAngle @ " RearRightAngle =" @ Cannon.RearRightAngle
-                @ " RearLeftAngle =" @ Cannon.RearLeftAngle @ " FrontLeftAngle =" @ Cannon.FrontLeftAngle;
+            AnglesList = "Cannon angles: FrontRightAngle =" @ Cannon.FrontRightAngle @ " RearRightAngle ="
+                @ Cannon.RearRightAngle @ " RearLeftAngle =" @ Cannon.RearLeftAngle @ " FrontLeftAngle ="
+                @ Cannon.FrontLeftAngle;
         }
         else
         {
@@ -5560,7 +5727,12 @@ exec function DebugAngles(optional string Option, optional float NewAngle)
 }
 
 // Helper function to spawn debug plane attachments
-simulated function SpawnPlaneAttachment(DHVehicle V, Rotator RelRotation, optional Vector RelLocation, optional Actor BaseActor)
+simulated function SpawnPlaneAttachment(
+    DHVehicle V,
+    Rotator RelRotation,
+    optional Vector RelLocation,
+    optional Actor BaseActor
+    )
 {
     local Actor Plane;
 
@@ -5585,7 +5757,9 @@ simulated function SpawnPlaneAttachment(DHVehicle V, Rotator RelRotation, option
             }
 
             // Using DynamicLoadObject so we don't have DH_DebugTools static mesh file loaded all the time; just dynamically load on demand
-            Plane.SetStaticMesh(StaticMesh(DynamicLoadObject("DH_DebugTools.Misc.DebugPlaneAttachment", Class'StaticMesh')));
+            Plane.SetStaticMesh(
+                StaticMesh(DynamicLoadObject("DH_DebugTools.Misc.DebugPlaneAttachment", Class'StaticMesh'))
+                );
             Plane.SetRelativeRotation(RelRotation);
             Plane.SetRelativeLocation(RelLocation);
             V.VehicleAttachments.Length = V.VehicleAttachments.Length + 1;
@@ -5598,7 +5772,7 @@ simulated function SpawnPlaneAttachment(DHVehicle V, Rotator RelRotation, option
 simulated function DestroyPlaneAttachments(DHVehicle V)
 {
     local StaticMesh PlaneStaticMesh;
-    local int        i;
+    local int i;
 
     if (V != none)
     {
@@ -5617,9 +5791,7 @@ simulated function DestroyPlaneAttachments(DHVehicle V)
 }
 
 // Emptied out as the system of using coded hit points to represent vehicle occupants has been abandoned
-exec function DriverCollisionDebug()
-{
-}
+exec function DriverCollisionDebug();
 
 // TEMPDEBUG (Matt, v8.0): for problem where player in any vehicle position is visibly attached in the wrong position
 // The problem seems to be a net client very occasionally appears to get the player attached without the default PrePivot -42 Z adjustment to his RelativeLocation
@@ -5632,8 +5804,10 @@ exec function DebugDriverAttachment()
 
     if (V != none && V.Driver != none)
     {
-        Log(V.Tag @ "DebugDriverAttachment: RelativeLocation =" @ V.Driver.RelativeLocation @ ", DrivePos =" @ V.DrivePos
-            @ ", PrePivot =" @ V.Driver.PrePivot @ ", default.PrePivot =" @ V.Driver.default.PrePivot);
+        Log(
+            V.Tag @ "DebugDriverAttachment: RelativeLocation =" @ V.Driver.RelativeLocation @ ", DrivePos ="
+                @ V.DrivePos @ ", PrePivot =" @ V.Driver.PrePivot @ ", default.PrePivot =" @ V.Driver.default.PrePivot
+            );
     }
 }
 
@@ -5715,7 +5889,12 @@ function Paradrop(Vector DropLocation, optional float SpreadModifier, optional b
     }
 }
 
-function ParadropGroup(out array<DHPlayerReplicationInfo> PlayersToDrop, Vector DropLocation, optional float SpreadModifier, optional bool bForceOutOfVehicle)
+function ParadropGroup(
+    out array<DHPlayerReplicationInfo> PlayersToDrop,
+    Vector DropLocation,
+    optional float SpreadModifier,
+    optional bool bForceOutOfVehicle
+    )
 {
     local DHPlayer PC;
     local int i;
@@ -5731,7 +5910,12 @@ function ParadropGroup(out array<DHPlayerReplicationInfo> PlayersToDrop, Vector 
     }
 }
 
-function ServerParadropPlayer(DHPlayerReplicationInfo PRI, Vector DropLocation, optional float SpreadModifier, optional bool bForceOutOfVehicle)
+function ServerParadropPlayer(
+    DHPlayerReplicationInfo PRI,
+    Vector DropLocation,
+    optional float SpreadModifier,
+    optional bool bForceOutOfVehicle
+    )
 {
     local DHPlayer PC;
 
@@ -5748,7 +5932,12 @@ function ServerParadropPlayer(DHPlayerReplicationInfo PRI, Vector DropLocation, 
     }
 }
 
-function ServerParadropTeam(byte TeamIndex, Vector DropLocation, optional float SpreadModifier, optional bool bForceOutOfVehicle)
+function ServerParadropTeam(
+    byte TeamIndex,
+    Vector DropLocation,
+    optional float SpreadModifier,
+    optional bool bForceOutOfVehicle
+    )
 {
     local DHGameReplicationInfo GRI;
     local DHPlayerReplicationInfo PRI;
@@ -5775,7 +5964,13 @@ function ServerParadropTeam(byte TeamIndex, Vector DropLocation, optional float 
     ParadropGroup(PlayersToDrop, DropLocation, SpreadModifier, bForceOutOfVehicle);
 }
 
-function ServerParadropSquad(byte TeamIndex, int SquadIndex, Vector DropLocation, optional float SpreadModifier, optional bool bForceOutOfVehicle)
+function ServerParadropSquad(
+    byte TeamIndex,
+    int SquadIndex,
+    Vector DropLocation,
+    optional float SpreadModifier,
+    optional bool bForceOutOfVehicle
+    )
 {
     local array<DHPlayerReplicationInfo> PlayersToDrop;
 
@@ -5813,7 +6008,10 @@ simulated function bool GetMarkedParadropLocation(out Vector ParadropLocation)
     return false;
 }
 
-simulated function bool GetSquadLeaderParadropLocation(out Vector ParadropLocation, DHPlayerReplicationInfo SelectedPRI)
+simulated function bool GetSquadLeaderParadropLocation(
+    out Vector ParadropLocation,
+    DHPlayerReplicationInfo SelectedPRI
+    )
 {
     local DHGameReplicationInfo GRI;
 
@@ -5826,9 +6024,7 @@ simulated function bool GetSquadLeaderParadropLocation(out Vector ParadropLocati
 
     // We use squad leader's quantized position since we don't need
     // precision here.
-    Class'UQuantize'.static.DequantizeClamped2DPose(SquadMemberLocations[0],
-                                                    ParadropLocation.X,
-                                                    ParadropLocation.Y);
+    Class'UQuantize'.static.DequantizeClamped2DPose(SquadMemberLocations[0], ParadropLocation.X, ParadropLocation.Y);
 
     ParadropLocation = GRI.GetWorldCoords(ParadropLocation.X, ParadropLocation.Y);
     ParadropLocation.Z = ParadropHeight;
@@ -5865,7 +6061,11 @@ simulated function ClientSquadLeaderVolunteerPrompt(int TeamIndex, int SquadInde
     }
 }
 
-simulated function ClientSquadAssistantVolunteerPrompt(int TeamIndex, int SquadIndex, DHPlayerReplicationInfo VolunteerPRI)
+simulated function ClientSquadAssistantVolunteerPrompt(
+    int TeamIndex,
+    int SquadIndex,
+    DHPlayerReplicationInfo VolunteerPRI
+    )
 {
     local int VolunteerIndex, i;
 
@@ -5915,7 +6115,10 @@ simulated function RemoveSquadAssistantVolunteer(int VolunteerIndex)
     // Clear up the volunteer array if needed
     for (i = 0; i < SquadAssistantVolunteers.Length; ++i)
     {
-        if (SquadAssistantVolunteers[i] != none) return;
+        if (SquadAssistantVolunteers[i] != none)
+        {
+            return;
+        }
     }
 
     SquadAssistantVolunteers.Length = 0;
@@ -5944,7 +6147,7 @@ exec function Speak(string ChannelTitle)
     local DHVoiceReplicationInfo VRI;
     local DHPlayerReplicationInfo PRI;
 
-    if (VoiceReplicationInfo == none || !VoiceReplicationInfo.bEnableVoiceChat  || !bVoiceChatEnabled)
+    if (VoiceReplicationInfo == none || !VoiceReplicationInfo.bEnableVoiceChat || !bVoiceChatEnabled)
     {
         return;
     }
@@ -6096,7 +6299,12 @@ function ServerSquadJoin(int TeamIndex, int SquadIndex, optional bool bWasInvite
 
     G = DarkestHourGame(Level.Game);
 
-    G.SquadReplicationInfo.JoinSquad(DHPlayerReplicationInfo(PlayerReplicationInfo), TeamIndex, SquadIndex, bWasInvited);
+    G.SquadReplicationInfo.JoinSquad(
+        DHPlayerReplicationInfo(PlayerReplicationInfo),
+        TeamIndex,
+        SquadIndex,
+        bWasInvited
+        );
 }
 
 function ServerSquadJoinAuto()
@@ -6206,7 +6414,12 @@ function ServerSquadRename(string Name)
     }
 }
 
-function bool ServerAddMapMarker(class<DHMapMarker> MapMarkerClass, float MapLocationX, float MapLocationY, Vector WorldLocation)
+function bool ServerAddMapMarker(
+    class<DHMapMarker> MapMarkerClass,
+    float MapLocationX,
+    float MapLocationY,
+    Vector WorldLocation
+    )
 {
     local DHGameReplicationInfo GRI;
     local DHPlayerReplicationInfo PRI;
@@ -6284,7 +6497,12 @@ function bool IsPersonalMarkerPlaced(class<DHMapMarker> MapMarkerClass)
     return false;
 }
 
-function AddPersonalMarker(class<DHMapMarker> MapMarkerClass, float MapLocationX, float MapLocationY, Vector WorldLocation)
+function AddPersonalMarker(
+    class<DHMapMarker> MapMarkerClass,
+    float MapLocationX,
+    float MapLocationY,
+    Vector WorldLocation
+    )
 {
     local DHGameReplicationInfo GRI;
     local DHGameReplicationInfo.MapMarker PMM;
@@ -6345,8 +6563,8 @@ function AddPersonalMarker(class<DHMapMarker> MapMarkerClass, float MapLocationX
 
     for (i = 0; i < PersonalMapMarkers.Length; ++i)
     {
-        if (PersonalMapMarkers[i].MapMarkerClass.default.LifetimeSeconds != -1 &&
-            GRI.ElapsedTime > PersonalMapMarkers[i].ExpiryTime)
+        if (PersonalMapMarkers[i].MapMarkerClass.default.LifetimeSeconds != -1
+            && GRI.ElapsedTime > PersonalMapMarkers[i].ExpiryTime)
         {
             Index = i;
             break;
@@ -6412,11 +6630,11 @@ simulated function ClientSignal(class<DHSignal> SignalClass, Vector L, optional 
 
 simulated function bool IsSignalActive(int i)
 {
-    return i >= 0 &&
-           i < arraycount(Signals) &&
-           Signals[i].SignalClass != none &&
-           Signals[i].Location != vect(0, 0, 0) &&
-           Level.TimeSeconds - Signals[i].TimeSeconds < Signals[i].SignalClass.default.DurationSeconds;
+    return i >= 0
+        && i < arraycount(Signals)
+        && Signals[i].SignalClass != none
+        && Signals[i].Location != vect(0, 0, 0)
+        && Level.TimeSeconds - Signals[i].TimeSeconds < Signals[i].SignalClass.default.DurationSeconds;
 }
 
 function ServerSquadSpawnRallyPoint()
@@ -6460,8 +6678,15 @@ function ServerPlaceAdminSpawn(Vector WorldLocation, byte TeamIndex)
         AdminSpawn.SetIsActive(true);
 
         // Notify everyone and log the event
-        Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', Class'UInteger'.static.FromShorts(2, TeamIndex), PlayerReplicationInfo);
-        Log("Admin '" $ PlayerReplicationInfo.PlayerName $ "' (" $ GetPlayerIDHash() $ ") has placed a spawn on team" @ TeamIndex);
+        Level.Game.BroadcastLocalizedMessage(
+            Class'DHAdminMessage',
+            Class'UInteger'.static.FromShorts(2, TeamIndex),
+            PlayerReplicationInfo
+            );
+        Log(
+            "Admin '" $ PlayerReplicationInfo.PlayerName $ "' (" $ GetPlayerIDHash() $ ") has placed a spawn on team"
+                @ TeamIndex
+            );
     }
 }
 
@@ -6471,8 +6696,15 @@ function ServerDestroyAdminSpawn(DHSpawnPoint_Admin AdminSpawn)
     if (AdminSpawn != none && (IsLoggedInAsAdmin() || IsDebugModeAllowed()))
     {
         // Notify everyone and log the event
-        Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', Class'UInteger'.static.FromShorts(3, AdminSpawn.GetTeamIndex()), PlayerReplicationInfo);
-        Log("Admin '" $ PlayerReplicationInfo.PlayerName $ "' (" $ GetPlayerIDHash() $ ") has destroyed an admin spawn on team" @ AdminSpawn.GetTeamIndex());
+        Level.Game.BroadcastLocalizedMessage(
+            Class'DHAdminMessage',
+            Class'UInteger'.static.FromShorts(3, AdminSpawn.GetTeamIndex()),
+            PlayerReplicationInfo
+            );
+        Log(
+            "Admin '" $ PlayerReplicationInfo.PlayerName $ "' (" $ GetPlayerIDHash()
+                $ ") has destroyed an admin spawn on team" @ AdminSpawn.GetTeamIndex()
+            );
 
         AdminSpawn.Destroy();
     }
@@ -6501,8 +6733,15 @@ function ServerDestroyAllAdminSpawns(byte TeamIndex)
     if (bSpawnDestroyed)
     {
         // Notify everyone and log the event
-        Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', Class'UInteger'.static.FromShorts(4, TeamIndex), PlayerReplicationInfo);
-        Log("Admin '" $ PlayerReplicationInfo.PlayerName $ "' (" $ GetPlayerIDHash() $ ") has has destroyed all admin spawns on team" @ TeamIndex);
+        Level.Game.BroadcastLocalizedMessage(
+            Class'DHAdminMessage',
+            Class'UInteger'.static.FromShorts(4, TeamIndex),
+            PlayerReplicationInfo
+            );
+        Log(
+            "Admin '" $ PlayerReplicationInfo.PlayerName $ "' (" $ GetPlayerIDHash()
+                $ ") has has destroyed all admin spawns on team" @ TeamIndex
+            );
     }
 }
 
@@ -6533,7 +6772,10 @@ function ServerTeleportToMapLocation(float X, float Y)
     {
         // Notify everyone and log the event
         Level.Game.BroadcastLocalizedMessage(Class'DHAdminMessage', 5, PlayerReplicationInfo);
-        Log("Admin '" $ PlayerReplicationInfo.PlayerName $ "' (" $ GetPlayerIDHash() $ ") has teleported to" @ NewLocation);
+        Log(
+            "Admin '" $ PlayerReplicationInfo.PlayerName $ "' (" $ GetPlayerIDHash() $ ") has teleported to"
+                @ NewLocation
+            );
     }
 }
 
@@ -6567,7 +6809,7 @@ function ServerCommandSay(string Msg)
 
     if (G != none)
     {
-        G.BroadcastCommand(self, Level.Game.ParseMessageString(Level.Game.BaseMutator, self, Msg) , 'CommandSay');
+        G.BroadcastCommand(self, Level.Game.ParseMessageString(Level.Game.BaseMutator, self, Msg), 'CommandSay');
     }
 }
 
@@ -6579,7 +6821,7 @@ function ServerVehicleSay(string Msg)
 
     if (G != none)
     {
-        G.BroadcastVehicle(self, Level.Game.ParseMessageString(Level.Game.BaseMutator, self, Msg) , 'VehicleSay');
+        G.BroadcastVehicle(self, Level.Game.ParseMessageString(Level.Game.BaseMutator, self, Msg), 'VehicleSay');
     }
 }
 
@@ -6641,7 +6883,7 @@ function ServerSquadSay(string Msg)
 
     if (G != none)
     {
-        G.BroadcastSquad(self, Level.Game.ParseMessageString(Level.Game.BaseMutator, self, Msg) , 'SquadSay');
+        G.BroadcastSquad(self, Level.Game.ParseMessageString(Level.Game.BaseMutator, self, Msg), 'SquadSay');
     }
 }
 
@@ -6660,14 +6902,20 @@ function OnCommandInteractionHidden()
     CommandInteraction = none;
 }
 
-function ShowCommandInteractionWithMenu(string MenuClassName, optional Object MenuObject, optional bool bShouldHideOnLeftMouseRelease)
+function ShowCommandInteractionWithMenu(
+    string MenuClassName,
+    optional Object MenuObject,
+    optional bool bShouldHideOnLeftMouseRelease
+    )
 {
     if (CommandInteraction != none)
     {
         CommandInteraction.TearDown();
     }
 
-    CommandInteraction = DHCommandInteraction(Player.InteractionMaster.AddInteraction("DH_Engine.DHCommandInteraction", Player));
+    CommandInteraction = DHCommandInteraction(
+        Player.InteractionMaster.AddInteraction("DH_Engine.DHCommandInteraction", Player)
+        );
 
     if (CommandInteraction != none)
     {
@@ -6905,7 +7153,7 @@ function ServerSpeak(int ChannelIndex, optional string ChannelPassword)
 
 simulated event ChatRoomMessage(byte Result, int ChannelIndex, optional PlayerReplicationInfo RelatedPRI)
 {
-    local VoiceChatRoom     VCR;
+    local VoiceChatRoom VCR;
 
     if (VoiceReplicationInfo != none && ChatRoomMessageClass != none)
     {
@@ -6928,7 +7176,13 @@ simulated event ChatRoomMessage(byte Result, int ChannelIndex, optional PlayerRe
         }
         else
         {
-            ClientMessage(ChatRoomMessageClass.static.AssembleMessage(Result, Class'DHVoiceReplicationInfo'.default.LocalChannelText, RelatedPRI));
+            ClientMessage(
+                ChatRoomMessageClass.static.AssembleMessage(
+                    Result,
+                    Class'DHVoiceReplicationInfo'.default.LocalChannelText,
+                    RelatedPRI
+                    )
+                );
         }
     }
 }
@@ -7049,11 +7303,13 @@ simulated function bool IsSpecModeValid(ESpectatorMode Mode)
     if (Mode == SPEC_Self)
     {
         return true;
-        //return !bViewBlackOnDeadNotViewingPlayers && Pawn != none && PlayerReplicationInfo != none && !PlayerReplicationInfo.bOnlySpectator;
+        // return !bViewBlackOnDeadNotViewingPlayers && Pawn != none && PlayerReplicationInfo != none && !PlayerReplicationInfo.bOnlySpectator;
     }
     else if (Mode == SPEC_Roaming)
     {
-        return !bViewBlackonDeadNotViewingPlayers && bAllowRoamWhileSpectating && (!IsDead() || (bAllowRoamWhileDeadSpectating && !bViewBlackWhenDead));
+        return !bViewBlackonDeadNotViewingPlayers
+            && bAllowRoamWhileSpectating
+            && (!IsDead() || (bAllowRoamWhileDeadSpectating && !bViewBlackWhenDead));
     }
     else if (Mode == SPEC_Players)
     {
@@ -7090,7 +7346,8 @@ function ESpectatorMode GetNextValidSpecMode()
 
 state Spectating
 {
-    ignores SwitchWeapon, RestartLevel, ClientRestart, Suicide, ThrowWeapon, NotifyPhysicsVolumeChange, NotifyHeadVolumeChange;
+    ignores SwitchWeapon, RestartLevel, ClientRestart, Suicide, ThrowWeapon, NotifyPhysicsVolumeChange,
+        NotifyHeadVolumeChange;
 
     exec function Jump(optional float F)
     {
@@ -7131,14 +7388,25 @@ function ServerRequestBanInfo(int PlayerID)
 
             if (PlayerID == -1 || PC.PlayerReplicationInfo.PlayerID == PlayerID)
             {
-                Log(Name @ "Sending BanInfo To Client PlayerID:" $ PC.PlayerReplicationInfo.PlayerID @ "Hash:" $ PC.GetPlayerIDHash() @ "Address:" $ PC.GetPlayerNetworkAddress(), 'ChatManager');
+                Log(
+                    Name @ "Sending BanInfo To Client PlayerID:" $ PC.PlayerReplicationInfo.PlayerID @ "Hash:"
+                        $ PC.GetPlayerIDHash() @ "Address:" $ PC.GetPlayerNetworkAddress(),
+                    'ChatManager'
+                    );
 
                 if (ChatManager != none)
                 {
-                    ChatManager.TrackNewPlayer(PC.PlayerReplicationInfo.PlayerID, PC.GetPlayerIDHash(), PC.GetPlayerNetworkAddress());
+                    ChatManager.TrackNewPlayer(
+                        PC.PlayerReplicationInfo.PlayerID,
+                        PC.GetPlayerIDHash(),
+                        PC.GetPlayerNetworkAddress()
+                        );
                 }
 
-                ClientReceiveBan(PC.PlayerReplicationInfo.PlayerID $ Chr(27) $ PC.GetPlayerIDHash() $ Chr(27) $ PC.GetPlayerNetworkAddress());
+                ClientReceiveBan(
+                    PC.PlayerReplicationInfo.PlayerID $ Chr(27) $ PC.GetPlayerIDHash() $ Chr(27)
+                        $ PC.GetPlayerNetworkAddress()
+                    );
             }
         }
     }
@@ -7153,7 +7421,7 @@ function PatronRequestOnResponse(HTTPRequest Request, int Status, TreeMap_string
 
     if (Status == 200)
     {
-        Log("Patron status request success (" $ Status  $ ")");
+        Log("Patron status request success (" $ Status $ ")");
 
         Parser = new Class'JSONParser';
         O = Parser.ParseObject(Content);
@@ -7186,7 +7454,7 @@ function ServerSetPatronTier(string PatronTier)
 }
 
 // Client-to-server function that reports the player's incognito mode to the server.
-function ServerSetIncognitoMode(bool bIsIncognito)
+function ServerSetIncognitoMode(bool bNewIsIncognito)
 {
     local DHPlayerReplicationInfo PRI;
 
@@ -7194,7 +7462,7 @@ function ServerSetIncognitoMode(bool bIsIncognito)
 
     if (PRI != none)
     {
-        PRI.bIsIncognito = bIsIncognito;
+        PRI.bIsIncognito = bNewIsIncognito;
     }
 }
 
@@ -7220,7 +7488,11 @@ function ServerSquadLeaderVolunteer(int TeamIndex, int SquadIndex)
 {
     if (SquadReplicationInfo != none)
     {
-        SquadReplicationInfo.VolunteerForSquadLeader(DHPlayerReplicationInfo(PlayerReplicationInfo), TeamIndex, SquadIndex);
+        SquadReplicationInfo.VolunteerForSquadLeader(
+            DHPlayerReplicationInfo(PlayerReplicationInfo),
+            TeamIndex,
+            SquadIndex
+            );
     }
 }
 
@@ -7331,7 +7603,11 @@ function ServerSendVote(int VoteId, int OptionIndex)
     }
 }
 
-simulated function ClientReceiveVotePrompt(class<DHVoteInfo> VoteInfoClass, int VoteId, optional string OptionalString)
+simulated function ClientReceiveVotePrompt(
+    class<DHVoteInfo> VoteInfoClass,
+    int VoteId,
+    optional string OptionalString
+    )
 {
     // TODO: display the interaction prompt!
     // TODO: how are we showing other interactions?
@@ -7373,13 +7649,62 @@ function ServerUpdateStats(TeamPlayerReplicationInfo PRI);
 function ServerUpdateStatArrays(TeamPlayerReplicationInfo PRI);
 function ServerGetNextWeaponStats(TeamPlayerReplicationInfo PRI, int i);
 function ServerGetNextVehicleStats(TeamPlayerReplicationInfo PRI, int i);
-simulated function ClientSendWeapon(TeamPlayerReplicationInfo PRI, class<Weapon> W, int Kills, int Deaths, int DeathsHolding, int i);
-simulated function ClientSendVehicle(TeamPlayerReplicationInfo PRI, class<Vehicle> V, int Kills, int Deaths, int DeathsDriving, int i);
-simulated function ClientSendSprees(TeamPlayerReplicationInfo PRI,byte Spree0,byte Spree1,byte Spree2,byte Spree3,byte Spree4,byte Spree5);
-simulated function ClientSendMultiKills(TeamPlayerReplicationInfo PRI, byte MultiKills0, byte MultiKills1, byte MultiKills2, byte MultiKills3, byte MultiKills4, byte MultiKills5, byte MultiKills6);
-simulated function ClientSendCombos(TeamPlayerReplicationInfo PRI,byte Combos0, byte Combos1, byte Combos2, byte Combos3, byte Combos4);
-simulated function ClientSendStats(TeamPlayerReplicationInfo PRI, int NewGoals, bool bNewFirstBlood, int Newkills, int NewSuicides,
-    int NewFlagTouches, int NewFlagReturns, int NewFlakCount, int NewComboCount, int NewHeadCount, int NewRanOverCount);
+simulated function ClientSendWeapon(
+    TeamPlayerReplicationInfo PRI,
+    class<Weapon> W,
+    int Kills,
+    int Deaths,
+    int DeathsHolding,
+    int i
+    );
+simulated function ClientSendVehicle(
+    TeamPlayerReplicationInfo PRI,
+    class<Vehicle> V,
+    int Kills,
+    int Deaths,
+    int DeathsDriving,
+    int i
+    );
+simulated function ClientSendSprees(
+    TeamPlayerReplicationInfo PRI,
+    byte Spree0,
+    byte Spree1,
+    byte Spree2,
+    byte Spree3,
+    byte Spree4,
+    byte Spree5
+    );
+simulated function ClientSendMultiKills(
+    TeamPlayerReplicationInfo PRI,
+    byte MultiKills0,
+    byte MultiKills1,
+    byte MultiKills2,
+    byte MultiKills3,
+    byte MultiKills4,
+    byte MultiKills5,
+    byte MultiKills6
+    );
+simulated function ClientSendCombos(
+    TeamPlayerReplicationInfo PRI,
+    byte Combos0,
+    byte Combos1,
+    byte Combos2,
+    byte Combos3,
+    byte Combos4
+    );
+simulated function ClientSendStats(
+    TeamPlayerReplicationInfo PRI,
+    int NewGoals,
+    bool bNewFirstBlood,
+    int Newkills,
+    int NewSuicides,
+    int NewFlagTouches,
+    int NewFlagReturns,
+    int NewFlakCount,
+    int NewComboCount,
+    int NewHeadCount,
+    int NewRanOverCount
+    );
 
 // We're hijacking InventoryActivate (since it does literally nothing and is
 // by default bound to the Enter key which is unused otherwise).
@@ -7495,9 +7820,12 @@ function ClientReceiveSquadMergeRequest(int SquadMergeRequestID, string SenderPl
     Player.InteractionMaster.AddInteraction("DH_Engine.DHSquadMergeRequestInteraction", Player);
 }
 
-
 // Squad Promotion Requests
-function ClientReceiveSquadPromotionRequest(int SquadPromotionRequestID, string SenderPlayerName, string SenderSquadName)
+function ClientReceiveSquadPromotionRequest(
+    int SquadPromotionRequestID,
+    string SenderPlayerName,
+    string SenderSquadName
+    )
 {
     if (bIgnoreSquadPromotionRequestPrompts)
     {
@@ -7572,10 +7900,14 @@ simulated function bool IsLoggedInAsAdmin()
     return PRI != none && PRI.IsLoggedInAsAdmin();
 }
 
-function ClientLocationalVoiceMessage(PlayerReplicationInfo Sender,
-                                      PlayerReplicationInfo Recipient,
-                                      name MessageType, byte MessageID,
-                                      optional Pawn SenderPawn, optional Vector SenderLocation)
+function ClientLocationalVoiceMessage(
+    PlayerReplicationInfo Sender,
+    PlayerReplicationInfo Recipient,
+    name MessageType,
+    byte MessageID,
+    optional Pawn SenderPawn,
+    optional Vector SenderLocation
+    )
 {
     local VoicePack Voice;
     local ROVoicePack V;
@@ -7585,19 +7917,24 @@ function ClientLocationalVoiceMessage(PlayerReplicationInfo Sender,
     local ROPlayerReplicationInfo PRI;
     local DH_LevelInfo LI;
 
-    if (Sender == none || Sender.VoiceType == none || Sender.Team == none ||
-        Player == none || Player.Console == none || Level.NetMode == NM_DedicatedServer)
+    if (Sender == none
+        || Sender.VoiceType == none
+        || Sender.Team == none
+        || Player == none
+        || Player.Console == none
+        || Level.NetMode == NM_DedicatedServer)
     {
         return;
     }
 
     PRI = ROPlayerReplicationInfo(Sender);
-    bIsTeamVoice = Level.GetLocalPlayerController().PlayerReplicationInfo.Team != none && Sender.Team.TeamIndex == Level.GetLocalPlayerController().PlayerReplicationInfo.Team.TeamIndex;
+    bIsTeamVoice = Level.GetLocalPlayerController().PlayerReplicationInfo.Team != none
+        && Sender.Team.TeamIndex == Level.GetLocalPlayerController().PlayerReplicationInfo.Team.TeamIndex;
 
     if (PRI != none && PRI.RoleInfo != none)
     {
-        ROV = Class<ROVoicePack>(DynamicLoadObject(PRI.RoleInfo.VoiceType, Class'Class'));
-        DHV = Class<DHVoicePack>(ROV);
+        ROV = class<ROVoicePack>(DynamicLoadObject(PRI.RoleInfo.VoiceType, Class'Class'));
+        DHV = class<DHVoicePack>(ROV);
 
         if (DHV != none)
         {
@@ -7645,23 +7982,25 @@ function VehicleVoiceMessage(PlayerReplicationInfo Sender, string Msg)
 {
     local ROBroadcastHandler Handler;
 
-    if (Level != none &&
-        Level.Game != none &&
-        Level.Game.BroadcastHandler != none &&
-        Level.Game.BroadcastHandler.IsA('ROBroadcastHandler'))
+    if (Level != none
+        && Level.Game != none
+        && Level.Game.BroadcastHandler != none
+        && Level.Game.BroadcastHandler.IsA('ROBroadcastHandler'))
     {
         Handler = ROBroadcastHandler(Level.Game.BroadcastHandler);
         Handler.BroadcastText(Sender, self, Msg, 'VehicleVoiceSay');
     }
 }
 
-function SendVoiceMessage(PlayerReplicationInfo Sender,
-                          PlayerReplicationInfo Recipient,
-                          name MessageType,
-                          byte MessageID,
-                          name BroadcastType,
-                          optional Pawn SoundSender,
-                          optional Vector SenderLocation)
+function SendVoiceMessage(
+    PlayerReplicationInfo Sender,
+    PlayerReplicationInfo Recipient,
+    name MessageType,
+    byte MessageID,
+    name BroadcastType,
+    optional Pawn SoundSender,
+    optional Vector SenderLocation
+    )
 {
     local Controller P;
     local ROPlayer ROP;
@@ -7713,21 +8052,29 @@ function SendVoiceMessage(PlayerReplicationInfo Sender,
                 {
                     DistanceToOther = VSize(Pawn.Location - ROP.Pawn.Location);
 
-                    if (Class'ROVoicePack'.static.isValidDistanceForMessageType(MessageType,DistanceToOther))
+                    if (Class'ROVoicePack'.static.isValidDistanceForMessageType(MessageType, DistanceToOther))
                     {
-                        ROP.ClientLocationalVoiceMessage(Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation);
+                        ROP.ClientLocationalVoiceMessage(
+                            Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation
+                            );
                     }
                 }
                 else
                 {
                     // Sending to self
-                   ROP.ClientLocationalVoiceMessage(Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation);
+                    ROP.ClientLocationalVoiceMessage(
+                        Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation
+                        );
                 }
             }
         }
-        else if ((MessageType == 'ORDER' || MessageType == 'ATTACK' || MessageType == 'DEFEND') &&
-                 (Recipient == none || Recipient == P.PlayerReplicationInfo ||
-                 (Bot(P) != none && Bot(P).Squad != none && Bot(P).Squad.SquadLeader != none && Bot(P).Squad.SquadLeader.PlayerReplicationInfo == Recipient)))
+        else if ((MessageType == 'ORDER' || MessageType == 'ATTACK' || MessageType == 'DEFEND')
+            && (Recipient == none
+                || Recipient == P.PlayerReplicationInfo
+                || (Bot(P) != none
+                    && Bot(P).Squad != none
+                    && Bot(P).Squad.SquadLeader != none
+                    && Bot(P).Squad.SquadLeader.PlayerReplicationInfo == Recipient)))
         {
             P.BotVoiceMessage(MessageType, MessageID, self);
         }
@@ -7775,13 +8122,15 @@ function SendVoiceMessage(PlayerReplicationInfo Sender,
     }
 }
 
-function SendVehicleVoiceMessage(PlayerReplicationInfo Sender,
-                                 PlayerReplicationInfo Recipient,
-                                 name MessageType,
-                                 byte MessageID,
-                                 name BroadcastType)
+function SendVehicleVoiceMessage(
+    PlayerReplicationInfo Sender,
+    PlayerReplicationInfo Recipient,
+    name MessageType,
+    byte MessageID,
+    name BroadcastType
+    )
 {
-    local ROPlayer ROP,P;
+    local ROPlayer ROP, P;
     local int i;
     local array<PlayerController> VehicleOccupants;
 
@@ -7790,7 +8139,7 @@ function SendVehicleVoiceMessage(PlayerReplicationInfo Sender,
 
     for (i = 0; i < VehicleOccupants.Length; ++i)
     {
-        ROP =  ROPlayer(VehicleOccupants[i]);
+        ROP = ROPlayer(VehicleOccupants[i]);
 
         // Sender is banned by recipient
         if (ROP.ChatManager != none && !ROP.ChatManager.AcceptSpeech(Sender))
@@ -7798,7 +8147,7 @@ function SendVehicleVoiceMessage(PlayerReplicationInfo Sender,
             continue;
         }
 
-        if (ROP != None)
+        if (ROP != none)
         {
             ROP.ClientLocationalVoiceMessage(Sender, Recipient, MessageType, MessageID, Pawn);
         }
@@ -7822,10 +8171,7 @@ simulated function GetEyeTraceLocation(out Vector HitLocation, out Vector HitNor
 
     foreach TraceActors(Class'Actor', A, HitLocation, HitNormal, TraceEnd, TraceStart)
     {
-        if (A == Pawn ||
-            A == PawnVehicleBase ||
-            A.IsA('ROBulletWhipAttachment') ||
-            A.IsA('Volume'))
+        if (A == Pawn || A == PawnVehicleBase || A.IsA('ROBulletWhipAttachment') || A.IsA('Volume'))
         {
             continue;
         }
@@ -7870,8 +8216,8 @@ simulated function bool CanUseFireSupportMenu()
 function AddMarker(class<DHMapMarker> MarkerClass, float MapLocationX, float MapLocationY, optional Vector L)
 {
     local DHGameReplicationInfo GRI;
-    local Vector                WorldLocation;
-    local int                   MapMarkerPlacingLockTimeout;
+    local Vector WorldLocation;
+    local int MapMarkerPlacingLockTimeout;
 
     GRI = DHGameReplicationInfo(GameReplicationInfo);
 
@@ -7891,7 +8237,11 @@ function AddMarker(class<DHMapMarker> MarkerClass, float MapLocationX, float Map
 
         if (MapMarkerPlacingLockTimeout > 0)
         {
-            ReceiveLocalizedMessage(Class'DHFireSupportMessage', 1,,, Class'UInteger'.static.Create(MapMarkerPlacingLockTimeout));
+            ReceiveLocalizedMessage(
+                Class'DHFireSupportMessage',
+                1,,,
+                Class'UInteger'.static.Create(MapMarkerPlacingLockTimeout)
+                );
             return;
         }
     }
@@ -7981,7 +8331,7 @@ simulated function int GetMapMarkerLockExpiryTime(class<DHMapMarker> MapMarkerCl
         return 0;
     }
 
-    switch(MapMarkerClass.default.OverwritingRule)
+    switch (MapMarkerClass.default.OverwritingRule)
     {
         case UNIQUE:
             for (i = 0; i < arraycount(MapMarkerCooldowns); i++)
@@ -7995,7 +8345,8 @@ simulated function int GetMapMarkerLockExpiryTime(class<DHMapMarker> MapMarkerCl
         case UNIQUE_PER_GROUP:
             for (i = 0; i < arraycount(MapMarkerCooldowns); i++)
             {
-                if (MapMarkerCooldowns[i].Type == MMCT_Group && MapMarkerCooldowns[i].GroupIndex == MapMarkerClass.default.GroupIndex)
+                if (MapMarkerCooldowns[i].Type == MMCT_Group
+                    && MapMarkerCooldowns[i].GroupIndex == MapMarkerClass.default.GroupIndex)
                 {
                     return MapMarkerCooldowns[i].ExpiryTime;
                 }
@@ -8041,7 +8392,8 @@ simulated function int GetMapMarkerCooldownIndex(class<DHMapMarker> MapMarkerCla
                 }
                 break;
             case UNIQUE_PER_GROUP:
-                if (MapMarkerCooldowns[i].Type == MMCT_Group && MapMarkerCooldowns[i].GroupIndex == MapMarkerClass.default.GroupIndex)
+                if (MapMarkerCooldowns[i].Type == MMCT_Group
+                    && MapMarkerCooldowns[i].GroupIndex == MapMarkerClass.default.GroupIndex)
                 {
                     return i;
                 }
@@ -8061,7 +8413,7 @@ simulated function int GetMapMarkerCooldownIndex(class<DHMapMarker> MapMarkerCla
     return -1;
 }
 
-function SetMapMarkerClassLock(class <DHMapMarker> MapMarkerClass, int ExpiryTime)
+function SetMapMarkerClassLock(class<DHMapMarker> MapMarkerClass, int ExpiryTime)
 {
     local int Index;
 
@@ -8158,7 +8510,10 @@ function ERoleEnabledResult GetRoleEnabledResult(DHRoleInfo RI)
     PRI = DHPlayerReplicationInfo(PlayerReplicationInfo);
     GRI = DHGameReplicationInfo(GameReplicationInfo);
 
-    if (RI == none || PRI == none || GRI == none) { return RER_Fatal; }
+    if (RI == none || PRI == none || GRI == none)
+    {
+        return RER_Fatal;
+    }
 
     if (RI.bIsLocked)
     {

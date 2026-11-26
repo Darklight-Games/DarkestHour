@@ -9,41 +9,42 @@
 class DHMortarCannonPawn extends DHATGunCannonPawn
     abstract;
 
-var     int     FiringDriverPositionIndex;      // The driver position index that allows the gun to be fired.
+var int FiringDriverPositionIndex; // The driver position index that allows the gun to be fired.
 
-var     float   FiringStartTimeSeconds;         // The time at which the firing animation started, relative to Level.TimeSeconds.
-var     float   OverlayFiringAnimDuration;      // The duration of the firing animation on the overlay mesh. Calculated when entering the Firing state.
-var()   float   FireDelaySeconds;               // The amount of time to wait into the firing animation before actually firing the round.
+var float FiringStartTimeSeconds; // The time at which the firing animation started, relative to Level.TimeSeconds.
+var float OverlayFiringAnimDuration; // The duration of the firing animation on the overlay mesh. Calculated when entering the Firing state.
+var() float FireDelaySeconds; // The amount of time to wait into the firing animation before actually firing the round.
 
-var()   name    HandsFiringCameraBone;          // The name of the bone to use for the camera while firing.
-var()   name    HandsFiringAnimName;            // The name of the firing animation on the hands mesh.
+var() name HandsFiringCameraBone; // The name of the bone to use for the camera while firing.
+var() name HandsFiringAnimName; // The name of the firing animation on the hands mesh.
 
-var()   float   HandsFiringShowInTime;          // The amount of time to wait before showing the hands when firing.
-var()   float   HandsFiringShowOutTime;         // The amount of time to wait before hiding the hands after firing.
+var() float HandsFiringShowInTime; // The amount of time to wait before showing the hands when firing.
+var() float HandsFiringShowOutTime; // The amount of time to wait before hiding the hands after firing.
 
-var()   float   FiringCameraInTime;             // How long it takes to interpolate the camera to the firing camera position at the start of the firing animation.
-var()   float   FiringCameraOutTime;            // How long it takes to interpolate the camera back to the normal position at the end of the firing animation.
+var() float FiringCameraInTime; // How long it takes to interpolate the camera to the firing camera position at the start of the firing animation.
+var() float FiringCameraOutTime; // How long it takes to interpolate the camera back to the normal position at the end of the firing animation.
 
-var()   float   FiringCameraLocationFactor;
-var()   float   FiringCameraRotationFactor;
+var() float FiringCameraLocationFactor;
+var() float FiringCameraRotationFactor;
 
-var()   float   ProjectileLifeSpan;             // The life span of the projectile attached to the gunner's hand.
+var() float ProjectileLifeSpan; // The life span of the projectile attached to the gunner's hand.
 
 // First person hands.
-var     DHFirstPersonHands  HandsActor;                 // The first person hands actor.
-var     Mesh                HandsMesh;                  // The first person hands mesh.
-var     DHDecoAttachment    HandsProjectile;            // The first person projectile actor.
-var     int                 HandsProjectileRollRange;   // The maximum amount of roll deviation for the first person projectile actor.
+var DHFirstPersonHands HandsActor; // The first person hands actor.
+var Mesh HandsMesh; // The first person hands mesh.
+var DHDecoAttachment HandsProjectile; // The first person projectile actor.
+var int HandsProjectileRollRange; // The maximum amount of roll deviation for the first person projectile actor.
 
-var()   Vector              HandsRelativeLocation;  // The location of the hands in actor relation to it's attachment bone.
-var()   name                HandsAttachBone;        // The bone to attach the first person hands to.
-var()   name                HandsProjectileBone;    // The bone to attach the first person projectile to.
+var() Vector HandsRelativeLocation; // The location of the hands in actor relation to it's attachment bone.
+var() name HandsAttachBone; // The bone to attach the first person hands to.
+var() name HandsProjectileBone; // The bone to attach the first person projectile to.
 
 struct FireAnim
 {
     var float Angle;
     var name AnimName;
 };
+
 var private array<FireAnim> PlayerFireAnims;
 
 // Used for triggering the firing animation on the client since
@@ -96,7 +97,7 @@ simulated function PostNetReceive()
 exec function CalibrateMortar(string AngleUnitString, int Samples)
 {
     local DHBallisticProjectile BP;
-    local int Pitch;    // Unreal units.
+    local int Pitch; // Unreal units.
     local int MinPitch, MaxPitch;
     local float PitchStep;
     local UUnits.EAngleUnit AngleUnit;
@@ -349,37 +350,37 @@ function ServerPlayThirdPersonFiringAnim(class<Projectile> ProjectileClass)
 simulated state Firing
 {
     // Don't let the user move, leave, or change the round type while firing.
-    simulated function Fire(optional float F) { }
-    function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange) { }
-    exec simulated function SwitchFireMode() { }
-    function bool KDriverLeave(bool bForceLeave) { return false; }
-    simulated function NextWeapon() { }
-    simulated function PrevWeapon() { }
+    simulated function Fire(optional float F);
+    function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange);
+    exec simulated function SwitchFireMode();
+    function bool KDriverLeave(bool bForceLeave);
+    simulated function NextWeapon();
+    simulated function PrevWeapon();
 
     // Calculate the linear interpolation value for the camera position and rotation.
     simulated function float GetCameraInterpolationTheta()
     {
         return Class'UInterp'.static.LerpBilateral(
-            Level.TimeSeconds, 
-            FiringStartTimeSeconds, 
-            FiringStartTimeSeconds + OverlayFiringAnimDuration, 
-            FiringCameraInTime,
-            FiringCameraOutTime
-        );
+            Level.TimeSeconds, FiringStartTimeSeconds, FiringStartTimeSeconds + OverlayFiringAnimDuration,
+            FiringCameraInTime, FiringCameraOutTime
+            );
     }
 
     simulated function bool GetHandsHidden()
     {
         return Class'UInterp'.static.LerpBilateral(
-            Level.TimeSeconds, 
-            FiringStartTimeSeconds, 
-            FiringStartTimeSeconds + OverlayFiringAnimDuration, 
-            HandsFiringShowInTime,
-            HandsFiringShowOutTime
-        ) < 1.0;
+            Level.TimeSeconds, FiringStartTimeSeconds, FiringStartTimeSeconds + OverlayFiringAnimDuration,
+            HandsFiringShowInTime, HandsFiringShowOutTime
+            )
+            < 1.0;
     }
 
-    simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+    simulated function SpecialCalcFirstPersonView(
+        PlayerController PC,
+        out Actor ViewActor,
+        out Vector CameraLocation,
+        out Rotator CameraRotation
+        )
     {
         local float Theta;
         local Vector NormalCameraLocation, FiringCameraLocation;
@@ -393,7 +394,11 @@ simulated state Firing
 
         // Convert the X, Y and Z axis from the bone coords to a quaternion.
         FiringCameraRotation = QuatToRotator(
-            Class'UQuaternion'.static.FromAxes(FiringCameraBoneCoords.XAxis, FiringCameraBoneCoords.YAxis, FiringCameraBoneCoords.ZAxis)
+            Class'UQuaternion'.static.FromAxes(
+                FiringCameraBoneCoords.XAxis,
+                FiringCameraBoneCoords.YAxis,
+                FiringCameraBoneCoords.ZAxis
+                )
             );
 
         // Get the linear theta.
@@ -406,8 +411,18 @@ simulated state Firing
         global.SpecialCalcFirstPersonView(PC, ViewActor, NormalCameraLocation, NormalCameraRotation);
 
         ViewActor = self;
-        CameraLocation = Class'UVector'.static.VLerp(Theta * FiringCameraLocationFactor, NormalCameraLocation, FiringCameraLocation);
-        CameraRotation = QuatToRotator(QuatSlerp(QuatFromRotator(NormalCameraRotation), QuatFromRotator(FiringCameraRotation), Theta * FiringCameraRotationFactor));
+        CameraLocation = Class'UVector'.static.VLerp(
+            Theta * FiringCameraLocationFactor,
+            NormalCameraLocation,
+            FiringCameraLocation
+            );
+        CameraRotation = QuatToRotator(
+            QuatSlerp(
+                QuatFromRotator(NormalCameraRotation),
+                QuatFromRotator(FiringCameraRotation),
+                Theta * FiringCameraRotationFactor
+                )
+            );
 
         // Neutralize the roll to prevent motion sickness.
         CameraRotation.Roll = CameraRotation.Roll * (1.0 - Theta);
@@ -444,7 +459,7 @@ simulated state Firing
             }
 
             // TODO: turn off the rotate sound
-            //Cannon.Base.RotateSoundAttachment.SoundVolume = 0;
+            // Cannon.Base.RotateSoundAttachment.SoundVolume = 0;
 
             // Update the hands projectile mesh to the round we are about to fire.
             UpdateHandsProjectileStaticMesh();

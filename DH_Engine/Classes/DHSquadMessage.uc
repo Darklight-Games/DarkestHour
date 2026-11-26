@@ -65,7 +65,12 @@ var localized string SquadPromotionRequestAcceptedMessage;
 var localized string SquadPromotionRequestSentMessage;
 var localized string SquadPromotionRequestDuplicateMessage;
 
-static function string GetString(optional int S, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int S,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local int ExtraValue;
     local DHConstruction C;
@@ -138,6 +143,7 @@ static function string GetString(optional int S, optional PlayerReplicationInfo 
             return default.RallyPointSwapped;
         case 60:
             C = DHConstruction(OptionalObject);
+
             if (C != none)
             {
                 return Repl(default.RallyPointTooCloseToConstruction, "{0}", C.MenuName);
@@ -171,9 +177,13 @@ static function string GetString(optional int S, optional PlayerReplicationInfo 
         case 72:
             return Repl(default.NewAssistantMessage, "{0}", RelatedPRI_1.PlayerName);
         case 73:
-            return Class'ROTeamGame'.static.ParseLoadingHintNoColor(default.NotInSquadMessage, PlayerController(OptionalObject));
+            return Class'ROTeamGame'.static.ParseLoadingHintNoColor(
+                default.NotInSquadMessage,
+                PlayerController(OptionalObject)
+                );
         case 74:
             SRI = DHSquadReplicationInfo(OptionalObject);
+
             if (SRI != none || RelatedPRI_1 != none || RelatedPRI_1.Team != none)
             {
                 SquadName = SRI.GetSquadName(RelatedPRI_1.Team.TeamIndex, ExtraValue);
@@ -187,6 +197,7 @@ static function string GetString(optional int S, optional PlayerReplicationInfo 
             return default.SquadMergedDestinationMessage;
         case 76:
             SRI = DHSquadReplicationInfo(OptionalObject);
+
             if (SRI != none)
             {
                 SquadName = SRI.GetSquadName(RelatedPRI_1.Team.TeamIndex, ExtraValue);
@@ -220,7 +231,7 @@ static function string GetString(optional int S, optional PlayerReplicationInfo 
 
 defaultproperties
 {
-    DrawColor=(R=0,G=252,B=126,A=255)
+    DrawColor=(R=124,G=252,B=0,A=255)
     JoinedMessage="{0} has joined the squad."
     LeftMessage="{0} has left the squad."
     KickedMessage="You have been kicked from the squad."

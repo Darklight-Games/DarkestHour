@@ -28,4 +28,3 @@ defaultproperties
     AmmoShellTexture=Texture'InterfaceArt_tex.panzer4F2shell'
     AmmoShellReloadTexture=Texture'InterfaceArt_tex.panzer4F2shell_reload'
 }
-

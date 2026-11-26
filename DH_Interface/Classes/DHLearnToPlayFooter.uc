@@ -5,9 +5,9 @@
 
 class DHLearnToPlayFooter extends ButtonFooter;
 
-var     automated GUIButton                 b_Back;
+var automated GUIButton b_Back;
 
-var     DHLearnToPlayPage                   Owner;
+var DHLearnToPlayPage Owner;
 
 function InitComponent(GUIController InController, GUIComponent InOwner)
 {

@@ -61,19 +61,26 @@ simulated state Intact
         super.Touch(Other);
     }
 
-    simulated function TakeDamage(int Damage, Pawn EventInstigator, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+    simulated function TakeDamage(
+        int Damage,
+        Pawn EventInstigator,
+        Vector HitLocation,
+        Vector Momentum,
+        class<DamageType> DamageType,
+        optional int HitIndex
+        )
     {
         local DarkestHourGame G;
 
         if (Role == ROLE_Authority)
         {
             // Determine if the obstacle can be destroyed by explosives or weapons and make sure the damage meets the threshold for destruction
-            if ((Info.CanBeDestroyedByExplosives() &&
-                !DamageType.default.bLocationalHit &&
-                Damage >= Info.GetExplosionDamageThreshold()) ||
-                (Info.CanBeDestroyedByWeapons() &&
-                DamageType.default.bLocationalHit &&
-                Damage >= Info.GetDamageThreshold()))
+            if ((Info.CanBeDestroyedByExplosives()
+                    && !DamageType.default.bLocationalHit
+                    && Damage >= Info.GetExplosionDamageThreshold())
+                || (Info.CanBeDestroyedByWeapons()
+                    && DamageType.default.bLocationalHit
+                    && Damage >= Info.GetDamageThreshold()))
             {
                 G = DarkestHourGame(Level.Game);
 
@@ -107,8 +114,7 @@ simulated function SetCleared(bool bIsCleared)
 
     if (bIsCleared && !IsInState('Cleared'))
     {
-        if (Level.NetMode != NM_DedicatedServer &&
-            !IsInState('DHObstacleInstance'))
+        if (Level.NetMode != NM_DedicatedServer && !IsInState('DHObstacleInstance'))
         {
             ClearSound = Info.GetClearSound(ClearSoundRadius);
             ClearEmitterClass = Info.GetClearEmitterClass();

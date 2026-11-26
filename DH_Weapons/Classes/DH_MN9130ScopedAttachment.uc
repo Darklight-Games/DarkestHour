@@ -8,7 +8,7 @@ class DH_MN9130ScopedAttachment extends DHWeaponAttachment;
 // Modified so we skip the Super if we've just played the reload or pre-reload animation
 simulated function AnimEnd(int Channel)
 {
-    local name  Anim;
+    local name Anim;
     local float Frame, Rate;
 
     GetAnimParams(0, Anim, Frame, Rate);

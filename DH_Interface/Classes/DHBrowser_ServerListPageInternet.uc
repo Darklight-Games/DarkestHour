@@ -5,8 +5,8 @@
 
 class DHBrowser_ServerListPageInternet extends ROUT2k4Browser_ServerListPageInternet;
 
-var bool            bDisableWhitelist;  // Kill-switch for the whitelist.
-var array<string>   ServerWhitelist;    // Show only servers in this list if they aren't password-protected.
+var bool bDisableWhitelist; // Kill-switch for the whitelist.
+var array<string> ServerWhitelist; // Show only servers in this list if they aren't password-protected.
 
 function InitServerList()
 {

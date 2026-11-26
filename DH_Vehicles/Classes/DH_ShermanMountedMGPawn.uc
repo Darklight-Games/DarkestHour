@@ -8,7 +8,12 @@ class DH_ShermanMountedMGPawn extends DHVehicleMGPawn;
 // Modified so player's view rotation isn't matched to the MG's aiming direction, as he's aiming it through his periscope
 // Note we could easily make it so periscope view is allowed to yaw with the MG, while preventing any view pitch, which would also be plausible
 // But no need as fixed periscope view covers full firing range of MG, & anyway if co-driver is firing MG he can't realistically adjust his periscope
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    )
 {
     ViewActor = self;
 
@@ -27,15 +32,17 @@ simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor Vie
 simulated function DrawHUD(Canvas C)
 {
     local PlayerController PC;
-    local Vector           GunOffset;
-    local float            SavedOpacity;
+    local Vector GunOffset;
+    local float SavedOpacity;
 
     PC = PlayerController(Controller);
 
     if (PC != none && !PC.bBehindView)
     {
         // Player is in a position where an overlay should be drawn
-        if (!bMultiPosition || (DriverPositions[DriverPositionIndex].bDrawOverlays && (!IsInState('ViewTransition') || DriverPositions[LastPositionIndex].bDrawOverlays)))
+        if (!bMultiPosition
+            || (DriverPositions[DriverPositionIndex].bDrawOverlays
+                && (!IsInState('ViewTransition') || DriverPositions[LastPositionIndex].bDrawOverlays)))
         {
             // Draw any gun HUD overlay
             if (HUDOverlay != none && DriverPositionIndex != BinocPositionIndex)
@@ -47,11 +54,15 @@ simulated function DrawHUD(Canvas C)
                     // This makes the first person gun appear lower if player raises his head above the gun
                     if (FirstPersonGunRefBone != '' && Gun != none)
                     {
-                        GunOffset.Z += (Gun.GetBoneCoords(FirstPersonGunRefBone).Origin.Z - PC.CalcViewLocation.Z) * FirstPersonOffsetZScale;
+                        GunOffset.Z += (Gun.GetBoneCoords(FirstPersonGunRefBone).Origin.Z - PC.CalcViewLocation.Z)
+                            * FirstPersonOffsetZScale;
                     }
 
                     HUDOverlay.SetLocation(PC.CalcViewLocation);
-                    C.DrawBoundActor(HUDOverlay, false, true, HUDOverlayFOV, PC.CalcViewRotation, PC.ShakeRot * FirstPersonGunShakeScale, -GunOffset);
+                    C.DrawBoundActor(
+                        HUDOverlay, false, true, HUDOverlayFOV, PC.CalcViewRotation,
+                        PC.ShakeRot * FirstPersonGunShakeScale, -GunOffset
+                        );
                 }
             }
 
@@ -98,9 +109,15 @@ simulated function DrawGunsightOverlay(Canvas C)
     ScreenRatio = float(C.SizeY) / float(C.SizeX);
     C.SetPos(0.0, 0.0);
 
-    C.DrawTile(GunsightOverlay, C.SizeX, C.SizeY,                                // screen drawing area (to fill screen)
-        0.0, (1.0 - ScreenRatio) * float(GunsightOverlay.MaterialVSize()) / 2.0, // position in texture to begin drawing tile (from left edge, with vertical position to suit screen aspect ratio)
-        GunsightOverlay.MaterialUSize(), float(GunsightOverlay.MaterialVSize()) * ScreenRatio); // width & height of tile within texture
+    C.DrawTile(
+        GunsightOverlay,
+        C.SizeX,
+        C.SizeY, // screen drawing area (to fill screen)
+        0.0,
+        (1.0 - ScreenRatio) * float(GunsightOverlay.MaterialVSize()) / 2.0, // position in texture to begin drawing tile (from left edge, with vertical position to suit screen aspect ratio)
+        GunsightOverlay.MaterialUSize(),
+        float(GunsightOverlay.MaterialVSize()) * ScreenRatio
+        ); // width & height of tile within texture
 }
 
 defaultproperties

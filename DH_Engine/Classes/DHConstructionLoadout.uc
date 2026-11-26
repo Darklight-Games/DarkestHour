@@ -6,26 +6,26 @@
 //==============================================================================
 
 class DHConstructionLoadout extends Object
-    dependson(DHConstructionTypes)
-    abstract;
+    abstract
+    dependson(DHConstructionTypes);
 
 struct SConstruction
 {
     var class<DHConstruction> ConstructionClass;
-    var int Limit;      // The total limit alotted per round. -1 means no limit.
-    var int MaxActive;  // The maximum amount active at a time. -1 means no limit.
-    var byte Tag;       // Optional tag to group similar constructions together for limit purposes. 0 means no tag.
+    var int Limit; // The total limit alotted per round. -1 means no limit.
+    var int MaxActive; // The maximum amount active at a time. -1 means no limit.
+    var byte Tag; // Optional tag to group similar constructions together for limit purposes. 0 means no tag.
 };
 
 struct STagLimit
 {
     var byte Tag;
-    var int Limit;      // The total limit alotted per round. -1 means no limit.
-    var int MaxActive;  // The maximum amount active at a time. -1 means no limit.
+    var int Limit; // The total limit alotted per round. -1 means no limit.
+    var int MaxActive; // The maximum amount active at a time. -1 means no limit.
 };
 
 var array<SConstruction> Constructions;
-var array<Class<DHConstructionLoadout> > Loadouts;
+var array<class<DHConstructionLoadout> > Loadouts;
 var array<DHConstructionTypes.SConstructionTagLimit> TagLimits;
 
 // static function byte GetConstructionTag(class<DHConstruction> ConstructionClass)

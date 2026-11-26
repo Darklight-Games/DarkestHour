@@ -5,7 +5,6 @@
 
 class DHBulletHitEffectLarge extends DHHitEffect;
 
-
 defaultproperties
 {
     HitEffects(0)=(HitDecal=Class'BulletHoleDirt',HitEffect=Class'DHBulletHitDefaultEffectLarge',HitSound=Sound'ProjectileSounds.Impact_Dirt')          // Default (Dirt?)

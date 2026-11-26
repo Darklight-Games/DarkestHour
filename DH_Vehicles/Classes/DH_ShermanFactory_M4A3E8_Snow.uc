@@ -9,4 +9,3 @@ defaultproperties
 {
     VehicleClass=Class'DH_ShermanTank_M4A3E8_Snow'
 }
-

@@ -50,4 +50,3 @@ defaultproperties
 
     //SquadMemberCountMinimum=1 // DEBUG USE
 }
-

@@ -23,7 +23,7 @@ struct GridCoordinate
 {
     var byte Column;
     var byte Row;
-    var byte Keypad;    // If 0, then the entire square is being referred to.
+    var byte Keypad; // If 0, then the entire square is being referred to.
 };
 
 static function string GetGridCoordinateToString(GridCoordinate Coordinate)
@@ -61,11 +61,12 @@ static function GridCoordinate GetGridCoordinateFromString(string CoordinateStri
 static function GridCoordinate GetGridCoordinatesFromWorldLocation(
     DHGameReplicationInfo GRI,
     Vector WorldLocation,
-    optional bool bIncludeKeypad)
+    optional bool bIncludeKeypad
+    )
 {
     local GridCoordinate Coordinate;
     local float X, Y;
-    
+
     GRI.GetMapCoords(WorldLocation, X, Y);
 
     X = FClamp(X, 0.0, 1.0);
@@ -85,7 +86,12 @@ static function GridCoordinate GetGridCoordinatesFromWorldLocation(
 }
 
 // Returns the grid coordinate from untranslated normalized map coordinates (0.0 to 1.0).
-static function GridCoordinate GetGridCoordinatesFromMapCoordinates(DHGameReplicationInfo GRI, float X, float Y, optional bool bIncludeKeypad)
+static function GridCoordinate GetGridCoordinatesFromMapCoordinates(
+    DHGameReplicationInfo GRI,
+    float X,
+    float Y,
+    optional bool bIncludeKeypad
+    )
 {
     return GetGridCoordinatesFromWorldLocation(GRI, GRI.GetWorldCoords(X, Y), bIncludeKeypad);
 }
@@ -98,6 +104,7 @@ static function int GridCoordinateCompress(GridCoordinate Coordinate)
 static function GridCoordinate GridCoordinateDecompress(int Compressed)
 {
     local GridCoordinate Coordinate;
+
     Class'UInteger'.static.ToBytes(Compressed, Coordinate.Column, Coordinate.Row, Coordinate.Keypad);
     return Coordinate;
 }

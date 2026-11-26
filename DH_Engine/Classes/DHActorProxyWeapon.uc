@@ -5,23 +5,28 @@
 
 class DHActorProxyWeapon extends DHWeapon;
 
-var DHActorProxy                    ProxyCursor;
+var DHActorProxy ProxyCursor;
 
 var class<DHActorProxyErrorMessage> ErrorMessageClass;
-var class<DHControlsMessage>        ControlsMessageClass;
+var class<DHControlsMessage> ControlsMessageClass;
 
-var() bool                          bCanRotateCursor;
-var() int                           LocalRotationRate;
-var() protected float               TraceDepthMeters;
-var() protected float               TraceHeightMeters;
+var() bool bCanRotateCursor;
+var() int LocalRotationRate;
+var() protected float TraceDepthMeters;
+var() protected float TraceHeightMeters;
 
-var Sound                           ClickSound;
+var Sound ClickSound;
 
 simulated function DHActorProxy CreateProxyCursor();
 simulated function OnConfirmPlacement();
 simulated function bool ShouldSnapRotation();
 simulated function float GetRotationSnapAngle();
-simulated function float GetLocalRotationRate() { return LocalRotationRate; }
+
+simulated function float GetLocalRotationRate()
+{
+    return LocalRotationRate;
+}
+
 simulated function ResetCursor();
 
 simulated function bool ShouldSwitchToLastWeaponOnPlacement()
@@ -96,7 +101,9 @@ simulated function OnTick(float DeltaTime)
 
     if (!ProxyCursor.bHidden)
     {
-        ProxyCursor.UpdateParameters(HitLocation, PC.CalcViewRotation, HitActor, HitNormal, bool(bLimitLocalRotation), LocalRotationYawRange);
+        ProxyCursor.UpdateParameters(
+            HitLocation, PC.CalcViewRotation, HitActor, HitNormal, bool(bLimitLocalRotation), LocalRotationYawRange
+            );
 
         if (IsInState('RaisingWeapon') || IsInState('LoweringWeapon'))
         {
@@ -113,7 +120,12 @@ simulated function OnTick(float DeltaTime)
         {
             if (ControlsMessageClass != none)
             {
-                Instigator.ReceiveLocalizedMessage(ControlsMessageClass, 0, Instigator.PlayerReplicationInfo,, ProxyCursor);
+                Instigator.ReceiveLocalizedMessage(
+                    ControlsMessageClass,
+                    0,
+                    Instigator.PlayerReplicationInfo,,
+                    ProxyCursor
+                    );
             }
         }
     }
@@ -229,7 +241,7 @@ simulated function bool WeaponLeanLeft()
     if (CanRotateCursor())
     {
         if (ProxyCursor != none)
-        { 
+        {
             if (ShouldSnapRotation())
             {
                 ProxyCursor.LocalRotation.Yaw -= GetRotationSnapAngle();

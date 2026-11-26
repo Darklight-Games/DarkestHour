@@ -13,9 +13,10 @@ class DHVehicleTouchControlsMessage extends DHControlsMessage
 static function string GetHeaderString(
     optional PlayerReplicationInfo RelatedPRI_1,
     optional PlayerReplicationInfo RelatedPRI_2,
-    optional Object OptionalObject)
+    optional Object OptionalObject
+    )
 {
-    if (Vehicle(OptionalObject) == None)
+    if (Vehicle(OptionalObject) == none)
     {
         return "";
     }

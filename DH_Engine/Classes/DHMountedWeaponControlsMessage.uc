@@ -6,7 +6,13 @@
 class DHMountedWeaponControlsMessage extends DHControlsMessage
     abstract;
 
-static function bool ShouldShowControl(int Index, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function bool ShouldShowControl(
+    int Index,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local DHMountedWeapon MW;
 
@@ -26,7 +32,13 @@ static function bool ShouldShowControl(int Index, optional int Switch, optional 
     }
 }
 
-static function string GetControlText(int Index, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetControlText(
+    int Index,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string Text;
     local DHMountedWeapon MW;

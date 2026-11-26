@@ -5,24 +5,24 @@
 
 class DHRadio extends Actor;
 
-var int                 TeamIndex;
-var float               ResponseDelaySeconds;
-var float               UsageDistanceMaximumMeters;
+var int TeamIndex;
+var float ResponseDelaySeconds;
+var float UsageDistanceMaximumMeters;
 
-var float               ResponseSoundVolume;
-var float               ResponseSoundRadius;
+var float ResponseSoundVolume;
+var float ResponseSoundRadius;
 
 // Map icon
-var bool                bShouldShowOnSituationMap;
-var Material            MapIconMaterial;
+var bool bShouldShowOnSituationMap;
+var Material MapIconMaterial;
 
-var DHArtilleryRequest  Request;
+var DHArtilleryRequest Request;
 
 // A reference to the pawn that carries this radio (used for scoring).
-var DHPawn              Carrier;
+var DHPawn Carrier;
 
 // Used to signal to the client that the radio cannot be used.
-var protected bool      bIsBusy;
+var protected bool bIsBusy;
 
 var class<LocalMessage> ArtilleryMessageClass;
 
@@ -35,7 +35,7 @@ enum ERadioUsageError
     ERROR_Busy,
     ERROR_TooFarAway,
     ERROR_Calibrating,
-    ERROR_Fatal
+    ERROR_Fatal,
 };
 
 replication
@@ -216,12 +216,12 @@ state Requesting extends Busy
             return;
         }
 
-        if (Request == none ||
-            Request.Sender == none ||
-            Request.ArtilleryTypeIndex < 0 ||
-            Request.ArtilleryTypeIndex >= LI.ArtilleryTypes.Length ||
-            LI.ArtilleryTypes[Request.ArtilleryTypeIndex].ArtilleryClass == none ||
-            LI.ArtilleryTypes[Request.ArtilleryTypeIndex].TeamIndex != Request.Sender.GetTeamNum())
+        if (Request == none
+            || Request.Sender == none
+            || Request.ArtilleryTypeIndex < 0
+            || Request.ArtilleryTypeIndex >= LI.ArtilleryTypes.Length
+            || LI.ArtilleryTypes[Request.ArtilleryTypeIndex].ArtilleryClass == none
+            || LI.ArtilleryTypes[Request.ArtilleryTypeIndex].TeamIndex != Request.Sender.GetTeamNum())
         {
             return;
         }
@@ -323,7 +323,7 @@ state Responding extends Busy
         SetTimer(FMax(1.0, GetSoundDuration(ResponseSound)), false);
 
         // Free request object.
-        Request = None;
+        Request = none;
     }
 
     function Timer()
@@ -376,26 +376,26 @@ simulated function NotifySelected(Pawn User)
 
 // TODO: The way that RO and DH have traditionally handled "teams" is terrible
 // and results in nonsense like this needing to be coded up.
-function class<DHVoicePack> GetVoicePack(int TeamIndex, DH_LevelInfo LI)
+function class<DHVoicePack> GetVoicePack(int PlayerTeamIndex, DH_LevelInfo LI)
 {
-    return LI.GetTeamNationClass(TeamIndex).default.VoicePackClass.static.GetVoicePackClass(
-        LI.GetTeamNationClass(int(!bool(TeamIndex)))
+    return LI.GetTeamNationClass(PlayerTeamIndex).default.VoicePackClass.static.GetVoicePackClass(
+        LI.GetTeamNationClass(int(!bool(PlayerTeamIndex)))
         );
 }
 
-function SoundGroup GetRequestSound(int TeamIndex, DH_LevelInfo LI)
+function SoundGroup GetRequestSound(int PlayerTeamIndex, DH_LevelInfo LI)
 {
-    return GetVoicePack(TeamIndex, LI).default.RadioRequestSound;
+    return GetVoicePack(PlayerTeamIndex, LI).default.RadioRequestSound;
 }
 
-function SoundGroup GetConfirmSound(int TeamIndex, DH_LevelInfo LI)
+function SoundGroup GetConfirmSound(int PlayerTeamIndex, DH_LevelInfo LI)
 {
-    return GetVoicePack(TeamIndex, LI).default.RadioResponseConfirmSound;
+    return GetVoicePack(PlayerTeamIndex, LI).default.RadioResponseConfirmSound;
 }
 
-function SoundGroup GetDenySound(int TeamIndex, DH_LevelInfo LI)
+function SoundGroup GetDenySound(int PlayerTeamIndex, DH_LevelInfo LI)
 {
-    return GetVoicePack(TeamIndex, LI).default.RadioResponseDenySound;
+    return GetVoicePack(PlayerTeamIndex, LI).default.RadioResponseDenySound;
 }
 
 defaultproperties

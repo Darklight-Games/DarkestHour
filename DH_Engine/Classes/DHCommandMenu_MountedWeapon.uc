@@ -29,13 +29,13 @@ var localized string AlreadyMountedText;
 var localized string AlreadyHasWeaponText;
 var localized string IncompatibleWeapon;
 
-var DHMountedGun.EInteractionError  InteractionError;
-var DHMountedGun.ERotateError       RotationError;
-var DHMountedGun.EPickUpError       PickUpError;
-var DHMountedGun.EMountError        MountError;
-var DHMountedGun.EUnmountError      UnmountError;
+var DHMountedGun.EInteractionError InteractionError;
+var DHMountedGun.ERotateError RotationError;
+var DHMountedGun.EPickUpError PickUpError;
+var DHMountedGun.EMountError MountError;
+var DHMountedGun.EUnmountError UnmountError;
 
-var int                             TeammatesInRadiusCount;
+var int TeammatesInRadiusCount;
 
 function bool MountWeapon(DHPawn Pawn, DHMountedGun Gun)
 {
@@ -43,7 +43,7 @@ function bool MountWeapon(DHPawn Pawn, DHMountedGun Gun)
     {
         return false;
     }
-    
+
     Gun.ServerMountWeapon(Pawn);
 
     return true;
@@ -159,12 +159,12 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
     Gun = DHMountedGun(MenuObject);
 
     super.GetOptionRenderInfo(OptionIndex, ORI);
-    
+
     if (Gun == none)
     {
         return;
     }
-    
+
     UpdateErrors();
 
     switch (InteractionError)
@@ -225,7 +225,7 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
                     break;
             }
             break;
-        
+
         case PICK_UP_OPTION_INDEX:
             if (PickUpError != ERROR_None)
             {
@@ -307,7 +307,6 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
     }
 }
 
-
 // Modified to hide the unmount option when the gun doesn't allow this.
 function bool IsOptionHidden(int OptionIndex)
 {
@@ -335,7 +334,7 @@ function bool IsOptionHidden(int OptionIndex)
         default:
             break;
     }
-    
+
     switch (OptionIndex)
     {
         case UNMOUNT_OPTION_INDEX:
@@ -399,11 +398,8 @@ simulated function UpdateErrors()
     }
 }
 
-function bool ShouldHideMenu()
-{
-    // TODO: close this if we are too far away for any interaction.
-    return false;
-}
+// TODO: close this if we are too far away for any interaction.
+function bool ShouldHideMenu();
 
 defaultproperties
 {

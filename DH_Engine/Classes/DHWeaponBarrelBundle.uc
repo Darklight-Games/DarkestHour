@@ -12,7 +12,7 @@ enum EBarrelCondition
 {
     BC_Good,
     BC_Damaged, // If barrel passes CriticalTemperature, cone-fire error introduced.
-    BC_Failed   // If barrel passes FailureTemperature, becomes unusable.
+    BC_Failed, // If barrel passes FailureTemperature, becomes unusable.
 };
 
 var class<DHWeaponBarrel> BarrelClass;
@@ -64,11 +64,11 @@ simulated function PostBeginPlay()
 }
 
 // If ActiveBarrelCount is not provided, it will default to 1.
-function Setup(class<DHWeaponBarrel> BarrelClass, int BarrelCount, optional int ActiveBarrelCount)
+function Setup(class<DHWeaponBarrel> NewBarrelClass, int BarrelCount, optional int ActiveBarrelCount)
 {
     local int i;
 
-    self.BarrelClass = BarrelClass;
+    BarrelClass = NewBarrelClass;
 
     Barrels.Length = BarrelCount;
 
@@ -152,14 +152,14 @@ private function int GetNextBestBarrelIndex()
             continue;
         }
 
-        if (NextBestBarrelIndex == - 1)
+        if (NextBestBarrelIndex == -1)
         {
             NextBestBarrelIndex = i;
             continue;
         }
-        
-        if (Barrels[i].Condition <= Barrels[NextBestBarrelIndex].Condition &&
-            Barrels[i].Temperature <= Barrels[NextBestBarrelIndex].Temperature)
+
+        if (Barrels[i].Condition <= Barrels[NextBestBarrelIndex].Condition
+            && Barrels[i].Temperature <= Barrels[NextBestBarrelIndex].Temperature)
         {
             NextBestBarrelIndex = i;
         }
@@ -176,7 +176,7 @@ function bool CanChangeBarrel()
 function PerformBarrelChange(optional int ActiveBarrelIndex)
 {
     local int NextBarrelIndex;
-    
+
     NextBarrelIndex = GetNextBestBarrelIndex();
 
     if (NextBarrelIndex == -1)
@@ -194,7 +194,7 @@ function PerformBarrelChange(optional int ActiveBarrelIndex)
 function WeaponFired(optional int ActiveBarrelIndex)
 {
     local int BarrelIndex;
-    
+
     BarrelIndex = ActiveBarrelIndices[ActiveBarrelIndex];
 
     if (BarrelIndex == -1)
@@ -225,7 +225,10 @@ function Timer()
     {
         OldTemperature = Barrels[i].Temperature;
 
-        Barrels[i].Temperature = FMax(LevelTempCentigrade, Barrels[i].Temperature - (BarrelClass.default.BarrelCoolingRate * BARREL_TIMER_RATE));
+        Barrels[i].Temperature = FMax(
+            LevelTempCentigrade,
+            Barrels[i].Temperature - (BarrelClass.default.BarrelCoolingRate * BARREL_TIMER_RATE)
+            );
 
         if (OldTemperature != Barrels[i].Temperature)
         {
@@ -298,7 +301,8 @@ function UpdateBarrelStatus(int BarrelIndex)
         }
     }
 
-    if (Barrels[BarrelIndex].Condition < BC_Damaged && Barrels[BarrelIndex].Temperature > BarrelClass.default.CriticalTemperature)
+    if (Barrels[BarrelIndex].Condition < BC_Damaged
+        && Barrels[BarrelIndex].Temperature > BarrelClass.default.CriticalTemperature)
     {
         Barrels[BarrelIndex].Condition = BC_Damaged;
 
@@ -307,7 +311,8 @@ function UpdateBarrelStatus(int BarrelIndex)
             OnConditionChanged(ActiveBarrelIndex, Barrels[BarrelIndex].Condition);
         }
     }
-    else if (Barrels[BarrelIndex].Condition < BC_Failed && Barrels[BarrelIndex].Temperature > BarrelClass.default.FailureTemperature)
+    else if (Barrels[BarrelIndex].Condition < BC_Failed
+        && Barrels[BarrelIndex].Temperature > BarrelClass.default.FailureTemperature)
     {
         Barrels[BarrelIndex].Condition = BC_Failed;
 
@@ -315,7 +320,7 @@ function UpdateBarrelStatus(int BarrelIndex)
         {
             OnConditionChanged(ActiveBarrelIndex, Barrels[BarrelIndex].Condition);
         }
-        
+
         OnSpareBarrelCountChanged(GetSpareBarrelCount());
     }
 }
@@ -376,8 +381,9 @@ simulated function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
     {
         YPos += YL;
         Canvas.SetPos(4.0, YPos);
-        S = "Barrel[" $ i $ "]" @ Barrels[i].Temperature $ "c" @ "(" $ GetEnum(Enum'EBarrelCondition', Barrels[i].Condition) $ ")";
-        
+        S = "Barrel[" $ i $ "]" @ Barrels[i].Temperature $ "c" @ "("
+            $ GetEnum(Enum'EBarrelCondition', Barrels[i].Condition) $ ")";
+
         if (IsBarrelActive(i))
         {
             S @= "<active>";

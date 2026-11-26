@@ -6,15 +6,15 @@
 class DHGermanCannonPawn extends DHVehicleCannonPawn
     abstract;
 
-var     TexRotator  RangeRingRotator;        // overlay for range ring (renamed from RO's ScopeCenterRotator)
-var     int         RangeRingRotationFactor; // scales the rotation of the range ring, so it correctly aligns the range markings (renamed from RO's CenterRotationFactor)
-var     float       RangeRingScale;          // scale of the range ring (renamed from RO's ScopeCenterScale)
+var TexRotator RangeRingRotator; // overlay for range ring (renamed from RO's ScopeCenterRotator)
+var int RangeRingRotationFactor; // scales the rotation of the range ring, so it correctly aligns the range markings (renamed from RO's CenterRotationFactor)
+var float RangeRingScale; // scale of the range ring (renamed from RO's ScopeCenterScale)
 
 // Modified to draw any range indicator ring
 simulated function DrawGunsightOverlay(Canvas C)
 {
     local float ScaledTexureSize, Scale;
-    local int   RotationFactor;
+    local int RotationFactor;
 
     super.DrawGunsightOverlay(C);
 

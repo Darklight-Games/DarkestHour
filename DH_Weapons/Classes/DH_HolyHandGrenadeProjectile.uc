@@ -5,18 +5,18 @@
 
 class DH_HolyHandGrenadeProjectile extends DHGrenadeProjectile;
 
-var() sound PreExplosionSound; // 
-var int TimerStep;            // Tracks what stage the fuse is currently in
+var() sound PreExplosionSound;
+var int TimerStep; // Tracks what stage the fuse is currently in
 
 simulated function PostBeginPlay()
 {
     super.PostBeginPlay();
-    
+
     // Step 0: Initialize tracking variables
     TimerStep = 0;
-    
+
     // Step 1: Start the first countdown phase (7 seconds for the sound)
-    SetTimer(7.0, false); 
+    SetTimer(7.0, false);
 }
 
 simulated function Timer()
@@ -29,10 +29,10 @@ simulated function Timer()
         {
             PlaySound(PreExplosionSound, SLOT_None, 2.0,, 800.0,, true);
         }
-        
+
         // Advance to Phase 2
         TimerStep = 1;
-        
+
         // Start the secondary countdown phase (2 second until explosion)
         SetTimer(2.0, false);
     }
@@ -40,7 +40,7 @@ simulated function Timer()
     else if (TimerStep == 1)
     {
         // Trigger the standard Red Orchestra / Darkest Hour explosion routine
-        Explode(Location, vect(0,0,1));
+        Explode(Location, vect(0, 0, 1));
     }
 }
 
@@ -48,7 +48,7 @@ simulated function Timer()
 
 defaultproperties
 {
-    Damage=660.0 // 
+    Damage=660.0 //
     DamageRadius=1000 // about 15 meters
     MyDamageType=Class'DH_HolyHandGrenadeDamType'
     StaticMesh=StaticMesh'DH_HHG_stc.HHG.HHG'

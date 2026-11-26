@@ -5,7 +5,7 @@
 
 class DHBulletHitWaterEffectLarge extends Emitter;
 
-//particles:
+// particles:
 
 defaultproperties
 {

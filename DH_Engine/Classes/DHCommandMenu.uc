@@ -13,11 +13,11 @@ var Color SpottingMarkerEnabledColor;
 
 struct OptionRenderInfo
 {
-    var string      OptionName;
-    var string      InfoText[MAX_LABELS];
-    var Material    InfoIcon;
-    var Color       InfoColor;
-    var string      DescriptionText;
+    var string OptionName;
+    var string InfoText[MAX_LABELS];
+    var Material InfoIcon;
+    var Color InfoColor;
+    var string DescriptionText;
 };
 
 struct Option
@@ -28,24 +28,24 @@ struct Option
     var Material ActionIcon;
     var Material Material;
     var Object OptionalObject;
-    var Color IconColor;    // If unspecified, will default to white.
+    var Color IconColor; // If unspecified, will default to white.
     var int OptionalInteger;
-    var float HoldTime;     // If non-zero, the amount of time the player must hold the button to select this option.
-    var Sound HoldSound;    // Sound to play when the player holds the button down for this option.
+    var float HoldTime; // If non-zero, the amount of time the player must hold the button to select this option.
+    var Sound HoldSound; // Sound to play when the player holds the button down for this option.
 };
 
 var array<Option> Options;
 
-var DHCommandInteraction    Interaction;
-var DHCommandMenu           NextMenu;
-var DHCommandMenu           PreviousMenu;
-var Object                  MenuObject;
-var int                     MenuInteger;
-var int                     SlotCount;
-var int                     SlotCountOverride;  // If non-zero, the amount of slots will always be at least this many.
+var DHCommandInteraction Interaction;
+var DHCommandMenu NextMenu;
+var DHCommandMenu PreviousMenu;
+var Object MenuObject;
+var int MenuInteger;
+var int SlotCount;
+var int SlotCountOverride; // If non-zero, the amount of slots will always be at least this many.
 
-var bool                    bShouldTick;
-var bool                    bUsesSpottingMarker;
+var bool bShouldTick;
+var bool bUsesSpottingMarker;
 
 // Called before pushed onto the stack
 function Setup()
@@ -155,7 +155,7 @@ function OnPop()
 
 function bool IsOptionDisabled(int OptionIndex);
 function bool ShouldHideMenu();
-function bool IsOptionHidden(int OptionIndex) { return false; } // This will only get run once when the menu is pushed onto the stack.
+function bool IsOptionHidden(int OptionIndex);
 
 function float GetOptionHoldTime(int OptionIndex)
 {
@@ -177,17 +177,15 @@ function Sound GetOptionHoldSound(int OptionIndex)
     return Options[OptionIndex].HoldSound;
 }
 
-function OnActive();                    // Called when a menu becomes the topmost menu on the stack
-function OnPassive();                   // Called when a menu is no longer the topmost menu on the stack
-function OnHoverIn(int OptionIndex);    // Called when a menu option is hovered over
-function OnHoverOut(int OptionIndex);   // Called when a menu option is no longer being hovered over
+function OnActive(); // Called when a menu becomes the topmost menu on the stack
+function OnPassive(); // Called when a menu is no longer the topmost menu on the stack
+function OnHoverIn(int OptionIndex); // Called when a menu option is hovered over
+function OnHoverOut(int OptionIndex); // Called when a menu option is no longer being hovered over
 function OnSelect(int OptionIndex, Vector Location, optional Vector HitLocation);
-
-function Tick();                        // Called every frame if bShouldTick is true and the menu is at the top of the stack
+function Tick(); // Called every frame if bShouldTick is true and the menu is at the top of the stack
 
 defaultproperties
 {
     SpottingMarkerDisabledColor=(B=0,G=0,R=255,A=255)
     SpottingMarkerEnabledColor=(B=0,G=255,R=0,A=255)
 }
-

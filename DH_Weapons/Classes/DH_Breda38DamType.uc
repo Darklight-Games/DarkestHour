@@ -8,6 +8,5 @@ class DH_Breda38DamType extends DHMediumCaliberDamageType
 
 defaultproperties
 {
-    //WeaponClass=Class'DH_Kar98Weapon'
     HUDIcon=Texture'InterfaceArt_tex.b792mm'
 }

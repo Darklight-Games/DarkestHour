@@ -15,7 +15,13 @@ var localized string LockedFFSKMessage;
 var Sound MessageSound;
 
 // Modified to play a buzz sound to go with screen screen message if player's weapon's are locked and he can't fire
-static function ClientReceive(PlayerController P, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function ClientReceive(
+    PlayerController P,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     if ((Switch == 0 || Switch == 1) && P != none)
     {
@@ -29,10 +35,15 @@ static function ClientReceive(PlayerController P, optional int Switch, optional 
 }
 
 // Modified to show appropriate weapons locked/unlocked message based on passed Switch value
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local DHPlayer PC;
-    local int      WeaponLockTimeLeft;
+    local int WeaponLockTimeLeft;
 
     switch (Switch)
     {
@@ -62,7 +73,11 @@ static function string GetString(optional int Switch, optional PlayerReplication
 }
 
 // Modified to show message in red if weapon is locked, or white when unlocked
-static function Color GetColor(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2)
+static function Color GetColor(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2
+    )
 {
     if (Switch == 0 || Switch == 1)
     {

@@ -27,4 +27,3 @@ defaultproperties
     HumanReadableName="Construction Built"
     CategoryClass=Class'DHScoreCategory_Support'
 }
-

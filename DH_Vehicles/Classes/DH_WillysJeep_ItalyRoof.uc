@@ -14,4 +14,3 @@ defaultproperties
     DestroyedMeshSkins(0)=Combiner'DH_Jeep_tex.Willys_Body_Italy_Destroyed'
     VehicleAttachments(0)=(Skins=(Texture'DH_Jeep_tex.Willys_Body_Italy',Texture'DH_Jeep_tex.Willys_Gear_Desert'))
 }
-

@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_G98Weapon extends DHBoltActionWeapon;  //original model creator: Coin-goD
+class DH_G98Weapon extends DHBoltActionWeapon; // original model creator: Coin-goD
 
 defaultproperties
 {
@@ -40,4 +40,3 @@ defaultproperties
     BoltHipAnim="bolt_st"
     BoltIronAnim="iron_boltrest_st"
 }
-

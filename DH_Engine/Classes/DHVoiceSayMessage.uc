@@ -6,7 +6,12 @@
 class DHVoiceSayMessage extends DHChatMessage
     abstract;
 
-static function string AssembleString(HUD myHUD, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional string MessageString)
+static function string AssembleString(
+    HUD myHUD,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional string MessageString
+    )
 {
     local Color ConsoleColor, NameColor;
     local DHPlayerReplicationInfo MyPRI;
@@ -28,20 +33,19 @@ static function string AssembleString(HUD myHUD, optional int Switch, optional P
     {
         NameColor = Class'DHColor'.default.SquadColor;
         SquadMemberID = GetSquadMemberID(DHPlayerReplicationInfo(RelatedPRI_1));
-        if (SquadMemberID != "") SquadMemberID $= " ";
+
+        if (SquadMemberID != "")
+        {
+            SquadMemberID $= " ";
+        }
     }
     else
     {
         NameColor = ConsoleColor;
     }
 
-    return default.MessagePrefix @
-           Class'GameInfo'.static.MakeColorCode(NameColor) $
-           SquadMemberID $
-           RelatedPRI_1.PlayerName $
-           Class'GameInfo'.static.MakeColorCode(ConsoleColor) @
-           ":" @
-           MessageString;
+    return default.MessagePrefix @ Class'GameInfo'.static.MakeColorCode(NameColor) $ SquadMemberID
+        $ RelatedPRI_1.PlayerName $ Class'GameInfo'.static.MakeColorCode(ConsoleColor) @ ":" @ MessageString;
 }
 
 defaultproperties

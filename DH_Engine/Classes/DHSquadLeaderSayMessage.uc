@@ -6,26 +6,31 @@
 class DHSquadLeaderSayMessage extends DHChatMessage
     abstract;
 
-static function string AssembleString(HUD myHUD, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional string MessageString)
+static function string AssembleString(
+    HUD myHUD,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional string MessageString
+    )
 {
     if (RelatedPRI_1 == none || RelatedPRI_1.PlayerName == "")
     {
         return "";
     }
 
-    return default.MessagePrefix @ RelatedPRI_1.PlayerName @ ":" @ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White) $ MessageString;
+    return default.MessagePrefix @ RelatedPRI_1.PlayerName @ ":"
+        @ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White) $ MessageString;
 }
 
 static function Color GetDHConsoleColor(PlayerReplicationInfo RelatedPRI_1, bool bSimpleColours)
 {
-    return default.DrawColor;
+    return Class'DHColor'.default.SquadColor;
 }
 
 defaultproperties
 {
-    DrawColor=(R=0,G=204,B=0,A=255)
+    DrawColor=(R=124,G=252,B=0,A=255)
     MessagePrefix="[SQUAD LEADER]"
     bComplexString=true
     bBeep=true
 }
-

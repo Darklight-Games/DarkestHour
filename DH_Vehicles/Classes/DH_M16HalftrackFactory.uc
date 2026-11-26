@@ -10,4 +10,3 @@ defaultproperties
     VehicleClass=Class'DH_M16Halftrack'
     Mesh=SkeletalMesh'DH_M3Halftrack_anm.m16_body'
 }
-

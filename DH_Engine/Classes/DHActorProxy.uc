@@ -9,72 +9,72 @@
 
 class DHActorProxy extends Actor;
 
-var DHPawn                  PawnOwner;
-var DHPlayer                PlayerOwner;
-var Actor                   GroundActor;
-var Vector                  GroundNormal;
-var Rotator                 Direction;
+var DHPawn PawnOwner;
+var DHPlayer PlayerOwner;
+var Actor GroundActor;
+var Vector GroundNormal;
+var Rotator Direction;
 
-var DHActorProxyProjector   Projector;  // TODO: add other projectors for collision checks.
-var array<Actor>            Attachments;
+var DHActorProxyProjector Projector; // TODO: add other projectors for collision checks.
+var array<Actor> Attachments;
 
 // Rotation
-var Rotator                 LocalRotation;
-var Rotator                 LocalRotationRate;
-var bool                    bLimitLocalRotation;    // Whether or not the limit the local rotation.
-var Range                   LocalRotationYawRange;
+var Rotator LocalRotation;
+var Rotator LocalRotationRate;
+var bool bLimitLocalRotation; // Whether or not the limit the local rotation.
+var Range LocalRotationYawRange;
 
-var localized string        MenuName;
-var localized string        MenuVerb;
+var localized string MenuName;
+var localized string MenuVerb;
 
-var DHActorProxySocket      Socket;
+var DHActorProxySocket Socket;
 
 enum EActorProxyErrorType
 {
     ERROR_None,
-    ERROR_Fatal,                    // Some fatal error occurred, usually a case of unexpected values
-    ERROR_NoGround,                 // No solid ground was able to be found
-    ERROR_TooSteep,                 // The ground slope exceeded the allowable maximum
-    ERROR_InWater,                  // The actor is in water
-    ERROR_NoRoom,                   // No room to place this actor
-    ERROR_NotOnTerrain,             // Actor is not on terrain
-    ERROR_InMinefield,              // Cannot be in a minefield!
-    ERROR_NearSpawnPoint,           // Cannot be so close to a spawn point or location hint
-    ERROR_Indoors,                  // Cannot be placed indoors
-    ERROR_InObjective,              // Cannot be placed inside an objective area
-    ERROR_BadSurface,               // Cannot be placed on this surface type
-    ERROR_BadTerrain,               // This is used when something needs to snap to the terrain, but the engine's native trace functionality isn't cooperating!
-    ERROR_InDangerZone,             // Cannot place this actor inside enemy territory.
-    ERROR_Custom,                   // Custom error type (provide an error message in OptionalString)
-    ERROR_SocketOccupied,           // The socket is already occupied.
+    ERROR_Fatal, // Some fatal error occurred, usually a case of unexpected values
+    ERROR_NoGround, // No solid ground was able to be found
+    ERROR_TooSteep, // The ground slope exceeded the allowable maximum
+    ERROR_InWater, // The actor is in water
+    ERROR_NoRoom, // No room to place this actor
+    ERROR_NotOnTerrain, // Actor is not on terrain
+    ERROR_InMinefield, // Cannot be in a minefield!
+    ERROR_NearSpawnPoint, // Cannot be so close to a spawn point or location hint
+    ERROR_Indoors, // Cannot be placed indoors
+    ERROR_InObjective, // Cannot be placed inside an objective area
+    ERROR_BadSurface, // Cannot be placed on this surface type
+    ERROR_BadTerrain, // This is used when something needs to snap to the terrain, but the engine's native trace functionality isn't cooperating!
+    ERROR_InDangerZone, // Cannot place this actor inside enemy territory.
+    ERROR_Custom, // Custom error type (provide an error message in OptionalString)
+    ERROR_SocketOccupied, // The socket is already occupied.
     // TODO: The following errors are only used in the construction system, but it's
     // currently less of a hassle to keep them here since these error types are used
     // in lots of different places. In future, this should maybe be a secondary error
     // code attached to the proxy error.
-    ERROR_Restricted,               // In a restriction volume.
-    ERROR_TooCloseFriendly,         // Too close to an identical friendly actor.
-    ERROR_TooCloseEnemy,            // Too close to an identical enemy actor.
-    ERROR_MaxActive,                // Max active limit reached.
-    ERROR_InsufficientSupply,       // Not enough supplies to build this actor.
-    ERROR_RestrictedType,           // Restricted actor type (can't build on this map!)
-    ERROR_SquadTooSmall,            // Not enough players in the squad!
-    ERROR_PlayerBusy,               // Player is in an undesireable state (e.g. MG deployed, crawling, prone transitioning or otherwise unable to switch weapons).
-    ERROR_TooCloseToObjective,      // Too close to an objective.
+    ERROR_Restricted, // In a restriction volume.
+    ERROR_TooCloseFriendly, // Too close to an identical friendly actor.
+    ERROR_TooCloseEnemy, // Too close to an identical enemy actor.
+    ERROR_MaxActive, // Max active limit reached.
+    ERROR_InsufficientSupply, // Not enough supplies to build this actor.
+    ERROR_RestrictedType, // Restricted actor type (can't build on this map!)
+    ERROR_SquadTooSmall, // Not enough players in the squad!
+    ERROR_PlayerBusy, // Player is in an undesireable state (e.g. MG deployed, crawling, prone transitioning or otherwise unable to switch weapons).
+    ERROR_TooCloseToObjective, // Too close to an objective.
     ERROR_TooCloseToEnemyObjective, // Too close to enemy controlled objective.
-    ERROR_MissingRequirement,       // Not close enough to a required friendly actor.
-    ERROR_Exhausted,                // Your team cannot place any more of these this round.
-    ERROR_NoSquadmatesNearby,       // No squadmates nearby.
-    ERROR_Leaning,                  // Cannot be placed if player is leaning
-    ERROR_PlayerIsntCrouched,       // Cannot be placed if player is not crouched
+    ERROR_MissingRequirement, // Not close enough to a required friendly actor.
+    ERROR_Exhausted, // Your team cannot place any more of these this round.
+    ERROR_NoSquadmatesNearby, // No squadmates nearby.
+    ERROR_Leaning, // Cannot be placed if player is leaning
+    ERROR_PlayerIsntCrouched, // Cannot be placed if player is not crouched
 };
 
 var struct ActorProxyError
 {
-    var EActorProxyErrorType    Type;
-    var string                  CustomErrorString;  // When Type is ERROR_Custom, this will contain the error string to be used.
-    var int                     OptionalInteger;
-    var Object                  OptionalObject;
-    var string                  OptionalString;
+    var EActorProxyErrorType Type;
+    var string CustomErrorString; // When Type is ERROR_Custom, this will contain the error string to be used.
+    var int OptionalInteger;
+    var Object OptionalObject;
+    var string OptionalString;
 } ProxyError;
 
 // A context object used for passing context-relevant values to functions that
@@ -90,22 +90,64 @@ struct Context
     var int SkinIndex;
 };
 
-protected simulated function bool CanPlaceIndoors() { return true; }
-protected simulated function float GetIndoorsCeilingHeightMeters() { return 25.0; }
-protected simulated function float GetGroundSlopeMaxDegrees() { return 25.0;}
-protected simulated function float GetArcLengthTraceIntervalMeters() { return 0.5; }
-protected simulated function float GetFloatToleranceMeters() { return 0.5; }
+protected simulated function bool CanPlaceIndoors()
+{
+    return true;
+}
+
+protected simulated function float GetIndoorsCeilingHeightMeters()
+{
+    return 25.0;
+}
+
+protected simulated function float GetGroundSlopeMaxDegrees()
+{
+    return 25.0;
+}
+
+protected simulated function float GetArcLengthTraceIntervalMeters()
+{
+    return 0.5;
+}
+
+protected simulated function float GetFloatToleranceMeters()
+{
+    return 0.5;
+}
+
 protected simulated function bool CanOnlyPlaceOnTerrain();
 protected simulated function bool ShouldAlignToGround();
 protected simulated function bool ShouldSnapToTerrainVertex();
-protected simulated function bool CanPlaceInWater() { return false; }
-protected simulated function bool CanPlaceInDangerZone() { return true; }
-protected simulated function bool CanPlaceInMinefield() { return false; }
-protected simulated function bool CanPlaceInObjective(DHObjective Objective) { return true; }
-protected simulated function float GetSpawnPointDistanceThresholdMeters() { return 2.0; }
-protected simulated function bool CanPlaceOnTerrainSurfaceType(Material.ESurfaceTypes SurfaceType) { return true; }
+protected simulated function bool CanPlaceInWater();
+
+protected simulated function bool CanPlaceInDangerZone()
+{
+    return true;
+}
+
+protected simulated function bool CanPlaceInMinefield();
+
+protected simulated function bool CanPlaceInObjective(DHObjective Objective)
+{
+    return true;
+}
+
+protected simulated function float GetSpawnPointDistanceThresholdMeters()
+{
+    return 2.0;
+}
+
+protected simulated function bool CanPlaceOnTerrainSurfaceType(Material.ESurfaceTypes SurfaceType)
+{
+    return true;
+}
+
 protected simulated function Vector GetPlacementOffset();
-protected simulated function bool CanPlaceOnTerrain(TerrainInfo TerrainInfo) { return true; }
+
+protected simulated function bool CanPlaceOnTerrain(TerrainInfo TerrainInfo)
+{
+    return true;
+}
 
 // Functions to call when the proxy is snapped or unsnapped from a socket.
 delegate OnSocketEnter(DHActorProxySocket Socket);
@@ -163,7 +205,7 @@ function DestroyAttachments()
     Attachments.Length = 0;
 }
 
-function static Material CreateProxyMaterial(Material M)
+static function Material CreateProxyMaterial(Material M)
 {
     local Combiner C;
     local FadeColor FC;
@@ -213,7 +255,7 @@ function static Material CreateProxyMaterial(Material M)
     return FB;
 }
 
-function static UpdateProxyMaterialColors(Actor A, Color Color)
+static function UpdateProxyMaterialColors(Actor A, Color Color)
 {
     local FinalBlend FB;
     local Combiner C;
@@ -316,7 +358,7 @@ function ActorProxyError GetContextError(Context Context)
     return Error;
 }
 
-function UpdateError(optional bool bForceUpdate) 
+function UpdateError(optional bool bForceUpdate)
 {
     local ActorProxyError ProvisionalPositionError, NewProxyError;
 
@@ -445,7 +487,7 @@ function ActorProxyError SetProvisionalLocationAndRotation()
 
             // Trace down to get the height at this vertex (no other way to query the height!)
             TraceStart = BaseLocation;
-            TraceStart.Z += 100.0;    // TODO: Magic number used for now, in future find out the maximum terrain z-height programmatically.
+            TraceStart.Z += 100.0; // TODO: Magic number used for now, in future find out the maximum terrain z-height programmatically.
 
             TraceEnd = BaseLocation;
             TraceEnd.Z -= 100.0;
@@ -504,15 +546,10 @@ function ActorProxyError SetProvisionalLocationAndRotation()
         if (E.Type == ERROR_None)
         {
             CCR = Class'UCollision'.static.CylinderCollisionQuery(
-                self,
-                BaseLocation,
-                Rotator(Forward),
-                CollisionRadius,
-                CollisionHeight,
+                self, BaseLocation, Rotator(Forward), CollisionRadius, CollisionHeight,
                 Class'DHUnits'.static.MetersToUnreal(GetArcLengthTraceIntervalMeters()),
-                Class'DHUnits'.static.MetersToUnreal(GetFloatToleranceMeters()),
-                CanOnlyPlaceOnTerrain()
-            );
+                Class'DHUnits'.static.MetersToUnreal(GetFloatToleranceMeters()), CanOnlyPlaceOnTerrain()
+                );
 
             switch (CCR.Type)
             {
@@ -557,7 +594,7 @@ function ActorProxyError SetProvisionalLocationAndRotation()
         Left = Forward cross HitNormal;
         Forward = HitNormal cross Left;
     }
-    
+
     // Handle socket entering and exiting.
     if (Socket != GroundActor)
     {
@@ -625,11 +662,11 @@ function ActorProxyError GetPositionError()
     {
         foreach TouchingActors(Class'ROMineVolume', MV)
         {
-            if (MV != none &&
-                MV.bActive &&
-                (MV.MineKillStyle == KS_All ||
-                (PawnOwner.GetTeamNum() == AXIS_TEAM_INDEX && MV.MineKillStyle == KS_Axis) ||
-                (PawnOwner.GetTeamNum() == ALLIES_TEAM_INDEX && MV.MineKillStyle == KS_Allies)))
+            if (MV != none
+                && MV.bActive
+                && (MV.MineKillStyle == KS_All
+                    || (PawnOwner.GetTeamNum() == AXIS_TEAM_INDEX && MV.MineKillStyle == KS_Axis)
+                    || (PawnOwner.GetTeamNum() == ALLIES_TEAM_INDEX && MV.MineKillStyle == KS_Allies)))
             {
                 E.Type = ERROR_InMinefield;
                 return E;
@@ -640,7 +677,9 @@ function ActorProxyError GetPositionError()
     // Don't allow actors to be placed in objectives if this is disallowed.
     for (i = 0; i < arraycount(GRI.DHObjectives); ++i)
     {
-        if (GRI.DHObjectives[i] != none && GRI.DHObjectives[i].WithinArea(self) && !CanPlaceInObjective(GRI.DHObjectives[i]))
+        if (GRI.DHObjectives[i] != none
+            && GRI.DHObjectives[i].WithinArea(self)
+            && !CanPlaceInObjective(GRI.DHObjectives[i]))
         {
             E.Type = ERROR_InObjective;
             return E;
@@ -728,8 +767,11 @@ function ActorProxyError GetPositionError()
             // above us. We start the trace slightly higher than the ground
             // because uneven terrain tends to produce false positives.
             TraceStart = Location + (vect(0, 0, 1) * CollisionHeight / 2);
-            TraceEnd = Location + (vect(0, 0, 1) * Class'DHUnits'.static.MetersToUnreal(GetIndoorsCeilingHeightMeters()));
-            HitActor = Trace(CeilingHitLocation, CeilingHitNormal, TraceEnd, TraceStart,, vect(1.0, 1.0, 0.0) * SquareLength);
+            TraceEnd = Location
+                + (vect(0, 0, 1) * Class'DHUnits'.static.MetersToUnreal(GetIndoorsCeilingHeightMeters()));
+            HitActor = Trace(
+                CeilingHitLocation, CeilingHitNormal, TraceEnd, TraceStart,, vect(1.0, 1.0, 0.0) * SquareLength
+                );
 
             if (HitActor != none)
             {
@@ -740,13 +782,21 @@ function ActorProxyError GetPositionError()
     }
 
     // Don't allow actors to be placed within 2 meters of spawn points or location hints.
-    foreach RadiusActors(Class'DHSpawnPointBase', SP, CollisionRadius + Class'DHUnits'.static.MetersToUnreal(GetSpawnPointDistanceThresholdMeters()))
+    foreach RadiusActors(
+        Class'DHSpawnPointBase',
+        SP,
+        CollisionRadius + Class'DHUnits'.static.MetersToUnreal(GetSpawnPointDistanceThresholdMeters())
+        )
     {
         E.Type = ERROR_NearSpawnPoint;
         return E;
     }
 
-    foreach RadiusActors(Class'DHLocationHint', LH, CollisionRadius + Class'DHUnits'.static.MetersToUnreal(GetSpawnPointDistanceThresholdMeters()))
+    foreach RadiusActors(
+        Class'DHLocationHint',
+        LH,
+        CollisionRadius + Class'DHUnits'.static.MetersToUnreal(GetSpawnPointDistanceThresholdMeters())
+        )
     {
         E.Type = ERROR_NearSpawnPoint;
         return E;
@@ -779,7 +829,7 @@ function Material GetProjectorMaterial(EActorProxyErrorType ErrorType)
             return Projector.OrangeTexture;
         default:
             return Projector.RedTexture;
-    }  
+    }
 }
 
 function GetCollisionSize(Context Context, out float Radius, out float Height)
@@ -797,18 +847,25 @@ final function UpdateCollisionSize()
     SetCollisionSize(Radius, Height);
 }
 
-function UpdateParameters(Vector Location, Rotator Direction, Actor GroundActor, Vector GroundNormal, bool bLimitLocalRotation, Range LocalRotationYawRange)
+function UpdateParameters(
+    Vector NewLocation,
+    Rotator NewDirection,
+    Actor NewGroundActor,
+    Vector NewGroundNormal,
+    bool bNewLimitLocalRotation,
+    Range NewLocalRotationYawRange
+    )
 {
-    self.Direction = Direction;
-    self.GroundNormal = GroundNormal;
-    self.bLimitLocalRotation = bLimitLocalRotation;
-    self.LocalRotationYawRange = LocalRotationYawRange;
+    Direction = NewDirection;
+    GroundNormal = NewGroundNormal;
+    bLimitLocalRotation = bNewLimitLocalRotation;
+    LocalRotationYawRange = NewLocalRotationYawRange;
 
-    SetLocation(Location);
+    SetLocation(NewLocation);
 
-    if (self.GroundActor != GroundActor)
+    if (GroundActor != NewGroundActor)
     {
-        self.GroundActor = GroundActor;
+        GroundActor = NewGroundActor;
 
         // Ground actor changed so let's re-evaluate our collison size.
         // TODO: we may want to do more than just re-evaluate the collision size

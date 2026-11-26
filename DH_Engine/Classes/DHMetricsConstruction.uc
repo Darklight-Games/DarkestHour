@@ -5,11 +5,11 @@
 
 class DHMetricsConstruction extends JSONSerializable;
 
-var int                     TeamIndex;
-var class<DHConstruction>   ConstructionClass;
-var Vector                  Location;
-var int                     RoundTime;
-var string                  PlayerID;
+var int TeamIndex;
+var class<DHConstruction> ConstructionClass;
+var Vector Location;
+var int RoundTime;
+var string PlayerID;
 
 function JSONValue ToJSON()
 {
@@ -20,4 +20,3 @@ function JSONValue ToJSON()
         .PutVector("location", Location)
         .PutString("player_id", PlayerID);
 }
-

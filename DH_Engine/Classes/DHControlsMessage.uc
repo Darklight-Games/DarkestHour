@@ -30,25 +30,39 @@ static function string GetHeaderString(
 }
 
 // Override in subclasses to hide controls based on the context.
-static function bool ShouldShowControl(int Index, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function bool ShouldShowControl(
+    int Index,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     return true;
 }
 
 // Override in suubclasses
-static function string GetControlText(int Index, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetControlText(
+    int Index,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     return default.Controls[Index].Text;
 }
 
-static function RenderComplexMessage(Canvas Canvas,
-                              out float XL,
-                              out float YL,
-                              optional string MessageString,
-                              optional int Switch,
-                              optional PlayerReplicationInfo RelatedPRI_1,
-                              optional PlayerReplicationInfo RelatedPRI_2,
-                              optional Object OptionalObject)
+static function RenderComplexMessage(
+    Canvas Canvas,
+    out float XL,
+    out float YL,
+    optional string MessageString,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local PlayerController PC;
     local float Y;
@@ -85,12 +99,13 @@ static function RenderComplexMessage(Canvas Canvas,
 
         for (j = 0; j < default.Controls[i].Keys.Length; ++j)
         {
-            Keys[Keys.Length] = Class'GameInfo'.static.MakeColorCode(default.KeyColor) $
-                                "[" $ Class'ROTeamGame'.static.ParseLoadingHintNoColor("%" $ default.Controls[i].Keys[j] $ "%", PC) $ "]" $
-                                Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White);
+            Keys[Keys.Length] = Class'GameInfo'.static.MakeColorCode(default.KeyColor) $ "["
+                $ Class'ROTeamGame'.static.ParseLoadingHintNoColor("%" $ default.Controls[i].Keys[j] $ "%", PC) $ "]"
+                $ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White);
         }
 
-        S = Class'UString'.static.Join(" / ", Keys) @  GetControlText(i, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
+        S = Class'UString'.static.Join(" / ", Keys)
+            @ GetControlText(i, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 
         Canvas.TextSize(S, XL, YL);
         Canvas.SetDrawColor(255, 255, 255);
@@ -111,4 +126,3 @@ defaultproperties
     FontSize=0
     KeyColor=(R=192,G=192,B=192,A=255)
 }
-

@@ -17,13 +17,13 @@ struct DistanceUnit
 {
     var localized string Name;
     var localized string Symbol;
-    var float Conversion;           // Conversion factor to Unreal units.
+    var float Conversion; // Conversion factor to Unreal units.
 };
 
 enum ETemperatureUnit
 {
     TU_Celcius,
-    TU_Fahrenheit
+    TU_Fahrenheit,
 };
 
 struct TemperatureUnit

@@ -7,7 +7,6 @@
 class UInterp extends Object
     abstract;
 
-
 enum EInterpolationType
 {
     INTERP_Step,
@@ -18,7 +17,13 @@ enum EInterpolationType
     INTERP_Deceleration,
 };
 
-final static function float MapRangeClamped(float Value, float InRangeA, float InRangeB, float OutRangeA, float OutRangeB)
+final static function float MapRangeClamped(
+    float Value,
+    float InRangeA,
+    float InRangeB,
+    float OutRangeA,
+    float OutRangeB
+    )
 {
     return OutRangeA + (OutRangeB - OutRangeA) * FClamp((Value - InRangeA) / (InRangeB - InRangeA), 0.0, 1.0);
 }
@@ -178,7 +183,10 @@ final static function float DialRounding(float X, float Span, optional bool bDeb
 
     if (bDebug)
     {
-        Log("X:" @ X @ ", AngularStretch:" @ AngularStretch @ ", AngularCoordinate:" @ AngularCoordinate @ ", AngularModifier:" @ AngularModifier @ ", NormalizedAngularModifier:" @ NormalizedAngularModifier);
+        Log(
+            "X:" @ X @ ", AngularStretch:" @ AngularStretch @ ", AngularCoordinate:" @ AngularCoordinate
+                @ ", AngularModifier:" @ AngularModifier @ ", NormalizedAngularModifier:" @ NormalizedAngularModifier
+            );
     }
 
     return NormalizedAngularModifier;

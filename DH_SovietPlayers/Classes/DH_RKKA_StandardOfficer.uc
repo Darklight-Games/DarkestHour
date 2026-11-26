@@ -4,5 +4,3 @@
 //==============================================================================
 
 class DH_RKKA_StandardOfficer extends DHDeprecated;
-
-

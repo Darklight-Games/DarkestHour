@@ -11,4 +11,3 @@ defaultproperties
     GroupName="Guns"
     SortOrder=3
 }
-

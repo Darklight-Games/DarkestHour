@@ -27,7 +27,9 @@ function bool DHIsInNoArtyVolume(DHGameReplicationInfo GRI)
             }
         }
         // Prevent arty if we're in a current spawn area's protective volume
-        else if (V.AssociatedActor != none && V.AssociatedActor.IsA('ROSpawnArea') && IsCurrentSpawnArea(ROSpawnArea(V.AssociatedActor)))
+        else if (V.AssociatedActor != none
+            && V.AssociatedActor.IsA('ROSpawnArea')
+            && IsCurrentSpawnArea(ROSpawnArea(V.AssociatedActor)))
         {
             return true;
         }

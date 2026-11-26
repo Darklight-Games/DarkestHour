@@ -5,10 +5,10 @@
 
 class DHMetricsCapture extends JSONSerializable;
 
-var int             ObjectiveIndex;
-var int             RoundTime;
-var int             TeamIndex;
-var array<string>   PlayerIDs;
+var int ObjectiveIndex;
+var int RoundTime;
+var int TeamIndex;
+var array<string> PlayerIDs;
 
 function JSONValue ToJSON()
 {
@@ -18,4 +18,3 @@ function JSONValue ToJSON()
         .PutInteger("team", TeamIndex)
         .Put("player_ids", Class'JSONArray'.static.FromStrings(PlayerIDs));
 }
-

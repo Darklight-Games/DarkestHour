@@ -17,5 +17,5 @@ defaultproperties
     GunsightCameraBone="GUNSIGHT_CAMERA_WC"
     VehicleMGReloadTexture=Texture'DH_Fiat1435_tex.fiat14_ammo_reload'
 
-    
+
 }

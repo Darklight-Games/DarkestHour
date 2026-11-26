@@ -3,6 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
+// usagi: ignore[class-name-ends-in-digit]
 class DH_ShermanMountedMGPawn_M4A3E8 extends DH_ShermanMountedMGPawn;
 
 defaultproperties
@@ -10,4 +11,3 @@ defaultproperties
     GunClass=Class'DH_ShermanMountedMG_M4A3E8'
     FPCamPos=(X=4,Y=0,Z=7)
 }
-

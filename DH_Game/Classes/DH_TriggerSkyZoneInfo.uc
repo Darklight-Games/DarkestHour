@@ -5,14 +5,14 @@
 
 class DH_TriggerSkyZoneInfo extends SkyZoneInfo;
 
-var()   Color   OnColor;          // color when light is on
-var()   Color   OffColor;         // color when light is off
-var()   float   ChangeTime;       // time light takes to change from on to off
-var()   bool    bInitiallyOn;     // whether it's initially on
-var()   bool    bInitiallyFading; // whether it's initially fading up or down
+var() Color OnColor; // color when light is on
+var() Color OffColor; // color when light is off
+var() float ChangeTime; // time light takes to change from on to off
+var() bool bInitiallyOn; // whether it's initially on
+var() bool bInitiallyFading; // whether it's initially fading up or down
 
-var     float   TimeSinceTriggered;
-var     bool    bIsOn;
+var float TimeSinceTriggered;
+var bool bIsOn;
 
 simulated event PostBeginPlay()
 {

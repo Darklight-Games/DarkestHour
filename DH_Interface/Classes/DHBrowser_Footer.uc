@@ -10,10 +10,10 @@ var automated GUIButton b_Main;
 function bool InternalOnClick(GUIComponent Sender)
 {
     local DHPlayer PC;
-    
+
     if (Sender == b_Main)
     {
-        //Open main menu
+        // Open main menu
         PC = DHPlayer(PlayerOwner());
         PC.ConsoleCommand("DISCONNECT");
         Controller.CloseAll(false, true);
@@ -29,18 +29,18 @@ function bool InternalOnClick(GUIComponent Sender)
 // This also allows a proper override of the Captions for the footer buttons
 function UpdateActiveButtons(UT2K4Browser_Page CurrentPanel)
 {
-    if (CurrentPanel == none ||
-        CurrentPanel != Class'DHBrowser_ServerListPageInternet' ||
-        CurrentPanel != Class'DHBrowser_ServerListPageLAN' ||
-        CurrentPanel != Class'DHBrowser_ServerListPageFavorites')
+    if (CurrentPanel == none
+        || CurrentPanel != Class'DHBrowser_ServerListPageInternet'
+        || CurrentPanel != Class'DHBrowser_ServerListPageLAN'
+        || CurrentPanel != Class'DHBrowser_ServerListPageFavorites')
     {
         return;
     }
 
-    UpdateButtonState(b_Join,     CurrentPanel.IsJoinAvailable(b_Join.default.Caption));
-    UpdateButtonState(b_Refresh,  CurrentPanel.IsRefreshAvailable(b_Refresh.default.Caption));
+    UpdateButtonState(b_Join, CurrentPanel.IsJoinAvailable(b_Join.default.Caption));
+    UpdateButtonState(b_Refresh, CurrentPanel.IsRefreshAvailable(b_Refresh.default.Caption));
     UpdateButtonState(b_Spectate, CurrentPanel.IsSpectateAvailable(b_Spectate.default.Caption));
-    UpdateButtonState(b_Filter,   CurrentPanel.IsFilterAvailable(b_Filter.default.Caption));
+    UpdateButtonState(b_Filter, CurrentPanel.IsFilterAvailable(b_Filter.default.Caption));
 
     if (b_Filter.MenuState == MSAT_Disabled)
     {

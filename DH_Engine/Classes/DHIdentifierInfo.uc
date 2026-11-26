@@ -15,11 +15,11 @@ class DHIdentifierInfo extends Object
 // TODO: move this definition data to its own class.
 enum EIdentifierType
 {
-    ID_UserNumber,  // User-defined decimal number.
-    ID_UserLetter,  // User-defined letter.
-    ID_UserString,  // User-defined string.
+    ID_UserNumber, // User-defined decimal number.
+    ID_UserLetter, // User-defined letter.
+    ID_UserString, // User-defined string.
     ID_SquadNumber, // The squad number.
-    ID_SquadName,   // The squad name.
+    ID_SquadName, // The squad name.
 };
 
 enum EJustification
@@ -34,7 +34,7 @@ struct Identifier
     var() EIdentifierType Type;
     var() EJustification Justification;
     var() class<DHGlyphSet> GlyphSetClass;
-    var() array<int> SkinIndices;   // The length of this array is the maximum length of the identifier.
+    var() array<int> SkinIndices; // The length of this array is the maximum length of the identifier.
 };
 
 var() array<Identifier> Identifiers;

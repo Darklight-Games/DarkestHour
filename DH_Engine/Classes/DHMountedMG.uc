@@ -8,88 +8,89 @@
 class DHMountedMG extends DHVehicleWeapon
     abstract;
 
-var DHWeaponRangeParams     RangeParams;
-var int                     RangeIndex;
+var DHWeaponRangeParams RangeParams;
+var int RangeIndex;
 
-var private bool            bIsWeaponMounted;
-var bool                    bOldIsWeaponMounted;
-var name                    MountBoneName;
-var byte                    MountBoneChannel;
+var private bool bIsWeaponMounted;
+var bool bOldIsWeaponMounted;
+var name MountBoneName;
+var byte MountBoneChannel;
 
 // TODO: many of these systems should be componentized.
 
 // Firing Animation
-var int                     FiringChannel;
-var name                    FiringBone;
-var name                    FiringAnim;
-var name                    FiringIdleAnim;
+var int FiringChannel;
+var name FiringBone;
+var name FiringAnim;
+var name FiringIdleAnim;
 
 // Belt Animations
-var int                     BeltChannel;
-var name                    BeltBone;
-var name                    BeltIdleAnimation;
-var name                    BeltFireLoopAnimation;
-var name                    BeltFireEndAnimation;
+var int BeltChannel;
+var name BeltBone;
+var name BeltIdleAnimation;
+var name BeltFireLoopAnimation;
+var name BeltFireEndAnimation;
 
 // Clip Animation
-var name                    ClipBone;
-var name                    ClipAnim;
-var int                     ClipChannel;
+var name ClipBone;
+var name ClipAnim;
+var int ClipChannel;
 
 // Shell Ejection
 
 struct ShellEjectInfo
 {
-    var class<RO3rdShellEject>  ShellEjectClass;
-    var name                    Bone;
-    var Rotator                 RotationOffset;
+    var class<RO3rdShellEject> ShellEjectClass;
+    var name Bone;
+    var Rotator RotationOffset;
 };
-var array<ShellEjectInfo>       ShellEjectors;
+
+var array<ShellEjectInfo> ShellEjectors;
 
 // Ammo Round
-var array<ROFPAmmoRound>    AmmoRounds;
-var StaticMesh              AmmoRoundStaticMesh;
-var array<name>             AmmoRoundBones;
-var Rotator                 AmmoRoundRelativeRotation;
+var array<ROFPAmmoRound> AmmoRounds;
+var StaticMesh AmmoRoundStaticMesh;
+var array<name> AmmoRoundBones;
+var Rotator AmmoRoundRelativeRotation;
 
 // Empty Ammo Rounds
 // This is used for things like the Fiat 14/35 where the empty belt links stay attached to the rest of the belt.
-var array<ROFPAmmoRound>    EmptyAmmoRounds;
-var StaticMesh              EmptyAmmoRoundStaticMesh;
-var array<name>             EmptyAmmoRoundBones;
-var() Rotator               EmptyAmmoRoundRelativeRotation;
+var array<ROFPAmmoRound> EmptyAmmoRounds;
+var StaticMesh EmptyAmmoRoundStaticMesh;
+var array<name> EmptyAmmoRoundBones;
+var() Rotator EmptyAmmoRoundRelativeRotation;
 
-var int                     NumRoundsInStaticMesh; // The number of rounds depicted in the static mesh.
+var int NumRoundsInStaticMesh; // The number of rounds depicted in the static mesh.
 
 // Barrels (STATIC)
-var int                             BarrelCount;
-var class<DHWeaponBarrel>           BarrelClass;
-var class<ROMGSteam>                BarrelSteamEmitterClass;
-var name                            BarrelSteamBone;
-var name                            BarrelChangeAnimation;
+var int BarrelCount;
+var class<DHWeaponBarrel> BarrelClass;
+var class<ROMGSteam> BarrelSteamEmitterClass;
+var name BarrelSteamBone;
+var name BarrelChangeAnimation;
 
 // Barrels (RUNTIME)
-var DHWeaponBarrelBundle            BarrelBundle;
-var ROMGSteam                       BarrelSteamEmitter;
+var DHWeaponBarrelBundle BarrelBundle;
+var ROMGSteam BarrelSteamEmitter;
 var DHWeaponBarrelBundle.EBarrelCondition BarrelCondition;
-var float                           BarrelTemperature;
-var bool                            bBarrelIsSteamActive, bOldBarrelIsSteamActive;
-var int                             SpareBarrelCount;
+var float BarrelTemperature;
+var bool bBarrelIsSteamActive, bOldBarrelIsSteamActive;
+var int SpareBarrelCount;
 
 // Timing for force-aim during reload and barrel changes.
-var float                           ForceAimStartSeconds;
-var float                           ForceAimEndSeconds;
-var Quat                            ForceAimLocalWeaponAimStart;
-var float                           ForceAimTweenSeconds;
-var Quat                            ForceAimLocalWeaponAimTarget;
-var UInterp.EInterpolationType      ForceAimInterpolationType;
+var float ForceAimStartSeconds;
+var float ForceAimEndSeconds;
+var Quat ForceAimLocalWeaponAimStart;
+var float ForceAimTweenSeconds;
+var Quat ForceAimLocalWeaponAimTarget;
+var UInterp.EInterpolationType ForceAimInterpolationType;
 
 // The reload animation to use for the third-person driver mesh.
 // This should be the same duration as the ReloadSequence.
-var() name  DriverReloadSequence;
+var() name DriverReloadSequence;
 // The reload animation to use for the turret mesh.
 // This animation should be the same duration as the DriverReloadSequence.
-var() name  ReloadSequence;
+var() name ReloadSequence;
 
 replication
 {
@@ -238,7 +239,7 @@ simulated function SetIsWeaponMounted(bool bNewIsWeaponMounted)
 simulated function OnSwitchMesh()
 {
     super.OnSwitchMesh();
-    
+
     SetupAnimationDrivers();
     InitializeAmmoRounds();
     UpdateClip();
@@ -337,7 +338,12 @@ simulated function SpawnEjectors()
         }
 
         EjectCoords = GetBoneCoords(ShellEjectors[i].Bone);
-        Ejection = Spawn(ShellEjectors[i].ShellEjectClass, self,, EjectCoords.Origin, GetBoneRotation(ShellEjectors[i].Bone));
+        Ejection = Spawn(
+            ShellEjectors[i].ShellEjectClass,
+            self,,
+            EjectCoords.Origin,
+            GetBoneRotation(ShellEjectors[i].Bone)
+            );
 
         if (Ejection == none)
         {
@@ -357,7 +363,7 @@ function Fire(Controller C)
     local DHMountedMGPawn MGP;
 
     super.Fire(C);
-    
+
     StartFiringAnimation();
 
     if (Level.NetMode != NM_DedicatedServer)
@@ -369,7 +375,7 @@ function Fire(Controller C)
     {
         BarrelBundle.WeaponFired();
     }
-    
+
     UpdateClip();
 
     MGP = DHMountedMGPawn(WeaponPawn);
@@ -406,23 +412,20 @@ simulated function StopFiringAnimation()
     }
 }
 
-function CeaseFire(Controller C, Bool bWasAltFire)
+function CeaseFire(Controller C, bool bWasAltFire)
 {
     super.CeaseFire(C, bWasAltFire);
 
     StopFiringAnimation();
 }
 
-simulated function bool IsBusy()
-{
-    return false;
-}
+simulated function bool IsBusy();
 
 simulated state Busy
 {
     // Don't allow the player to change the range while busy.
-    simulated function DecrementRange() {}
-    simulated function IncrementRange() {}
+    simulated function DecrementRange();
+    simulated function IncrementRange();
     // No firing while busy.
     simulated function bool ReadyToFire(bool bAltFire);
     event bool AttemptFire(Controller C, bool bAltFire);
@@ -504,7 +507,7 @@ simulated state Reloading extends Busy
     simulated function Tick(float DeltaTime)
     {
         super.Tick(DeltaTime);
-        
+
         TickForceAim();
     }
 
@@ -578,7 +581,7 @@ simulated function StartForceAim(Rotator AimTarget, float TweenSeconds, UInterp.
 simulated function StopForceAim(float TweenSeconds, UInterp.EInterpolationType InterpolationType)
 {
     local Quat T;
-    
+
     ForceAimStartSeconds = Level.TimeSeconds;
     ForceAimEndSeconds = Level.TimeSeconds + TweenSeconds;
     // Swap the start and target.
@@ -793,7 +796,10 @@ private simulated function SendRangeMessage()
     }
 
     // Send a message to the player's HUD.
-    WeaponPawn.ReceiveLocalizedMessage(Class'DHWeaponRangeMessage', Class'UInteger'.static.FromShorts(RangeParams.RangeTable[RangeIndex].Range, int(RangeParams.DistanceUnit)));
+    WeaponPawn.ReceiveLocalizedMessage(
+        Class'DHWeaponRangeMessage',
+        Class'UInteger'.static.FromShorts(RangeParams.RangeTable[RangeIndex].Range, int(RangeParams.DistanceUnit))
+        );
 }
 
 simulated function RangeIndexChanged()
@@ -906,7 +912,11 @@ function bool ResupplyAmmo()
     }
 
     // If weapon is waiting to reload & we have a player who doesn't use manual reloading (so must be out of ammo), then try to start a reload
-    if (ReloadState == RL_Waiting && WeaponPawn != none && WeaponPawn.Occupied() && !PlayerUsesManualReloading() && bDidResupply)
+    if (ReloadState == RL_Waiting
+        && WeaponPawn != none
+        && WeaponPawn.Occupied()
+        && !PlayerUsesManualReloading()
+        && bDidResupply)
     {
         AttemptReload();
     }
@@ -919,7 +929,7 @@ function bool ResupplyAmmo()
             bDidResupply = true;
         }
     }
-    
+
     return bDidResupply;
 }
 
@@ -1002,8 +1012,8 @@ simulated function bool PlayerUsesManualReloading()
 // Modified to take the ProjectileRotationMode into account.
 simulated function CalcWeaponFire(bool bWasAltFire)
 {
-    local name      WeaponFireAttachBone;
-    local Vector    CurrentFireOffset;
+    local name WeaponFireAttachBone;
+    local Vector CurrentFireOffset;
 
     // Get attachment bone & positional offset
     WeaponFireAttachBone = WeaponFireAttachmentBone;
@@ -1020,7 +1030,7 @@ simulated function CalcWeaponFire(bool bWasAltFire)
     }
 
     WeaponFireLocation = GetBoneCoords(WeaponFireAttachBone).Origin;
-    
+
     if (CurrentFireOffset != vect(0.0, 0.0, 0.0)) // apply any positional offset
     {
         WeaponFireLocation += CurrentFireOffset >> WeaponFireRotation;

@@ -10,4 +10,3 @@ defaultproperties
     VehicleClass=Class'DH_M45QuadmountGun_Snow'
     Skins(0)=Texture'DH_Artillery_tex.m45_trailer_snow'
 }
-

@@ -6,8 +6,8 @@
 class DHMortar extends DHMountedGun
     abstract;
 
-var DHConstructionSocket            Socket;
-var DHConstructionSocketParameters  SocketParameters;
+var DHConstructionSocket Socket;
+var DHConstructionSocketParameters SocketParameters;
 
 replication
 {
@@ -37,7 +37,7 @@ simulated function Destroyed()
 {
     super.Destroyed();
 
-    if (Socket != none)
+    if (Role == ROLE_Authority && Socket != none)
     {
         Socket.Destroy();
     }

@@ -11,4 +11,3 @@ defaultproperties
     CannonSkins(0)=Texture'DH_M116_tex.M116_body_winter'
     DestroyedMeshSkins(0)=Material'DH_M116_tex.M116_body_winter_destroyed_fb'
 }
-

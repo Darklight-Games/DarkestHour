@@ -18,20 +18,20 @@ var bool bIsZoomed;
 var() float ZoomFOV;
 
 // Reload
-var() name  ReloadCameraBone;
+var() name ReloadCameraBone;
 
 // First Person Hands
-var DHFirstPersonHands  HandsActor;
-var Mesh                HandsMesh;
-var() name              HandsReloadSequence;
-var() name              HandsIdleSequence;
-var name                HandsAttachBone;
-var() Vector            HandsRelativeLocation;
+var DHFirstPersonHands HandsActor;
+var Mesh HandsMesh;
+var() name HandsReloadSequence;
+var() name HandsIdleSequence;
+var name HandsAttachBone;
+var() Vector HandsRelativeLocation;
 
 // Belt
-var Class<DHFirstPersonBelt>    BeltClass;
-var name                        BeltAttachBone;
-var DHFirstPersonBelt           BeltActor;
+var class<DHFirstPersonBelt> BeltClass;
+var name BeltAttachBone;
+var DHFirstPersonBelt BeltActor;
 
 // Camera Transition
 var DHCameraTransitionController CameraTransitionController;
@@ -57,6 +57,7 @@ struct PositionInfoExtra
 {
     var name CameraBone;
 };
+
 var() array<PositionInfoExtra> DriverPositionsExtra;
 
 var Material BarrelHudTexture;
@@ -98,7 +99,10 @@ simulated state ViewTransition
             // Then transition to the ironsights camera at the end of the animation.
             CameraTransitionController.QueueCameraTransition(
                 GetCameraBoneForPosition(IronSightsPositionIndex),
-                Level.TimeSeconds + ViewTransitionDuration - 0.25, 0.25, INTERP_SmoothStep);
+                Level.TimeSeconds + ViewTransitionDuration - 0.25,
+                0.25,
+                INTERP_SmoothStep
+                );
         }
     }
 
@@ -153,7 +157,7 @@ simulated state LeavingViewTransition
         {
             MaybeTransitionToTargetDriverPosition();
         }
-        else  if (PendingAction == ACTION_Reload)
+        else if (PendingAction == ACTION_Reload)
         {
             AttemptReload();
         }
@@ -343,19 +347,25 @@ simulated function PlayReloadAnim(float AnimationDurationSeconds)
     }
 
     // Add a transition to and from the reload camera.
+    CameraTransitionController.QueueCameraTransition(ReloadCameraBone, Level.TimeSeconds, 0.25, INTERP_SmoothStep);
     CameraTransitionController.QueueCameraTransition(
-        ReloadCameraBone, Level.TimeSeconds, 0.25, INTERP_SmoothStep);
-    CameraTransitionController.QueueCameraTransition(
-        GetCameraBoneForPosition(DriverPositionIndex), Level.TimeSeconds + AnimationDurationSeconds - 0.25, 0.25, INTERP_SmoothStep);
+        GetCameraBoneForPosition(DriverPositionIndex),
+        Level.TimeSeconds + AnimationDurationSeconds - 0.25,
+        0.25,
+        INTERP_SmoothStep
+        );
 }
 
 simulated function PlayBarrelChangeAnim(float AnimationDurationSeconds)
 {
     // Add a transition to and from the reload camera.
+    CameraTransitionController.QueueCameraTransition(ReloadCameraBone, Level.TimeSeconds, 0.25, INTERP_SmoothStep);
     CameraTransitionController.QueueCameraTransition(
-        ReloadCameraBone, Level.TimeSeconds, 0.25, INTERP_SmoothStep);
-    CameraTransitionController.QueueCameraTransition(
-        GetCameraBoneForPosition(DriverPositionIndex), Level.TimeSeconds + AnimationDurationSeconds, 0.25, INTERP_SmoothStep);
+        GetCameraBoneForPosition(DriverPositionIndex),
+        Level.TimeSeconds + AnimationDurationSeconds,
+        0.25,
+        INTERP_SmoothStep
+        );
 }
 
 // Resets the queued actions, camera transitions, hands animation and zoom.
@@ -450,7 +460,12 @@ simulated function Tick(float DeltaTime)
     super.Tick(DeltaTime);
 }
 
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    )
 {
     local DHMountedMG MG;
     local Rotator GunsightCameraRotation;
@@ -472,10 +487,12 @@ simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor Vie
         CameraLocation = Gun.GetBoneCoords(GunsightCameraBone).Origin;
         GunsightCameraRotation.Pitch = MG.RangeParams.GetGunsightPitchOffset();
         // TODO: double check that this is the right order of multiplication; this could be the cause of aiming issues.
-        CameraRotation = QuatToRotator(QuatProduct(
-            QuatFromRotator(GunsightCameraRotation),
-            QuatFromRotator(Gun.GetBoneRotation(GunsightCameraBone))
-            ));
+        CameraRotation = QuatToRotator(
+            QuatProduct(
+                QuatFromRotator(GunsightCameraRotation),
+                QuatFromRotator(Gun.GetBoneRotation(GunsightCameraBone))
+                )
+            );
     }
     else
     {
@@ -488,7 +505,7 @@ simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor Vie
 }
 
 // Despite the name, this function is used to update the gun's rotation using the mouse.
-function UpdateRocketAcceleration(Float DeltaTime, Float YawChange, Float PitchChange)
+function UpdateRocketAcceleration(float DeltaTime, float YawChange, float PitchChange)
 {
     PitchChange *= 0.5;
 
@@ -509,7 +526,7 @@ function UpdateRocketAcceleration(Float DeltaTime, Float YawChange, Float PitchC
 }
 
 // Pitch is handled with W/S keys.
-function HandleTurretRotation(Float DeltaTime, Float YawChange, Float PitchChange)
+function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange)
 {
     local DHMountedMG MG;
 
@@ -561,7 +578,7 @@ simulated function NextWeapon()
     }
 
     SetIsZoomed(false);
-    
+
     super.NextWeapon();
 }
 
@@ -603,15 +620,14 @@ function OnFire()
 
 // Modified to fix driver's ragdoll falling into terrain by changing its offset.
 function DriverDied()
-{   
+{
     if (Driver != none)
-    {   
+    {
         Driver.SetLocation(Driver.Location + RagdollOffset);
     }
-    
+
     super.DriverDied();
 }
-
 
 // Attempt to change barrels. On a net client, this sends a request to the server,
 // which validates and starts the barrel change, then tells the owning client to
@@ -721,7 +737,7 @@ simulated function bool CanReloadInDriverPositionIndex(int DriverPositionIndex)
 
 // Attempt to reload. If the player is not in the reload position, they are moved
 // there first and the reload is started once the transition ends.
-// 
+//
 // Only the server can start a new reload, so a net client sends a request to the
 // server. The server then replicates the new reload state back to the client via
 // ClientSetReloadState, which starts the clientside reload.
@@ -797,7 +813,7 @@ function bool CanBeResuppliedByType(DHResupplyStrategy.EResupplyType ResupplyTyp
     {
         return true;
     }
-    
+
     return super.CanBeResuppliedByType(ResupplyType);
 }
 
@@ -839,7 +855,7 @@ exec simulated function SpawnRangeTarget(int SizeMeters)
     {
         return;
     }
-    
+
     MG = DHMountedMG(Gun);
 
     if (MG == none || MG.RangeParams == none)
@@ -858,13 +874,14 @@ exec simulated function SpawnRangeTarget(int SizeMeters)
         TargetActor.Destroy();
     }
 
-    TargetLocation = MuzzleCoords.Origin + (Direction * Class'DHUnits'.static.MetersToUnreal(MG.RangeParams.RangeTable[MG.RangeIndex].Range));
+    TargetLocation = MuzzleCoords.Origin
+        + (Direction * Class'DHUnits'.static.MetersToUnreal(MG.RangeParams.RangeTable[MG.RangeIndex].Range));
 
     if (SizeMeters == 0)
     {
         SizeMeters = 4.0;
     }
-    
+
     TargetActor = Spawn(Class'DHRangeTargetActor', self,, TargetLocation, Rotator(-Direction));
     TargetActor.SetStaticMesh(TargetStaticMesh);
     // Set the target size.
@@ -878,7 +895,9 @@ exec simulated function SetRangeTheta(float NewTheta)
 
     MG = DHMountedMG(Gun);
 
-    if ((Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode()) || MG == none || MG.RangeParams == none)
+    if ((Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode())
+        || MG == none
+        || MG.RangeParams == none)
     {
         return;
     }

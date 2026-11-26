@@ -4,34 +4,34 @@
 //==============================================================================
 
 class DHSetupPhaseManager extends Actor
-    placeable
-    hidecategories(Collision,Lighting,LightColor,Karma,Force,Sound);
+    hidecategories(Collision, Lighting, LightColor, Karma, Force, Sound)
+    placeable;
 
 struct TeamReinf
 {
     var() int AxisReinforcements, AlliesReinforcements;
 };
 
-var() int               SetupPhaseDuration;                 // How long should the setup phase be in seconds
-var() int               SpawningEnabledTime;                // Round time at which players can spawn
-var() int               TeamAddSpawningEnabledTime[2];      // Additional time to add for spawning to enable for each team (can be negative)
+var() int SetupPhaseDuration; // How long should the setup phase be in seconds
+var() int SpawningEnabledTime; // Round time at which players can spawn
+var() int TeamAddSpawningEnabledTime[2]; // Additional time to add for spawning to enable for each team (can be negative)
 
-var() name              PhaseMineFieldTag;                  // Tag of minefield volumes to disable once setup phase is over
-var() name              PhaseBoundaryTag;                   // Tag of DestroyableStaticMeshes to disable once phase is over
-var() array<name>       InitialSpawnPointTags;              // Tags of spawn points that should only be active while in setup phase
+var() name PhaseMineFieldTag; // Tag of minefield volumes to disable once setup phase is over
+var() name PhaseBoundaryTag; // Tag of DestroyableStaticMeshes to disable once phase is over
+var() array<name> InitialSpawnPointTags; // Tags of spawn points that should only be active while in setup phase
 
-var() bool              bScaleUpPhaseEndReinforcements;     // Scales the reinforcements set in "PhaseEndReinforcements" upward to account for more players
-var() bool              bResetRoundTimer;                   // If true will reset the round's timer to the proper value when phase is over
+var() bool bScaleUpPhaseEndReinforcements; // Scales the reinforcements set in "PhaseEndReinforcements" upward to account for more players
+var() bool bResetRoundTimer; // If true will reset the round's timer to the proper value when phase is over
 
-var() TeamReinf         PhaseEndReinforcements;             // What to set reinforcements to at the end of the phase (-1 means no change)
+var() TeamReinf PhaseEndReinforcements; // What to set reinforcements to at the end of the phase (-1 means no change)
 
-var() name              PhaseEndEventName;                  // Event to call when the phase ends
+var() name PhaseEndEventName; // Event to call when the phase ends
 
-var bool                bSkipPreStart;                      // If true will override the game's default PreStartTime, making it zero
-var bool                bPlayersOpenedMenus;
-var int                 TimerCount;
-var int                 SetupPhaseDurationActual;
-var int                 SpawningEnabledTimeActual[2];
+var bool bSkipPreStart; // If true will override the game's default PreStartTime, making it zero
+var bool bPlayersOpenedMenus;
+var int TimerCount;
+var int SetupPhaseDurationActual;
+var int SpawningEnabledTimeActual[2];
 
 function ModifySetupPhaseDuration(int Seconds, optional bool bSetToValue);
 
@@ -124,7 +124,10 @@ auto state Timing
 
                     if (PC != none)
                     {
-                        PC.ReceiveLocalizedMessage(Class'DHSetupPhaseMessage', Class'UInteger'.static.FromShorts(0, SetupPhaseDurationActual - TimerCount));
+                        PC.ReceiveLocalizedMessage(
+                            Class'DHSetupPhaseMessage',
+                            Class'UInteger'.static.FromShorts(0, SetupPhaseDurationActual - TimerCount)
+                            );
                     }
                 }
             }
@@ -219,7 +222,8 @@ auto state Timing
         }
         else
         {
-            GRI.SpawnsRemaining[ALLIES_TEAM_INDEX] = PhaseEndReinforcements.AlliesReinforcements * ScaleUpModifier + UnspawnedPlayers[ALLIES_TEAM_INDEX];
+            GRI.SpawnsRemaining[ALLIES_TEAM_INDEX] = PhaseEndReinforcements.AlliesReinforcements * ScaleUpModifier
+                + UnspawnedPlayers[ALLIES_TEAM_INDEX];
         }
 
         if (PhaseEndReinforcements.AxisReinforcements < 0)
@@ -228,7 +232,8 @@ auto state Timing
         }
         else
         {
-            GRI.SpawnsRemaining[AXIS_TEAM_INDEX] = PhaseEndReinforcements.AxisReinforcements * ScaleUpModifier + UnspawnedPlayers[AXIS_TEAM_INDEX];
+            GRI.SpawnsRemaining[AXIS_TEAM_INDEX] = PhaseEndReinforcements.AxisReinforcements * ScaleUpModifier
+                + UnspawnedPlayers[AXIS_TEAM_INDEX];
         }
 
         // Set the starting reinforcements in DHGame (for use in reinforcement warning calculation)

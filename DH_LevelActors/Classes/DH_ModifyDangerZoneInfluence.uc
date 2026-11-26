@@ -12,17 +12,17 @@ enum EInfluenceType
     IT_Base,
     IT_Axis,
     IT_Allies,
-    IT_Neutral
+    IT_Neutral,
 };
 
 struct DangerZoneInfluence
 {
-    var()   EInfluenceType  Type;
-    var()   name            ObjectiveTag;
-    var()   float           NewInfluence;
+    var() EInfluenceType Type;
+    var() name ObjectiveTag;
+    var() float NewInfluence;
 };
 
-var()   array<DangerZoneInfluence>  DangerZoneInfluences;
+var() array<DangerZoneInfluence> DangerZoneInfluences;
 
 event Trigger(Actor Other, Pawn EventInstigator)
 {

@@ -120,7 +120,7 @@ function JSONLiteral ReadTrue()
     }
 }
 
-//BUGS:
+// BUGS:
 // [3,] - invalid array, but parsed as valid
 function JSONArray ReadArray()
 {
@@ -284,21 +284,23 @@ function string ReadEscape()
         case "/":
         case "\\":
             return C;
-        case "b":   // Backspace
+        case "b": // Backspace
             return Chr(0x08);
-        case "f":   // Form feed
+        case "f": // Form feed
             return Chr(0x0C);
-        case "n":   // Line feed
+        case "n": // Line feed
             return Chr(0x0A);
-        case "r":   // Carriage return
+        case "r": // Carriage return
             return Chr(0x0D);
-        case "t":   // Tab
+        case "t": // Tab
             return Chr(0x09);
-        case "u":   // Unicode character (eg. \u0820)
+        case "u": // Unicode character (eg. \u0820)
             return Chr(Class'UInteger'.static.FromHex(InputBuffer.Read(4)));
         default:
             return "";
     }
+
+    return "";
 }
 
 function int ReadStringInternal(out string S)
@@ -390,7 +392,7 @@ private function JSONNumber ReadNumber()
             break;
         case "e":
         case "E":
-            //TODO: fill this in
+            // TODO: fill this in
             break;
         default:
             break;

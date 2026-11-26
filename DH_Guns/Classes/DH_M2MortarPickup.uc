@@ -11,4 +11,3 @@ defaultproperties
     // TODO: not static mesh, use normal mesh in fun pose.
     StaticMesh=StaticMesh'DH_M2Mortar_stc.M2MORTAR_PICKUP'
 }
-

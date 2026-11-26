@@ -22,7 +22,7 @@ class DH_FG42Weapon extends DHAutoWeapon;
 var private enum EBoltMode
 {
     BM_Open,
-    BM_Closed
+    BM_Closed,
 } BoltMode;
 var int BoltOpenSlot;
 var int BoltClosedSlot;
@@ -30,11 +30,11 @@ var name BoltOpenBoneName;
 var name BoltClosedBoneName;
 
 // Sets the bolt mode and updates the bolt visuals.
-simulated function SetBoltMode(EBoltMode BoltMode)
+simulated function SetBoltMode(EBoltMode NewBoltMode)
 {
-    if (self.BoltMode != BoltMode)
+    if (BoltMode != NewBoltMode)
     {
-        self.BoltMode = BoltMode;
+        BoltMode = NewBoltMode;
 
         UpdateBolt();
     }

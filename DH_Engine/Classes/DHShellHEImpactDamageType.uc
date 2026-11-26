@@ -4,5 +4,3 @@
 //==============================================================================
 
 class DHShellHEImpactDamageType extends DHShellImpactDamageType;
-
-

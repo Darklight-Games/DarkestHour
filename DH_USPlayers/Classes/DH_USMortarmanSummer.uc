@@ -4,4 +4,3 @@
 //==============================================================================
 
 class DH_USMortarmanSummer extends DHDeprecated;
-

@@ -1,4 +1,3 @@
-
 //==============================================================================
 // Darkest Hour: Europe '44-'45
 // Copyright (c) Darklight Games.  All rights reserved.
@@ -6,24 +5,25 @@
 
 class DHGUIProportionalContainer extends DHGUIPlainBackground;
 
-var(Debug) bool    bChangingPosValues;
+var(Debug) bool bChangingPosValues;
 
 struct ComponentPosValues
 {
-        var GUIComponent    component;
-        var float           WinLeft, WinTop, WinWidth, WinHeight;
+    var GUIComponent component;
+    var float WinLeft, WinTop, WinWidth, WinHeight;
 };
 
-var()      array<ComponentPosValues>    AlignOriginalValues;
+var() array<ComponentPosValues> AlignOriginalValues;
 
 function bool ManageComponent(GUIComponent Component)
 {
-        local bool bResult;
-        bResult = super.ManageComponent(Component);
-        InternalPreDraw(none);                  // This is used to position the controls before drawing them
-                                                    // (else you see the controls full screen for a split second,
-                                                    // which looks kinda odd)
-        return bResult;
+    local bool bResult;
+
+    bResult = super.ManageComponent(Component);
+    InternalPreDraw(none); // This is used to position the controls before drawing them
+    // (else you see the controls full screen for a split second,
+    // which looks kinda odd)
+    return bResult;
 }
 
 function bool InternalPreDraw(Canvas C)
@@ -32,11 +32,13 @@ function bool InternalPreDraw(Canvas C)
     local float AL, AT, AW, AH, LPad, RPad, TPad, BPad;
     local ComponentPosValues values;
 
-    if (AlignStack.Length == 0) {
+    if (AlignStack.Length == 0)
+    {
         return false;
     }
 
-    if (bChangingPosValues) {
+    if (bChangingPosValues)
+    {
         AlignOriginalValues.Length = 0;
         return false;
     }
@@ -46,9 +48,9 @@ function bool InternalPreDraw(Canvas C)
     AW = ActualWidth();
     AH = ActualHeight();
 
-    LPad = (LeftPadding   * AW) + ImageOffset[0];
-    TPad = (TopPadding    * AH) + ImageOffset[1];
-    RPad = (RightPadding  * AW) + ImageOffset[2];
+    LPad = (LeftPadding * AW) + ImageOffset[0];
+    TPad = (TopPadding * AH) + ImageOffset[1];
+    RPad = (RightPadding * AW) + ImageOffset[2];
     BPad = (BottomPadding * AH) + ImageOffset[3];
 
     if (Style != none)
@@ -78,20 +80,24 @@ function bool InternalPreDraw(Canvas C)
 
 function ComponentPosValues GetAlignOriginalValues(GUIComponent component)
 {
-        local ComponentPosValues values;
-        local int i;
+    local ComponentPosValues values;
+    local int i;
 
-        for (i = 0; i < AlignOriginalValues.Length; ++i)
-                if (AlignOriginalValues[i].component == component)
-                    return AlignOriginalValues[i];
+    for (i = 0; i < AlignOriginalValues.Length; ++i)
+    {
+        if (AlignOriginalValues[i].component == component)
+        {
+            return AlignOriginalValues[i];
+        }
+    }
 
-        values.component = component;
-        values.WinLeft = component.WinLeft;
-        values.WinTop = component.WinTop;
-        values.WinWidth = component.WinWidth;
-        values.WinHeight = component.WinHeight;
-        AlignOriginalValues[AlignOriginalValues.Length] = values;
-        return values;
+    values.component = component;
+    values.WinLeft = component.WinLeft;
+    values.WinTop = component.WinTop;
+    values.WinWidth = component.WinWidth;
+    values.WinHeight = component.WinHeight;
+    AlignOriginalValues[AlignOriginalValues.Length] = values;
+    return values;
 }
 
 defaultproperties

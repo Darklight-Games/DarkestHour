@@ -4,5 +4,3 @@
 //==============================================================================
 
 class DH_RKKA_GreatcoatGreyAssaultEarly extends DHDeprecated;
-
-

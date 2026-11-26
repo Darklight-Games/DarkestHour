@@ -6,7 +6,12 @@
 class DHServerSayMessage extends DHChatMessage
     abstract;
 
-static function string AssembleString(HUD myHUD, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional string MessageString)
+static function string AssembleString(
+    HUD myHUD,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional string MessageString
+    )
 {
     return default.MessagePrefix @ ":" @ MessageString;
 }

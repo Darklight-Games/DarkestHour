@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_Czech extends DHSPECIES_Human; //to do: slovak?
+class DH_Czech extends DHSPECIES_Human; // to do: slovak?
 
 defaultproperties
 {

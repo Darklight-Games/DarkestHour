@@ -36,13 +36,13 @@ Matt's explanation of several nasty bugs in ROMineVolume, especially when mine v
     Solution: when a vehicle enters the MV or we find a vehicle in the MV, loop through all occupants & give a warning to any players.
 */
 
-var()   bool                    bInitiallyActive;    // leveler can set MV to be inactive at start of round, so it can be activated later by an event
-var()   bool                    bIsAlsoNoArtyVolume; // leveler can set this volume to also function like a no arty volume, stopping artillery/mortars rounds from being effective
-var     float                   ActivationTime;      // time this MV was activated - used in workaround fix to bug if player teleports into MV, & also useful in subclasses
-var     class<ROMineFieldMsg>   WarningMessageClass; // local message class to use for warning messages, so can be replaced by custom messages in a subclass
+var() bool bInitiallyActive; // leveler can set MV to be inactive at start of round, so it can be activated later by an event
+var() bool bIsAlsoNoArtyVolume; // leveler can set this volume to also function like a no arty volume, stopping artillery/mortars rounds from being effective
+var float ActivationTime; // time this MV was activated - used in workaround fix to bug if player teleports into MV, & also useful in subclasses
+var class<ROMineFieldMsg> WarningMessageClass; // local message class to use for warning messages, so can be replaced by custom messages in a subclass
 
-var int                             Index;           // Where our activation state is stored in DHGRI.DHMineVolumeIsActives
-var private DHGameReplicationInfo   GRI;
+var int Index; // Where our activation state is stored in DHGRI.DHMineVolumeIsActives
+var private DHGameReplicationInfo GRI;
 
 // Modified to skip over the Super in ROMineVolume as it was always activating the mine volume & instead we need to use our bInitiallyActive setting
 // We don't need to do anything here as we can leave it to Reset(), which gets called whenever a new round starts, otherwise we just duplicate the same functionality here
@@ -170,11 +170,11 @@ event UnTouch(Actor Other)
 // For all relevant players entering/exiting the MV, including all occupants of a vehicle, it calls either PawnEnteredMineVolume() or PawnExitedMineVolume()
 function ProcessTouch(Actor Other, optional bool bUnTouch)
 {
-    local Pawn         P;
-    local ROVehicle    Vehicle;
+    local Pawn P;
+    local ROVehicle Vehicle;
     local ROMineVolume MV;
-    local bool         bStillInsideAnotherMineVolume;
-    local int          i;
+    local bool bStillInsideAnotherMineVolume;
+    local int i;
 
     P = Pawn(Other);
 
@@ -240,7 +240,7 @@ function ProcessTouch(Actor Other, optional bool bUnTouch)
 
                 i++;
             }
-            until (i > Vehicle.WeaponPawns.Length)
+            until (i > Vehicle.WeaponPawns.Length);
         }
 
         // If player entered MV, make sure we have a PainTimer running
@@ -311,7 +311,7 @@ function bool RelevantVehicleInMineVolume(ROVehicle Vehicle)
 {
     local bool bVehicleBeingDestroyed;
     local Pawn Occupant;
-    local int  i;
+    local int i;
 
     bVehicleBeingDestroyed = IsPawnInMineVolumeTooLong(Vehicle); // if vehicle is going to get blown up then for now just set a flag so we can handle warnings
 
@@ -339,7 +339,7 @@ function bool RelevantVehicleInMineVolume(ROVehicle Vehicle)
 
         i++;
     }
-    until (i > Vehicle.WeaponPawns.Length)
+    until (i > Vehicle.WeaponPawns.Length);
 
     // If vehicle's time is up, blow it up now that we've warned the occupants
     if (bVehicleBeingDestroyed)
@@ -410,7 +410,8 @@ function bool IsARelevantPawn(Pawn P)
         PawnTeam = P.GetTeamNum();
     }
 
-    return (PawnTeam == AXIS_TEAM_INDEX && MineKillStyle == KS_Axis) || (PawnTeam == ALLIES_TEAM_INDEX && MineKillStyle == KS_Allies);
+    return (PawnTeam == AXIS_TEAM_INDEX && MineKillStyle == KS_Axis)
+        || (PawnTeam == ALLIES_TEAM_INDEX && MineKillStyle == KS_Allies);
 }
 
 // Check if pawn has been inside the mine volume too long & is going to get blown up (added for readability in other functions)

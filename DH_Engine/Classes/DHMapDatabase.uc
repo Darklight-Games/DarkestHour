@@ -13,11 +13,11 @@ var localized string SizeLargeText;
 
 enum EMapSize
 {
-    SIZE_Any,           // 0-64 players
-    SIZE_ExtraSmall,    // 0-24 players
-    SIZE_Small,         // 0-48 players
-    SIZE_Medium,        // 24+ players
-    SIZE_Large,         // 48+ players
+    SIZE_Any, // 0-64 players
+    SIZE_ExtraSmall, // 0-24 players
+    SIZE_Small, // 0-48 players
+    SIZE_Medium, // 24+ players
+    SIZE_Large, // 48+ players
 };
 
 struct SMapInfo
@@ -29,8 +29,8 @@ struct SMapInfo
     var DH_LevelInfo.EAxisNation AxisNation;
 };
 
-var array<SMapInfo>         MapInfos;
-var HashTable_string_int    MapInfoIndexTable;
+var array<SMapInfo> MapInfos;
+var HashTable_string_int MapInfoIndexTable;
 
 function Initialize()
 {
@@ -51,9 +51,9 @@ static function string GetMapSizeString(EMapSize Size)
             return default.SizeMediumText;
         case SIZE_Large:
             return default.SizeLargeText;
-        default:
-            return "";
     }
+
+    return "";
 }
 
 static function string GetAlliedNationString(DH_LevelInfo.EAlliedNation AlliedNation)
@@ -70,9 +70,11 @@ static function string GetAlliedNationString(DH_LevelInfo.EAlliedNation AlliedNa
             return "USSR";
         case NATION_Poland:
             return "Poland";
-        default:
-            return "";
+        case NATION_Czechoslovakia:
+            return "Czechoslovakia";
     }
+
+    return "";
 }
 
 static function string GetAxisNationString(DH_LevelInfo.EAxisNation AxisNation)
@@ -83,9 +85,9 @@ static function string GetAxisNationString(DH_LevelInfo.EAxisNation AxisNation)
             return "Germany";
         case NATION_Italy:
             return "Italy";
-        default:
-            return "";
     }
+
+    return "";
 }
 
 static function GetMapSizePlayerCountRange(EMapSize Size, out int PlayersMin, out int PlayersMax)
@@ -148,7 +150,6 @@ static function string GetHumanReadableMapName(string MapName)
 {
     return Repl(Repl(Repl(MapName, "_", " "), ".rom", ""), "DH-", "");
 }
-
 
 defaultproperties
 {

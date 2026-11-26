@@ -18,4 +18,4 @@ defaultproperties
         KMaxAngularSpeed=0.0
     End Object
     KParams=KParams0
-}   
+}

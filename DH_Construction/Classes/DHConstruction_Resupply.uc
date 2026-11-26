@@ -6,12 +6,12 @@
 class DHConstruction_Resupply extends DHConstruction
     abstract;
 
-var class<DHResupplyAttachment>         ResupplyAttachmentClass;
-var DHResupplyAttachment                ResupplyAttachment;
-var int                                 ResupplyCount;
-var DHResupplyStrategy.EResupplyType    ResupplyType;
-var float                               ResupplyAttachmentCollisionRadius;
-var float                               ResupplyAttachmentCollisionHeight;
+var class<DHResupplyAttachment> ResupplyAttachmentClass;
+var DHResupplyAttachment ResupplyAttachment;
+var int ResupplyCount;
+var DHResupplyStrategy.EResupplyType ResupplyType;
+var float ResupplyAttachmentCollisionRadius;
+var float ResupplyAttachmentCollisionHeight;
 
 function PostBeginPlay()
 {

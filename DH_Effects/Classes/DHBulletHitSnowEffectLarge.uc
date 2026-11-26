@@ -5,7 +5,7 @@
 
 class DHBulletHitSnowEffectLarge extends Emitter;
 
-//particles: 37
+// particles: 37
 
 defaultproperties
 {

@@ -7,7 +7,6 @@
 // Copyright (C) 2003 John "Ramm-Jaeger" Gibson / Adjusted by Matty
 //=============================================================================
 
-
 class DHGrenadeMark extends DHBlastMark;
 
 //=============================================================================

@@ -10,13 +10,13 @@ class DH_ModifyMainBaseSupplyCache extends DH_LevelActors;
 enum EModifyAction
 {
     ACTION_Disable,
-    ACTION_Enable
+    ACTION_Enable,
 };
 
-var()   name                        MainBaseSupplyCacheTag;
-var()   EModifyAction               ModifyAction;
+var() name MainBaseSupplyCacheTag;
+var() EModifyAction ModifyAction;
 
-var private DHMainBaseSupplyCache   MainBaseSupplyCache;
+var private DHMainBaseSupplyCache MainBaseSupplyCache;
 
 function PostBeginPlay()
 {
@@ -50,4 +50,3 @@ event Trigger(Actor Other, Pawn EventInstigator)
             break;
     }
 }
-

@@ -3,6 +3,4 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_RKKA_TanTelogreikaRifleman extends DH_RKKA_TanTelogreikaRiflemanEarly; //to be removed
-
-
+class DH_RKKA_TanTelogreikaRifleman extends DH_RKKA_TanTelogreikaRiflemanEarly; // to be removed

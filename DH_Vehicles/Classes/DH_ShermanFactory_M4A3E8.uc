@@ -3,6 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
+// usagi: ignore[class-name-ends-in-digit]
 class DH_ShermanFactory_M4A3E8 extends DH_ShermanFactory;
 
 defaultproperties
@@ -10,4 +11,3 @@ defaultproperties
     VehicleClass=Class'DH_ShermanTank_M4A3E8'
     Mesh=SkeletalMesh'DH_ShermanM4A3E8_anm.body_ext'
 }
-

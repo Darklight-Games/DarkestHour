@@ -35,7 +35,7 @@ var localized string PlayerIsntCrouchedMessage;
 
 static function string GetStringFromType(DHActorProxy.EActorProxyErrorType Type)
 {
-    switch(Type)
+    switch (Type)
     {
         case ERROR_NoGround:
             return default.NoGroundMessage;
@@ -94,7 +94,12 @@ static function string GetStringFromType(DHActorProxy.EActorProxyErrorType Type)
     }
 }
 
-static function string GetString(optional int S, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int S,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local DHActorProxy ActorProxy;
     local string Result;
@@ -122,7 +127,7 @@ static function RenderComplexMessage(
     Canvas Canvas,
     out float XL,
     out float YL,
-    optional String MessageString,
+    optional string MessageString,
     optional int Switch,
     optional PlayerReplicationInfo RelatedPRI_1,
     optional PlayerReplicationInfo RelatedPRI_2,

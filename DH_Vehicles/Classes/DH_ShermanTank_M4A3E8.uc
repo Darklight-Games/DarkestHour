@@ -6,6 +6,7 @@
 // Volute Spring Suspension (HVSS), fitted with the 76mm M1 cannon.
 //==============================================================================
 
+// usagi: ignore[class-name-ends-in-digit]
 class DH_ShermanTank_M4A3E8 extends DH_ShermanTank_M4A376W;
 
 var StaticMesh LogsLeftStaticMesh;

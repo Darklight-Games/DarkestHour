@@ -26,7 +26,11 @@ simulated event Tick(float DeltaTime)
 
         if (Gun != none && P.GunToRotate != none)
         {
-            Instigator.ReceiveLocalizedMessage(Class'DHATGunRotateControlsMessage',, Instigator.PlayerReplicationInfo,, P.GunToRotate);
+            Instigator.ReceiveLocalizedMessage(
+                Class'DHATGunRotateControlsMessage',,
+                Instigator.PlayerReplicationInfo,,
+                P.GunToRotate
+                );
         }
         else
         {
@@ -65,11 +69,11 @@ simulated function OnEnterRotation()
     }
 }
 
-function ServerEnterRotation(DHMountedGun Gun, DHPawn Pawn)
+function ServerEnterRotation(DHMountedGun GunToRotate, DHPawn Pawn)
 {
-    if (Gun != none)
+    if (GunToRotate != none)
     {
-        Gun.ServerEnterRotation(Pawn);
+        GunToRotate.ServerEnterRotation(Pawn);
     }
 }
 
@@ -87,11 +91,11 @@ simulated function OnExitRotation()
     }
 }
 
-function ServerExitRotation(DHMountedGun Gun)
+function ServerExitRotation(DHMountedGun GunToRotate)
 {
-    if (Gun != none)
+    if (GunToRotate != none)
     {
-        Gun.ServerExitRotation();
+        GunToRotate.ServerExitRotation();
     }
 }
 
@@ -103,11 +107,11 @@ simulated function OnRotate(byte InputRotationFactor)
     }
 }
 
-function ServerRotate(DHMountedGun Gun, byte InputRotationFactor)
+function ServerRotate(DHMountedGun GunToRotate, byte InputRotationFactor)
 {
-    if (Gun != none)
+    if (GunToRotate != none)
     {
-        Gun.ServerRotate(InputRotationFactor);
+        GunToRotate.ServerRotate(InputRotationFactor);
     }
 }
 

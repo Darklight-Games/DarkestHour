@@ -16,4 +16,3 @@ defaultproperties
     CategoryClass=Class'DHScoreCategory_Combat'
     Value=-250
 }
-

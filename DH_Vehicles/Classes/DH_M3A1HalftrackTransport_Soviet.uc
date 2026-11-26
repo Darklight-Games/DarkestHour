@@ -5,7 +5,6 @@
 
 class DH_M3A1HalftrackTransport_Soviet extends DH_M3A1HalftrackTransport;
 
-
 defaultproperties
 {
 

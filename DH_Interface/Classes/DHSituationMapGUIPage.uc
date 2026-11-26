@@ -5,17 +5,17 @@
 
 class DHSituationMapGUIPage extends GUIPage;
 
-var automated   ROGUIProportionalContainer  c_MapRoot;
-var automated   DHGUIMapContainer           c_Map;
-var automated   GUILabel                    l_PromptLabel;
+var automated ROGUIProportionalContainer c_MapRoot;
+var automated DHGUIMapContainer c_Map;
+var automated GUILabel l_PromptLabel;
 
-var string                                  HideExecs[2];
-var array<int>                              HideKeys;
+var string HideExecs[2];
+var array<int> HideKeys;
 
-var localized string                        EnableMouseControlPrompt;
+var localized string EnableMouseControlPrompt;
 
-var int     SavedZoomLevel;
-var Vector  SavedOrigin;
+var int SavedZoomLevel;
+var Vector SavedOrigin;
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
@@ -99,11 +99,9 @@ function bool MapContainerPreDraw(Canvas C)
     Offset = (c_MapRoot.ActualWidth() - c_MapRoot.ActualHeight()) / 2.0;
     Offset /= ActualWidth();
 
-    c_Map.SetPosition(c_MapRoot.WinLeft + Offset,
-                      c_MapRoot.WinTop,
-                      c_MapRoot.ActualHeight(),
-                      c_MapRoot.ActualHeight(),
-                      true);
+    c_Map.SetPosition(
+        c_MapRoot.WinLeft + Offset, c_MapRoot.WinTop, c_MapRoot.ActualHeight(), c_MapRoot.ActualHeight(), true
+        );
 
     // Set the correct prompt label based on the state of the HUD.
     PC = DHPlayer(PlayerOwner());
@@ -193,7 +191,7 @@ function PopulateHideKeys()
 
     if (PlayerOwner() != none)
     {
-        for (i = 0;  i < arraycount(HideExecs); ++i)
+        for (i = 0; i < arraycount(HideExecs); ++i)
         {
             Split(PlayerOwner().ConsoleCommand("BINDINGTOKEY \"" $ HideExecs[i] $ "\""), ",", Bindings);
 

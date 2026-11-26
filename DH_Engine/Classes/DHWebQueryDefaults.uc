@@ -8,13 +8,13 @@ class DHWebQueryDefaults extends xWebQueryDefaults
 
 enum EOperationError
 {
-    ERR_OK,                  // 200
-    ERR_BadRequest,          // 400
-    ERR_Conflict,            // 409
+    ERR_OK, // 200
+    ERR_BadRequest, // 400
+    ERR_Conflict, // 409
     ERR_UnprocessableEntity, // 422
 };
 
-var config    string DefaultsRestrictionsPage;
+var config string DefaultsRestrictionsPage;
 var localized string DefaultsRestrictionsLink;
 var localized string NoteRestrictionsPage;
 
@@ -29,14 +29,48 @@ function bool Query(WebRequest Request, WebResponse Response)
 
     switch (Mid(Request.URI, 1))
     {
-        case DefaultPage:                   QueryDefaults(Request, Response);     return true; // Done : General
-        case DefaultsIndexPage:             QueryDefaultsMenu(Request, Response); return true; // Done : General
-        case DefaultsMapsPage:              if (!MapIsChanging()) QueryDefaultsMaps(Request, Response);         return true;
-        case DefaultsRulesPage:             if (!MapIsChanging()) QueryDefaultsRules(Request, Response);        return true;
-        case DefaultsRestrictionsPage:      if (!MapIsChanging()) QueryDefaultsRestrictions(Request, Response); return true;
-        case DefaultsIPPolicyPage:          if (!MapIsChanging()) QueryDefaultsIPPolicy(Request, Response);     return true;
-        case DefaultsRestartPage:           if (!MapIsChanging()) QueryRestartPage(Request, Response);          return true;
-        case DefaultsVotingGameConfigPage:  if (!MapIsChanging()) QueryVotingGameConfig(Request, Response);     return true;
+        case DefaultPage:
+            QueryDefaults(Request, Response);
+            return true; // Done : General
+        case DefaultsIndexPage:
+            QueryDefaultsMenu(Request, Response);
+            return true; // Done : General
+        case DefaultsMapsPage:
+            if (!MapIsChanging())
+            {
+                QueryDefaultsMaps(Request, Response);
+            }
+            return true;
+        case DefaultsRulesPage:
+            if (!MapIsChanging())
+            {
+                QueryDefaultsRules(Request, Response);
+            }
+            return true;
+        case DefaultsRestrictionsPage:
+            if (!MapIsChanging())
+            {
+                QueryDefaultsRestrictions(Request, Response);
+            }
+            return true;
+        case DefaultsIPPolicyPage:
+            if (!MapIsChanging())
+            {
+                QueryDefaultsIPPolicy(Request, Response);
+            }
+            return true;
+        case DefaultsRestartPage:
+            if (!MapIsChanging())
+            {
+                QueryRestartPage(Request, Response);
+            }
+            return true;
+        case DefaultsVotingGameConfigPage:
+            if (!MapIsChanging())
+            {
+                QueryVotingGameConfig(Request, Response);
+            }
+            return true;
     }
 
     return false;
@@ -44,7 +78,7 @@ function bool Query(WebRequest Request, WebResponse Response)
 
 function QueryDefaultsMenu(WebRequest Request, WebResponse Response)
 {
-    local string	GameType, Page, TempStr, Content;
+    local string GameType, Page, TempStr, Content;
     local int i;
 
     GameType = SetGamePI(Request.GetVariable("GameType", string(Level.Game.Class)));
@@ -68,18 +102,23 @@ function QueryDefaultsMenu(WebRequest Request, WebResponse Response)
     }
     else
     {
-        Response.Subst("GameTypeSelect", Level.Game.Default.GameName);
+        Response.Subst("GameTypeSelect", Level.Game.default.GameName);
     }
 
     // Set background colors
-    Response.Subst("DefaultBG", DefaultBG);	// for unused tabs
+    Response.Subst("DefaultBG", DefaultBG); // for unused tabs
 
     // Set URIs
     Content = MakeMenuRow(Response, GameType $ "&Page=" $ DefaultsMapsPage, DefaultsMapsLink);
 
     for (i = 0; i < GamePI.Groups.Length; i++)
     {
-        Content = Content $ MakeMenuRow(Response, GameType $ "&Page=" $ DefaultsRulesPage $ "&Filter=" $ GamePI.Groups[i], GamePI.Groups[i]);
+        Content = Content
+            $ MakeMenuRow(
+                Response,
+                GameType $ "&Page=" $ DefaultsRulesPage $ "&Filter=" $ GamePI.Groups[i],
+                GamePI.Groups[i]
+                );
     }
 
     Content $= MakeMenuRow(Response, GameType $ "&Page=" $ DefaultsRestrictionsPage, DefaultsRestrictionsLink);
@@ -222,7 +261,7 @@ function QueryDefaultsRestrictions(WebRequest Request, WebResponse Response)
         Response.Subst("VehAccess", Checkbox("VehAccess", DHAC.Restrictions[i].bVehicleAccess));
         Response.Subst("SquadName", Checkbox("SquadName", DHAC.Restrictions[i].bSquadNames));
         Response.Subst("LeaderPos", Checkbox("LeaderPos", DHAC.Restrictions[i].bLeaderPositions));
-        Response.Subst("PostAction", DefaultsRestrictionsPage $ "?IDNo="$string(i));
+        Response.Subst("PostAction", DefaultsRestrictionsPage $ "?IDNo=" $ string(i));
         Response.Subst("UpdateButton", "");
         Response.Subst("UpdateButton", SubmitButton("Update", Update));
         ItemList = ItemList $ WebInclude(DefaultsRestrictionsPage $ "_row");
@@ -241,4 +280,3 @@ defaultproperties
     DefaultsRestrictionsLink="Restrictions"
     NoteRestrictionsPage="Ban players from using selected in-game features"
 }
-

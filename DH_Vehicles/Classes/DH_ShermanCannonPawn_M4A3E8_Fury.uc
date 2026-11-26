@@ -9,4 +9,3 @@ defaultproperties
 {
     GunClass=Class'DH_ShermanCannon_M4A3E8_Fury'
 }
-

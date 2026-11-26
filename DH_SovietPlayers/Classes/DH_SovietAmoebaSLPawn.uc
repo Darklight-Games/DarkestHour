@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_SovietAmoebaSLPawn extends DH_SovietPawn;  //Green ("standart")
+class DH_SovietAmoebaSLPawn extends DH_SovietPawn; // Green ("standart")
 
 defaultproperties
 {

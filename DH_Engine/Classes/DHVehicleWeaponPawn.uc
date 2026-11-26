@@ -4,44 +4,45 @@
 //==============================================================================
 
 class DHVehicleWeaponPawn extends ROVehicleWeaponPawn
-    dependson(DHVehicleWeaponPawnAnimationDriverParameters) // TODO: move this to a "types" class instead.
-    abstract;
+    // TODO: move this to a "types" class instead.
+    abstract
+    dependson(DHVehicleWeaponPawnAnimationDriverParameters);
 
-var     DHVehicleWeapon     VehWep;              // just a convenient reference to the VehicleWeapon actor
+var DHVehicleWeapon VehWep; // just a convenient reference to the VehicleWeapon actor
 
 // View positions
-var     int         InitialPositionIndex;       // initial player position on entering
-var     int         UnbuttonedPositionIndex;    // lowest position number where player is unbuttoned
-var     float       ViewTransitionDuration;     // calculated to control the time we stay in state ViewTransition
+var int InitialPositionIndex; // initial player position on entering
+var int UnbuttonedPositionIndex; // lowest position number where player is unbuttoned
+var float ViewTransitionDuration; // calculated to control the time we stay in state ViewTransition
 
 // Binoculars
-var     int                         BinocPositionIndex; // index position when player is using binoculars
-var     class<DHProjectileWeapon>   BinocularsClass;    // on entering, records which class of the binoculars the player has (necessary to move to binocs position)
-var     DHDecoAttachment            BinocsAttachment;   // decorative actor spawned locally when player is using binoculars
+var int BinocPositionIndex; // index position when player is using binoculars
+var class<DHProjectileWeapon> BinocularsClass; // on entering, records which class of the binoculars the player has (necessary to move to binocs position)
+var DHDecoAttachment BinocsAttachment; // decorative actor spawned locally when player is using binoculars
 
 // Damage
-var     bool        bGunsightOpticsDestroyed;
-var     bool        bPeriscopeOpticsDestroyed;
-var     bool        bTraverseDamaged;
-var     bool        bElevationDamaged;
+var bool bGunsightOpticsDestroyed;
+var bool bPeriscopeOpticsDestroyed;
+var bool bTraverseDamaged;
+var bool bElevationDamaged;
 
 // Gunsight overlay
-var     Material    DestroyedOpticsOverlay;     // texture overlay for shattered glass to display "under" the gunsight
-var     Material    GunsightOverlay;            // texture overlay for gunsight
-var     float       GunsightSize;               // size of the gunsight overlay (1.0 means full screen width, 0.5 means half screen width, etc)
-var     float       OverlayCorrectionX;         // scope center correction in pixels, in case an overlay is off-center by pixel or two
-var     float       OverlayCorrectionY;
+var Material DestroyedOpticsOverlay; // texture overlay for shattered glass to display "under" the gunsight
+var Material GunsightOverlay; // texture overlay for gunsight
+var float GunsightSize; // size of the gunsight overlay (1.0 means full screen width, 0.5 means half screen width, etc)
+var float OverlayCorrectionX; // scope center correction in pixels, in case an overlay is off-center by pixel or two
+var float OverlayCorrectionY;
 
 // Spotting scope overlay
-var     int                             SpottingScopePositionIndex;
-var     class<DHArtillerySpottingScope> ArtillerySpottingScopeClass;
-var     DHArtillerySpottingScope        ArtillerySpottingScope;
+var int SpottingScopePositionIndex;
+var class<DHArtillerySpottingScope> ArtillerySpottingScopeClass;
+var DHArtillerySpottingScope ArtillerySpottingScope;
 
 // Clientside flags to do certain things when certain actors are received, to fix problems caused by replication timing issues
-var     bool        bInitializedVehicleAndGun;   // done some set up when had received both the VehicleBase & Gun actors
-var     bool        bNeedToInitializeDriver;     // do some player set up when we receive the Driver actor
-var     bool        bNeedToEnterVehicle;         // go to state 'EnteringVehicle' when we receive the Gun actor
-var     bool        bNeedToStoreVehicleRotation; // set StoredVehicleRotation when we receive the VehicleBase actor
+var bool bInitializedVehicleAndGun; // done some set up when had received both the VehicleBase & Gun actors
+var bool bNeedToInitializeDriver; // do some player set up when we receive the Driver actor
+var bool bNeedToEnterVehicle; // go to state 'EnteringVehicle' when we receive the Gun actor
+var bool bNeedToStoreVehicleRotation; // set StoredVehicleRotation when we receive the VehicleBase actor
 
 // Animation Drivers
 // These are used to animate the occpants' body based on the yaw or pitch
@@ -51,36 +52,36 @@ var     bool        bNeedToStoreVehicleRotation; // set StoredVehicleRotation wh
 struct SAnimationDriver
 {
     var DHVehicleWeaponPawnAnimationDriverParameters Parameters;
-    var bool    bActive;
-    var float   BlendAlpha;
+    var bool bActive;
+    var float BlendAlpha;
 };
 
 var array<SAnimationDriver> AnimationDrivers;
 
 // Client transitions
-var     bool        bDoAnimationDriverTransition;   // If true, we're transitioning between animation drivers.
-var     int         LastPositionAnimationDriverIndex, DriverPositionAnimationDriverIndex;
-var     float       ClientViewTransitionStartTime;  // Time when client's view transition will start and end, relative to Level.TimeSeconds
-var     float       ClientViewTransitionEndTime;
+var bool bDoAnimationDriverTransition; // If true, we're transitioning between animation drivers.
+var int LastPositionAnimationDriverIndex, DriverPositionAnimationDriverIndex;
+var float ClientViewTransitionStartTime; // Time when client's view transition will start and end, relative to Level.TimeSeconds
+var float ClientViewTransitionEndTime;
 
-var     bool        bUseInternalMeshForBaseVehicle; // If true, we use the internal mesh for the base vehicle as well.
+var bool bUseInternalMeshForBaseVehicle; // If true, we use the internal mesh for the base vehicle as well.
 
 // To work around the fact that weapons cannot have a positive minimum pitch,
 // we have to have a barrel rotation offset within the geometry of the model.
 // As a result, we need to offset the internal pitch of the weapon to match the
 // barrel's true pitch (e.g., the Model 35 mortar's lowest pitch is +40 degrees,
 // but internally the pitch is at 0 degrees).
-var     int         GunPitchOffset;
+var int GunPitchOffset;
 
 // In cases where we have meshes with complete different skins.
-var     array<Material> DriverPositionMeshSkins;
+var array<Material> DriverPositionMeshSkins;
 
 replication
 {
     // Variables the server will replicate to the client that owns this actor
-    reliable if (bNetOwner && bNetDirty && Role == ROLE_Authority)  // TODO: why is this necessary???
+    reliable if (bNetOwner && bNetDirty && Role == ROLE_Authority) // TODO: why is this necessary???
         BinocularsClass;
-    
+
     reliable if (bNetDirty && Role == ROLE_Authority)
         bGunsightOpticsDestroyed, bPeriscopeOpticsDestroyed, bTraverseDamaged, bElevationDamaged;
 
@@ -245,7 +246,10 @@ simulated function DrawBinocsOverlay(Canvas C)
         // Draw the periscope overlay
         C.SetPos(0.0, 0.0);
 
-        C.DrawTile(BinocularsClass.default.ScopeOverlay, C.SizeX, C.SizeY, TileStartPosU, TileStartPosV, TilePixelWidth, TilePixelHeight);
+        C.DrawTile(
+            BinocularsClass.default.ScopeOverlay, C.SizeX, C.SizeY, TileStartPosU, TileStartPosV, TilePixelWidth,
+            TilePixelHeight
+            );
     }
 }
 
@@ -319,6 +323,7 @@ simulated function int GetGunPitchMax()
 
     return VehWep.CustomPitchUpLimit + GunPitchOffset;
 }
+
 // Modified to switch to external mesh & unzoomed FOV for behind view, plus handling of any relative/non-relative turret rotation
 // Also to only adjust PC's rotation to make it relative to vehicle if we've just switched back from behind view into 1st person view
 // This is because when we enter a vehicle we now call SetInitialViewRotation(), which is already relative to vehicle
@@ -429,10 +434,7 @@ simulated function float GetViewFOV(int PositionIndex)
 }
 
 // Modified so when player possesses a weapon pawn, he never starts in behind view (used in PC's Possess/Restart functions)
-simulated function bool PointOfView()
-{
-    return false;
-}
+simulated function bool PointOfView();
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //  ******************************* FIRING & AMMO  ********************************  //
@@ -448,9 +450,7 @@ function Fire(optional float F)
 }
 
 // Emptied out so we have no alt fire by default - implement functionality in subclass if has alt fire, e.g. cannon with coaxial MG
-function AltFire(optional float F)
-{
-}
+function AltFire(optional float F);
 
 // Modified for server verification that player's weapons aren't locked due to spawn killing (belt & braces as similar clientside check stops it reaching this point anyway)
 function VehicleFire(bool bWasAltFire)
@@ -547,7 +547,8 @@ function CheckResumeReloadingOnEntry()
         OldReloadState = VehWep.ReloadState;
 
         // Try to resume any paused reload, or start a new reload if in waiting state & the player does not use manual reloading
-        if (VehWep.ReloadState < RL_ReadyToFire || (VehWep.ReloadState == RL_Waiting && !VehWep.PlayerUsesManualReloading()))
+        if (VehWep.ReloadState < RL_ReadyToFire
+            || (VehWep.ReloadState == RL_Waiting && !VehWep.PlayerUsesManualReloading()))
         {
             VehWep.AttemptReload();
         }
@@ -574,7 +575,7 @@ function float GetAmmoReloadState()
             return 0.0;
         case RL_Waiting:
         case RL_ReloadingPart1:
-            return 1.0;   
+            return 1.0;
         default:
             return VehWep.ReloadStages[VehWep.ReloadState].HUDProportion;
     }
@@ -594,11 +595,19 @@ simulated function bool CanReload()
 function bool TryToDrive(Pawn P)
 {
     local bool bEnemyVehicle;
-    local int  i;
+    local int i;
 
     // Deny entry if vehicle is destroyed, or if player is on fire or reloading a weapon (plus several very obscure other reasons)
-    if (Health <= 0 || P == none || (DHPawn(P) != none && DHPawn(P).bOnFire) || (P.Weapon != none && P.Weapon.IsInState('Reloading')) ||
-        P.Controller == none || !P.Controller.bIsPlayer || P.DrivenVehicle != none || P.IsA('Vehicle') || bNonHumanControl || !Level.Game.CanEnterVehicle(self, P))
+    if (Health <= 0
+        || P == none
+        || (DHPawn(P) != none && DHPawn(P).bOnFire)
+        || (P.Weapon != none && P.Weapon.IsInState('Reloading'))
+        || P.Controller == none
+        || !P.Controller.bIsPlayer
+        || P.DrivenVehicle != none
+        || P.IsA('Vehicle')
+        || bNonHumanControl
+        || !Level.Game.CanEnterVehicle(self, P))
     {
         return false;
     }
@@ -622,7 +631,9 @@ function bool TryToDrive(Pawn P)
             {
                 for (i = 0; i < VehicleBase.WeaponPawns.Length; ++i)
                 {
-                    if (VehicleBase.WeaponPawns[i] != none && VehicleBase.WeaponPawns[i].Driver != none && P.GetTeamNum() != VehicleBase.WeaponPawns[i].Driver.GetTeamNum())
+                    if (VehicleBase.WeaponPawns[i] != none
+                        && VehicleBase.WeaponPawns[i].Driver != none
+                        && P.GetTeamNum() != VehicleBase.WeaponPawns[i].Driver.GetTeamNum())
                     {
                         bEnemyVehicle = true;
                         break;
@@ -739,7 +750,7 @@ function KDriverEnter(Pawn P)
 
     // No point setting rotation here (as in the Super), because single player mode or a listen server host get it anyway in ClientKDriverEnter()
     // And it's of no relevance to dedicated server or non-owning listen server, which receive rotation from owning player's client (autonomous proxy role)
-//  SetInitialViewRotation();
+    //  SetInitialViewRotation();
 
     // Activate vehicle weapon & increase it's network priority
     if (Gun != none)
@@ -777,7 +788,9 @@ function KDriverEnter(Pawn P)
 
     if (BinocPositionIndex >= 0 && BinocPositionIndex < DriverPositions.Length) // record whether player has binoculars
     {
-        BinocularsItem = DHProjectileWeapon(P.FindInventoryType(class<Inventory>(DynamicLoadObject("DH_Equipment.DHBinocularsItem", Class'class'))));
+        BinocularsItem = DHProjectileWeapon(
+            P.FindInventoryType(class<Inventory>(DynamicLoadObject("DH_Equipment.DHBinocularsItem", Class'class')))
+            );
 
         if (BinocularsItem != none)
         {
@@ -912,7 +925,10 @@ simulated state EnteringVehicle
 // Also to prevent player from moving to binoculars position if he doesn't have any binocs
 simulated function NextWeapon()
 {
-    if (DriverPositionIndex < DriverPositions.Length - 1 && DriverPositionIndex == PendingPositionIndex && !IsInState('ViewTransition') && bMultiPosition)
+    if (DriverPositionIndex < DriverPositions.Length - 1
+        && DriverPositionIndex == PendingPositionIndex
+        && !IsInState('ViewTransition')
+        && bMultiPosition)
     {
         if ((DriverPositionIndex + 1) == BinocPositionIndex && BinocularsClass == none) // can't go to binocs if don't have them
         {
@@ -926,7 +942,10 @@ simulated function NextWeapon()
 
 simulated function PrevWeapon()
 {
-    if (DriverPositionIndex > 0 && DriverPositionIndex == PendingPositionIndex && !IsInState('ViewTransition') && bMultiPosition)
+    if (DriverPositionIndex > 0
+        && DriverPositionIndex == PendingPositionIndex
+        && !IsInState('ViewTransition')
+        && bMultiPosition)
     {
         PendingPositionIndex = DriverPositionIndex - 1;
         ServerChangeViewPoint(false);
@@ -972,7 +991,9 @@ simulated function NextViewPoint()
     {
         GotoState('ViewTransition');
     }
-    else if (Level.NetMode != NM_DedicatedServer || DriverPositions[DriverPositionIndex].bExposed || DriverPositions[LastPositionIndex].bExposed)
+    else if (Level.NetMode != NM_DedicatedServer
+        || DriverPositions[DriverPositionIndex].bExposed
+        || DriverPositions[LastPositionIndex].bExposed)
     {
         GotoState('ViewTransition');
     }
@@ -1005,8 +1026,8 @@ simulated state ViewTransition
 
         for (i = 0; i < AnimationDrivers.Length; i++)
         {
-            if (PositionIndex >= AnimationDrivers[i].Parameters.DriverPositionIndexRange.Min &&
-                PositionIndex <= AnimationDrivers[i].Parameters.DriverPositionIndexRange.Max)
+            if (PositionIndex >= AnimationDrivers[i].Parameters.DriverPositionIndexRange.Min
+                && PositionIndex <= AnimationDrivers[i].Parameters.DriverPositionIndexRange.Max)
             {
                 return i;
             }
@@ -1019,13 +1040,15 @@ simulated state ViewTransition
     {
         local float Alpha;
 
-        if (LastPositionAnimationDriverIndex == -1 || DriverPositionAnimationDriverIndex == -1 ||
-            LastPositionAnimationDriverIndex == DriverPositionAnimationDriverIndex)
+        if (LastPositionAnimationDriverIndex == -1
+            || DriverPositionAnimationDriverIndex == -1
+            || LastPositionAnimationDriverIndex == DriverPositionAnimationDriverIndex)
         {
             return;
         }
 
-        Alpha = (Level.TimeSeconds  - ClientViewTransitionStartTime) / (ClientViewTransitionEndTime - ClientViewTransitionStartTime);
+        Alpha = (Level.TimeSeconds - ClientViewTransitionStartTime)
+            / (ClientViewTransitionEndTime - ClientViewTransitionStartTime);
         Alpha = FClamp(Alpha, 0.0, 1.0);
 
         SetAnimationDriverBlendAlpha(LastPositionAnimationDriverIndex, 1.0 - Alpha);
@@ -1109,7 +1132,6 @@ simulated state ViewTransition
 
             if (LastPositionIndex < DriverPositionIndex)
             {
-
                 // Transition up
                 if (Gun.HasAnim(DriverPositions[LastPositionIndex].TransitionUpAnim))
                 {
@@ -1128,7 +1150,9 @@ simulated state ViewTransition
         if (Driver != none)
         {
             // If moving to an exposed position, enable the player's hit detection
-            if (DriverPositions[DriverPositionIndex].bExposed && !DriverPositions[LastPositionIndex].bExposed && ROPawn(Driver) != none)
+            if (DriverPositions[DriverPositionIndex].bExposed
+                && !DriverPositions[LastPositionIndex].bExposed
+                && ROPawn(Driver) != none)
             {
                 ROPawn(Driver).ToggleAuxCollision(true);
             }
@@ -1137,8 +1161,7 @@ simulated state ViewTransition
             ClientViewTransitionEndTime = ClientViewTransitionStartTime + ViewTransitionDuration;
 
             // If we are transitioning from between driver positions with different animation drivers, make the transition smooth.
-            if (HasAnimationDriverForPosition(DriverPositionIndex) &&
-                HasAnimationDriverForPosition(LastPositionIndex))
+            if (HasAnimationDriverForPosition(DriverPositionIndex) && HasAnimationDriverForPosition(LastPositionIndex))
             {
                 bDoAnimationDriverTransition = true;
 
@@ -1163,8 +1186,8 @@ simulated state ViewTransition
                 bDoAnimationDriverTransition = false;
 
                 // Play any transition animation for the player
-                if (Driver.HasAnim(DriverPositions[DriverPositionIndex].DriverTransitionAnim) &&
-                    Driver.HasAnim(DriverPositions[LastPositionIndex].DriverTransitionAnim))
+                if (Driver.HasAnim(DriverPositions[DriverPositionIndex].DriverTransitionAnim)
+                    && Driver.HasAnim(DriverPositions[LastPositionIndex].DriverTransitionAnim))
                 {
                     // Disable the animation drivers during the transition.
                     // The necessary drivers will be re-enabled once we exit this state.
@@ -1183,9 +1206,7 @@ simulated state ViewTransition
     }
 
     // Emptied out so that Sleep is the sole timing for exiting this state
-    simulated function AnimEnd(int channel)
-    {
-    }
+    simulated function AnimEnd(int channel);
 
     // Reverted to global Timer as Sleep is now the sole means of exiting this state
     simulated function Timer()
@@ -1213,7 +1234,9 @@ simulated state ViewTransition
         }
 
         // If moving to an unexposed position, disable the player's hit detection
-        if (!DriverPositions[DriverPositionIndex].bExposed && DriverPositions[LastPositionIndex].bExposed && ROPawn(Driver) != none)
+        if (!DriverPositions[DriverPositionIndex].bExposed
+            && DriverPositions[LastPositionIndex].bExposed
+            && ROPawn(Driver) != none)
         {
             ROPawn(Driver).ToggleAuxCollision(false);
         }
@@ -1243,7 +1266,8 @@ simulated state LeavingViewTransition
 // By default in includes a gunsight or binoculars overlay position, but can easily be subclassed
 simulated function bool ShouldViewSnapInPosition(byte PositionIndex)
 {
-    return DriverPositions[PositionIndex].bDrawOverlays && ((GunsightOverlay != none && PositionIndex == 0) || PositionIndex == BinocPositionIndex);
+    return DriverPositions[PositionIndex].bDrawOverlays
+        && ((GunsightOverlay != none && PositionIndex == 0) || PositionIndex == BinocPositionIndex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -1267,7 +1291,7 @@ simulated function SwitchWeapon(byte F)
 // Generally re-factored to avoid repeating any of the same checks & to reduce repetition & make clearer
 function ServerChangeDriverPosition(byte F)
 {
-    local DHPawn  SwitchingPlayer, Bot;
+    local DHPawn SwitchingPlayer, Bot;
     local Vehicle NewVehiclePosition;
 
     SwitchingPlayer = DHPawn(Driver);
@@ -1321,8 +1345,8 @@ function ServerChangeDriverPosition(byte F)
 simulated function bool CanSwitchToVehiclePosition(byte F)
 {
     local DHArmoredVehicle AV;
-    local Vehicle          NewVehiclePosition;
-    local bool             bMustBeTankerToSwitch;
+    local Vehicle NewVehiclePosition;
+    local bool bMustBeTankerToSwitch;
 
     if (F == 0 || DHVehicle(VehicleBase) == none) // pressing zero is an invalid switch choice
     {
@@ -1335,13 +1359,16 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
         NewVehiclePosition = VehicleBase;
         bMustBeTankerToSwitch = VehicleBase.bMustBeTankCommander;
 
-        if (DHVehicle(VehicleBase).default.bRequiresDriverLicense && !Class'DHPlayerReplicationInfo'.static.IsPlayerLicensedToDrive(DHPlayer(Controller)) && IsHumanControlled())
+        if (DHVehicle(VehicleBase).default.bRequiresDriverLicense
+            && !Class'DHPlayerReplicationInfo'.static.IsPlayerLicensedToDrive(DHPlayer(Controller))
+            && IsHumanControlled())
         {
             DisplayVehicleMessage(0); // not qualified to operate vehicle
             return false;
         }
 
-        if (!bMustBeTankerToSwitch && Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(Controller)))
+        if (!bMustBeTankerToSwitch
+            && Class'DHPlayerReplicationInfo'.static.IsPlayerVehicleAccessRestricted(DHPlayer(Controller)))
         {
             DisplayVehicleMessage(32); // restricted from operating vehicles
             return false;
@@ -1369,7 +1396,8 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
         // But that's fine because there's nothing we need to check for an unoccupied rider pawn & we can always switch to it if we got here
         // If we let the switch go ahead, the rider pawn will get replicated to the owning net client as the player enters it on the server
         NewVehiclePosition = VehicleBase.WeaponPawns[F];
-        bMustBeTankerToSwitch = ROVehicleWeaponPawn(NewVehiclePosition) != none && ROVehicleWeaponPawn(NewVehiclePosition).bMustBeTankCrew;
+        bMustBeTankerToSwitch = ROVehicleWeaponPawn(NewVehiclePosition) != none
+            && ROVehicleWeaponPawn(NewVehiclePosition).bMustBeTankCrew;
     }
 
     if (bMustBeTankerToSwitch)
@@ -1383,7 +1411,9 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
 
         // Can't switch to a tank crew position in an armored vehicle if it's been locked & player isn't an allowed crewman (gives message)
         // We DO NOT apply this check to a net client, as it doesn't have the required variables (bVehicleLocked & CrewedLockedVehicle)
-        if (Role == ROLE_Authority && (AV != none || GetArmoredVehicleBase(AV)) && AV.AreCrewPositionsLockedForPlayer(self))
+        if (Role == ROLE_Authority
+            && (AV != none || GetArmoredVehicleBase(AV))
+            && AV.AreCrewPositionsLockedForPlayer(self))
         {
             DisplayVehicleMessage(22); // this vehicle has been locked by its crew
             return false;
@@ -1398,7 +1428,9 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
 
     // Can't switch if new vehicle position already has a human occupant
     // bDriving check is there to also catch 'LeaveBody' debug pawns, which won't have a PRI, stopping player switching into same position as one
-    if (NewVehiclePosition != none && NewVehiclePosition.bDriving && !(NewVehiclePosition.PlayerReplicationInfo != none && NewVehiclePosition.PlayerReplicationInfo.bBot))
+    if (NewVehiclePosition != none
+        && NewVehiclePosition.bDriving
+        && !(NewVehiclePosition.PlayerReplicationInfo != none && NewVehiclePosition.PlayerReplicationInfo.bBot))
     {
         return false;
     }
@@ -1413,9 +1445,9 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
 function bool KDriverLeave(bool bForceLeave)
 {
     local DHArmoredVehicle AV;
-    local Controller       SavedController;
-    local Vector           ExitVelocity;
-    local bool             bSwitchingVehiclePosition, bAllowedCrewmanExitingLockedVehicle;
+    local Controller SavedController;
+    local Vector ExitVelocity;
+    local bool bSwitchingVehiclePosition, bAllowedCrewmanExitingLockedVehicle;
 
     // Prevent exit if player is buttoned up (or if game type or mutator prevents exit)
     if (!bForceLeave && (!CanExit() || (Level.Game != none && !Level.Game.CanLeaveVehicle(self, Driver))))
@@ -1464,7 +1496,7 @@ function bool KDriverLeave(bool bForceLeave)
         // We now skip this block if only switching, so we no longer briefly re-possess the player pawn
         if (!bSwitchingVehiclePosition && Driver != none && Driver.Health > 0)
         {
-//          Driver.SetOwner(SavedController); // removed as gets set anyway in the possession process
+            //          Driver.SetOwner(SavedController); // removed as gets set anyway in the possession process
             SavedController.bVehicleTransition = true; // to stop bots from doing Restart() during possession
             SavedController.Possess(Driver);
             SavedController.bVehicleTransition = false; // reset
@@ -1511,7 +1543,10 @@ function bool KDriverLeave(bool bForceLeave)
     }
 
     // If an an 'allowed' crewman is exiting a locked armored vehicle, check whether need to set an unlock timer
-    bAllowedCrewmanExitingLockedVehicle = !bSwitchingVehiclePosition && GetArmoredVehicleBase(AV) && AV.bVehicleLocked && AV.IsAnAllowedCrewman(Driver);
+    bAllowedCrewmanExitingLockedVehicle = !bSwitchingVehiclePosition
+        && GetArmoredVehicleBase(AV)
+        && AV.bVehicleLocked
+        && AV.IsAnAllowedCrewman(Driver);
 
     DriverLeft();
 
@@ -1535,7 +1570,7 @@ function DriverDied()
         Driver.StopDriving(self);
         Driver.Controller = Controller;
         Driver.DrivenVehicle = self; // for in game stats, so it knows player was killed inside a vehicle
-        
+
         if (Controller != none)
         {
             if (IsHumanControlled()) // set PlayerController to view the dead driver
@@ -1664,7 +1699,9 @@ simulated function Destroyed_HandleDriver()
 // New function to check if player can exit, displaying an "unbutton hatch" message if he can't (just saves repeating code in different functions)
 simulated function bool CanExit()
 {
-    if ((DriverPositionIndex < UnbuttonedPositionIndex || (IsInState('ViewTransition') && DriverPositionIndex == UnbuttonedPositionIndex)) && IsHumanControlled())
+    if ((DriverPositionIndex < UnbuttonedPositionIndex
+            || (IsInState('ViewTransition') && DriverPositionIndex == UnbuttonedPositionIndex))
+        && IsHumanControlled())
     {
         if (UnbuttonedPositionIndex > 0 && DriverPositions.Length > UnbuttonedPositionIndex) // means it is possible to unbutton
         {
@@ -1683,7 +1720,7 @@ function bool PlaceExitingDriver()
 {
     local array<Vector> MyExitPositions;
     local Vector Extent, ZOffset, ExitPosition, HitLocation, HitNormal;
-    local int    StartIndex, i;
+    local int StartIndex, i;
     local DHVehicle DHV;
 
     if (Driver == none || VehicleBase == none)
@@ -1728,7 +1765,10 @@ function bool PlaceExitingDriver()
     {
         ExitPosition = VehicleBase.Location + (MyExitPositions[i] >> VehicleBase.Rotation) + ZOffset;
 
-        if (VehicleBase.Trace(HitLocation, HitNormal, ExitPosition, Driver.Location + ZOffset - Driver.default.PrePivot, false, Extent) == none
+        if (VehicleBase.Trace(
+            HitLocation, HitNormal, ExitPosition, Driver.Location + ZOffset - Driver.default.PrePivot, false, Extent
+            )
+            == none
             && Trace(HitLocation, HitNormal, ExitPosition, ExitPosition + ZOffset, false, Extent) == none
             && Driver.SetLocation(ExitPosition))
         {
@@ -1766,7 +1806,7 @@ function Died(Controller Killer, class<DamageType> damageType, Vector HitLocatio
 
     if (Level.Game.PreventDeath(self, Killer, damageType, HitLocation))
     {
-        Health = Max(Health, 1); //mutator should set this higher
+        Health = Max(Health, 1); // mutator should set this higher
         return;
     }
 
@@ -1977,7 +2017,10 @@ simulated function InitializeVehicleWeapon()
     }
     else
     {
-        Warn("ERROR:" @ Tag @ "somehow spawned without an owned DHVehicleWeapon, so lots of things are not going to work!");
+        Warn(
+            "ERROR:" @ Tag
+                @ "somehow spawned without an owned DHVehicleWeapon, so lots of things are not going to work!"
+            );
     }
 
     // We need to go to state 'EnteringVehicle', but were unable to do it from ClientKDriverEnter() because we hadn't then received our Gun reference
@@ -2000,7 +2043,7 @@ simulated function InitializeVehicleWeapon()
 simulated function InitializeVehicleBase()
 {
     local bool bAddSelfToWeaponPawns;
-    local int  i;
+    local int i;
 
     if (Role < ROLE_Authority)
     {
@@ -2012,14 +2055,17 @@ simulated function InitializeVehicleBase()
 
         // On client, this actor is destroyed if becomes net irrelevant - when it respawns, empty WeaponPawns array needs filling again or will cause lots of errors
         // First check if our WeaponPawns slot doesn't exist, is empty or has an invalid member
-        if (PositionInArray >= VehicleBase.WeaponPawns.Length || VehicleBase.WeaponPawns[PositionInArray] == none || VehicleBase.WeaponPawns[PositionInArray].default.Class == none)
+        if (PositionInArray >= VehicleBase.WeaponPawns.Length
+            || VehicleBase.WeaponPawns[PositionInArray] == none
+            || VehicleBase.WeaponPawns[PositionInArray].default.Class == none)
         {
             bAddSelfToWeaponPawns = true;
 
             // Then make sure that somehow another WeaponPawns slot isn't already occupied by this actor or an actor of the same class
             for (i = 0; i < VehicleBase.WeaponPawns.Length; ++i)
             {
-                if (VehicleBase.WeaponPawns[i] != none && (VehicleBase.WeaponPawns[i] == self || VehicleBase.WeaponPawns[i].Class == class))
+                if (VehicleBase.WeaponPawns[i] != none
+                    && (VehicleBase.WeaponPawns[i] == self || VehicleBase.WeaponPawns[i].Class == class))
                 {
                     bAddSelfToWeaponPawns = false;
                     break;
@@ -2050,7 +2096,7 @@ simulated function InitializeVehicleAndWeapon()
 simulated function SetPlayerPosition()
 {
     local name VehicleAnim, PlayerAnim;
-    local int  i, DriverAnimationChannel;
+    local int i, DriverAnimationChannel;
 
     // Fix driver attachment position - on replication, AttachDriver() only works if client has received Gun actor, which it may not have yet
     // Client then receives Driver attachment and RelativeLocation through replication, but this is unreliable & sometimes gives incorrect positioning
@@ -2068,7 +2114,7 @@ simulated function SetPlayerPosition()
         if (DriverPositionIndex > InitialPositionIndex)
         {
             // Step down through each position until we find the 'most recent' transition up anim & player transition anim (or have reached the initial position)
-            for (i = DriverPositionIndex; i > InitialPositionIndex && (VehicleAnim == ''|| PlayerAnim == ''); --i)
+            for (i = DriverPositionIndex; i > InitialPositionIndex && (VehicleAnim == '' || PlayerAnim == ''); --i)
             {
                 if (VehicleAnim == '' && DriverPositions[i - 1].TransitionUpAnim != '')
                 {
@@ -2076,7 +2122,9 @@ simulated function SetPlayerPosition()
                 }
 
                 // DriverTransitionAnim only relevant if there is also one in the position below
-                if (PlayerAnim == '' && DriverPositions[i].DriverTransitionAnim != '' && DriverPositions[i - 1].DriverTransitionAnim != '')
+                if (PlayerAnim == ''
+                    && DriverPositions[i].DriverTransitionAnim != ''
+                    && DriverPositions[i - 1].DriverTransitionAnim != '')
                 {
                     PlayerAnim = DriverPositions[i].DriverTransitionAnim;
                 }
@@ -2085,7 +2133,7 @@ simulated function SetPlayerPosition()
         else
         {
             // Step up through each position until we find the 'most recent' transition down anim & player transition anim (or have reached the initial position)
-            for (i = DriverPositionIndex; i < InitialPositionIndex && (VehicleAnim == ''|| PlayerAnim == ''); ++i)
+            for (i = DriverPositionIndex; i < InitialPositionIndex && (VehicleAnim == '' || PlayerAnim == ''); ++i)
             {
                 if (VehicleAnim == '' && DriverPositions[i + 1].TransitionDownAnim != '')
                 {
@@ -2093,7 +2141,9 @@ simulated function SetPlayerPosition()
                 }
 
                 // DriverTransitionAnim only relevant if there is also one in the position above
-                if (PlayerAnim == '' && DriverPositions[i].DriverTransitionAnim != '' && DriverPositions[i + 1].DriverTransitionAnim != '')
+                if (PlayerAnim == ''
+                    && DriverPositions[i].DriverTransitionAnim != ''
+                    && DriverPositions[i + 1].DriverTransitionAnim != '')
                 {
                     PlayerAnim = DriverPositions[i].DriverTransitionAnim;
                 }
@@ -2150,9 +2200,11 @@ function int LocalLimitPitch(int pitch)
 
     if (DriverPositions.Length > 0)
     {
-        if (pitch > DriverPositions[DriverPositionIndex].ViewPitchUpLimit && pitch < DriverPositions[DriverPositionIndex].ViewPitchDownLimit)
+        if (pitch > DriverPositions[DriverPositionIndex].ViewPitchUpLimit
+            && pitch < DriverPositions[DriverPositionIndex].ViewPitchDownLimit)
         {
-            if (pitch - DriverPositions[DriverPositionIndex].ViewPitchUpLimit < DriverPositions[DriverPositionIndex].ViewPitchDownLimit - pitch)
+            if (pitch - DriverPositions[DriverPositionIndex].ViewPitchUpLimit
+                < DriverPositions[DriverPositionIndex].ViewPitchDownLimit - pitch)
             {
                 pitch = DriverPositions[DriverPositionIndex].ViewPitchUpLimit;
             }
@@ -2251,12 +2303,13 @@ simulated function SetVehicleBaseMesh(bool bInternalMesh)
 // Modified to handle switching between external & internal mesh, including copying weapon's aimed direction to new mesh
 simulated function SwitchMesh(int PositionIndex, optional bool bUpdateAnimations)
 {
-    local Mesh    NewMesh;
+    local Mesh NewMesh;
     local Rotator WeaponYaw, WeaponPitch;
     local int i;
     local DHVehicle V;
 
-    if (Gun != none && (Role == ROLE_AutonomousProxy || Level.NetMode == NM_Standalone || Level.NetMode == NM_ListenServer))
+    if (Gun != none
+        && (Role == ROLE_AutonomousProxy || Level.NetMode == NM_Standalone || Level.NetMode == NM_ListenServer))
     {
         // If switching to a valid driver position, get its PositionMesh
         if (PositionIndex >= 0 && PositionIndex < DriverPositions.Length)
@@ -2273,7 +2326,7 @@ simulated function SwitchMesh(int PositionIndex, optional bool bUpdateAnimations
         if (NewMesh != Gun.Mesh && NewMesh != none)
         {
             // Switch to the new mesh
-            Gun.LinkMesh(NewMesh, true);    // TODO: true, or have a callback that sets up the drivers again properly
+            Gun.LinkMesh(NewMesh, true); // TODO: true, or have a callback that sets up the drivers again properly
 
             // Option to play any necessary animations to get the new mesh in the correct position, e.g. with switching to/from behind view
             if (bUpdateAnimations)
@@ -2293,7 +2346,7 @@ simulated function SwitchMesh(int PositionIndex, optional bool bUpdateAnimations
                 Gun.SetBoneRotation(Gun.YawBone, WeaponYaw);
                 Gun.SetBoneRotation(Gun.PitchBone, WeaponPitch);
             }
-            
+
             Gun.Skins.Length = 0;
 
             // Handle skins if we are using driver position mesh skins.
@@ -2303,7 +2356,7 @@ simulated function SwitchMesh(int PositionIndex, optional bool bUpdateAnimations
                 {
                     Gun.Skins[i] = Gun.default.Skins[i];
                 }
-                
+
                 V = DHVehicle(Gun.Base);
 
                 if (V != none)
@@ -2406,36 +2459,40 @@ simulated function HandleBinoculars(bool bMovingOntoBinocs)
 }
 
 // Emptied out as blast damage to exposed vehicle occupants is now handled from HurtRadius() in the projectile class
-function DriverRadiusDamage(float DamageAmount, float DamageRadius, Controller EventInstigator, class<DamageType> DamageType, float Momentum, Vector HitLocation)
-{
-}
-
+function DriverRadiusDamage(
+    float DamageAmount,
+    float DamageRadius,
+    Controller EventInstigator,
+    class<DamageType> DamageType,
+    float Momentum,
+    Vector HitLocation
+    );
 // Functions emptied out as not relevant to a VehicleWeaponPawn in RO/DH:
 simulated event StartDriving(Vehicle V);
 simulated event StopDriving(Vehicle V);
-function bool IsHeadShot(Vector Loc, Vector Ray, float AdditionalScale) { return false; }
+function bool IsHeadShot(Vector Loc, Vector Ray, float AdditionalScale);
 function AttachFlag(Actor FlagActor);
 function ShouldCrouch(bool Crouch);
 function ShouldProne(bool Prone);
 event EndCrouch(float HeightAdjust);
 event StartCrouch(float HeightAdjust);
-function bool DoJump(bool bUpdating) { return false; }
-function bool CheckWaterJump(out Vector WallNormal) { return false; }
+function bool DoJump(bool bUpdating);
+function bool CheckWaterJump(out Vector WallNormal);
 function JumpOutOfWater(Vector JumpDir);
 function ClimbLadder(LadderVolume L);
 function EndClimbLadder(LadderVolume OldLadder);
 function ShouldTargetMissile(Projectile P);
 function ShootMissile(Projectile P);
 function GiveWeapon(string aClassName);
-simulated function bool CanThrowWeapon() { return false; }
+simulated function bool CanThrowWeapon();
 function TossWeapon(Vector TossVel);
 exec function SwitchToLastWeapon();
 simulated function ChangedWeapon();
 function ServerChangedWeapon(Weapon OldWeapon, Weapon NewWeapon);
-function bool AddInventory(Inventory NewItem) { return false; }
+function bool AddInventory(Inventory NewItem);
 function DeleteInventory(Inventory Item);
-function Inventory FindInventoryType(class DesiredClass) { return none; }
-simulated function Weapon GetDemoRecordingWeapon() { return none; }
+function Inventory FindInventoryType(class DesiredClass);
+simulated function Weapon GetDemoRecordingWeapon();
 exec function NextItem(); // only concerns UT2004 PowerUps) & just causes "accessed none" log errors if keybound & used
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -2502,7 +2559,9 @@ exec function ToggleViewLimit()
 
     if (IsDebugModeAllowed() && Gun != none) // removed requirement to be in single player mode, as valid in multi-player if in DHDebugMode
     {
-        if (Gun.bLimitYaw == Gun.default.bLimitYaw && PitchUpLimit == default.PitchUpLimit && PitchDownLimit == default.PitchDownLimit)
+        if (Gun.bLimitYaw == Gun.default.bLimitYaw
+            && PitchUpLimit == default.PitchUpLimit
+            && PitchDownLimit == default.PitchDownLimit)
         {
             Gun.bLimitYaw = false;
             Gun.PitchUpLimit = 65535;
@@ -2552,9 +2611,14 @@ exec function SetViewLimits(int NewPitchUp, int NewPitchDown, int NewYawRight, i
 {
     if (IsDebugModeAllowed())
     {
-        Log(Tag @ ": ViewPitchUpLimit =" @ NewPitchUp @ "ViewPitchDownLimit =" @ NewPitchDown @ "ViewPositiveYawLimit =" @ NewYawRight @ "ViewNegativeYawLimit =" @ NewYawLeft
-            @ "(was" @ DriverPositions[DriverPositionIndex].ViewPitchUpLimit @ DriverPositions[DriverPositionIndex].ViewPitchDownLimit
-            @ DriverPositions[DriverPositionIndex].ViewPositiveYawLimit @ DriverPositions[DriverPositionIndex].ViewNegativeYawLimit $ ")");
+        Log(
+            Tag @ ": ViewPitchUpLimit =" @ NewPitchUp @ "ViewPitchDownLimit =" @ NewPitchDown
+                @ "ViewPositiveYawLimit =" @ NewYawRight @ "ViewNegativeYawLimit =" @ NewYawLeft @ "(was"
+                @ DriverPositions[DriverPositionIndex].ViewPitchUpLimit
+                @ DriverPositions[DriverPositionIndex].ViewPitchDownLimit
+                @ DriverPositions[DriverPositionIndex].ViewPositiveYawLimit
+                @ DriverPositions[DriverPositionIndex].ViewNegativeYawLimit $ ")"
+            );
 
         DriverPositions[DriverPositionIndex].ViewPitchUpLimit = NewPitchUp;
         DriverPositions[DriverPositionIndex].ViewPitchDownLimit = NewPitchDown;
@@ -2581,7 +2645,10 @@ exec function ShowColMesh()
 {
     local int i;
 
-    if (VehWep != none && VehWep.CollisionMeshActors.Length > 0 && IsDebugModeAllowed() && Level.NetMode != NM_DedicatedServer)
+    if (VehWep != none
+        && VehWep.CollisionMeshActors.Length > 0
+        && IsDebugModeAllowed()
+        && Level.NetMode != NM_DedicatedServer)
     {
         for (i = 0; i < VehWep.CollisionMeshActors.Length; ++i)
         {
@@ -2643,7 +2710,10 @@ exec function SetAttachOffset(string NewX, string NewY, string NewZ)
 {
     if (IsDebugModeAllowed() && VehWep != none)
     {
-        Log(VehWep.Tag @ "WeaponAttachOffset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ "(was" @ VehWep.WeaponAttachOffset $ ")");
+        Log(
+            VehWep.Tag @ "WeaponAttachOffset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ "(was"
+                @ VehWep.WeaponAttachOffset $ ")"
+            );
         VehWep.WeaponAttachOffset.X = float(NewX);
         VehWep.WeaponAttachOffset.Y = float(NewY);
         VehWep.WeaponAttachOffset.Z = float(NewZ);
@@ -2664,7 +2734,10 @@ exec function SetFEOffset(int NewX, int NewY, int NewZ, optional float NewScale)
         // Only update offset if something has been entered (otherwise just entering "SetFEOffset" is quick way of triggering hatch fire at current position)
         if (NewX != 0 || NewY != 0 || NewZ != 0 || NewScale != VehWep.FireEffectScale)
         {
-            Log(VehWep.Tag @ "FireEffectOffset =" @ NewX @ NewY @ NewZ @ "scale =" @ NewScale @ "(old was" @ VehWep.FireEffectOffset @ "scale =" @ VehWep.FireEffectScale $ ")");
+            Log(
+                VehWep.Tag @ "FireEffectOffset =" @ NewX @ NewY @ NewZ @ "scale =" @ NewScale @ "(old was"
+                    @ VehWep.FireEffectOffset @ "scale =" @ VehWep.FireEffectScale $ ")"
+                );
             VehWep.FireEffectOffset.X = NewX;
             VehWep.FireEffectOffset.Y = NewY;
             VehWep.FireEffectOffset.Z = NewZ;
@@ -2726,8 +2799,12 @@ exec function SetShake(string RotMag, string RotRate, string RotTime, string Off
 {
     if (IsDebugModeAllowed() && Gun != none)
     {
-        log(Gun.Tag @ "ShakeRotMag =" @ RotMag @ "ShakeRotRate =" @ RotRate @ "ShakeRotTime =" @ RotTime @ "ShakeOffsetMag =" @ OffMag @ "ShakeOffsetRate =" @ OffRate @ "ShakeOffsetTime =" @ OffTime
-            @ "  Rot was" @ Gun.ShakeRotMag.Z @ Gun.ShakeRotRate.Z @ Gun.ShakeRotTime @ "  Offset was" @ Gun.ShakeOffsetMag.Z @ Gun.ShakeOffsetRate.Z @ Gun.ShakeOffsetTime);
+        log(
+            Gun.Tag @ "ShakeRotMag =" @ RotMag @ "ShakeRotRate =" @ RotRate @ "ShakeRotTime =" @ RotTime
+                @ "ShakeOffsetMag =" @ OffMag @ "ShakeOffsetRate =" @ OffRate @ "ShakeOffsetTime =" @ OffTime
+                @ "  Rot was" @ Gun.ShakeRotMag.Z @ Gun.ShakeRotRate.Z @ Gun.ShakeRotTime @ "  Offset was"
+                @ Gun.ShakeOffsetMag.Z @ Gun.ShakeOffsetRate.Z @ Gun.ShakeOffsetTime
+            );
 
         Gun.ShakeRotMag.Z = float(RotMag);
         Gun.ShakeRotRate.Z = float(RotRate);
@@ -2899,8 +2976,13 @@ simulated function UpdateAnimationDrivers()
         Driver.PlayAnim(AD.Parameters.Sequences[SequenceIndex],,, AD.Parameters.SequenceChannel);
         Driver.FreezeAnimAt(SequenceTheta * (FrameCount + 1), AD.Parameters.SequenceChannel);
 
-        Driver.AnimBlendParams(AD.Parameters.BlendChannel, BlendTheta * AD.BlendAlpha, 0.0, 0.0, AD.Parameters.BoneName);
-        Driver.PlayAnim(AD.Parameters.Sequences[Clamp(SequenceIndex + 1, 0, SequenceCount - 1)],,, AD.Parameters.BlendChannel);
+        Driver.AnimBlendParams(
+            AD.Parameters.BlendChannel, BlendTheta * AD.BlendAlpha, 0.0, 0.0, AD.Parameters.BoneName
+            );
+        Driver.PlayAnim(
+            AD.Parameters.Sequences[Clamp(SequenceIndex + 1, 0, SequenceCount - 1)],,,
+            AD.Parameters.BlendChannel
+            );
         Driver.FreezeAnimAt(SequenceTheta * (FrameCount + 1), AD.Parameters.BlendChannel);
     }
 }
@@ -2911,8 +2993,8 @@ simulated function bool HasAnimationDriverForPosition(int DriverPositionIndex)
 
     for (i = 0; i < AnimationDrivers.Length; ++i)
     {
-        if (DriverPositionIndex >= AnimationDrivers[i].Parameters.DriverPositionIndexRange.Min &&
-            DriverPositionIndex <= AnimationDrivers[i].Parameters.DriverPositionIndexRange.Max)
+        if (DriverPositionIndex >= AnimationDrivers[i].Parameters.DriverPositionIndexRange.Min
+            && DriverPositionIndex <= AnimationDrivers[i].Parameters.DriverPositionIndexRange.Max)
         {
             return true;
         }
@@ -2921,10 +3003,13 @@ simulated function bool HasAnimationDriverForPosition(int DriverPositionIndex)
     return false;
 }
 
-simulated function bool IsAnimationDriverActiveForDriverPositionIndex(int AnimationDriverIndex, int InputDriverPositionIndex)
+simulated function bool IsAnimationDriverActiveForDriverPositionIndex(
+    int AnimationDriverIndex,
+    int InputDriverPositionIndex
+    )
 {
-    return InputDriverPositionIndex >= AnimationDrivers[AnimationDriverIndex].Parameters.DriverPositionIndexRange.Min &&
-            InputDriverPositionIndex <= AnimationDrivers[AnimationDriverIndex].Parameters.DriverPositionIndexRange.Max;
+    return InputDriverPositionIndex >= AnimationDrivers[AnimationDriverIndex].Parameters.DriverPositionIndexRange.Min
+        && InputDriverPositionIndex <= AnimationDrivers[AnimationDriverIndex].Parameters.DriverPositionIndexRange.Max;
 }
 
 simulated function DeactivateAllAnimationDrivers(Pawn Driver)

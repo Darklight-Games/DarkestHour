@@ -5,58 +5,58 @@
 
 class DHGUIMapComponent extends GUIPanel;
 
-const   SPAWN_POINTS_MAX =                  63; // Max spawn points total (make sure this matches GRI)
-const   ADMIN_SPAWN_TRACE_HEIGHT =          10000; // Trace height for placing admin spawns via map
+const SPAWN_POINTS_MAX = 63; // Max spawn points total (make sure this matches GRI)
+const ADMIN_SPAWN_TRACE_HEIGHT = 10000; // Trace height for placing admin spawns via map
 
-var automated   DHGUICheckBoxButton         b_SpawnPoints[SPAWN_POINTS_MAX];
+var automated DHGUICheckBoxButton b_SpawnPoints[SPAWN_POINTS_MAX];
 
-var             DHHud                       MyHud;
-var             DHGameReplicationInfo       GRI;
-var             DHPlayer                    PC;
-var             DHPlayerReplicationInfo     PRI;
+var DHHud MyHud;
+var DHGameReplicationInfo GRI;
+var DHPlayer PC;
+var DHPlayerReplicationInfo PRI;
 
-var             GUIContextMenu              SquadRallyPointContextMenu;
-var             Material                    SpawnPointBlockedOverlay;
+var GUIContextMenu SquadRallyPointContextMenu;
+var Material SpawnPointBlockedOverlay;
 
-var             Vector                      MapClickLocation;
-var             array<class<DHMapMarker> >  MapMarkerMenuItems;
-var             int                         MapMarkerIndexToRemove;
-var             bool                        bRemoveMapMarker;
-var             int                         AdminMenuIndex; // pointer for where admin options begin in the context menu
+var Vector MapClickLocation;
+var array<class<DHMapMarker> > MapMarkerMenuItems;
+var int MapMarkerIndexToRemove;
+var bool bRemoveMapMarker;
+var int AdminMenuIndex; // pointer for where admin options begin in the context menu
 
-var             Box                         Viewport;
-var             Box                         ViewportInterpStart;
-var             Box                         ViewportInterpEnd;
-var             float                       ViewportInterpStartTime;
-var             float                       ViewportInterpEndTime;
-var             float                       ViewportInterpDuration;
+var Box Viewport;
+var Box ViewportInterpStart;
+var Box ViewportInterpEnd;
+var float ViewportInterpStartTime;
+var float ViewportInterpEndTime;
+var float ViewportInterpDuration;
 
-var             int                         ZoomLevel;
-var             int                         ZoomLevelMin;
-var             int                         ZoomLevelMax;
+var int ZoomLevel;
+var int ZoomLevelMin;
+var int ZoomLevelMax;
 
-var             Range                       ZoomScaleRange;
-var             Range                       ZoomScaleInterpRange;
+var Range ZoomScaleRange;
+var Range ZoomScaleInterpRange;
 
-var             bool                        bIsPanning;
-var             bool                        bIsViewportInterpolating;
+var bool bIsPanning;
+var bool bIsViewportInterpolating;
 
-var localized string        SquadRallyPointDestroyText;
-var localized string        SquadRallyPointSetAsSecondaryText;
-var localized string        RemoveText;
-var localized string        ActiveTargetSelectText;
-var localized string        ActiveTargetDeselectText;
+var localized string SquadRallyPointDestroyText;
+var localized string SquadRallyPointSetAsSecondaryText;
+var localized string RemoveText;
+var localized string ActiveTargetSelectText;
+var localized string ActiveTargetDeselectText;
 
-var localized string        AdminPlaceAlliedSpawnText;
-var localized string        AdminPlaceAxisSpawnText;
-var localized string        AdminDestroyAlliedSpawnsText;
-var localized string        AdminDestroyAxisSpawnsText;
-var localized string        AdminDestroySpawnText;
-var localized string        AdminTeleportText;
+var localized string AdminPlaceAlliedSpawnText;
+var localized string AdminPlaceAxisSpawnText;
+var localized string AdminDestroyAlliedSpawnsText;
+var localized string AdminDestroyAxisSpawnsText;
+var localized string AdminDestroySpawnText;
+var localized string AdminTeleportText;
 
-var             bool                        bSelectArtilleryTarget;
-var             bool                        bDeselectArtilleryTarget;
-var             int                         TargetSquadIndex;
+var bool bSelectArtilleryTarget;
+var bool bDeselectArtilleryTarget;
+var int TargetSquadIndex;
 
 delegate OnSpawnPointChanged(int SpawnPointIndex, optional bool bDoubleClick);
 delegate OnZoomLevelChanged(int ZoomLevel);
@@ -86,10 +86,14 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     }
 }
 
-function SetViewport(Vector Origin, int ZoomLevel)
+function SetViewport(Vector Origin, int NewZoomLevel)
 {
-    SetZoomLevel(ZoomLevel);
-    Viewport = ConstrainViewport(Class'UBox'.static.Create(Origin, GetZoomScale(ZoomLevel)), vect(0, 0, 0), vect(1, 1, 0));
+    SetZoomLevel(NewZoomLevel);
+    Viewport = ConstrainViewport(
+        Class'UBox'.static.Create(Origin, GetZoomScale(NewZoomLevel)),
+        vect(0, 0, 0),
+        vect(1, 1, 0)
+        );
 }
 
 function Vector GetViewportOrigin()
@@ -119,15 +123,29 @@ function UpdateSpawnPointPositions()
         if (GRI.SpawnPoints[i].BaseMapIconAttachment != none)
         {
             // Get location from a related map icon to keep both items in sync and avoid replicating the same location twice.
-            GRI.GetMapCoords(GRI.SpawnPoints[i].BaseMapIconAttachment.GetWorldCoords(GRI), X, Y, b_SpawnPoints[i].WinWidth * ViewportScale, b_SpawnPoints[i].WinHeight * ViewportScale);
+            GRI.GetMapCoords(
+                GRI.SpawnPoints[i].BaseMapIconAttachment.GetWorldCoords(GRI), X, Y,
+                b_SpawnPoints[i].WinWidth * ViewportScale, b_SpawnPoints[i].WinHeight * ViewportScale
+                );
         }
         else
         {
-            GRI.GetMapCoords(GRI.SpawnPoints[i].Location, X, Y, b_SpawnPoints[i].WinWidth * ViewportScale, b_SpawnPoints[i].WinHeight * ViewportScale);
+            GRI.GetMapCoords(
+                GRI.SpawnPoints[i].Location, X, Y, b_SpawnPoints[i].WinWidth * ViewportScale,
+                b_SpawnPoints[i].WinHeight * ViewportScale
+                );
         }
 
-        X = FClamp(1.0 - X - GRI.SpawnPoints[i].SpawnPointIconOffsetMultiplierX * b_SpawnPoints[i].WinWidth * ViewportScale, 0.0, 1.0);
-        Y = FClamp(1.0 - Y - GRI.SpawnPoints[i].SpawnPointIconOffsetMultiplierY * b_SpawnPoints[i].WinHeight * ViewportScale, 0.0, 1.0);
+        X = FClamp(
+            1.0 - X - GRI.SpawnPoints[i].SpawnPointIconOffsetMultiplierX * b_SpawnPoints[i].WinWidth * ViewportScale,
+            0.0,
+            1.0
+            );
+        Y = FClamp(
+            1.0 - Y - GRI.SpawnPoints[i].SpawnPointIconOffsetMultiplierY * b_SpawnPoints[i].WinHeight * ViewportScale,
+            0.0,
+            1.0
+            );
 
         X = (X - Viewport.Min.X) / ViewportScale;
         Y = (Y - Viewport.Min.Y) / ViewportScale;
@@ -144,7 +162,7 @@ function UpdateSpawnPointPositions()
 function UpdateSpawnPoints(int TeamIndex, int RoleIndex, int VehiclePoolIndex, int SpawnPointIndex)
 {
     local GUI.eFontScale FS;
-    local int            SquadIndex, i;
+    local int SquadIndex, i;
 
     SquadIndex = -1;
 
@@ -156,15 +174,17 @@ function UpdateSpawnPoints(int TeamIndex, int RoleIndex, int VehiclePoolIndex, i
     // Spawn points
     for (i = 0; i < arraycount(b_SpawnPoints); ++i)
     {
-        if (GRI != none &&
-            GRI.SpawnPoints[i] != none &&
-            GRI.SpawnPoints[i].IsVisibleTo(TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex))
+        if (GRI != none
+            && GRI.SpawnPoints[i] != none
+            && GRI.SpawnPoints[i].IsVisibleTo(TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex))
         {
             b_SpawnPoints[i].bIsActive = true;
             b_SpawnPoints[i].SetVisibility(true);
             b_SpawnPoints[i].CenterText = GRI.SpawnPoints[i].GetMapText();
 
-            if (GRI.SpawnPoints[i].CanSpawnWithParameters(GRI, TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex, true))
+            if (GRI.SpawnPoints[i].CanSpawnWithParameters(
+                GRI, TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex, true
+                ))
             {
                 // Spawn is acessible to spawn at, make the button clickable.
                 b_SpawnPoints[i].MenuStateChange(MSAT_Blurry);
@@ -213,9 +233,14 @@ function bool InternalOnDraw(Canvas C)
             bIsViewportInterpolating = false;
         }
 
-        ViewportInterpAlpha = (TimeSeconds - ViewportInterpStartTime) / (ViewportInterpEndTime - ViewportInterpStartTime);
+        ViewportInterpAlpha = (TimeSeconds - ViewportInterpStartTime)
+            / (ViewportInterpEndTime - ViewportInterpStartTime);
         ViewportInterpAlpha = FClamp(ViewportInterpAlpha, 0.0, 1.0);
-        Viewport =  Class'UBox'.static.Interp(Class'UInterp'.static.Deceleration(ViewportInterpAlpha, 0.0, 1.0), ViewportInterpStart, ViewportInterpEnd);
+        Viewport = Class'UBox'.static.Interp(
+            Class'UInterp'.static.Deceleration(ViewportInterpAlpha, 0.0, 1.0),
+            ViewportInterpStart,
+            ViewportInterpEnd
+            );
     }
 
     UpdateSpawnPointPositions();
@@ -236,17 +261,17 @@ function bool InternalOnDraw(Canvas C)
     return false;
 }
 
-function Box ConstrainViewport(Box Viewport, Vector Min, Vector Max)
+function Box ConstrainViewport(Box ViewportBox, Vector Min, Vector Max)
 {
     local Vector Translation;
 
-    Translation = -Class'UVector'.static.MinComponent(Viewport.Min, vect(0, 0, 0));
-    Viewport = Class'UBox'.static.Translate(Viewport, Translation);
+    Translation = -Class'UVector'.static.MinComponent(ViewportBox.Min, vect(0, 0, 0));
+    ViewportBox = Class'UBox'.static.Translate(ViewportBox, Translation);
 
-    Translation = -(Class'UVector'.static.MaxComponent(Viewport.Max, vect(1, 1, 0)) - vect(1, 1, 0));
-    Viewport = Class'UBox'.static.Translate(Viewport, Translation);
+    Translation = -(Class'UVector'.static.MaxComponent(ViewportBox.Max, vect(1, 1, 0)) - vect(1, 1, 0));
+    ViewportBox = Class'UBox'.static.Translate(ViewportBox, Translation);
 
-    return Viewport;
+    return ViewportBox;
 }
 
 function SelectSpawnPoint(int SpawnPointIndex)
@@ -387,10 +412,10 @@ function MyContextSelect(GUIContextMenu Sender, int Index)
 
     switch (Index)
     {
-        case 0:  // Destroy
+        case 0: // Destroy
             PC.ServerSquadDestroyRallyPoint(SRP);
             break;
-        case 2:  // Set as secondary
+        case 2: // Set as secondary
             PC.ServerSquadSwapRallyPoints();
             break;
     }
@@ -444,7 +469,12 @@ function Vector GetNormalizedLocation(float X, float Y)
 }
 
 // TODO:
-function bool IsMarkerUnderCursor(float LocationX, float LocationY, float CursorMapLocationX, float CursorMapLocationY)
+function bool IsMarkerUnderCursor(
+    float LocationX,
+    float LocationY,
+    float CursorMapLocationX,
+    float CursorMapLocationY
+    )
 {
     local float X, Y, D;
 
@@ -487,10 +517,15 @@ function bool InternalOnOpen(GUIContextMenu Sender)
 
     for (i = 0; i < PersonalMapMarkers.Length; ++i)
     {
-        if (PersonalMapMarkers[i].MapMarkerClass != none &&
-           (PersonalMapMarkers[i].ExpiryTime == -1 || PersonalMapMarkers[i].ExpiryTime > ElapsedTime) &&
-           PersonalMapMarkers[i].MapMarkerClass.static.CanRemoveMarker(PRI, PersonalMapMarkers[i]) &&
-           IsMarkerUnderCursor(float(PersonalMapMarkers[i].LocationX) / 255.0, float(PersonalMapMarkers[i].LocationY) / 255.0, MapClickLocation.X, MapClickLocation.Y))
+        if (PersonalMapMarkers[i].MapMarkerClass != none
+            && (PersonalMapMarkers[i].ExpiryTime == -1 || PersonalMapMarkers[i].ExpiryTime > ElapsedTime)
+            && PersonalMapMarkers[i].MapMarkerClass.static.CanRemoveMarker(PRI, PersonalMapMarkers[i])
+            && IsMarkerUnderCursor(
+                float(PersonalMapMarkers[i].LocationX) / 255.0,
+                float(PersonalMapMarkers[i].LocationY) / 255.0,
+                MapClickLocation.X,
+                MapClickLocation.Y
+                ))
         {
             bRemoveMapMarker = true;
             MapMarkerIndexToRemove = i;
@@ -504,10 +539,15 @@ function bool InternalOnOpen(GUIContextMenu Sender)
     {
         for (i = 0; i < PublicMapMarkers.Length; ++i)
         {
-            if (PublicMapMarkers[i].MapMarkerClass != none &&
-                (PublicMapMarkers[i].ExpiryTime == -1 || PublicMapMarkers[i].ExpiryTime > ElapsedTime) &&
-                PublicMapMarkers[i].MapMarkerClass.static.CanRemoveMarker(PRI, PublicMapMarkers[i]) &&
-                IsMarkerUnderCursor(float(PublicMapMarkers[i].LocationX) / 255.0, float(PublicMapMarkers[i].LocationY) / 255.0, MapClickLocation.X, MapClickLocation.Y))
+            if (PublicMapMarkers[i].MapMarkerClass != none
+                && (PublicMapMarkers[i].ExpiryTime == -1 || PublicMapMarkers[i].ExpiryTime > ElapsedTime)
+                && PublicMapMarkers[i].MapMarkerClass.static.CanRemoveMarker(PRI, PublicMapMarkers[i])
+                && IsMarkerUnderCursor(
+                    float(PublicMapMarkers[i].LocationX) / 255.0,
+                    float(PublicMapMarkers[i].LocationY) / 255.0,
+                    MapClickLocation.X,
+                    MapClickLocation.Y
+                    ))
             {
                 bRemoveMapMarker = true;
                 MapMarkerIndexToRemove = i;
@@ -516,12 +556,18 @@ function bool InternalOnOpen(GUIContextMenu Sender)
                 break;
             }
 
-            if (PublicMapMarkers[i].MapMarkerClass != none &&
-                (PublicMapMarkers[i].ExpiryTime == -1 || PublicMapMarkers[i].ExpiryTime > ElapsedTime) &&
-                PublicMapMarkers[i].MapMarkerClass.default.Type == MT_OnMapArtilleryRequest &&
-                PublicMapMarkers[i].MapMarkerClass.static.CanSeeMarker(PRI, PublicMapMarkers[i]) &&
-                (PC.IsArtilleryOperator() && !(PC.IsArtillerySpotter() && PC.GetSquadIndex() == PublicMapMarkers[i].SquadIndex)) &&
-                IsMarkerUnderCursor(float(PublicMapMarkers[i].LocationX) / 255.0, float(PublicMapMarkers[i].LocationY) / 255.0, MapClickLocation.X, MapClickLocation.Y))
+            if (PublicMapMarkers[i].MapMarkerClass != none
+                && (PublicMapMarkers[i].ExpiryTime == -1 || PublicMapMarkers[i].ExpiryTime > ElapsedTime)
+                && PublicMapMarkers[i].MapMarkerClass.default.Type == MT_OnMapArtilleryRequest
+                && PublicMapMarkers[i].MapMarkerClass.static.CanSeeMarker(PRI, PublicMapMarkers[i])
+                && (PC.IsArtilleryOperator()
+                    && !(PC.IsArtillerySpotter() && PC.GetSquadIndex() == PublicMapMarkers[i].SquadIndex))
+                && IsMarkerUnderCursor(
+                    float(PublicMapMarkers[i].LocationX) / 255.0,
+                    float(PublicMapMarkers[i].LocationY) / 255.0,
+                    MapClickLocation.X,
+                    MapClickLocation.Y
+                    ))
             {
                 if (PC.ArtillerySupportSquadIndex == PublicMapMarkers[i].SquadIndex)
                 {
@@ -547,7 +593,9 @@ function bool InternalOnOpen(GUIContextMenu Sender)
     // Fetch and sort map marker classes by group.
     for (i = 0; i < arraycount(GRI.MapMarkerClasses); ++i)
     {
-        if (GRI.MapMarkerClasses[i] != none && GRI.MapMarkerClasses[i].static.CanBeUsed(GRI) && GRI.MapMarkerClasses[i].static.CanPlaceMarker(PRI))
+        if (GRI.MapMarkerClasses[i] != none
+            && GRI.MapMarkerClasses[i].static.CanBeUsed(GRI)
+            && GRI.MapMarkerClasses[i].static.CanPlaceMarker(PRI))
         {
             MapMarkerClasses[MapMarkerClasses.Length] = GRI.MapMarkerClasses[i];
         }
@@ -639,10 +687,16 @@ function InternalOnSelect(GUIContextMenu Sender, int ClickIndex)
                     PC.ServerTeleportToMapLocation(MapClickLocation.X, MapClickLocation.Y);
                     break;
                 case 2:
-                    PC.ServerPlaceAdminSpawn(GRI.GetWorldSurfaceCoords(MapClickLocation.X, MapClickLocation.Y, ADMIN_SPAWN_TRACE_HEIGHT), ALLIES_TEAM_INDEX);
+                    PC.ServerPlaceAdminSpawn(
+                        GRI.GetWorldSurfaceCoords(MapClickLocation.X, MapClickLocation.Y, ADMIN_SPAWN_TRACE_HEIGHT),
+                        ALLIES_TEAM_INDEX
+                        );
                     break;
                 case 3:
-                    PC.ServerPlaceAdminSpawn(GRI.GetWorldSurfaceCoords(MapClickLocation.X, MapClickLocation.Y, ADMIN_SPAWN_TRACE_HEIGHT), AXIS_TEAM_INDEX);
+                    PC.ServerPlaceAdminSpawn(
+                        GRI.GetWorldSurfaceCoords(MapClickLocation.X, MapClickLocation.Y, ADMIN_SPAWN_TRACE_HEIGHT),
+                        AXIS_TEAM_INDEX
+                        );
                     break;
                 case 5:
                     PC.ServerDestroyAllAdminSpawns(ALLIES_TEAM_INDEX);
@@ -686,13 +740,13 @@ function InternalOnSelect(GUIContextMenu Sender, int ClickIndex)
 }
 
 // Gets the zoom scale based on the zoom level.
-function float GetZoomScale(int ZoomLevel)
+function float GetZoomScale(int TargetZoomLevel)
 {
     local int ZoomLevelRange;
     local float T;
 
     ZoomLevelRange = ZoomLevelMax - ZoomLevelMin;
-    T = float(ZoomLevel) * (1.0 / ZoomLevelRange);
+    T = float(TargetZoomLevel) * (1.0 / ZoomLevelRange);
     return Class'UInterp'.static.Deceleration(T, ZoomScaleRange.Max, ZoomScaleRange.Min);
 }
 
@@ -704,10 +758,10 @@ function SetZoomLevel(int NewZoomLevel)
 }
 
 // Given a viewport and a location within that viewport, get the frame coordinates.
-function Vector ViewportToFrame(Box Viewport, Vector Location)
+function Vector ViewportToFrame(Box ViewportBox, Vector Location)
 {
-    Location.X = Viewport.Min.X + (Location.X * (Viewport.Max.X - Viewport.Min.X));
-    Location.Y = Viewport.Min.Y + (Location.Y * (Viewport.Max.Y - Viewport.Min.Y));
+    Location.X = ViewportBox.Min.X + (Location.X * (ViewportBox.Max.X - ViewportBox.Min.X));
+    Location.Y = ViewportBox.Min.Y + (Location.Y * (ViewportBox.Max.Y - ViewportBox.Min.Y));
     return Location;
 }
 

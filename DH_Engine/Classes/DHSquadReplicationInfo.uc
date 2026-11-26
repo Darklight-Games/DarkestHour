@@ -7,12 +7,12 @@ class DHSquadReplicationInfo extends ReplicationInfo;
 
 const SQUAD_SIZE_MIN = 8;
 const SQUAD_SIZE_MAX = 12;
-const SQUAD_RALLY_POINTS_MAX = 2;           // The number of squad rally points that can be exist at one time.
-const SQUAD_RALLY_POINTS_ACTIVE_MAX = 1;    // The number of squad rally points that are "active" at one time.
+const SQUAD_RALLY_POINTS_MAX = 2; // The number of squad rally points that can be exist at one time.
+const SQUAD_RALLY_POINTS_ACTIVE_MAX = 1; // The number of squad rally points that are "active" at one time.
 const TEAM_SQUAD_MEMBERS_MAX = 64;
-const TEAM_SQUADS_MAX = 7;                  // SQUAD_SIZE_MIN / TEAM_SQUAD_MEMBERS_MAX
+const TEAM_SQUADS_MAX = 7; // SQUAD_SIZE_MIN / TEAM_SQUAD_MEMBERS_MAX
 
-const RALLY_POINTS_MAX = 32;                // TEAM_SQUADS_MAX * SQUAD_RALLY_POINTS_MAX * 2
+const RALLY_POINTS_MAX = 32; // TEAM_SQUADS_MAX * SQUAD_RALLY_POINTS_MAX * 2
 
 const SQUAD_NAME_LENGTH_MIN = 3;
 const SQUAD_NAME_LENGTH_MAX = 20;
@@ -27,38 +27,38 @@ const SQUAD_MERGE_REQUEST_INTERVAL = 15.0;
 // This nightmare is necessary because UnrealScript cannot replicate large
 // arrays of structs.
 var private DHPlayerReplicationInfo AxisMembers[TEAM_SQUAD_MEMBERS_MAX];
-var private byte                    AxisAssistantSquadLeaderMemberIndices[TEAM_SQUADS_MAX];
-var private string                  AxisNames[TEAM_SQUADS_MAX];
-var private byte                    AxisLocked[TEAM_SQUADS_MAX];
-var private int                     AxisNextRallyPointTimes[TEAM_SQUADS_MAX];   // Stores the next time (in relation to Level.TimeSeconds) that a squad can place a new rally point.
+var private byte AxisAssistantSquadLeaderMemberIndices[TEAM_SQUADS_MAX];
+var private string AxisNames[TEAM_SQUADS_MAX];
+var private byte AxisLocked[TEAM_SQUADS_MAX];
+var private int AxisNextRallyPointTimes[TEAM_SQUADS_MAX]; // Stores the next time (in relation to Level.TimeSeconds) that a squad can place a new rally point.
 
 // Rally points
-var DHSquadRallyPoint               RallyPoints[RALLY_POINTS_MAX];
-var float                           RallyPointInitialDelaySeconds;
-var float                           RallyPointChangeLeaderDelaySeconds;
-var float                           RallyPointRadiusInMeters;
-var float                           RallyPointSquadmatePlacementRadiusInMeters;
-var int                             RallyPointInitialSpawnsMinimum;
-var float                           RallyPointInitialSpawnsMemberFactor;
-var float                           RallyPointInitialSpawnsDangerZoneFactor;
-var config  bool                    bAllowRallyPointsBehindEnemyLines;
+var DHSquadRallyPoint RallyPoints[RALLY_POINTS_MAX];
+var float RallyPointInitialDelaySeconds;
+var float RallyPointChangeLeaderDelaySeconds;
+var float RallyPointRadiusInMeters;
+var float RallyPointSquadmatePlacementRadiusInMeters;
+var int RallyPointInitialSpawnsMinimum;
+var float RallyPointInitialSpawnsMemberFactor;
+var float RallyPointInitialSpawnsDangerZoneFactor;
+var config bool bAllowRallyPointsBehindEnemyLines;
 
 var private DHPlayerReplicationInfo AlliesMembers[TEAM_SQUAD_MEMBERS_MAX];
-var private byte                    AlliesAssistantSquadLeaderMemberIndices[TEAM_SQUADS_MAX];
-var private string                  AlliesNames[TEAM_SQUADS_MAX];
-var private byte                    AlliesLocked[TEAM_SQUADS_MAX];
-var private int                     AlliesNextRallyPointTimes[TEAM_SQUADS_MAX]; // Stores the next time (in relation to Level.TimeSeconds) that a squad can place a new rally point.
+var private byte AlliesAssistantSquadLeaderMemberIndices[TEAM_SQUADS_MAX];
+var private string AlliesNames[TEAM_SQUADS_MAX];
+var private byte AlliesLocked[TEAM_SQUADS_MAX];
+var private int AlliesNextRallyPointTimes[TEAM_SQUADS_MAX]; // Stores the next time (in relation to Level.TimeSeconds) that a squad can place a new rally point.
 
-var private int                     AxisSquadSize;
-var private int                     AlliesSquadSize;
+var private int AxisSquadSize;
+var private int AlliesSquadSize;
 
-var class<LocalMessage>             SquadMessageClass;
+var class<LocalMessage> SquadMessageClass;
 
-var int                             NextRallyPointInterval;
-var bool                            bAreRallyPointsEnabled;
+var int NextRallyPointInterval;
+var bool bAreRallyPointsEnabled;
 
-var int                             SquadLockMemberCountMin;    // The amount of squad member required to be able to lock a squad and keep it locked.
-var int                             SquadLeaderRallyPointInactivityThreshold;
+var int SquadLockMemberCountMin; // The amount of squad member required to be able to lock a squad and keep it locked.
+var int SquadLeaderRallyPointInactivityThreshold;
 
 struct SquadLeaderVolunteer
 {
@@ -66,7 +66,8 @@ struct SquadLeaderVolunteer
     var int SquadIndex;
     var array<DHPlayerReplicationInfo> Volunteers;
 };
-var array<SquadLeaderVolunteer>     SquadLeaderVolunteers;
+
+var array<SquadLeaderVolunteer> SquadLeaderVolunteers;
 
 struct SquadLeaderDraw
 {
@@ -74,7 +75,8 @@ struct SquadLeaderDraw
     var int SquadIndex;
     var int ExpirationTime;
 };
-var array<SquadLeaderDraw>          SquadLeaderDraws;
+
+var array<SquadLeaderDraw> SquadLeaderDraws;
 
 // Squads Bans
 struct SquadBan
@@ -83,7 +85,8 @@ struct SquadBan
     var int SquadIndex;
     var string ROID;
 };
-var array<SquadBan>                 SquadBans;
+
+var array<SquadBan> SquadBans;
 
 // Squad Merge Requests
 enum ESquadMergeRequestResult
@@ -92,7 +95,7 @@ enum ESquadMergeRequestResult
     RESULT_Fatal,
     RESULT_CannotMerge,
     RESULT_Duplicate,
-    RESULT_Sent
+    RESULT_Sent,
 };
 
 struct SquadMergeRequest
@@ -102,20 +105,21 @@ struct SquadMergeRequest
     var int SenderSquadIndex;
     var int RecipientSquadIndex;
 };
-var array<SquadMergeRequest>        SquadMergeRequests;
-var int                             NextSquadMergeRequestID;
 
-var private DHGameReplicationInfo   GRI;    // only valid on the server, clients should use GetGameReplicationInfo()
+var array<SquadMergeRequest> SquadMergeRequests;
+var int NextSquadMergeRequestID;
 
-var localized array<string>         SquadMergeRequestResultStrings;
-var localized array<string>         SquadPromotionRequestResultStrings;
+var private DHGameReplicationInfo GRI; // only valid on the server, clients should use GetGameReplicationInfo()
+
+var localized array<string> SquadMergeRequestResultStrings;
+var localized array<string> SquadPromotionRequestResultStrings;
 
 // Squad Promotion Requests
 enum ESquadPromotionRequestResult
 {
     SPPR_Fatal,
     SPPR_Duplicate,
-    SPPR_Sent
+    SPPR_Sent,
 };
 
 struct SquadPromotionRequest
@@ -127,23 +131,23 @@ struct SquadPromotionRequest
     var DHPlayerReplicationInfo Recipient;
 };
 
-var array<SquadPromotionRequest>    SquadPromotionRequests;
-var int                             NextSquadPromotionRequestID;
+var array<SquadPromotionRequest> SquadPromotionRequests;
+var int NextSquadPromotionRequestID;
 
-var int                             JoinSquadNagMessageInterval;    // How often to nag unassigned players to join a squad.
-var int                             NextJoinSquadNagTime;           // The next time to nag unassigned players to join a squad.
+var int JoinSquadNagMessageInterval; // How often to nag unassigned players to join a squad.
+var int NextJoinSquadNagTime; // The next time to nag unassigned players to join a squad.
 
 enum ERallyPointPlacementErrorType
 {
     ERROR_None,
     ERROR_Fatal,
-    ERROR_NotOnFoot/*=52*/,                             // PC.ReceiveLocalizedMessage(SquadMessageClass, 52); // "You must be on foot to create a rally point."
-    ERROR_TooCloseToOtherRallyPoint/*=45*/,             // PC.ReceiveLocalizedMessage(SquadMessageClass, Class'UInteger'.static.FromShorts(45, E.OptionalInt));
-    ERROR_InUncontrolledObjective/*=78*/,               // PC.ReceiveLocalizedMessage(SquadMessageClass, 78);
-    ERROR_TooSoon/*=53*/,                               // PC.ReceiveLocalizedMessage(SquadMessageClass, Class'UInteger'.static.FromShorts(53, E.OptionalInt));
-    ERROR_MissingSquadmate/*=47*/,                      // PC.ReceiveLocalizedMessage(SquadMessageClass, 47);
-    ERROR_BadLocation/*=56*/,
-    ERROR_BehindEnemyLines/*=80*/,
+    ERROR_NotOnFoot /*=52*/, // PC.ReceiveLocalizedMessage(SquadMessageClass, 52); // "You must be on foot to create a rally point."
+    ERROR_TooCloseToOtherRallyPoint /*=45*/, // PC.ReceiveLocalizedMessage(SquadMessageClass, Class'UInteger'.static.FromShorts(45, E.OptionalInt));
+    ERROR_InUncontrolledObjective /*=78*/, // PC.ReceiveLocalizedMessage(SquadMessageClass, 78);
+    ERROR_TooSoon /*=53*/, // PC.ReceiveLocalizedMessage(SquadMessageClass, Class'UInteger'.static.FromShorts(53, E.OptionalInt));
+    ERROR_MissingSquadmate /*=47*/, // PC.ReceiveLocalizedMessage(SquadMessageClass, 47);
+    ERROR_BadLocation /*=56*/,
+    ERROR_BehindEnemyLines /*=80*/,
 };
 
 struct RallyPointPlacementError
@@ -160,24 +164,22 @@ struct RallyPointPlacementError
 struct RallyPointPlacementResult
 {
     var RallyPointPlacementError Error;
-    var bool    bIsInDangerZone;
-    var Vector  HitLocation;
-    var Vector  HitNormal;
+    var bool bIsInDangerZone;
+    var Vector HitLocation;
+    var Vector HitNormal;
 };
 
 replication
 {
     reliable if (bNetDirty && Role == ROLE_Authority)
-        AxisSquadSize, AlliesSquadSize,
-        AxisMembers, AxisNames, AxisLocked, AlliesMembers, AlliesNames,
-        AlliesLocked, bAreRallyPointsEnabled, RallyPoints,
-        AxisNextRallyPointTimes, AlliesNextRallyPointTimes;
+        AxisSquadSize, AlliesSquadSize, AxisMembers, AxisNames, AxisLocked, AlliesMembers, AlliesNames, AlliesLocked,
+        bAreRallyPointsEnabled, RallyPoints, AxisNextRallyPointTimes, AlliesNextRallyPointTimes;
 }
 
 simulated function PostBeginPlay()
 {
     local DH_LevelInfo LI;
-    local Class<DHNation> NationClass;
+    local class<DHNation> NationClass;
 
     super.PostBeginPlay();
 
@@ -247,7 +249,9 @@ function Timer()
     local bool bShouldSendJoinSquadNagMessage;
 
     // When appropriate, all unassigned players will be berated to join a squad at regular intervals.
-    bShouldSendJoinSquadNagMessage = Level.NetMode != NM_Standalone && bAreRallyPointsEnabled && Level.Game.GameReplicationInfo.ElapsedTime >= NextJoinSquadNagTime;
+    bShouldSendJoinSquadNagMessage = Level.NetMode != NM_Standalone
+        && bAreRallyPointsEnabled
+        && Level.Game.GameReplicationInfo.ElapsedTime >= NextJoinSquadNagTime;
 
     if (bShouldSendJoinSquadNagMessage)
     {
@@ -310,7 +314,11 @@ private function UpdateSquadMemberLocations(DHPlayer PC)
             if (OtherController != none && OtherController.Pawn != none)
             {
                 GRI.GetMapCoords(OtherController.Pawn.Location, X, Y);
-                PC.SquadMemberLocations[i] = Class'UQuantize'.static.QuantizeClamped2DPose(X, Y, OtherController.Pawn.Rotation.Yaw);
+                PC.SquadMemberLocations[i] = Class'UQuantize'.static.QuantizeClamped2DPose(
+                    X,
+                    Y,
+                    OtherController.Pawn.Rotation.Yaw
+                    );
                 continue;
             }
         }
@@ -349,7 +357,11 @@ private function UpdateSquadLeaderLocations(DHPlayer PC)
         if (OtherController != none && OtherController.Pawn != none)
         {
             GRI.GetMapCoords(OtherController.Pawn.Location, X, Y);
-            PC.SquadLeaderLocations[i] = Class'UQuantize'.static.QuantizeClamped2DPose(X, Y, OtherController.Pawn.Rotation.Yaw);
+            PC.SquadLeaderLocations[i] = Class'UQuantize'.static.QuantizeClamped2DPose(
+                X,
+                Y,
+                OtherController.Pawn.Rotation.Yaw
+                );
         }
     }
 }
@@ -425,10 +437,14 @@ private function UpdateSquadRallyPoints()
                     {
                         ActiveSquadRallyPoints[i].SpawnAccrualTimer += 1;
 
-                        if (ActiveSquadRallyPoints[i].SpawnAccrualTimer >= ActiveSquadRallyPoints[i].SpawnAccrualThreshold)
+                        if (ActiveSquadRallyPoints[i].SpawnAccrualTimer
+                            >= ActiveSquadRallyPoints[i].SpawnAccrualThreshold)
                         {
                             ActiveSquadRallyPoints[i].SpawnAccrualTimer = 0;
-                            ActiveSquadRallyPoints[i].SpawnsRemaining = Min(ActiveSquadRallyPoints[i].SpawnsRemaining + 1, GetSquadRallyPointInitialSpawns(ActiveSquadRallyPoints[i]));
+                            ActiveSquadRallyPoints[i].SpawnsRemaining = Min(
+                                ActiveSquadRallyPoints[i].SpawnsRemaining + 1,
+                                GetSquadRallyPointInitialSpawns(ActiveSquadRallyPoints[i])
+                                );
                         }
                     }
                 }
@@ -706,7 +722,11 @@ simulated function bool HasAssistant(int TeamIndex, int SquadIndex)
 // Returns true if the specified player is the squad leader of the specified squad.
 simulated function bool IsSquadLeader(DHPlayerReplicationInfo PRI, int TeamIndex, int SquadIndex)
 {
-    if (PRI == none || PRI.SquadIndex == -1 || PRI.Team == none || PRI.Team.TeamIndex != TeamIndex || PRI.SquadIndex != SquadIndex)
+    if (PRI == none
+        || PRI.SquadIndex == -1
+        || PRI.Team == none
+        || PRI.Team.TeamIndex != TeamIndex
+        || PRI.SquadIndex != SquadIndex)
     {
         return false;
     }
@@ -725,9 +745,9 @@ private function bool SwapSquadMembersByIndex(int TeamIndex, int SquadIndex, int
 {
     local DHPlayerReplicationInfo PRI1, PRI2;
 
-    if (!IsSquadActive(TeamIndex, SquadIndex) ||
-        MemberIndex1 >= GetTeamSquadSize(TeamIndex) ||
-        MemberIndex2 >= GetTeamSquadSize(TeamIndex))
+    if (!IsSquadActive(TeamIndex, SquadIndex)
+        || MemberIndex1 >= GetTeamSquadSize(TeamIndex)
+        || MemberIndex2 >= GetTeamSquadSize(TeamIndex))
     {
         return false;
     }
@@ -829,7 +849,11 @@ function int CreateSquad(DHPlayerReplicationInfo PRI, optional string Name)
 
             // Have a slight delay in placing rally points to dissuade players
             // from trying to exploit the system.
-            SetSquadNextRallyPointTime(TeamIndex, i, Level.Game.GameReplicationInfo.ElapsedTime + RallyPointInitialDelaySeconds);
+            SetSquadNextRallyPointTime(
+                TeamIndex,
+                i,
+                Level.Game.GameReplicationInfo.ElapsedTime + RallyPointInitialDelaySeconds
+                );
 
             // New squad will have no rallies. Reset the no rally points time to now.
             UpdateSquadLeaderNoRallyPointsTime(TeamIndex, i);
@@ -846,7 +870,12 @@ function int CreateSquad(DHPlayerReplicationInfo PRI, optional string Name)
 
 // Changes the squad leader. Returns true if the squad leader was successfully changed.
 // NOTE: Duplicates functionality of `ComandeerSquad` function.
-function bool ChangeSquadLeader(DHPlayerReplicationInfo PRI, int TeamIndex, int SquadIndex, DHPlayerReplicationInfo NewSquadLeader)
+function bool ChangeSquadLeader(
+    DHPlayerReplicationInfo PRI,
+    int TeamIndex,
+    int SquadIndex,
+    DHPlayerReplicationInfo NewSquadLeader
+    )
 {
     local DHBot Bot;
     local DHPlayer PC, OtherPC;
@@ -909,13 +938,10 @@ function bool ChangeSquadLeader(DHPlayerReplicationInfo PRI, int TeamIndex, int 
 
     if (bRequestedByAdmin)
     {
-        Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level,
-                                                                    TeamIndex,
-                                                                    Class'DHAdminMessage',
-                                                                    Class'UInteger'.static.FromShorts(1, SquadIndex),
-                                                                    Admin,
-                                                                    NewSquadLeader,
-                                                                    self);
+        Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+            Level, TeamIndex, Class'DHAdminMessage', Class'UInteger'.static.FromShorts(1, SquadIndex), Admin,
+            NewSquadLeader, self
+            );
     }
 
     if (PC != none)
@@ -941,7 +967,11 @@ function bool ChangeSquadLeader(DHPlayerReplicationInfo PRI, int TeamIndex, int 
 
     // Have a slight delay in placing rally points to dissuade players
     // from trying to exploit the system.
-    SetSquadNextRallyPointTime(TeamIndex, SquadIndex, Level.Game.GameReplicationInfo.ElapsedTime + RallyPointChangeLeaderDelaySeconds);
+    SetSquadNextRallyPointTime(
+        TeamIndex,
+        SquadIndex,
+        Level.Game.GameReplicationInfo.ElapsedTime + RallyPointChangeLeaderDelaySeconds
+        );
 
     return true;
 }
@@ -981,7 +1011,11 @@ private function OnSquadLeaderLeftSquad(int TeamIndex, int SquadIndex)
 // The player is guaranteed to not be a member of a squad after this
 // call, regardless of the return value.
 // TODO: these optional bools are ugly and are indicative that a minor refactor is required around this code flow.
-function bool LeaveSquad(DHPlayerReplicationInfo PRI, optional bool bShouldShowLeftMessage, optional bool bShouldNotInvalidateRole)
+function bool LeaveSquad(
+    DHPlayerReplicationInfo PRI,
+    optional bool bShouldShowLeftMessage,
+    optional bool bShouldNotInvalidateRole
+    )
 {
     local int TeamIndex, SquadIndex, SquadMemberIndex;
     local DHPlayer PC;
@@ -1101,9 +1135,9 @@ function ResetSquad(int TeamIndex, int SquadIndex)
     // Destroy all rally points.
     for (i = 0; i < arraycount(RallyPoints); ++i)
     {
-        if (RallyPoints[i] != none &&
-            RallyPoints[i].GetTeamIndex() == TeamIndex &&
-            RallyPoints[i].SquadIndex == SquadIndex)
+        if (RallyPoints[i] != none
+            && RallyPoints[i].GetTeamIndex() == TeamIndex
+            && RallyPoints[i].SquadIndex == SquadIndex)
         {
             RallyPoints[i].Destroy();
         }
@@ -1168,10 +1202,10 @@ simulated function bool IsInSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, i
 
 simulated function bool IsSquadJoinable(int TeamIndex, int SquadIndex)
 {
-    return IsSquadActive(TeamIndex, SquadIndex) &&
-           !IsSquadFull(TeamIndex, SquadIndex) &&
-           !IsSquadLocked(TeamIndex, SquadIndex) &&
-           GetSquadLeader(TeamIndex, SquadIndex) != none;
+    return IsSquadActive(TeamIndex, SquadIndex)
+        && !IsSquadFull(TeamIndex, SquadIndex)
+        && !IsSquadLocked(TeamIndex, SquadIndex)
+        && GetSquadLeader(TeamIndex, SquadIndex) != none;
 }
 
 simulated function bool IsAnySquadJoinable(int TeamIndex)
@@ -1190,37 +1224,35 @@ simulated function bool IsAnySquadJoinable(int TeamIndex)
 }
 
 // Attempt to make the specified player join the most populous open squad.
-// Returns the squad index of the newly joined squad, or -1 if it failed.
-function int JoinSquadAuto(DHPlayerReplicationInfo PRI)
+function bool JoinSquadAuto(DHPlayerReplicationInfo PRI)
 {
     local int i, SquadIndex, MaxMemberCount, MemberCount;
     local DHPlayer PC;
 
     if (PRI == none || PRI.Team == none)
     {
-        return -1;
+        return false;
     }
 
     PC = DHPlayer(PRI.Owner);
 
     if (PC == none)
     {
-        return -1;
+        return false;
     }
 
     if (PRI.IsInSquad())
     {
         // "You are already in a squad."
         PC.ReceiveLocalizedMessage(SquadMessageClass, 69);
-        return -1;
+        return false;
     }
 
     SquadIndex = -1;
 
     for (i = 0; i < GetTeamSquadLimit(PRI.Team.TeamIndex); ++i)
     {
-        if (!IsSquadJoinable(PRI.Team.TeamIndex, i) ||
-            IsPlayerBannedFromSquad(PRI, PRI.Team.TeamIndex, i))
+        if (!IsSquadJoinable(PRI.Team.TeamIndex, i) || IsPlayerBannedFromSquad(PRI, PRI.Team.TeamIndex, i))
         {
             continue;
         }
@@ -1234,15 +1266,15 @@ function int JoinSquadAuto(DHPlayerReplicationInfo PRI)
         }
     }
 
-    if (SquadIndex >= 0)
+    if (SquadIndex < 0)
     {
-        return JoinSquad(PRI, PRI.Team.TeamIndex, SquadIndex);
+        // "There are no squads that you are eligible to join."
+        PC.ReceiveLocalizedMessage(SquadMessageClass, 63);
+
+        return false;
     }
 
-    // "There are no squads that you are eligible to join."
-    PC.ReceiveLocalizedMessage(SquadMessageClass, 63);
-
-    return -1;
+    return JoinSquad(PRI, PRI.Team.TeamIndex, SquadIndex);
 }
 
 private function int GetEmptySquadMemberIndex(byte TeamIndex, int SquadIndex)
@@ -1261,9 +1293,13 @@ private function int GetEmptySquadMemberIndex(byte TeamIndex, int SquadIndex)
 }
 
 // Attempts to make the specified player join the specified squad.
-// Returns the index of the player's new SquadMemberIndex or -1 if
-// they were unable to join the squad.
-function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadIndex, optional bool bWasInvited, optional bool bIsQuiet)
+function bool JoinSquad(
+    DHPlayerReplicationInfo PRI,
+    byte TeamIndex,
+    int SquadIndex,
+    optional bool bWasInvited,
+    optional bool bIsQuiet
+    )
 {
     local int MemberIndex;
     local DHPlayer PC;
@@ -1272,7 +1308,7 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
 
     if (PRI == none || PRI.Team == none || PRI.Team.TeamIndex != TeamIndex)
     {
-        return -1;
+        return false;
     }
 
     PC = DHPlayer(PRI.Owner);
@@ -1280,12 +1316,14 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
 
     if (PC == none && Bot == none)
     {
-        return -1;
+        return false;
     }
 
-    if (!IsSquadActive(TeamIndex, SquadIndex) || IsInSquad(PRI, TeamIndex, SquadIndex) || GetSquadLeader(TeamIndex, SquadIndex) == none)
+    if (!IsSquadActive(TeamIndex, SquadIndex)
+        || IsInSquad(PRI, TeamIndex, SquadIndex)
+        || GetSquadLeader(TeamIndex, SquadIndex) == none)
     {
-        return -1;
+        return false;
     }
 
     if (!bWasInvited)
@@ -1294,12 +1332,12 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
         {
             // "You are unable to join this squad as you have been banned."
             PC.ReceiveLocalizedMessage(Class'DHSquadMessage', 62);
-            return -1;
+            return false;
         }
 
         if (IsSquadLocked(TeamIndex, SquadIndex))
         {
-            return -1;
+            return false;
         }
     }
 
@@ -1337,12 +1375,17 @@ function int JoinSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadInd
         ClearSquadBan(TeamIndex, SquadIndex, PRI);
     }
 
-    return MemberIndex;
+    return true;
 }
 
 // Attempts to kick the specified player from the specified squad.
 // Returns true if the the player was successfully kicked from a squad.
-function bool KickFromSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadIndex, DHPlayerReplicationInfo MemberToKick)
+function bool KickFromSquad(
+    DHPlayerReplicationInfo PRI,
+    byte TeamIndex,
+    int SquadIndex,
+    DHPlayerReplicationInfo MemberToKick
+    )
 {
     local DHPlayer OtherPC;
 
@@ -1355,13 +1398,10 @@ function bool KickFromSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int Squ
     {
         if (PRI.IsLoggedInAsAdmin())
         {
-            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level,
-                                                                        TeamIndex,
-                                                                        Class'DHAdminMessage',
-                                                                        Class'UInteger'.static.FromShorts(0, SquadIndex),
-                                                                        PRI,
-                                                                        MemberToKick,
-                                                                        self);
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                Level, TeamIndex, Class'DHAdminMessage', Class'UInteger'.static.FromShorts(0, SquadIndex), PRI,
+                MemberToKick, self
+                );
         }
         else
         {
@@ -1405,9 +1445,9 @@ function bool IsPlayerBannedFromSquad(DHPlayerReplicationInfo PRI, int TeamIndex
 
     for (i = 0; i < SquadBans.Length; ++i)
     {
-        if (SquadBans[i].TeamIndex == TeamIndex &&
-            SquadBans[i].SquadIndex == SquadIndex &&
-            SquadBans[i].ROID == PC.ROIDHash)
+        if (SquadBans[i].TeamIndex == TeamIndex
+            && SquadBans[i].SquadIndex == SquadIndex
+            && SquadBans[i].ROID == PC.ROIDHash)
         {
             return true;
         }
@@ -1435,9 +1475,9 @@ function bool ClearSquadBan(int TeamIndex, int SquadIndex, DHPlayerReplicationIn
 
     for (i = SquadBans.Length - 1; i >= 0; --i)
     {
-        if (SquadBans[i].TeamIndex == TeamIndex &&
-            SquadBans[i].SquadIndex == SquadIndex &&
-            SquadBans[i].ROID == PC.ROIDHash)
+        if (SquadBans[i].TeamIndex == TeamIndex
+            && SquadBans[i].SquadIndex == SquadIndex
+            && SquadBans[i].ROID == PC.ROIDHash)
         {
             SquadBans.Remove(i, 1);
             return true;
@@ -1462,7 +1502,12 @@ function ClearSquadBans(int TeamIndex, int SquadIndex)
 
 // Kicks and bans the specified player from the squad.
 // Returns true if the player was kicked and is now banned from the squad.
-function bool BanFromSquad(DHPlayerReplicationInfo PRI, int TeamIndex, int SquadIndex, DHPlayerReplicationInfo PlayerToBan)
+function bool BanFromSquad(
+    DHPlayerReplicationInfo PRI,
+    int TeamIndex,
+    int SquadIndex,
+    DHPlayerReplicationInfo PlayerToBan
+    )
 {
     local DHPlayer PC, OtherPC;
     local SquadBan Ban;
@@ -1506,15 +1551,20 @@ simulated function bool IsOnTeam(DHPlayerReplicationInfo PRI, int TeamIndex)
 
 // Sends an invitation to the specified recipient to join the specified squad.
 // Returns true if the invitation was successfully sent.
-function bool InviteToSquad(DHPlayerReplicationInfo PRI, byte TeamIndex, int SquadIndex, DHPlayerReplicationInfo Recipient)
+function bool InviteToSquad(
+    DHPlayerReplicationInfo PRI,
+    byte TeamIndex,
+    int SquadIndex,
+    DHPlayerReplicationInfo Recipient
+    )
 {
     local DHPlayer PC, OtherPC;
     local DHBot Bot;
 
-    if (Recipient == none ||
-        !IsOnTeam(PRI, TeamIndex) ||
-        !IsOnTeam(Recipient, TeamIndex) ||
-        !IsSquadLeader(PRI, TeamIndex, SquadIndex))
+    if (Recipient == none
+        || !IsOnTeam(PRI, TeamIndex)
+        || !IsOnTeam(Recipient, TeamIndex)
+        || !IsSquadLeader(PRI, TeamIndex, SquadIndex))
     {
         return false;
     }
@@ -1656,7 +1706,15 @@ private function bool SetSquadLockedInternal(int TeamIndex, int SquadIndex, bool
     return true;
 }
 
-function BroadcastSquadLocalizedMessage(byte TeamIndex, int SquadIndex, class<LocalMessage> MessageClass, int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+function BroadcastSquadLocalizedMessage(
+    byte TeamIndex,
+    int SquadIndex,
+    class<LocalMessage> MessageClass,
+    int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local int i;
     local DHPlayer PC;
@@ -1928,7 +1986,14 @@ function SetName(int TeamIndex, int SquadIndex, string Name)
 // SQUAD SIGNALS
 //==============================================================================
 
-function SendSignal(DHPlayerReplicationInfo PRI, int TeamIndex, int SquadIndex, class<DHSignal> SignalClass, Vector Location, optional Object OptionalObject)
+function SendSignal(
+    DHPlayerReplicationInfo PRI,
+    int TeamIndex,
+    int SquadIndex,
+    class<DHSignal> SignalClass,
+    Vector Location,
+    optional Object OptionalObject
+    )
 {
     local float Radius;
     local DHPlayer Sender, Recipient;
@@ -1967,9 +2032,9 @@ function DHSquadRallyPoint GetRallyPoint(int TeamIndex, int SquadIndex)
 
     for (i = 0; i < arraycount(RallyPoints); ++i)
     {
-        if (RallyPoints[i] != none &&
-            RallyPoints[i].GetTeamIndex() == TeamIndex &&
-            RallyPoints[i].SquadIndex == SquadIndex)
+        if (RallyPoints[i] != none
+            && RallyPoints[i].GetTeamIndex() == TeamIndex
+            && RallyPoints[i].SquadIndex == SquadIndex)
         {
             return RallyPoints[i];
         }
@@ -2017,10 +2082,10 @@ simulated function int GetSquadRallyPointCount(int TeamIndex, int SquadIndex)
 
     for (i = 0; i < arraycount(RallyPoints); ++i)
     {
-        if (RallyPoints[i] != none &&
-            RallyPoints[i].GetTeamIndex() == TeamIndex &&
-            RallyPoints[i].SquadIndex == SquadIndex &&
-            !RallyPoints[i].bPendingDelete)
+        if (RallyPoints[i] != none
+            && RallyPoints[i].GetTeamIndex() == TeamIndex
+            && RallyPoints[i].SquadIndex == SquadIndex
+            && !RallyPoints[i].bPendingDelete)
         {
             ++Count;
         }
@@ -2036,9 +2101,9 @@ simulated function array<DHSquadRallyPoint> GetSquadRallyPoints(int TeamIndex, i
 
     for (i = 0; i < arraycount(RallyPoints); ++i)
     {
-        if (RallyPoints[i] != none &&
-            RallyPoints[i].GetTeamIndex() == TeamIndex &&
-            RallyPoints[i].SquadIndex == SquadIndex)
+        if (RallyPoints[i] != none
+            && RallyPoints[i].GetTeamIndex() == TeamIndex
+            && RallyPoints[i].SquadIndex == SquadIndex)
         {
             SquadRallyPoints[SquadRallyPoints.Length] = RallyPoints[i];
         }
@@ -2054,10 +2119,10 @@ simulated function array<DHSquadRallyPoint> GetActiveSquadRallyPoints(int TeamIn
 
     for (i = 0; i < arraycount(RallyPoints); ++i)
     {
-        if (RallyPoints[i] != none &&
-            RallyPoints[i].GetTeamIndex() == TeamIndex &&
-            RallyPoints[i].SquadIndex == SquadIndex &&
-            RallyPoints[i].IsActive())
+        if (RallyPoints[i] != none
+            && RallyPoints[i].GetTeamIndex() == TeamIndex
+            && RallyPoints[i].SquadIndex == SquadIndex
+            && RallyPoints[i].IsActive())
         {
             ActiveSquadRallyPoints[ActiveSquadRallyPoints.Length] = RallyPoints[i];
         }
@@ -2118,7 +2183,12 @@ simulated function RallyPointPlacementResult GetRallyPointPlacementResult(DHPlay
     }
 
     // Determine whether or not we are in the danger zone.
-    bIsInFriendlyZone = Class'DHDangerZone'.static.IsIn(MyGRI, P.Location.X, P.Location.Y, Class'UMath'.static.SwapFirstPair(PC.GetTeamNum()));
+    bIsInFriendlyZone = Class'DHDangerZone'.static.IsIn(
+        MyGRI,
+        P.Location.X,
+        P.Location.Y,
+        Class'UMath'.static.SwapFirstPair(PC.GetTeamNum())
+        );
 
     if (bIsInFriendlyZone)
     {
@@ -2128,8 +2198,7 @@ simulated function RallyPointPlacementResult GetRallyPointPlacementResult(DHPlay
     {
         Result.bIsInDangerZone = Class'DHDangerZone'.static.IsIn(MyGRI, P.Location.X, P.Location.Y, PC.GetTeamNum());
 
-        if (!bAllowRallyPointsBehindEnemyLines &&
-            Result.bIsInDangerZone)
+        if (!bAllowRallyPointsBehindEnemyLines && Result.bIsInDangerZone)
         {
             Result.Error.Type = ERROR_BehindEnemyLines;
             return Result;
@@ -2150,9 +2219,9 @@ simulated function RallyPointPlacementResult GetRallyPointPlacementResult(DHPlay
     // Cannot be too close to another rally point.
     for (i = 0; i < arraycount(RallyPoints); ++i)
     {
-        if (RallyPoints[i] != none &&
-            RallyPoints[i].SquadIndex == PC.GetSquadIndex() &&
-            RallyPoints[i].GetTeamIndex() == PC.GetTeamNum())
+        if (RallyPoints[i] != none
+            && RallyPoints[i].SquadIndex == PC.GetSquadIndex()
+            && RallyPoints[i].GetTeamIndex() == PC.GetTeamNum())
         {
             D = VSize(RallyPoints[i].Location - P.Location);
 
@@ -2169,16 +2238,19 @@ simulated function RallyPointPlacementResult GetRallyPointPlacementResult(DHPlay
     if (ClosestBlockingRallyPointDistance != Class'UFloat'.static.Infinity())
     {
         Result.Error.Type = ERROR_TooCloseToOtherRallyPoint;
-        Result.Error.OptionalInt = Max(1, RallyPointRadiusInMeters - Class'DHUnits'.static.UnrealToMeters(ClosestBlockingRallyPointDistance));
+        Result.Error.OptionalInt = Max(
+            1,
+            RallyPointRadiusInMeters - Class'DHUnits'.static.UnrealToMeters(ClosestBlockingRallyPointDistance)
+            );
         return Result;
     }
 
     // Cannot be inside of an uncontrolled objective.
     for (i = 0; i < arraycount(MyGRI.DHObjectives); ++i)
     {
-        if (MyGRI.DHObjectives[i] != none &&
-            MyGRI.DHObjectives[i].ObjState != P.GetTeamNum() &&
-            MyGRI.DHObjectives[i].WithinArea(P))
+        if (MyGRI.DHObjectives[i] != none
+            && MyGRI.DHObjectives[i].ObjState != P.GetTeamNum()
+            && MyGRI.DHObjectives[i].WithinArea(P))
         {
             // "You cannot create a squad rally point inside an uncontrolled objective."
             Result.Error.Type = ERROR_InUncontrolledObjective;
@@ -2190,7 +2262,10 @@ simulated function RallyPointPlacementResult GetRallyPointPlacementResult(DHPlay
     if (MyGRI.ElapsedTime < GetSquadNextRallyPointTime(PC.GetTeamNum(), PC.GetSquadIndex()))
     {
         Result.Error.Type = ERROR_TooSoon;
-        Result.Error.OptionalInt = Max(1, GetSquadNextRallyPointTime(PC.GetTeamNum(), PC.GetSquadIndex()) - MyGRI.ElapsedTime);
+        Result.Error.OptionalInt = Max(
+            1,
+            GetSquadNextRallyPointTime(PC.GetTeamNum(), PC.GetSquadIndex()) - MyGRI.ElapsedTime
+            );
         return Result;
     }
 
@@ -2198,7 +2273,11 @@ simulated function RallyPointPlacementResult GetRallyPointPlacementResult(DHPlay
     {
         // Must have a teammate nearby.
         // For single-player testing, we can ignore this check.
-        foreach P.RadiusActors(Class'Pawn', OtherPawn, Class'DHUnits'.static.MetersToUnreal(RallyPointSquadmatePlacementRadiusInMeters))
+        foreach P.RadiusActors(
+            Class'Pawn',
+            OtherPawn,
+            Class'DHUnits'.static.MetersToUnreal(RallyPointSquadmatePlacementRadiusInMeters)
+            )
         {
             if (OtherPawn != none && !OtherPawn.bDeleteMe && OtherPawn.Health > 0)
             {
@@ -2277,12 +2356,9 @@ simulated function RallyPointPlacementResult GetRallyPointPlacementResult(DHPlay
             if (Constructions[i] != none && Constructions[i].bShouldBlockSquadRallyPoints)
             {
                 if (Class'UCollision'.static.PointInCylinder(
-                        Constructions[i].Location,
-                        Constructions[i].default.CollisionRadius + P.CollisionRadius,
-                        Constructions[i].default.CollisionHeight,
-                        Constructions[i].Rotation,
-                        P.Location)
-                    )
+                    Constructions[i].Location, Constructions[i].default.CollisionRadius + P.CollisionRadius,
+                    Constructions[i].default.CollisionHeight, Constructions[i].Rotation, P.Location
+                    ))
                 {
                     // "You cannot create a squad rally point at this location."
                     Result.Error.Type = ERROR_BadLocation;
@@ -2332,13 +2408,19 @@ function DHSquadRallyPoint SpawnRallyPoint(DHPlayer PC)
                 PC.ReceiveLocalizedMessage(SquadMessageClass, 52);
                 break;
             case ERROR_TooCloseToOtherRallyPoint:
-                PC.ReceiveLocalizedMessage(SquadMessageClass, Class'UInteger'.static.FromShorts(45, Result.Error.OptionalInt));
+                PC.ReceiveLocalizedMessage(
+                    SquadMessageClass,
+                    Class'UInteger'.static.FromShorts(45, Result.Error.OptionalInt)
+                    );
                 break;
             case ERROR_InUncontrolledObjective:
                 PC.ReceiveLocalizedMessage(SquadMessageClass, 78);
                 break;
             case ERROR_TooSoon:
-                PC.ReceiveLocalizedMessage(SquadMessageClass, Class'UInteger'.static.FromShorts(53, Result.Error.OptionalInt));
+                PC.ReceiveLocalizedMessage(
+                    SquadMessageClass,
+                    Class'UInteger'.static.FromShorts(53, Result.Error.OptionalInt)
+                    );
                 break;
             case ERROR_MissingSquadmate:
                 PC.ReceiveLocalizedMessage(SquadMessageClass, 47);
@@ -2348,6 +2430,9 @@ function DHSquadRallyPoint SpawnRallyPoint(DHPlayer PC)
                 break;
             case ERROR_BehindEnemyLines:
                 PC.ReceiveLocalizedMessage(SquadMessageClass, 80);
+                break;
+            case ERROR_None:
+            case ERROR_Fatal:
                 break;
         }
 
@@ -2417,7 +2502,11 @@ function DHSquadRallyPoint SpawnRallyPoint(DHPlayer PC)
     // "You have create a squad rally point. Secure the area with your squad to establish this rally point."
     PC.ReceiveLocalizedMessage(SquadMessageClass, 48);
 
-    SetSquadNextRallyPointTime(RP.GetTeamIndex(), RP.SquadIndex, Level.Game.GameReplicationInfo.ElapsedTime + default.NextRallyPointInterval);
+    SetSquadNextRallyPointTime(
+        RP.GetTeamIndex(),
+        RP.SquadIndex,
+        Level.Game.GameReplicationInfo.ElapsedTime + default.NextRallyPointInterval
+        );
 
     return RP;
 }
@@ -2456,7 +2545,12 @@ function OnSquadRallyPointDestroyed(DHSquadRallyPoint SRP)
 
 function DestroySquadRallyPoint(DHPlayerReplicationInfo PRI, DHSquadRallyPoint SRP)
 {
-    if (PRI == none || SRP == none || !PRI.IsSquadLeader() || PRI.Team.TeamIndex != SRP.GetTeamIndex() || PRI.SquadIndex != SRP.SquadIndex || !SRP.IsActive())
+    if (PRI == none
+        || SRP == none
+        || !PRI.IsSquadLeader()
+        || PRI.Team.TeamIndex != SRP.GetTeamIndex()
+        || PRI.SquadIndex != SRP.SquadIndex
+        || !SRP.IsActive())
     {
         return;
     }
@@ -2531,10 +2625,10 @@ function bool RallyPointSortFunction(Object LHS, Object RHS)
 
 function OnSquadRallyPointActivated(DHSquadRallyPoint SRP)
 {
-    if (SRP != none &&
-        SRP.InstigatorController != none &&
-        SRP.InstigatorController.GetTeamNum() == SRP.GetTeamIndex() &&
-        SRP.InstigatorController.GetSquadIndex() == SRP.SquadIndex)
+    if (SRP != none
+        && SRP.InstigatorController != none
+        && SRP.InstigatorController.GetTeamNum() == SRP.GetTeamIndex()
+        && SRP.InstigatorController.GetSquadIndex() == SRP.SquadIndex)
     {
         SRP.InstigatorController.ReceiveScoreEvent(Class'DHScoreEvent_SquadRallyPointEstablished'.static.Create());
     }
@@ -2632,8 +2726,7 @@ function int GetSquadLeaderVolunteersIndex(int TeamIndex, int SquadIndex)
 
     for (i = 0; i < SquadLeaderVolunteers.Length; ++i)
     {
-        if (SquadLeaderVolunteers[i].TeamIndex == TeamIndex &&
-            SquadLeaderVolunteers[i].SquadIndex == SquadIndex)
+        if (SquadLeaderVolunteers[i].TeamIndex == TeamIndex && SquadLeaderVolunteers[i].SquadIndex == SquadIndex)
         {
             return i;
         }
@@ -2694,11 +2787,11 @@ function GetSquadLeaderVolunteers(int TeamIndex, int SquadIndex, out array<DHPla
     {
         PRI = SquadLeaderVolunteers[i].Volunteers[j];
 
-        if (PRI != none &&
-            PRI.Team != none &&
-            PRI.Team.TeamIndex == TeamIndex &&
-            PRI.SquadIndex == SquadIndex &&
-            !PRI.bRestrictLeaderPositions)
+        if (PRI != none
+            && PRI.Team != none
+            && PRI.Team.TeamIndex == TeamIndex
+            && PRI.SquadIndex == SquadIndex
+            && !PRI.bRestrictLeaderPositions)
         {
             Volunteers[Volunteers.Length] = PRI;
         }
@@ -2729,7 +2822,8 @@ function StartSquadLeaderDraw(int TeamIndex, int SquadIndex)
     SquadLeaderDraws.Insert(0, 1);
     SquadLeaderDraws[0].TeamIndex = TeamIndex;
     SquadLeaderDraws[0].SquadIndex = SquadIndex;
-    SquadLeaderDraws[0].ExpirationTime = Level.Game.GameReplicationInfo.ElapsedTime + SQUAD_LEADER_DRAW_DURATION_SECONDS;
+    SquadLeaderDraws[0].ExpirationTime = Level.Game.GameReplicationInfo.ElapsedTime
+        + SQUAD_LEADER_DRAW_DURATION_SECONDS;
 
     GetMembers(TeamIndex, SquadIndex, Members);
 
@@ -2836,9 +2930,9 @@ function SetAssistantSquadLeader(int TeamIndex, int SquadIndex, DHPlayerReplicat
 
     if (PRI != none)
     {
-        if (!IsInSquad(PRI, TeamIndex, SquadIndex) ||
-            IsSquadLeader(PRI, TeamIndex, SquadIndex) ||
-            IsSquadAssistant(PRI, TeamIndex, SquadIndex))
+        if (!IsInSquad(PRI, TeamIndex, SquadIndex)
+            || IsSquadLeader(PRI, TeamIndex, SquadIndex)
+            || IsSquadAssistant(PRI, TeamIndex, SquadIndex))
         {
             return;
         }
@@ -2904,11 +2998,17 @@ function MaybeInvalidateRole(DHPlayer PC)
     local DHRoleInfo RI;
     local int DefaultRoleIndex;
 
-    if (PC == none) { return; }
+    if (PC == none)
+    {
+        return;
+    }
 
     RI = DHRoleInfo(PC.GetRoleInfo());
 
-    if (RI == none) { return; }
+    if (RI == none)
+    {
+        return;
+    }
 
     if (PC.GetRoleEnabledResult(RI) != RER_Enabled)
     {
@@ -3010,7 +3110,10 @@ function MergeSquads(int TeamIndex, int SenderSquadIndex, int RecipientSquadInde
 
     // "Your squad has been merged into {0} squad. Your squad leader is now {1}."
     SwitchValue = Class'UInteger'.static.FromShorts(74, SenderSquadIndex);
-    BroadcastSquadLocalizedMessage(TeamIndex, RecipientSquadIndex, SquadMessageClass, SwitchValue, GetSquadLeader(TeamIndex, SenderSquadIndex),, self);
+    BroadcastSquadLocalizedMessage(
+        TeamIndex, RecipientSquadIndex, SquadMessageClass, SwitchValue, GetSquadLeader(TeamIndex, SenderSquadIndex),,
+        self
+        );
 
     // "Another squad has been merged into your squad."
     BroadcastSquadLocalizedMessage(TeamIndex, SenderSquadIndex, SquadMessageClass, 75);
@@ -3029,7 +3132,12 @@ function MergeSquads(int TeamIndex, int SenderSquadIndex, int RecipientSquadInde
     }
 }
 
-function ESquadMergeRequestResult SendSquadMergeRequest(DHPlayer SenderPC, int TeamIndex, int SenderSquadIndex, int RecipientSquadIndex)
+function ESquadMergeRequestResult SendSquadMergeRequest(
+    DHPlayer SenderPC,
+    int TeamIndex,
+    int SenderSquadIndex,
+    int RecipientSquadIndex
+    )
 {
     local SquadMergeRequest MR;
     local DHPlayerReplicationInfo RecipientPRI, SenderPRI;
@@ -3098,9 +3206,9 @@ function int GetSquadMergeRequestIndex(int TeamIndex, int SenderSquadIndex, int 
 
     for (i = 0; i < SquadMergeRequests.Length; ++i)
     {
-        if (SquadMergeRequests[i].TeamIndex == TeamIndex &&
-            SquadMergeRequests[i].SenderSquadIndex == SenderSquadIndex &&
-            SquadMergeRequests[i].RecipientSquadIndex == RecipientSquadIndex)
+        if (SquadMergeRequests[i].TeamIndex == TeamIndex
+            && SquadMergeRequests[i].SenderSquadIndex == SenderSquadIndex
+            && SquadMergeRequests[i].RecipientSquadIndex == RecipientSquadIndex)
         {
             return i;
         }
@@ -3145,7 +3253,12 @@ function bool DenySquadMergeRequest(DHPlayer SenderPC, int SquadMergeRequestID)
             if (PC != none)
             {
                 // "Your squad merge request was denied by {0} squad."
-                PC.ReceiveLocalizedMessage(SquadMessageClass, Class'UInteger'.static.FromShorts(76, SMR.RecipientSquadIndex), PRI,, self);
+                PC.ReceiveLocalizedMessage(
+                    SquadMessageClass,
+                    Class'UInteger'.static.FromShorts(76, SMR.RecipientSquadIndex),
+                    PRI,,
+                    self
+                    );
             }
         }
 
@@ -3196,8 +3309,9 @@ function ClearSquadMergeRequests(int TeamIndex, int SquadIndex)
 
     for (i = SquadMergeRequests.Length - 1; i >= 0; --i)
     {
-        if (SquadMergeRequests[i].TeamIndex == TeamIndex &&
-            (SquadMergeRequests[i].SenderSquadIndex == SquadIndex || SquadMergeRequests[i].RecipientSquadIndex == SquadIndex))
+        if (SquadMergeRequests[i].TeamIndex == TeamIndex
+            && (SquadMergeRequests[i].SenderSquadIndex == SquadIndex
+                || SquadMergeRequests[i].RecipientSquadIndex == SquadIndex))
         {
             SquadMergeRequests.Remove(i, 1);
         }
@@ -3215,7 +3329,12 @@ static function string GetSquadPromotionRequestResultString(int Result)
 }
 
 // Squad Promotion Requests
-function ESquadPromotionRequestResult SendSquadPromotionRequest(DHPlayerReplicationInfo SenderPRI, DHPlayerReplicationInfo RecipientPRI, int TeamIndex, int SquadIndex)
+function ESquadPromotionRequestResult SendSquadPromotionRequest(
+    DHPlayerReplicationInfo SenderPRI,
+    DHPlayerReplicationInfo RecipientPRI,
+    int TeamIndex,
+    int SquadIndex
+    )
 {
     local SquadPromotionRequest PR;
     local DHPlayer SenderPC, RecipientPC;
@@ -3244,9 +3363,9 @@ function ESquadPromotionRequestResult SendSquadPromotionRequest(DHPlayerReplicat
 
     for (i = 0; i < SquadPromotionRequests.Length; ++i)
     {
-        if (SquadPromotionRequests[i].TeamIndex == TeamIndex &&
-            SquadPromotionRequests[i].SquadIndex == SquadIndex &&
-            SquadPromotionRequests[i].Recipient == RecipientPRI)
+        if (SquadPromotionRequests[i].TeamIndex == TeamIndex
+            && SquadPromotionRequests[i].SquadIndex == SquadIndex
+            && SquadPromotionRequests[i].Recipient == RecipientPRI)
         {
             // "You have already sent {0} a squad promotion request."
             SenderPC.ReceiveLocalizedMessage(SquadMessageClass, 85, RecipientPRI);
@@ -3303,12 +3422,12 @@ function int GetSquadPromotionRequestIndexByID(int SquadPromotionRequestID)
 
 function bool IsSquadPromotionRequestValid(SquadPromotionRequest SPR)
 {
-    return IsSquadActive(SPR.TeamIndex, SPR.SquadIndex) &&
-           IsInSquad(SPR.Recipient, SPR.TeamIndex, SPR.SquadIndex) &&
-           !IsSquadLeader(SPR.Recipient, SPR.TeamIndex, SPR.SquadIndex);
+    return IsSquadActive(SPR.TeamIndex, SPR.SquadIndex)
+        && IsInSquad(SPR.Recipient, SPR.TeamIndex, SPR.SquadIndex)
+        && !IsSquadLeader(SPR.Recipient, SPR.TeamIndex, SPR.SquadIndex);
 }
 
-function bool DenySquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionRequestID)
+function DenySquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionRequestID)
 {
     local int SquadPromotionRequestIndex;
     local SquadPromotionRequest SPR;
@@ -3318,14 +3437,13 @@ function bool DenySquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionReq
 
     if (SquadPromotionRequestIndex == -1)
     {
-        return false;
+        return;
     }
 
     SPR = SquadPromotionRequests[SquadPromotionRequestIndex];
 
     // Send a message to the sender that the request has been denied (only if they are still the squad leader of this squad).
-    if (IsSquadPromotionRequestValid(SPR) &&
-        IsSquadLeader(SPR.Sender, SPR.TeamIndex, SPR.SquadIndex))
+    if (IsSquadPromotionRequestValid(SPR) && IsSquadLeader(SPR.Sender, SPR.TeamIndex, SPR.SquadIndex))
     {
         PC = PlayerController(SPR.Sender.Owner);
 
@@ -3338,8 +3456,6 @@ function bool DenySquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionReq
 
     // Remove the request.
     SquadPromotionRequests.Remove(SquadPromotionRequestIndex, 1);
-
-    return true;
 }
 
 function bool AcceptSquadPromotionRequest(DHPlayer SenderPC, int SquadPromotionRequestID)
@@ -3403,7 +3519,6 @@ function UpdateSquadLeaderNoRallyPointsTime(int TeamIndex, int SquadIndex)
     {
         SL.NoRallyPointsTime = GRI.ElapsedTime;
     }
-
 }
 
 // Returns true if SL hasn't placed any rally points in time specified by
@@ -3421,10 +3536,10 @@ simulated function bool SquadHadNoRallyPointsInAwhile(int TeamIndex, int SquadIn
     MyGRI = GetGameReplicationInfo();
     SL = GetSquadLeader(TeamIndex, SquadIndex);
 
-    return SL != none &&
-           MyGRI != none &&
-           MyGRI.ElapsedTime >= SL.NoRallyPointsTime + SquadLeaderRallyPointInactivityThreshold &&
-           !SquadHasRallyPoint(TeamIndex, SquadIndex);
+    return SL != none
+        && MyGRI != none
+        && MyGRI.ElapsedTime >= SL.NoRallyPointsTime + SquadLeaderRallyPointInactivityThreshold
+        && !SquadHasRallyPoint(TeamIndex, SquadIndex);
 }
 
 defaultproperties

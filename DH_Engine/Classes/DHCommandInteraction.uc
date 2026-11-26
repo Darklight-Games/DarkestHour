@@ -14,11 +14,11 @@ const INNER_RADIUS = 16.0;
 const OUTER_RADIUS = 32.0;
 const TAU = 6.28318530718;
 
-var Stack_Object        Menus;
+var Stack_Object Menus;
 
-var float               MenuAlpha;
-var Vector              Cursor;
-var int                 SelectedIndex;
+var float MenuAlpha;
+var Vector Cursor;
+var int SelectedIndex;
 
 const MAX_OPTIONS = 8;
 const MAX_PROGRESS_SEGMENTS = 8;
@@ -26,37 +26,37 @@ const MAX_PROGRESS_SEGMENTS = 8;
 // This is necessary because trying to DrawTile on identical TexRotators
 // and other procedural materials in the same frame ends up only drawing one
 // of them (probably due to engine-level render batching).
-var Texture             OptionTextures[MAX_OPTIONS];
-var array<TexRotator>   OptionTexRotators;
-var TexRotator          ProgressWheelTexRotators[MAX_PROGRESS_SEGMENTS];
-var Texture             RingTexture;
-var Texture             ProgressSegmentTexture;
+var Texture OptionTextures[MAX_OPTIONS];
+var array<TexRotator> OptionTexRotators;
+var TexRotator ProgressWheelTexRotators[MAX_PROGRESS_SEGMENTS];
+var Texture RingTexture;
+var Texture ProgressSegmentTexture;
 
-var Color               SelectedColor;
-var Color               DisabledColor;
-var Color               SubmenuColor;
+var Color SelectedColor;
+var Color DisabledColor;
+var Color SubmenuColor;
 
 var DHGameReplicationInfo GRI;
 
-var bool                bShouldHideOnLeftMouseRelease;
+var bool bShouldHideOnLeftMouseRelease;
 
-var Pawn                InstigatorPawn;
+var Pawn InstigatorPawn;
 
-var Sound               SelectSound;
-var Sound               HoverSound;
-var Sound               CancelSound;
+var Sound SelectSound;
+var Sound HoverSound;
+var Sound CancelSound;
 
-var Material            CrosshairMaterial;
+var Material CrosshairMaterial;
 
-var bool                bDebugCursor;
+var bool bDebugCursor;
 
-var bool                bIsHolding;         // Whether or not the player is holding the button to select the option.
-var float               HoldTimeStart;      // When the button was first pressed.
-var float               HoldTimeEnd;        // When the hold time ends.
-var Vector              HoldHitLocation;    // The location of the hit when the button was held.
-var Vector              HoldHitNormal;      // The normal of the hit when the button was held.
+var bool bIsHolding; // Whether or not the player is holding the button to select the option.
+var float HoldTimeStart; // When the button was first pressed.
+var float HoldTimeEnd; // When the hold time ends.
+var Vector HoldHitLocation; // The location of the hit when the button was held.
+var Vector HoldHitNormal; // The normal of the hit when the button was held.
 
-delegate                OnHidden();
+delegate OnHidden();
 
 event Initialized()
 {
@@ -239,10 +239,7 @@ state FadeOut
         }
     }
 
-    function bool KeyEvent(out EInputKey Key, out EInputAction Action, float Delta)
-    {
-        return false;
-    }
+    function bool KeyEvent(out EInputKey Key, out EInputAction Action, float Delta);
 }
 
 function TearDown()
@@ -268,7 +265,12 @@ function Tick(float DeltaTime)
 
     Menu = DHCommandMenu(Menus.Peek());
 
-    if (PC == none || PC.Pawn == none || PC.IsDead() || Menu == none || Menu.ShouldHideMenu() || PC.Pawn != InstigatorPawn)
+    if (PC == none
+        || PC.Pawn == none
+        || PC.IsDead()
+        || Menu == none
+        || Menu.ShouldHideMenu()
+        || PC.Pawn != InstigatorPawn)
     {
         Hide();
         return;
@@ -507,7 +509,10 @@ function PostRender(Canvas C)
                         C.DrawColor = ORI.InfoColor;
                         C.DrawColor.A = byte(255 * MenuAlpha);
                         C.SetPos(CenterX - (XL / 2) - XL2 - (GUIScale * 4), CenterY - YL2 - YL - (GUIScale * 8));
-                        C.DrawTile(ORI.InfoIcon, XL2, YL2, 0, 0, ORI.InfoIcon.MaterialUSize() - 1, ORI.InfoIcon.MaterialVSize() - 1);
+                        C.DrawTile(
+                            ORI.InfoIcon, XL2, YL2, 0, 0, ORI.InfoIcon.MaterialUSize() - 1,
+                            ORI.InfoIcon.MaterialVSize() - 1
+                            );
                     }
                 }
             }
@@ -532,19 +537,12 @@ function PostRender(Canvas C)
     if (bIsHolding)
     {
         HoldProgressTheta = Class'UInterp'.static.MapRangeClamped(
-            ViewportOwner.Actor.Level.TimeSeconds, 
-            HoldTimeStart,
-            HoldTimeEnd,
-            0.0,
-            1.0);
-        
+            ViewportOwner.Actor.Level.TimeSeconds, HoldTimeStart, HoldTimeEnd, 0.0, 1.0
+            );
+
         // Use a deceleration interpolation so that the user can see that progress is being made immediately.
-        HoldProgressTheta = Class'UInterp'.static.Interpolate(
-            HoldProgressTheta,
-            0.0,
-            1.0,
-            INTERP_Deceleration
-            ) * MAX_PROGRESS_SEGMENTS;
+        HoldProgressTheta = Class'UInterp'.static.Interpolate(HoldProgressTheta, 0.0, 1.0, INTERP_Deceleration)
+            * MAX_PROGRESS_SEGMENTS;
 
         for (i = 0; i < MAX_PROGRESS_SEGMENTS; ++i)
         {
@@ -556,7 +554,7 @@ function PostRender(Canvas C)
             DrawCenteredTile(C, ProgressWheelTexRotators[i], CenterX, CenterY, GUIScale);
         }
     }
-    
+
     if (bDebugCursor)
     {
         // Draw the cursor position for debugging purposes.
@@ -573,7 +571,7 @@ function bool KeyEvent(out EInputKey Key, out EInputAction Action, float Delta)
     local Vector HitLocation, HitNormal;
     local DHCommandMenu Menu;
     local Sound HoldSound;
-    
+
     Menu = DHCommandMenu(Menus.Peek());
 
     PC = DHPlayer(ViewportOwner.Actor);
@@ -632,6 +630,9 @@ function bool KeyEvent(out EInputKey Key, out EInputAction Action, float Delta)
                         return false;
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
         case IST_Press:
@@ -644,7 +645,9 @@ function bool KeyEvent(out EInputKey Key, out EInputAction Action, float Delta)
                 case IK_LeftMouse:
                     PC.GetEyeTraceLocation(HitLocation, HitNormal);
 
-                    if (Menu != none && Menu.GetOptionHoldTime(SelectedIndex) > 0.0 && !Menu.IsOptionDisabled(SelectedIndex))
+                    if (Menu != none
+                        && Menu.GetOptionHoldTime(SelectedIndex) > 0.0
+                        && !Menu.IsOptionDisabled(SelectedIndex))
                     {
                         bIsHolding = true;
                         HoldTimeStart = ViewportOwner.Actor.Level.TimeSeconds;
@@ -722,9 +725,20 @@ function PlaySound(Sound Sound)
     }
 }
 
-function bool IsFadingIn() { return IsInState('FadeIn'); }
-function bool IsFadingOut() { return IsInState('FadeOut'); }
-function bool IsFadingInOrOut() { return IsFadingIn() || IsFadingOut(); }
+function bool IsFadingIn()
+{
+    return IsInState('FadeIn');
+}
+
+function bool IsFadingOut()
+{
+    return IsInState('FadeOut');
+}
+
+function bool IsFadingInOrOut()
+{
+    return IsFadingIn() || IsFadingOut();
+}
 
 defaultproperties
 {

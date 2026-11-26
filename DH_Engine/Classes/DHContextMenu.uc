@@ -6,11 +6,19 @@
 class DHContextMenu extends Object
     abstract;
 
-var private   array<int>    EntryIndices;
+var private array<int> EntryIndices;
 var localized array<string> EntryTexts;
 
-final function int GetMenuLength() { return EntryIndices.Length; }
-protected final function Reset() { EntryIndices.Length = 0; }
+final function int GetMenuLength()
+{
+    return EntryIndices.Length;
+}
+
+protected final function Reset()
+{
+    EntryIndices.Length = 0;
+}
+
 protected function AssembleMenu(GUIComponent Component);
 protected function ProcessEntry(int EntryIndex, GUIComponent Component);
 

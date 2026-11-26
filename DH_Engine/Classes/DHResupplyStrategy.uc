@@ -13,9 +13,9 @@ enum EResupplyType
     RT_Mortars,
 };
 
-var float   UpdateTime;
-var float   UpdateGivenItemsTime;
-var bool    bGivesExtraAmmo;
+var float UpdateTime;
+var float UpdateGivenItemsTime;
+var bool bGivesExtraAmmo;
 
 delegate OnPawnResupplied(Pawn P); // Called for every pawn that is resupplied
 
@@ -67,7 +67,10 @@ function bool HandleResupply(Pawn recvr, EResupplyType SourceType, int TimeSecon
             {
                 recvr_weapon = ROWeapon(recvr_inv);
 
-                if (recvr_weapon == none || (!bShouldResupplyGrenades && recvr_weapon.IsGrenade()) || recvr_weapon.IsA('DHMortarWeapon') || recvr_weapon.IsA('DH_M9530Weapon'))
+                if (recvr_weapon == none
+                    || (!bShouldResupplyGrenades && recvr_weapon.IsGrenade())
+                    || recvr_weapon.IsA('DHMortarWeapon')
+                    || recvr_weapon.IsA('DH_M9530Weapon'))
                 {
                     continue;
                 }

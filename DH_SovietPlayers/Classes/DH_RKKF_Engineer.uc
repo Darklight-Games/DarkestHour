@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_RKKF_Engineer extends DHSOVEngineerRoles; //wears helmet and no naval cap, so doesnt need to be separated on fleets for an appropriate cap
+class DH_RKKF_Engineer extends DHSOVEngineerRoles; // wears helmet and no naval cap, so doesnt need to be separated on fleets for an appropriate cap
 
 defaultproperties
 {

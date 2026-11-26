@@ -6,12 +6,12 @@
 class DHObjectiveMessage extends ROObjectiveMsg
     abstract;
 
-var Sound   EnemyObjectiveSounds[3];
-var Sound   TeamObjectiveSounds[3];
+var Sound EnemyObjectiveSounds[3];
+var Sound TeamObjectiveSounds[3];
 
 var(Messages) localized string TeamStrings[2];
 var(Messages) localized string NotificationTypes[3];
-var(Messages) localized string  NotificationMessage;
+var(Messages) localized string NotificationMessage;
 
 // Modified to handle more sounds (ran by client)
 simulated static function ClientReceive(
@@ -53,7 +53,12 @@ simulated static function ClientReceive(
 }
 
 // Override to handle more messages
-static function string GetString(optional int Type, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Type,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local DHObjective Obj;
     local int Team;
@@ -64,9 +69,11 @@ static function string GetString(optional int Type, optional PlayerReplicationIn
     Obj = DHObjective(OptionalObject);
 
     // If everything is legal, then construct and return the message ex- "The Axis have captured Church"
-    if (Obj != none &&
-        Type >= 0 && Type < arraycount(default.NotificationTypes) &&
-        Team >= 0 && Team < arraycount(default.TeamStrings))
+    if (Obj != none
+        && Type >= 0
+        && Type < arraycount(default.NotificationTypes)
+        && Team >= 0
+        && Team < arraycount(default.TeamStrings))
     {
         Message = Repl(default.NotificationMessage, "{0}", default.TeamStrings[Team]);
         Message = Repl(Message, "{1}", default.NotificationTypes[Type]);
@@ -77,11 +84,12 @@ static function string GetString(optional int Type, optional PlayerReplicationIn
 }
 
 // Todo will need to override the draw function and setup flag stuff
-static function int getIconID(
+static function int GetIconID(
     optional int Switch,
     optional PlayerReplicationInfo RelatedPRI_1,
     optional PlayerReplicationInfo RelatedPRI_2,
-    optional Object OptionalObject)
+    optional Object OptionalObject
+    )
 {
     local int Type, Team;
 

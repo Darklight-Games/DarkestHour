@@ -7,30 +7,35 @@
 class DHAdminMenu_NotifyMessages extends LocalMessage
     abstract;
 
-var     localized string    NotifyRename;
-var     localized string    NotifyKill;
-var     localized string    NotifyGag;
-var     localized string    NotifySwitch;
-var     localized string    NotifyParaDrop;
-var     localized string    BroadcastMinesDisabled;
-var     localized string    BroadcastMinesEnabled;
-var     localized string    BroadcastCapProgressDisabled;
-var     localized string    BroadcastCapProgressEnabled;
-var     localized string    BroadcastPlayerIconDisabled;
-var     localized string    BroadcastPlayerIconEnabled;
-var     localized string    BroadcastKilledAllPlayers;
-var     localized string    BroadcastChangedGameSpeed;
-var     localized string    BroadcastSetTimeRemaining;
-var     localized string    NotifyToggleAdminCanPause;
-var     localized string    BroadcastAlliesSquadSizeChanged;
-var     localized string    BroadcastAxisSquadSizeChanged;
-var     localized string    BroadcastRallyPointsDisabled;
-var     localized string    BroadcastRallyPointsEnabled;
+var localized string NotifyRename;
+var localized string NotifyKill;
+var localized string NotifyGag;
+var localized string NotifySwitch;
+var localized string NotifyParaDrop;
+var localized string BroadcastMinesDisabled;
+var localized string BroadcastMinesEnabled;
+var localized string BroadcastCapProgressDisabled;
+var localized string BroadcastCapProgressEnabled;
+var localized string BroadcastPlayerIconDisabled;
+var localized string BroadcastPlayerIconEnabled;
+var localized string BroadcastKilledAllPlayers;
+var localized string BroadcastChangedGameSpeed;
+var localized string BroadcastSetTimeRemaining;
+var localized string NotifyToggleAdminCanPause;
+var localized string BroadcastAlliesSquadSizeChanged;
+var localized string BroadcastAxisSquadSizeChanged;
+var localized string BroadcastRallyPointsDisabled;
+var localized string BroadcastRallyPointsEnabled;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string MessageString, GameSpeedRounded;
-    local float  GameSpeed;
+    local float GameSpeed;
 
     if (Switch >= 100) // a trick of passing changed game speed, as a percentage with 100 added so we know it isn't one of the normal numbered messages
     {

@@ -11,4 +11,3 @@ defaultproperties
     GameTypeName="Push"
     bUseInfiniteReinforcements=true
 }
-

@@ -46,17 +46,17 @@ Ps - A col mesh actor can be used to represent things other than VehicleWeapons,
 */
 
 // Options to control what kind of projectile or damage this collision actor will stop (stops all by default)
-var     bool    bWontStopBullet;           // won't stop a DHBullet
-var     bool    bWontStopShell;            // won't stop a DHAntiVehicleProjectile, e.g. a cannon shell (also includes AT rocket)
-var     bool    bWontStopBlastDamage;      // won't stop blast damage caused by HurtRadius function
-var     bool    bWontStopThrownProjectile; // won't stop a DHThrowableExplosiveProjectile, e.g. grenade or satchel (hard to see utility, but included for completeness)
+var bool bWontStopBullet; // won't stop a DHBullet
+var bool bWontStopShell; // won't stop a DHAntiVehicleProjectile, e.g. a cannon shell (also includes AT rocket)
+var bool bWontStopBlastDamage; // won't stop blast damage caused by HurtRadius function
+var bool bWontStopThrownProjectile; // won't stop a DHThrowableExplosiveProjectile, e.g. grenade or satchel (hard to see utility, but included for completeness)
 
-var     bool    bIsBulletProof;            // col mesh is bullet proof, i.e. resistant to small arms fire - used to attach armour attachments to a soft skin vehicle
+var bool bIsBulletProof; // col mesh is bullet proof, i.e. resistant to small arms fire - used to attach armour attachments to a soft skin vehicle
 
 enum ETransformSpace
 {
     TS_Actor,
-    TS_Bone
+    TS_Bone,
 };
 
 // Modified to copy the owning actor's collision properties
@@ -88,8 +88,14 @@ simulated function PostBeginPlay()
 }
 
 // New function to spawn, attach & align a collision static mesh actor (used by the classes that spawn a col mesh)
-simulated static function DHCollisionMeshActor AttachCollisionMesh(Actor ColMeshOwner, StaticMesh ColStaticMesh,
-    name AttachBone, optional Vector AttachOffset, optional class<DHCollisionMeshActor> ColMeshActorClass, optional ETransformSpace TransformSpace)
+simulated static function DHCollisionMeshActor AttachCollisionMesh(
+    Actor ColMeshOwner,
+    StaticMesh ColStaticMesh,
+    name AttachBone,
+    optional Vector AttachOffset,
+    optional class<DHCollisionMeshActor> ColMeshActorClass,
+    optional ETransformSpace TransformSpace
+    )
 {
     local DHCollisionMeshActor ColMeshActor;
 
@@ -121,7 +127,10 @@ simulated static function DHCollisionMeshActor AttachCollisionMesh(Actor ColMesh
                 else
                 {
                     ColMeshActor.SetRelativeRotation(ColMeshOwner.Rotation - ColMeshOwner.GetBoneRotation(AttachBone)); // as attachment bone may be modelled with rotation in reference pose
-                    ColMeshActor.SetRelativeLocation((ColMeshOwner.Location - ColMeshOwner.GetBoneCoords(AttachBone).Origin) << (ColMeshOwner.Rotation - ColMeshActor.RelativeRotation));
+                    ColMeshActor.SetRelativeLocation(
+                        (ColMeshOwner.Location - ColMeshOwner.GetBoneCoords(AttachBone).Origin)
+                            << (ColMeshOwner.Rotation - ColMeshActor.RelativeRotation)
+                        );
                 }
                 break;
             case TS_Bone:
@@ -151,7 +160,14 @@ simulated event NotifySelected(Pawn User)
 }
 
 // Col mesh actor should never take damage, so just in case we'll call TakeDamage on the owning actor, which would have otherwise have received the damage call
-function TakeDamage(int Damage, Pawn EventInstigator, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+function TakeDamage(
+    int Damage,
+    Pawn EventInstigator,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     Owner.TakeDamage(Damage, EventInstigator, HitLocation, Momentum, DamageType, HitIndex);
 }
@@ -184,8 +200,8 @@ simulated function Vehicle GetBaseVehicle()
 simulated function HideOwner(bool bHide)
 {
     local DHVehicle V;
-    local bool      bUseCannonSkinsArray, bMatchMGSkinToVehicle;
-    local int       i;
+    local bool bUseCannonSkinsArray, bMatchMGSkinToVehicle;
+    local int i;
 
     if (!bHide)
     {

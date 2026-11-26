@@ -32,7 +32,7 @@ function int Hours()
     return _Hours;
 }
 
-function static TimeSpan FromSeconds(int TotalSeconds)
+static function TimeSpan FromSeconds(int TotalSeconds)
 {
     local TimeSpan TS;
 
@@ -43,18 +43,18 @@ function static TimeSpan FromSeconds(int TotalSeconds)
     return TS;
 }
 
-function static Decompose(int TotalSeconds, out int Hours, out int Minutes, out int Seconds)
+static function Decompose(int TotalSeconds, out int Hours, out int Minutes, out int Seconds)
 {
     Seconds = TotalSeconds;
 
-    Hours   = Seconds / SECONDS_PER_HOUR;
+    Hours = Seconds / SECONDS_PER_HOUR;
     Seconds = Seconds % SECONDS_PER_HOUR;
 
     Minutes = Seconds / SECONDS_PER_MINUTE;
     Seconds = Seconds % SECONDS_PER_MINUTE;
 }
 
-function static string ToString(int TotalSeconds)
+static function string ToString(int TotalSeconds)
 {
     local string S;
     local int Hours, Minutes, Seconds;

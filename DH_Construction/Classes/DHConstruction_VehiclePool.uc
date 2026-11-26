@@ -6,7 +6,7 @@
 class DHConstruction_VehiclePool extends DHConstruction;
 
 var class<DHSpawnPoint> SpawnPointClass;
-var DHSpawnPoint        SpawnPoint;
+var DHSpawnPoint SpawnPoint;
 
 simulated function OnConstructed()
 {
@@ -127,4 +127,3 @@ defaultproperties
 
     CompletionPointValue=500
 }
-

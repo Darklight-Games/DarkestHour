@@ -5,8 +5,4 @@
 class JSONSerializable extends Object
     abstract;
 
-function JSONValue ToJSON()
-{
-    return none;
-}
-
+function JSONValue ToJSON();

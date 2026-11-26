@@ -4,8 +4,8 @@
 //==============================================================================
 
 class DHMainBaseSupplyCache extends Actor
-    placeable
-    hidecategories(Collision,Lighting,LightColor,Karma,Force,Sound);
+    hidecategories(Collision, Lighting, LightColor, Karma, Force, Sound)
+    placeable;
 
 enum ETeamOwner
 {
@@ -13,14 +13,14 @@ enum ETeamOwner
     TEAM_Allies,
 };
 
-var() ETeamOwner                TeamOwner;                      // Set the team the main cache is for
-var() int                       InitialSupplyCount;             // Initial amount of supply
-var() int                       SupplyCountMax;                 // The max amount of supply
-var() int                       BonusSupplyGenerationRate;
-var() bool                      bInitiallyActive;               //Leveller can set the SC to be inactive at the start of the round and activated later via a modify actor.
+var() ETeamOwner TeamOwner; // Set the team the main cache is for
+var() int InitialSupplyCount; // Initial amount of supply
+var() int SupplyCountMax; // The max amount of supply
+var() int BonusSupplyGenerationRate;
+var() bool bInitiallyActive; // Leveller can set the SC to be inactive at the start of the round and activated later via a modify actor.
 
-var DHConstructionSupplyAttachment              SupplyAttachment;
-var class<DHConstructionSupplyAttachment>       SupplyAttachmentClass;
+var DHConstructionSupplyAttachment SupplyAttachment;
+var class<DHConstructionSupplyAttachment> SupplyAttachmentClass;
 
 function Reset()
 {

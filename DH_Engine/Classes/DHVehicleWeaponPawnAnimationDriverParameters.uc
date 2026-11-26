@@ -40,9 +40,9 @@ struct RangeInt
     var int Max;
 };
 
-var() RangeInt DriverPositionIndexRange;    // Range is inclusive
+var() RangeInt DriverPositionIndexRange; // Range is inclusive
 var() EDriverInputType SequenceInputType;
-var() int SequenceChannel;                  // Sequence channels should be non-zero.
+var() int SequenceChannel; // Sequence channels should be non-zero.
 var() bool bInvertSequenceTheta;
 var() EDriverInputType BlendInputType;
 var() int BlendChannel;

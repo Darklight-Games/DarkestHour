@@ -53,4 +53,3 @@ defaultproperties
     DamageTypeScales(5)=(DamageType=Class'DH_SatchelDamType',Scale=1.4)             // Satchels
     DamageTypeScales(6)=(DamageType=Class'DHMortarDamageType',Scale=0.5)            // Mortar
 }
-

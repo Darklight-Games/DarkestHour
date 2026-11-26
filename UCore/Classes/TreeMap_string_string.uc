@@ -318,7 +318,7 @@ private static function TreeMapNode_string_string PutStatic(TreeMap_string_strin
 
         return RotateRight(Node);
     }
-    else if (Balance  < -1 && D.RecursiveKey < Node.RHS.Key)
+    else if (Balance < -1 && D.RecursiveKey < Node.RHS.Key)
     {
         Node.RHS = RotateRight(Node.RHS);
 
@@ -327,4 +327,3 @@ private static function TreeMapNode_string_string PutStatic(TreeMap_string_strin
 
     return Node;
 }
-

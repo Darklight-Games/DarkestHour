@@ -5,10 +5,10 @@
 
 class DHGetPassword extends UT2K4GetPassword;
 
-const BUTTON_WIDTH=0.1475;
-const BUTTON_HEIGHT=0.042773;
-const BUTTON_SPACING=0.15;
-const BUTTON_POS_TOP=0.7;
+const BUTTON_WIDTH = 0.1475;
+const BUTTON_HEIGHT = 0.042773;
+const BUTTON_SPACING = 0.15;
+const BUTTON_POS_TOP = 0.7;
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
@@ -19,15 +19,9 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     // Set button positions
     ButtonRowLeft = 0.5 - BUTTON_SPACING * 0.5 - BUTTON_WIDTH;
 
-    b_Cancel.SetPosition(ButtonRowLeft,
-                         BUTTON_POS_TOP,
-                         BUTTON_WIDTH,
-                         BUTTON_HEIGHT);
+    b_Cancel.SetPosition(ButtonRowLeft, BUTTON_POS_TOP, BUTTON_WIDTH, BUTTON_HEIGHT);
 
-    b_Ok.SetPosition(ButtonRowLeft + BUTTON_SPACING + BUTTON_WIDTH,
-                     BUTTON_POS_TOP,
-                     BUTTON_WIDTH,
-                     BUTTON_HEIGHT);
+    b_Ok.SetPosition(ButtonRowLeft + BUTTON_SPACING + BUTTON_WIDTH, BUTTON_POS_TOP, BUTTON_WIDTH, BUTTON_HEIGHT);
 }
 
 function bool InternalOnPreDraw(Canvas C)

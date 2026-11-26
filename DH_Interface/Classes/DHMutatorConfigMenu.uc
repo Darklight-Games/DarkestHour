@@ -5,7 +5,7 @@
 
 class DHMutatorConfigMenu extends MutatorConfigMenu;
 
-function AddSystemMenu(){}
+function AddSystemMenu();
 
 defaultproperties
 {

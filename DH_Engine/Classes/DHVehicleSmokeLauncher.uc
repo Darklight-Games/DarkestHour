@@ -12,20 +12,20 @@ Includes a variety of self-descriptive static functions, giving user-friendly ac
 
 class DHVehicleSmokeLauncher extends Object;
 
-var     class<Projectile>   ProjectileClass;              // the smoke projectile class
+var class<Projectile> ProjectileClass; // the smoke projectile class
 // TODO: probably delete InitialAmmo here & set NumSmokeLauncherRounds in cannon's def props, as no. of rounds carried is likely to vary from vehicle to vehicle
-var     byte                InitialAmmo;                  // the initial & maximum no. of smoke rounds carried
-var     byte                ProjectilesPerFire;           // no. of projectiles launched each time fire button is pressed (external launchers are often paired)
-var     array<Rotator>      FireRotation;                 // the firing rotation to launch the projectile(s), relative to vehicle - may be multiple for external launchers
-var     float               Spread;                       // random spread of launched projectiles
-var     Sound               FireSound;                    // firing sound
-var     bool                bCanBeReloaded;               // whether smoke launcher can be reloaded after firing (not for external launch tubes)
-var     array<DHVehicleWeapon.ReloadStage>  ReloadStages; // stages for multi-part reload, including sounds, durations & HUD reload icon proportions
-var     Material            HUDAmmoIcon;                  // ammo icon for the HUD display
-var     Material            HUDAmmoReloadTexture;         // ammo reload icon for the HUD display (the red overlay to show reloading progress)
-var     byte                NumRotationSettings;          // how many rotation settings there are for a smoke launcher that can be rotated to aim it
-var     array<float>        RangeSettingSpeedModifier;    // initial launch speed for projectiles fired from a smoke launcher has a range adjustment mechanism
-var     bool                bShowHUDInfo;                 // whether to show ammo & any other information on the commander's HUD
+var byte InitialAmmo; // the initial & maximum no. of smoke rounds carried
+var byte ProjectilesPerFire; // no. of projectiles launched each time fire button is pressed (external launchers are often paired)
+var array<Rotator> FireRotation; // the firing rotation to launch the projectile(s), relative to vehicle - may be multiple for external launchers
+var float Spread; // random spread of launched projectiles
+var Sound FireSound; // firing sound
+var bool bCanBeReloaded; // whether smoke launcher can be reloaded after firing (not for external launch tubes)
+var array<DHVehicleWeapon.ReloadStage> ReloadStages; // stages for multi-part reload, including sounds, durations & HUD reload icon proportions
+var Material HUDAmmoIcon; // ammo icon for the HUD display
+var Material HUDAmmoReloadTexture; // ammo reload icon for the HUD display (the red overlay to show reloading progress)
+var byte NumRotationSettings; // how many rotation settings there are for a smoke launcher that can be rotated to aim it
+var array<float> RangeSettingSpeedModifier; // initial launch speed for projectiles fired from a smoke launcher has a range adjustment mechanism
+var bool bShowHUDInfo; // whether to show ammo & any other information on the commander's HUD
 
 static function int GetNumberOfLauncherTubes()
 {
@@ -114,12 +114,15 @@ static function StaticPrecache(LevelInfo L)
 // New debug function to set/adjust the firing offset (called from a debug exec in the cannon pawn class)
 static function SetFireOffset(DHVehicleCannon Cannon, string NewX, string NewY, string NewZ)
 {
-    local Vector  FireLocation;
+    local Vector FireLocation;
     local Rotator VehicleRotation;
 
     if (Cannon != none)
     {
-        Cannon.Log(Cannon.Tag @ "SmokeLauncherFireOffset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ "(was" @ Cannon.SmokeLauncherFireOffset[0] $ ")");
+        Cannon.Log(
+            Cannon.Tag @ "SmokeLauncherFireOffset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ "(was"
+                @ Cannon.SmokeLauncherFireOffset[0] $ ")"
+            );
         Cannon.SmokeLauncherFireOffset[0].X = float(NewX);
         Cannon.SmokeLauncherFireOffset[0].Y = float(NewY);
         Cannon.SmokeLauncherFireOffset[0].Z = float(NewZ);
@@ -135,8 +138,14 @@ static function SetFireOffset(DHVehicleCannon Cannon, string NewX, string NewY, 
 
         FireLocation = Cannon.Location + (Cannon.SmokeLauncherFireOffset[0] >> VehicleRotation);
         Cannon.ClearStayingDebugLines();
-        Cannon.DrawStayingDebugLine(FireLocation, FireLocation + (100.0 * Vector(Cannon.SmokeLauncherClass.static.GetFireRotation(0)) >> VehicleRotation), 255, 0, 0);
-        Cannon.DrawStayingDebugLine(FireLocation - (20.0 * Vector(VehicleRotation)), FireLocation + (20.0 * Vector(VehicleRotation)), 0, 255, 0);
+        Cannon.DrawStayingDebugLine(
+            FireLocation,
+            FireLocation + (100.0 * Vector(Cannon.SmokeLauncherClass.static.GetFireRotation(0)) >> VehicleRotation),
+            255, 0, 0
+            );
+        Cannon.DrawStayingDebugLine(
+            FireLocation - (20.0 * Vector(VehicleRotation)), FireLocation + (20.0 * Vector(VehicleRotation)), 0, 255, 0
+            );
     }
 }
 

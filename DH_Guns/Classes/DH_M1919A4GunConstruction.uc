@@ -5,4 +5,3 @@
 
 class DH_M1919A4GunConstruction extends DHMountedMachineGunConstruction
     abstract;
-

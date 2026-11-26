@@ -11,12 +11,12 @@ class DHFirstPersonBelt extends Actor
 
 // We need a system for individual shot animations and then a set of anims to
 // pull from for the "loop", maybe like 4-8 anims of the same shot happening
-var array<name>                         BulletBoneNames;
-var Class<ROFPAmmoRound>                BulletClass;
-var array<name>                         FireSequenceNames;
+var array<name> BulletBoneNames;
+var class<ROFPAmmoRound> BulletClass;
+var array<name> FireSequenceNames;
 
-var int                                 BulletCount;
-var array<ROFPAmmoRound>                Bullets;
+var int BulletCount;
+var array<ROFPAmmoRound> Bullets;
 
 function PostBeginPlay()
 {
@@ -66,7 +66,7 @@ function DestroyBullets()
 function Destroyed()
 {
     super.Destroyed();
-    
+
     DestroyBullets();
 }
 

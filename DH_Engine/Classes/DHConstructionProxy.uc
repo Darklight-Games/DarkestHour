@@ -6,13 +6,13 @@
 class DHConstructionProxy extends DHActorProxy
     dependson(DHConstruction);
 
-var class<DHConstruction>   ConstructionClass;
+var class<DHConstruction> ConstructionClass;
 
-var int                     VariantIndex;       // The current selected variant index.
-var int                     DefaultSkinIndex;   // The default skin index for the current variant.
-var int                     SkinIndex;          // The current selected skin index. This is unbounded here, but modulo'd downstream.
+var int VariantIndex; // The current selected variant index.
+var int DefaultSkinIndex; // The default skin index for the current variant.
+var int SkinIndex; // The current selected skin index. This is unbounded here, but modulo'd downstream.
 
-var private DHConstruction.RuntimeData  RuntimeData;
+var private DHConstruction.RuntimeData RuntimeData;
 
 function DHConstruction.RuntimeData GetRuntimeData()
 {
@@ -51,23 +51,30 @@ function Destroyed()
     }
 }
 
-final function SetConstructionClass(class<DHConstruction> ConstructionClass, optional int VariantIndex, optional int SkinIndex)
+final function SetConstructionClass(
+    class<DHConstruction> NewConstructionClass,
+    optional int NewVariantIndex,
+    optional int NewSkinIndex
+    )
 {
-    if (ConstructionClass == none)
+    if (NewConstructionClass == none)
     {
         Warn("Cannot set the construction class to none");
         return;
     }
 
-    self.ConstructionClass = ConstructionClass;
-    self.VariantIndex = VariantIndex;
-    self.SkinIndex = SkinIndex;
+    ConstructionClass = NewConstructionClass;
+    VariantIndex = NewVariantIndex;
+    SkinIndex = NewSkinIndex;
 
     UpdateDefaultSkinIndex();
     UpdateAppearance();
 
     // Initialize the local rotation based on the parameters in the new construction class
-    LocalRotation = Class'URotator'.static.RandomRange(ConstructionClass.default.StartRotationMin, ConstructionClass.default.StartRotationMax);
+    LocalRotation = Class'URotator'.static.RandomRange(
+        ConstructionClass.default.StartRotationMin,
+        ConstructionClass.default.StartRotationMax
+        );
 }
 
 final function UpdateDefaultSkinIndex()
@@ -154,10 +161,7 @@ protected simulated function bool CanPlaceInDangerZone()
     return ConstructionClass.default.bCanBePlacedInDangerZone;
 }
 
-protected simulated function bool CanPlaceInMinefield()
-{
-    return false;
-}
+protected simulated function bool CanPlaceInMinefield();
 
 protected simulated function bool CanPlaceInObjective(DHObjective Objective)
 {
@@ -181,7 +185,7 @@ protected simulated function bool CanPlaceOnTerrainSurfaceType(Material.ESurface
             return true;
         }
     }
-    
+
     return false;
 }
 
@@ -193,8 +197,8 @@ protected simulated function Vector GetPlacementOffset()
 // TODO: shouldn't this be CanSnapToTerrain??
 protected simulated function bool CanPlaceOnTerrain(TerrainInfo TerrainInfo)
 {
-    if (TerrainInfo.TerrainScale.X > ConstructionClass.default.TerrainScaleMax ||
-        TerrainInfo.TerrainScale.Y > ConstructionClass.default.TerrainScaleMax)
+    if (TerrainInfo.TerrainScale.X > ConstructionClass.default.TerrainScaleMax
+        || TerrainInfo.TerrainScale.Y > ConstructionClass.default.TerrainScaleMax)
     {
         return false;
     }
@@ -261,7 +265,7 @@ function ActorProxyError GetPositionError()
         E.Type = ERROR_Fatal;
         return E;
     }
-    
+
     GRI = DHGameReplicationInfo(PlayerOwner.GameReplicationInfo);
 
     // TODO: Make the evaluation of these two errors dependent on the values
@@ -279,8 +283,9 @@ function ActorProxyError GetPositionError()
             {
                 Distance = VSize(Location - GRI.DHObjectives[i].Location);
 
-                if (Distance < Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.EnemyObjectiveDistanceMinMeters) &&
-                    Distance < DistanceMin)
+                if (Distance
+                    < Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.EnemyObjectiveDistanceMinMeters)
+                    && Distance < DistanceMin)
                 {
                     DistanceMin = Distance;
                     ObjectiveIndex = i;
@@ -292,7 +297,11 @@ function ActorProxyError GetPositionError()
         {
             E.Type = ERROR_TooCloseToEnemyObjective;
             E.OptionalString = GRI.DHObjectives[ObjectiveIndex].ObjName;
-            E.OptionalInteger = Max(1, ConstructionClass.default.EnemyObjectiveDistanceMinMeters - Class'DHUnits'.static.UnrealToMeters(DistanceMin));
+            E.OptionalInteger = Max(
+                1,
+                ConstructionClass.default.EnemyObjectiveDistanceMinMeters
+                    - Class'DHUnits'.static.UnrealToMeters(DistanceMin)
+                );
             return E;
         }
     }
@@ -321,12 +330,15 @@ function ActorProxyError GetPositionError()
         {
             E.Type = ERROR_TooCloseToObjective;
             E.OptionalString = GRI.DHObjectives[ObjectiveIndex].ObjName;
-            E.OptionalInteger = Max(1, ConstructionClass.default.ObjectiveDistanceMinMeters - Class'DHUnits'.static.UnrealToMeters(DistanceMin));
+            E.OptionalInteger = Max(
+                1,
+                ConstructionClass.default.ObjectiveDistanceMinMeters - Class'DHUnits'.static.UnrealToMeters(DistanceMin)
+                );
             return E;
         }
     }
 
-        // Don't allow constructions to overlap restriction volumes that restrict constructions.
+    // Don't allow constructions to overlap restriction volumes that restrict constructions.
     foreach TouchingActors(Class'DHRestrictionVolume', RV)
     {
         if (RV != none)
@@ -356,13 +368,23 @@ function ActorProxyError GetPositionError()
     {
         F = 0.0;
 
-        foreach RadiusActors(ConstructionClass, A, Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.DuplicateFriendlyDistanceInMeters))
+        foreach RadiusActors(
+            ConstructionClass,
+            A,
+            Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.DuplicateFriendlyDistanceInMeters)
+            )
         {
             C = DHConstruction(A);
 
-            if (C != none && !C.IsDummy() && (C.GetTeamIndex() == NEUTRAL_TEAM_INDEX || C.GetTeamIndex() == PawnOwner.GetTeamNum()))
+            if (C != none
+                && !C.IsDummy()
+                && (C.GetTeamIndex() == NEUTRAL_TEAM_INDEX || C.GetTeamIndex() == PawnOwner.GetTeamNum()))
             {
-                F = FMax(F, ConstructionClass.default.DuplicateFriendlyDistanceInMeters - Class'DHUnits'.static.UnrealToMeters(VSize(C.Location - Location)));
+                F = FMax(
+                    F,
+                    ConstructionClass.default.DuplicateFriendlyDistanceInMeters
+                        - Class'DHUnits'.static.UnrealToMeters(VSize(C.Location - Location))
+                    );
             }
         }
 
@@ -378,13 +400,24 @@ function ActorProxyError GetPositionError()
     {
         F = 0.0;
 
-        foreach RadiusActors(ConstructionClass, A, Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.DuplicateEnemyDistanceInMeters))
+        foreach RadiusActors(
+            ConstructionClass,
+            A,
+            Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.DuplicateEnemyDistanceInMeters)
+            )
         {
             C = DHConstruction(A);
 
-            if (C != none && !C.IsDummy() && C.GetTeamIndex() != NEUTRAL_TEAM_INDEX && C.GetTeamIndex() != PawnOwner.GetTeamNum())
+            if (C != none
+                && !C.IsDummy()
+                && C.GetTeamIndex() != NEUTRAL_TEAM_INDEX
+                && C.GetTeamIndex() != PawnOwner.GetTeamNum())
             {
-                F = FMax(F, ConstructionClass.default.DuplicateEnemyDistanceInMeters - Class'DHUnits'.static.UnrealToMeters(VSize(C.Location - Location)));
+                F = FMax(
+                    F,
+                    ConstructionClass.default.DuplicateEnemyDistanceInMeters
+                        - Class'DHUnits'.static.UnrealToMeters(VSize(C.Location - Location))
+                    );
             }
         }
 
@@ -400,8 +433,11 @@ function ActorProxyError GetPositionError()
     {
         bDidSatisfyProximityRequirement = false;
 
-        foreach RadiusActors(ConstructionClass.default.ProximityRequirements[i].ConstructionClass, A,
-                             Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.ProximityRequirements[i].DistanceMeters))
+        foreach RadiusActors(
+            ConstructionClass.default.ProximityRequirements[i].ConstructionClass,
+            A,
+            Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.ProximityRequirements[i].DistanceMeters)
+            )
         {
             C = DHConstruction(A);
 
@@ -439,30 +475,40 @@ function string GetMenuVerb()
         return super.GetMenuName();
     }
 
-
     return ConstructionClass.default.ConstructionVerb;
 }
 
 // TODO: move this to somewhere else.
-function DrawDebugCylinder(vector Base,vector X, vector Y,vector Z, FLOAT Radius,float HalfHeight,int NumSides, byte R, byte G, byte B)
+function DrawDebugCylinder(
+    vector Base,
+    vector X,
+    vector Y,
+    vector Z,
+    float Radius,
+    float HalfHeight,
+    int NumSides,
+    byte R,
+    byte G,
+    byte B
+    )
 {
-	local float AngleDelta;
-	local vector LastVertex, Vertex;
-	local int SideIndex;
+    local float AngleDelta;
+    local vector LastVertex, Vertex;
+    local int SideIndex;
 
-	AngleDelta = 2.0f * PI / NumSides;
-	LastVertex = Base + X * Radius;
+    AngleDelta = 2.0f * PI / NumSides;
+    LastVertex = Base + X * Radius;
 
-	for(SideIndex = 0;SideIndex < NumSides;SideIndex++)
-	{
-		Vertex = Base + (X * Cos(AngleDelta * (SideIndex + 1)) + Y * Sin(AngleDelta * (SideIndex + 1))) * Radius;
+    for (SideIndex = 0; SideIndex < NumSides; SideIndex++)
+    {
+        Vertex = Base + (X * Cos(AngleDelta * (SideIndex + 1)) + Y * Sin(AngleDelta * (SideIndex + 1))) * Radius;
 
-		DrawStayingDebugLine(LastVertex - Z * HalfHeight,Vertex - Z * HalfHeight,R,G,B);
-		DrawStayingDebugLine(LastVertex + Z * HalfHeight,Vertex + Z * HalfHeight,R,G,B);
-		DrawStayingDebugLine(LastVertex - Z * HalfHeight,LastVertex + Z * HalfHeight,R,G,B);
+        DrawStayingDebugLine(LastVertex - Z * HalfHeight, Vertex - Z * HalfHeight, R, G, B);
+        DrawStayingDebugLine(LastVertex + Z * HalfHeight, Vertex + Z * HalfHeight, R, G, B);
+        DrawStayingDebugLine(LastVertex - Z * HalfHeight, LastVertex + Z * HalfHeight, R, G, B);
 
-		LastVertex = Vertex;
-	}
+        LastVertex = Vertex;
+    }
 }
 
 simulated function DebugRenderCollisionQueries()
@@ -502,9 +548,9 @@ simulated function UpdateProjectors()
     // TODO: manage our other projectors.
 }
 
-simulated function SetVariantAndSkin(int VariantIndex, int SkinIndex)
+simulated function SetVariantAndSkin(int NewVariantIndex, int NewSkinIndex)
 {
-    SetConstructionClass(ConstructionClass, VariantIndex, SkinIndex);
+    SetConstructionClass(ConstructionClass, NewVariantIndex, NewSkinIndex);
 }
 
 defaultproperties

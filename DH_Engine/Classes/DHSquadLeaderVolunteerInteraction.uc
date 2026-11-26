@@ -15,11 +15,11 @@ function Tick(float DeltaTime)
 
     PC = DHPlayer(ViewportOwner.Actor);
 
-    if (PC == none ||
-        PC.GameReplicationInfo == none ||
-        PC.GetTeamNum() != TeamIndex ||
-        PC.GetSquadIndex() != SquadIndex ||
-        PC.GameReplicationInfo.ElapsedTime >= ExpirationTime)
+    if (PC == none
+        || PC.GameReplicationInfo == none
+        || PC.GetTeamNum() != TeamIndex
+        || PC.GetSquadIndex() != SquadIndex
+        || PC.GameReplicationInfo.ElapsedTime >= ExpirationTime)
     {
         Master.RemoveInteraction(self);
     }
@@ -56,7 +56,11 @@ function string GetPromptText()
 
     if (PC != none)
     {
-        return Repl(PromptText, "{time}", Class'TimeSpan'.static.ToString(ExpirationTime - PC.GameReplicationInfo.ElapsedTime));
+        return Repl(
+            PromptText,
+            "{time}",
+            Class'TimeSpan'.static.ToString(ExpirationTime - PC.GameReplicationInfo.ElapsedTime)
+            );
     }
 
     return super.GetPromptText();
@@ -70,4 +74,3 @@ defaultproperties
     Options(2)=(Key=IK_F3,Text="Ignore All")
     bRequiresTick=true
 }
-

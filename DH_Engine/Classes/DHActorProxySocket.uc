@@ -11,12 +11,12 @@
 
 class DHActorProxySocket extends Actor;
 
-var() bool  bLimitLocalRotation;    // When true, the local rotation of the actor proxy is limited to the specified yaw range.
-var() Range LocalRotationYawRange;  // Limits the local rotation of the actor proxy attached to this hint.
-var() bool  bShouldDestroyOccupant;
+var() bool bLimitLocalRotation; // When true, the local rotation of the actor proxy is limited to the specified yaw range.
+var() Range LocalRotationYawRange; // Limits the local rotation of the actor proxy attached to this hint.
+var() bool bShouldDestroyOccupant;
 
-var private Actor Occupant;         // The current actor that is occupying this socket.
-var private DHActorProxy Proxy;     // The proxy actor that is snapped to this socket.
+var private Actor Occupant; // The current actor that is occupying this socket.
+var private DHActorProxy Proxy; // The proxy actor that is snapped to this socket.
 
 replication
 {
@@ -28,7 +28,7 @@ function Destroyed()
 {
     super.Destroyed();
 
-    if (bShouldDestroyOccupant && Occupant != None)
+    if (bShouldDestroyOccupant && Occupant != none)
     {
         Occupant.Destroy();
     }
@@ -36,7 +36,7 @@ function Destroyed()
 
 simulated function bool IsOccupied()
 {
-    return Occupant != None;
+    return Occupant != none;
 }
 
 function Actor GetOccupant()
@@ -44,11 +44,11 @@ function Actor GetOccupant()
     return Occupant;
 }
 
-function SetOccupant(Actor Occupant)
+function SetOccupant(Actor NewOccupant)
 {
-    if (self.Occupant != Occupant)
+    if (Occupant != NewOccupant)
     {
-        self.Occupant = Occupant;
+        Occupant = NewOccupant;
         OnOccupantChanged();
     }
 }
@@ -58,11 +58,11 @@ simulated function DHActorProxy GetProxy()
     return Proxy;
 }
 
-simulated function SetProxy(DHActorProxy Proxy)
+simulated function SetProxy(DHActorProxy NewProxy)
 {
-    if (self.Proxy != Proxy)
+    if (Proxy != NewProxy)
     {
-        self.Proxy = Proxy;
+        Proxy = NewProxy;
         OnProxyChanged();
     }
 }

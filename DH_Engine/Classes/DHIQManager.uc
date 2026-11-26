@@ -10,7 +10,7 @@ enum EReason
 {
     REASON_None,
     REASON_NotInSquad,
-    REASON_AWOL
+    REASON_AWOL,
 };
 
 var DHPlayer PC;
@@ -21,22 +21,30 @@ var globalconfig float SupplyDistance;
 
 var globalconfig float RefreshInterval;
 var globalconfig float SpawnDelay;
-var globalconfig int   IQIncrement;
-var globalconfig int   HeadGrowthStep;
-var globalconfig int   MinIQToGrowHead;
+var globalconfig int IQIncrement;
+var globalconfig int HeadGrowthStep;
+var globalconfig int MinIQToGrowHead;
 
-var globalconfig bool  bDebugIQManager;
+var globalconfig bool bDebugIQManager;
 
-var globalconfig int   MinIQ;
-var globalconfig int   MaxIQ;
+var globalconfig int MinIQ;
+var globalconfig int MaxIQ;
 var globalconfig float MaxHeadScale;
 
-var private      bool  bNormalHead;
-var private      int   OldWholeScale;
-var private      float ScaleMultiplier;
+var private bool bNormalHead;
+var private int OldWholeScale;
+var private float ScaleMultiplier;
 
-function OnSpawn() { GoToState('Pending'); }
-function OnDeath() { GoToState(''); }
+function OnSpawn()
+{
+    GoToState('Pending');
+}
+
+function OnDeath()
+{
+    GoToState('');
+}
+
 // function bool IsManaged() { return IsInState('Managed') || IsInState('Pending'); }
 // function DebugLog(string Msg) { if (bDebugIQManager) Log(Msg); }
 
@@ -197,10 +205,10 @@ state Managed
 
             OtherPRI = DHPlayerReplicationInfo(P.PlayerReplicationInfo);
 
-            if (OtherPRI == none ||
-                PRI == OtherPRI ||
-                P.GetTeamNum() != MyPawn.GetTeamNum() ||
-                PRI.SquadIndex != OtherPRI.SquadIndex)
+            if (OtherPRI == none
+                || PRI == OtherPRI
+                || P.GetTeamNum() != MyPawn.GetTeamNum()
+                || PRI.SquadIndex != OtherPRI.SquadIndex)
             {
                 continue;
             }
@@ -291,6 +299,8 @@ state Managed
                     {
                         PC.ReceiveLocalizedMessage(Class'DHIQMessage', 2);
                     }
+                    break;
+                case REASON_None:
                     break;
             }
         }

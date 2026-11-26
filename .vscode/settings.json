@@ -1,7 +1,15 @@
 {
   "[unrealscript]": {
-    "files.encoding": "windows1252"
+    "files.encoding": "windows1252",
+    "editor.defaultFormatter": "jkillian.custom-local-formatters",
+    "editor.formatOnSave": true
   },
+  "customLocalFormatters.formatters": [
+    {
+      "command": "usagi format -",
+      "languages": ["unrealscript"]
+    }
+  ],
   "files.associations": {
     "*.inc": "html",
   }

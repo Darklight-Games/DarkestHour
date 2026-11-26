@@ -5,7 +5,7 @@
 
 class DH_M1GarandFire extends DHSemiAutoFire;
 
-var     array<sound>    FirePingSounds;   // an array of the last round firing sound with ping
+var array<sound> FirePingSounds; // an array of the last round firing sound with ping
 
 // Modified to play firing sound including a clip eject ping when firing last round
 function ServerPlayFiring()
@@ -24,9 +24,9 @@ function ServerPlayFiring()
 function PlayFiring()
 {
     local DH_M1GarandWeapon Garand;
-    local name              Anim;
-    local Sound             FiringSound;
-    local bool              bLastRound;
+    local name Anim;
+    local Sound FiringSound;
+    local bool bLastRound;
 
     Garand = DH_M1GarandWeapon(Weapon);
 

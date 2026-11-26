@@ -5,7 +5,7 @@
 
 class DHTab_MainMP extends DHTab_MainSP;
 
-var automated DHGUIPlainBackground  sb_ButtonBackground2;
+var automated DHGUIPlainBackground sb_ButtonBackground2;
 
 defaultproperties
 {

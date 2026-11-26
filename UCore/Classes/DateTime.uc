@@ -40,12 +40,9 @@ final static function DateTime Now(Actor A)
 // Returns an ISO-8601 compliant string (eg. 2016-07-26T20:52:54)
 function string IsoFormat()
 {
-    return Class'UString'.static.ZFill(Year, 4) $ "-" $
-           Class'UString'.static.ZFill(Month, 2) $ "-" $
-           Class'UString'.static.ZFill(Day, 2) $ "T" $
-           Class'UString'.static.ZFill(Hour, 2) $ ":" $
-           Class'UString'.static.ZFill(Minute, 2) $ ":" $
-           Class'UString'.static.ZFill(Second, 2);
+    return Class'UString'.static.ZFill(Year, 4) $ "-" $ Class'UString'.static.ZFill(Month, 2) $ "-"
+        $ Class'UString'.static.ZFill(Day, 2) $ "T" $ Class'UString'.static.ZFill(Hour, 2) $ ":"
+        $ Class'UString'.static.ZFill(Minute, 2) $ ":" $ Class'UString'.static.ZFill(Second, 2);
 }
 
 // Returns the total number of seconds since the beginning of January 1st, 1970.

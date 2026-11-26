@@ -12,7 +12,7 @@ class DH_ModifyArtillery extends DH_ModifyActors;
 
 struct SArtilleryStatusModifier
 {
-    var() int              ArtilleryTypeIndex; // in DH_Levelnfo.ArtilleryTypes
+    var() int ArtilleryTypeIndex; // in DH_Levelnfo.ArtilleryTypes
     var() StatusModifyType HowToModify;
 };
 
@@ -52,9 +52,9 @@ event Trigger(Actor Other, Pawn EventInstigator)
     {
         TypeIndex = ArtilleryStatusModifiers[i].ArtilleryTypeIndex;
 
-        if (TypeIndex < 0 ||
-            TypeIndex >= arraycount(GRI.ArtilleryTypeInfos) ||
-            TypeIndex >= DHG.DHLevelInfo.ArtilleryTypes.Length)
+        if (TypeIndex < 0
+            || TypeIndex >= arraycount(GRI.ArtilleryTypeInfos)
+            || TypeIndex >= DHG.DHLevelInfo.ArtilleryTypes.Length)
         {
             Warn("Failed action [" $ i $ "]: ArtilleryTypeIndex is invalid.");
             continue;

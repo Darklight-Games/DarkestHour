@@ -20,7 +20,7 @@ simulated function ROIronSights()
 // Modified as every time the PTRD fires its out of ammo, so play the empty animation
 simulated function AnimEnd(int channel)
 {
-    local name  Anim;
+    local name Anim;
     local float Frame, Rate;
 
     if (ClientState == WS_ReadyToFire)

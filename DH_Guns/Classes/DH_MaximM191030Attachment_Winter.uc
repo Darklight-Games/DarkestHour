@@ -4,8 +4,3 @@
 //==============================================================================
 
 class DH_MaximM191030Attachment_Winter extends DH_MaximM191030Attachment;
-
-defaultproperties
-{
-    // Skins here
-}

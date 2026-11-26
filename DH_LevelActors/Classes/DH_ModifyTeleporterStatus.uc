@@ -5,23 +5,25 @@
 
 class DH_ModifyTeleporterStatus extends DH_ModifyActors;
 
-var()   array<name>         TeleportersToModify;
-var     array<teleporter>   TeleReferences;
-var()   string              NewURL; // if set will change the URL of the teleporter
-var()   bool                UseRandomness;
-var()   int                 RandomPercent; // 100 for always succeed, 0 for always fail
-var()   enum    HTModify
+var() array<name> TeleportersToModify;
+var array<teleporter> TeleReferences;
+var() string NewURL; // if set will change the URL of the teleporter
+// usagi:ignore[bool-name-prefix]
+var() bool UseRandomness;
+var() int RandomPercent; // 100 for always succeed, 0 for always fail
+// usagi:ignore[enum-name-prefix]
+var() enum HTModify
 {
     HTM_Activate,
     HTM_Deactivate,
     HTM_Toggle,
-    HTM_Set
-}                           HowToModify; // How to modify teleporter
+    HTM_Set,
+} HowToModify; // How to modify teleporter
 
 function PostBeginPlay()
 {
-    local int           i;
-    local Teleporter    Tele;
+    local int i;
+    local Teleporter Tele;
 
     super.PostBeginPlay();
 
@@ -29,8 +31,8 @@ function PostBeginPlay()
     {
         foreach AllActors(Class'Teleporter', Tele, TeleportersToModify[i])
         {
-            TeleReferences.Insert(0, 1); //Adds a new spot at index for the attached tele
-            TeleReferences[0] = Tele; //Sets the attached tele in the reference array
+            TeleReferences.Insert(0, 1); // Adds a new spot at index for the attached tele
+            TeleReferences[0] = Tele; // Sets the attached tele in the reference array
             break;
         }
     }
@@ -42,36 +44,42 @@ event Trigger(Actor Other, Pawn EventInstigator)
 
     if (UseRandomness)
     {
-        RandomNum = Rand(100);  //Gets a random # between 0 & 99
+        RandomNum = Rand(100); // Gets a random # between 0 & 99
+
         if (RandomPercent < RandomNum)
-            return; //Leave script randomly failed
+        {
+            return; // Leave script randomly failed
+        }
     }
+
     // RandomPercentToFail was not higher than randomnum
     switch (HowToModify)
     {
         case HTM_Activate:
-            for (i = 0; i < TeleReferences.Length; ++i){
+            for (i = 0; i < TeleReferences.Length; ++i)
+            {
                 TeleReferences[i].bEnabled = true;
             }
-        break;
+            break;
         case HTM_Deactivate:
-            for (i = 0; i < TeleReferences.Length; ++i){
+            for (i = 0; i < TeleReferences.Length; ++i)
+            {
                 TeleReferences[i].bEnabled = false;
             }
-        break;
+            break;
         case HTM_Toggle:
-            for (i = 0; i < TeleReferences.Length; ++i){
+            for (i = 0; i < TeleReferences.Length; ++i)
+            {
                 TeleReferences[i].bEnabled = !TeleReferences[i].bEnabled;
             }
-        break;
+            break;
         case HTM_Set:
-            for (i = 0; i < TeleReferences.Length; ++i){
+            for (i = 0; i < TeleReferences.Length; ++i)
+            {
                 TeleReferences[i].URL = NewURL;
             }
-        break;
+            break;
         default:
-        break;
+            break;
     }
 }
-
-

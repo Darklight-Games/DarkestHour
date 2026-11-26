@@ -11,4 +11,3 @@ defaultproperties
     GroupName="Logistics"
     SortOrder=0
 }
-

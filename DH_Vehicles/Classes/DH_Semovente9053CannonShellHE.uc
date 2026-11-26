@@ -26,7 +26,7 @@ defaultproperties
 
     CoronaClass=Class'DHShellTracer_WhiteLarge'
     ShellTrailClass=Class'DHShellTrail_White'
-    
+
     ShellImpactDamage=Class'DHShellHEGunImpactDamageType'
 
     //Effects

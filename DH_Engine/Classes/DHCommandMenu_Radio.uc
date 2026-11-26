@@ -8,7 +8,7 @@ class DHCommandMenu_Radio extends DHCommandMenu
 
 var DH_LevelInfo LevelInfo;
 var DHRadio Radio;
-var Sound   OnActiveSound;
+var Sound OnActiveSound;
 
 var localized string UnavailableText;
 var localized string ExhaustedText;
@@ -40,7 +40,8 @@ function Setup()
             O.OptionalObject = LevelInfo.ArtilleryTypes[i].ArtilleryClass;
             O.SubjectText = LevelInfo.ArtilleryTypes[i].ArtilleryClass.static.GetMenuName();
             O.Material = LevelInfo.ArtilleryTypes[i].ArtilleryClass.default.MenuIcon;
-            O.ActionText = Interaction.GRI.ArtilleryTypeInfos[i].UsedCount $ "/" $ Interaction.GRI.ArtilleryTypeInfos[i].Limit;
+            O.ActionText = Interaction.GRI.ArtilleryTypeInfos[i].UsedCount $ "/"
+                $ Interaction.GRI.ArtilleryTypeInfos[i].Limit;
             O.OptionalInteger = i;
             Options[Options.Length] = O;
         }
@@ -66,7 +67,9 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
     if (Error == ERROR_None)
     {
         ORI.InfoColor = Class'UColor'.default.White;
-        ORI.InfoText[0] = default.AvailableText @ "(" $ Interaction.GRI.ArtilleryTypeInfos[Index].Limit - Interaction.GRI.ArtilleryTypeInfos[Index].UsedCount $ ")";
+        ORI.InfoText[0] = default.AvailableText @ "("
+            $ Interaction.GRI.ArtilleryTypeInfos[Index].Limit - Interaction.GRI.ArtilleryTypeInfos[Index].UsedCount
+            $ ")";
     }
     else if (Error == ERROR_Cancellable)
     {
@@ -96,10 +99,9 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
 
                     if (ArtilleryClass != none)
                     {
-                        ORI.InfoText[0] = default.SquadTooSmallText @ "(" $
-                                          PC.SquadReplicationInfo.GetMemberCount(PC.GetTeamNum(), PC.GetSquadIndex()) $
-                                          "/" $
-                                          ArtilleryClass.default.RequiredSquadMemberCount $ ")";
+                        ORI.InfoText[0] = default.SquadTooSmallText @ "("
+                            $ PC.SquadReplicationInfo.GetMemberCount(PC.GetTeamNum(), PC.GetSquadIndex()) $ "/"
+                            $ ArtilleryClass.default.RequiredSquadMemberCount $ ")";
                         break;
                     }
                 }
@@ -108,7 +110,8 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
                 break;
             case ERROR_Cooldown:
                 ORI.InfoIcon = Texture'DH_GUI_tex.StopWatch';
-                CooldownTimeSeconds = Interaction.GRI.ArtilleryTypeInfos[Index].NextConfirmElapsedTime - Interaction.GRI.ElapsedTime;
+                CooldownTimeSeconds = Interaction.GRI.ArtilleryTypeInfos[Index].NextConfirmElapsedTime
+                    - Interaction.GRI.ElapsedTime;
                 ORI.InfoText[0] = Class'TimeSpan'.static.ToString(CooldownTimeSeconds);
                 break;
             case ERROR_Ongoing:
@@ -125,10 +128,10 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
 
 function OnActive()
 {
-    if (Interaction != none &&
-        Interaction.ViewportOwner != none &&
-        Interaction.ViewportOwner.Actor != none &&
-        Interaction.ViewportOwner.Actor.Pawn != none)
+    if (Interaction != none
+        && Interaction.ViewportOwner != none
+        && Interaction.ViewportOwner.Actor != none
+        && Interaction.ViewportOwner.Actor.Pawn != none)
     {
         Interaction.ViewportOwner.Actor.Pawn.PlayOwnedSound(OnActiveSound, SLOT_Interface, 1.0);
     }

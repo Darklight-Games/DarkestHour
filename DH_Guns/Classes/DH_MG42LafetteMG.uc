@@ -41,7 +41,7 @@ defaultproperties
     NumMGMags=3
     ProjectileClass=Class'DH_MG42Bullet'
     TracerProjectileClass=Class'DH_MG42TracerBullet'
-    
+
     FireInterval=0.055 // ~1250 rpm (value had to be found experimentally due to an engine bug)
     TracerFrequency=7
     // Spread=88.0 (the spread units on the infantry and vehicle weapons are different for some reason!)

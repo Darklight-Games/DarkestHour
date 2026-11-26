@@ -9,11 +9,11 @@ enum ECollisionType
     CT_Disjoint,
     CT_Intersect,
     CT_Contain,
-    CT_Parallel
+    CT_Parallel,
 };
 
 // TODO: attach a generic "collision actor" and se ehow it behaves.
-enum SCylinderCollisionResultType
+enum ECylinderCollisionResultType
 {
     CCRT_OK,
     CCRT_NoRoom,
@@ -23,12 +23,18 @@ enum SCylinderCollisionResultType
 
 struct SCylinderCollisionResult
 {
-    var SCylinderCollisionResultType Type;
+    var ECylinderCollisionResultType Type;
     var Actor HitActor;
     var Vector HitNormalAverage;
 };
 
-final static function bool PointInCylinder(Vector Origin, float Radius, float HalfHeight, Rotator Rotation, Vector Point)
+final static function bool PointInCylinder(
+    Vector Origin,
+    float Radius,
+    float HalfHeight,
+    Rotator Rotation,
+    Vector Point
+    )
 {
     Point = (Point - Origin) << Rotation;
     return Sqrt(Point.X * Point.X + Point.Y * Point.Y) < Radius && Abs(Point.Z) < HalfHeight;
@@ -166,7 +172,7 @@ final static function bool ClipLineToViewport(out float X0, out float Y0, out fl
 
 final static function SCylinderCollisionResult CylinderCollisionQuery(
     Actor Owner,
-    Vector BaseLocation, 
+    Vector BaseLocation,
     Rotator Rotation,
     float CollisionRadius,
     float CollisionHeight,

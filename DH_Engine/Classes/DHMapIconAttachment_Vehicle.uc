@@ -9,9 +9,9 @@ class DHMapIconAttachment_Vehicle extends DHMapIconAttachment
 // Track the driver of the vehicle so we can display the correct icon color
 // depending on the driver's team and squad.
 var private DHPlayerReplicationInfo DriverPRI;
-var class<DHVehicle>                VehicleClass;
-var Color                           UnoccupiedColor;
-var TexRotator                      MyIconMaterial;
+var class<DHVehicle> VehicleClass;
+var Color UnoccupiedColor;
+var TexRotator MyIconMaterial;
 
 replication
 {
@@ -47,7 +47,7 @@ function DHPlayerReplicationInfo GetPrimaryOccupant()
     {
         return none;
     }
-    
+
     if (V.Controller != none)
     {
         return DHPlayerReplicationInfo(V.Controller.PlayerReplicationInfo);

@@ -38,4 +38,3 @@ defaultproperties
     End Object
     Emitters(0)=TrailEmitter'TrailEmitter0'
 }
-

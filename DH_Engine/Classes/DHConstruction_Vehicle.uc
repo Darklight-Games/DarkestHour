@@ -4,42 +4,42 @@
 //==============================================================================
 
 class DHConstruction_Vehicle extends DHConstruction
-    dependson(DH_LevelInfo)
     abstract
+    dependson(DH_LevelInfo)
     notplaceable;
 
-var class<DHVehicle>        VehicleClass;
+var class<DHVehicle> VehicleClass;
 
 enum ESeasonFilterOperation
 {
     SFO_Any,
-    SFO_None
+    SFO_None,
 };
 
 struct SeasonFilter
 {
     var array<DH_LevelInfo.ESeason> Seasons;
-    var ESeasonFilterOperation      Operation;
+    var ESeasonFilterOperation Operation;
 };
 
 // Options for the vehicle class. Used to store variants and skin variants.
 // Note that for simplicity's sake we assume that the entries are stored in ascending order of variants.
 struct SVehicleClass
 {
-    var class<DHVehicle>    VehicleClass;
-    var int                 VariantIndex;
+    var class<DHVehicle> VehicleClass;
+    var int VariantIndex;
 
     // If this is empty, the variant is always available.
     // Otherwise, the entry will only be available if it is one of the seasons listed.
-    var array<SeasonFilter>  SeasonFilters;
+    var array<SeasonFilter> SeasonFilters;
 };
 
-var array<SVehicleClass>    VehicleClasses;
+var array<SVehicleClass> VehicleClasses;
 
-var DHVehicle               Vehicle;
+var DHVehicle Vehicle;
 
-var localized string        VariantNoun;
-var localized string        SkinNoun;
+var localized string VariantNoun;
+var localized string SkinNoun;
 
 replication
 {
@@ -120,7 +120,7 @@ simulated state Dummy
 }
 
 // TODO: do we put this in the vehicle itself???
-function static UpdateProxy(DHActorProxy AP)
+static function UpdateProxy(DHActorProxy AP)
 {
     local class<DHVehicle> VehicleClass;
 
@@ -327,7 +327,7 @@ static function GetIndicesForVehicleClass(
         {
             continue;
         }
-        
+
         // Find the variant's position among the available variants.
         Indices = GetAvailableVariantIndices(Context);
 
@@ -344,7 +344,8 @@ static function GetIndicesForVehicleClass(
         // Count how many earlier entries share the same variant to determine the skin.
         for (j = 0; j < i; ++j)
         {
-            if (default.VehicleClasses[j].VariantIndex == default.VehicleClasses[i].VariantIndex && IsEntryAvailable(Context, j))
+            if (default.VehicleClasses[j].VariantIndex == default.VehicleClasses[i].VariantIndex
+                && IsEntryAvailable(Context, j))
             {
                 ++SkinIndex;
             }
@@ -370,7 +371,8 @@ static function class<DHVehicle> GetVehicleClass(DHActorProxy.Context Context)
     }
 
     // Wrap the index so that out-of-range values (including negative ones) are valid.
-    return default.VehicleClasses[Indices[((Context.SkinIndex % Indices.Length) + Indices.Length) % Indices.Length]].VehicleClass;
+    return default.VehicleClasses[Indices[((Context.SkinIndex % Indices.Length) + Indices.Length)
+        % Indices.Length]].VehicleClass;
 }
 
 // Returns whether the entry is available based on the season.
@@ -379,12 +381,12 @@ static function bool IsEntryAvailable(DHActorProxy.Context Context, int Index)
     local int i, j;
     local bool bHasAny;
     local DH_LevelInfo.ESeason Season;
-    
+
     if (Context.LevelInfo != none)
     {
         Season = Context.LevelInfo.Season;
     }
-    
+
     if (default.VehicleClasses[Index].SeasonFilters.Length == 0)
     {
         // If the season filter list is empty, the entry is always available.
@@ -398,6 +400,7 @@ static function bool IsEntryAvailable(DHActorProxy.Context Context, int Index)
         {
             case SFO_Any:
                 bHasAny = false;
+
                 for (j = 0; j < default.VehicleClasses[Index].SeasonFilters[i].Seasons.Length; ++j)
                 {
                     if (default.VehicleClasses[Index].SeasonFilters[i].Seasons[j] == Season)
@@ -406,6 +409,7 @@ static function bool IsEntryAvailable(DHActorProxy.Context Context, int Index)
                         break;
                     }
                 }
+
                 if (!bHasAny)
                 {
                     return false;

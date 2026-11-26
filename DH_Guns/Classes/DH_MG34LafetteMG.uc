@@ -67,7 +67,7 @@ defaultproperties
     InitialPrimaryAmmo=50
     NumMGMags=8
     ProjectileClass=Class'DH_MG34Bullet'
-    
+
     FireInterval=0.08 // 862 rpm (value had to be found experimentally due to an engine bug)
     TracerFrequency=7
     // Spread=88.0 (the spread units on the infantry and vehicle weapons are different for some reason!)

@@ -16,4 +16,3 @@ defaultproperties
     DestroyedMeshSkins(0)=Combiner'DH_VehiclesGE_tex8.Panzer4F2_ext_Winter_dest'
     DestroyedMeshSkins(2)=Combiner'DH_Artillery_tex.Wirbelwind_turret_snow_dest'
 }
-

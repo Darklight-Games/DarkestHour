@@ -12,7 +12,7 @@ defaultproperties
 
     InitialPrimaryAmmo=250
     NumMGMags=2
-    
+
     Mesh=SkeletalMesh'DH_M1919A4_anm.M1919A4_M2_GUN_EXT'
 
     Begin Object Class=DHWeaponRangeParams Name=RangeParams0

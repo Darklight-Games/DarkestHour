@@ -7,21 +7,20 @@ class DHRadioItem extends DHWeapon;
 
 // TODO: ArtilleryTrigger seems to serve no purpose as an instance variable & should be made a local variable in AttachToPawn()
 // The other 2 could probably also be removed & replaced with class/name literals as they are only used here & only once & will never change or be subclassed
-var class<DHRadio>      RadioClass;
-var DHRadio             Radio;
-var name                AttachBoneName;
-
+var class<DHRadio> RadioClass;
+var DHRadio Radio;
+var name AttachBoneName;
 
 // Functions emptied out or returning false, as radio isn't a real weapon
-simulated function Fire(float F) {return;}
-simulated event ClientStartFire(int Mode) {return;}
-simulated event StopFire(int Mode) {return;}
-simulated function bool IsFiring(){return false;}
-function bool FillAmmo(){return false;}
-function bool ResupplyAmmo(){return false;}
-exec simulated function ROManualReload() {return;}
-simulated function bool IsBusy() {return false;} // not busy in the idle state because we never fire
-simulated function bool ShouldUseFreeAim() {return false;}
+simulated function Fire(float F);
+simulated event ClientStartFire(int Mode);
+simulated event StopFire(int Mode);
+simulated function bool IsFiring();
+function bool FillAmmo();
+function bool ResupplyAmmo();
+exec simulated function ROManualReload();
+simulated function bool IsBusy(); // not busy in the idle state because we never fire
+simulated function bool ShouldUseFreeAim();
 
 simulated function PreBeginPlay() // TODO: merge this into PostBeginPlay & perhaps add an authority role check
 {

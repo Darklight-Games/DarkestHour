@@ -11,11 +11,12 @@ event AllowBroadcastLocalized(
     optional int Switch,
     optional PlayerReplicationInfo RelatedPRI_1,
     optional PlayerReplicationInfo RelatedPRI_2,
-    optional Object OptionalObject)
+    optional Object OptionalObject
+    )
 {
-    local Controller    C;
-    local DHPlayer      P;
-    local DHRoleInfo    RI;
+    local Controller C;
+    local DHPlayer P;
+    local DHRoleInfo RI;
 
     for (C = Level.ControllerList; C != none; C = C.NextController)
     {
@@ -24,13 +25,19 @@ event AllowBroadcastLocalized(
         // Only broadcast rally point messages to your same team, and only to other players
         if (class<RORallyMsg>(Message) != none && Switch == 1)
         {
-            if (P != none && Controller(Sender) != none && P != Sender && P.PlayerReplicationInfo.Team == Controller(Sender).PlayerReplicationInfo.Team)
+            if (P != none
+                && Controller(Sender) != none
+                && P != Sender
+                && P.PlayerReplicationInfo.Team == Controller(Sender).PlayerReplicationInfo.Team)
             {
                 BroadcastLocalized(Sender, P, Message, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
             }
         }
         // Send correct last-objective message depending on who's winning and on the reciever's team
-        else if (class<ROLastObjectiveMsg>(Message) != none && P != none && P.PlayerReplicationInfo != none && P.PlayerReplicationInfo.Team != none)
+        else if (class<ROLastObjectiveMsg>(Message) != none
+            && P != none
+            && P.PlayerReplicationInfo != none
+            && P.PlayerReplicationInfo.Team != none)
         {
             // If P.PRI.Team == Switch, then that team is about to win. Broadcast an about-to-win msg to that team. Else broadast an about-to-lost msg.
             if (P.PlayerReplicationInfo.Team.TeamIndex == Switch)
@@ -43,7 +50,10 @@ event AllowBroadcastLocalized(
             }
         }
         // Only send demo charge placed msg to teammates
-        else if (class<RODemolitionChargePlacedMsg>(Message) != none && P != none && P.PlayerReplicationInfo != none && P.PlayerReplicationInfo.Team != none)
+        else if (class<RODemolitionChargePlacedMsg>(Message) != none
+            && P != none
+            && P.PlayerReplicationInfo != none
+            && P.PlayerReplicationInfo.Team != none)
         {
             if (P.PlayerReplicationInfo.Team.TeamIndex == Switch)
             {
@@ -51,32 +61,39 @@ event AllowBroadcastLocalized(
             }
         }
         // If this message is a static mesh destroyed msg, figure who it should go to
-        else if (class<RODestroyableSMDestroyedMsg>(Message) != none && P != none && P.PlayerReplicationInfo != none && P.PlayerReplicationInfo.Team != none)
+        else if (class<RODestroyableSMDestroyedMsg>(Message) != none
+            && P != none
+            && P.PlayerReplicationInfo != none
+            && P.PlayerReplicationInfo.Team != none)
         {
             switch (Switch)
             {
-                case 0:   // send to nobody? wtf this should never be called
+                case 0: // send to nobody? wtf this should never be called
                     break;
 
-                case 1:   // send to everyone
+                case 1: // send to everyone
                     BroadcastLocalized(Sender, P, Message, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
                     break;
 
-                case 2:   // send to teammates only
-                    if (RelatedPRI_1 != none && RelatedPRI_1.Team != none && P.PlayerReplicationInfo.Team.TeamIndex == RelatedPRI_1.Team.TeamIndex)
+                case 2: // send to teammates only
+                    if (RelatedPRI_1 != none
+                        && RelatedPRI_1.Team != none
+                        && P.PlayerReplicationInfo.Team.TeamIndex == RelatedPRI_1.Team.TeamIndex)
                     {
                         BroadcastLocalized(Sender, P, Message, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
                     }
                     break;
 
-                case 3:   // send to enemies only (not sure when this would be useful)
-                    if (RelatedPRI_1 != none && RelatedPRI_1.Team != none && P.PlayerReplicationInfo.Team.TeamIndex != RelatedPRI_1.Team.TeamIndex)
+                case 3: // send to enemies only (not sure when this would be useful)
+                    if (RelatedPRI_1 != none
+                        && RelatedPRI_1.Team != none
+                        && P.PlayerReplicationInfo.Team.TeamIndex != RelatedPRI_1.Team.TeamIndex)
                     {
                         BroadcastLocalized(Sender, P, Message, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
                     }
                     break;
 
-                case 4:   // send to instigator only
+                case 4: // send to instigator only
                     if (RelatedPRI_1 == P.PlayerReplicationInfo)
                     {
                         BroadcastLocalized(Sender, P, Message, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
@@ -89,10 +106,10 @@ event AllowBroadcastLocalized(
         }
         else if (class<DHArtilleryTargetMessage>(Message) != none)
         {
-            if (P == none ||
-                P.Pawn == none ||
-                DHPlayerReplicationInfo(P.Pawn.PlayerReplicationInfo) == none ||
-                DHPlayerReplicationInfo(P.Pawn.PlayerReplicationInfo).RoleInfo == none)
+            if (P == none
+                || P.Pawn == none
+                || DHPlayerReplicationInfo(P.Pawn.PlayerReplicationInfo) == none
+                || DHPlayerReplicationInfo(P.Pawn.PlayerReplicationInfo).RoleInfo == none)
             {
                 continue;
             }
@@ -140,7 +157,10 @@ function RegisterBroadcastHandler(BroadcastHandler NewBH)
     {
         if (NextBroadcastHandler == NewBH)
         {
-            Warn(Tag @ "RegisterBroadcastHandler: TRIED TO REGISTER" @ NewBH.Tag @ "as NextBroadcastHandler, when it's already recorded as NextBroadcastHandler !!!");
+            Warn(
+                Tag @ "RegisterBroadcastHandler: TRIED TO REGISTER" @ NewBH.Tag
+                    @ "as NextBroadcastHandler, when it's already recorded as NextBroadcastHandler !!!"
+                );
         }
 
         NextBroadcastHandler.RegisterBroadcastHandler(NewBH);
@@ -154,7 +174,11 @@ function BroadcastTeam(Controller Sender, coerce string Msg, optional name Type)
     local Controller C;
     local PlayerController P;
 
-    if (!AllowsBroadcast(Sender, Len(Msg)) || Sender == none || PlayerController(Sender) == none || PlayerController(Sender).PlayerReplicationInfo == none || PlayerController(Sender).PlayerReplicationInfo.bOnlySpectator)
+    if (!AllowsBroadcast(Sender, Len(Msg))
+        || Sender == none
+        || PlayerController(Sender) == none
+        || PlayerController(Sender).PlayerReplicationInfo == none
+        || PlayerController(Sender).PlayerReplicationInfo.bOnlySpectator)
     {
         return;
     }
@@ -163,7 +187,9 @@ function BroadcastTeam(Controller Sender, coerce string Msg, optional name Type)
     {
         P = PlayerController(C);
 
-        if (P != none && P.PlayerReplicationInfo != none && P.PlayerReplicationInfo.Team == Sender.PlayerReplicationInfo.Team)
+        if (P != none
+            && P.PlayerReplicationInfo != none
+            && P.PlayerReplicationInfo.Team == Sender.PlayerReplicationInfo.Team)
         {
             BroadcastText(Sender.PlayerReplicationInfo, P, Msg, Type);
         }
@@ -189,7 +215,7 @@ function BroadcastVehicle(Controller Sender, coerce string Msg, optional name Ty
 
     for (i = 0; i < VehicleOccupants.length; ++i)
     {
-        Receiver =  DHPlayer(VehicleOccupants[i]);
+        Receiver = DHPlayer(VehicleOccupants[i]);
 
         if (Receiver != none)
         {
@@ -247,7 +273,7 @@ function BroadcastSquad(Controller Sender, coerce string Msg, optional name Type
         return;
     }
 
-    PC  = DHPlayer(Sender);
+    PC = DHPlayer(Sender);
 
     if (PC == none)
     {
@@ -291,7 +317,7 @@ function BroadcastCommand(Controller Sender, coerce string Msg, optional name Ty
         return;
     }
 
-    DHSender  = DHPlayer(Sender);
+    DHSender = DHPlayer(Sender);
 
     // Important check here to rule out non SLs and non ASLs
     if (DHSender == none || !DHSender.IsSLorASL())

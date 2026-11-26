@@ -64,4 +64,3 @@ defaultproperties
     SelectFireEmptyAnim="select_fire_empty"
     SelectFireIronEmptyAnim="Iron_select_fire_empty"
 }
-

@@ -7,11 +7,17 @@ class DHRoundOverMessage extends RORoundOverMsg
     abstract;
 
 // Overridden to support varying victory music
-simulated static function ClientReceive(PlayerController P, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+simulated static function ClientReceive(
+    PlayerController P,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
-    local DH_LevelInfo          LI;
+    local DH_LevelInfo LI;
     local DHGameReplicationInfo GRI;
-    local SoundGroup            SG;
+    local SoundGroup SG;
 
     // Do not call the super because the RO code is bad and calls the default values of sound and we don't want that
 
@@ -28,8 +34,13 @@ simulated static function ClientReceive(PlayerController P, optional int Switch,
 
     if (IsConsoleMessage(Switch) && P.Player != none && P.Player.Console != none)
     {
-        P.Player.InteractionMaster.Process_Message(static.GetString(Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject), 6.0, P.Player.LocalInteractions);
+        P.Player.InteractionMaster.Process_Message(
+            static.GetString(Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject),
+            6.0,
+            P.Player.LocalInteractions
+            );
     }
+
     // End super code
 
     // Have client pausesounds before the music begins (can help prevent very loud level sounds from drowning out music)

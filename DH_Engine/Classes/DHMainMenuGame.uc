@@ -5,23 +5,24 @@
 
 class DHMainMenuGame extends CinematicGame;
 
-const DESIRED_MIN_FPS =                 60.0;                   // If average FPS is below this, it won't do any limiter calculations
-const DESIRED_MAX_FPS =                 144.0;                  // If average FPS is above this, it'll keep doing more and more limiter iterations
+const DESIRED_MIN_FPS = 60.0; // If average FPS is below this, it won't do any limiter calculations
+const DESIRED_MAX_FPS = 144.0; // If average FPS is above this, it'll keep doing more and more limiter iterations
 
-const LIMITER_ITERATIONS =              1000;                   // Base number of iterations the limiter will do, it increases dynamically with IterationMultiplier
-const LIMITER_STRENGTH =                10;                     // How many Sqrt() calculations are done per iteration (effects how quickly it'll lower the FPS to desired max)
+const LIMITER_ITERATIONS = 1000; // Base number of iterations the limiter will do, it increases dynamically with IterationMultiplier
+const LIMITER_STRENGTH = 10; // How many Sqrt() calculations are done per iteration (effects how quickly it'll lower the FPS to desired max)
 
-const CLIENTFRAMERATE_UPDATETIME =      0.25;                   // How often to calculate the average fps
+const CLIENTFRAMERATE_UPDATETIME = 0.25; // How often to calculate the average fps
 
-var     float           ClientAverageFrameRate;
-var     float           ClientFrameRateConsolidated;            // Keeps track of tick rates over time, used to calculate average
-var     int             ClientFrameRateCount;                   // Keeps track of how many frames are between ClientFrameRateConsolidated
+var float ClientAverageFrameRate;
+var float ClientFrameRateConsolidated; // Keeps track of tick rates over time, used to calculate average
+var int ClientFrameRateCount; // Keeps track of how many frames are between ClientFrameRateConsolidated
 
-var     int             IterationMultiplier;
+var int IterationMultiplier;
 
 event Tick(float DeltaTime)
 {
-    local int i, j;
+    // usagi:ignore[local-set-but-never-used]
+    local int i, j, x;
 
     ClientFrameRateConsolidated += DeltaTime;
 
@@ -53,7 +54,7 @@ event Tick(float DeltaTime)
         {
             for (j = 0; j < LIMITER_STRENGTH; ++j)
             {
-                Sqrt(Rand(10000));
+                x = Sqrt(Rand(10000));
             }
         }
     }

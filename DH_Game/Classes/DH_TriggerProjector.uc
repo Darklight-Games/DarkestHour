@@ -5,22 +5,22 @@
 
 class DH_TriggerProjector extends Projector;
 
-var(Projector)  Color   ProjColorOn;      // the light color if the projector is on
-var(Projector)  Color   ProjColorOff;     // the light color if the projector is off
-var(Projector)  Color   ProjTintOn;       // these colors are overlaid over the projection
-var(Projector)  Color   ProjTintOff;      // alpha - grey will have no effect, white brightens & black darkens
-var(Projector)  float   ChangeTime;       // time light takes to change from on to off
-var(Projector)  bool    bInitiallyOn;     // whether it's initially on
-var(Projector)  bool    bInitiallyFading; // whether it's initially fading up or down
-var(Projector)  float   ChangeTimeTwo;
+var(Projector) Color ProjColorOn; // the light color if the projector is on
+var(Projector) Color ProjColorOff; // the light color if the projector is off
+var(Projector) Color ProjTintOn; // these colors are overlaid over the projection
+var(Projector) Color ProjTintOff; // alpha - grey will have no effect, white brightens & black darkens
+var(Projector) float ChangeTime; // time light takes to change from on to off
+var(Projector) bool bInitiallyOn; // whether it's initially on
+var(Projector) bool bInitiallyFading; // whether it's initially fading up or down
+var(Projector) float ChangeTimeTwo;
 
 var protected ScriptedTexture ScriptTexture;
-var     Material    MaskTexture;
-var     float       TimeSinceTriggered;
-var     float       SwapTime;
-var     Color       CurrentColor;
-var     Color       CurrentTint;
-var     bool        bIsOn;
+var Material MaskTexture;
+var float TimeSinceTriggered;
+var float SwapTime;
+var Color CurrentColor;
+var Color CurrentTint;
+var bool bIsOn;
 
 replication
 {
@@ -32,7 +32,7 @@ replication
 simulated event PostBeginPlay()
 {
     local Texture TheProjTexture;
-    local Color   StartColor, StartTint;
+    local Color StartColor, StartTint;
 
     super.PostBeginPlay();
 
@@ -178,7 +178,7 @@ simulated function Tick(float DeltaTime)
     NewColor.A = 255;
     NewTint.A = 255;
 
-    SetColors(NewColor,NewTint);
+    SetColors(NewColor, NewTint);
 }
 
 simulated function Trigger(Actor Other, Pawn EventInstigator)

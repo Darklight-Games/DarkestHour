@@ -3,6 +3,4 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_SovietGreenTeloPawn extends DH_SovietGreenTeloEarlyPawn; //eventually should be removed to avoid confusion
-
-
+class DH_SovietGreenTeloPawn extends DH_SovietGreenTeloEarlyPawn; // eventually should be removed to avoid confusion

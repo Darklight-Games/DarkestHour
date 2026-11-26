@@ -11,12 +11,12 @@ class DHSpawnPoint_Vehicle extends DHSpawnPointBase
 
 const SPAWN_VEHICLES_BLOCK_RADIUS = 2048.0;
 
-var     DHVehicle   Vehicle;            // Reference to the owning vehicle.
-var     class<DHVehicle> VehicleClass;  // The class of the vehicle that this spawn point is attached to.
-var     bool        bIsTemporary;       // When true, this is a "temporary" spawn point that will be destroyed soon.
+var DHVehicle Vehicle; // Reference to the owning vehicle.
+var class<DHVehicle> VehicleClass; // The class of the vehicle that this spawn point is attached to.
+var bool bIsTemporary; // When true, this is a "temporary" spawn point that will be destroyed soon.
 
-var     bool        bHasSpawnKillPenalty;
-var     float       CreatedTimeSeconds;
+var bool bHasSpawnKillPenalty;
+var float CreatedTimeSeconds;
 
 replication
 {
@@ -128,7 +128,14 @@ function Timer()
 }
 
 // Modified to make sure we have a vehicle & it's on the same team
-simulated function bool CanSpawnWithParameters(DHGameReplicationInfo GRI, int TeamIndex, int RoleIndex, int SquadIndex, int VehiclePoolIndex, optional bool bSkipTimeCheck)
+simulated function bool CanSpawnWithParameters(
+    DHGameReplicationInfo GRI,
+    int TeamIndex,
+    int RoleIndex,
+    int SquadIndex,
+    int VehiclePoolIndex,
+    optional bool bSkipTimeCheck
+    )
 {
     if (!super.CanSpawnWithParameters(GRI, TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex, bSkipTimeCheck))
     {
@@ -149,8 +156,8 @@ simulated function bool CanSpawnWithParameters(DHGameReplicationInfo GRI, int Te
 private function Vehicle FindEntryVehicle(bool bCanEnterTankCrewPositions)
 {
     local array<VehicleWeaponPawn> RealWeaponPawns;
-    local VehicleWeaponPawn        WP;
-    local int                      i;
+    local VehicleWeaponPawn WP;
+    local int i;
 
     if (Vehicle == none)
     {
@@ -184,7 +191,9 @@ private function Vehicle FindEntryVehicle(bool bCanEnterTankCrewPositions)
         WP = RealWeaponPawns[i];
 
         // Enter weapon pawn position if it's empty & player isn't barred by tank crew restriction
-        if (WP.Driver == none && (bCanEnterTankCrewPositions || !(WP.IsA('ROVehicleWeaponPawn') && ROVehicleWeaponPawn(WP).bMustBeTankCrew)))
+        if (WP.Driver == none
+            && (bCanEnterTankCrewPositions
+                || !(WP.IsA('ROVehicleWeaponPawn') && ROVehicleWeaponPawn(WP).bMustBeTankCrew)))
         {
             return WP;
         }
@@ -197,12 +206,12 @@ private function Vehicle FindEntryVehicle(bool bCanEnterTankCrewPositions)
 function bool PerformSpawn(DHPlayer PC)
 {
     local RORoleInfo RoleInfo;
-    local Vehicle    EntryVehiclePosition;
-    local Pawn       P;
-    local Vector     Offset;
+    local Vehicle EntryVehiclePosition;
+    local Pawn P;
+    local Vector Offset;
     local array<int> ExitPositionIndices;
-    local int        RoleIndex, i;
-    local bool       bCanEnterTankCrewPositions;
+    local int RoleIndex, i;
+    local bool bCanEnterTankCrewPositions;
 
     if (PC == none || GRI == none || Vehicle == none)
     {
@@ -235,7 +244,10 @@ function bool PerformSpawn(DHPlayer PC)
 
             for (i = 0; i < ExitPositionIndices.Length; ++i)
             {
-                if (PC.TeleportPlayer(Vehicle.Location + (Vehicle.ExitPositions[ExitPositionIndices[i]] >> Vehicle.Rotation) + Offset, Vehicle.Rotation))
+                if (PC.TeleportPlayer(
+                    Vehicle.Location + (Vehicle.ExitPositions[ExitPositionIndices[i]] >> Vehicle.Rotation) + Offset,
+                    Vehicle.Rotation
+                    ))
                 {
                     OnPawnSpawned(PC.Pawn);
                     return true;

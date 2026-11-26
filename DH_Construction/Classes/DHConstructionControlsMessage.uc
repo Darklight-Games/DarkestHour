@@ -9,7 +9,8 @@ class DHConstructionControlsMessage extends DHControlsMessage
 static function string GetHeaderString(
     optional PlayerReplicationInfo RelatedPRI_1,
     optional PlayerReplicationInfo RelatedPRI_2,
-    optional Object OptionalObject)
+    optional Object OptionalObject
+    )
 {
     local DHConstructionProxy CP;
 
@@ -24,7 +25,13 @@ static function string GetHeaderString(
     return CP.GetRuntimeData().MenuName;
 }
 
-static function bool ShouldShowControl(int Index, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function bool ShouldShowControl(
+    int Index,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local DHConstructionProxy CP;
 
@@ -47,7 +54,13 @@ static function bool ShouldShowControl(int Index, optional int Switch, optional 
     }
 }
 
-static function string GetControlText(int Index, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetControlText(
+    int Index,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string Text;
     local DHConstructionProxy CP;

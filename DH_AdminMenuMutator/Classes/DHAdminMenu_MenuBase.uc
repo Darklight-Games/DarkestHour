@@ -8,36 +8,36 @@
 class DHAdminMenu_MenuBase extends Interaction
     abstract;
 
-const  ITEMS_PER_PAGE = 10; // how many menu items are to be displayed on one page
+const ITEMS_PER_PAGE = 10; // how many menu items are to be displayed on one page
 
-var  localized array<string>  MenuText;             // array of the menu option description to be displayed
-var  array<string>            MenuCommand;          // array of the actual command lines to be executed when we choose a menu option
+var localized array<string> MenuText; // array of the menu option description to be displayed
+var array<string> MenuCommand; // array of the actual command lines to be executed when we choose a menu option
 
-var  DHAdminMenu_Replicator   Replicator;           // reference to the mutator's 'helper' replicated actor, which replicates some variables used by the menus on the client
-var  PlayerController         PC;                   // reference to the local PlayerController, just to simplify lots of ViewportOwner.Actor references
-var  int                      MenuPage;             // for menu lists that run over into more than 1 page, this records the current page number
-var  string                   PreviousMenu;         // saves the command to open the previous menu, so that 'previous menu' key can operate correctly
-var  bool                     bMenuDidAdminLogin;   // gets set to true if the menu automatically logs in the admin, which flags that we need to log them out afterwards
-var  bool                     bInitialVariablesSet; // a flag that we have done initial setup
+var DHAdminMenu_Replicator Replicator; // reference to the mutator's 'helper' replicated actor, which replicates some variables used by the menus on the client
+var PlayerController PC; // reference to the local PlayerController, just to simplify lots of ViewportOwner.Actor references
+var int MenuPage; // for menu lists that run over into more than 1 page, this records the current page number
+var string PreviousMenu; // saves the command to open the previous menu, so that 'previous menu' key can operate correctly
+var bool bMenuDidAdminLogin; // gets set to true if the menu automatically logs in the admin, which flags that we need to log them out afterwards
+var bool bInitialVariablesSet; // a flag that we have done initial setup
 
 // Variables set in menus to tell HandleInput function how to build its command string
 // (allows HI to be a generic function & avoids subclass redefinitions)
-var  localized string  MenuTitle;                   // menu heading on the screen
-var  string            SelectionPrefix;             // any text to add before the selected menu command
-var  string            SelectionSuffix;             // any text to after the selected menu command
-var  bool              bUseSelectionIndexAsSuffix;  // tells HI to use the selection index number as SelectionSuffix, i.e. add the number at the end of the command string
-var  bool              bUseMenuTextAsMenuCommand;   // tells HI to use the MenuText array instead of a separate MenuCommand array (e.g. for player selection list)
-var  bool              bTreatSelectionAsOneWord;    // tells HI to replace any spaces with non-breaking spaces, which effectively makes name into 1 word but looks the same
-var  bool              bKeepMenuOpen;               // if set to true it prevents HI from closing the menu after the function completes, e.g. if error is encountered
+var localized string MenuTitle; // menu heading on the screen
+var string SelectionPrefix; // any text to add before the selected menu command
+var string SelectionSuffix; // any text to after the selected menu command
+var bool bUseSelectionIndexAsSuffix; // tells HI to use the selection index number as SelectionSuffix, i.e. add the number at the end of the command string
+var bool bUseMenuTextAsMenuCommand; // tells HI to use the MenuText array instead of a separate MenuCommand array (e.g. for player selection list)
+var bool bTreatSelectionAsOneWord; // tells HI to replace any spaces with non-breaking spaces, which effectively makes name into 1 word but looks the same
+var bool bKeepMenuOpen; // if set to true it prevents HI from closing the menu after the function completes, e.g. if error is encountered
 
 // Menu labels
-var  localized string  Label_PageNumber, Label_PreviousMenu, Label_PreviousPage, Label_NextPage, Label_ExitMenu;
+var localized string Label_PageNumber, Label_PreviousMenu, Label_PreviousPage, Label_NextPage, Label_ExitMenu;
 
 // Config variables that can be set (or overridden) in any player's DarkestHour.ini file
-var  config  string    AdminName, AdminPassword;    // local player's own admin account details - if added to their config file, menu automatically logs them in & out
-var  config  Color    MenuColour;                  // a default is set but can be overridden in config
-var  config  float     MenuPosX, MenuPosY;          // top left positioning of menus on the screen, ranging from 0 to 1 (a default is set but can be overridden in config)
-var  config  bool      bDebug;                      // if true, various events will be logged
+var config string AdminName, AdminPassword; // local player's own admin account details - if added to their config file, menu automatically logs them in & out
+var config Color MenuColour; // a default is set but can be overridden in config
+var config float MenuPosX, MenuPosY; // top left positioning of menus on the screen, ranging from 0 to 1 (a default is set but can be overridden in config)
+var config bool bDebug; // if true, various events will be logged
 
 // Triggered when an interaction is created, which happens every round as re remove & re-create menus each time
 // However it is often too early to do setup stuff, e.g. wouldn't have Replicator reference & may not have GRI
@@ -75,7 +75,7 @@ state MenuVisible
         DrawMenu(Canvas, PosX, PosY, MenuTitle, MenuText);
     }
 
-    function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
+    function bool KeyEvent(EInputKey Key, EInputAction Action, float Delta)
     {
         local int KeyNumber;
 
@@ -97,7 +97,7 @@ state MenuVisible
             // Handle escape key press (exit menu)
             if (Key == IK_Escape)
             {
-                GotoState('');    // close menu
+                GotoState(''); // close menu
                 AdminLogoutIfNecessary();
 
                 return true;
@@ -136,9 +136,16 @@ state MenuVisible
 }
 
 // Displays menu based on an input list - updates PosY & LineHeight for use in subclass (PosY is last drawn vertical position, allowing subclass to add to end of menu list)
-function DrawMenu(canvas Canvas, int PosX, out int PosY, string Title, array<string> LineText, optional out float LineHeight)
+function DrawMenu(
+    canvas Canvas,
+    int PosX,
+    out int PosY,
+    string Title,
+    array<string> LineText,
+    optional out float LineHeight
+    )
 {
-    local int   KeyNumber, i;
+    local int KeyNumber, i;
     local float XL;
 
     // Set correct LineHeight based on the player's local config for ConsoleFontSize
@@ -209,7 +216,7 @@ function DrawMenu(canvas Canvas, int PosX, out int PosY, string Title, array<str
 // Takes the number key pressed & executes a command based on the selection list
 function bool HandleInput(int KeyIn, array<string> SelectionList)
 {
-    local int    SelectionIndex;
+    local int SelectionIndex;
     local string CommandString, bDoAdminLogin; // bDoAdminLogin should be bool but needs to be another type so can be passed as out parameter to BuildCommandString
 
     if (KeyIn < 0 || KeyIn > 9)
@@ -237,7 +244,7 @@ function bool HandleInput(int KeyIn, array<string> SelectionList)
         }
         else
         {
-            GotoState('');    // close menu
+            GotoState(''); // close menu
         }
 
         return true;
@@ -249,9 +256,9 @@ function bool HandleInput(int KeyIn, array<string> SelectionList)
 // Builds a command string for HandleInput function
 function BuildCommandString(out string CommandString, out int SelectionIndex, out string bDoAdminLogin) // bDoAdminLogin is really bool but they don't work with 'out' paramenters
 {
-    if (bTreatSelectionAsOneWord)// if flagged, replace any spaces in selected name (e.g. player, objective or role name) with non-breaking spaces to stop it being split
+    if (bTreatSelectionAsOneWord) // if flagged, replace any spaces in selected name (e.g. player, objective or role name) with non-breaking spaces to stop it being split
     {
-        CommandString = Repl(CommandString," "," ");
+        CommandString = Repl(CommandString, " ", " ");
     }
 
     if (SelectionPrefix != "")
@@ -298,7 +305,9 @@ simulated function ExecuteCommand(string CommandString, coerce bool bDoAdminLogi
             // Note: would like to check here if admin login was successful, but bIsAdmin won't have had time to replicate
             if (AdminName != "" && AdminPassword != "")
             {
-                PC.AdminLoginSilent(Class'DHAccessControl'.static.AdminMenuMutatorLoginPrefix() $ AdminName @ AdminPassword);
+                PC.AdminLoginSilent(
+                    Class'DHAccessControl'.static.AdminMenuMutatorLoginPrefix() $ AdminName @ AdminPassword
+                    );
                 bMenuDidAdminLogin = true;
             }
             else
