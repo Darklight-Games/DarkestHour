@@ -1024,6 +1024,9 @@ simulated function GetDampenAndSoundValue(ESurfaceTypes ST)
             DampenFactorParallel = 0.55;
             MyImpactSound = default.ImpactSoundGrass;
             break;
+
+        default:
+            break;
     }
 
     if (MyImpactSound != none)

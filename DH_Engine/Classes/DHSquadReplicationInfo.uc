@@ -2431,6 +2431,9 @@ function DHSquadRallyPoint SpawnRallyPoint(DHPlayer PC)
             case ERROR_BehindEnemyLines:
                 PC.ReceiveLocalizedMessage(SquadMessageClass, 80);
                 break;
+            case ERROR_None:
+            case ERROR_Fatal:
+                break;
         }
 
         return none;

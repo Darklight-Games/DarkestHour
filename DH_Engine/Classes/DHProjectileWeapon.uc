@@ -3340,6 +3340,9 @@ simulated function float GetScopePortalFOV()
             return ScopePortalFOV;
         case RO_ModelScopeHigh:
             return ScopePortalFOVHigh;
+        case RO_TextureScope:
+        case RO_None:
+            break;
     }
 
     return 0.0;
@@ -3353,6 +3356,9 @@ simulated function Vector GetScopePlayerViewOffset()
             return XoffsetScoped;
         case RO_ModelScopeHigh:
             return XoffsetHighDetail;
+        case RO_TextureScope:
+        case RO_None:
+            break;
     }
 
     return vect(0.0, 0.0, 0.0);
@@ -3370,6 +3376,8 @@ simulated function GetScopeScriptedTextureSize(out int Width, out int Height)
         case RO_ModelScopeHigh:
             Width = default.ScopeScriptedTextureSize;
             Height = default.ScopeScriptedTextureSize;
+            break;
+        case RO_None:
             break;
     }
 }

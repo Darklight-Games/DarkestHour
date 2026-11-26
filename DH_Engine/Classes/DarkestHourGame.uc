@@ -786,6 +786,7 @@ function Bot SpawnBot(optional string botName)
         switch (RI.PrimaryWeaponType)
         {
             case WT_SMG:
+            case WT_Assault:
                 NewBot.CombatStyle = 1.0 - (FRand() * 0.2);
                 NewBot.Accuracy = 0.3;
                 NewBot.StrafingAbility = 0.0;
@@ -809,6 +810,7 @@ function Bot SpawnBot(optional string botName)
                 NewBot.StrafingAbility = -1.0;
                 break;
 
+            case WT_PTRD:
             case WT_Sniper:
                 NewBot.CombatStyle = -1.0;
                 NewBot.Accuracy = 1.0;

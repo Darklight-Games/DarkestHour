@@ -547,6 +547,9 @@ function bool KeyEvent(out EInputKey Key, out EInputAction Action, float Delta)
                         return false;
                     }
                     break;
+
+                default:
+                    break;
             }
             break;
         case IST_Press:

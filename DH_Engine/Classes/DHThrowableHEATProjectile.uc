@@ -526,6 +526,9 @@ simulated function GetDampenAndSoundValue(ESurfaceTypes ST)
             DampenFactorParallel = 0.55;
             ImpactSound = Sound'Inf_Weapons_Foley.grenadeland';
             break;
+
+        default:
+            break;
     }
 }
 

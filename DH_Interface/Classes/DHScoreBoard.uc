@@ -287,6 +287,8 @@ function GetScoreboardColumnRenderInfo(int ScoreboardColumnIndex, DHPlayerReplic
                         case PATRON_Gold:
                             CRI.Icon = default.PatronGoldMaterial;
                             break;
+                        case PATRON_None:
+                            break;
                     }
 
                     CRI.IconColor = Class'UColor'.default.White;

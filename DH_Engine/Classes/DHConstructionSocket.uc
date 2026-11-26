@@ -140,6 +140,8 @@ simulated function bool IsForConstructionClass(DHActorProxy.Context Context, cla
                     break;
                 case Exclude:
                     return false;
+                case NoOp:
+                    break;
             }
         }
     }
@@ -155,6 +157,8 @@ simulated function bool IsForConstructionClass(DHActorProxy.Context Context, cla
                     break;
                 case Exclude:
                     return false;
+                case NoOp:
+                    break;
             }
         }
     }

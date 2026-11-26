@@ -70,6 +70,8 @@ static function string GetAlliedNationString(DH_LevelInfo.EAlliedNation AlliedNa
             return "USSR";
         case NATION_Poland:
             return "Poland";
+        case NATION_Czechoslovakia:
+            return "Czechoslovakia";
     }
 
     return "";

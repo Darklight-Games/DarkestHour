@@ -300,6 +300,8 @@ state Managed
                         PC.ReceiveLocalizedMessage(Class'DHIQMessage', 2);
                     }
                     break;
+                case REASON_None:
+                    break;
             }
         }
 

@@ -657,6 +657,11 @@ function UpdateRoles()
             case RER_Locked:
                 S @= "*" $ RoleLockedText $ "*";
                 break;
+            case RER_Fatal:
+            case RER_Enabled:
+            case RER_Limit:
+            case RER_Restricted:
+                break;
         }
 
         li_Roles.SetItemAtIndex(i, S);

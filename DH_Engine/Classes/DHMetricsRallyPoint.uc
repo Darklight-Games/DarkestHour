@@ -49,6 +49,8 @@ static function JSONValue GetDestroyedReasonValue(EDestroyedReason DestroyedReas
             return Class'JSONString'.static.Create("abandoned");
         case REASON_Encroached:
             return Class'JSONString'.static.Create("encroached");
+        case REASON_None:
+            break;
     }
 
     return Class'JSONLiteral'.static.CreateNull();
