@@ -1646,7 +1646,7 @@ simulated function SetupAnimationDrivers()
 
 simulated function UpdateAnimationDrivers()
 {
-    local int i, Rotation;
+    local int i, Yaw;
     local float Theta;
 
     for (i = 0; i < AnimationDrivers.Length; ++i)
@@ -1656,25 +1656,25 @@ simulated function UpdateAnimationDrivers()
             case ROTATION_Yaw:
                 if (CurrentAim.Yaw > 32768)
                 {
-                    Rotation = CurrentAim.Yaw - 65536;
+                    Yaw = CurrentAim.Yaw - 65536;
                 }
                 else
                 {
-                    Rotation = CurrentAim.Yaw;
+                    Yaw = CurrentAim.Yaw;
                 }
-                Theta = Class'UInterp'.static.MapRangeClamped(Rotation, MaxNegativeYaw, MaxPositiveYaw, 0.0, 1.0);
+                Theta = Class'UInterp'.static.MapRangeClamped(Yaw, MaxNegativeYaw, MaxPositiveYaw, 0.0, 1.0);
                 break;
             case ROTATION_Pitch:
                 if (CurrentAim.Pitch > 32768)
                 {
-                    Rotation = CurrentAim.Pitch - 65536;
+                    Yaw = CurrentAim.Pitch - 65536;
                 }
                 else
                 {
-                    Rotation = CurrentAim.Pitch;
+                    Yaw = CurrentAim.Pitch;
                 }
 
-                Theta = Class'UInterp'.static.MapRangeClamped(Rotation, GetGunPitchMin(), GetGunPitchMax(), 0.0, 1.0);
+                Theta = Class'UInterp'.static.MapRangeClamped(Yaw, GetGunPitchMin(), GetGunPitchMax(), 0.0, 1.0);
                 break;
         }
 
