@@ -47,4 +47,3 @@ defaultproperties
     End Object
     KParams=KParams0
 }
-

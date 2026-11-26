@@ -4,39 +4,39 @@
 //==============================================================================
 
 class DHConstruction_Vehicle extends DHConstruction
-    dependson(DH_LevelInfo)
     abstract
+    dependson(DH_LevelInfo)
     notplaceable;
 
-var class<DHVehicle>        VehicleClass;
+var class<DHVehicle> VehicleClass;
 
 enum ESeasonFilterOperation
 {
     SFO_Any,
-    SFO_None
+    SFO_None,
 };
 
 struct SeasonFilter
 {
     var array<DH_LevelInfo.ESeason> Seasons;
-    var ESeasonFilterOperation      Operation;
+    var ESeasonFilterOperation Operation;
 };
 
 // Options for the vehicle class. Used to store variants and skin variants.
 // Note that for simplicity's sake we assume that the entries are stored in ascending order of variants.
 struct SVehicleClass
 {
-    var class<DHVehicle>    VehicleClass;
-    var int                 VariantIndex;
+    var class<DHVehicle> VehicleClass;
+    var int VariantIndex;
 
     // If this is empty, the variant is always available.
     // Otherwise, the entry will only be available if it is one of the seasons listed.
-    var array<SeasonFilter>  SeasonFilters;
+    var array<SeasonFilter> SeasonFilters;
 };
 
-var array<SVehicleClass>    VehicleClasses;
+var array<SVehicleClass> VehicleClasses;
 
-var DHVehicle               Vehicle;
+var DHVehicle Vehicle;
 
 replication
 {
@@ -109,7 +109,7 @@ simulated state Dummy
 }
 
 // TODO: do we put this in the vehicle itself???
-function static UpdateProxy(DHActorProxy AP)
+static function UpdateProxy(DHActorProxy AP)
 {
     local int i, j;
     local DHActorProxyAttachment APA;
@@ -164,9 +164,13 @@ function static UpdateProxy(DHActorProxy AP)
             // If there are still any skin slots empty, just use the skins defined in the weapon class.
             for (j = 0; j < VehicleClass.default.PassengerWeapons[i].WeaponPawnClass.default.GunClass.default.Skins.Length; ++j)
             {
-                if ((j >= APA.Skins.Length || APA.Skins[j] == none) && VehicleClass.default.PassengerWeapons[i].WeaponPawnClass.default.GunClass.default.Skins[j] != none)
+                if ((j >= APA.Skins.Length || APA.Skins[j] == none)
+                    && VehicleClass.default.PassengerWeapons[i].WeaponPawnClass.default.GunClass.default.Skins[j]
+                        != none)
                 {
-                    APA.Skins[j] = AP.CreateProxyMaterial(VehicleClass.default.PassengerWeapons[i].WeaponPawnClass.default.GunClass.default.Skins[j]);
+                    APA.Skins[j] = AP.CreateProxyMaterial(
+                        VehicleClass.default.PassengerWeapons[i].WeaponPawnClass.default.GunClass.default.Skins[j]
+                        );
                 }
             }
 
@@ -233,7 +237,7 @@ function UpdateAppearance()
     SetCollisionSize(VehicleClass.default.CollisionRadius, VehicleClass.default.CollisionHeight);
 }
 
-function static GetCollisionSize(DHActorProxy.Context Context, out float NewRadius, out float NewHeight)
+static function GetCollisionSize(DHActorProxy.Context Context, out float NewRadius, out float NewHeight)
 {
     local class<DHVehicle> VehicleClass;
 
@@ -387,6 +391,7 @@ static function bool IsEntryAvailable(DHActorProxy.Context Context, int Index)
         {
             case SFO_Any:
                 bHasAny = false;
+
                 for (j = 0; j < default.VehicleClasses[Index].SeasonFilters[i].Seasons.Length; ++j)
                 {
                     if (default.VehicleClasses[Index].SeasonFilters[i].Seasons[j] == Context.LevelInfo.Season)
@@ -395,6 +400,7 @@ static function bool IsEntryAvailable(DHActorProxy.Context Context, int Index)
                         break;
                     }
                 }
+
                 if (!bHasAny)
                 {
                     return false;

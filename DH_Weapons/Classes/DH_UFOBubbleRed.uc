@@ -7,12 +7,12 @@ class DH_UFOBubbleRed extends DH_GeratPIIBullet;
 
 defaultproperties
 {
-    CollisionRadius=40.000000    
-    CollisionHeight=40.000000    
+    CollisionRadius=40.000000
+    CollisionHeight=40.000000
 
     bCollideActors=True
     bCollideWorld=True
-    
+
     bBlockActors=False
     bBlockPlayers=False
 

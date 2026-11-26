@@ -5,7 +5,7 @@
 
 class DHBulletHitRockEffectLarge extends Emitter;
 
-//particles:
+// particles:
 
 defaultproperties
 {

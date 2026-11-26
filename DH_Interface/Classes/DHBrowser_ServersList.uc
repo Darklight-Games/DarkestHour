@@ -7,11 +7,11 @@ class DHBrowser_ServersList extends UT2K4Browser_ServersList;
 
 const MAX_RULES_REFRESH_ATTEMPTS = 5;
 
-var(Style) noexport GUIStyles           WrongVersionStyle;
-var(Style) string                       WrongVersionStyleName;
-var        Color                        WrongVersionColor;
+var(Style) noexport GUIStyles WrongVersionStyle;
+var(Style) string WrongVersionStyleName;
+var Color WrongVersionColor;
 
-var int    ServerRulesRefreshAttempts;
+var int ServerRulesRefreshAttempts;
 
 function InitComponent(GUIController InController, GUIComponent InOwner)
 {
@@ -19,10 +19,10 @@ function InitComponent(GUIController InController, GUIComponent InOwner)
 
     if (WrongVersionStyleName != "" && WrongVersionStyle == none)
     {
-        WrongVersionStyle = InController.GetStyle(WrongVersionStyleName,FontScale);
+        WrongVersionStyle = InController.GetStyle(WrongVersionStyleName, FontScale);
     }
 
-    SetTimer(1.5,true);
+    SetTimer(1.5, true);
 }
 
 event Timer()
@@ -70,7 +70,10 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
         // Get the server's performance string
         if (Servers[SortData[i].SortItem].ServerInfo[j].Key ~= "AverageTick")
         {
-            HealthString = Class'DHLib'.static.GetServerHealthString(byte(Servers[SortData[i].SortItem].ServerInfo[j].Value), HealthColor);
+            HealthString = Class'DHLib'.static.GetServerHealthString(
+                byte(Servers[SortData[i].SortItem].ServerInfo[j].Value),
+                HealthColor
+                );
             HealthString = Class'GameInfo'.static.MakeColorCode(HealthColor) $ HealthString;
         }
 
@@ -109,7 +112,7 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
     {
         if (bSelected)
         {
-            Style.Draw(Canvas,MenuState,X,Y,W,H+1);
+            Style.Draw(Canvas, MenuState, X, Y, W, H + 1);
         }
 
         DStyle = Style;
@@ -124,9 +127,9 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
     // Vac Secured     16       //  Was Instagib        16
     // Standard        32
     // UT CLassic      64
-    Flags = Servers[SortData[i].SortItem].Flags;
+    flags = Servers[SortData[i].SortItem].Flags;
 
-    GetCellLeftWidth( 0, CellLeft, CellWidth );
+    GetCellLeftWidth(0, CellLeft, CellWidth);
     IconPosX = CellLeft;
     IconPosY = Y;
 
@@ -145,7 +148,7 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
                 Canvas.DrawColor = Canvas.MakeColor(255, 255, 255, 255);
 
                 Canvas.SetPos(IconPosX, IconPosY);
-                Canvas.DrawTile(Icons[k], DrawX, 14, 0, 0, DrawX+1.0, 15.0);
+                Canvas.DrawTile(Icons[k], DrawX, 14, 0, 0, DrawX + 1.0, 15.0);
 
                 IconPosX += 14;
             }
@@ -156,7 +159,9 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
 
     // Server Name
     GetCellLeftWidth(1, CellLeft, CellWidth);
-    DStyle.DrawText(Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Left, Servers[SortData[i].SortItem].ServerName, FontScale);
+    DStyle.DrawText(
+        Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Left, Servers[SortData[i].SortItem].ServerName, FontScale
+        );
 
     // Server Health
     GetCellLeftWidth(2, CellLeft, CellWidth);
@@ -172,13 +177,20 @@ function MyOnDrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, 
 
     // Map
     GetCellLeftWidth(5, CellLeft, CellWidth);
-    DStyle.DrawText(Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Center, Servers[SortData[i].SortItem].MapName, FontScale);
+    DStyle.DrawText(
+        Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Center, Servers[SortData[i].SortItem].MapName, FontScale
+        );
 
     // Players
     GetCellLeftWidth(6, CellLeft, CellWidth);
+
     if (Servers[SortData[i].SortItem].CurrentPlayers > 0 || Servers[SortData[i].SortItem].MaxPlayers > 0)
     {
-        DStyle.DrawText(Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Center, string(Servers[SortData[i].SortItem].CurrentPlayers) $ "/" $ string((Servers[SortData[i].SortItem].MaxPlayers & 255)), FontScale);
+        DStyle.DrawText(
+            Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Center,
+            string(Servers[SortData[i].SortItem].CurrentPlayers) $ "/"
+                $ string((Servers[SortData[i].SortItem].MaxPlayers & 255)), FontScale
+            );
     }
 
     // Ping

@@ -12,4 +12,3 @@ defaultproperties
     Skins(0)=Texture'DH_Artillery_tex.m45_trailer'
     TeamNum=ALLIES
 }
-

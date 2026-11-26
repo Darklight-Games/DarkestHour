@@ -5,9 +5,9 @@
 
 class DHMapVotingPage extends MapVotingPage;
 
-var localized string                            lmsgMapOutOfBounds;
-var localized string                            NoRestartMapPrivilegeText;
-var localized string                            NoChangeMapPrivilegeText;
+var localized string lmsgMapOutOfBounds;
+var localized string NoRestartMapPrivilegeText;
+var localized string NoChangeMapPrivilegeText;
 
 var automated moEditBox ed_Filter;
 var automated GUIButton b_FilterClear;
@@ -22,10 +22,10 @@ function InternalOnOpen()
 
 function bool AlignBK(Canvas C)
 {
-    i_MapCountListBackground.WinWidth  = lb_VoteCountListbox.MyList.ActualWidth();
+    i_MapCountListBackground.WinWidth = lb_VoteCountListbox.MyList.ActualWidth();
     i_MapCountListBackground.WinHeight = lb_VoteCountListbox.MyList.ActualHeight();
-    i_MapCountListBackground.WinLeft   = lb_VoteCountListbox.MyList.ActualLeft();
-    i_MapCountListBackground.WinTop    = lb_VoteCountListbox.MyList.ActualTop();
+    i_MapCountListBackground.WinLeft = lb_VoteCountListbox.MyList.ActualLeft();
+    i_MapCountListBackground.WinTop = lb_VoteCountListbox.MyList.ActualTop();
 
     return false;
 }
@@ -48,7 +48,7 @@ function ForceMapVote(GUIComponent Sender)
     {
         GameConfigIndex = int(co_GameType.GetExtra());
 
-        DHVRI.ServerForceMapVote(MapIndex,GameConfigIndex);
+        DHVRI.ServerForceMapVote(MapIndex, GameConfigIndex);
     }
 }
 
@@ -95,7 +95,7 @@ function SendVote(GUIComponent Sender)
 
             if (MVRI.MapList[MapIndex].bEnabled || PlayerOwner().PlayerReplicationInfo.bAdmin)
             {
-                MVRI.SendMapVote(MapIndex,GameConfigIndex);
+                MVRI.SendMapVote(MapIndex, GameConfigIndex);
             }
             else
             {
@@ -113,7 +113,7 @@ function SendVote(GUIComponent Sender)
 
             if (MVRI.MapList[MapIndex].bEnabled || PlayerOwner().PlayerReplicationInfo.bAdmin)
             {
-                MVRI.SendMapVote(MapIndex,GameConfigIndex);
+                MVRI.SendMapVote(MapIndex, GameConfigIndex);
             }
             else
             {
@@ -131,6 +131,8 @@ function bool InternalOnKeyEvent(out byte Key, out byte State, float Delta)
         DHMapVoteMultiColumnList(lb_MapListBox.List).SetFilterPattern(ed_Filter.GetText());
         return true;
     }
+
+    return false;
 }
 
 function bool InternalOnClick(GUIComponent Sender)
@@ -140,6 +142,8 @@ function bool InternalOnClick(GUIComponent Sender)
         OnFilterClear();
         return true;
     }
+
+    return false;
 }
 
 delegate OnFilterClear()

@@ -17,7 +17,7 @@ struct DistanceUnit
 {
     var localized string Name;
     var localized string Symbol;
-    var float Conversion;           // Conversion factor to Unreal units.
+    var float Conversion; // Conversion factor to Unreal units.
 };
 
 var array<DistanceUnit> DistanceUnits;

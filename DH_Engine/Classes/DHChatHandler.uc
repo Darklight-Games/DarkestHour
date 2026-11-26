@@ -25,7 +25,10 @@ function RegisterBroadcastHandler(BroadcastHandler NewBH)
     {
         if (NextBroadcastHandler == NewBH)
         {
-            Warn(Tag @ "RegisterBroadcastHandler: TRIED TO REGISTER" @ NewBH.Tag @ "as NextBroadcastHandler, when it's already recorded as NextBroadcastHandler !!!");
+            Warn(
+                Tag @ "RegisterBroadcastHandler: TRIED TO REGISTER" @ NewBH.Tag
+                    @ "as NextBroadcastHandler, when it's already recorded as NextBroadcastHandler !!!"
+                );
         }
 
         NextBroadcastHandler.RegisterBroadcastHandler(NewBH);

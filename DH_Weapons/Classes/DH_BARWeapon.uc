@@ -5,14 +5,13 @@
 
 class DH_BARWeapon extends DHAutoWeapon;
 
-var     bool    bSlowFireRate; // flags that the slower firing rate is currently selected
+var bool bSlowFireRate; // flags that the slower firing rate is currently selected
 
 simulated function UpdateFireRate()
 {
     if (bSlowFireRate)
     {
-        FireMode[0].FireRate = 0.2;  // slow rate ~330rpm (? to be tested)
-
+        FireMode[0].FireRate = 0.2; // slow rate ~330rpm (? to be tested)
     }
     else
     {

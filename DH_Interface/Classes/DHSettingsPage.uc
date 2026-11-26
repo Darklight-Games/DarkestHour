@@ -9,7 +9,7 @@ class DHSettingsPage extends UT2K4SettingsPage;
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
     local Rotator PlayerRot;
-    local int     i;
+    local int i;
 
     super(UT2K4MainPage).InitComponent(MyController, MyOwner); // skip over Super in UT2K4SettingsPage as we're re-stating it here
 

@@ -10,7 +10,6 @@ var bool bIsArtilleryExplosion;
 
 defaultproperties
 {
-    bIsArtilleryExplosion=false
     VehicleMomentumScaling=1.3
     KDamageImpulse=5000.0
     KDeathVel=300.0

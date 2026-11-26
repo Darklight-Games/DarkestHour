@@ -12,7 +12,7 @@ enum EPatronTier
     PATRON_Lead,
     PATRON_Bronze,
     PATRON_Silver,
-    PATRON_Gold
+    PATRON_Gold,
 };
 
 enum ERoleSelector
@@ -25,45 +25,44 @@ enum ERoleSelector
     ERS_ARTILLERY_SPOTTER,
     ERS_RADIOMAN,
     ERS_ADMIN,
-    ERS_PATRON
+    ERS_PATRON,
 };
 
-var     EPatronTier             PatronTier;
-var     bool                    bIsDeveloper;
-var     bool                    bIsIncognito;
-var     bool                    bIsPossesingPawn;
+var EPatronTier PatronTier;
+var bool bIsDeveloper;
+var bool bIsIncognito;
+var bool bIsPossesingPawn;
 
-var     float                   NameDrawStartTime;
-var     float                   LastNameDrawTime;
-var     int                     DHKills;
+var float NameDrawStartTime;
+var float LastNameDrawTime;
+var int DHKills;
 
 // Squad
-var     int                     SquadIndex;
-var     int                     SquadMemberIndex;
-var     bool                    bIsSquadAssistant;
+var int SquadIndex;
+var int SquadMemberIndex;
+var bool bIsSquadAssistant;
 
 // Scoring
-var     int                     TotalScore;
-var     int                     CategoryScores[2];
+var int TotalScore;
+var int CategoryScores[2];
 
-var     localized string        SquadLeaderAbbreviation;
-var     localized string        AssistantAbbreviation;
+var localized string SquadLeaderAbbreviation;
+var localized string AssistantAbbreviation;
 
-var     int                     PlayerIQ;
+var int PlayerIQ;
 
-var     int                     NoRallyPointsTime; // Time when SL lost all rally points
+var int NoRallyPointsTime; // Time when SL lost all rally points
 
 // Restrictions
-var     bool                    bRestrictOutboundVoice;    // Disable ability to speak in voice chat
-var     bool                    bRestrictLeaderPositions;  // Disable access to SL and ASL positions and ability to create squads
+var bool bRestrictOutboundVoice; // Disable ability to speak in voice chat
+var bool bRestrictLeaderPositions; // Disable access to SL and ASL positions and ability to create squads
 
 replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
-        SquadIndex, SquadMemberIndex, PatronTier, bIsDeveloper, DHKills, bIsSquadAssistant,
-        TotalScore, CategoryScores, PlayerIQ, NoRallyPointsTime, bIsIncognito, bIsPossesingPawn,
-        bRestrictOutboundVoice, bRestrictLeaderPositions;
+        SquadIndex, SquadMemberIndex, PatronTier, bIsDeveloper, DHKills, bIsSquadAssistant, TotalScore, CategoryScores,
+        PlayerIQ, NoRallyPointsTime, bIsIncognito, bIsPossesingPawn, bRestrictOutboundVoice, bRestrictLeaderPositions;
 }
 
 simulated function string GetNamePrefix()
@@ -117,7 +116,9 @@ simulated function bool IsSLorASL()
 
 simulated function bool IsInSquad()
 {
-    return Team != none && (Team.TeamIndex == AXIS_TEAM_INDEX || Team.TeamIndex == ALLIES_TEAM_INDEX) && SquadIndex != -1;
+    return Team != none
+        && (Team.TeamIndex == AXIS_TEAM_INDEX || Team.TeamIndex == ALLIES_TEAM_INDEX)
+        && SquadIndex != -1;
 }
 
 simulated function bool HasSquadMembers(int MinCount)
@@ -137,9 +138,7 @@ simulated function bool HasSquadMembers(int MinCount)
         SRI = PC.SquadReplicationInfo;
     }
 
-    return SRI != none &&
-           Team != none &&
-           SRI.GetMemberCount(Team.TeamIndex, SquadIndex) >= MinCount;
+    return SRI != none && Team != none && SRI.GetMemberCount(Team.TeamIndex, SquadIndex) >= MinCount;
 }
 
 simulated function bool IsPatron()
@@ -176,23 +175,28 @@ simulated function bool IsArtillerySpotter()
 
 simulated function bool IsAdmin()
 {
-    return self.bAdmin || self.bSilentAdmin
-      || (self.Level != none && self.Level.NetMode == NM_Standalone);
+    return bAdmin || bSilentAdmin || (Level != none && Level.NetMode == NM_Standalone);
 }
 
 // Will return true if passed two players that are in the same squad.
 simulated static function bool IsInSameSquad(DHPlayerReplicationInfo A, DHPlayerReplicationInfo B)
 {
-    return A != none && A.Team != none && B != none && B.Team != none &&
-          (A.Team.TeamIndex == AXIS_TEAM_INDEX || A.Team.TeamIndex == ALLIES_TEAM_INDEX) &&
-           A.Team.TeamIndex == B.Team.TeamIndex &&
-           A.SquadIndex >= 0 && A.SquadIndex == B.SquadIndex;
+    return A != none
+        && A.Team != none
+        && B != none
+        && B.Team != none
+        && (A.Team.TeamIndex == AXIS_TEAM_INDEX || A.Team.TeamIndex == ALLIES_TEAM_INDEX)
+        && A.Team.TeamIndex == B.Team.TeamIndex
+        && A.SquadIndex >= 0
+        && A.SquadIndex == B.SquadIndex;
 }
 
 // New helper function to check whether a player can be tank crew
 simulated static function bool IsPlayerTankCrew(Pawn P)
 {
-    return P != none && ROPlayerReplicationInfo(P.PlayerReplicationInfo) != none && ROPlayerReplicationInfo(P.PlayerReplicationInfo).RoleInfo != none
+    return P != none
+        && ROPlayerReplicationInfo(P.PlayerReplicationInfo) != none
+        && ROPlayerReplicationInfo(P.PlayerReplicationInfo).RoleInfo != none
         && ROPlayerReplicationInfo(P.PlayerReplicationInfo).RoleInfo.bCanBeTankCrew;
 }
 
@@ -203,7 +207,9 @@ simulated static function bool IsPlayerVehicleAccessRestricted(DHPlayer C)
 
 simulated static function bool IsPlayerLicensedToDrive(DHPlayer C)
 {
-    return C != none && DHPlayerReplicationInfo(C.PlayerReplicationInfo) != none && DHPlayerReplicationInfo(C.PlayerReplicationInfo).IsSLorASL();
+    return C != none
+        && DHPlayerReplicationInfo(C.PlayerReplicationInfo) != none
+        && DHPlayerReplicationInfo(C.PlayerReplicationInfo).IsSLorASL();
 }
 
 // Modified to fix bug where the last line was being drawn at top of screen, instead of in vertical sequence, so overwriting info in the 1st screen line
@@ -211,7 +217,10 @@ simulated function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 {
     if (Team != none)
     {
-        Canvas.DrawText("     PlayerName" @ PlayerName @ "Team" @ Team.GetHumanReadableName() $ "(" $ Team.TeamIndex $ ") has flag" @ HasFlag);
+        Canvas.DrawText(
+            "     PlayerName" @ PlayerName @ "Team" @ Team.GetHumanReadableName() $ "(" $ Team.TeamIndex
+                $ ") has flag" @ HasFlag
+            );
     }
     else
     {
@@ -222,7 +231,10 @@ simulated function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
     {
         YPos += YL;
         Canvas.SetPos(4.0, YPos); // bug was here, as it was setting Y draw position to YL not YPos
-        Canvas.DrawText("     bIsSpec:" $ bIsSpectator @ "OnlySpec:" $ bOnlySpectator @ "Waiting:" $ bWaitingPlayer @ "Ready:" $ bReadyToPlay @ "OutOfLives:" $ bOutOfLives);
+        Canvas.DrawText(
+            "     bIsSpec:" $ bIsSpectator @ "OnlySpec:" $ bOnlySpectator @ "Waiting:" $ bWaitingPlayer @ "Ready:"
+                $ bReadyToPlay @ "OutOfLives:" $ bOutOfLives
+            );
     }
 }
 
@@ -255,8 +267,7 @@ simulated function bool CheckRole(ERoleSelector RoleSelector)
 
 simulated function bool CanAccessCommandChannel()
 {
-    return IsAssistantLeader() ||
-           (IsSquadLeader() && HasSquadMembers(2));
+    return IsAssistantLeader() || (IsSquadLeader() && HasSquadMembers(2));
 }
 
 // Functions emptied out as RO/DH doesn't use a LocalStatsScreen actor, so all of this is just recording pointless information throughout each round
@@ -266,8 +277,20 @@ function AddWeaponDeath(class<DamageType> D);
 function AddWeaponDeathHolding(class<Weapon> W);
 function AddVehicleDeath(class<DamageType> D);
 function AddVehicleDeathDriving(class<Vehicle> V);
-simulated function UpdateWeaponStats(TeamPlayerReplicationInfo PRI, class<Weapon> W, int NewKills, int NewDeaths, int NewDeathsHolding);
-simulated function UpdateVehicleStats(TeamPlayerReplicationInfo PRI, class<Vehicle> V, int NewKills, int NewDeaths, int NewDeathsDriving);
+simulated function UpdateWeaponStats(
+    TeamPlayerReplicationInfo PRI,
+    class<Weapon> W,
+    int NewKills,
+    int NewDeaths,
+    int NewDeathsHolding
+    );
+simulated function UpdateVehicleStats(
+    TeamPlayerReplicationInfo PRI,
+    class<Vehicle> V,
+    int NewKills,
+    int NewDeaths,
+    int NewDeathsDriving
+    );
 
 defaultproperties
 {

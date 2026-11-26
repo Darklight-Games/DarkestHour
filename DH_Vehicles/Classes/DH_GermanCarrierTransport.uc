@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_GermanCarrierTransport extends DHVehicle;  //to do: destroyed texture
+class DH_GermanCarrierTransport extends DHVehicle; // to do: destroyed texture
 
 simulated event DestroyAppearance()
 {

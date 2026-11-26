@@ -5,7 +5,7 @@
 
 class DH_M1GarandWeapon extends DHProjectileWeapon;
 
-var     bool    bIsLastRound;
+var bool bIsLastRound;
 
 // Modified to support garand last round clip eject for client only
 simulated function Fire(float F)

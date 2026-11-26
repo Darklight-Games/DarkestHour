@@ -11,10 +11,10 @@
 
 class DH_ISU152CannonPawn extends DHSovietCannonPawn;
 
-const            SECONDARY_PERISCOPE_INDEX = 2;
-var     Material SecondaryPeriscopeOverlay;
+const SECONDARY_PERISCOPE_INDEX = 2;
+var Material SecondaryPeriscopeOverlay;
 
-var     float    PeriscopeVisibleFOV[2]; // the visible FOV when using the two periscope views (1st is unmagnified, 2nd is 5x magnification)
+var float PeriscopeVisibleFOV[2]; // the visible FOV when using the two periscope views (1st is unmagnified, 2nd is 5x magnification)
 
 // Modified to add a little hack so various other functionality recognises an extra periscope position, without having to override lots of other stuff
 // We just flip the PeriscopePositionIndex to match the player's current position whenever he's in either of the two periscope positions
@@ -38,7 +38,8 @@ simulated function DrawPeriscopeOverlay(Canvas C)
 
     if (DriverPositionIndex == SECONDARY_PERISCOPE_INDEX)
     {
-        ScreenWidthProportion = PeriscopeVisibleFOV[DriverPositionIndex - 1] / DriverPositions[PeriscopePositionIndex].ViewFOV;
+        ScreenWidthProportion = PeriscopeVisibleFOV[DriverPositionIndex - 1]
+            / DriverPositions[PeriscopePositionIndex].ViewFOV;
         TextureSize = float(SecondaryPeriscopeOverlay.MaterialUSize());
         TilePixelWidth = TextureSize / ScreenWidthProportion;
         TilePixelHeight = TilePixelWidth * float(C.SizeY) / float(C.SizeX);
@@ -46,13 +47,14 @@ simulated function DrawPeriscopeOverlay(Canvas C)
         TileStartPosV = (TextureSize - TilePixelHeight) / 2.0;
         C.SetPos(0.0, 0.0);
 
-        C.DrawTile(SecondaryPeriscopeOverlay, C.SizeX, C.SizeY, TileStartPosU, TileStartPosV, TilePixelWidth, TilePixelHeight);
+        C.DrawTile(
+            SecondaryPeriscopeOverlay, C.SizeX, C.SizeY, TileStartPosU, TileStartPosV, TilePixelWidth, TilePixelHeight
+            );
     }
     else
     {
         super.DrawPeriscopeOverlay(C);
     }
-
 }
 
 defaultproperties
@@ -79,7 +81,7 @@ defaultproperties
     CannonScopeCenter=Texture'Vehicle_Optic.T3476_sight_mover'
     GunsightSize=0.424 // 18 degrees visible FOV at 2x magnification (ST-10 sight)
     DestroyedGunsightOverlay=Texture'DH_VehicleOpticsDestroyed_tex.PZ4_sight_destroyed' // matches size of gunsight
-    PeriscopeOverlay=Texture'DH_VehicleOptics_tex.PERISCOPE_overlay_Allied
+    PeriscopeOverlay=Texture'DH_VehicleOptics_tex.PERISCOPE_overlay_Allied'
     SecondaryPeriscopeOverlay=Texture'DH_VehicleOptics_tex.Soviet.TNK-1_periscope'
     AmmoShellTexture=Texture'DH_InterfaceArt_tex.ISU152_shell'
     AmmoShellReloadTexture=Texture'DH_InterfaceArt_tex.ISU152_shell_reload'

@@ -5,21 +5,21 @@
 
 class DHTab_DetailSettings extends ROTab_DetailSettings;
 
-var automated moCheckBox        ch_DynamicFogRatio;
-var bool                        bUseDynamicFogRatio;
+var automated moCheckBox ch_DynamicFogRatio;
+var bool bUseDynamicFogRatio;
 
-var automated moCheckBox        ch_UseVSync;
-var bool                        bUseVSync;              // The optional variable already exists as UseVSync under D3DDrv.RENDERDEVICE
+var automated moCheckBox ch_UseVSync;
+var bool bUseVSync; // The optional variable already exists as UseVSync under D3DDrv.RENDERDEVICE
 
-var automated moNumericEdit     nu_MinDesiredFPS;
-var int                         NumMinDesiredFPS;
+var automated moNumericEdit nu_MinDesiredFPS;
+var int NumMinDesiredFPS;
 
-var automated moSlider          sl_CorpseStayTime;
-var int                         CorpseStayNum;
+var automated moSlider sl_CorpseStayTime;
+var int CorpseStayNum;
 
-var bool                        bIsUpdatingGameDetails; // When true, we are in the process of updating all of the options via the Game details option
+var bool bIsUpdatingGameDetails; // When true, we are in the process of updating all of the options via the Game details option
 
-var localized string            NoneText;
+var localized string NoneText;
 
 function SetupPositions()
 {
@@ -41,7 +41,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     RemoveComponent(ch_Advanced);
 }
 
-//Overrided to remove extra options for scope detail
+// Overrided to remove extra options for scope detail
 function MyGetComboOptions(moComboBox Combo, out array<GUIListElem> Options)
 {
     local int i;
@@ -152,19 +152,19 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
 
         case ch_UseVSync:
             bUseVSync = bool(PC.ConsoleCommand("get" @ co_RenderDevice.GetComponentValue() @ "UseVSync")); // Get the UseVSync value for the current render device
-            ch_UseVSync.SetComponentValue(bUseVSync,true);
+            ch_UseVSync.SetComponentValue(bUseVSync, true);
             break;
 
         case ch_MotionBlur:
             bMotionBlur = bool(PC.ConsoleCommand("get ROEngine.ROPlayer bUseBlurEffect"));
             bMotionBlurD = bMotionBlur;
-            ch_MotionBlur.SetComponentValue(bMotionBlur,true);
+            ch_MotionBlur.SetComponentValue(bMotionBlur, true);
             break;
 
         case ch_HDR:
             bHDR = bool(PC.ConsoleCommand("get ini:Engine.Engine.ViewportManager Bloom"));
             bHDRD = bHDR;
-            ch_HDR.SetComponentValue(bHDR,true);
+            ch_HDR.SetComponentValue(bHDR, true);
             break;
 
         case ch_Advanced:
@@ -227,7 +227,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             break;
 
         default:
-            super(UT2K4Tab_DetailSettings).InternalOnLoadINI(sender, s);
+            super(UT2K4Tab_DetailSettings).InternalOnLoadINI(Sender, s);
     }
 
     // Post-super checks
@@ -412,14 +412,14 @@ function UpdateGlobalDetails()
     switch (iGlobalDetails)
     {
         case 0: // Lowest
-            co_Texture.SetIndex(0);         // Range = 0 - 8
-            co_Char.SetIndex(0);            // Range = 0 - 8
-            co_World.SetIndex(0);           // Range = 0 - 2
-            co_ScopeDetail.SetIndex(1);     // Range = 0 - 2 , 1 being lowest
-            co_Physics.SetIndex(0);         // Range = 0 - 2
-            co_Decal.SetIndex(0);           // Range = 0 - 5
-            co_Shadows.SetIndex(0);         // Range = 0 - 2 (0 - 1 sometimes -- check that!)
-            co_MeshLOD.SetIndex(0);         // Range = 0 - 3
+            co_Texture.SetIndex(0); // Range = 0 - 8
+            co_Char.SetIndex(0); // Range = 0 - 8
+            co_World.SetIndex(0); // Range = 0 - 2
+            co_ScopeDetail.SetIndex(1); // Range = 0 - 2 , 1 being lowest
+            co_Physics.SetIndex(0); // Range = 0 - 2
+            co_Decal.SetIndex(0); // Range = 0 - 5
+            co_Shadows.SetIndex(0); // Range = 0 - 2 (0 - 1 sometimes -- check that!)
+            co_MeshLOD.SetIndex(0); // Range = 0 - 3
             co_MultiSamples.SetIndex(0);
             co_Anisotropy.SetIndex(0);
             ch_ForceFSAAScreenshotSupport.SetComponentValue(false, false);
@@ -439,14 +439,14 @@ function UpdateGlobalDetails()
             break;
 
         case 1: // Low
-            co_Texture.SetIndex(3);         // Range = 0 - 8
-            co_Char.SetIndex(3);            // Range = 0 - 8
-            co_World.SetIndex(0);           // Range = 0 - 2
-            co_ScopeDetail.SetIndex(1);     // Range = 0 - 2 , 1 being lowest
-            co_Physics.SetIndex(0);         // Range = 0 - 2
-            co_Decal.SetIndex(1);           // Range = 0 - 5
-            co_Shadows.SetIndex(1);         // Range = 0 - 2 (0 - 1 sometimes -- check that!)
-            co_MeshLOD.SetIndex(1);         // Range = 0 - 3
+            co_Texture.SetIndex(3); // Range = 0 - 8
+            co_Char.SetIndex(3); // Range = 0 - 8
+            co_World.SetIndex(0); // Range = 0 - 2
+            co_ScopeDetail.SetIndex(1); // Range = 0 - 2 , 1 being lowest
+            co_Physics.SetIndex(0); // Range = 0 - 2
+            co_Decal.SetIndex(1); // Range = 0 - 5
+            co_Shadows.SetIndex(1); // Range = 0 - 2 (0 - 1 sometimes -- check that!)
+            co_MeshLOD.SetIndex(1); // Range = 0 - 3
             co_MultiSamples.SetIndex(0);
 
             if (AnisotropyModes.Length > 1)
@@ -474,14 +474,14 @@ function UpdateGlobalDetails()
             break;
 
         case 2: // Medium
-            co_Texture.SetIndex(5);         // Range = 0 - 8
-            co_Char.SetIndex(5);            // Range = 0 - 8
-            co_World.SetIndex(1);           // Range = 0 - 2
-            co_ScopeDetail.SetIndex(1);     // Range = 0 - 2 , 1 being lowest
-            co_Physics.SetIndex(1);         // Range = 0 - 2
-            co_Decal.SetIndex(2);           // Range = 0 - 5
-            co_Shadows.SetIndex(1);         // Range = 0 - 2 (0 - 1 sometimes -- check that!)
-            co_MeshLOD.SetIndex(2);         // Range = 0 - 3
+            co_Texture.SetIndex(5); // Range = 0 - 8
+            co_Char.SetIndex(5); // Range = 0 - 8
+            co_World.SetIndex(1); // Range = 0 - 2
+            co_ScopeDetail.SetIndex(1); // Range = 0 - 2 , 1 being lowest
+            co_Physics.SetIndex(1); // Range = 0 - 2
+            co_Decal.SetIndex(2); // Range = 0 - 5
+            co_Shadows.SetIndex(1); // Range = 0 - 2 (0 - 1 sometimes -- check that!)
+            co_MeshLOD.SetIndex(2); // Range = 0 - 3
             co_MultiSamples.SetIndex(0);
 
             if (AnisotropyModes.Length > 2)
@@ -513,14 +513,14 @@ function UpdateGlobalDetails()
             break;
 
         case 3: // High
-            co_Texture.SetIndex(6);         // Range = 0 - 8
-            co_Char.SetIndex(6);            // Range = 0 - 8
-            co_World.SetIndex(2);           // Range = 0 - 2
-            co_ScopeDetail.SetIndex(0);     // Range = 0 - 2 , 1 being lowest
-            co_Physics.SetIndex(1);         // Range = 0 - 2
-            co_Decal.SetIndex(3);           // Range = 0 - 5
-            co_Shadows.SetIndex(1);         // Range = 0 - 2 (0 - 1 sometimes -- check that!)
-            co_MeshLOD.SetIndex(2);         // Range = 0 - 3
+            co_Texture.SetIndex(6); // Range = 0 - 8
+            co_Char.SetIndex(6); // Range = 0 - 8
+            co_World.SetIndex(2); // Range = 0 - 2
+            co_ScopeDetail.SetIndex(0); // Range = 0 - 2 , 1 being lowest
+            co_Physics.SetIndex(1); // Range = 0 - 2
+            co_Decal.SetIndex(3); // Range = 0 - 5
+            co_Shadows.SetIndex(1); // Range = 0 - 2 (0 - 1 sometimes -- check that!)
+            co_MeshLOD.SetIndex(2); // Range = 0 - 3
             co_MultiSamples.SetIndex(0);
 
             if (MultiSampleModes.Length > 1)
@@ -565,14 +565,14 @@ function UpdateGlobalDetails()
             break;
 
         case 4: // Higher
-            co_Texture.SetIndex(7);         // Range = 0 - 8
-            co_Char.SetIndex(7);            // Range = 0 - 8
-            co_World.SetIndex(2);           // Range = 0 - 2
-            co_ScopeDetail.SetIndex(2);     // Range = 0 - 2 , 1 being lowest
-            co_Physics.SetIndex(1);         // Range = 0 - 2
-            co_Decal.SetIndex(4);           // Range = 0 - 5
-            co_Shadows.SetIndex(min(co_Shadows.ItemCount() - 1, 3));  // Range = 0 - 2 (0 - 1 sometimes -- check that!)
-            co_MeshLOD.SetIndex(2);         // Range = 0 - 3
+            co_Texture.SetIndex(7); // Range = 0 - 8
+            co_Char.SetIndex(7); // Range = 0 - 8
+            co_World.SetIndex(2); // Range = 0 - 2
+            co_ScopeDetail.SetIndex(2); // Range = 0 - 2 , 1 being lowest
+            co_Physics.SetIndex(1); // Range = 0 - 2
+            co_Decal.SetIndex(4); // Range = 0 - 5
+            co_Shadows.SetIndex(min(co_Shadows.ItemCount() - 1, 3)); // Range = 0 - 2 (0 - 1 sometimes -- check that!)
+            co_MeshLOD.SetIndex(2); // Range = 0 - 3
 
             if (MultiSampleModes.Length > 2)
             {
@@ -620,16 +620,17 @@ function UpdateGlobalDetails()
             break;
 
         case 5: // Highest
-            co_Texture.SetIndex(8);         // Range = 0 - 8
-            co_Char.SetIndex(8);            // Range = 0 - 8
-            co_World.SetIndex(2);           // Range = 0 - 2
-            co_ScopeDetail.SetIndex(2);     // Range = 0 - 2 , 1 being lowest
-            co_Physics.SetIndex(2);         // Range = 0 - 2
-            co_Decal.SetIndex(5);           // Range = 0 - 5
-            co_Shadows.SetIndex(min(co_Shadows.ItemCount() - 1, 3));  // Range = 0 - 2 (0 - 1 sometimes -- check that!)
-            co_MeshLOD.SetIndex(3);         // Range = 0 - 3
+            co_Texture.SetIndex(8); // Range = 0 - 8
+            co_Char.SetIndex(8); // Range = 0 - 8
+            co_World.SetIndex(2); // Range = 0 - 2
+            co_ScopeDetail.SetIndex(2); // Range = 0 - 2 , 1 being lowest
+            co_Physics.SetIndex(2); // Range = 0 - 2
+            co_Decal.SetIndex(5); // Range = 0 - 5
+            co_Shadows.SetIndex(min(co_Shadows.ItemCount() - 1, 3)); // Range = 0 - 2 (0 - 1 sometimes -- check that!)
+            co_MeshLOD.SetIndex(3); // Range = 0 - 3
 
-            if (((bool(PC.ConsoleCommand("ISNVIDIAGPU"))) && (!bool(PC.ConsoleCommand("SUPPORTEDMULTISAMPLE 4"))) || (!bool(PC.ConsoleCommand("ISNVIDIAGPU"))))
+            if ((bool(PC.ConsoleCommand("ISNVIDIAGPU")) && !bool(PC.ConsoleCommand("SUPPORTEDMULTISAMPLE 4"))
+                    || !bool(PC.ConsoleCommand("ISNVIDIAGPU")))
                 && (MultiSampleModes.Length > 3))
             {
                 co_MultiSamples.SetIndex(3);
@@ -676,8 +677,8 @@ function UpdateGlobalDetailsVisibility()
 
     if (co_RenderDevice.GetExtra() != RenderMode[0])
     {
-       co_MultiSamples.DisableMe();
-       ch_ForceFSAAScreenshotSupport.DisableMe();
+        co_MultiSamples.DisableMe();
+        ch_ForceFSAAScreenshotSupport.DisableMe();
     }
 }
 
@@ -805,7 +806,7 @@ function SaveSettings()
 
     if (bSavePlayerConfig)
     {
-       Class'ROPlayer'.static.StaticSaveConfig();
+        Class'ROPlayer'.static.StaticSaveConfig();
     }
 }
 
@@ -813,16 +814,16 @@ function bool RenderDeviceClick(byte Btn)
 {
     switch (Btn)
     {
-    case QBTN_Yes:
-        SaveSettings();
-        Console(Controller.Master.Console).DelayedConsoleCommand("relaunch -mod=DarkestHour");
-        break;
+        case QBTN_Yes:
+            SaveSettings();
+            Console(Controller.Master.Console).DelayedConsoleCommand("relaunch -mod=DarkestHour");
+            break;
 
-    case QBTN_Cancel:
-        sRenDev = sRenDevD;
-        co_RenderDevice.Find(sRenDev);
-        co_RenderDevice.SetComponentValue(sRenDev, true);
-        break;
+        case QBTN_Cancel:
+            sRenDev = sRenDevD;
+            co_RenderDevice.Find(sRenDev);
+            co_RenderDevice.SetComponentValue(sRenDev, true);
+            break;
     }
 
     return true;

@@ -6,9 +6,9 @@
 class DHMetrics extends Actor
     notplaceable;
 
-var private Hashtable_string_Object         Players;
-var private array<DHMetricsRound>           Rounds;
-var private array<DHMetricsTextMessage>     TextMessages;
+var private Hashtable_string_Object Players;
+var private array<DHMetricsRound> Rounds;
+var private array<DHMetricsTextMessage> TextMessages;
 
 function PostBeginPlay()
 {
@@ -65,14 +65,17 @@ function WriteToFile()
         .Put("rounds", Class'JSONArray'.static.FromSerializables(Rounds))
         .Put("text_messages", Class'JSONArray'.static.FromSerializables(TextMessages))
         .PutString("version", Class'DHBuildManifest'.default.Version.ToString())
-        .Put("server", (new Class'JSONObject')
-            .PutString("name", Level.Game.GameReplicationInfo.ServerName))
-        .Put("map", (new Class'JSONObject')
-            .PutString("name", Class'DHLib'.static.GetMapName(Level))
-            .PutInteger("offset", GRI.OverheadOffset)
-            .Put("bounds", (new Class'JSONObject')
-                .PutVector("ne", GRI.NorthEastBounds)
-                .PutVector("sw", GRI.SouthWestBounds)));
+        .Put("server", (new Class'JSONObject').PutString("name", Level.Game.GameReplicationInfo.ServerName))
+        .Put(
+            "map",
+            (new Class'JSONObject')
+                .PutString("name", Class'DHLib'.static.GetMapName(Level))
+                .PutInteger("offset", GRI.OverheadOffset)
+                .Put(
+                    "bounds",
+                    (new Class'JSONObject').PutVector("ne", GRI.NorthEastBounds).PutVector("sw", GRI.SouthWestBounds)
+                    )
+            );
 
     F = Spawn(Class'FileLog');
     F.OpenLog(Class'DateTime'.static.Now(self).IsoFormat(), "json");
@@ -259,7 +262,14 @@ function OnConstructionBuilt(DHConstruction Construction, int RoundTime)
     Rounds[0].Constructions[Rounds[0].Constructions.Length] = C;
 }
 
-function OnPlayerFragged(PlayerController Killer, PlayerController Victim, class<DamageType> DamageType, Vector HitLocation, int HitIndex, int RoundTime)
+function OnPlayerFragged(
+    PlayerController Killer,
+    PlayerController Victim,
+    class<DamageType> DamageType,
+    Vector HitLocation,
+    int HitIndex,
+    int RoundTime
+    )
 {
     local DHMetricsFrag F;
     local DHVehicle KillerVehicle, VictimVehicle;
@@ -271,7 +281,7 @@ function OnPlayerFragged(PlayerController Killer, PlayerController Victim, class
 
     F = new Class'DHMetricsFrag';
     F.DamageType = DamageType;
-    F.HitIndex  = HitIndex;
+    F.HitIndex = HitIndex;
     F.RoundTime = RoundTime;
 
     // Killer
@@ -311,7 +321,13 @@ function OnPlayerFragged(PlayerController Killer, PlayerController Victim, class
     Rounds[0].Frags[Rounds[0].Frags.Length] = F;
 }
 
-function OnVehicleFragged(PlayerController Killer, DHVehicle Vehicle, class<DamageType> DamageType, Vector HitLocation, int RoundTime)
+function OnVehicleFragged(
+    PlayerController Killer,
+    DHVehicle Vehicle,
+    class<DamageType> DamageType,
+    Vector HitLocation,
+    int RoundTime
+    )
 {
     local DHMetricsVehicleFrag F;
     local DHVehicle KillerVehicle;
@@ -397,9 +413,7 @@ function AddEvent(string Type, JSONObject Data)
         return;
     }
 
-    Rounds[0].Events[Rounds[0].Events.Length] = (new Class'JSONObject')
-        .PutString("type", Type)
-        .Put("data", Data);
+    Rounds[0].Events[Rounds[0].Events.Length] = (new Class'JSONObject').PutString("type", Type).Put("data", Data);
 }
 
 defaultproperties
@@ -407,4 +421,3 @@ defaultproperties
     RemoteRole=ROLE_None
     bHidden=true
 }
-

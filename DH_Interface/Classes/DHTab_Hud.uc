@@ -5,11 +5,11 @@
 
 class DHTab_Hud extends ROTab_Hud;
 
-var automated moCheckBox    ch_SimpleColours;
-var automated moCheckBox    ch_ShowChatMessages;
-var automated moCheckBox    ch_ShowDeathMessages;
-var automated moCheckBox    ch_UseTechnicalAmmoNames;
-var automated moCheckBox    ch_UseNativeItemNames;
+var automated moCheckBox ch_SimpleColours;
+var automated moCheckBox ch_ShowChatMessages;
+var automated moCheckBox ch_ShowDeathMessages;
+var automated moCheckBox ch_UseTechnicalAmmoNames;
+var automated moCheckBox ch_UseNativeItemNames;
 
 var bool bSimpleColours;
 var bool bShowChatMessages;
@@ -41,6 +41,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
     local DHPlayer DHP;
 
     DHP = DHPlayer(PlayerOwner());
+
     if (DHP != none)
     {
         H = DHHud(DHP.myHUD);
@@ -69,12 +70,12 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             {
                 bShowChatMessages = bool(Class'DHHud'.default.ConsoleMessageCount);
             }
-            ch_ShowChatMessages.SetComponentValue(bShowChatMessages,true);
+            ch_ShowChatMessages.SetComponentValue(bShowChatMessages, true);
             break;
         case ch_ShowDeathMessages:
-             bShowDeathMessages = Class'DHHud'.default.bShowDeathMessages;
-             ch_ShowDeathMessages.SetComponentValue(bShowDeathMessages, true);
-             break;
+            bShowDeathMessages = Class'DHHud'.default.bShowDeathMessages;
+            ch_ShowDeathMessages.SetComponentValue(bShowDeathMessages, true);
+            break;
         case ch_UseNativeRoleNames:
             if (DHP != none)
             {
@@ -85,7 +86,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
                 bUseNativeRoleNames = Class'DHPlayer'.default.bUseNativeRoleNames;
             }
             bUseNativeRoleNamesD = bUseNativeRoleNames;
-            ch_UseNativeRoleNames.SetComponentValue(bUseNativeRoleNames,true);
+            ch_UseNativeRoleNames.SetComponentValue(bUseNativeRoleNames, true);
             break;
         case ch_UseTechnicalAmmoNames:
             if (H != none)
@@ -96,7 +97,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             {
                 bUseTechnicalAmmoNames = Class'DHHud'.default.bUseTechnicalAmmoNames;
             }
-            ch_UseTechnicalAmmoNames.SetComponentValue(bUseTechnicalAmmoNames,true);
+            ch_UseTechnicalAmmoNames.SetComponentValue(bUseTechnicalAmmoNames, true);
             break;
 
         case ch_UseNativeItemNames:
@@ -108,7 +109,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             {
                 bUseNativeItemNames = Class'DHPlayer'.default.bUseNativeItemNames;
             }
-            ch_UseNativeItemNames.SetComponentValue(bUseNativeItemNames,true);
+            ch_UseNativeItemNames.SetComponentValue(bUseNativeItemNames, true);
             break;
         case ch_ShowCompass:
             if (ROH != none)
@@ -119,7 +120,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             {
                 bShowCompass = Class'ROHud'.default.bShowCompass;
             }
-            ch_ShowCompass.SetComponentValue(bShowCompass,true);
+            ch_ShowCompass.SetComponentValue(bShowCompass, true);
             break;
         case sl_Opacity:
             fOpacity = (PlayerOwner().myHUD.HudOpacity / 255) * 100;
@@ -133,22 +134,30 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             if (DHP != none)
             {
                 if (DHP.bShowHints)
+                {
                     HintLevel = 1;
+                }
                 else
+                {
                     HintLevel = 2;
+                }
             }
             else
             {
                 if (Class'DHPlayer'.default.bShowHints)
+                {
                     HintLevel = 1;
+                }
                 else
+                {
                     HintLevel = 2;
+                }
             }
             HintLevelD = HintLevel;
             co_Hints.SilentSetIndex(HintLevel);
             break;
         default:
-            super(UT2K4Tab_HudSettings).InternalOnLoadINI(sender, s);
+            super(UT2K4Tab_HudSettings).InternalOnLoadINI(Sender, s);
     }
 }
 
@@ -193,9 +202,9 @@ function SaveSettings()
         }
     }
 
-    //var int HintLevel, HintLevelD; // 0 = all hints, 1 = new hints, 2 = no hints
+    // var int HintLevel, HintLevelD; // 0 = all hints, 1 = new hints, 2 = no hints
 
-    //function is a mess but there's sort of no way around it since you need to run the console commands randomly
+    // function is a mess but there's sort of no way around it since you need to run the console commands randomly
     if (HintLevelD != HintLevel)
     {
         if (HintLevel == 0) // 0 = all hints
@@ -224,14 +233,14 @@ function SaveSettings()
         {
             if (PC != none)
             {
-                PC.bShowHints = HintLevel == 1; //true if (new hints), false if (no hints)
+                PC.bShowHints = HintLevel == 1; // true if (new hints), false if (no hints)
                 PC.ConsoleCommand("set DH_Engine.DHPlayer bShowHints" @ string(HintLevel == 1));
-                PC.UpdateHintManagement(HintLevel == 1); //true if (new hints), false if (no hints)
+                PC.UpdateHintManagement(HintLevel == 1); // true if (new hints), false if (no hints)
                 PC.SaveConfig();
             }
             else
             {
-                Class'DHPlayer'.default.bShowHints = HintLevel == 1; //true if (new hints), false if (no hints)
+                Class'DHPlayer'.default.bShowHints = HintLevel == 1; // true if (new hints), false if (no hints)
                 Class'DHPlayer'.static.StaticSaveConfig();
             }
         }
@@ -307,7 +316,7 @@ function InternalOnChange(GUIComponent Sender)
             break;
         case nu_MsgCount:
             iCount = nu_MsgCount.GetValue();
-            ch_ShowChatMessages.SetComponentValue(bool(iCount),true);
+            ch_ShowChatMessages.SetComponentValue(bool(iCount), true);
             break;
         case ch_SimpleColours:
             bSimpleColours = ch_SimpleColours.IsChecked();

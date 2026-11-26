@@ -10,7 +10,10 @@ simulated function PostBeginPlay()
 {
     super.PostBeginPlay();
 
-    PassengerWeapons[1].WeaponPawnClass = class<VehicleWeaponPawn>(DynamicLoadObject("DH_Guns.DH_Sdkfz105CannonPawn", Class'Class'));
+    PassengerWeapons[1].WeaponPawnClass = class<VehicleWeaponPawn>(DynamicLoadObject(
+        "DH_Guns.DH_Sdkfz105CannonPawn",
+        Class'Class'
+        ));
 }
 
 // Modified to match the windscreen camo to vehicle's 'cabin' texture

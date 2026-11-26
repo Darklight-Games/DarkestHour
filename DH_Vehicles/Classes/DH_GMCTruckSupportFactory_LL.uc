@@ -11,4 +11,3 @@ defaultproperties
     Skins(0)=Texture'DH_GMC_tex.GMC_Generic'
     Skins(1)=Texture'DH_GMC_tex.GMC_Canvas'
 }
-

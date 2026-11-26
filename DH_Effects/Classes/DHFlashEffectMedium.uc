@@ -5,7 +5,6 @@
 
 class DHFlashEffectMedium extends Emitter;
 
-
 defaultproperties
 {
     LifeSpan=0.15

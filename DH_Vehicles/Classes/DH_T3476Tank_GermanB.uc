@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_T3476Tank_GermanB extends DH_T3476Tank; //alternative skin
+class DH_T3476Tank_GermanB extends DH_T3476Tank; // alternative skin
 
 defaultproperties
 {

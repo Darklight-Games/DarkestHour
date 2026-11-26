@@ -9,8 +9,8 @@ class DHHighROFWeaponAttachment extends DHWeaponAttachment
 // Struct that holds the info we need to launch our client side hit effect
 struct ShotInfo
 {
-    var Vector  ShotLocation;
-    var int     ShotRotation;
+    var Vector ShotLocation;
+    var int ShotRotation;
 };
 
 // This struct is used to pack two shot info's for replication
@@ -21,20 +21,20 @@ struct DualShotInfo
 };
 
 // Internal shot replication and tracking vars
-var     DualShotInfo    SavedDualShot;         // last dualshot info recieved on the client
-var     ShotInfo        LastShot;              // last single shotinfo saved server side
-var     bool            bFirstShot;            // flags whether this is the first or second shot
-var     bool            bUnReplicatedShot;     // we have a shot we haven't replicated the info for yet
-var     byte            DualShotCount;         // when this byte is incremented the DualShotInfo will be replicated.
-var     byte            SavedDualShotCount;    // the last DualShot Count
+var DualShotInfo SavedDualShot; // last dualshot info recieved on the client
+var ShotInfo LastShot; // last single shotinfo saved server side
+var bool bFirstShot; // flags whether this is the first or second shot
+var bool bUnReplicatedShot; // we have a shot we haven't replicated the info for yet
+var byte DualShotCount; // when this byte is incremented the DualShotInfo will be replicated.
+var byte SavedDualShotCount; // the last DualShot Count
 
 var() class<Projectile> ClientProjectileClass; // class for the netclient only projectile for this weapon // was class ROClientBullet
-var() class<Projectile> ClientTracerClass;     // class for the netclient only tracer for this weapon     // was class ROClientBullet
+var() class<Projectile> ClientTracerClass; // class for the netclient only tracer for this weapon     // was class ROClientBullet
 
 // Tracer stuff
-var()   bool            bUsesTracers;          // true if the weapon uses tracers in it's ammo loadout
-var()   int             TracerFrequency;       // how often a tracer is loaded in.  Assume to be 1 in valueof(TracerFrequency)
-var     byte            NextTracerCounter;     // when this equals TracerFrequency, spawn a tracer
+var() bool bUsesTracers; // true if the weapon uses tracers in it's ammo loadout
+var() int TracerFrequency; // how often a tracer is loaded in.  Assume to be 1 in valueof(TracerFrequency)
+var byte NextTracerCounter; // when this equals TracerFrequency, spawn a tracer
 
 replication
 {
@@ -52,12 +52,12 @@ simulated function Int2Rot(int N, out Rotator R)
     R.Yaw = N & 0xFFFF;
 }
 
-simulated function Rot2Int(Rotator  R, out int N)
+simulated function Rot2Int(Rotator R, out int N)
 {
     // Pack pitch and yaw components into a 32-bit integer:
     // 0x0 - Pitch (16-bit signed integer)
     // 0xF - Yaw (16-bit signed integer)
-    N = ((R.Pitch << 16) & 0XFFFF0000) | (R.Yaw & 0xFFFF);
+    N = ((R.Pitch << 16) & 0xFFFF0000) | (R.Yaw & 0xFFFF);
 }
 
 // Here we spawn our client side effect rounds if the shot count has changed
@@ -105,7 +105,7 @@ simulated function bool ShouldSpawnTracer()
 // Also some re-factoring to optimise & make clearer, by removing repetition & redundancy
 simulated function SpawnClientRounds(bool bFirstRoundOnly)
 {
-    local Vector  ProjectileLoc, HitLocation, TestHitLocation, HitNormal, TraceEnd, MuzzleLocation;
+    local Vector ProjectileLoc, HitLocation, TestHitLocation, HitNormal, TraceEnd, MuzzleLocation;
     local Rotator ProjectileDir;
 
     // First shot, or single shot
@@ -134,7 +134,10 @@ simulated function SpawnClientRounds(bool bFirstRoundOnly)
             // Switch the spawn location to the muzzle location & adjust tracer direction based on our hit location
             // But first just make sure the tracer wouldn't spawn inside something if we spawn it from the 3rd person weapon's muzzle
             // So do another very short trace forwards from our hit location to make sure there's nothing right in front of it
-            if (Trace(TestHitLocation, HitNormal, MuzzleLocation + (Vector(ProjectileDir) * 15.0), MuzzleLocation, true) == none)
+            if (Trace(
+                TestHitLocation, HitNormal, MuzzleLocation + (Vector(ProjectileDir) * 15.0), MuzzleLocation, true
+                )
+                == none)
             {
                 ProjectileDir = Rotator(Normal(HitLocation - ProjectileLoc));
                 ProjectileLoc = MuzzleLocation;
@@ -168,7 +171,10 @@ simulated function SpawnClientRounds(bool bFirstRoundOnly)
                     HitLocation = TraceEnd;
                 }
 
-                if (Trace(TestHitLocation, HitNormal, MuzzleLocation + (Vector(ProjectileDir) * 15.0), MuzzleLocation, true) == none)
+                if (Trace(
+                    TestHitLocation, HitNormal, MuzzleLocation + (Vector(ProjectileDir) * 15.0), MuzzleLocation, true
+                    )
+                    == none)
                 {
                     ProjectileDir = Rotator(Normal(HitLocation - ProjectileLoc));
                     ProjectileLoc = MuzzleLocation;

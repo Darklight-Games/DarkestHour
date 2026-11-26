@@ -6,17 +6,17 @@
 class DHVehicleFactory extends ROVehicleFactory
     abstract;
 
-var(ROVehicleFactory)   name    FactoryDepletedEvent; // option for specified event to be triggered if the last vehicle the factory can spawn is killed/destroyed
+var(ROVehicleFactory) name FactoryDepletedEvent; // option for specified event to be triggered if the last vehicle the factory can spawn is killed/destroyed
 
-var     bool    bLastVehicle;            // on the last vehicle this factory is meant to spawn
-var     bool    bControlledBySpawnPoint; // flags that this factory is activated or deactivated by a spawn point, based on whether that spawn is active (set by SP)
+var bool bLastVehicle; // on the last vehicle this factory is meant to spawn
+var bool bControlledBySpawnPoint; // flags that this factory is activated or deactivated by a spawn point, based on whether that spawn is active (set by SP)
 
-var()   bool    bStartsWithDamagedTreadLeft;
-var()   bool    bStartsWithDamagedTreadRight;
+var() bool bStartsWithDamagedTreadLeft;
+var() bool bStartsWithDamagedTreadRight;
 
 // If true, the vehicle will have a spawn point attachment created.
 // Useful for initial spawn points when there are no land-based spawns (i.e. beach landings).
-var()   bool    bIsSpawnVehicle;
+var() bool bIsSpawnVehicle;
 
 // Modified to call UpdatePrecacheMaterials(), allowing any subclassed factory materials to be cached
 // And we no longer call StaticPrecache on the VehicleClass from here, as that gets done in our UpdatePrecacheMaterials(), so we don't want to do it twice
@@ -120,8 +120,8 @@ function VehicleSpawned(Vehicle V)
 function SpawnVehicle()
 {
     local ROLevelInfo ROL;
-    local Pawn        P;
-    local bool        bBlocked;
+    local Pawn P;
+    local bool bBlocked;
 
     ROL = ROTeamGame(Level.Game).LevelInfo;
 

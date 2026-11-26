@@ -13,18 +13,18 @@ class DHATGunFactory extends DHVehicleFactory
 // When the master is activated it activates the randomly selected factories (note there is one master for each designated gun group)
 // If the round is re-started the master makes a new random selection
 
-var()   bool        bUseRandomizer;           // makes this factory part of a randomized AT gun group
-var()   string      GroupTag;                 // each factory in a group must have a matching GroupTag
-var()   int         MaxRandomFactoriesActive; // the number of gun factories to be activated based on random selection from their group
-var()   bool        bOverrideTeamLock;        // use factory value for `bTeamLocked`
-var()   bool        bTeamLocked;              // gun can only be used by owning team
-var     int         NumToActivate;            // the no. of factories out of the group that are to be randomly selected to be activated
-var     bool        bHaveSetupATGunGroup;     // flags that we've already set up our allocated AT gun group
-var     bool        bIsMasterFactory;         // flags that this factory is acting as the master gun factory & will control randomization
-var     array<int>  SelectedFactoryIndexes;   // array of index numbers of the randomly selected active factories
-var     array<DHATGunFactory> GunFactories;   // saved actor references to all gun factories in our group
+var() bool bUseRandomizer; // makes this factory part of a randomized AT gun group
+var() string GroupTag; // each factory in a group must have a matching GroupTag
+var() int MaxRandomFactoriesActive; // the number of gun factories to be activated based on random selection from their group
+var() bool bOverrideTeamLock; // use factory value for `bTeamLocked`
+var() bool bTeamLocked; // gun can only be used by owning team
+var int NumToActivate; // the no. of factories out of the group that are to be randomly selected to be activated
+var bool bHaveSetupATGunGroup; // flags that we've already set up our allocated AT gun group
+var bool bIsMasterFactory; // flags that this factory is acting as the master gun factory & will control randomization
+var array<int> SelectedFactoryIndexes; // array of index numbers of the randomly selected active factories
+var array<DHATGunFactory> GunFactories; // saved actor references to all gun factories in our group
 
-var()   name        ExitPositionHintTag;      // allow the leveler to define a specific exit position (for guns with tight positioning)
+var() name ExitPositionHintTag; // allow the leveler to define a specific exit position (for guns with tight positioning)
 
 // Modified to handle the randomizer option
 // If enabled, we don't activate any factories directly, but just make one factory act as master controller for the group & that handles randomized activation
@@ -70,7 +70,7 @@ function Reset()
 function SetupATGunGroup()
 {
     local DHATGunFactory GunFactory;
-    local int            i;
+    local int i;
 
     // Find & build array of all AT Gun factories in this group, & determine how many factories we should randomly select to be activated
     foreach DynamicActors(Class'DHATGunFactory', GunFactory)
@@ -87,7 +87,10 @@ function SetupATGunGroup()
                 {
                     if (NumToActivate > 0)
                     {
-                        Log("Randomized AT gun group with GroupTag" @ GroupTag @ "has differing numbers of how many factories are to be randomly activated - needs fixing!");
+                        Log(
+                            "Randomized AT gun group with GroupTag" @ GroupTag
+                                @ "has differing numbers of how many factories are to be randomly activated - needs fixing!"
+                            );
                     }
 
                     NumToActivate = GunFactory.MaxRandomFactoriesActive;
@@ -96,7 +99,10 @@ function SetupATGunGroup()
             // Invalid set up by the leveller, so log a fix warning & don't include factory in the group
             else
             {
-                Log(GunFactory @ "has GroupTag matching randomized AT gun group" @ GroupTag @ "but does not have bUseRandomizer set to true - needs fixing!");
+                Log(
+                    GunFactory @ "has GroupTag matching randomized AT gun group" @ GroupTag
+                        @ "but does not have bUseRandomizer set to true - needs fixing!"
+                    );
             }
         }
     }
@@ -106,12 +112,18 @@ function SetupATGunGroup()
     {
         if (NumToActivate == 0)
         {
-            Log("Randomized AT gun group with GroupTag" @ GroupTag @ "does not specify how many are to be randomly activated, so all will activate - needs fixing!");
+            Log(
+                "Randomized AT gun group with GroupTag" @ GroupTag
+                    @ "does not specify how many are to be randomly activated, so all will activate - needs fixing!"
+                );
         }
         else
         {
-            Log("Randomized AT gun group with GroupTag" @ GroupTag @ "specifies to activate" @ NumToActivate
-                @ "factories but there are only" @ GunFactories.Length @ "factories in the group, so all will activate - needs fixing!");
+            Log(
+                "Randomized AT gun group with GroupTag" @ GroupTag @ "specifies to activate" @ NumToActivate
+                    @ "factories but there are only" @ GunFactories.Length
+                    @ "factories in the group, so all will activate - needs fixing!"
+                );
         }
 
         for (i = 0; i < GunFactories.Length; ++i)
@@ -128,7 +140,7 @@ function SetupATGunGroup()
 function ResetAndRandomizeATGunGroup()
 {
     local array<DHATGunFactory> TempGunFactories;
-    local int                   RandomArrayPosition, i;
+    local int RandomArrayPosition, i;
 
     // Initially reset all the group factories
     for (i = 0; i < GunFactories.Length; ++i)
@@ -138,7 +150,7 @@ function ResetAndRandomizeATGunGroup()
     }
 
     SelectedFactoryIndexes.Length = 0; // clear any previous array
-    TempGunFactories = GunFactories;   // make temp copy of GunFactories array so we can alter it without messing up the original
+    TempGunFactories = GunFactories; // make temp copy of GunFactories array so we can alter it without messing up the original
 
     // Make the specified no. of random selections from temp array, each time removing the selected factory so it can't be chosen again
     for (i = 0; i < NumToActivate; ++i)
@@ -153,8 +165,8 @@ function ResetAndRandomizeATGunGroup()
 function ActivateGroupsSelectedFactories()
 {
     local DHVehicleFactory GunFactory;
-    local ROSideIndex      Side;
-    local int              i;
+    local ROSideIndex Side;
+    local int i;
 
     for (i = 0; i < SelectedFactoryIndexes.Length; ++i)
     {

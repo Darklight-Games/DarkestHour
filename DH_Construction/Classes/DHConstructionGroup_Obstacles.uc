@@ -11,4 +11,3 @@ defaultproperties
     GroupName="Obstacles"
     SortOrder=4
 }
-

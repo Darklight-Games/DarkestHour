@@ -19,12 +19,12 @@ static function string GetString(
     optional Object OptionalObject
     )
 {
-    local class<DHMapMarker>      MapMarkerClass;
+    local class<DHMapMarker> MapMarkerClass;
     local DHPlayerReplicationInfo PRI_1;
     local DHPlayerReplicationInfo PRI_2;
-    local DHPlayer                PC;
-    local UInteger                LockExpiry;
-    local string                  S;
+    local DHPlayer PC;
+    local UInteger LockExpiry;
+    local string S;
 
     switch (Switch)
     {
@@ -67,7 +67,11 @@ static function string GetString(
 
             if (PC != none && PC.SquadReplicationInfo != none && PRI_1 != none)
             {
-                return Repl(default.RadiomanNotification, "{squad}", PC.SquadReplicationInfo.GetSquadName(PRI_1.Team.TeamIndex, PRI_1.SquadIndex));
+                return Repl(
+                    default.RadiomanNotification,
+                    "{squad}",
+                    PC.SquadReplicationInfo.GetSquadName(PRI_1.Team.TeamIndex, PRI_1.SquadIndex)
+                    );
             }
 
             break;
@@ -112,4 +116,3 @@ defaultproperties
     ArtilleryOperatorNotification="{squad} squad has marked a {type} target for fire support."
     ErrorText="Could not place fire support marker."
 }
-

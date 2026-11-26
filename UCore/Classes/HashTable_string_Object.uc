@@ -190,11 +190,11 @@ function array<string> GetKeys()
     local int i;
     local array<string> _Keys;
 
-    for (i = 0; i < self.Keys.Length; ++i)
+    for (i = 0; i < Keys.Length; ++i)
     {
-        if (self.Keys[i] != "")
+        if (Keys[i] != "")
         {
-            _Keys[_Keys.Length] = self.Keys[i];
+            _Keys[_Keys.Length] = Keys[i];
         }
     }
 
@@ -206,11 +206,11 @@ function array<Object> GetValues()
     local int i;
     local array<Object> _Values;
 
-    for (i = 0; i < self.Keys.Length; ++i)
+    for (i = 0; i < Keys.Length; ++i)
     {
-        if (self.Keys[i] != "")
+        if (Keys[i] != "")
         {
-            _Values[_Values.Length] = self.Values[i];
+            _Values[_Values.Length] = Values[i];
         }
     }
 

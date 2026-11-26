@@ -38,7 +38,12 @@ var localized string PlayerRestricted;
 
 var string NextWeaponButtonString;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string S;
 
@@ -62,7 +67,7 @@ static function string GetString(optional int Switch, optional PlayerReplication
         case 5:
             S = default.VehicleBurning;
             break;
-//      case 6, 7 & 8 LEFT SPARE
+        //      case 6, 7 & 8 LEFT SPARE
         case 9:
             S = Repl(default.OpenHatchToExit, "{0}", default.NextWeaponButtonString);
             break;
@@ -78,11 +83,11 @@ static function string GetString(optional int Switch, optional PlayerReplication
         case 13:
             S = default.CantFindExitPosition;
             break;
-//      case 14 & 15 LEFT SPARE
+        //      case 14 & 15 LEFT SPARE
         case 16:
             S = Repl(default.UnbuttonToReload, "{0}", default.NextWeaponButtonString);
             break;
-//      case 17, 18 & 19 LEFT SPARE
+        //      case 17, 18 & 19 LEFT SPARE
         case 20:
             S = default.VehicleNowLocked;
             break;

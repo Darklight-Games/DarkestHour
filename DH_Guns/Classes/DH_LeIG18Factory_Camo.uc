@@ -11,4 +11,3 @@ defaultproperties
     Skins(0)=Texture'DH_LeIG18_tex.IG18_1_spring'
     Skins(1)=Texture'DH_LeIG18_tex.IG18_2_spring'
 }
-

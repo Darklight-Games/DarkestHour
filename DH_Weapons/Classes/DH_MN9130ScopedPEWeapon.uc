@@ -21,7 +21,7 @@ defaultproperties
     bHasScope=true
     bIsSniper=true
     ScopeOverlay=Texture'DH_Weapon_tex.Scopes.Textured_SovScope'
-    ScriptedScopeTexture=Texture'DH_Weapon_tex.Scopes.USSR_PU_Scope_Overlay'e
+    ScriptedScopeTexture=Texture'DH_Weapon_tex.Scopes.USSR_PU_Scope_Overlay'
 
     ScopeOverlaySize=0.366 // size of the scope overlay (1.0 means full screen width, 0.5 means half screen width, etc)
     DisplayFOV=82.0

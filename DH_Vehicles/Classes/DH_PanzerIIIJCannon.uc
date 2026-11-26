@@ -5,7 +5,6 @@
 
 class DH_PanzerIIIJCannon extends DHVehicleCannon;
 
-
 defaultproperties
 {
     // Turret mesh

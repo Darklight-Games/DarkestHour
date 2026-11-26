@@ -7,29 +7,29 @@ class DHTab_GameSettings extends Settings_Tabs;
 
 var automated GUISectionBackground i_BG1, i_BG2, i_BG3;
 
-var automated DHmoEditBox       ed_PlayerName;
-var automated DHmoCheckBox      ch_Incognito;
-var automated DHmoComboBox      co_ViewFOV;
-var automated DHmoCheckBox      ch_NoGore;
-var automated DHmoCheckBox      ch_BayonetAtStart;
-var automated DHmoCheckBox      ch_TankThrottle, ch_VehicleThrottle, ch_ManualReloading, ch_LockTankOnEntry;
-var automated GUILabel          l_PlayerROID;     // label showing player's unique ROID
-var automated DHGUIButton       b_CopyPlayerROID; // button to copy player's ROID to clipboard
-var automated DHmoCheckBox      ch_DynamicNetSpeed;
-var automated DHmoComboBox      co_Netspeed, co_PurgeCacheDays, co_AutomaticVehicleAlerts;
+var automated DHmoEditBox ed_PlayerName;
+var automated DHmoCheckBox ch_Incognito;
+var automated DHmoComboBox co_ViewFOV;
+var automated DHmoCheckBox ch_NoGore;
+var automated DHmoCheckBox ch_BayonetAtStart;
+var automated DHmoCheckBox ch_TankThrottle, ch_VehicleThrottle, ch_ManualReloading, ch_LockTankOnEntry;
+var automated GUILabel l_PlayerROID; // label showing player's unique ROID
+var automated DHGUIButton b_CopyPlayerROID; // button to copy player's ROID to clipboard
+var automated DHmoCheckBox ch_DynamicNetSpeed;
+var automated DHmoComboBox co_Netspeed, co_PurgeCacheDays, co_AutomaticVehicleAlerts;
 
-var     int                     OriginalNetSpeed, OriginalPurgeCacheDays; // save initial values so can tell later if they have changed & need to be saved
-var     int                     PurgeCacheDaysValues[3]; // deliberately one less than PurgeCacheDaysText array size, as highest text in list is for possible custom value
+var int OriginalNetSpeed, OriginalPurgeCacheDays; // save initial values so can tell later if they have changed & need to be saved
+var int PurgeCacheDaysValues[3]; // deliberately one less than PurgeCacheDaysText array size, as highest text in list is for possible custom value
 
-var     localized string        UserDefinedNetSpeedText;
-var     localized string        PurgeCacheDaysText[4];
-var     localized string        IDText, NoROIDText;
-var     localized string        DegreesText;
+var localized string UserDefinedNetSpeedText;
+var localized string PurgeCacheDaysText[4];
+var localized string IDText, NoROIDText;
+var localized string DegreesText;
 
-var     localized string        NetSpeedText[7];
-var     int                     NetSpeedValues[7];
+var localized string NetSpeedText[7];
+var int NetSpeedValues[7];
 
-var     localized string        AutomaticVehicleAlertsText[3];
+var localized string AutomaticVehicleAlertsText[3];
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
@@ -81,9 +81,9 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 function InternalOnLoadINI(GUIComponent Sender, string s)
 {
     local PlayerController PC;
-    local float            ViewFOV;
-    local int              i, j;
-    local bool             bOptionEnabled;
+    local float ViewFOV;
+    local int i, j;
+    local bool bOptionEnabled;
 
     PC = PlayerOwner();
 
@@ -102,7 +102,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
         // View FOV
         case co_ViewFOV:
             ViewFOV = float(PC.ConsoleCommand("get DH_Engine.DHPlayer ConfigViewFOV"));
-            ViewFOV = Round(ViewFOV / 5.0) * 5.0;  // round existing config setting to nearest 5 degrees
+            ViewFOV = Round(ViewFOV / 5.0) * 5.0; // round existing config setting to nearest 5 degrees
             co_ViewFOV.Find(string(int(ViewFOV)) @ DegreesText); // finds current FOV in the list array & sets the list's index position
             break;
 
@@ -126,7 +126,9 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             break;
 
         case co_AutomaticVehicleAlerts:
-            co_AutomaticVehicleAlerts.SetIndex(int(PlayerOwner().ConsoleCommand("get DH_Engine.DHPlayer AutomaticVehicleAlerts")));
+            co_AutomaticVehicleAlerts.SetIndex(
+                int(PlayerOwner().ConsoleCommand("get DH_Engine.DHPlayer AutomaticVehicleAlerts"))
+                );
             break;
 
         // Incognito
@@ -231,7 +233,7 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
             }
 
             // Remove the NetSpeed User Defined value (last value), we will add it back only if it is actually defined by the user
-            co_NetSpeed.RemoveItem(arraycount(NetSpeedText) - 1);
+            co_Netspeed.RemoveItem(arraycount(NetSpeedText) - 1);
 
             // Select the setting based on the NetSpeed value
             for (j = 0; j < arraycount(NetSpeedValues); ++j)
@@ -240,14 +242,14 @@ function InternalOnLoadINI(GUIComponent Sender, string s)
                 {
                     if (j == arraycount(NetSpeedValues) - 1)
                     {
-                        co_NetSpeed.AddItem(Repl(default.NetSpeedText[arraycount(NetSpeedText) - 1], "%NetSpeed%", i));
+                        co_Netspeed.AddItem(Repl(default.NetSpeedText[arraycount(NetSpeedText) - 1], "%NetSpeed%", i));
                     }
 
                     OriginalNetSpeed = j;
                 }
             }
 
-            co_NetSpeed.SetIndex(OriginalNetSpeed);
+            co_Netspeed.SetIndex(OriginalNetSpeed);
             break;
 
         // Purge cache
@@ -289,14 +291,14 @@ function bool OnClick(GUIComponent Sender)
 function SaveSettings()
 {
     local PlayerController PC;
-    local DHPlayer         DHP;
-    local string           PlayerName;
-    local float            ViewFOV;
-    local int              GoreLevel, NetSpeed, PurgeCacheDays;
-    local bool             bTankThrottle, bVehicleThrottle, bManualReloading, bDynamicNetSpeed, bSaveConfig, bStaticSaveConfig;
-    local bool             bSpawnWithBayonet, bLockTankOnEntry;
-    local bool             bIncognito;
-    local byte             AutomaticVehicleAlerts;
+    local DHPlayer DHP;
+    local string PlayerName;
+    local float ViewFOV;
+    local int GoreLevel, NetSpeed, PurgeCacheDays;
+    local bool bTankThrottle, bVehicleThrottle, bManualReloading, bDynamicNetSpeed, bSaveConfig, bStaticSaveConfig;
+    local bool bSpawnWithBayonet, bLockTankOnEntry;
+    local bool bIncognito;
+    local byte AutomaticVehicleAlerts;
 
     PC = PlayerOwner();
     DHP = DHPlayer(PC);
@@ -352,7 +354,7 @@ function SaveSettings()
     bIncognito = ch_Incognito.IsChecked();
 
     // Vehicle settings
-    bTankThrottle    = ch_TankThrottle.IsChecked();
+    bTankThrottle = ch_TankThrottle.IsChecked();
     bVehicleThrottle = ch_VehicleThrottle.IsChecked();
     bManualReloading = ch_ManualReloading.IsChecked();
     bLockTankOnEntry = ch_LockTankOnEntry.IsChecked();
@@ -444,7 +446,7 @@ function SaveSettings()
 
     // Net speed
     bDynamicNetSpeed = ch_DynamicNetSpeed.IsChecked();
-    NetSpeed = co_NetSpeed.GetIndex();
+    NetSpeed = co_Netspeed.GetIndex();
 
     if (PC.bDynamicNetSpeed != bDynamicNetSpeed)
     {
@@ -487,7 +489,7 @@ function SaveSettings()
 function ResetClicked()
 {
     local DHPlayer DHP;
-    local int      i;
+    local int i;
 
     Class'DHPlayer'.static.ResetConfig("ConfigViewFOV");
     Class'GameInfo'.static.ResetConfig("GoreLevel");

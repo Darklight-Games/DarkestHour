@@ -22,4 +22,3 @@ defaultproperties
 
     GroupOffset=2
 }
-

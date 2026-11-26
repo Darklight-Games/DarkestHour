@@ -6,41 +6,42 @@
 class DHWeapon extends ROWeapon
     abstract;
 
-var     localized string NativeItemName;        // The designation name used by the nation that created it (not translated to English)
+var localized string NativeItemName; // The designation name used by the nation that created it (not translated to English)
 
-var     int     TeamIndex;                      // Which team this weapon "belongs" to, used for ammo giving, you can't give enemy weapons ammo
-                                                // Default: 2 which is neutral and allows anyone to reupply it
+// Which team this weapon "belongs" to, used for ammo giving, you can't give enemy weapons ammo
+// Default: 2 which is neutral and allows anyone to reupply it
+var int TeamIndex;
 
-var     bool    bCanHaveInitialNumMagsChanged;  // Determines if the weapon will have initial number of magazines affected by the game's variables
+var bool bCanHaveInitialNumMagsChanged; // Determines if the weapon will have initial number of magazines affected by the game's variables
 
-var     float   SwayNotMovingModifier;
-var     float   SwayRestingModifier;
-var     float   SwayCrouchedModifier;
-var     float   SwayProneModifier;
-var     float   SwayTransitionModifier;
-var     float   SwayLeanModifier;
-var     float   SwayBayonetModifier;
+var float SwayNotMovingModifier;
+var float SwayRestingModifier;
+var float SwayCrouchedModifier;
+var float SwayProneModifier;
+var float SwayTransitionModifier;
+var float SwayLeanModifier;
+var float SwayBayonetModifier;
 
-var     bool            bIsMantling;
-var     bool            bUsesIronsightFOV;
-var     private float   PlayerIronsightFOV;
-var     float           SwayModifyFactor;
-var     float           BobModifyFactor;
+var bool bIsMantling;
+var bool bUsesIronsightFOV;
+var private float PlayerIronsightFOV;
+var float SwayModifyFactor;
+var float BobModifyFactor;
 
 // An alternate animation to `SelectAnim` that plays when a weapon is drawn
 // for a first time.
-var()   name            FirstSelectAnim;
-var     bool            bHasBeenDrawn;
+var() name FirstSelectAnim;
+var bool bHasBeenDrawn;
 
-var     float           ResupplyInterval;
-var     int             LastResupplyTimestamp;
-var     bool            bCanResupplyWhenEmpty;
+var float ResupplyInterval;
+var int LastResupplyTimestamp;
+var bool bCanResupplyWhenEmpty;
 
 // For some absolutely fucked reason, RO sets their sprint animation rates at 1.5x by default.
 // We allow ourselves the ability to override this nonsense.
-var     float           SprintEndAnimRate;
-var     float           SprintStartAnimRate;
-var     float           SprintLoopAnimRate;
+var float SprintEndAnimRate;
+var float SprintStartAnimRate;
+var float SprintLoopAnimRate;
 
 replication
 {
@@ -120,9 +121,9 @@ function int GetNumberOfDroppedPickups()
 // Modfied to add randomize to a drop and to be more modular (please try to avoid duplicating this function everywhere)
 function DropFrom(Vector StartLocation)
 {
-    local Pickup  Pickup;
+    local Pickup Pickup;
     local Rotator R;
-    local int     i;
+    local int i;
 
     if (bCanThrow)
     {
@@ -378,6 +379,8 @@ simulated function WeaponFire GetFiringMode()
             return FireMode[i];
         }
     }
+
+    return none;
 }
 
 // Modified to include states PostFiring & AutoLoweringWeapon
@@ -394,8 +397,13 @@ simulated function SetSprinting(bool bNewSprintStatus)
 
     if (bNewSprintStatus)
     {
-        if (ClientState != WS_PutDown && ClientState != WS_Hidden && !IsInState('WeaponSprinting') && !IsInState('RaisingWeapon')
-            && !IsInState('LoweringWeapon') && !IsInState('PostFiring') && !IsInState('AutoLoweringWeapon'))
+        if (ClientState != WS_PutDown
+            && ClientState != WS_Hidden
+            && !IsInState('WeaponSprinting')
+            && !IsInState('RaisingWeapon')
+            && !IsInState('LoweringWeapon')
+            && !IsInState('PostFiring')
+            && !IsInState('AutoLoweringWeapon'))
         {
             GotoState('StartSprinting');
         }
@@ -441,7 +449,10 @@ function bool HandlePickupQuery(Pickup Item)
     if (Item.InventoryType.default.InventoryGroup == InventoryGroup)
     {
         // If this is the currently held weapon & it can be dropped by human player, throw it away & pick up the weapon on the ground
-        if (InstigatorIsHumanControlled() && Instigator.Weapon != none && Instigator.Weapon.InventoryGroup == InventoryGroup && Instigator.CanThrowWeapon())
+        if (InstigatorIsHumanControlled()
+            && Instigator.Weapon != none
+            && Instigator.Weapon.InventoryGroup == InventoryGroup
+            && Instigator.CanThrowWeapon())
         {
             PlayerController(Instigator.Controller).ThrowWeapon();
 
@@ -490,7 +501,10 @@ simulated state Idle
         }
 
         // Send the weapon to crawling if we started crawling during some other activity that couldn't be interrupted
-        if (Instigator != none && Instigator.bIsCrawling && CanStartCrawlMoving() && VSizeSquared(Instigator.Velocity) > 1.0)
+        if (Instigator != none
+            && Instigator.bIsCrawling
+            && CanStartCrawlMoving()
+            && VSizeSquared(Instigator.Velocity) > 1.0)
         {
             GotoState('StartCrawling');
         }
@@ -533,8 +547,8 @@ simulated state AutoLoweringWeapon extends LoweringWeapon
     simulated function Timer()
     {
         local Inventory Inv;
-        local bool      bFoundOtherWeapon;
-        local int       i;
+        local bool bFoundOtherWeapon;
+        local int i;
 
         // If we still have more of the weapon, bring up a new one
         if (AmmoAmount(0) > 0)
@@ -696,10 +710,7 @@ simulated function int GetHudAmmoCount()
 }
 
 // Implemented in subclasses
-function bool AssistedReload()
-{
-    return false;
-}
+function bool AssistedReload();
 
 simulated function bool WeaponAllowMantle()
 {
@@ -779,12 +790,14 @@ static function StaticPrecache(LevelInfo L)
         }
     }
 
-    if (default.FireModeClass[0].default.AmmoClass != none && default.FireModeClass[0].default.AmmoClass.default.IconMaterial != none)
+    if (default.FireModeClass[0].default.AmmoClass != none
+        && default.FireModeClass[0].default.AmmoClass.default.IconMaterial != none)
     {
         L.AddPrecacheMaterial(default.FireModeClass[0].default.AmmoClass.default.IconMaterial); // HUD icon
     }
 
-    if (default.FireModeClass[0].default.ProjectileClass != none && default.FireModeClass[0].default.ProjectileClass.default.StaticMesh != none)
+    if (default.FireModeClass[0].default.ProjectileClass != none
+        && default.FireModeClass[0].default.ProjectileClass.default.StaticMesh != none)
     {
         L.AddPrecacheStaticMesh(default.FireModeClass[0].default.ProjectileClass.default.StaticMesh); // projectile SM
     }
@@ -797,9 +810,9 @@ static function StaticPrecache(LevelInfo L)
 
 // New functions used by DHPawn to pass lean events to the weapon for
 // possible consumption. Return true to consume the lean event.
-simulated function bool WeaponLeanRight() { return false; }
+simulated function bool WeaponLeanRight();
 simulated function WeaponLeanRightReleased();
-simulated function bool WeaponLeanLeft() { return false; }
+simulated function bool WeaponLeanLeft();
 simulated function WeaponLeanLeftReleased();
 
 /////////////////////////////////////////////////////////////
@@ -839,7 +852,9 @@ simulated function PlayAnimAndSetTimer(name Anim, float AnimRate, optional float
 
         AnimTimer = GetAnimDuration(Anim, AnimRate) + FastTweenTime;
 
-        if (ServerTimerReduction > 0.0 && (Level.NetMode == NM_DedicatedServer || (Level.NetMode == NM_ListenServer && !InstigatorIsLocallyControlled())))
+        if (ServerTimerReduction > 0.0
+            && (Level.NetMode == NM_DedicatedServer
+                || (Level.NetMode == NM_ListenServer && !InstigatorIsLocallyControlled())))
         {
             SetTimer(AnimTimer * (1.0 - ServerTimerReduction), false);
         }
@@ -860,7 +875,9 @@ simulated function DisplayDebug(Canvas Canvas, out float YL, out float YPos)
 {
     super(Weapon).DisplayDebug(Canvas, YL, YPos);
 
-    Canvas.DrawText("DisplayFOV =" @ DisplayFOV @ " Default =" @ default.DisplayFOV @ "Zoomed default =" @ IronSightDisplayFOV);
+    Canvas.DrawText(
+        "DisplayFOV =" @ DisplayFOV @ " Default =" @ default.DisplayFOV @ "Zoomed default =" @ IronSightDisplayFOV
+        );
     YPos += YL;
     Canvas.SetPos(4.0, YPos);
 }
@@ -956,14 +973,15 @@ simulated function Weapon PrevWeapon(Weapon CurrentChoice, Weapon CurrentWeapon)
             CurrentChoice = self;
         }
     }
-    else if (CurrentChoice.InventoryGroup == CurrentWeapon.InventoryGroup && CurrentChoice.GroupOffset > CurrentWeapon.GroupOffset)
+    else if (CurrentChoice.InventoryGroup == CurrentWeapon.InventoryGroup
+        && CurrentChoice.GroupOffset > CurrentWeapon.GroupOffset)
     {
         CurrentChoice = self;
     }
     else if (InventoryGroup == CurrentWeapon.InventoryGroup)
     {
-        if (GroupOffset < CurrentWeapon.GroupOffset &&
-           (CurrentChoice.InventoryGroup != InventoryGroup || GroupOffset > CurrentChoice.GroupOffset))
+        if (GroupOffset < CurrentWeapon.GroupOffset
+            && (CurrentChoice.InventoryGroup != InventoryGroup || GroupOffset > CurrentChoice.GroupOffset))
         {
             CurrentChoice = self;
         }
@@ -977,12 +995,14 @@ simulated function Weapon PrevWeapon(Weapon CurrentChoice, Weapon CurrentWeapon)
     }
     else if (InventoryGroup > CurrentChoice.InventoryGroup)
     {
-        if (InventoryGroup < CurrentWeapon.InventoryGroup || CurrentChoice.InventoryGroup > CurrentWeapon.InventoryGroup)
+        if (InventoryGroup < CurrentWeapon.InventoryGroup
+            || CurrentChoice.InventoryGroup > CurrentWeapon.InventoryGroup)
         {
             CurrentChoice = self;
         }
     }
-    else if (CurrentChoice.InventoryGroup > CurrentWeapon.InventoryGroup && InventoryGroup < CurrentWeapon.InventoryGroup)
+    else if (CurrentChoice.InventoryGroup > CurrentWeapon.InventoryGroup
+        && InventoryGroup < CurrentWeapon.InventoryGroup)
     {
         CurrentChoice = self;
     }
@@ -993,7 +1013,7 @@ simulated function Weapon PrevWeapon(Weapon CurrentChoice, Weapon CurrentWeapon)
     }
     else
     {
-        return Inventory.PrevWeapon(CurrentChoice,CurrentWeapon);
+        return Inventory.PrevWeapon(CurrentChoice, CurrentWeapon);
     }
 }
 
@@ -1012,7 +1032,8 @@ simulated function Weapon NextWeapon(Weapon CurrentChoice, Weapon CurrentWeapon)
     }
     else if (InventoryGroup == CurrentWeapon.InventoryGroup)
     {
-        if (GroupOffset > CurrentWeapon.GroupOffset && (CurrentChoice.InventoryGroup != InventoryGroup || GroupOffset < CurrentChoice.GroupOffset))
+        if (GroupOffset > CurrentWeapon.GroupOffset
+            && (CurrentChoice.InventoryGroup != InventoryGroup || GroupOffset < CurrentChoice.GroupOffset))
         {
             CurrentChoice = self;
         }
@@ -1026,21 +1047,24 @@ simulated function Weapon NextWeapon(Weapon CurrentChoice, Weapon CurrentWeapon)
     }
     else if (InventoryGroup < CurrentChoice.InventoryGroup)
     {
-        if (InventoryGroup > CurrentWeapon.InventoryGroup || CurrentChoice.InventoryGroup < CurrentWeapon.InventoryGroup)
+        if (InventoryGroup > CurrentWeapon.InventoryGroup
+            || CurrentChoice.InventoryGroup < CurrentWeapon.InventoryGroup)
         {
             CurrentChoice = self;
         }
     }
     // If the chosen weapon's inventory group is < the current selected weapon AND
     // this weapon's inventory group is greater than current selected weapon's inventory group, then set current choice to this weapon
-    else if (CurrentChoice.InventoryGroup < CurrentWeapon.InventoryGroup && InventoryGroup > CurrentWeapon.InventoryGroup)
+    else if (CurrentChoice.InventoryGroup < CurrentWeapon.InventoryGroup
+        && InventoryGroup > CurrentWeapon.InventoryGroup)
     {
         CurrentChoice = self;
     }
     // If the chosen's inventory group is <= the current weapon's AND the chosen's group offset is < the currentweapon's, then pick me!
     // This is added, because unlike RO DH supports items on the same inventory slot
     // This is needed so players with multiple items on the same slot can cycle through and onto the next slot (otherwise it loops in the same slot)
-    else if (CurrentChoice.InventoryGroup == CurrentWeapon.InventoryGroup && CurrentChoice.GroupOffset < CurrentWeapon.GroupOffset)
+    else if (CurrentChoice.InventoryGroup == CurrentWeapon.InventoryGroup
+        && CurrentChoice.GroupOffset < CurrentWeapon.GroupOffset)
     {
         CurrentChoice = self;
     }
@@ -1051,7 +1075,7 @@ simulated function Weapon NextWeapon(Weapon CurrentChoice, Weapon CurrentWeapon)
     }
     else
     {
-        return Inventory.NextWeapon(CurrentChoice,CurrentWeapon);
+        return Inventory.NextWeapon(CurrentChoice, CurrentWeapon);
     }
 }
 
@@ -1152,7 +1176,6 @@ defaultproperties
     bCanHaveInitialNumMagsChanged=true
 
     bUsesIronsightFOV=true
-    bCanResupplyWhenEmpty=false
     ResupplyInterval=2.5
 
     SprintStartAnimRate=1.5

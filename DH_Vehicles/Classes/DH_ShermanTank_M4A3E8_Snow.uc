@@ -15,4 +15,3 @@ defaultproperties
     DestroyedMeshSkins(0)=Combiner'DH_ShermanM4A3E8_tex.body_ext_snow_destroyed'
     DestroyedMeshSkins(3)=Combiner'DH_ShermanM4A3E8_tex.turret_ext_snow_destroyed'
 }
-

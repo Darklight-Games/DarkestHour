@@ -5,7 +5,6 @@
 
 class DH_ShermanMountedMGPawn_M4A3W extends DH_ShermanMountedMGPawn;
 
-
 defaultproperties
 {
     //This class is for M4A3 Shermans; M4A1 Sherman and Stuarts have their own MG pawn classes

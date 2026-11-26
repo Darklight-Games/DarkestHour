@@ -40,4 +40,3 @@ defaultproperties
     End Object
     Emitters(0)=MeshEmitter'MeshEmitter0'
 }
-

@@ -3,6 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
+// usagi: ignore[class-name-ends-in-digit]
 class DH_Tiger2BTank_Snow502 extends DH_Tiger2BTank;
 
 defaultproperties

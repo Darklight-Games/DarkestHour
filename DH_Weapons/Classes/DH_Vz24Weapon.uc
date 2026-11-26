@@ -38,4 +38,3 @@ defaultproperties
     BoltHipAnim="bolt_st"
     BoltIronAnim="iron_boltrest_st"
 }
-

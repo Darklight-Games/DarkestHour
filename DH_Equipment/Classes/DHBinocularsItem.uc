@@ -6,11 +6,11 @@
 class DHBinocularsItem extends DHProjectileWeapon; // obviously not really a projectile weapon, but that class has most of the necessary functionality, e.g. zoom in for ironsight mode
 
 // Functions emptied out or returning false, as binoculars aren't a real weapon
-simulated function bool IsFiring() { return false; }
-simulated event ClientStartFire(int Mode) { return; }
-simulated event StopFire(int Mode) { return; }
-simulated function bool IsBusy() { return false; }
-function bool FillAmmo() { return false; }
+simulated function bool IsFiring();
+simulated event ClientStartFire(int Mode);
+simulated event StopFire(int Mode);
+simulated function bool IsBusy();
+function bool FillAmmo();
 
 // Modified to ignore InventoryGroup, so this item can be picked up regardless if its group is occupied
 function bool HandlePickupQuery(Pickup Item)
@@ -86,7 +86,7 @@ function bool HandlePickupQuery(Pickup Item)
 // Modified to add fire button functionality for artillery observer or artillery officer roles to mark targets
 simulated function Fire(float F)
 {
-    local DHPlayer   PC;
+    local DHPlayer PC;
 
     if (bUsingSights && Instigator != none && Instigator.IsLocallyControlled())
     {
@@ -117,9 +117,7 @@ simulated function BringUp(optional Weapon PrevWeapon)
 // Modified to avoid re-setting DHPawn.bPreventWeaponFire to false, as binocs can never fire (doesn't actually make a difference, but avoids unnecessary update on replicated variable)
 simulated state RaisingWeapon
 {
-    simulated function EndState()
-    {
-    }
+    simulated function EndState();
 }
 
 // Modified to avoid zooming in until raising binoculars animation finishes
@@ -154,10 +152,7 @@ simulated function ZoomIn(optional bool bAnimateTransition)
     }
 }
 
-function bool CanDeadThrow()
-{
-    return false;
-}
+function bool CanDeadThrow();
 
 defaultproperties
 {

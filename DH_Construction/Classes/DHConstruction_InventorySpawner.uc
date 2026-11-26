@@ -6,8 +6,8 @@
 class DHConstruction_InventorySpawner extends DHConstruction
     abstract;
 
-var class<DHInventorySpawner>   SpawnerClass;
-var DHInventorySpawner          Spawner;
+var class<DHInventorySpawner> SpawnerClass;
+var DHInventorySpawner Spawner;
 
 static function DHConstruction.ConstructionError GetPlayerError(DHActorProxy.Context Context)
 {
@@ -33,7 +33,7 @@ simulated function OnConstructed()
 
         Spawner = Spawn(SpawnerClass, Level,, Location, Rotation);
         Spawner.SetTeamIndex(GetTeamIndex());
-        Spawner.OnExhausted = self.OnExhausted;
+        Spawner.OnExhausted = OnExhausted;
         Spawner.bShouldDestroyOnExhaustion = true;
     }
 }
@@ -90,7 +90,7 @@ function Reset()
     }
 }
 
-simulated function OnExhausted(DHInventorySpawner Spawner)
+simulated function OnExhausted(DHInventorySpawner ExhaustedSpawner)
 {
     if (Owner != none)
     {
@@ -109,4 +109,3 @@ defaultproperties
 
     CompletionPointValue=100
 }
-

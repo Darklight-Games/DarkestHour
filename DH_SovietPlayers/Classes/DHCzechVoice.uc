@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHCzechVoice extends DHVoicePack; //to do: vehicle voices; may be slovak voice pack?
+class DHCzechVoice extends DHVoicePack; // to do: vehicle voices; may be slovak voice pack?
 
 defaultproperties
 {

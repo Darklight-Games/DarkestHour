@@ -5,7 +5,7 @@
 
 class DHBulletHitDefaultEffectLarge extends Emitter;
 
-//particles: 13
+// particles: 13
 
 defaultproperties
 {

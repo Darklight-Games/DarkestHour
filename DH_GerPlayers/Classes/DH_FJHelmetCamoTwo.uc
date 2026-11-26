@@ -4,4 +4,5 @@
 //==============================================================================
 
 class DH_FJHelmetCamoTwo extends DH_FJHelmetCamoOne;
-//removed as part of optimization because its too similar
+
+// removed as part of optimization because its too similar

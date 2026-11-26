@@ -13,11 +13,11 @@ var localized string SizeLargeText;
 
 enum EMapSize
 {
-    SIZE_Any,           // 0-64 players
-    SIZE_ExtraSmall,    // 0-24 players
-    SIZE_Small,         // 0-48 players
-    SIZE_Medium,        // 24+ players
-    SIZE_Large,         // 48+ players
+    SIZE_Any, // 0-64 players
+    SIZE_ExtraSmall, // 0-24 players
+    SIZE_Small, // 0-48 players
+    SIZE_Medium, // 24+ players
+    SIZE_Large, // 48+ players
 };
 
 struct SMapInfo
@@ -29,8 +29,8 @@ struct SMapInfo
     var DH_LevelInfo.EAxisNation AxisNation;
 };
 
-var array<SMapInfo>         MapInfos;
-var HashTable_string_int    MapInfoIndexTable;
+var array<SMapInfo> MapInfos;
+var HashTable_string_int MapInfoIndexTable;
 
 function Initialize()
 {
@@ -52,6 +52,8 @@ static function string GetMapSizeString(EMapSize Size)
         case SIZE_Large:
             return default.SizeLargeText;
     }
+
+    return "";
 }
 
 static function string GetAlliedNationString(DH_LevelInfo.EAlliedNation AlliedNation)
@@ -68,7 +70,11 @@ static function string GetAlliedNationString(DH_LevelInfo.EAlliedNation AlliedNa
             return "USSR";
         case NATION_Poland:
             return "Poland";
+        case NATION_Czechoslovakia:
+            return "Czechoslovakia";
     }
+
+    return "";
 }
 
 static function string GetAxisNationString(DH_LevelInfo.EAxisNation AxisNation)
@@ -80,6 +86,8 @@ static function string GetAxisNationString(DH_LevelInfo.EAxisNation AxisNation)
         case NATION_Italy:
             return "Italy";
     }
+
+    return "";
 }
 
 static function GetMapSizePlayerCountRange(EMapSize Size, out int PlayersMin, out int PlayersMax)
@@ -94,7 +102,7 @@ static function GetMapSizePlayerCountRange(EMapSize Size, out int PlayersMin, ou
             PlayersMin = 0;
             PlayersMax = 48;
             break;
-        case Size_Medium:
+        case SIZE_Medium:
             PlayersMin = 24;
             PlayersMax = 100;
             break;
@@ -102,7 +110,6 @@ static function GetMapSizePlayerCountRange(EMapSize Size, out int PlayersMin, ou
             PlayersMin = 48;
             PlayersMax = 100;
             break;
-        case SIZE_Any:
         default:
             PlayersMin = 0;
             PlayersMax = 100;
@@ -143,7 +150,6 @@ static function string GetHumanReadableMapName(string MapName)
 {
     return Repl(Repl(Repl(MapName, "_", " "), ".rom", ""), "DH-", "");
 }
-
 
 defaultproperties
 {

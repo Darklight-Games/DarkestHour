@@ -5,13 +5,13 @@
 
 class DH_ModifyRoundTime extends DH_ModifyActors;
 
-var(DH_ModifyRoundTime) enum ERoundTimeOperator
+var() enum ERoundTimeOperator
 {
     RTO_Add,
     RTO_Subtract,
-    RTO_Set
-}                                   RoundTimeOperator;      //Add, Subtract or Set
-var(DH_ModifyRoundTime) int         Seconds;                //The amount of seconds to add to, subtract from or set the round time.
+    RTO_Set,
+} RoundTimeOperator; // Add, Subtract or Set
+var() int Seconds; // The amount of seconds to add to, subtract from or set the round time.
 
 event Trigger(Actor Other, Pawn EventInstigator)
 {

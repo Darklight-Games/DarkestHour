@@ -12,7 +12,7 @@ static function Sound GetSound(optional int SurfaceTypeIndex)
 {
     if (SurfaceTypeIndex < 0 || SurfaceTypeIndex >= default.FootstepSounds.Length)
     {
-        return None;
+        return none;
     }
     else
     {

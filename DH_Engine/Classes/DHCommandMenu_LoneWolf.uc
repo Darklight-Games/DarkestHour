@@ -40,7 +40,9 @@ function bool IsOptionDisabled(int OptionIndex)
     switch (OptionIndex)
     {
         case 0:
-            return PC == none || PC.SquadReplicationInfo == none || !PC.SquadReplicationInfo.IsAnySquadJoinable(PC.GetTeamNum());
+            return PC == none
+                || PC.SquadReplicationInfo == none
+                || !PC.SquadReplicationInfo.IsAnySquadJoinable(PC.GetTeamNum());
         default:
             break;
     }
@@ -86,4 +88,3 @@ defaultproperties
     Options(0)=(ActionText="Auto-Join Squad",Material=Texture'DH_InterfaceArt2_tex.squad')
     Options(1)=(ActionText="Create Squad",Material=Texture'DH_InterfaceArt2_tex.squad_leader')
 }
-

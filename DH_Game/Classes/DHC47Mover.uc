@@ -5,8 +5,8 @@
 
 class DHC47Mover extends DHVariableTimedMover;
 
-var(InitialAnimation)   name    AnimName;
-var(InitialAnimation)   float   AnimRate;
+var(InitialAnimation) name AnimName;
+var(InitialAnimation) float AnimRate;
 
 simulated function BeginPlay()
 {

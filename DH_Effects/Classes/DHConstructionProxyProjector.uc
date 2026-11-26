@@ -23,4 +23,3 @@ defaultproperties
     FrameBufferBlendingOp=PB_AlphaBlend
     FOV=1
 }
-

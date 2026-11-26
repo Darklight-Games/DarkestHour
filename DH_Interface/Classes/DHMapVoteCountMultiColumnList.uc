@@ -5,10 +5,10 @@
 
 class DHMapVoteCountMultiColumnList extends MapVoteCountMultiColumnList;
 
-var(Style) string               RedListStyleName; // name of the style to use for when current player is out of recommended player range
-var(Style) noexport GUIStyles   RedListStyle;
+var(Style) string RedListStyleName; // name of the style to use for when current player is out of recommended player range
+var(Style) noexport GUIStyles RedListStyle;
 
-var DHMapDatabase               MapDatabase;
+var DHMapDatabase MapDatabase;
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
@@ -18,7 +18,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 
     if (RedListStyleName != "" && RedListStyle == none)
     {
-        RedListStyle = MyController.GetStyle(RedListStyleName,FontScale);
+        RedListStyle = MyController.GetStyle(RedListStyleName, FontScale);
     }
 
     // Get a reference to the map database.
@@ -34,12 +34,12 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 
 function DrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, bool bSelected, bool bPending)
 {
-    local DHGameReplicationInfo     GRI;
-    local GUIStyles                 DrawStyle, OldDrawStyle;
-    local float                     CellLeft, CellWidth;
-    local int                       Min, Max;
-    local DHMapDatabase.SMapInfo    MI;
-    local string                    MapName;
+    local DHGameReplicationInfo GRI;
+    local GUIStyles DrawStyle, OldDrawStyle;
+    local float CellLeft, CellWidth;
+    local int Min, Max;
+    local DHMapDatabase.SMapInfo MI;
+    local string MapName;
 
     GRI = DHGameReplicationInfo(PlayerOwner().GameReplicationInfo);
 
@@ -51,7 +51,7 @@ function DrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, bool
     // Draw the selection border
     if (bSelected)
     {
-        SelectedStyle.Draw(Canvas,MenuState, X, Y - 2, W, H + 2);
+        SelectedStyle.Draw(Canvas, MenuState, X, Y - 2, W, H + 2);
         DrawStyle = SelectedStyle;
     }
     else
@@ -63,11 +63,17 @@ function DrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, bool
 
     // Map Name
     GetCellLeftWidth(0, CellLeft, CellWidth);
-    DrawStyle.DrawText(Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Left, Class'DHMapDatabase'.static.GetHumanReadableMapName(MapName), FontScale);
+    DrawStyle.DrawText(
+        Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Left,
+        Class'DHMapDatabase'.static.GetHumanReadableMapName(MapName), FontScale
+        );
 
     // Vote Count
     GetCellLeftWidth(1, CellLeft, CellWidth);
-    DrawStyle.DrawText(Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Left, string(VRI.MapVoteCount[SortData[i].SortItem].VoteCount), FontScale);
+    DrawStyle.DrawText(
+        Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Left,
+        string(VRI.MapVoteCount[SortData[i].SortItem].VoteCount), FontScale
+        );
 
     // Map Size
     if (MapDatabase.GetMapInfo(MapName, MI))
@@ -83,7 +89,10 @@ function DrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, bool
             DrawStyle = RedListStyle;
         }
 
-        DrawStyle.DrawText(Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Left, Class'DHMapDatabase'.static.GetMapSizeString(MI.Size), FontScale);
+        DrawStyle.DrawText(
+            Canvas, MenuState, CellLeft, Y, CellWidth, H, TXTA_Left,
+            Class'DHMapDatabase'.static.GetMapSizeString(MI.Size), FontScale
+            );
         DrawStyle = OldDrawStyle;
     }
 }
@@ -101,7 +110,9 @@ function string GetSortString(int i)
     switch (SortColumn)
     {
         case 0: // Map name
-            return Locs(Class'DHMapDatabase'.static.GetHumanReadableMapName(VRI.MapList[VRI.MapVoteCount[i].MapIndex].MapName));
+            return Locs(
+                Class'DHMapDatabase'.static.GetHumanReadableMapName(VRI.MapList[VRI.MapVoteCount[i].MapIndex].MapName)
+                );
         case 1: // Votes
             return Class'UString'.static.ZFill(string(VRI.MapVoteCount[i].VoteCount), 4);
         case 2: // Size
@@ -109,6 +120,7 @@ function string GetSortString(int i)
             {
                 return string(int(MI.Size));
             }
+            break;
         default:
             break;
     }

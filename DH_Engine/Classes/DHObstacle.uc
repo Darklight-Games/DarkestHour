@@ -8,20 +8,20 @@
 //==============================================================================
 
 class DHObstacle extends Actor
-    hidecategories(Events,Force,Karama,Object,Sound)
+    hidecategories(Events, Force, Karama, Object, Sound)
     placeable;
 
-var() float         SpawnClearedChance;
+var() float SpawnClearedChance;
 
-var int             TypeIndex;
-var int             Index;
-var bool            bIsDefault;
+var int TypeIndex;
+var int Index;
+var bool bIsDefault;
 
-var config bool     bDebug;
+var config bool bDebug;
 
-var DHObstacleInstance      Instance;
+var DHObstacleInstance Instance;
 
-var private DHObstacleInfo  Info;
+var private DHObstacleInfo Info;
 
 simulated function bool IsCleared()
 {
@@ -95,18 +95,65 @@ simulated function PostBeginPlay()
     super.PostBeginPlay();
 }
 
-simulated function StaticMesh GetIntactStaticMesh() {return Info.GetIntactStaticMesh(TypeIndex, bIsDefault);}
-simulated function StaticMesh GetClearedStaticMesh() {return Info.GetClearedStaticMesh(TypeIndex, Index, bIsDefault);}
-simulated function bool CanBeCut() {return Info.CanBeCut(TypeIndex, bIsDefault);}
-simulated function bool CanBeMantled() {return Info.CanBeMantled(TypeIndex, bIsDefault);}
-simulated function bool CanBeCrushed() {return Info.CanBeCrushed(TypeIndex, bIsDefault);}
-simulated function bool CanBeDestroyedByExplosives() {return Info.CanBeDestroyedByExplosives(TypeIndex, bIsDefault);}
-simulated function bool CanBeDestroyedByWeapons() {return Info.CanBeDestroyedByWeapons(TypeIndex, bIsDefault);}
-simulated function int GetExplosionDamageThreshold() {return Info.GetExplosionDamageThreshold(TypeIndex, bIsDefault);}
-simulated function int GetDamageThreshold() {return Info.GetDamageThreshold(TypeIndex, bIsDefault);}
-simulated function Sound GetClearSound(out float SoundRadius) {return Info.GetClearSound(TypeIndex, bIsDefault, SoundRadius);}
-simulated function float GetCutDuration() {return Info.GetCutDuration(TypeIndex, bIsDefault);}
-simulated function class<Emitter> GetClearEmitterClass() {return Info.GetClearEmitterClass(TypeIndex, Index, bIsDefault);}
+simulated function StaticMesh GetIntactStaticMesh()
+{
+    return Info.GetIntactStaticMesh(TypeIndex, bIsDefault);
+}
+
+simulated function StaticMesh GetClearedStaticMesh()
+{
+    return Info.GetClearedStaticMesh(TypeIndex, Index, bIsDefault);
+}
+
+simulated function bool CanBeCut()
+{
+    return Info.CanBeCut(TypeIndex, bIsDefault);
+}
+
+simulated function bool CanBeMantled()
+{
+    return Info.CanBeMantled(TypeIndex, bIsDefault);
+}
+
+simulated function bool CanBeCrushed()
+{
+    return Info.CanBeCrushed(TypeIndex, bIsDefault);
+}
+
+simulated function bool CanBeDestroyedByExplosives()
+{
+    return Info.CanBeDestroyedByExplosives(TypeIndex, bIsDefault);
+}
+
+simulated function bool CanBeDestroyedByWeapons()
+{
+    return Info.CanBeDestroyedByWeapons(TypeIndex, bIsDefault);
+}
+
+simulated function int GetExplosionDamageThreshold()
+{
+    return Info.GetExplosionDamageThreshold(TypeIndex, bIsDefault);
+}
+
+simulated function int GetDamageThreshold()
+{
+    return Info.GetDamageThreshold(TypeIndex, bIsDefault);
+}
+
+simulated function Sound GetClearSound(out float SoundRadius)
+{
+    return Info.GetClearSound(TypeIndex, bIsDefault, SoundRadius);
+}
+
+simulated function float GetCutDuration()
+{
+    return Info.GetCutDuration(TypeIndex, bIsDefault);
+}
+
+simulated function class<Emitter> GetClearEmitterClass()
+{
+    return Info.GetClearEmitterClass(TypeIndex, Index, bIsDefault);
+}
 
 defaultproperties
 {
@@ -125,7 +172,6 @@ defaultproperties
     StaticMesh=StaticMesh'DH_Obstacles_stc.fence_farm01'
     RemoteRole=ROLE_None
     TypeIndex=-1
-    bDebug=false
     bNoDelete=false
     bHidden=true
     bHiddenEd=false

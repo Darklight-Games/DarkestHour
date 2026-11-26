@@ -8,7 +8,6 @@ class DHCommandMenu_SquadAssistant extends DHCommandMenu;
 function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
 {
     local DHPlayer PC;
-    local DHPlayerReplicationInfo PRI;
 
     PC = GetPlayerController();
 
@@ -16,8 +15,6 @@ function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
     {
         return;
     }
-
-    PRI = DHPlayerReplicationInfo(PC.PlayerReplicationInfo);
 
     switch (OptionIndex)
     {
@@ -50,10 +47,10 @@ function bool IsOptionDisabled(int OptionIndex)
 
     switch (OptionIndex)
     {
-    case 0: // Construction
-        return DHPawn(PC.Pawn) == none || GRI == none || !GRI.bAreConstructionsEnabled;
-    default:
-        return false;
+        case 0: // Construction
+            return DHPawn(PC.Pawn) == none || GRI == none || !GRI.bAreConstructionsEnabled;
+        default:
+            return false;
     }
 }
 

@@ -24,7 +24,7 @@ function InitServerList()
     lb_Server.InitBaseList(li_Server);
     lb_Server.HeaderColumnPerc = li_Server.InitColumnPerc;
     li_Server.OnChange = ServerListChanged;
-    lb_Server.SetAnchor(Self);
+    lb_Server.SetAnchor(self);
 }
 
 defaultproperties

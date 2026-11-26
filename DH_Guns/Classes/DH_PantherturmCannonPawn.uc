@@ -27,4 +27,3 @@ defaultproperties
     PoweredRotateAndPitchSound=Sound'Vehicle_Weapons.hydraul_turret_traverse'
     FireImpulse=(X=-100.0)
 }
-

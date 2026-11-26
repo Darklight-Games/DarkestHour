@@ -51,7 +51,10 @@ function ChooseAttackMode()
         }
     }
 
-    if (Squad != none && Squad.PriorityObjective(self) == 0 && (Skill + Tactics) > 2.0 && (EnemyStrength > -0.3 || (Pawn != none && Pawn.Weapon != none && Pawn.Weapon.AIRating < 0.5)))
+    if (Squad != none
+        && Squad.PriorityObjective(self) == 0
+        && (Skill + Tactics) > 2.0
+        && (EnemyStrength > -0.3 || (Pawn != none && Pawn.Weapon != none && Pawn.Weapon.AIRating < 0.5)))
     {
         if (Pawn == none || Pawn.Weapon == none)
         {
@@ -86,7 +89,8 @@ function ChooseAttackMode()
             }
             else
             {
-                GoalString = "Fallback to better pickup" @ InventorySpot(RouteGoal).MarkedItem @ "hidden" @ InventorySpot(RouteGoal).MarkedItem.bHidden;
+                GoalString = "Fallback to better pickup" @ InventorySpot(RouteGoal).MarkedItem @ "hidden"
+                    @ InventorySpot(RouteGoal).MarkedItem.bHidden;
             }
 
             GotoState('FallBack');
@@ -101,7 +105,7 @@ function ChooseAttackMode()
 
 state RangedAttack
 {
-ignores HearNoise, Bump;
+    ignores HearNoise, Bump;
 
     // Modified to fix logic flaw in the Super when making a bot switch to an empty vehicle weapon MG to engage enemy
     // Problem was it always called KDriverLeave() on the vehicle base, even if the bot was in another vehicle weapon position
@@ -110,8 +114,8 @@ ignores HearNoise, Bump;
     function BeginState()
     {
         local VehicleWeaponPawn CurrentWP, WP;
-        local ROVehicle         V;
-        local int               i;
+        local ROVehicle V;
+        local int i;
 
         StopStartTime = Level.TimeSeconds;
         bHasFired = false;
@@ -143,7 +147,9 @@ ignores HearNoise, Bump;
             CurrentWP = VehicleWeaponPawn(Pawn);
 
             // If bot is already in a vehicle weapon position, only consider switching if current position isn't a suitable weapon
-            if (CurrentWP != none && !CurrentWP.IsA('DHVehicleCannonPawn') && !(CurrentWP.IsA('DHVehicleMGPawn') && DHPawn(Target) != none))
+            if (CurrentWP != none
+                && !CurrentWP.IsA('DHVehicleCannonPawn')
+                && !(CurrentWP.IsA('DHVehicleMGPawn') && DHPawn(Target) != none))
             {
                 V = CurrentWP.VehicleBase;
             }
@@ -157,7 +163,10 @@ ignores HearNoise, Bump;
                 WP = V.WeaponPawns[i];
 
                 // Removed requirement for bot's vehicle to be an APC to be able to use an MG, as MG will be effective against infantry regardless of vehicle it's mounted on
-                if (WP != none && WP.Driver == none && (WP.IsA('DHVehicleCannonPawn') || (WP.IsA('DHVehicleMGPawn') && DHPawn(Target) != none/* && V.bIsApc*/)))
+                if (WP != none
+                    && WP.Driver == none
+                    && (WP.IsA('DHVehicleCannonPawn')
+                        || (WP.IsA('DHVehicleMGPawn') && DHPawn(Target) != none /* && V.bIsApc*/)))
                 {
                     // Fixed to call this on bot's current vehicle pawn (not always the vehicle base)
                     // And also now calling a switch function instead of KDriverLeave & KDriverEnter, to work properly with DH's modified vehicle switching system
@@ -243,7 +252,8 @@ state WaitForCrew
 Begin:
     Sleep(0.2);
 
-    if ((ROWheeledVehicle(Pawn) != none && ROWheeledVehicle(Pawn).CheckForCrew()) || (ROSquadAI(Squad) != none && !ROSquadAI(Squad).ShouldWaitForCrew(self)))
+    if ((ROWheeledVehicle(Pawn) != none && ROWheeledVehicle(Pawn).CheckForCrew())
+        || (ROSquadAI(Squad) != none && !ROSquadAI(Squad).ShouldWaitForCrew(self)))
     {
         MoveTimer = CachedMoveTimer;
         WhatToDoNext(53); // go back to the function that got us here
@@ -255,8 +265,8 @@ Begin:
 // Modified to avoid "accessed none" errors on Pawn.Weapon
 function FightEnemy(bool bCanCharge, float EnemyStrength)
 {
-    local float  EnemyDistance, AdjustedCombatStyle;
-    local bool   bOldForcedCharge, bFarAway;
+    local float EnemyDistance, AdjustedCombatStyle;
+    local bool bOldForcedCharge, bFarAway;
     local Vector X, Y, Z;
 
     if (Squad == none || Enemy == none || Pawn == none)
@@ -302,7 +312,11 @@ function FightEnemy(bool bCanCharge, float EnemyStrength)
         AdjustedCombatStyle = CombatStyle + Pawn.Weapon.SuggestAttackStyle();
     }
 
-    Aggression = (1.5 * FRand()) - 0.8 + (2.0 * AdjustedCombatStyle) - (0.5 * EnemyStrength) + (FRand() * (Normal(Enemy.Velocity - Pawn.Velocity) dot Normal(Enemy.Location - Pawn.Location)));
+    Aggression = (1.5 * FRand())
+        - 0.8
+        + (2.0 * AdjustedCombatStyle)
+        - (0.5 * EnemyStrength)
+        + (FRand() * (Normal(Enemy.Velocity - Pawn.Velocity) dot Normal(Enemy.Location - Pawn.Location)));
 
     if (Enemy.Weapon != none)
     {
@@ -395,7 +409,9 @@ function FightEnemy(bool bCanCharge, float EnemyStrength)
         return;
     }
 
-    if ((Pawn.Weapon != none && Pawn.Weapon.RecommendRangedAttack()) || IsSniping() || ((FRand() > 0.17 * (Skill + Tactics - 1.0)) && !DefendMelee(EnemyDistance)))
+    if ((Pawn.Weapon != none && Pawn.Weapon.RecommendRangedAttack())
+        || IsSniping()
+        || ((FRand() > 0.17 * (Skill + Tactics - 1.0)) && !DefendMelee(EnemyDistance)))
     {
         GoalString = "Ranged Attack";
         DoRangedAttackOn(Enemy);
@@ -413,7 +429,10 @@ function FightEnemy(bool bCanCharge, float EnemyStrength)
 
     GoalString = "Do tactical move";
 
-    if (Pawn.Weapon != none && !Pawn.Weapon.RecommendSplashDamage() && FRand() < 0.7 && ((3.0 * Jumpiness) + (FRand() * Skill)) > 3.0)
+    if (Pawn.Weapon != none
+        && !Pawn.Weapon.RecommendSplashDamage()
+        && FRand() < 0.7
+        && ((3.0 * Jumpiness) + (FRand() * Skill)) > 3.0)
     {
         GetAxes(Pawn.Rotation, X, Y, Z);
         GoalString = "Try to Duck ";
@@ -436,7 +455,7 @@ function FightEnemy(bool bCanCharge, float EnemyStrength)
 function SetAttractionState()
 {
     local ROVehicle V;
-    local int       i;
+    local int i;
 
     if (Enemy != none)
     {
@@ -462,6 +481,7 @@ function SetAttractionState()
         GotoState('Roaming');
     }
 }
+
 // Modified so entering a shallow water volume doesn't send bot into swimming state (also stripped out some redundancy)
 function bool NotifyPhysicsVolumeChange(PhysicsVolume NewVolume)
 {
@@ -472,7 +492,9 @@ function bool NotifyPhysicsVolumeChange(PhysicsVolume NewVolume)
         return false;
     }
 
-    if (NewVolume != none && NewVolume.bWaterVolume && !(NewVolume.IsA('DHWaterVolume') && DHWaterVolume(NewVolume).bIsShallowWater))
+    if (NewVolume != none
+        && NewVolume.bWaterVolume
+        && !(NewVolume.IsA('DHWaterVolume') && DHWaterVolume(NewVolume).bIsShallowWater))
     {
         bPlannedJump = false;
 
@@ -485,7 +507,9 @@ function bool NotifyPhysicsVolumeChange(PhysicsVolume NewVolume)
     {
         Pawn.SetPhysics(PHYS_Falling);
 
-        if (Destination.Z >= Pawn.Location.Z && (Abs(Pawn.Acceleration.X) + Abs(Pawn.Acceleration.Y)) > 0.0 && Pawn.CheckWaterJump(JumpDir))
+        if (Destination.Z >= Pawn.Location.Z
+            && (Abs(Pawn.Acceleration.X) + Abs(Pawn.Acceleration.Y)) > 0.0
+            && Pawn.CheckWaterJump(JumpDir))
         {
             Pawn.JumpOutOfWater(JumpDir);
             bNotifyApex = true;

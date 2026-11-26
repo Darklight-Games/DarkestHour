@@ -6,22 +6,22 @@ class DH_GapAltEmitter extends WeaponAmbientEmitter;
 
 simulated function SetEmitterStatus(bool bEnabled)
 {
-	if(bEnabled)
-	{
-		Emitters[0].ParticlesPerSecond = 30.0;
-		Emitters[0].InitialParticlesPerSecond = 30.0;
-		Emitters[0].AllParticlesDead = false;
-		Emitters[1].ParticlesPerSecond = 30.0;
-		Emitters[1].InitialParticlesPerSecond = 30.0;
-		Emitters[1].AllParticlesDead = false;
-	}
-	else
-	{
-		Emitters[0].ParticlesPerSecond = 0.0;
-		Emitters[0].InitialParticlesPerSecond = 0.0;
-		Emitters[1].ParticlesPerSecond = 0.0;
-		Emitters[1].InitialParticlesPerSecond = 0.0;
-	}
+    if (bEnabled)
+    {
+        Emitters[0].ParticlesPerSecond = 30.0;
+        Emitters[0].InitialParticlesPerSecond = 30.0;
+        Emitters[0].AllParticlesDead = false;
+        Emitters[1].ParticlesPerSecond = 30.0;
+        Emitters[1].InitialParticlesPerSecond = 30.0;
+        Emitters[1].AllParticlesDead = false;
+    }
+    else
+    {
+        Emitters[0].ParticlesPerSecond = 0.0;
+        Emitters[0].InitialParticlesPerSecond = 0.0;
+        Emitters[1].ParticlesPerSecond = 0.0;
+        Emitters[1].InitialParticlesPerSecond = 0.0;
+    }
 }
 
 defaultproperties
@@ -80,5 +80,3 @@ defaultproperties
 	bBlockActors=False
 	CullDistance=4000.0
 }
-
-

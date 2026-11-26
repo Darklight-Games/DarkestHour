@@ -5,9 +5,9 @@
 
 class DHVariableTimedMover extends Mover;
 
-var()   bool            bActAsClientMover;
-var()   array<float>    KeyMoveTime;
-var     array<float>    KeyMoveSpeed;
+var() bool bActAsClientMover;
+var() array<float> KeyMoveTime;
+var array<float> KeyMoveSpeed;
 
 function PostBeginPlay()
 {

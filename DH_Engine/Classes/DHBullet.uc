@@ -4,46 +4,46 @@
 //==============================================================================
 
 class DHBullet extends DHBallisticProjectile
-    config
-    abstract;
+    abstract
+    config;
 
 // General
-var     int             WhizType;               // sent in HitPointTrace to indicate whiz or snap sound to play (0 = none, 1 = close supersonic bullet, 2 = subsonic or distant bullet)
-var     Actor           SavedTouchActor;        // added (same as shell) to prevent recurring ProcessTouch on same actor (e.g. was screwing up tracer ricochets from turrets)
-var     Sound           WaterHitSound;          // sound of this bullet hitting water
-var     bool            bHitBulletProofColMesh; // bullet has hit a collision mesh actor that is bullet proof, so we can handle vehicle hits accordingly
+var int WhizType; // sent in HitPointTrace to indicate whiz or snap sound to play (0 = none, 1 = close supersonic bullet, 2 = subsonic or distant bullet)
+var Actor SavedTouchActor; // added (same as shell) to prevent recurring ProcessTouch on same actor (e.g. was screwing up tracer ricochets from turrets)
+var Sound WaterHitSound; // sound of this bullet hitting water
+var bool bHitBulletProofColMesh; // bullet has hit a collision mesh actor that is bullet proof, so we can handle vehicle hits accordingly
 
 // Tracers
-var     bool            bIsTracerBullet; // just set to true in a tracer bullet subclass of a normal bullet & then the inheritance from this class will handle everything
-var     bool            bHasDeflected;
-var     byte            Bounces;
-var     StaticMesh      DeflectedMesh;
-var     class<Emitter>  TracerEffectClass;
-var     Emitter         TracerEffect;
-var     float           TracerPullback;
-var     int             TracerHue;
-var     int             TracerSaturation;
-var     float           DampenFactor;
-var     float           DampenFactorParallel;
+var bool bIsTracerBullet; // just set to true in a tracer bullet subclass of a normal bullet & then the inheritance from this class will handle everything
+var bool bHasDeflected;
+var byte Bounces;
+var StaticMesh DeflectedMesh;
+var class<Emitter> TracerEffectClass;
+var Emitter TracerEffect;
+var float TracerPullback;
+var int TracerHue;
+var int TracerSaturation;
+var float DampenFactor;
+var float DampenFactorParallel;
 
 // Vehicle hit effects
-var     class<Emitter>  VehiclePenetrateEffectClass;
-var     Sound           VehiclePenetrateSound;
-var     float           VehiclePenetrateSoundVolume;
-var     class<Emitter>  VehicleDeflectEffectClass;
-var     Sound           VehicleDeflectSound;
-var     float           VehicleDeflectSoundVolume;
+var class<Emitter> VehiclePenetrateEffectClass;
+var Sound VehiclePenetrateSound;
+var float VehiclePenetrateSoundVolume;
+var class<Emitter> VehicleDeflectEffectClass;
+var Sound VehicleDeflectSound;
+var float VehicleDeflectSoundVolume;
 
 // Debugging
-var globalconfig bool   bDebugROBallistics; // if true, set bDebugBallistics to true for getting the arrow pointers
+var globalconfig bool bDebugROBallistics; // if true, set bDebugBallistics to true for getting the arrow pointers
 
 // From deprecated ROBullet class:
-const       MIN_PENETRATE_VELOCITY = 163;              // minimum bullet speed in Unreal units to damage anything (equivalent to 2.7 m/sec or 8.86 feet/sec)
+const MIN_PENETRATE_VELOCITY = 163; // minimum bullet speed in Unreal units to damage anything (equivalent to 2.7 m/sec or 8.86 feet/sec)
 
-var         class<DHHitEffect>      ImpactEffect;    // effect to spawn when bullets hits something other than a vehicle (handles sound & visual effect)
-var         class<ROBulletWhiz>     WhizSoundEffect; // bullet whip sound effect class
-var         class<Actor>            SplashEffect;    // water splash effect class
-var         Actor                   WallHitActor;    // internal var used for storing the wall that was hit so the same wall doesn't get hit again
+var class<DHHitEffect> ImpactEffect; // effect to spawn when bullets hits something other than a vehicle (handles sound & visual effect)
+var class<ROBulletWhiz> WhizSoundEffect; // bullet whip sound effect class
+var class<Actor> SplashEffect; // water splash effect class
+var Actor WallHitActor; // internal var used for storing the wall that was hit so the same wall doesn't get hit again
 
 // Modified to move bDebugBallistics stuff to PostNetBeginPlay, as net client won't yet have Instigator here
 simulated function PostBeginPlay()
@@ -52,7 +52,10 @@ simulated function PostBeginPlay()
     BCInverse = 1.0 / BallisticCoefficient;
     Velocity = Vector(Rotation) * Speed;
 
-    if (Role == ROLE_Authority && Instigator != none && Instigator.HeadVolume != none && Instigator.HeadVolume.bWaterVolume)
+    if (Role == ROLE_Authority
+        && Instigator != none
+        && Instigator.HeadVolume != none
+        && Instigator.HeadVolume.bWaterVolume)
     {
         Velocity *= 0.5;
     }
@@ -61,9 +64,9 @@ simulated function PostBeginPlay()
 // Modified to set InstigatorController, to set tracer properties if this is a tracer bullet, & to move bDebugBallistics stuff here from PostBeginPlay (with bDebugROBallistics option)
 simulated function PostNetBeginPlay()
 {
-    local Actor  TraceHitActor;
+    local Actor TraceHitActor;
     local Vector HitNormal;
-    local float  TraceRadius;
+    local float TraceRadius;
 
     if (Instigator != none)
     {
@@ -73,13 +76,13 @@ simulated function PostNetBeginPlay()
     if (bIsTracerBullet && Level.NetMode != NM_DedicatedServer)
     {
         SetDrawType(DT_StaticMesh);
-//      SetRotation(Rotator(Velocity)); // removed as simply setting bOrientToVelocity handles this natively (replacing use of Tick)
+        //      SetRotation(Rotator(Velocity)); // removed as simply setting bOrientToVelocity handles this natively (replacing use of Tick)
         bOrientToVelocity = true;
 
         if (Level.bDropDetail)
         {
             bDynamicLight = false;
-//          LightType = LT_None; // is default anyway
+            //          LightType = LT_None; // is default anyway
         }
         else
         {
@@ -111,11 +114,17 @@ simulated function PostNetBeginPlay()
             TraceRadius += Instigator.CollisionRadius;
         }
 
-        TraceHitActor = Trace(TraceHitLoc, HitNormal, Location + 65355.0 * Vector(Rotation), Location + TraceRadius * Vector(Rotation), true);
+        TraceHitActor = Trace(
+            TraceHitLoc, HitNormal, Location + 65355.0 * Vector(Rotation), Location + TraceRadius * Vector(Rotation),
+            true
+            );
 
         if (ROBulletWhipAttachment(TraceHitActor) != none)
         {
-            TraceHitActor = Trace(TraceHitLoc, HitNormal, Location + 65355.0 * Vector(Rotation), TraceHitLoc + 5.0 * Vector(Rotation), true);
+            TraceHitActor = Trace(
+                TraceHitLoc, HitNormal, Location + 65355.0 * Vector(Rotation), TraceHitLoc + 5.0 * Vector(Rotation),
+                true
+                );
         }
 
         Log("Bullet debug tracing: TraceHitActor =" @ TraceHitActor);
@@ -143,7 +152,6 @@ simulated singular function Touch(Actor Other)
 {
     local Vector HitLocation, HitNormal;
 
-
     // Added bBlockHitPointTraces check here instead of doing it at the start of ProcessTouch()
     // This is so a collision static mesh gets handled properly in ProcessTouch, as it will have bBlockHitPointTraces=false
     if (Other == none || (!Other.bProjTarget && !Other.bBlockActors) || !Other.bBlockHitPointTraces)
@@ -161,7 +169,8 @@ simulated singular function Touch(Actor Other)
     // It's more accurate than using our current location as projectile has often travelled further by the time this event gets called
     // But if that trace returns true then it somehow didn't hit the actor, so we fall back to using our current location as the HitLocation
     // Also skip trace & use our location if velocity is zero (touching actor when projectile spawns) or hit a Mover actor (legacy, don't know why)
-    if (Velocity == vect(0.0, 0.0, 0.0) || Other.IsA('Mover')
+    if (Velocity == vect(0.0, 0.0, 0.0)
+        || Other.IsA('Mover')
         || Other.TraceThisActor(HitLocation, HitNormal, Location, Location - (2.0 * Velocity), GetCollisionExtent()))
     {
         HitLocation = Location;
@@ -213,14 +222,14 @@ simulated singular function Touch(Actor Other)
 // Modified to handle tracer bullet clientside effects, as well as normal bullet functionality, plus handling of hit on a vehicle weapon similar to a shell
 simulated function ProcessTouch(Actor Other, Vector HitLocation)
 {
-    local DHPawn       HitPlayer, WhizzedPlayer;
-    local Pawn         InstigatorPlayer;
-    local Actor        A;
+    local DHPawn HitPlayer, WhizzedPlayer;
+    local Pawn InstigatorPlayer;
+    local Actor A;
     local array<Actor> SavedHitActors;
-    local Vector       Direction, PawnHitLocation, TempHitLocation, HitNormal;
-    local float        V;
-    local array<int>   HitPoints;
-    local int          TraceWhizType, i, MyDamage;
+    local Vector Direction, PawnHitLocation, TempHitLocation, HitNormal;
+    local float V;
+    local array<int> HitPoints;
+    local int TraceWhizType, i, MyDamage;
 
     if (SavedTouchActor == Other) // immediate exit to prevent recurring touches on same actor
     {
@@ -244,8 +253,13 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
     // Exit without doing anything if we hit something we don't want to count a hit on
     // Using InstigatorPlayer instead of Instigator, except for a check on "Other.Owner == Instigator", which stops a VehicleWeapon from somehow shooting itself
     // Note that bBlockHitPointTraces removed here & instead checked in Touch() event, so an actor owning a collision mesh actor gets handled properly
-    if (Other == none || Other == InstigatorPlayer || Other.Base == InstigatorPlayer || Other.Owner == InstigatorPlayer || Other.Owner == Instigator
-        || Other.bDeleteMe || (Other.IsA('Projectile') && !Other.bProjTarget))
+    if (Other == none
+        || Other == InstigatorPlayer
+        || Other.Base == InstigatorPlayer
+        || Other.Owner == InstigatorPlayer
+        || Other.Owner == Instigator
+        || Other.bDeleteMe
+        || (Other.IsA('Projectile') && !Other.bProjTarget))
     {
         return;
     }
@@ -313,10 +327,13 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
         for (i = 0; i < 3; ++i)
         {
             // HitPointTraces don't work well with short traces, so we have to do long trace first, then if we hit player we check whether he was within the whip attachment
-            A = InstigatorPlayer.HitPointTrace(TempHitLocation, HitNormal, HitLocation + (Direction * 65535.0), HitPoints, HitLocation,, TraceWhizType);
+            A = InstigatorPlayer.HitPointTrace(
+                TempHitLocation, HitNormal, HitLocation + (Direction * 65535.0), HitPoints, HitLocation,, TraceWhizType
+                );
 
             // We're primarily interested if we hit a player, but also need to check if hit invalid col mesh or destro mesh that doesn't stop bullet (as would need to repeat trace)
-            if (DHPawn(A) != none || (DHCollisionMeshActor(A) != none && DHCollisionMeshActor(A).bWontStopBullet)
+            if (DHPawn(A) != none
+                || (DHCollisionMeshActor(A) != none && DHCollisionMeshActor(A).bWontStopBullet)
                 || (RODestroyableStaticMesh(A) != none && RODestroyableStaticMesh(A).bWontStopBullets))
             {
                 // Only count hit if traced actor is within extent of bullet whip (we had to do an artificially long HitPointTrace, so may have traced something far away)
@@ -347,7 +364,9 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
         if (HitPlayer != none)
         {
             // Trace along path from where we hit player's whip attachment to where we traced a hit on player, checking if any blocking actor is in the way
-            foreach InstigatorPlayer.TraceActors(Class'Actor', A, TempHitLocation, HitNormal, PawnHitLocation, HitLocation)
+            foreach InstigatorPlayer.TraceActors(
+                Class'Actor', A, TempHitLocation, HitNormal, PawnHitLocation, HitLocation
+                )
             {
                 // We hit a blocking actor, so now check if it's a valid 'stopper' (something that would trigger HitWall or ProcessTouch)
                 if (A.bWorldGeometry || A.Physics == PHYS_Karma || (A.bBlockActors && A.bBlockHitPointTraces))
@@ -371,8 +390,13 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
                     }
 
                     // A blocking actor is in the way, so we didn't really hit the player (but ignore anything ProcessTouch would normally ignore)
-                    if (A != InstigatorPlayer && A.Base != InstigatorPlayer && A.Owner != InstigatorPlayer && A.Owner != Instigator
-                        && !A.bDeleteMe && !(A.IsA('Projectile') && !A.bProjTarget) && A != HitPlayer)
+                    if (A != InstigatorPlayer
+                        && A.Base != InstigatorPlayer
+                        && A.Owner != InstigatorPlayer
+                        && A.Owner != Instigator
+                        && !A.bDeleteMe
+                        && !(A.IsA('Projectile') && !A.bProjTarget)
+                        && A != HitPlayer)
                     {
                         HitPlayer = none;
                         break;
@@ -417,7 +441,9 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
         {
             if (!HitPlayer.bDeleteMe)
             {
-                HitPlayer.ProcessLocationalDamage(MyDamage, Instigator, PawnHitLocation, MomentumTransfer * Direction, MyDamageType, HitPoints);
+                HitPlayer.ProcessLocationalDamage(
+                    MyDamage, Instigator, PawnHitLocation, MomentumTransfer * Direction, MyDamageType, HitPoints
+                    );
             }
 
             // If traced hit on destro mesh that won't stop bullet (e.g. glass) in front of player, need to damage it now as we're destroying bullet & it won't collide with destro mesh
@@ -425,7 +451,9 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
             {
                 if (RODestroyableStaticMesh(SavedHitActors[i]) != none)
                 {
-                    SavedHitActors[i].TakeDamage(MyDamage, Instigator, SavedHitActors[i].Location, MomentumTransfer * Direction, MyDamageType);
+                    SavedHitActors[i].TakeDamage(
+                        MyDamage, Instigator, SavedHitActors[i].Location, MomentumTransfer * Direction, MyDamageType
+                        );
                 }
             }
         }
@@ -446,9 +474,9 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
 // Note this gets called when bullet collides with an ROVehicle (not a VehicleWeapon), as well as world geometry
 simulated function HitWall(Vector HitNormal, Actor Wall)
 {
-    local ROVehicle        HitVehicle;
+    local ROVehicle HitVehicle;
     local DHArmoredVehicle AV;
-    local bool             bPenetratedVehicle;
+    local bool bPenetratedVehicle;
 
     // Hit WallHitActor that we've already hit & recorded
     if (WallHitActor == Wall && WallHitActor != none)
@@ -501,10 +529,13 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
             if (HitVehicle != none && !bPenetratedVehicle)
             {
                 // Hit exposed gunsight optics
-                if (AV != none && AV.GunOpticsHitPointIndex >= 0 && AV.GunOpticsHitPointIndex < AV.NewVehHitpoints.Length
+                if (AV != none
+                    && AV.GunOpticsHitPointIndex >= 0
+                    && AV.GunOpticsHitPointIndex < AV.NewVehHitpoints.Length
                     && AV.NewVehHitpoints[AV.GunOpticsHitPointIndex].NewHitPointType == NHP_GunOptics
                     && AV.IsNewPointShot(Location, MomentumTransfer * Normal(Velocity), AV.GunOpticsHitPointIndex)
-                    && AV.Cannon != none && DHVehicleCannonPawn(AV.Cannon.WeaponPawn) != none)
+                    && AV.Cannon != none
+                    && DHVehicleCannonPawn(AV.Cannon.WeaponPawn) != none)
                 {
                     DHVehicleCannonPawn(AV.Cannon.WeaponPawn).DamageCannonOverlay();
 
@@ -519,16 +550,24 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
                     }
                 }
                 // This allows VehicleMG bullets to damage wheels of APCs
-                else if (DHVehicle(HitVehicle) != none && DHVehicle(HitVehicle).bIsAPC && DHVehicle(HitVehicle).HasDamageableWheels())
+                else if (DHVehicle(HitVehicle) != none
+                    && DHVehicle(HitVehicle).bIsAPC
+                    && DHVehicle(HitVehicle).HasDamageableWheels())
                 {
                     UpdateInstigator();
-                    Wall.TakeDamage(Damage - (20.0 * (1.0 - (VSize(Velocity) / default.Speed))), Instigator, Location, MomentumTransfer * Normal(Velocity), MyDamageType);
+                    Wall.TakeDamage(
+                        Damage - (20.0 * (1.0 - (VSize(Velocity) / default.Speed))), Instigator, Location,
+                        MomentumTransfer * Normal(Velocity), MyDamageType
+                        );
                 }
             }
             else if (Wall.bCanBeDamaged)
             {
                 UpdateInstigator();
-                Wall.TakeDamage(Damage - (20.0 * (1.0 - (VSize(Velocity) / default.Speed))), Instigator, Location, MomentumTransfer * Normal(Velocity), MyDamageType);
+                Wall.TakeDamage(
+                    Damage - (20.0 * (1.0 - (VSize(Velocity) / default.Speed))), Instigator, Location,
+                    MomentumTransfer * Normal(Velocity), MyDamageType
+                    );
             }
 
             MakeNoise(1.0);
@@ -593,13 +632,21 @@ simulated function PlayVehicleHitEffects(bool bPenetrated, Vector HitLocation, V
 }
 
 // New helper function, just to improve readability & to avoid repeating functionality in other classes (e.g. bullet's pre-launch trace)
-simulated static function GetWhizType(out int TraceWhizType, DHPawn WhizzedPlayer, Pawn Instigator, Vector LaunchLocation)
+simulated static function GetWhizType(
+    out int TraceWhizType,
+    DHPawn WhizzedPlayer,
+    Pawn Instigator,
+    Vector LaunchLocation
+    )
 {
-    local bool  bFriendlyFire;
+    local bool bFriendlyFire;
     local float BulletDistance;
 
-    bFriendlyFire = Instigator != none && WhizzedPlayer != none && Instigator.GetTeamNum() == WhizzedPlayer.GetTeamNum()
-        && WhizzedPlayer.PlayerReplicationInfo != none && !WhizzedPlayer.PlayerReplicationInfo.bBot;
+    bFriendlyFire = Instigator != none
+        && WhizzedPlayer != none
+        && Instigator.GetTeamNum() == WhizzedPlayer.GetTeamNum()
+        && WhizzedPlayer.PlayerReplicationInfo != none
+        && !WhizzedPlayer.PlayerReplicationInfo.bBot;
 
     // We only need to calculate distance travelled by bullet if it's friendly fire or the passed default WhizType is a supersonic 'snap'
     if (bFriendlyFire || TraceWhizType == 1)
@@ -679,12 +726,12 @@ simulated function Deflect(Vector HitNormal)
 
     bHasDeflected = true;
 
-    if (TracerEffect != none && VSizeSquared(Velocity) < 750000.0) //14.4 m/s
+    if (TracerEffect != none && VSizeSquared(Velocity) < 750000.0) // 14.4 m/s
     {
         TracerEffect.Destroy();
     }
 
-    if (StaticMesh != DeflectedMesh) //swaps to ball mesh from streak mesh, but still has trail until below 14.4 m/s
+    if (StaticMesh != DeflectedMesh) // swaps to ball mesh from streak mesh, but still has trail until below 14.4 m/s
     {
         SetStaticMesh(DeflectedMesh);
     }
@@ -722,21 +769,27 @@ simulated function PhysicsVolumeChange(PhysicsVolume NewVolume)
 // Modified to add water splash sound, & to add an EffectIsRelevant check before spawning visual splash effect
 simulated function CheckForSplash(Vector SplashLocation)
 {
-    local Actor  HitActor;
+    local Actor HitActor;
     local Vector HitLocation, HitNormal;
 
     // No splash if detail settings are low, or if projectile is already in a water volume
-    if (Level.Netmode != NM_DedicatedServer && !Level.bDropDetail && Level.DetailMode != DM_Low
+    if (Level.Netmode != NM_DedicatedServer
+        && !Level.bDropDetail
+        && Level.DetailMode != DM_Low
         && !(Instigator != none && Instigator.PhysicsVolume != none && Instigator.PhysicsVolume.bWaterVolume))
     {
         bTraceWater = true;
-        HitActor = Trace(HitLocation, HitNormal, SplashLocation - (50.0 * vect(0.0, 0.0, 1.0)), SplashLocation + (15.0 * vect(0.0, 0.0, 1.0)), true);
+        HitActor = Trace(
+            HitLocation, HitNormal, SplashLocation - (50.0 * vect(0.0, 0.0, 1.0)),
+            SplashLocation + (15.0 * vect(0.0, 0.0, 1.0)), true
+            );
         bTraceWater = false;
 
         // We hit a water volume or a fluid surface, so play splash effects
         // Note this seems unnecessary, as we must have hit a water volume, as this is only called by PhysicsVolumeChange() when projectile enters a water volume
         // But the trace gives a more accurate location to spawn the splash effect, which makes a significant difference, so it's worth doing
-        if ((PhysicsVolume(HitActor) != none && PhysicsVolume(HitActor).bWaterVolume) || FluidSurfaceInfo(HitActor) != none)
+        if ((PhysicsVolume(HitActor) != none && PhysicsVolume(HitActor).bWaterVolume)
+            || FluidSurfaceInfo(HitActor) != none)
         {
             if (WaterHitSound != none)
             {

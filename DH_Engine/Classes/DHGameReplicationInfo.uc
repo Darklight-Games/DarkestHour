@@ -32,14 +32,14 @@ enum EVehicleReservationError
     ERROR_PoolMaxActive,
     ERROR_NoReservations,
     ERROR_NoLicense,
-    ERROR_Restricted
+    ERROR_Restricted,
 };
 
 struct SpawnVehicle
 {
-    var int             SpawnPointIndex;
-    var int             VehiclePoolIndex;
-    var Vehicle         Vehicle;
+    var int SpawnPointIndex;
+    var int VehiclePoolIndex;
+    var Vehicle Vehicle;
 };
 
 struct SupplyPoint
@@ -62,7 +62,7 @@ enum EArtilleryTypeError
     ERROR_Cooldown,
     ERROR_Ongoing,
     ERROR_SquadTooSmall,
-    ERROR_Cancellable
+    ERROR_Cancellable,
 };
 
 struct STeamScores
@@ -72,73 +72,73 @@ struct STeamScores
     var int CategoryScores[2];
 };
 
-var STeamScores         TeamScores[2];
+var STeamScores TeamScores[2];
 
-var class<DHGameType>   GameType;
+var class<DHGameType> GameType;
 
-var SupplyPoint         SupplyPoints[SUPPLY_POINTS_MAX];
+var SupplyPoint SupplyPoints[SUPPLY_POINTS_MAX];
 
-var DHRadio             Radios[RADIOS_MAX];
+var DHRadio Radios[RADIOS_MAX];
 
-var int                 AxisNationID;
-var int                 AlliedNationID;
-var int                 AlliesVictoryMusicIndex;
-var int                 AxisVictoryMusicIndex;
+var int AxisNationID;
+var int AlliedNationID;
+var int AlliesVictoryMusicIndex;
+var int AxisVictoryMusicIndex;
 
-var int                 RoundEndTime;       // Length of a round in seconds (this can be modified at real time unlike RoundDuration, which it replaces)
-var int                 RoundOverTime;      // The time stamp at which the round is over
-var int                 SpawningEnableTimes[2]; // When spawning for the round should be enabled (default: 0)
+var int RoundEndTime; // Length of a round in seconds (this can be modified at real time unlike RoundDuration, which it replaces)
+var int RoundOverTime; // The time stamp at which the round is over
+var int SpawningEnableTimes[2]; // When spawning for the round should be enabled (default: 0)
 
-var int                 DHRoundLimit;       // Added this so that a changing round limit can be replicated to clients.
-var int                 DHRoundDuration;    // Added this so that a more flexible changing round duration can be replicated to clients (e.g change to unlimited)
+var int DHRoundLimit; // Added this so that a changing round limit can be replicated to clients.
+var int DHRoundDuration; // Added this so that a more flexible changing round duration can be replicated to clients (e.g change to unlimited)
 
-var DHRoleInfo          DHAxisRoles[ROLES_MAX];
-var DHRoleInfo          DHAlliesRoles[ROLES_MAX];
+var DHRoleInfo DHAxisRoles[ROLES_MAX];
+var DHRoleInfo DHAlliesRoles[ROLES_MAX];
 
-var DHArtillery         DHArtillery[ARTILLERY_MAX];
+var DHArtillery DHArtillery[ARTILLERY_MAX];
 
-var byte                DHAlliesRoleLimit[ROLES_MAX];
-var byte                DHAlliesRoleBotCount[ROLES_MAX];
-var byte                DHAlliesRoleCount[ROLES_MAX];
-var byte                DHAxisRoleLimit[ROLES_MAX];
-var byte                DHAxisRoleBotCount[ROLES_MAX];
-var byte                DHAxisRoleCount[ROLES_MAX];
+var byte DHAlliesRoleLimit[ROLES_MAX];
+var byte DHAlliesRoleBotCount[ROLES_MAX];
+var byte DHAlliesRoleCount[ROLES_MAX];
+var byte DHAxisRoleLimit[ROLES_MAX];
+var byte DHAxisRoleBotCount[ROLES_MAX];
+var byte DHAxisRoleCount[ROLES_MAX];
 
-var int                 SpawnsRemaining[2];
-var float               AttritionRate[2];
-var float               CurrentAlliedToAxisRatio;
+var int SpawnsRemaining[2];
+var float AttritionRate[2];
+var float CurrentAlliedToAxisRatio;
 
 // TODO: vehicle classes should have been made available in static data for client and server to read
-var class<ROVehicle>    VehiclePoolVehicleClasses[VEHICLE_POOLS_MAX];
-var byte                VehiclePoolIsActives[VEHICLE_POOLS_MAX];
-var float               VehiclePoolNextAvailableTimes[VEHICLE_POOLS_MAX];
-var byte                VehiclePoolActiveCounts[VEHICLE_POOLS_MAX];
-var byte                VehiclePoolMaxActives[VEHICLE_POOLS_MAX];
-var byte                VehiclePoolMaxSpawns[VEHICLE_POOLS_MAX];
-var byte                VehiclePoolSpawnCounts[VEHICLE_POOLS_MAX];
-var byte                VehiclePoolIsSpawnVehicles[VEHICLE_POOLS_MAX];
-var byte                VehiclePoolReservationCount[VEHICLE_POOLS_MAX];
-var int                 VehiclePoolIgnoreMaxTeamVehiclesFlags;
+var class<ROVehicle> VehiclePoolVehicleClasses[VEHICLE_POOLS_MAX];
+var byte VehiclePoolIsActives[VEHICLE_POOLS_MAX];
+var float VehiclePoolNextAvailableTimes[VEHICLE_POOLS_MAX];
+var byte VehiclePoolActiveCounts[VEHICLE_POOLS_MAX];
+var byte VehiclePoolMaxActives[VEHICLE_POOLS_MAX];
+var byte VehiclePoolMaxSpawns[VEHICLE_POOLS_MAX];
+var byte VehiclePoolSpawnCounts[VEHICLE_POOLS_MAX];
+var byte VehiclePoolIsSpawnVehicles[VEHICLE_POOLS_MAX];
+var byte VehiclePoolReservationCount[VEHICLE_POOLS_MAX];
+var int VehiclePoolIgnoreMaxTeamVehiclesFlags;
 
 // It is impossible to get DHMineVolume to actually replicate variables so this is needed as proxy.
-var byte                    DHMineVolumeIsActives[MINE_VOLUMES_MAX];
-var array<RONoArtyVolume>   DHNoArtyVolumes;
-var byte                    DHNoArtyVolumeIsActives[NO_ARTY_VOLUMES_MAX];
+var byte DHMineVolumeIsActives[MINE_VOLUMES_MAX];
+var array<RONoArtyVolume> DHNoArtyVolumes;
+var byte DHNoArtyVolumeIsActives[NO_ARTY_VOLUMES_MAX];
 
-var int                 MaxTeamVehicles[2];
+var int MaxTeamVehicles[2];
 
-var float               TeamMunitionPercentages[2];
+var float TeamMunitionPercentages[2];
 
-var DHSpawnPointBase    SpawnPoints[SPAWN_POINTS_MAX];
+var DHSpawnPointBase SpawnPoints[SPAWN_POINTS_MAX];
 
-var DHObjective             DHObjectives[OBJECTIVES_MAX];
-var Hashtable_string_int    DHObjectiveTable; // not replicated, but clients create their own so can be used by both client/server
+var DHObjective DHObjectives[OBJECTIVES_MAX];
+var Hashtable_string_int DHObjectiveTable; // not replicated, but clients create their own so can be used by both client/server
 
-var bool                bIsInSetupPhase;
-var bool                bRoundIsOver;
+var bool bIsInSetupPhase;
+var bool bRoundIsOver;
 
-var localized string    ForceScaleText;
-var localized string    ReinforcementsInfiniteText;
+var localized string ForceScaleText;
+var localized string ReinforcementsInfiniteText;
 
 // Holds the runtime status of the construction classes.
 struct ConstructionInfo
@@ -147,52 +147,53 @@ struct ConstructionInfo
     var byte Remaining;
 };
 
-var ConstructionInfo        Constructions[CONSTRUCTION_CLASSES_MAX];
-var DHConstructionManager   ConstructionManager;
+var ConstructionInfo Constructions[CONSTRUCTION_CLASSES_MAX];
+var DHConstructionManager ConstructionManager;
 
-var bool                bAreConstructionsEnabled;
-var bool                bAllChatEnabled;
+var bool bAreConstructionsEnabled;
+var bool bAllChatEnabled;
 
-var byte                ServerTickHealth;
-var int                 ServerNetHealth;
+var byte ServerTickHealth;
+var int ServerNetHealth;
 
-var private bool        bIsDangerZoneEnabled;
-var private byte        DangerZoneNeutral;
-var private byte        DangerZoneBalance;
-var private byte        OldDangerZoneNeutral;
-var private byte        OldDangerZoneBalance;
+var private bool bIsDangerZoneEnabled;
+var private byte DangerZoneNeutral;
+var private byte DangerZoneBalance;
+var private byte OldDangerZoneNeutral;
+var private byte OldDangerZoneBalance;
 
 // Map markers
 struct MapMarker
 {
     var DHPlayerReplicationInfo Author;
     var class<DHMapMarker> MapMarkerClass;
-    var byte LocationX;                     // Quantized representation of 0.0..1.0 - X coordinate
-    var byte LocationY;                     // Quantized representation of 0.0..1.0 - Y coordinate
-    var byte SquadIndex;                    // The squad index that owns the marker, or -1 if team-wide
-    var int CreationTime;                   // The time this marker was created, relative to ElapsedTime
-    var int ExpiryTime;                     // The expiry time, relative to ElapsedTime
-    var Vector WorldLocation;               // World location of the marker
+    var byte LocationX; // Quantized representation of 0.0..1.0 - X coordinate
+    var byte LocationY; // Quantized representation of 0.0..1.0 - Y coordinate
+    var byte SquadIndex; // The squad index that owns the marker, or -1 if team-wide
+    var int CreationTime; // The time this marker was created, relative to ElapsedTime
+    var int ExpiryTime; // The expiry time, relative to ElapsedTime
+    var Vector WorldLocation; // World location of the marker
 };
 
 // This handles the mutable artillery type info (classes, team indices can be fetched from static data in DH_LevelInfo).
 // TODO: reset this somewhere on round begin
 struct ArtilleryTypeInfo
 {
-    var bool                bIsAvailable;               // Whether or not this type of artillery is available (can be made available and unavailable during a round).
-    var int                 UsedCount;                  // The amount of times this artillery type has been confirmed.
-    var int                 Limit;                      // The amount of these types of artillery strikes that are available.
-    var int                 NextConfirmElapsedTime;     // The next time, relative to ElapsedTime, that a request can confirmed for this artillery type.
-    var DHArtillery         ArtilleryActor;             // Artillery actor.
+    var bool bIsAvailable; // Whether or not this type of artillery is available (can be made available and unavailable during a round).
+    var int UsedCount; // The amount of times this artillery type has been confirmed.
+    var int Limit; // The amount of these types of artillery strikes that are available.
+    var int NextConfirmElapsedTime; // The next time, relative to ElapsedTime, that a request can confirmed for this artillery type.
+    var DHArtillery ArtilleryActor; // Artillery actor.
 };
-var ArtilleryTypeInfo                   ArtilleryTypeInfos[ARTILLERY_TYPES_MAX];
+
+var ArtilleryTypeInfo ArtilleryTypeInfos[ARTILLERY_TYPES_MAX];
 
 // to do: add airstrikes
 enum EArtilleryType
 {
     ArtyType_Barrage,
     ArtyType_Paradrop,
-    ArtyType_Airstrikes
+    ArtyType_Airstrikes,
 };
 
 struct SAvailableArtilleryInfoEntry
@@ -201,12 +202,12 @@ struct SAvailableArtilleryInfoEntry
     var EArtilleryType Type;
 };
 
-var private array<string>               MapMarkerClassNames;
-var class<DHMapMarker>                  MapMarkerClasses[MAP_MARKERS_CLASSES_MAX];
-var MapMarker                           AxisMapMarkers[MAP_MARKERS_MAX];
-var MapMarker                           AlliesMapMarkers[MAP_MARKERS_MAX];
-var byte                                bOffMapArtilleryEnabled[2];
-var byte                                bOnMapArtilleryEnabled[2];
+var private array<string> MapMarkerClassNames;
+var class<DHMapMarker> MapMarkerClasses[MAP_MARKERS_CLASSES_MAX];
+var MapMarker AxisMapMarkers[MAP_MARKERS_MAX];
+var MapMarker AlliesMapMarkers[MAP_MARKERS_MAX];
+var byte bOffMapArtilleryEnabled[2];
+var byte bOnMapArtilleryEnabled[2];
 
 // Delayed round ending
 enum ERoundEndReason
@@ -214,73 +215,28 @@ enum ERoundEndReason
     REASON_Surrendered,
 };
 
-var byte            DelayedRoundWinnerTeamIndex;
+var byte DelayedRoundWinnerTeamIndex;
 var ERoundEndReason DelayedRoundEndReason;
 
-var         bool bIsSurrenderVoteEnabled;
+var bool bIsSurrenderVoteEnabled;
 var private byte SurrenderVotesInProgress[2];
 
 replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
-        RoundEndTime,
-        SpawnsRemaining,
-        DHAxisRoles,
-        DHAlliesRoles,
-        DHAlliesRoleLimit,
-        DHAlliesRoleCount,
-        DHAxisRoleLimit,
-        DHAxisRoleCount,
-        DHAlliesRoleBotCount,
-        DHAxisRoleBotCount,
-        Radios,
-        VehiclePoolVehicleClasses,
-        VehiclePoolIsActives,
-        VehiclePoolNextAvailableTimes,
-        VehiclePoolActiveCounts,
-        VehiclePoolMaxActives,
-        VehiclePoolMaxSpawns,
-        VehiclePoolSpawnCounts,
-        VehiclePoolIsSpawnVehicles,
-        VehiclePoolReservationCount,
-        VehiclePoolIgnoreMaxTeamVehiclesFlags,
-        MaxTeamVehicles,
-        DHObjectives,
-        AttritionRate,
-        GameType,
-        CurrentAlliedToAxisRatio,
-        SpawnPoints,
-        SpawningEnableTimes,
-        bIsInSetupPhase,
-        bRoundIsOver,
-        bAreConstructionsEnabled,
-        SupplyPoints,
-        AxisMapMarkers,
-        AlliesMapMarkers,
-        bAllChatEnabled,
-        RoundOverTime,
-        DHRoundLimit,
-        DHRoundDuration,
-        ServerTickHealth,
-        ServerNetHealth,
-        ArtilleryTypeInfos,
-        DHArtillery,
-        TeamMunitionPercentages,
-        AlliesVictoryMusicIndex,
-        AxisVictoryMusicIndex,
-        bIsDangerZoneEnabled,
-        DangerZoneNeutral,
-        DangerZoneBalance,
-        DelayedRoundWinnerTeamIndex,
-        bIsSurrenderVoteEnabled,
-        SurrenderVotesInProgress,
-        Constructions,
-        bOffMapArtilleryEnabled,
-        bOnMapArtilleryEnabled,
-        DHMineVolumeIsActives,
-        DHNoArtyVolumeIsActives,
-        TeamScores;
+        RoundEndTime, SpawnsRemaining, DHAxisRoles, DHAlliesRoles, DHAlliesRoleLimit, DHAlliesRoleCount,
+        DHAxisRoleLimit, DHAxisRoleCount, DHAlliesRoleBotCount, DHAxisRoleBotCount, Radios, VehiclePoolVehicleClasses,
+        VehiclePoolIsActives, VehiclePoolNextAvailableTimes, VehiclePoolActiveCounts, VehiclePoolMaxActives,
+        VehiclePoolMaxSpawns, VehiclePoolSpawnCounts, VehiclePoolIsSpawnVehicles, VehiclePoolReservationCount,
+        VehiclePoolIgnoreMaxTeamVehiclesFlags, MaxTeamVehicles, DHObjectives, AttritionRate, GameType,
+        CurrentAlliedToAxisRatio, SpawnPoints, SpawningEnableTimes, bIsInSetupPhase, bRoundIsOver,
+        bAreConstructionsEnabled, SupplyPoints, AxisMapMarkers, AlliesMapMarkers, bAllChatEnabled, RoundOverTime,
+        DHRoundLimit, DHRoundDuration, ServerTickHealth, ServerNetHealth, ArtilleryTypeInfos, DHArtillery,
+        TeamMunitionPercentages, AlliesVictoryMusicIndex, AxisVictoryMusicIndex, bIsDangerZoneEnabled,
+        DangerZoneNeutral, DangerZoneBalance, DelayedRoundWinnerTeamIndex, bIsSurrenderVoteEnabled,
+        SurrenderVotesInProgress, Constructions, bOffMapArtilleryEnabled, bOnMapArtilleryEnabled, DHMineVolumeIsActives,
+        DHNoArtyVolumeIsActives, TeamScores;
 
     reliable if (bNetInitial && Role == ROLE_Authority)
         AxisNationID, AlliedNationID, MapMarkerClasses;
@@ -298,10 +254,10 @@ simulated event PreBeginPlay()
 // Another problem is a big splash effect was being played for every ejected bullet shell case that hit water, looking totally wrong for such a small, relatively slow object
 simulated function PostBeginPlay()
 {
-    local WaterVolume                   WV;
-    local FluidSurfaceInfo              FSI;
-    local int                           i, j;
-    local class<DHMapMarker>            MapMarkerClass;
+    local WaterVolume WV;
+    local FluidSurfaceInfo FSI;
+    local int i, j;
+    local class<DHMapMarker> MapMarkerClass;
 
     super.PostBeginPlay();
 
@@ -391,7 +347,8 @@ simulated function bool HasTeamConstructionRemaining(int TeamIndex, class<DHCons
         return false;
     }
 
-    return LevelInfo.ConstructionsEvaluated[ConstructionIndex].Limit == -1 || Constructions[ConstructionIndex].Remaining > 0;
+    return LevelInfo.ConstructionsEvaluated[ConstructionIndex].Limit == -1
+        || Constructions[ConstructionIndex].Remaining > 0;
 }
 
 // Returns the remaining construction count for a team of a certain class, or -1 if the class construction is unlimited.
@@ -406,7 +363,7 @@ simulated function int GetTeamConstructionRemaining(int TeamIndex, class<DHConst
 
     if (ConstructionIndex == -1)
     {
-       return -1;
+        return -1;
     }
 
     if (LI.ConstructionsEvaluated[ConstructionIndex].Limit == -1)
@@ -556,6 +513,7 @@ function GetIndicesForObjectiveSpawns(int Team, out array<int> Indices)
 
     // Eliminate all indices that are below the Minimum Required Depth or have been rejected.
     MinDepth = GetMinRequiredDepth();
+
     for (i = Indices.Length - 1; i >= 0; --i)
     {
         ObjIndex = Indices[i] & 0xFFFF;
@@ -597,7 +555,14 @@ function GetIndicesForObjectiveSpawns(int Team, out array<int> Indices)
     }
 }
 
-function TraverseTreeNode(int Team, DHObjectiveTreeNode Root, DHObjectiveTreeNode Node, out array<int> ObjectiveIndices, out array<int> RejectedObjectiveIndices, optional int Depth)
+function TraverseTreeNode(
+    int Team,
+    DHObjectiveTreeNode Root,
+    DHObjectiveTreeNode Node,
+    out array<int> ObjectiveIndices,
+    out array<int> RejectedObjectiveIndices,
+    optional int Depth
+    )
 {
     local int i;
     local bool bIsFarEnoughAway;
@@ -624,7 +589,8 @@ function TraverseTreeNode(int Team, DHObjectiveTreeNode Root, DHObjectiveTreeNod
 
         if (bNodeHasHints && !bIsActive)
         {
-            bIsFarEnoughAway = VSize(Root.Objective.Location - Node.Objective.Location) > Class'DHUnits'.static.MetersToUnreal(LI.ObjectiveSpawnDistanceThreshold);
+            bIsFarEnoughAway = VSize(Root.Objective.Location - Node.Objective.Location)
+                > Class'DHUnits'.static.MetersToUnreal(LI.ObjectiveSpawnDistanceThreshold);
 
             if (bIsFarEnoughAway)
             {
@@ -790,8 +756,8 @@ function RemoveSupplyPoint(DHConstructionSupplyAttachment CSA)
 // This is meant to be used by vehicles with vehicle supply attachements
 function int CollectSupplyFromMainCache(int Team, int MaxCarryingCapacity)
 {
-    local int                               i, n;
-    local DHConstructionSupplyAttachment    SupplyAttachment;
+    local int i, n;
+    local DHConstructionSupplyAttachment SupplyAttachment;
 
     for (i = 0; i < arraycount(SupplyPoints); ++i)
     {
@@ -812,7 +778,9 @@ function int CollectSupplyFromMainCache(int Team, int MaxCarryingCapacity)
             n = Clamp(SupplyAttachment.GetSupplyCount(), 0, MaxCarryingCapacity);
 
             // Subtract the supply we will give
-            SupplyAttachment.SetSupplyCount(FClamp(SupplyAttachment.GetSupplyCount() - n, 0.0, float(SupplyAttachment.SupplyCountMax)));
+            SupplyAttachment.SetSupplyCount(
+                FClamp(SupplyAttachment.GetSupplyCount() - n, 0.0, float(SupplyAttachment.SupplyCountMax))
+                );
 
             // Return the supply amount we are giving
             return n;
@@ -831,10 +799,10 @@ function int GetNumberOfGeneratingSupplyPointsForTeam(int Team)
     // Count active unfilled supply points that generate supply based on team
     for (i = 0; i < arraycount(SupplyPoints); ++i)
     {
-        if (SupplyPoints[i].Actor != none &&
-            SupplyPoints[i].bIsActive == 1 &&
-            SupplyPoints[i].TeamIndex == Team &&
-            SupplyPoints[i].Actor.IsGeneratingSupplies())
+        if (SupplyPoints[i].Actor != none
+            && SupplyPoints[i].bIsActive == 1
+            && SupplyPoints[i].TeamIndex == Team
+            && SupplyPoints[i].Actor.IsGeneratingSupplies())
         {
             ++Count;
         }
@@ -851,10 +819,10 @@ simulated function int GetNumberOfSupplyCachesForTeam(int Team, optional bool bE
     // Count active supply points based on team
     for (i = 0; i < arraycount(SupplyPoints); ++i)
     {
-        if (SupplyPoints[i].Actor != none &&
-            SupplyPoints[i].bIsActive == 1 &&
-            SupplyPoints[i].TeamIndex == Team &&
-            SupplyPoints[i].ActorClass.default.bCanGenerateSupplies)
+        if (SupplyPoints[i].Actor != none
+            && SupplyPoints[i].bIsActive == 1
+            && SupplyPoints[i].TeamIndex == Team
+            && SupplyPoints[i].ActorClass.default.bCanGenerateSupplies)
         {
             ++Count;
 
@@ -973,16 +941,23 @@ simulated function bool IsRallyPointIndexValid(DHPlayer PC, byte RallyPointIndex
     return true;
 }
 
-simulated function bool CanSpawnWithParameters(int SpawnPointIndex, int TeamIndex, int RoleIndex, int SquadIndex, int VehiclePoolIndex, optional bool bSkipTimeCheck)
+simulated function bool CanSpawnWithParameters(
+    int SpawnPointIndex,
+    int PlayerTeamIndex,
+    int PlayerRoleIndex,
+    int PlayerSquadIndex,
+    int PlayerVehiclePoolIndex,
+    optional bool bSkipTimeCheck
+    )
 {
     local DHSpawnPointBase SP;
     local class<DHVehicle> VehicleClass;
 
-    if (VehiclePoolIndex != -1)
+    if (PlayerVehiclePoolIndex != -1)
     {
-        VehicleClass = class<DHVehicle>(GetVehiclePoolVehicleClass(VehiclePoolIndex));
+        VehicleClass = class<DHVehicle>(GetVehiclePoolVehicleClass(PlayerVehiclePoolIndex));
 
-        if (VehicleClass == none || !CanSpawnVehicle(VehiclePoolIndex, bSkipTimeCheck))
+        if (VehicleClass == none || !CanSpawnVehicle(PlayerVehiclePoolIndex, bSkipTimeCheck))
         {
             return false;
         }
@@ -990,7 +965,10 @@ simulated function bool CanSpawnWithParameters(int SpawnPointIndex, int TeamInde
 
     SP = GetSpawnPoint(SpawnPointIndex);
 
-    return SP != none && SP.CanSpawnWithParameters(self, TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex, bSkipTimeCheck);
+    return SP != none
+        && SP.CanSpawnWithParameters(
+            self, PlayerTeamIndex, PlayerRoleIndex, PlayerSquadIndex, PlayerVehiclePoolIndex, bSkipTimeCheck
+            );
 }
 
 simulated function bool CanSpawnVehicle(int VehiclePoolIndex, optional bool bSkipTimeCheck)
@@ -1106,7 +1084,10 @@ simulated function byte GetVehiclePoolAvailableReservationCount(int VehiclePoolI
 
 function bool ReserveVehicle(DHPlayer PC, int VehiclePoolIndex)
 {
-    if (PC == none || VehiclePoolIndex != -1 && GetVehicleReservationError(PC, DHRoleInfo(PC.GetRoleInfo()), PC.GetTeamNum(), VehiclePoolIndex) != ERROR_None)
+    if (PC == none
+        || VehiclePoolIndex != -1
+            && GetVehicleReservationError(PC, DHRoleInfo(PC.GetRoleInfo()), PC.GetTeamNum(), VehiclePoolIndex)
+                != ERROR_None)
     {
         return false;
     }
@@ -1256,11 +1237,6 @@ simulated function GetRoleCounts(RORoleInfo RI, out int Count, out int BotCount,
 // Artillery Functions
 //------------------------------------------------------------------------------
 
-simulated function bool IsArtilleryEnabled(int TeamIndex)
-{
-    return bOffMapArtilleryEnabled[TeamIndex] == 1 || bOffMapArtilleryEnabled[TeamIndex] == 1;
-}
-
 function AddArtillery(DHArtillery Artillery)
 {
     local int i;
@@ -1389,36 +1365,35 @@ simulated function int GetRoundTimeRemaining()
 
 simulated function string GetTeamScaleString(int Team)
 {
-   local float     d;
-   local int       i;
+    local float d;
+    local int i;
 
-   if (Team == AXIS_TEAM_INDEX)
-   {
-       d = (1.0 - CurrentAlliedToAxisRatio) - (1.0 - (1.0 - CurrentAlliedToAxisRatio));
-   }
+    if (Team == AXIS_TEAM_INDEX)
+    {
+        d = (1.0 - CurrentAlliedToAxisRatio) - (1.0 - (1.0 - CurrentAlliedToAxisRatio));
+    }
+    else if (Team == ALLIES_TEAM_INDEX)
+    {
+        d = CurrentAlliedToAxisRatio - (1.0 - CurrentAlliedToAxisRatio);
+    }
 
-   else if (Team == ALLIES_TEAM_INDEX)
-   {
-       d = CurrentAlliedToAxisRatio - (1.0 - CurrentAlliedToAxisRatio);
-   }
+    i = int(Round(d * 100));
 
-   i = int(Round(d * 100));
-
-   if (i > 0)
-   {
-       return "+" $ i $ "%";
-   }
-   else
-   {
-       return string(i) $ "%";
-   }
+    if (i > 0)
+    {
+        return "+" $ i $ "%";
+    }
+    else
+    {
+        return string(i) $ "%";
+    }
 }
 
 // Modified to allow VoiceID to be greater than 32
 simulated function AddPRI(PlayerReplicationInfo PRI)
 {
-    local byte      NewVoiceID;
-    local int       i;
+    local byte NewVoiceID;
+    local int i;
 
     if (Level.NetMode == NM_ListenServer || Level.NetMode == NM_DedicatedServer)
     {
@@ -1449,9 +1424,9 @@ simulated function int GetTankReservationCount(int TeamIndex)
 
     for (i = 0; i < arraycount(VehiclePoolReservationCount); ++i)
     {
-        if (VehiclePoolVehicleClasses[i] != none &&
-            VehiclePoolVehicleClasses[i].default.VehicleTeam == TeamIndex &&
-            !IgnoresMaxTeamVehiclesFlags(i))
+        if (VehiclePoolVehicleClasses[i] != none
+            && VehiclePoolVehicleClasses[i].default.VehicleTeam == TeamIndex
+            && !IgnoresMaxTeamVehiclesFlags(i))
         {
             Count += VehiclePoolReservationCount[i];
         }
@@ -1465,13 +1440,23 @@ simulated function int GetReservableTankCount(int TeamIndex)
     return MaxTeamVehicles[TeamIndex] - GetTankReservationCount(TeamIndex);
 }
 
-simulated function EVehicleReservationError GetVehicleReservationError(DHPlayer PC, DHRoleInfo RI, int TeamIndex, int VehiclePoolIndex)
+simulated function EVehicleReservationError GetVehicleReservationError(
+    DHPlayer PC,
+    DHRoleInfo RI,
+    int TeamIndex,
+    int VehiclePoolIndex
+    )
 {
     local class<DHVehicle> VC;
 
     VC = class<DHVehicle>(GetVehiclePoolVehicleClass(VehiclePoolIndex));
 
-    if (PC == none || RI == none || VC == none || (TeamIndex != AXIS_TEAM_INDEX && TeamIndex != ALLIES_TEAM_INDEX) || (PC.Pawn != none && PC.Pawn.Health > 0) || VC.default.VehicleTeam != RI.Side)
+    if (PC == none
+        || RI == none
+        || VC == none
+        || (TeamIndex != AXIS_TEAM_INDEX && TeamIndex != ALLIES_TEAM_INDEX)
+        || (PC.Pawn != none && PC.Pawn.Health > 0)
+        || VC.default.VehicleTeam != RI.Side)
     {
         return ERROR_Fatal;
     }
@@ -1501,7 +1486,8 @@ simulated function EVehicleReservationError GetVehicleReservationError(DHPlayer 
         return ERROR_NoReservations;
     }
 
-    if (VC.default.bRequiresDriverLicense && !DHPlayerReplicationInfo(PC.PlayerReplicationInfo).IsPlayerLicensedToDrive(PC))
+    if (VC.default.bRequiresDriverLicense
+        && !DHPlayerReplicationInfo(PC.PlayerReplicationInfo).IsPlayerLicensedToDrive(PC))
     {
         return ERROR_NoLicense;
     }
@@ -1532,9 +1518,9 @@ simulated function GetTeamSizes(out int TeamSizes[2])
     {
         PRI = PRIArray[i];
 
-        if (PRI != none &&
-            PRI.Team != none &&
-            (PRI.Team.TeamIndex == AXIS_TEAM_INDEX || PRI.Team.TeamIndex == ALLIES_TEAM_INDEX))
+        if (PRI != none
+            && PRI.Team != none
+            && (PRI.Team.TeamIndex == AXIS_TEAM_INDEX || PRI.Team.TeamIndex == ALLIES_TEAM_INDEX))
         {
             ++TeamSizes[PRI.Team.TeamIndex];
         }
@@ -1628,10 +1614,10 @@ simulated function array<MapMarker> GetFireSupportMapMarkersAtLocation(DHPlayer 
     {
         Distance = VSize(MapMarkers[i].WorldLocation - WorldLocation);
 
-        if (IsMapMarkerExpired(MapMarkers[i]) ||
-            MapMarkers[i].MapMarkerClass == none ||
-            MapMarkers[i].MapMarkerClass.default.Type != MT_OnMapArtilleryRequest ||
-            Distance > DistanceThreshold)
+        if (IsMapMarkerExpired(MapMarkers[i])
+            || MapMarkers[i].MapMarkerClass == none
+            || MapMarkers[i].MapMarkerClass.default.Type != MT_OnMapArtilleryRequest
+            || Distance > DistanceThreshold)
         {
             MapMarkers.Remove(i, 1);
             continue;
@@ -1704,12 +1690,21 @@ simulated function GetGlobalArtilleryMapMarkers(DHPlayer PC, out array<MapMarker
     }
 }
 
-function int AddMapMarker(DHPlayerReplicationInfo PRI, class<DHMapMarker> MapMarkerClass, Vector MapLocation, Vector WorldLocation)
+function int AddMapMarker(
+    DHPlayerReplicationInfo PRI,
+    class<DHMapMarker> MapMarkerClass,
+    Vector MapLocation,
+    Vector WorldLocation
+    )
 {
     local int i;
     local MapMarker M;
 
-    if (PRI == none || PRI.Team == none || MapMarkerClass == none || !MapMarkerClass.static.CanBeUsed(self) || !MapMarkerClass.static.CanPlaceMarker(PRI))
+    if (PRI == none
+        || PRI.Team == none
+        || MapMarkerClass == none
+        || !MapMarkerClass.static.CanBeUsed(self)
+        || !MapMarkerClass.static.CanPlaceMarker(PRI))
     {
         return -1;
     }
@@ -1743,8 +1738,10 @@ function int AddMapMarker(DHPlayerReplicationInfo PRI, class<DHMapMarker> MapMar
                     for (i = 0; i < arraycount(AxisMapMarkers); ++i)
                     {
                         if (AxisMapMarkers[i].MapMarkerClass != none
-                          && AxisMapMarkers[i].MapMarkerClass.default.GroupIndex == MapMarkerClass.default.GroupIndex
-                          && (MapMarkerClass.default.Scope == SQUAD && AxisMapMarkers[i].SquadIndex == PRI.SquadIndex)
+                            && AxisMapMarkers[i].MapMarkerClass.default.GroupIndex
+                                == MapMarkerClass.default.GroupIndex
+                            && (MapMarkerClass.default.Scope == SQUAD
+                                && AxisMapMarkers[i].SquadIndex == PRI.SquadIndex)
                             || MapMarkerClass.default.Scope == TEAM)
                         {
                             AxisMapMarkers[i] = M;
@@ -1758,7 +1755,8 @@ function int AddMapMarker(DHPlayerReplicationInfo PRI, class<DHMapMarker> MapMar
                     for (i = 0; i < arraycount(AxisMapMarkers); ++i)
                     {
                         if (AxisMapMarkers[i].MapMarkerClass == MapMarkerClass
-                          && (MapMarkerClass.default.Scope == SQUAD && AxisMapMarkers[i].SquadIndex == PRI.SquadIndex)
+                            && (MapMarkerClass.default.Scope == SQUAD
+                                && AxisMapMarkers[i].SquadIndex == PRI.SquadIndex)
                             || MapMarkerClass.default.Scope == TEAM)
                         {
                             AxisMapMarkers[i] = M;
@@ -1770,6 +1768,7 @@ function int AddMapMarker(DHPlayerReplicationInfo PRI, class<DHMapMarker> MapMar
                 case OFF:
                     break;
             }
+
             for (i = 0; i < arraycount(AxisMapMarkers); ++i)
             {
                 if (AxisMapMarkers[i].MapMarkerClass == none || IsMapMarkerExpired(AxisMapMarkers[i]))
@@ -1786,9 +1785,11 @@ function int AddMapMarker(DHPlayerReplicationInfo PRI, class<DHMapMarker> MapMar
                 case UNIQUE_PER_GROUP:
                     for (i = 0; i < arraycount(AlliesMapMarkers); ++i)
                     {
-                        if (AlliesMapMarkers[i].MapMarkerClass != none &&
-                            AlliesMapMarkers[i].MapMarkerClass.default.GroupIndex == MapMarkerClass.default.GroupIndex
-                            && (MapMarkerClass.default.Scope == SQUAD && AlliesMapMarkers[i].SquadIndex == PRI.SquadIndex)
+                        if (AlliesMapMarkers[i].MapMarkerClass != none
+                            && AlliesMapMarkers[i].MapMarkerClass.default.GroupIndex
+                                == MapMarkerClass.default.GroupIndex
+                            && (MapMarkerClass.default.Scope == SQUAD
+                                && AlliesMapMarkers[i].SquadIndex == PRI.SquadIndex)
                             || MapMarkerClass.default.Scope == TEAM)
                         {
                             AlliesMapMarkers[i] = M;
@@ -1801,8 +1802,9 @@ function int AddMapMarker(DHPlayerReplicationInfo PRI, class<DHMapMarker> MapMar
                     for (i = 0; i < arraycount(AlliesMapMarkers); ++i)
                     {
                         if (AlliesMapMarkers[i].MapMarkerClass == MapMarkerClass
-                          && (MapMarkerClass.default.Scope == TEAM
-                          || (MapMarkerClass.default.Scope == SQUAD && AlliesMapMarkers[i].SquadIndex == PRI.SquadIndex)))
+                            && (MapMarkerClass.default.Scope == TEAM
+                                || (MapMarkerClass.default.Scope == SQUAD
+                                    && AlliesMapMarkers[i].SquadIndex == PRI.SquadIndex)))
                         {
                             AlliesMapMarkers[i] = M;
                             MapMarkerClass.static.OnMapMarkerPlaced(DHPlayer(PRI.Owner), M);
@@ -1811,8 +1813,9 @@ function int AddMapMarker(DHPlayerReplicationInfo PRI, class<DHMapMarker> MapMar
                     }
                     break;
                 case OFF:
-                        break;
+                    break;
             }
+
             for (i = 0; i < arraycount(AlliesMapMarkers); ++i)
             {
                 if (AlliesMapMarkers[i].MapMarkerClass == none || IsMapMarkerExpired(AlliesMapMarkers[i]))
@@ -1886,7 +1889,7 @@ function InvalidateOngoingBarrageMarker(int TeamIndex)
             for (i = 0; i < arraycount(AlliesMapMarkers); i++)
             {
                 if (AlliesMapMarkers[i].MapMarkerClass != none
-                  && AlliesMapMarkers[i].MapMarkerClass.default.Type == MT_ArtilleryBarrage)
+                    && AlliesMapMarkers[i].MapMarkerClass.default.Type == MT_ArtilleryBarrage)
                 {
                     AlliesMapMarkers[i].ExpiryTime = 0;
                 }
@@ -1896,7 +1899,7 @@ function InvalidateOngoingBarrageMarker(int TeamIndex)
             for (i = 0; i < arraycount(AxisMapMarkers); i++)
             {
                 if (AxisMapMarkers[i].MapMarkerClass != none
-                  && AxisMapMarkers[i].MapMarkerClass.default.Type == MT_ArtilleryBarrage)
+                    && AxisMapMarkers[i].MapMarkerClass.default.Type == MT_ArtilleryBarrage)
                 {
                     AxisMapMarkers[i].ExpiryTime = 0;
                 }
@@ -1947,22 +1950,24 @@ simulated function float GetMapIconYaw(float WorldYaw)
 }
 
 // Gets the map coordindates (0..1) from a world location.
-simulated function GetMapCoords(Vector WorldLocation, out float X, out float Y, optional float Width, optional float Height)
+simulated function GetMapCoords(
+    Vector WorldLocation,
+    out float X,
+    out float Y,
+    optional float Width,
+    optional float Height
+    )
 {
-    local float  MapScale;
+    local float MapScale;
     local Vector MapCenter;
 
     MapScale = FMax(1.0, Abs((SouthWestBounds - NorthEastBounds).X));
     MapCenter = NorthEastBounds + ((SouthWestBounds - NorthEastBounds) * 0.5);
     WorldLocation = GetAdjustedHudLocation(WorldLocation - MapCenter, false);
 
-    X = 1.0 - FClamp(0.5 + (WorldLocation.X / MapScale) - (Width * 0.5),
-                     0.0,
-                     1.0 - Width);
+    X = 1.0 - FClamp(0.5 + (WorldLocation.X / MapScale) - (Width * 0.5), 0.0, 1.0 - Width);
 
-    Y = 1.0 - FClamp(0.5 + (WorldLocation.Y / MapScale) - (Height * 0.5),
-                     0.0,
-                     1.0 - Height);
+    Y = 1.0 - FClamp(0.5 + (WorldLocation.Y / MapScale) - (Height * 0.5), 0.0, 1.0 - Height);
 }
 
 // Gets the world location from map coordinates.
@@ -1999,6 +2004,8 @@ simulated function Vector GetWorldSurfaceCoords(float X, float Y, float TraceHei
             return HitLocation;
         }
     }
+
+    return vect(0.0, 0.0, 0.0);
 }
 
 // This function will adjust a hud map location based on the rotation offset of
@@ -2058,11 +2065,12 @@ simulated function EArtilleryTypeError GetArtilleryTypeError(DHPlayer PC, int Ar
 
     LI = Class'DH_LevelInfo'.static.GetInstance(Level);
 
-    if (PC == none || LI == none ||
-        ArtilleryTypeIndex < 0 ||
-        ArtilleryTypeIndex >= arraycount(ArtilleryTypeInfos) ||
-        LI.ArtilleryTypes[ArtilleryTypeIndex].ArtilleryClass == none ||
-        LI.ArtilleryTypes[ArtilleryTypeIndex].TeamIndex != PC.GetTeamNum())
+    if (PC == none
+        || LI == none
+        || ArtilleryTypeIndex < 0
+        || ArtilleryTypeIndex >= arraycount(ArtilleryTypeInfos)
+        || LI.ArtilleryTypes[ArtilleryTypeIndex].ArtilleryClass == none
+        || LI.ArtilleryTypes[ArtilleryTypeIndex].TeamIndex != PC.GetTeamNum())
     {
         return ERROR_Fatal;
     }
@@ -2232,6 +2240,8 @@ simulated function bool IsSurrenderVoteInProgress(byte TeamIndex)
     {
         return bool(SurrenderVotesInProgress[TeamIndex]);
     }
+
+    return false;
 }
 
 function SetSurrenderVoteInProgress(byte TeamIndex, bool bInProgress)
@@ -2260,7 +2270,9 @@ function RegisterMineVolumes()
     {
         if (Index >= MINE_VOLUMES_MAX)
         {
-            Warn("Too many mine volumes! Only" @ MINE_VOLUMES_MAX @ "minefield activation states can be tracked at once.");
+            Warn(
+                "Too many mine volumes! Only" @ MINE_VOLUMES_MAX @ "minefield activation states can be tracked at once."
+                );
         }
 
         MV.Index = Index++;
@@ -2362,7 +2374,7 @@ simulated function array<SAvailableArtilleryInfoEntry> GetTeamOffMapFireSupportC
     {
         if (LI.ArtilleryTypes[i].TeamIndex == TeamIndex && ArtilleryTypeInfos[i].bIsAvailable)
         {
-            switch(LI.ArtilleryTypes[i].ArtilleryClass.default.ArtilleryType)
+            switch (LI.ArtilleryTypes[i].ArtilleryClass.default.ArtilleryType)
             {
                 case ArtyType_Barrage:
                     ArtilleryCount += ArtilleryTypeInfos[i].Limit - ArtilleryTypeInfos[i].UsedCount;
@@ -2450,7 +2462,7 @@ defaultproperties
     MapMarkerClassNames(3)="DH_Engine.DHMapMarker_Squad_Attention"
     MapMarkerClassNames(4)="DH_Engine.DHMapMarker_Enemy_CommandPost"
     MapMarkerClassNames(5)="DH_Engine.DHMapMarker_Enemy_Infantry"
-    MapMarkerClassNameS(6)="DH_Engine.DHMapMarker_Enemy_Vehicle"
+    MapMarkerClassNames(6)="DH_Engine.DHMapMarker_Enemy_Vehicle"
     MapMarkerClassNames(7)="DH_Engine.DHMapMarker_Enemy_Tank"
     MapMarkerClassNames(8)="DH_Engine.DHMapMarker_Enemy_ATGun"
     MapMarkerClassNames(9)="DH_Engine.DHMapMarker_Enemy_Artillery"

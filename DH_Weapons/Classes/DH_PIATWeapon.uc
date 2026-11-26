@@ -30,7 +30,6 @@ simulated function ROIronSights()
     }
 }
 
-
 defaultproperties
 {
     ItemName="PIAT"

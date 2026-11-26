@@ -9,4 +9,3 @@ defaultproperties
 {
     VehicleClass=Class'DH_WillysJeep_DesertRoof'
 }
-

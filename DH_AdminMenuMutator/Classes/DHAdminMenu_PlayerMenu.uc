@@ -7,11 +7,9 @@
 // Can also choose the special menu for a realism match (or testing) from here (if that option is allowed by the server)
 class DHAdminMenu_PlayerMenu extends DHAdminMenu_MenuBase;
 
-var localized string    Label_AimedPlayer,
-                        Label_RealismMenu,
-                        Label_ServerMenu;                     // menu labels for the options for 'player in your sights' & the realism/testing menu
+var localized string Label_AimedPlayer, Label_RealismMenu, Label_ServerMenu; // menu labels for the options for 'player in your sights' & the realism/testing menu
 
-var EInputKey           KeyForRealismMenu, KeyForServerMenu;
+var EInputKey KeyForRealismMenu, KeyForServerMenu;
 
 exec function Menu()
 {
@@ -22,7 +20,7 @@ exec function Menu()
 function GetAllPlayerNames()
 {
     local array<PlayerReplicationInfo> AllPRI;
-    local int                          i;
+    local int i;
 
     MenuText.Length = 0;
     MenuText[0] = Label_AimedPlayer;
@@ -40,7 +38,7 @@ function GetAllPlayerNames()
 state MenuVisible
 {
     // Extended to include special key press options for realism/testing menu or choosing the player in your sights
-    function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
+    function bool KeyEvent(EInputKey Key, EInputAction Action, float Delta)
     {
         if (Action == IST_Press)
         {
@@ -83,7 +81,14 @@ state MenuVisible
 }
 
 // Extended to add the realism/testing option if it's enabled (after calling the Super to display the main menu)
-function DrawMenu(canvas Canvas, int PosX, out int PosY, string Title, array<string> LineText, optional out float LineHeight)
+function DrawMenu(
+    canvas Canvas,
+    int PosX,
+    out int PosY,
+    string Title,
+    array<string> LineText,
+    optional out float LineHeight
+    )
 {
     super.DrawMenu(Canvas, PosX, PosY, Title, LineText, LineHeight);
 
@@ -104,9 +109,9 @@ function DrawMenu(canvas Canvas, int PosX, out int PosY, string Title, array<str
 function SelectPlayerInSights()
 {
     local string PlayerName;
-    local int    TraceDistance;
+    local int TraceDistance;
     local Vector HitLocation, HitNormal, StartTrace, EndTrace;
-    local Pawn   HitPawn;
+    local Pawn HitPawn;
 
     if (ROPlayer(PC) != none)
     {
@@ -119,7 +124,7 @@ function SelectPlayerInSights()
         // replaces any spaces in player's name with non-breaking spaces, which effectively makes it 1 word while looking the same
         if (HitPawn != none && HitPawn.PlayerReplicationInfo != none)
         {
-            PlayerName = Repl(HitPawn.PlayerReplicationInfo.PlayerName," "," ");
+            PlayerName = Repl(HitPawn.PlayerReplicationInfo.PlayerName, " ", " ");
         }
 
         if (bDebug)

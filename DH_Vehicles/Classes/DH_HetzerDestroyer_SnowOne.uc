@@ -4,7 +4,3 @@
 //==============================================================================
 
 class DH_HetzerDestroyer_SnowOne extends DH_HetzerDestroyer_Snow;
-
-defaultproperties
-{
-}

@@ -4,59 +4,59 @@
 //==============================================================================
 
 class DHConstruction extends Actor
-    dependson(DHConstructionTypes)
     abstract
+    dependson(DHConstructionTypes)
     placeable;
 
 enum EConstructionErrorType
 {
     ERROR_None,
-    ERROR_Fatal,                    // Some fatal error occurred, usually a case of unexpected values
-    ERROR_NoGround,                 // No solid ground was able to be found
-    ERROR_TooSteep,                 // The ground slope exceeded the allowable maximum
-    ERROR_InWater,                  // The construction is in water and the construction type disallows this
-    ERROR_Restricted,               // Construction overlaps a restriction volume
-    ERROR_NoRoom,                   // No room to place this construction
-    ERROR_NotOnTerrain,             // Construction is not on terrain
-    ERROR_TooCloseFriendly,         // Too close to an identical friendly construction
-    ERROR_TooCloseEnemy,            // Too close to an identical enemy construction
-    ERROR_InMinefield,              // Cannot be in a minefield!
-    ERROR_NearSpawnPoint,           // Cannot be so close to a spawn point (or location hint)
-    ERROR_Indoors,                  // Cannot be placed indoors
-    ERROR_InObjective,              // Cannot be placed inside an objective area
-    ERROR_MaxActive,                // Max active limit reached
-    ERROR_NoSupplies,               // Not within range of any supply caches
-    ERROR_InsufficientSupply,       // Not enough supplies to build this construction
-    ERROR_BadSurface,               // Cannot construct on this surface type
-    ERROR_GroundTooHard,            // This is used when something needs to snap to the terrain, but the engine's native trace functionality isn't cooperating!0
-    ERROR_RestrictedType,           // Restricted construction type (can't build on this map!)
-    ERROR_SquadTooSmall,            // Not enough players in the squad!
-    ERROR_PlayerBusy,               // Player is in an undesireable state (e.g. MG deployed, crawling, prone transitioning or otherwise unable to switch weapons)
-    ERROR_TooCloseToObjective,      // Too close to an objective
+    ERROR_Fatal, // Some fatal error occurred, usually a case of unexpected values
+    ERROR_NoGround, // No solid ground was able to be found
+    ERROR_TooSteep, // The ground slope exceeded the allowable maximum
+    ERROR_InWater, // The construction is in water and the construction type disallows this
+    ERROR_Restricted, // Construction overlaps a restriction volume
+    ERROR_NoRoom, // No room to place this construction
+    ERROR_NotOnTerrain, // Construction is not on terrain
+    ERROR_TooCloseFriendly, // Too close to an identical friendly construction
+    ERROR_TooCloseEnemy, // Too close to an identical enemy construction
+    ERROR_InMinefield, // Cannot be in a minefield!
+    ERROR_NearSpawnPoint, // Cannot be so close to a spawn point (or location hint)
+    ERROR_Indoors, // Cannot be placed indoors
+    ERROR_InObjective, // Cannot be placed inside an objective area
+    ERROR_MaxActive, // Max active limit reached
+    ERROR_NoSupplies, // Not within range of any supply caches
+    ERROR_InsufficientSupply, // Not enough supplies to build this construction
+    ERROR_BadSurface, // Cannot construct on this surface type
+    ERROR_GroundTooHard, // This is used when something needs to snap to the terrain, but the engine's native trace functionality isn't cooperating!0
+    ERROR_RestrictedType, // Restricted construction type (can't build on this map!)
+    ERROR_SquadTooSmall, // Not enough players in the squad!
+    ERROR_PlayerBusy, // Player is in an undesireable state (e.g. MG deployed, crawling, prone transitioning or otherwise unable to switch weapons)
+    ERROR_TooCloseToObjective, // Too close to an objective
     ERROR_TooCloseToEnemyObjective, // Too close to enemy controlled objective
-    ERROR_MissingRequirement,       // Not close enough to a required friendly construciton
-    ERROR_InDangerZone,             // Cannot place this construction inside enemy territory.
-    ERROR_Exhausted,                // Your team cannot place any more of these this round.
-    ERROR_SocketOccupied,           // The construction socket is already occupied.
-    ERROR_NoSquadmatesNearby,       // There are no squad members within 50 meters
-    ERROR_Custom,                   // Custom error type (provide an error message in OptionalString)
+    ERROR_MissingRequirement, // Not close enough to a required friendly construciton
+    ERROR_InDangerZone, // Cannot place this construction inside enemy territory.
+    ERROR_Exhausted, // Your team cannot place any more of these this round.
+    ERROR_SocketOccupied, // The construction socket is already occupied.
+    ERROR_NoSquadmatesNearby, // There are no squad members within 50 meters
+    ERROR_Custom, // Custom error type (provide an error message in OptionalString)
     ERROR_Other,
 };
 
 var struct ConstructionError
 {
-    var EConstructionErrorType  Type;
-    var string                  CustomErrorString;  // When Type is ERROR_Custom, this will contain the error string to be used.
-    var int                     OptionalInteger;
-    var Object                  OptionalObject;
-    var string                  OptionalString;
+    var EConstructionErrorType Type;
+    var string CustomErrorString; // When Type is ERROR_Custom, this will contain the error string to be used.
+    var int OptionalInteger;
+    var Object OptionalObject;
+    var string OptionalString;
 } ProxyError;
 
 enum ETeamOwner
 {
     TEAM_Axis,
     TEAM_Allies,
-    TEAM_Neutral
+    TEAM_Neutral,
 };
 
 // Tags for construction classes to signal their intended use to other systems (such as the socket system).
@@ -66,136 +66,136 @@ var array<DHConstructionTypes.EConstructionTag> ConstructionTags;
 // Client state management
 var name StateName, OldStateName;
 
-var() ETeamOwner TeamOwner;     // This enum is for the levelers' convenience only.
-var bool bIsNeutral;            // If true, this construction is neutral (can be built by either team)
-var private int OldTeamIndex;   // Used by the client to fire off an event when the team index changes.
+var() ETeamOwner TeamOwner; // This enum is for the levelers' convenience only.
+var bool bIsNeutral; // If true, this construction is neutral (can be built by either team)
+var private int OldTeamIndex; // Used by the client to fire off an event when the team index changes.
 var private int TeamIndex;
 
 // Manager
-var     DHConstructionManager       Manager;
-var     class<DHConstructionGroup>  GroupClass;
+var DHConstructionManager Manager;
+var class<DHConstructionGroup> GroupClass;
 
 // Placement
-var     float   ProxyTraceDepthMeters;          // The depth of the trace from the player's eye when determining the provisional proxy position.
-var     float   ProxyTraceHeightMeters;         // The height at which the proxy object will no longer snap to the ground.
-var     bool    bShouldAlignToGround;
-var     bool    bCanPlaceInWater;
-var     bool    bCanPlaceIndoors;
-var     float   IndoorsCeilingHeightInMeters;
-var     bool    bCanOnlyPlaceOnTerrain;
-var     float   GroundSlopeMaxInDegrees;
-var     bool    bSnapRotation;
-var     int     RotationSnapAngle;
-var     Rotator StartRotationMin;
-var     Rotator StartRotationMax;
-var     int     LocalRotationRate;
-var     bool    bCanPlaceInObjective;
-var     int     SquadMemberCountMinimum;        // The number of members you must have in your squad to create this.
-var     float   ArcLengthTraceIntervalInMeters; // The arc-length interval, in meters, used when tracing "outwards" during placement to check for blocking objects.
+var float ProxyTraceDepthMeters; // The depth of the trace from the player's eye when determining the provisional proxy position.
+var float ProxyTraceHeightMeters; // The height at which the proxy object will no longer snap to the ground.
+var bool bShouldAlignToGround;
+var bool bCanPlaceInWater;
+var bool bCanPlaceIndoors;
+var float IndoorsCeilingHeightInMeters;
+var bool bCanOnlyPlaceOnTerrain;
+var float GroundSlopeMaxInDegrees;
+var bool bSnapRotation;
+var int RotationSnapAngle;
+var Rotator StartRotationMin;
+var Rotator StartRotationMax;
+var int LocalRotationRate;
+var bool bCanPlaceInObjective;
+var int SquadMemberCountMinimum; // The number of members you must have in your squad to create this.
+var float ArcLengthTraceIntervalInMeters; // The arc-length interval, in meters, used when tracing "outwards" during placement to check for blocking objects.
 
-var     float   ObjectiveDistanceMinMeters;             // The minimum distance, in meters, that this construction must be placed away from all objectives.
-var     float   EnemyObjectiveDistanceMinMeters;        // The minimum distance, in meters, that this construction must be placed away from enemy objectives.
-var     bool    bShouldSwitchToLastWeaponOnPlacement;
-var     bool    bCanBePlacedInDangerZone;
+var float ObjectiveDistanceMinMeters; // The minimum distance, in meters, that this construction must be placed away from all objectives.
+var float EnemyObjectiveDistanceMinMeters; // The minimum distance, in meters, that this construction must be placed away from enemy objectives.
+var bool bShouldSwitchToLastWeaponOnPlacement;
+var bool bCanBePlacedInDangerZone;
 
 struct ProximityRequirement
 {
-    var class<DHConstruction>   ConstructionClass;
-    var float                   DistanceMeters;
+    var class<DHConstruction> ConstructionClass;
+    var float DistanceMeters;
 };
 
-var     array<ProximityRequirement> ProximityRequirements;
+var array<ProximityRequirement> ProximityRequirements;
 
 // Terrain placement
-var     bool    bSnapToTerrain;                 // If true, the origin of the placement (prior to the PlacementOffset) will coincide with the nearest terrain vertex during placement.
-var     bool    bPokesTerrain;                  // If true, terrain is poked when placed on terrain.
-var     bool    bDidPokeTerrain;
+var bool bSnapToTerrain; // If true, the origin of the placement (prior to the PlacementOffset) will coincide with the nearest terrain vertex during placement.
+var bool bPokesTerrain; // If true, terrain is poked when placed on terrain.
+var bool bDidPokeTerrain;
 var private int PokeTerrainRadius;
 var private int PokeTerrainDepth;
-var     float   TerrainScaleMax;                // The maximum terrain scale allowable
-var     bool    bLimitTerrainSurfaceTypes;      // If true, only allow placement on terrain surfaces types in the SurfaceTypes array
-var     array<ESurfaceTypes> TerrainSurfaceTypes;
+var float TerrainScaleMax; // The maximum terrain scale allowable
+var bool bLimitTerrainSurfaceTypes; // If true, only allow placement on terrain surfaces types in the SurfaceTypes array
+var array<ESurfaceTypes> TerrainSurfaceTypes;
 
-var private Vector      PlacementOffset;        // 3D offset in the proxy's local-space during placement
-var     Sound           PlacementSound;         // Sound to play when construction is first placed down
-var     float           PlacementSoundRadius;
-var     float           PlacementSoundVolume;
-var     class<Emitter>  PlacementEmitterClass;  // Emitter to spawn when the construction is first placed down
+var private Vector PlacementOffset; // 3D offset in the proxy's local-space during placement
+var Sound PlacementSound; // Sound to play when construction is first placed down
+var float PlacementSoundRadius;
+var float PlacementSoundVolume;
+var class<Emitter> PlacementEmitterClass; // Emitter to spawn when the construction is first placed down
 
-var     float   FloatToleranceInMeters;             // The distance the construction is allowed to "float" off of the ground at any given point along it's circumfrence
-var     float   DuplicateFriendlyDistanceInMeters;  // The distance required between identical constructions of the same type for FRIENDLY constructions.
-var     float   DuplicateEnemyDistanceInMeters;     // The distance required between identical constructions of the same type for ENEMY constructions.
+var float FloatToleranceInMeters; // The distance the construction is allowed to "float" off of the ground at any given point along it's circumfrence
+var float DuplicateFriendlyDistanceInMeters; // The distance required between identical constructions of the same type for FRIENDLY constructions.
+var float DuplicateEnemyDistanceInMeters; // The distance required between identical constructions of the same type for ENEMY constructions.
 
-var     Vector  ExplosionDamageTraceOffset;         // Optimal location for tracing this actor when dealing explosive damage (relative to origin)
+var Vector ExplosionDamageTraceOffset; // Optimal location for tracing this actor when dealing explosive damage (relative to origin)
 
 // Construction
-var private int SupplyCost;                     // The amount of supply points this construction costs
-var     bool    bDestroyOnConstruction;         // If true, this actor will be destroyed after being fully constructed
-var     bool    bDummyOnConstruction;           // If true, this actor will be put into the "dummy" state after being fully constructed.
-var     int     Progress;                       // The current count of progress
-var     int     ProgressMax;                    // The amount of construction points required to be built
-var     bool    bShouldRefundSuppliesOnTearDown;
+var private int SupplyCost; // The amount of supply points this construction costs
+var bool bDestroyOnConstruction; // If true, this actor will be destroyed after being fully constructed
+var bool bDummyOnConstruction; // If true, this actor will be put into the "dummy" state after being fully constructed.
+var int Progress; // The current count of progress
+var int ProgressMax; // The amount of construction points required to be built
+var bool bShouldRefundSuppliesOnTearDown;
 
 // Stagnation
-var     bool    bCanDieOfStagnation;            // If true, this construction will automatically destroy if no progress has been made for the amount of seconds specified in StagnationLifespan
-var     float   StagnationLifespan;
+var bool bCanDieOfStagnation; // If true, this construction will automatically destroy if no progress has been made for the amount of seconds specified in StagnationLifespan
+var float StagnationLifespan;
 
 // Tear-down
-var     bool    bCanBeTornDownWhenConstructed;      // Whether or not players can tear down the construction after it has been constructed.
-var     bool    bCanBeTornDownByFriendlies;         // Whether or not friendly players can tear down the construction (e.g. to stop griefing of important constructions)
-var     bool    bBreakOnTearDown;                   // If true, the construction breaks when torn down
-var     float   TearDownProgress;
-var     float   TakeDownProgressInterval;
+var bool bCanBeTornDownWhenConstructed; // Whether or not players can tear down the construction after it has been constructed.
+var bool bCanBeTornDownByFriendlies; // Whether or not friendly players can tear down the construction (e.g. to stop griefing of important constructions)
+var bool bBreakOnTearDown; // If true, the construction breaks when torn down
+var float TearDownProgress;
+var float TakeDownProgressInterval;
 
 // Broken
-var     float           BrokenLifespan;             // How long does the actor stay around after it's been killed?
-var     StaticMesh      BrokenStaticMesh;           // Static mesh to use when the construction is broken
-var     array<Sound>    BrokenSounds;                // Sound to play when the construction is broken
-var     float           BrokenSoundRadius;
-var     float           BrokenSoundVolume;
-var     float           BrokenSoundPitch;
-var     class<Emitter>  BrokenEmitterClass;         // Emitter to spawn when the construction is broken
+var float BrokenLifespan; // How long does the actor stay around after it's been killed?
+var StaticMesh BrokenStaticMesh; // Static mesh to use when the construction is broken
+var array<Sound> BrokenSounds; // Sound to play when the construction is broken
+var float BrokenSoundRadius;
+var float BrokenSoundVolume;
+var float BrokenSoundPitch;
+var class<Emitter> BrokenEmitterClass; // Emitter to spawn when the construction is broken
 
 // Reset
-var     bool            bShouldDestroyOnReset;
+var bool bShouldDestroyOnReset;
 
 // Damage
 struct DamageTypeScale
 {
-    var class<DamageType>   DamageType;
-    var float               Scale;
+    var class<DamageType> DamageType;
+    var float Scale;
 };
 
-var int                         MinDamagetoHurt;        // The minimum amount of damage required to actually harm the construction
-var array<DamageTypeScale>      DamageTypeScales;
-var array<class<DamageType> >   HarmfulDamageTypes;
-var float                       FriendlyFireDamageScale; // Set to 0.0 to disable friendly fire damage
+var int MinDamagetoHurt; // The minimum amount of damage required to actually harm the construction
+var array<DamageTypeScale> DamageTypeScales;
+var array<class<DamageType> > HarmfulDamageTypes;
+var float FriendlyFireDamageScale; // Set to 0.0 to disable friendly fire damage
 
 // Impact Damage
-var bool                        bCanTakeImpactDamage;
-var class<DamageType>           ImpactDamageType;
-var float                       ImpactDamageModifier;
-var float                       LastImpactTimeSeconds;
+var bool bCanTakeImpactDamage;
+var class<DamageType> ImpactDamageType;
+var float ImpactDamageModifier;
+var float LastImpactTimeSeconds;
 
 // Tattered
-var int                         TatteredHealthThreshold;    // The health below which the construction is considered "tattered". -1 for no tattering
-var StaticMesh                  TatteredStaticMesh;
+var int TatteredHealthThreshold; // The health below which the construction is considered "tattered". -1 for no tattering
+var StaticMesh TatteredStaticMesh;
 
 // Cut
-var float                       CutDuration;                // Cut duration
-var StaticMesh                  CutStaticMesh;              // Static mesh to display when cut
-var Sound                       CutSound;
-var float                       CutSoundVolume;
-var float                       CutSoundRadius;
+var float CutDuration; // Cut duration
+var StaticMesh CutStaticMesh; // Static mesh to display when cut
+var Sound CutSound;
+var float CutSoundVolume;
+var float CutSoundRadius;
 
 // Health
-var private int     Health;
-var     int         HealthMax;
+var private int Health;
+var int HealthMax;
 
 // Menu
-var     localized string    MenuName;
-var     Material            MenuIcon;
-var     localized string    MenuDescription;
+var localized string MenuName;
+var Material MenuIcon;
+var localized string MenuDescription;
 
 // Level Info
 var DH_LevelInfo LevelInfo;
@@ -203,8 +203,8 @@ var DH_LevelInfo LevelInfo;
 // Staging
 struct Stage
 {
-    var int Progress;           // The progress level at which this stage is used.
-    var StaticMesh StaticMesh;  // This can be overridden in GetStaticMesh
+    var int Progress; // The progress level at which this stage is used.
+    var StaticMesh StaticMesh; // This can be overridden in GetStaticMesh
     var Sound Sound;
     var Emitter Emitter;
 };
@@ -230,7 +230,7 @@ var bool bShouldAutoConstruct;
 // Used to make sure not to send duplicate events.
 var bool bHasBeenConstructed;
 
-var localized string ConstructionVerb;  // eg. dig, emplace, build etc.
+var localized string ConstructionVerb; // eg. dig, emplace, build etc.
 
 // Scoring
 var DHPlayer InstigatorController;
@@ -246,15 +246,16 @@ struct SConstructionSocket
     var Rotator Rotation;
     var DHConstructionSocketParameters Parameters;
 };
-var array<SConstructionSocket>      Sockets;
-var array<DHConstructionSocket>     SocketActors;
+
+var array<SConstructionSocket> Sockets;
+var array<DHConstructionSocket> SocketActors;
 
 // Cached values that are calculated only when needed (e.g., when any of the user-editable properties change such as variant or skin)
 struct RuntimeData
 {
-    var string  MenuName;           // The name to display on the interface.
-    var bool    bHasVariants;       // If true, this construction has variants (e.g., an AT gun with a different mount)
-    var bool    bHasSkins;          // If true, this construction has skins for the selected variant.
+    var string MenuName; // The name to display on the interface.
+    var bool bHasVariants; // If true, this construction has variants (e.g., an AT gun with a different mount)
+    var bool bHasSkins; // If true, this construction has skins for the selected variant.
 };
 
 // Variant & Skin Index
@@ -265,8 +266,10 @@ var int SkinIndex;
 var private bool bIsActive;
 
 // Debugging
-var bool bSinglePlayerOnly;  // If true, this construction can only be placed in single player mode.
-                             // Used to prevent players from placing constructions that are not yet ready for multiplayer.
+
+// If true, this construction can only be placed in single player mode.
+// Used to prevent players from placing constructions that are not yet ready for multiplayer.
+var bool bSinglePlayerOnly;
 
 replication
 {
@@ -292,22 +295,21 @@ function OnStageIndexChanged(int OldIndex);
 simulated function OnTeamIndexChanged();
 function OnProgressChanged(Pawn InstigatedBy);
 function OnHealthChanged();
-
-simulated function bool IsBroken() { return false; }
-simulated function bool IsConstructed() { return false; }
-simulated function bool IsTattered() { return false; }
-simulated function bool CanBeBuilt() { return false; }
-simulated function bool CanBeCut() { return false; }
-simulated function bool IsDummy() { return false; }
+simulated function bool IsBroken();
+simulated function bool IsConstructed();
+simulated function bool IsTattered();
+simulated function bool CanBeBuilt();
+simulated function bool CanBeCut();
+simulated function bool IsDummy();
 
 final simulated function int GetTeamIndex()
 {
     return TeamIndex;
 }
 
-final function SetTeamIndex(int TeamIndex)
+final function SetTeamIndex(int NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
     OnTeamIndexChanged();
     NetUpdateTime = Level.TimeSeconds - 1.0;
 }
@@ -434,7 +436,10 @@ function Activate(int InstigatorTeamIndex)
     if (ConstructionIndex != -1)
     {
         // Decrement the remaining count of this construction type.
-        GRI.Constructions[ConstructionIndex].Remaining = Max(0, int(GRI.Constructions[ConstructionIndex].Remaining) - 1);
+        GRI.Constructions[ConstructionIndex].Remaining = Max(
+            0,
+            int(GRI.Constructions[ConstructionIndex].Remaining) - 1
+            );
         GRI.Constructions[ConstructionIndex].Active += 1;
     }
 
@@ -561,7 +566,14 @@ simulated state Dummy
     }
 
     // Take no damage.
-    function TakeDamage(int Damage, Pawn EventInstigator, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex);
+    function TakeDamage(
+        int Damage,
+        Pawn EventInstigator,
+        Vector HitLocation,
+        Vector Momentum,
+        class<DamageType> DamageType,
+        optional int HitIndex
+        );
 
 Begin:
     if (Role == ROLE_Authority)
@@ -598,14 +610,14 @@ simulated event Destroyed()
     super.Destroyed();
 }
 
-function array<DHConstructionSupplyAttachment> GetTouchingSupplyAttachments(int TeamIndex)
+function array<DHConstructionSupplyAttachment> GetTouchingSupplyAttachments(int TargetTeamIndex)
 {
     local array<DHConstructionSupplyAttachment> Attachments;
     local DHConstructionSupplyAttachment Attachment;
 
     foreach DynamicActors(Class'DHConstructionSupplyAttachment', Attachment)
     {
-        if (Attachment.IsTouchingActor(self) && Attachment.GetTeamIndex() == TeamIndex)
+        if (Attachment.IsTouchingActor(self) && Attachment.GetTeamIndex() == TargetTeamIndex)
         {
             Attachments[Attachments.Length] = Attachment;
         }
@@ -657,7 +669,10 @@ function TearDown(Pawn Instigator)
         if (SuppliesRefunded > 0)
         {
             // Send a message to the instigating player about the amount of supplies that were refunded.
-            Instigator.ReceiveLocalizedMessage(Class'DHsupplyMessage', Class'UInteger'.static.FromShorts(7, SuppliesRefunded));
+            Instigator.ReceiveLocalizedMessage(
+                Class'DHsupplyMessage',
+                Class'UInteger'.static.FromShorts(7, SuppliesRefunded)
+                );
         }
     }
 
@@ -713,11 +728,6 @@ auto simulated state Constructing
     {
         local int i;
         local int OldStageIndex;
-        local DHGameReplicationInfo GRI;
-        local DH_LevelInfo LI;
-
-        GRI = DHGameReplicationInfo(Level.Game.GameReplicationInfo);
-        LI = Class'DH_LevelInfo'.static.GetInstance(Level);
 
         if (bCanDieOfStagnation)
         {
@@ -753,16 +763,14 @@ auto simulated state Constructing
         }
     }
 
-// This only runs on server/authority
+    // This only runs on server/authority
 Begin:
     if (Role == ROLE_Authority) // this is likely unneeded
     {
         // When placed in the SDK, the Owner will be none.
         // DEBUG: Construct instantly.
-        if ((Owner == none &&
-             bShouldAutoConstruct) ||
-            (DarkestHourGame(Level.Game) != none &&
-             DarkestHourGame(Level.Game).bDebugConstructions))
+        if ((Owner == none && bShouldAutoConstruct)
+            || (DarkestHourGame(Level.Game) != none && DarkestHourGame(Level.Game).bDebugConstructions))
         {
             bShouldAutoConstruct = false;
             Progress = ProgressMax;
@@ -815,7 +823,9 @@ simulated state Constructed
 
                 if (InstigatorController != none)
                 {
-                    InstigatorController.ReceiveScoreEvent(Class'DHScoreEvent_ConstructionCompleted'.static.Create(Class));
+                    InstigatorController.ReceiveScoreEvent(
+                        Class'DHScoreEvent_ConstructionCompleted'.static.Create(Class)
+                        );
                 }
 
                 SpawnConstructionSockets();
@@ -858,7 +868,7 @@ simulated state Constructed
         local int Damage;
         local Pawn P;
 
-        if (Level.TimeSeconds - LastImpactTimeSeconds >= 1.0)  // TODO: magic number
+        if (Level.TimeSeconds - LastImpactTimeSeconds >= 1.0) // TODO: magic number
         {
             LastImpactTimeSeconds = Level.TimeSeconds;
 
@@ -936,13 +946,14 @@ simulated state Constructed
 
     simulated function bool CanTakeTearDownDamageFromPawn(Pawn P, optional bool bShouldSendErrorMessage)
     {
-        return bCanBeTornDownWhenConstructed && (bCanBeTornDownByFriendlies || (P != none && P.GetTeamNum() != TeamIndex));
+        return bCanBeTornDownWhenConstructed
+            && (bCanBeTornDownByFriendlies || (P != none && P.GetTeamNum() != TeamIndex));
     }
 
-// This is required because we cannot call TakeDamage within the KImpact
-// function, because down the line is disables karma collision after going into
-// the broken state, causing a crash in native code. Delaying the damage until
-// the next frame works to avoid the crash!
+    // This is required because we cannot call TakeDamage within the KImpact
+    // function, because down the line is disables karma collision after going into
+    // the broken state, causing a crash in native code. Delaying the damage until
+    // the next frame works to avoid the crash!
 DelayedDamage:
     Sleep(0.1);
     TakeDamage(DelayedDamage, none, vect(0, 0, 0), vect(0, 0, 0), DelayedDamageType);
@@ -996,7 +1007,10 @@ simulated state Broken
 
             if (BrokenSounds.Length > 0)
             {
-                PlaySound(BrokenSounds[Rand(BrokenSounds.Length)],, BrokenSoundVolume,, BrokenSoundRadius, BrokenSoundPitch, true);
+                PlaySound(
+                    BrokenSounds[Rand(BrokenSounds.Length)],, BrokenSoundVolume,, BrokenSoundRadius, BrokenSoundPitch,
+                    true
+                    );
             }
         }
 
@@ -1008,10 +1022,15 @@ simulated state Broken
         OnBroken();
     }
 
-    event TakeDamage(int Damage, Pawn EventInstigator, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
-    {
-        // Do nothing, since we're broken already!
-    }
+    // Do nothing, since we're broken already!
+    event TakeDamage(
+        int Damage,
+        Pawn EventInstigator,
+        Vector HitLocation,
+        Vector Momentum,
+        class<DamageType> DamageType,
+        optional int HitIndex
+        );
 
     simulated function bool IsBroken()
     {
@@ -1071,15 +1090,15 @@ function StaticMesh GetBrokenStaticMesh()
     return default.BrokenStaticMesh;
 }
 
-function StaticMesh GetStageStaticMesh(int StageIndex)
+function StaticMesh GetStageStaticMesh(int TargetStageIndex)
 {
-    if (StageIndex < 0 || StageIndex >= default.Stages.Length)
+    if (TargetStageIndex < 0 || TargetStageIndex >= default.Stages.Length)
     {
         return default.StaticMesh;
     }
     else
     {
-        return default.Stages[StageIndex].StaticMesh;
+        return default.Stages[TargetStageIndex].StaticMesh;
     }
 
     return none;
@@ -1215,7 +1234,9 @@ static function ConstructionError GetPlayerError(DHActorProxy.Context Context)
         return E;
     }
 
-    if (P.Level.NetMode != NM_Standalone && !PRI.bAdmin && SRI.GetMemberCount(P.GetTeamNum(), PRI.SquadIndex) < default.SquadMemberCountMinimum)
+    if (P.Level.NetMode != NM_Standalone
+        && !PRI.bAdmin
+        && SRI.GetMemberCount(P.GetTeamNum(), PRI.SquadIndex) < default.SquadMemberCountMinimum)
     {
         E.Type = ERROR_SquadTooSmall;
         E.OptionalInteger = default.SquadMemberCountMinimum;
@@ -1331,16 +1352,24 @@ simulated function bool CanTakeTearDownDamageFromPawn(Pawn P, optional bool bSho
 }
 
 function CutConstruction(Pawn InstigatedBy);
-
 function TakeTearDownDamage(Pawn InstigatedBy);
 
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector Hitlocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+function TakeDamage(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector Hitlocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     local class<DamageType> TearDownDamageType;
 
     TearDownDamageType = class<DamageType>(DynamicLoadObject("DH_Equipment.DHShovelBashDamageType", Class'class'));
 
-    if (DamageType != none && DamageType.static.ClassIsChildOf(DamageType, TearDownDamageType) && CanTakeTearDownDamageFromPawn(InstigatedBy, true))
+    if (DamageType != none
+        && DamageType.static.ClassIsChildOf(DamageType, TearDownDamageType)
+        && CanTakeTearDownDamageFromPawn(InstigatedBy, true))
     {
         TakeTearDownDamage(InstigatedBy);
         return;
@@ -1375,8 +1404,7 @@ function int GetScaledDamage(class<DamageType> DamageType, int Damage)
 
     for (i = 0; i < DamageTypeScales.Length; ++i)
     {
-        if (DamageType == DamageTypeScales[i].DamageType ||
-            ClassIsChildOf(DamageType, DamageTypeScales[i].DamageType))
+        if (DamageType == DamageTypeScales[i].DamageType || ClassIsChildOf(DamageType, DamageTypeScales[i].DamageType))
         {
             return Damage * DamageTypeScales[i].Scale;
         }
@@ -1540,8 +1568,6 @@ defaultproperties
     ExplosionDamageTraceOffset=(Z=10.0)
 
     // Placement
-    bCanPlaceInWater=false
-    bCanPlaceIndoors=false
     FloatToleranceInMeters=0.5
     PlacementSound=Sound'Inf_Player.Gibimpact'
     PlacementEmitterClass=Class'DHConstructionEffect'
@@ -1581,7 +1607,6 @@ defaultproperties
     HarmfulDamageTypes(6)=Class'DHMortarDamageType'                 // Mortar
 
     // Impact
-    bCanTakeImpactDamage=false
     ImpactDamageType=Class'Crushed'
     ImpactDamageModifier=0.1
 
@@ -1603,5 +1628,4 @@ defaultproperties
 
     CompletionPointValue=10
 
-    bIsArtillery=false
 }

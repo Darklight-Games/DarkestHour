@@ -6,11 +6,11 @@
 class DHRocketFire extends DHProjectileFire
     abstract;
 
-var     bool                bCausesExhaustDamage;    // rocket exhaust causes backblast damage
-var     float               ExhaustLength;           // length of the exhaust back blast (in Unreal units)
-var     float               ExhaustDamage;           // damage caused by exhaust
-var     float               ExhaustMomentumTransfer; // momentum from exhaust to inflict on players
-var     class<DamageType>   ExhaustDamageType;       // damage type for exhaust
+var bool bCausesExhaustDamage; // rocket exhaust causes backblast damage
+var float ExhaustLength; // length of the exhaust back blast (in Unreal units)
+var float ExhaustDamage; // damage caused by exhaust
+var float ExhaustMomentumTransfer; // momentum from exhaust to inflict on players
+var class<DamageType> ExhaustDamageType; // damage type for exhaust
 
 // Modified to prevent firing if RocketWeapon's CanFire() says no
 simulated function bool AllowFire()
@@ -22,16 +22,14 @@ simulated function bool AllowFire()
         return super.AllowFire();
     }
 
-    return DHRocketWeapon(Weapon) != none &&
-           DHRocketWeapon(Weapon).CanFire() &&
-           super.AllowFire();
+    return DHRocketWeapon(Weapon) != none && DHRocketWeapon(Weapon).CanFire() && super.AllowFire();
 }
 
 // Modified to add exhaust damage & to call PostFire() on the Weapon
 event ModeDoFire()
 {
     local Vector WeaponLocation, ExhaustDirection, HitLocation, HitNormal, ExhaustReflectDirection;
-    local Actor  HitActor;
+    local Actor HitActor;
 
     super.ModeDoFire();
 
@@ -46,7 +44,10 @@ event ModeDoFire()
         ExhaustDirection = -Vector(Weapon.ThirdPersonActor.Rotation);
 
         // Check if the exhaust backblast hit an object behind the firer
-        HitActor = Trace(HitLocation, HitNormal, WeaponLocation + (ExhaustDirection * 0.75 * default.ExhaustLength), WeaponLocation, false);
+        HitActor = Trace(
+            HitLocation, HitNormal, WeaponLocation + (ExhaustDirection * 0.75 * default.ExhaustLength), WeaponLocation,
+            false
+            );
 
         // The backblast did hit something, not counting players or breakable objects
         if (HitActor != none && !HitActor.IsA('DHPawn') && !HitActor.IsA('RODestroyableStaticMesh'))
@@ -58,7 +59,10 @@ event ModeDoFire()
             if (ExhaustLength < 0.5 * default.ExhaustLength)
             {
                 ExhaustReflectDirection = 2.0 * (HitNormal * -ExhaustDirection) * HitNormal + ExhaustDirection;
-                Weapon.HurtRadius(ExhaustDamage, 0.375 * default.ExhaustLength, ExhaustDamageType, ExhaustMomentumTransfer, HitLocation + (ExhaustReflectDirection * 0.125 * default.ExhaustLength));
+                Weapon.HurtRadius(
+                    ExhaustDamage, 0.375 * default.ExhaustLength, ExhaustDamageType, ExhaustMomentumTransfer,
+                    HitLocation + (ExhaustReflectDirection * 0.125 * default.ExhaustLength)
+                    );
             }
         }
         // Otherwise exhaust didn't hit anything, so exhaust is full length
@@ -70,19 +74,28 @@ event ModeDoFire()
         // Full exhaust damage to anything in a small area just behind the weapon
         if (ExhaustLength > 0.25 * default.ExhaustLength)
         {
-            Weapon.HurtRadius(ExhaustDamage, 0.125 * default.ExhaustLength, ExhaustDamageType, ExhaustMomentumTransfer, WeaponLocation + (ExhaustDirection * 0.25 * default.ExhaustLength));
+            Weapon.HurtRadius(
+                ExhaustDamage, 0.125 * default.ExhaustLength, ExhaustDamageType, ExhaustMomentumTransfer,
+                WeaponLocation + (ExhaustDirection * 0.25 * default.ExhaustLength)
+                );
         }
 
         // Half exhaust damage to anything in a medium sized area further back from the weapon
         if (ExhaustLength > 0.5 * default.ExhaustLength)
         {
-            Weapon.HurtRadius(ExhaustDamage / 2.0, 0.25 * default.ExhaustLength, ExhaustDamageType, ExhaustMomentumTransfer, WeaponLocation + (ExhaustDirection * 0.5 * default.ExhaustLength));
+            Weapon.HurtRadius(
+                ExhaustDamage / 2.0, 0.25 * default.ExhaustLength, ExhaustDamageType, ExhaustMomentumTransfer,
+                WeaponLocation + (ExhaustDirection * 0.5 * default.ExhaustLength)
+                );
         }
 
         // Third exhaust damage to anything in a quite large area towards the end of the exhaust stream
         if (ExhaustLength > 0.75 * default.ExhaustLength)
         {
-            Weapon.HurtRadius(ExhaustDamage / 3.0, 0.375 * default.ExhaustLength, ExhaustDamageType, ExhaustMomentumTransfer, WeaponLocation + (ExhaustDirection * 0.75 * default.ExhaustLength));
+            Weapon.HurtRadius(
+                ExhaustDamage / 3.0, 0.375 * default.ExhaustLength, ExhaustDamageType, ExhaustMomentumTransfer,
+                WeaponLocation + (ExhaustDirection * 0.75 * default.ExhaustLength)
+                );
         }
     }
 
@@ -93,7 +106,7 @@ event ModeDoFire()
 function PlayFiring()
 {
     local DHRocketWeapon RocketWeapon;
-    local name           Anim;
+    local name Anim;
 
     if (Weapon != none)
     {

@@ -10,7 +10,7 @@ class DHMapIconAttachment extends Actor
 enum EMapIconAttachmentError
 {
     ERROR_None,
-    ERROR_SpawnFailed
+    ERROR_SpawnFailed,
 };
 
 enum EVisibleFor
@@ -18,32 +18,32 @@ enum EVisibleFor
     VISIBLE_None,
     VISIBLE_Team,
     VISIBLE_Enemy,
-    VISIBLE_All
+    VISIBLE_All,
 };
 
-var Material  IconMaterial;
-var IntBox    IconCoords;
-var float     IconScale;
+var Material IconMaterial;
+var IntBox IconCoords;
+var float IconScale;
 
-var Actor     AttachedTo;
-var bool      bTrackMovement;    // for moving actors
-var bool      bIgnoreGRIUpdates; // call updates from somewhere else
+var Actor AttachedTo;
+var bool bTrackMovement; // for moving actors
+var bool bIgnoreGRIUpdates; // call updates from somewhere else
 
-var           int  TimerCount;
-var           int  Quantized2DPose;
-var private   int  OldQuantized2DPose;
-var private   int  OldLocationX;
-var private   int  OldLocationY;
+var int TimerCount;
+var int Quantized2DPose;
+var private int OldQuantized2DPose;
+var private int OldLocationX;
+var private int OldLocationY;
 
-var private   byte TeamIndex;
+var private byte TeamIndex;
 var protected byte VisibilityIndex;
 
-var           int  TrackingUpdateIntervalSeconds;
-var           bool bTrackDangerZone;
-var           bool bInDangerZone;
-var private   bool bOldInDangerZone;
+var int TrackingUpdateIntervalSeconds;
+var bool bTrackDangerZone;
+var bool bInDangerZone;
+var private bool bOldInDangerZone;
 
-var           byte DrawOrder;
+var byte DrawOrder;
 
 replication
 {
@@ -216,9 +216,9 @@ final simulated function byte GetVisibilityIndex()
     return VisibilityIndex;
 }
 
-final function SetTeamIndex(byte TeamIndex)
+final function SetTeamIndex(byte NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
 
     if (bTrackDangerZone)
     {
@@ -248,7 +248,7 @@ final simulated function Vector GetWorldCoords(DHGameReplicationInfo GRI)
     else if (GRI != none)
     {
         Class'UQuantize'.static.DequantizeClamped2DPose(Quantized2DPose, X, Y);
-        L = GRI.GetWorldCoords(x, Y);
+        L = GRI.GetWorldCoords(X, Y);
     }
 
     return L;
@@ -271,6 +271,8 @@ final simulated function float GetMapIconYaw(DHGameReplicationInfo GRI)
     {
         return GRI.GetMapIconYaw(WorldYaw);
     }
+
+    return 0.0;
 }
 
 final function UpdateQuantized2DPose()
@@ -309,6 +311,8 @@ delegate bool IsInDangerZone()
 
         return GRI.IsInDangerZone(L.X, L.Y, TeamIndex);
     }
+
+    return false;
 }
 
 // Override to define who can see the icon

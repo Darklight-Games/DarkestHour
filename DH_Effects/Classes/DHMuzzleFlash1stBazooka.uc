@@ -9,7 +9,7 @@ simulated function Trigger(Actor Other, Pawn EventInstigator)
 {
     Emitters[0].SpawnParticle(2);
     Emitters[1].SpawnParticle(25);
-    //Emitters[2].SpawnParticle(20);
+    // Emitters[2].SpawnParticle(20);
 }
 
 defaultproperties

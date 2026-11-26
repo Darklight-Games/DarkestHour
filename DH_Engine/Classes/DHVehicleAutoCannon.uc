@@ -6,14 +6,14 @@
 class DHVehicleAutoCannon extends DHVehicleCannon;
 
 // Number of remaining magazines for different ammo types
-var     byte        NumPrimaryMags;
-var     byte        NumSecondaryMags;
-var     byte        NumTertiaryMags;
+var byte NumPrimaryMags;
+var byte NumSecondaryMags;
+var byte NumTertiaryMags;
 
 // Ejected shell case emitter
-var class<Emitter>  ShellCaseEmitterClass;
-var     Emitter     ShellCaseEmitter;
-var     name        ShellCaseEjectorBone;
+var class<Emitter> ShellCaseEmitterClass;
+var Emitter ShellCaseEmitter;
+var name ShellCaseEjectorBone;
 
 replication
 {
@@ -128,7 +128,9 @@ function bool GiveInitialAmmo()
 
     bSuppliedAmmo = super.GiveInitialAmmo();
 
-    if (NumPrimaryMags != default.NumPrimaryMags || NumSecondaryMags != default.NumSecondaryMags || NumTertiaryMags != default.NumTertiaryMags)
+    if (NumPrimaryMags != default.NumPrimaryMags
+        || NumSecondaryMags != default.NumSecondaryMags
+        || NumTertiaryMags != default.NumTertiaryMags)
     {
         NumPrimaryMags = default.NumPrimaryMags;
         NumSecondaryMags = default.NumSecondaryMags;
@@ -163,7 +165,11 @@ function bool ResupplyAmmo()
     }
 
     // If cannon is waiting to reload & we have a player who doesn't use manual reloading (so must be out of ammo), then try to start a reload
-    if (ReloadState == RL_Waiting && WeaponPawn != none && WeaponPawn.Occupied() && !PlayerUsesManualReloading() && bDidResupply)
+    if (ReloadState == RL_Waiting
+        && WeaponPawn != none
+        && WeaponPawn.Occupied()
+        && !PlayerUsesManualReloading()
+        && bDidResupply)
     {
         AttemptReload();
     }

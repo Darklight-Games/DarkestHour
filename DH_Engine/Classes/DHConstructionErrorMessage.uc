@@ -8,7 +8,12 @@ class DHConstructionErrorMessage extends LocalMessage
 
 var localized array<string> ErrorMessages;
 
-static function string GetString(optional int S, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int S,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local DHConstructionProxy CP;
     local string Result;
@@ -36,7 +41,7 @@ static function RenderComplexMessage(
     Canvas Canvas,
     out float XL,
     out float YL,
-    optional String MessageString,
+    optional string MessageString,
     optional int Switch,
     optional PlayerReplicationInfo RelatedPRI_1,
     optional PlayerReplicationInfo RelatedPRI_2,

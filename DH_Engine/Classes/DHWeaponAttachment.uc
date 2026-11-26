@@ -6,47 +6,47 @@
 class DHWeaponAttachment extends ROWeaponAttachment
     abstract;
 
-var     name        PA_MortarDeployAnim;
-var     name        WA_MortarDeployAnim;
+var name PA_MortarDeployAnim;
+var name WA_MortarDeployAnim;
 
-var     name        PA_AssistedReloadAnim;
-var     name        PA_ProneAssistedReloadAnim;
-var     name        PA_CrouchReloadAnim;
-var     name        PA_CrouchReloadEmptyAnim;
-var     name        WA_CrouchReload;
-var     name        WA_CrouchReloadEmpty;
-var     name        WA_BayonetCrouchReload;
-var     name        WA_BayonetCrouchReloadEmpty;
+var name PA_AssistedReloadAnim;
+var name PA_ProneAssistedReloadAnim;
+var name PA_CrouchReloadAnim;
+var name PA_CrouchReloadEmptyAnim;
+var name WA_CrouchReload;
+var name WA_CrouchReloadEmpty;
+var name WA_BayonetCrouchReload;
+var name WA_BayonetCrouchReloadEmpty;
 
-var     name        WA_ProneIdle;
-var     name        WA_DeployedIdle;
-var     name        WA_DeployedFire;
+var name WA_ProneIdle;
+var name WA_DeployedIdle;
+var name WA_DeployedFire;
 
-var     bool        bStaticReload; // Reload animations will take over the
-                                   // entire body (useful for deployed weapons).
+// Reload animations will take over the entire body (useful for deployed weapons).
+var bool bStaticReload;
 
-var     name        PA_BarrelChangeStandAnim;
-var     name        PA_BarrelChangeCrouchAnim;
-var     name        PA_BarrelChangeProneAnim;
+var name PA_BarrelChangeStandAnim;
+var name PA_BarrelChangeCrouchAnim;
+var name PA_BarrelChangeProneAnim;
 
-var     name        WA_BarrelChangeStandAnim;
-var     name        WA_BarrelChangeCrouchAnim;
-var     name        WA_BarrelChangeProneAnim;
+var name WA_BarrelChangeStandAnim;
+var name WA_BarrelChangeCrouchAnim;
+var name WA_BarrelChangeProneAnim;
 
-var     Vector      SavedmHitLocation; // used so net client's PostNetReceive() can tell when we've received a new mHitLocation & spawn a hit effect
+var Vector SavedmHitLocation; // used so net client's PostNetReceive() can tell when we've received a new mHitLocation & spawn a hit effect
 
 // SHAME: this is in here because of the laziness of previous developers;
 // The correct solution would be to just fix the ejection port in the model.
 // Unfortunately, we don't have access to these models any more so we can't fix them.
 // TODO: specify exact rotation for ejection, don't rely on "down" to be correct
-var     bool    bSpawnShellsOutBottom;
+var bool bSpawnShellsOutBottom;
 
 // Mesh offsets for when the weapon is on the back.
-var     Vector  BackAttachmentLocationOffset;
-var     Rotator BackAttachmentRotationOffset;
+var Vector BackAttachmentLocationOffset;
+var Rotator BackAttachmentRotationOffset;
 
 // An offset for correcting the tip location.
-var     Vector  MuzzleFlashOffset;
+var Vector MuzzleFlashOffset;
 
 // Modified to actual use the muzzle bone name instead of a hard-coded "tip" bone
 simulated function Vector GetTipLocation()
@@ -131,8 +131,8 @@ simulated function SetBarrelSteamActive(bool bSteaming)
 
 simulated function SpawnShells(float Frequency)
 {
-    local   Rotator     EjectorRotation;
-    local   Vector      SpawnLocation;
+    local Rotator EjectorRotation;
+    local Vector SpawnLocation;
 
     if (ROShellCaseClass != none && ShellEjectionBoneName != '' && Instigator != none && !Instigator.IsFirstPerson())
     {
@@ -211,7 +211,7 @@ simulated event ThirdPersonEffects()
 // But for net client this gets called by PostNetReceive() when it receives updated SpawnHitCount & mHitLocation, so it knows where to spawn the effect
 simulated function SpawnHitEffect()
 {
-    local PlayerController   PC;
+    local PlayerController PC;
     local DHVehicleHitEffect VehEffect;
 
     OldSpawnHitCount = SpawnHitCount;
@@ -222,7 +222,8 @@ simulated function SpawnHitEffect()
 
     // Check effect is relevant to player - must either be the local player who fired, or effect would be within a set distance for other players
     // Using squared distances for efficient processing of distance check (equivalent to 4000 units or 66m)
-    if ((Instigator != none && Instigator.Controller == PC) || VSizeSquared(PC.ViewTarget.Location - mHitLocation) < 16000000.0)
+    if ((Instigator != none && Instigator.Controller == PC)
+        || VSizeSquared(PC.ViewTarget.Location - mHitLocation) < 16000000.0)
     {
         if (Vehicle(mHitActor) != none || ROVehicleWeapon(mHitActor) != none) // removed call to GetVehicleHitInfo(), as it's pointless & just repeats same trace as GetHitInfo()
         {
@@ -240,11 +241,14 @@ simulated function SpawnHitEffect()
 // Modified to play water splash sound, & to use pawn's eye position as trace start as it's much closer to bullet's spawn location than pawn's location (strangely, even when hip firing)
 simulated function CheckForSplash()
 {
-    local Actor  HitActor;
+    local Actor HitActor;
     local Vector HitLocation, HitNormal;
 
     // No splash if detail settings are low, or if projectile is already in a water volume
-    if (Level.Netmode != NM_DedicatedServer && !Level.bDropDetail && Level.DetailMode != DM_Low && Instigator != none
+    if (Level.Netmode != NM_DedicatedServer
+        && !Level.bDropDetail
+        && Level.DetailMode != DM_Low
+        && Instigator != none
         && !(Instigator.PhysicsVolume != none && Instigator.PhysicsVolume.bWaterVolume))
     {
         // Trace to see if bullet hits water - from firing point to end hit location, because bullet may splash in water in between
@@ -253,7 +257,8 @@ simulated function CheckForSplash()
         bTraceWater = false;
 
         // We hit a water volume or a fluid surface, so play splash effects
-        if ((PhysicsVolume(HitActor) != none && PhysicsVolume(HitActor).bWaterVolume) || FluidSurfaceInfo(HitActor) != none)
+        if ((PhysicsVolume(HitActor) != none && PhysicsVolume(HitActor).bWaterVolume)
+            || FluidSurfaceInfo(HitActor) != none)
         {
             PlaySound(Class'DHBullet'.default.WaterHitSound);
 
@@ -281,14 +286,14 @@ function UpdateHit(Actor HitActor, Vector HitLocation, Vector HitNormal)
         mHitLocation = HitLocation;
     }
 
-    //SpawnHitCount++; // unnecessary replication (changing mHitLocation is enough)
+    // SpawnHitCount++; // unnecessary replication (changing mHitLocation is enough)
     NetUpdateTime = Level.TimeSeconds - 1.0;
 
     if (Level.NetMode != NM_DedicatedServer)
     {
         mHitActor = HitActor;
         mHitNormal = HitNormal;
-//      mVehHitNormal = HitNormal; // pointless, just use mHitNormal
+        //      mVehHitNormal = HitNormal; // pointless, just use mHitNormal
 
         // Little trick to make single player or listen server spawn hit effects, since we are no longer incrementing SpawnHitCount & they check old vs new values
         OldSpawnHitCount++;
@@ -347,10 +352,7 @@ simulated function GetHitInfo()
 }
 
 // Emptied out as deprecated
-simulated function Actor GetVehicleHitInfo()
-{
-    return none;
-}
+simulated function Actor GetVehicleHitInfo();
 
 // Modified to fix UT2004 bug affecting non-owning net players in any vehicle with bPCRelativeFPRotation (nearly all), often causing effects to be skipped
 // Vehicle's rotation was not being factored into calcs using the PlayerController's rotation, which effectively randomised the result of this function
@@ -392,9 +394,7 @@ simulated function bool EffectIsRelevant(Vector SpawnLocation, bool bForceDedica
 
 // Emptied out as is never called in RO/DHBullet
 // In the unused 'XPawn' class it was called in PlayTakeHit() function, but in ROPawn Ramm removed that call, commenting "this doesn't really fit our system")
-simulated function PlayDirectionalHit(Vector HitLoc)
-{
-}
+simulated function PlayDirectionalHit(Vector HitLoc);
 
 simulated function PlayIdle()
 {
@@ -607,7 +607,6 @@ defaultproperties
 
     CullDistance=8192.0 // 136m - was originally 4000 UU (approx 66m), but when the 3rd person weapon attachment gets culled, player's can't see a muzzle flash, which is important
     bNetNotify=true
-    bSpawnShellsOutBottom=false
     ROMGSteamEmitterClass=Class'DHMGSteam'
     SplashEffect=Class'DHBulletHitWaterEffect'
 

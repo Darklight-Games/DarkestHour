@@ -10,7 +10,9 @@ function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChang
 {
     super.HandleTurretRotation(DeltaTime, YawChange, PitchChange);
 
-    if (Level.NetMode != NM_DedicatedServer && ((YawChange != 0.0 && !bTurretRingDamaged) || (PitchChange != 0.0 && !bGunPivotDamaged)) && DH_Bofors40mmCannon(Gun) != none)
+    if (Level.NetMode != NM_DedicatedServer
+        && ((YawChange != 0.0 && !bTurretRingDamaged) || (PitchChange != 0.0 && !bGunPivotDamaged))
+        && DH_Bofors40mmCannon(Gun) != none)
     {
         DH_Bofors40mmCannon(Gun).UpdateControlsRotation();
     }

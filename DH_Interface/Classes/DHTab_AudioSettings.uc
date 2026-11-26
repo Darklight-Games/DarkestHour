@@ -5,9 +5,9 @@
 
 class DHTab_AudioSettings extends ROTab_AudioSettings;
 
-var automated moNumericEdit     nu_AudioChannels;
+var automated moNumericEdit nu_AudioChannels;
 
-var int                         NumberOfChannels;
+var int NumberOfChannels;
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
@@ -45,7 +45,7 @@ function InternalOnChange(GUIComponent Sender)
         case nu_AudioChannels:
             NumberOfChannels = nu_AudioChannels.GetValue();
             PlayerOwner().ConsoleCommand("set ini:Engine.Engine.AudioDevice Channels" @ NumberOfChannels);
-            //PlayerOwner().ConsoleCommand("SetMusicVolume"@fMusic);
+            // PlayerOwner().ConsoleCommand("SetMusicVolume"@fMusic);
             break;
     }
 }

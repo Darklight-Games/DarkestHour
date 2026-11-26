@@ -12,4 +12,3 @@ defaultproperties
     bRoundEndsAtZeroReinf=false
     bTimeCanChangeAtZeroReinf=false
 }
-

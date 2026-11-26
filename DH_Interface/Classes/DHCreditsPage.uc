@@ -40,7 +40,7 @@ var localized string PastPatreonSupportersText;
 var localized string OtherContributorsText;
 var localized string SpecialThanksText;
 
-function AddSystemMenu(){}
+function AddSystemMenu();
 
 function AddCreditLine(string Line)
 {

@@ -8,10 +8,7 @@
 class DH_Model35MortarCannon extends DHATGunCannon;
 
 // Ignore manual reloading functionality for mortars.
-simulated function bool PlayerUsesManualReloading()
-{
-    return false;
-}
+simulated function bool PlayerUsesManualReloading();
 
 defaultproperties
 {

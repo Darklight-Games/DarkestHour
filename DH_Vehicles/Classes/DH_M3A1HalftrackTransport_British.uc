@@ -15,7 +15,7 @@ class DH_M3A1HalftrackTransport_British extends DH_M3A1HalftrackTransport;
 function bool TryToDrive(Pawn P)
 {
     local DHGameReplicationInfo GRI;
-    local int                   VPI;
+    local int VPI;
 
     if (DHSpawnManager(Owner) != none && P != none && DHPlayer(P.Controller) != none)
     {
@@ -24,7 +24,10 @@ function bool TryToDrive(Pawn P)
 
         if (VPI >= 0 && VPI < arraycount(GRI.VehiclePoolActiveCounts) && GRI.VehiclePoolActiveCounts[VPI] < 1)
         {
-            Log("Leveller, please replace use of DH_M3A1HalftrackTransport_British with DH_M3A1HalftrackTransport, as this is a temporary legacy actor & in future the map will break", 'MAP WARNING');
+            Log(
+                "Leveller, please replace use of DH_M3A1HalftrackTransport_British with DH_M3A1HalftrackTransport, as this is a temporary legacy actor & in future the map will break",
+                'MAP WARNING'
+                );
         }
     }
 

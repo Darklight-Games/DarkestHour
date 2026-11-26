@@ -3,7 +3,8 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHWebServerAdmin extends UTServerAdmin config;
+class DHWebServerAdmin extends UTServerAdmin
+    config;
 
 // Override to add ServerName arguement so we can put the servername on the header page
 function QueryHeaderPage(WebRequest Request, WebResponse Response)
@@ -37,10 +38,10 @@ function QueryHeaderPage(WebRequest Request, WebResponse Response)
                 Dis = "d";
             }
 
-            Response.Subst("MenuLink", RootFrame$"?Group="$QueryHandlers[i].DefaultPage);
+            Response.Subst("MenuLink", RootFrame $ "?Group=" $ QueryHandlers[i].DefaultPage);
             Response.Subst("MenuTitle", QueryHandlers[i].Title);
 
-            menu = menu$WebInclude(HeaderPage$"_item"$Dis);
+            menu = menu $ WebInclude(HeaderPage $ "_item" $ Dis);
         }
 
         Response.Subst("Location", CurPageTitle);

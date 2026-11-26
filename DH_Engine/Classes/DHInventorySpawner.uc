@@ -7,51 +7,51 @@ class DHInventorySpawner extends Actor
     abstract
     placeable;
 
-var class<Weapon>       WeaponClass;
+var class<Weapon> WeaponClass;
 
 enum ETeamOwner
 {
     TEAM_Axis,
     TEAM_Allies,
-    TEAM_Neutral
+    TEAM_Neutral,
 };
 
-var bool                bIsTeamLocked;
-var() ETeamOwner        TeamOwner;
-var private int         TeamIndex;
+var bool bIsTeamLocked;
+var() ETeamOwner TeamOwner;
+var private int TeamIndex;
 
-var array<name>         PickupBoneNames;
+var array<name> PickupBoneNames;
 
-var     int             SavedPickupCount;
-var     int             PickupsMax;
-var()   int             PickupCount;
-var     int             UseCount;
-var()   int             UsesMax;    // -1 = infinite
+var int SavedPickupCount;
+var int PickupsMax;
+var() int PickupCount;
+var int UseCount;
+var() int UsesMax; // -1 = infinite
 
-var     name            CloseAnimation;
-var     name            ClosedAnimation;
-var     name            OpenAnimation;
-var     name            OpenedAnimation;
+var name CloseAnimation;
+var name ClosedAnimation;
+var name OpenAnimation;
+var name OpenedAnimation;
 
-var()   bool            bShouldGeneratePickups;
-var()   int             PickupGenerationRatePerMinute;
-var     float           NextPickupGenerationTimeSeconds;
+var() bool bShouldGeneratePickups;
+var() int PickupGenerationRatePerMinute;
+var float NextPickupGenerationTimeSeconds;
 
+var array<Actor> Proxies;
+var class<Actor> ProxyClass;
+var StaticMesh ProxyStaticMesh;
 
-var array<Actor>        Proxies;
-var class<Actor>        ProxyClass;
-var StaticMesh          ProxyStaticMesh;
-
-var localized string    MenuNoun;
-var localized string    MenuNameFormat;
+var localized string MenuNoun;
+var localized string MenuNameFormat;
 
 // Client-side variable for keeping track if the box is open or closed.
-var bool                bIsOpen;
+var bool bIsOpen;
 
 // Called when all pickups are exhausted and we are pending deletion.
-var bool                bShouldDestroyOnExhaustion;
-var float               ExhaustedLifespan;
-delegate                OnExhausted(DHInventorySpawner Spawner);
+var bool bShouldDestroyOnExhaustion;
+var float ExhaustedLifespan;
+
+delegate OnExhausted(DHInventorySpawner Spawner);
 
 replication
 {
@@ -76,7 +76,7 @@ simulated function PostBeginPlay()
             PickupCount = Min(PickupCount, UsesMax);
         }
 
-        if (CanGeneratePickups())   // TODO: determine if we need to call this still or move it etc.
+        if (CanGeneratePickups()) // TODO: determine if we need to call this still or move it etc.
         {
             NextPickupGenerationTimeSeconds = Level.TimeSeconds + (60.0 / PickupGenerationRatePerMinute);
         }
@@ -119,9 +119,9 @@ simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-function SetTeamIndex(int TeamIndex)
+function SetTeamIndex(int NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
 }
 
 simulated function bool ShouldBeOpen()
@@ -196,9 +196,9 @@ simulated event Timer()
     }
 }
 
-simulated function bool CanBeUsedByTeam(int TeamIndex)
+simulated function bool CanBeUsedByTeam(int UserTeamIndex)
 {
-    return !bIsTeamLocked || self.TeamIndex == NEUTRAL_TEAM_INDEX || self.TeamIndex == TeamIndex;
+    return !bIsTeamLocked || TeamIndex == NEUTRAL_TEAM_INDEX || TeamIndex == UserTeamIndex;
 }
 
 simulated function bool CanBeUsedByPawn(Pawn User)
@@ -279,10 +279,7 @@ simulated event NotifySelected(Pawn User)
 {
     local class<ROWeaponPickup> PickupClass;
 
-    if (Level.NetMode == NM_DedicatedServer ||
-        !CanBeUsedByPawn(User) ||
-        PickupCount <= 0 ||
-        WeaponClass == none)
+    if (Level.NetMode == NM_DedicatedServer || !CanBeUsedByPawn(User) || PickupCount <= 0 || WeaponClass == none)
     {
         return;
     }
@@ -324,7 +321,8 @@ simulated function UpdateProxies()
         Proxies[Proxies.Length] = Proxy;
     }
 
-    bShouldHideProxies = Level.GetLocalPlayerController() == none || !CanBeUsedByTeam(Level.GetLocalPlayerController().GetTeamNum());
+    bShouldHideProxies = Level.GetLocalPlayerController() == none
+        || !CanBeUsedByTeam(Level.GetLocalPlayerController().GetTeamNum());
 
     for (i = 0; i < Proxies.Length; ++i)
     {
@@ -392,6 +390,5 @@ defaultproperties
     OpenedAnimation="opened"
     ClosedAnimation="closed"
     SavedPickupCount=-1
-    bIsTeamLocked=false
     TeamOwner=TEAM_Neutral
 }

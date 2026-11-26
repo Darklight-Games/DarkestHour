@@ -18,7 +18,7 @@ enum EFilterOperation
 {
     NoOp,
     Include,
-    Exclude
+    Exclude,
 };
 
 struct SClassFilter

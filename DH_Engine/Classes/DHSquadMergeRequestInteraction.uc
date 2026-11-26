@@ -14,7 +14,12 @@ function Initialized()
     super.Initialized();
 
     PromptText = Repl(PromptText, "{0}", default.SenderPlayerName);
-    PromptText = Repl(PromptText, "{1}", Class'GameInfo'.static.MakeColorCode(Class'DHColor'.default.SquadColor) $ default.SenderSquadName $ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White));
+    PromptText = Repl(
+        PromptText,
+        "{1}",
+        Class'GameInfo'.static.MakeColorCode(Class'DHColor'.default.SquadColor) $ default.SenderSquadName
+            $ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White)
+        );
 }
 
 function OnOptionSelected(int Index)
@@ -50,4 +55,3 @@ defaultproperties
     Options(1)=(Key=IK_F2,Text="Decline")
     Options(2)=(Key=IK_F3,Text="Ignore All")
 }
-

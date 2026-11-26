@@ -6,10 +6,10 @@
 class DHCannonShellSmoke extends DHCannonShellHE
     abstract;
 
-var  class<Emitter> SmokeEmitterClass;
-var  Sound          SmokeIgniteSound;
-var  Sound          SmokeLoopSound;
-var  float          SmokeSoundDuration;
+var class<Emitter> SmokeEmitterClass;
+var Sound SmokeIgniteSound;
+var Sound SmokeLoopSound;
+var float SmokeSoundDuration;
 
 // Modified to add smoke effects
 simulated function Explode(Vector HitLocation, Vector HitNormal)

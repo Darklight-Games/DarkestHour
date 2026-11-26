@@ -16,7 +16,7 @@ function bool InternalOnKeyEvent(out byte Key, out byte State, float delta)
         return false;
     }
 
-    return super.InternalOnKeyEvent(Key, State, Delta);
+    return super.InternalOnKeyEvent(Key, State, delta);
 }
 
 function InternalOnEnter()

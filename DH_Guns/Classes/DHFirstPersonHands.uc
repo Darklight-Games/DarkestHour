@@ -33,6 +33,5 @@ defaultproperties
     bOnlyOwnerSee=True
     bOnlyDrawIfAttached=True
     RemoteRole=ROLE_None
-    HandsSkinIndex=0
     SleeveSkinIndex=1
 }

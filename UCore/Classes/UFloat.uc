@@ -23,6 +23,7 @@ final static function float RandomRange(float Min, float Max)
 
 final static function float Infinity()
 {
+    // usagi:ignore[division-by-zero]
     return 1.0 / 0.0;
 }
 
@@ -64,4 +65,3 @@ final static function string Format(float Value, int Decimals)
 
     return S;
 }
-

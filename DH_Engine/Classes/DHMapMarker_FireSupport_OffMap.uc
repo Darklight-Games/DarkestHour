@@ -12,9 +12,10 @@ static function bool CanRemoveMarker(DHPlayerReplicationInfo PRI, DHGameReplicat
 
     PC = DHPlayer(PRI.Owner);
 
-    return PRI != none && PC != none
-      && !PC.IsPositionOfArtillery(Marker.WorldLocation)
-      && !PC.IsPositionOfParadrop(Marker.WorldLocation);
+    return PRI != none
+        && PC != none
+        && !PC.IsPositionOfArtillery(Marker.WorldLocation)
+        && !PC.IsPositionOfParadrop(Marker.WorldLocation);
 }
 
 static function bool CanSeeMarker(DHPlayerReplicationInfo PRI, DHGameReplicationInfo.MapMarker Marker)

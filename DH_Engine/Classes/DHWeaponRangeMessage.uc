@@ -4,8 +4,8 @@
 //==============================================================================
 
 class DHWeaponRangeMessage extends LocalMessage
-    dependson(DHUnits)
-    abstract;
+    abstract
+    dependson(DHUnits);
 
 static function string GetString(
     optional int Switch,
@@ -15,18 +15,21 @@ static function string GetString(
     )
 {
     local int Range, Unit;
+
     Class'UInteger'.static.ToShorts(Switch, Range, Unit);
     return string(Range) $ Class'DHUnits'.static.GetDistanceUnitSymbol(EDistanceUnit(Unit));
 }
 
-static function RenderComplexMessage(Canvas Canvas,
-                              out float XL,
-                              out float YL,
-                              optional string MessageString,
-                              optional int Switch,
-                              optional PlayerReplicationInfo RelatedPRI_1,
-                              optional PlayerReplicationInfo RelatedPRI_2,
-                              optional Object OptionalObject)
+static function RenderComplexMessage(
+    Canvas Canvas,
+    out float XL,
+    out float YL,
+    optional string MessageString,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local float X, Y;
 

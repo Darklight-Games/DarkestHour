@@ -29,7 +29,7 @@ simulated function NextWeapon()
     {
         if (IsHumanControlled())
         {
-            PlayerController(Controller).ReceiveLocalizedMessage(class'DH_HetzerVehicleMessage');
+            PlayerController(Controller).ReceiveLocalizedMessage(Class'DH_HetzerVehicleMessage');
         }
 
         return;

@@ -44,4 +44,3 @@ final static function int FromBytes(array<int> Bytes)
 
     return ~CRC;
 }
-

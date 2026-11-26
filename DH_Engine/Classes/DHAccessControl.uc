@@ -13,19 +13,19 @@ struct Patron
     var string Tier;
 };
 
-var private array<string>           DeveloperIDs;
-var private array<Patron>           Patrons; // A list of patreon ROIDs for users that are on MAC and don't work with normal system
-var private array<string>           GloballyBannedIDs;
+var private array<string> DeveloperIDs;
+var private array<Patron> Patrons; // A list of patreon ROIDs for users that are on MAC and don't work with normal system
+var private array<string> GloballyBannedIDs;
 
 struct Restriction
 {
     var string PlayerID;
     var string ForcedName;
-    var bool   bOutboundMessages;
-    var bool   bOutboundVoice;
-    var bool   bLeaderPositions;
-    var bool   bSquadNames;
-    var bool   bVehicleAccess;
+    var bool bOutboundMessages;
+    var bool bOutboundVoice;
+    var bool bLeaderPositions;
+    var bool bSquadNames;
+    var bool bVehicleAccess;
 };
 
 var globalconfig array<Restriction> Restrictions;
@@ -101,9 +101,11 @@ function ApplyRestrictions(DHPlayer PC, optional bool bOnLogin)
         }
 
         // Squad name editing
-        if (PRI.Team != none &&
-            Restrictions[i].bSquadNames && !PC.bRestrictSquadNames &&
-            PC.SquadReplicationInfo != none && PRI.IsSquadLeader())
+        if (PRI.Team != none
+            && Restrictions[i].bSquadNames
+            && !PC.bRestrictSquadNames
+            && PC.SquadReplicationInfo != none
+            && PRI.IsSquadLeader())
         {
             PC.SquadReplicationInfo.SetName(PRI.Team.TeamIndex, PRI.SquadIndex, "");
         }
@@ -127,7 +129,7 @@ function ApplyRestrictions(DHPlayer PC, optional bool bOnLogin)
             if (PC.bRestrictVehicleAccess)
             {
                 PC.LeaveVehicleAsDriver();
-                PC.ReceiveLocalizedMessage(class'DHAdminMessage', 11);
+                PC.ReceiveLocalizedMessage(Class'DHAdminMessage', 11);
             }
         }
 
@@ -147,7 +149,7 @@ function ApplyRestrictions(DHPlayer PC, optional bool bOnLogin)
                     PC.SquadReplicationInfo.SetAssistantSquadLeader(PRI.Team.TeamIndex, PRI.SquadIndex, none);
                 }
 
-                PC.ReceiveLocalizedMessage(class'DHAdminMessage', 12);
+                PC.ReceiveLocalizedMessage(Class'DHAdminMessage', 12);
             }
         }
     }
@@ -155,9 +157,9 @@ function ApplyRestrictions(DHPlayer PC, optional bool bOnLogin)
 
 function bool AdminLogin(PlayerController P, string Username, string Password)
 {
-    local xAdminUser    User;
-    local int           Index;
-    local bool          bValidLogin;
+    local xAdminUser User;
+    local int Index;
+    local bool bValidLogin;
 
     if (P == none)
     {
@@ -168,7 +170,7 @@ function bool AdminLogin(PlayerController P, string Username, string Password)
 
     if (User == none)
     {
-        User = Users.FindByName(UserName);
+        User = Users.FindByName(Username);
         bValidLogin = User != none && User.Password == Password;
     }
 
@@ -176,8 +178,8 @@ function bool AdminLogin(PlayerController P, string Username, string Password)
     {
         Index = LoggedAdmins.Length;
         LoggedAdmins.Length = Index + 1;
-        LoggedAdmins[index].User = User;
-        LoggedAdmins[index].PRI = P.PlayerReplicationInfo;
+        LoggedAdmins[Index].User = User;
+        LoggedAdmins[Index].PRI = P.PlayerReplicationInfo;
         P.PlayerReplicationInfo.bAdmin = User.bMasterAdmin || User.HasPrivilege("Kp") || User.HasPrivilege("Bp");
         return true;
     }
@@ -190,9 +192,9 @@ function bool AdminLogin(PlayerController P, string Username, string Password)
 function bool AdminLoginSilent(PlayerController P, string UserName, string Password)
 {
     local xAdminUser User;
-    local string     ROID, AMMutatorPrefix;
-    local bool       bValidLogin, bAdminMenuMutatorLogin;
-    local int        Index;
+    local string ROID, AMMutatorPrefix;
+    local bool bValidLogin, bAdminMenuMutatorLogin;
+    local int Index;
 
     if (P == none || P.PlayerReplicationInfo == none)
     {
@@ -229,8 +231,12 @@ function bool AdminLoginSilent(PlayerController P, string UserName, string Passw
 
         if (!bAdminMenuMutatorLogin) // server log entry (unless was an auto-login by the admin menu mutator, which would be too much log spam))
         {
-            Log(P.PlayerReplicationInfo.PlayerName @ "(ROID =" @ ROID $ ") logged in as SILENT ADMIN, on map" @ Class'DHLib'.static.GetMapName(Level) @ "at server time"
-                @ Level.Hour $ ":" $ Class'UString'.static.ZFill(Level.Minute, 2) @ "on" @ Level.Month $ "/" $ Level.Day $ "/" $ Level.Year);
+            Log(
+                P.PlayerReplicationInfo.PlayerName @ "(ROID =" @ ROID $ ") logged in as SILENT ADMIN, on map"
+                    @ Class'DHLib'.static.GetMapName(Level) @ "at server time" @ Level.Hour $ ":"
+                    $ Class'UString'.static.ZFill(Level.Minute, 2) @ "on" @ Level.Month $ "/" $ Level.Day $ "/"
+                    $ Level.Year
+                );
         }
 
         return true;
@@ -273,6 +279,8 @@ static function bool IsGloballyBanned(string ROID)
             return true;
         }
     }
+
+    return false;
 }
 
 // This only gets the patron level off the PatreonIDs array in the default properties below, not from the webserver
@@ -313,7 +321,7 @@ function int CheckID(string CDHash)
             id = Left(BannedIDs[i], 32);
         }
 
-        if (CDHash ~= id)//STEAMAUTH -- ~=Left(BannedIDs[i],32) )
+        if (CDHash ~= id) // STEAMAUTH -- ~=Left(BannedIDs[i],32) )
         {
             return 2;
         }
@@ -329,7 +337,7 @@ function int CheckID(string CDHash)
             id = Left(SessionBannedIDs[i], 32);
         }
 
-        if (CDHash ~= id)//STEAMAUTH -- ~=Left(SessionBannedIDs[i],32) )
+        if (CDHash ~= id) // STEAMAUTH -- ~=Left(SessionBannedIDs[i],32) )
         {
             return 1;
         }

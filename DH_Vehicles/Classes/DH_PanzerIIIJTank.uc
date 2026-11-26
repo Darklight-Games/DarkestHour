@@ -5,7 +5,6 @@
 
 class DH_PanzerIIIJTank extends DHArmoredVehicle;
 
-
 defaultproperties
 {
     // Vehicle properties

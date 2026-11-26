@@ -5,14 +5,14 @@
 
 class DH_ModifyVehiclePool extends DH_ModifyActors;
 
-var()   name                                VehiclePoolTag;
-var()   DHObjective.EVehiclePoolOperation   Operation;
-var()   int                                 Value;
+var() name VehiclePoolTag;
+var() DHObjective.EVehiclePoolOperation Operation;
+var() int Value;
 
 event Trigger(Actor Other, Pawn EventInstigator)
 {
-    local DHSpawnManager    SM;
-    local DarkestHourGame   G;
+    local DHSpawnManager SM;
+    local DarkestHourGame G;
 
     G = DarkestHourGame(Level.Game);
 

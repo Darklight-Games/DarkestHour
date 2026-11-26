@@ -5,7 +5,7 @@
 
 class DHGUINumericEdit extends GUINumericEdit;
 
-var()   int                 MidValue;
+var() int MidValue;
 
 defaultproperties
 {

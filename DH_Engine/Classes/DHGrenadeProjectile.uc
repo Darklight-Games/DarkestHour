@@ -8,8 +8,8 @@ class DHGrenadeProjectile extends DHThrowableExplosiveProjectile // incorporatin
 
 var enum ESpinType
 {
-    ST_Normal,      // Normal spin for egg-shaped or canister grenades.
-    ST_Tumble,      // End-over-end tumbling flight (e.g. stick grenades).
+    ST_Normal, // Normal spin for egg-shaped or canister grenades.
+    ST_Tumble, // End-over-end tumbling flight (e.g. stick grenades).
 } SpinType;
 
 // Client-side only projectile class to accompany a throw
@@ -37,7 +37,9 @@ simulated function SpawnSpoonProjectile()
     SpoonDirection = Rotator(Velocity);
     SpoonDirection.Yaw += Class'UInterp'.static.Linear(FRand(), -300, 300);
 
-    SpoonProjectile.Velocity = Vector(SpoonDirection) * VSize(Velocity) * Class'UInterp'.static.Linear(FRand(), 0.5, 0.75);
+    SpoonProjectile.Velocity = Vector(SpoonDirection)
+        * VSize(Velocity)
+        * Class'UInterp'.static.Linear(FRand(), 0.5, 0.75);
     SpoonProjectile.RandSpin(100000);
 }
 
@@ -59,12 +61,12 @@ simulated function PostBeginPlay()
 
     switch (SpinType)
     {
-    case ST_Normal:
-        RandSpin(100000.0);
-        break;
-    case ST_Tumble:
-        RotationRate.Pitch = -(90000 + Rand(30000));
-        break;
+        case ST_Normal:
+            RandSpin(100000.0);
+            break;
+        case ST_Tumble:
+            RotationRate.Pitch = -(90000 + Rand(30000));
+            break;
     }
 }
 

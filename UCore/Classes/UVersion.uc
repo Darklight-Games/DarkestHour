@@ -148,4 +148,3 @@ function bool IsPrerelease()
 {
     return Prerelease != "";
 }
-

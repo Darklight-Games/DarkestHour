@@ -5,10 +5,10 @@
 
 class DH_Flakvierling38Cannon extends DH_Flak38Cannon;
 
-var     byte        NextFiringBarrelIndex; // barrel no. that is due to fire next, so SpawnProjectile() can get location of barrel bone
-var     name        BarrelBones[4];        // bone names for each
-var     Emitter     FlashEmitters[4];      // we will have a separate flash emitter for each barrel
-var     name        FireAnimations[6];     // alternating shoot anims for both 'open' & 'closed' positions, i.e. on the sights or with gunner's head raised
+var byte NextFiringBarrelIndex; // barrel no. that is due to fire next, so SpawnProjectile() can get location of barrel bone
+var name BarrelBones[4]; // bone names for each
+var Emitter FlashEmitters[4]; // we will have a separate flash emitter for each barrel
+var name FireAnimations[6]; // alternating shoot anims for both 'open' & 'closed' positions, i.e. on the sights or with gunner's head raised
 
 replication
 {
@@ -50,14 +50,15 @@ function Fire(Controller C)
 // Modified to get the firing location for the barrel that is next to fire
 function Vector GetProjectileFireLocation(class<Projectile> ProjClass)
 {
-    return GetBoneCoords(BarrelBones[NextFiringBarrelIndex]).Origin + ((WeaponFireOffset * vect(1.0, 0.0, 0.0)) >> WeaponFireRotation);
+    return GetBoneCoords(BarrelBones[NextFiringBarrelIndex]).Origin
+        + ((WeaponFireOffset * vect(1.0, 0.0, 0.0)) >> WeaponFireRotation);
 }
 
 // Modified to handle fire effects & animations from alternating pairs of barrels (& EffectEmitter & CannonDustEmitterClass stuff omitted as not relevant to weapon)
 simulated function FlashMuzzleFlash(bool bWasAltFire)
 {
     local DHVehicleCannonPawn CannonPawn;
-    local int                 FireAnimationIndex;
+    local int FireAnimationIndex;
 
     if (Role == ROLE_Authority)
     {
@@ -103,7 +104,9 @@ simulated function FlashMuzzleFlash(bool bWasAltFire)
             ++FireAnimationIndex; // shift anim index to no. 1/3/5 if 2nd barrel pair (barrels 2 & 3) are firing
         }
 
-        if (FireAnimationIndex >= 0 && FireAnimationIndex < arraycount(FireAnimations) && HasAnim(FireAnimations[FireAnimationIndex]))
+        if (FireAnimationIndex >= 0
+            && FireAnimationIndex < arraycount(FireAnimations)
+            && HasAnim(FireAnimations[FireAnimationIndex]))
         {
             PlayAnim(FireAnimations[FireAnimationIndex]);
         }

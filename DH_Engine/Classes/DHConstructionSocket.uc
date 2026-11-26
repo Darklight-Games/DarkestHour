@@ -108,7 +108,7 @@ simulated function Hide()
     bBlockZeroExtentTraces = false;
 }
 
-simulated function bool IsForConstructionClass(DHActorProxy.Context Context, Class<DHConstruction> ConstructionClass)
+simulated function bool IsForConstructionClass(DHActorProxy.Context Context, class<DHConstruction> ConstructionClass)
 {
     local int i;
     local bool bIncluded;
@@ -131,8 +131,7 @@ simulated function bool IsForConstructionClass(DHActorProxy.Context Context, Cla
 
     for (i = 0; i < arraycount(ClassFilters); ++i)
     {
-        if (ConstructionClass == ClassFilters[i].Class ||
-            ClassIsChildOf(ConstructionClass, ClassFilters[i].Class))
+        if (ConstructionClass == ClassFilters[i].Class || ClassIsChildOf(ConstructionClass, ClassFilters[i].Class))
         {
             switch (ClassFilters[i].Operation)
             {
@@ -141,6 +140,8 @@ simulated function bool IsForConstructionClass(DHActorProxy.Context Context, Cla
                     break;
                 case Exclude:
                     return false;
+                case NoOp:
+                    break;
             }
         }
     }
@@ -156,6 +157,8 @@ simulated function bool IsForConstructionClass(DHActorProxy.Context Context, Cla
                     break;
                 case Exclude:
                     return false;
+                case NoOp:
+                    break;
             }
         }
     }
@@ -263,11 +266,11 @@ simulated function OnProxyChanged()
 
     if (GetProxy() != none)
     {
-        UpdateColor(class'UColor'.default.Green);
+        UpdateColor(Class'UColor'.default.Green);
     }
     else
     {
-        UpdateColor(class'UColor'.default.White);
+        UpdateColor(Class'UColor'.default.White);
     }
 }
 

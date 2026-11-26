@@ -7,32 +7,32 @@ class DHNation extends Object
     abstract;
 
 // Name
-var localized string            NationName;
-var string                      NativeNationName;
+var localized string NationName;
+var string NativeNationName;
 
-var Texture                     FlagIconTexture;        // The icon used for the nation on the map.
-var Texture                     TeamSelectTexture;      // TODO: set this up on the team select page!
+var Texture FlagIconTexture; // The icon used for the nation on the map.
+var Texture TeamSelectTexture; // TODO: set this up on the team select page!
 
-var class<DHVoicePack>          VoicePackClass;
+var class<DHVoicePack> VoicePackClass;
 
-var class<DHConstructionLoadout>    DefaultConstructionLoadoutClass;
+var class<DHConstructionLoadout> DefaultConstructionLoadoutClass;
 
 // Rally Point
 var class<DHSquadRallyPoint> RallyPointClass;
 
 // Flags
-var Material                    DeployMenuFlagTexture;
-var HudBase.SpriteWidget        MapFlagIconSpriteWidget;
+var Material DeployMenuFlagTexture;
+var HudBase.SpriteWidget MapFlagIconSpriteWidget;
 
 // Squads
-var string                      DefaultSquadNames[8];
+var string DefaultSquadNames[8];
 
-var Sound                       RoundStartSound;
+var Sound RoundStartSound;
 
 // Supply
-var class<DHVehicle>            SupplyTruckClass;
+var class<DHVehicle> SupplyTruckClass;
 
-var int                         SquadSize;
+var int SquadSize;
 
 defaultproperties
 {

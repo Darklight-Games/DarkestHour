@@ -20,72 +20,73 @@ class DH_Fiat1435MG extends DHVehicleMG
     abstract;
 
 // Range Driver
-var name                    RangeDriverAnim;
-var int                     RangeDriverAnimFrameCount;
-var int                     RangeDriverChannel;
-var name                    RangeDriverBone;
-var DHUnits.EDistanceUnit   RangeDistanceUnit;
-var int                     RangeIndex;
+var name RangeDriverAnim;
+var int RangeDriverAnimFrameCount;
+var int RangeDriverChannel;
+var name RangeDriverBone;
+var DHUnits.EDistanceUnit RangeDistanceUnit;
+var int RangeIndex;
 
-var private float           RangeDriverAnimationFrame;
-var private float           RangeDriverAnimationFrameStart;
-var private float           RangeDriverAnimationFrameTarget;
-var private float           RangeDriverAnimationTimeSecondsStart;
-var private float           RangeDriverAnimationTimeSecondsEnd;
+var private float RangeDriverAnimationFrame;
+var private float RangeDriverAnimationFrameStart;
+var private float RangeDriverAnimationFrameTarget;
+var private float RangeDriverAnimationTimeSecondsStart;
+var private float RangeDriverAnimationTimeSecondsEnd;
 
-var() float                 RangeDriverAnimationInterpDuration;
+var() float RangeDriverAnimationInterpDuration;
 
 // Firing Animation
-var int                     FiringChannel;
-var name                    FiringBone;
-var name                    FiringAnim;
-var name                    FiringIdleAnim;
+var int FiringChannel;
+var name FiringBone;
+var name FiringAnim;
+var name FiringIdleAnim;
 
 // Belt Animations
-var int                     BeltChannel;
-var name                    BeltBone;
-var name                    BeltIdleAnimation;
-var name                    BeltFireLoopAnimation;
-var name                    BeltFireEndAnimation;
+var int BeltChannel;
+var name BeltBone;
+var name BeltIdleAnimation;
+var name BeltFireLoopAnimation;
+var name BeltFireEndAnimation;
 
 // Clip Animation
-var name                    ClipBone;
-var name                    ClipAnim;
-var int                     ClipChannel;
+var name ClipBone;
+var name ClipAnim;
+var int ClipChannel;
 
 // Shell Ejection
-var()   class<RO3rdShellEject>  ShellEjectClass;
-var()   name                    ShellEjectBone;
-var()   Rotator                 ShellEjectRotationOffset;
+var() class<RO3rdShellEject> ShellEjectClass;
+var() name ShellEjectBone;
+var() Rotator ShellEjectRotationOffset;
 
 // Ammo Round
-var array<ROFPAmmoRound>    AmmoRounds;
-var StaticMesh              AmmoRoundStaticMesh;
-var array<name>             AmmoRoundBones;
-var Rotator                 AmmoRoundRelativeRotation;
+var array<ROFPAmmoRound> AmmoRounds;
+var StaticMesh AmmoRoundStaticMesh;
+var array<name> AmmoRoundBones;
+var Rotator AmmoRoundRelativeRotation;
 
 // Empty Ammo Rounds
 // This is used for things like the Fiat 14/35 where the empty belt links stay attached to the rest of the belt.
-var array<ROFPAmmoRound>    EmptyAmmoRounds;
-var StaticMesh              EmptyAmmoRoundStaticMesh;
-var array<name>             EmptyAmmoRoundBones;
-var() Rotator               EmptyAmmoRoundRelativeRotation;
+var array<ROFPAmmoRound> EmptyAmmoRounds;
+var StaticMesh EmptyAmmoRoundStaticMesh;
+var array<name> EmptyAmmoRoundBones;
+var() Rotator EmptyAmmoRoundRelativeRotation;
 
-var int                     RoundsInStaticMesh; // The number of rounds depicted in the static mesh.
+var int RoundsInStaticMesh; // The number of rounds depicted in the static mesh.
 
 // Range Table
 struct RangeTableItem
 {
-    var() float Range;          // Range in the specified distance unit.
-    var() float AnimationTime;  // Animation driver theta value.
+    var() float Range; // Range in the specified distance unit.
+    var() float AnimationTime; // Animation driver theta value.
 };
+
 var array<RangeTableItem> RangeTable;
 
 // Reload
-var()   name                    ReloadSequence;
-var     float                   ReloadStartTimeSeconds; // The time that the reload animation started.
-var     float                   ReloadEndTimeSeconds;   // The time that the reload animation will end.
-var()   float                   ReloadCameraTweenTime;  // The time that the camera will tween back to the player's view.
+var() name ReloadSequence;
+var float ReloadStartTimeSeconds; // The time that the reload animation started.
+var float ReloadEndTimeSeconds; // The time that the reload animation will end.
+var() float ReloadCameraTweenTime; // The time that the camera will tween back to the player's view.
 
 replication
 {
@@ -222,7 +223,7 @@ function StopFiringAnimation()
     }
 }
 
-function CeaseFire(Controller C, Bool bWasAltFire)
+function CeaseFire(Controller C, bool bWasAltFire)
 {
     super.CeaseFire(C, bWasAltFire);
 
@@ -308,9 +309,15 @@ simulated function Tick(float DeltaTime)
     {
         if (RangeDriverAnimationFrameTarget != RangeDriverAnimationFrame)
         {
-            T = Class'UInterp'.static.MapRangeClamped(Level.TimeSeconds, RangeDriverAnimationTimeSecondsStart, RangeDriverAnimationTimeSecondsEnd, 0.0, 1.0);
+            T = Class'UInterp'.static.MapRangeClamped(
+                Level.TimeSeconds, RangeDriverAnimationTimeSecondsStart, RangeDriverAnimationTimeSecondsEnd, 0.0, 1.0
+                );
 
-            RangeDriverAnimationFrame = Class'UInterp'.static.Deceleration(T, RangeDriverAnimationFrameStart, RangeDriverAnimationFrameTarget);
+            RangeDriverAnimationFrame = Class'UInterp'.static.Deceleration(
+                T,
+                RangeDriverAnimationFrameStart,
+                RangeDriverAnimationFrameTarget
+                );
 
             UpdateRangeDriver();
         }
@@ -421,12 +428,15 @@ simulated function UpdateClipDriver(int Ammo)
     FreezeAnimAt(ClipFrame, ClipChannel);
 }
 
-simulated private function SendRangeMessage()
+private simulated function SendRangeMessage()
 {
     // Send a message to the player's HUD.
     if (WeaponPawn != none && WeaponPawn.IsLocallyControlled())
     {
-        WeaponPawn.ReceiveLocalizedMessage(Class'DHWeaponRangeMessage', Class'UInteger'.static.FromShorts(RangeTable[RangeIndex].Range, int(RangeDistanceUnit)));
+        WeaponPawn.ReceiveLocalizedMessage(
+            Class'DHWeaponRangeMessage',
+            Class'UInteger'.static.FromShorts(RangeTable[RangeIndex].Range, int(RangeDistanceUnit))
+            );
     }
 }
 

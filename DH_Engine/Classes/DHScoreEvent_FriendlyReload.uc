@@ -16,4 +16,3 @@ defaultproperties
     Value=50
     CategoryClass=Class'DHScoreCategory_Support'
 }
-

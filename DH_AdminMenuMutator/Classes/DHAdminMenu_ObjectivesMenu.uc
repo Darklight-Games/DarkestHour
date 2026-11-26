@@ -33,7 +33,7 @@ exec function ObjectivesMenu(string Action, optional string PlayerName)
 function GetAllObjectiveNames()
 {
     local DHGameReplicationInfo GRI;
-    local int  i;
+    local int i;
 
     MenuText.Length = 0;
     GRI = DHGameReplicationInfo(PC.GameReplicationInfo);

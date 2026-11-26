@@ -6,4 +6,3 @@
 //==============================================================================
 
 class DH_PlaceablePanzerFaustPickup extends DH_DeprecatedPickups;
-

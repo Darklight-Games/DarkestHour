@@ -8,58 +8,58 @@ class DHMortarVehicleWeaponPawn extends DHVehicleWeaponPawn
     dependson(DHPlayer);
 
 // Deploying, aiming & firing
-var     class<DHMortarWeapon>   WeaponClass;  // the weapon class for the carried mortar inventory item
-var     float       UndeployingDuration;      // needs literal as server doesn't have HUDOverlay actor & so can't use GetAnimDuration on it
-var     bool        bTraversing;              // player is currently adjusting traverse aim
-var     float       ElevationAdjustmentDelay; // seconds between individual elevation adjustments
-var     float       LastElevationTime;        // records last time elevation was adjusted, so ElevationAdjustmentDelay can be applied
-var     bool        bPendingFire;             // player has fired & mortar is about to fire
+var class<DHMortarWeapon> WeaponClass; // the weapon class for the carried mortar inventory item
+var float UndeployingDuration; // needs literal as server doesn't have HUDOverlay actor & so can't use GetAnimDuration on it
+var bool bTraversing; // player is currently adjusting traverse aim
+var float ElevationAdjustmentDelay; // seconds between individual elevation adjustments
+var float LastElevationTime; // records last time elevation was adjusted, so ElevationAdjustmentDelay can be applied
+var bool bPendingFire; // player has fired & mortar is about to fire
 
 // Operator ('Driver') animations
-const  IDLE_ANIM_INDEX = 0;
-const  FIRING_ANIM_INDEX = 1;
-const  UNFLINCH_ANIM_INDEX = 2;
+const IDLE_ANIM_INDEX = 0;
+const FIRING_ANIM_INDEX = 1;
+const UNFLINCH_ANIM_INDEX = 2;
 
-var     name        DriverFiringAnim;         // anim for player operator when firing
-var     name        DriverUnflinchAnim;       // anim for operator when returning to normal pose after flinching when firing
-var     byte        CurrentAnimationIndex;    // index for current mortar & operator anims (set by owning client & replicated to server, which replicates to other clients)
-var     byte        OldAnimationIndex;        // clientside record of last CurrentAnimationIndex, so net client can tell when server has replicated a new anim
+var name DriverFiringAnim; // anim for player operator when firing
+var name DriverUnflinchAnim; // anim for operator when returning to normal pose after flinching when firing
+var byte CurrentAnimationIndex; // index for current mortar & operator anims (set by owning client & replicated to server, which replicates to other clients)
+var byte OldAnimationIndex; // clientside record of last CurrentAnimationIndex, so net client can tell when server has replicated a new anim
 
 // 1st person HUD overlay animations
-var     name        OverlayIdleAnim;
-var     name        OverlayFiringAnim;
-var     name        OverlayKnobRaisingAnim;
-var     name        OverlayKnobLoweringAnim;
-var     name        OverlayKnobIdleAnim;
-var     name        OverlayKnobTurnLeftAnim;
-var     name        OverlayKnobTurnRightAnim;
-var     name        OverlayUndeployingAnim;
-var     float       OverlayKnobLoweringAnimRate;
-var     float       OverlayKnobRaisingAnimRate;
-var     float       OverlayKnobTurnAnimRate;
-var     int         OverlaySleeveTexNum;
-var     int         OverlayHandTexNum;
-var     name        OverlayPrimaryShellBone;
-var     name        OverlaySecondaryShellBone;
-var     bool        bSwapShellBonesBasedOnSelectedAmmo;
+var name OverlayIdleAnim;
+var name OverlayFiringAnim;
+var name OverlayKnobRaisingAnim;
+var name OverlayKnobLoweringAnim;
+var name OverlayKnobIdleAnim;
+var name OverlayKnobTurnLeftAnim;
+var name OverlayKnobTurnRightAnim;
+var name OverlayUndeployingAnim;
+var float OverlayKnobLoweringAnimRate;
+var float OverlayKnobRaisingAnimRate;
+var float OverlayKnobTurnAnimRate;
+var int OverlaySleeveTexNum;
+var int OverlayHandTexNum;
+var name OverlayPrimaryShellBone;
+var name OverlaySecondaryShellBone;
+var bool bSwapShellBonesBasedOnSelectedAmmo;
 
 // HUD
-var     Texture     HUDArcTexture;           // the elevation display
-var     TexRotator  HUDArrowTexture;         // indicator icon for current elevation
-var     Texture     HUDHighExplosiveTexture; // ammo icon for HE rounds
-var     Texture     HUDSmokeTexture;         // ammo icon for smoke rounds
-var     ROHud.NumericWidget AmmoAmount;
-var     ROHud.SpriteWidget AmmoIcon;
+var Texture HUDArcTexture; // the elevation display
+var TexRotator HUDArrowTexture; // indicator icon for current elevation
+var Texture HUDHighExplosiveTexture; // ammo icon for HE rounds
+var Texture HUDSmokeTexture; // ammo icon for smoke rounds
+var ROHud.NumericWidget AmmoAmount;
+var ROHud.SpriteWidget AmmoIcon;
 
 // Fire adjustment info
-var     class<DHMapMarker>    TargetMarkerClass;
+var class<DHMapMarker> TargetMarkerClass;
 
 // mortar periscope & range table handling
-var     int         PeriscopeIndex;
-var     int         ShooterIndex;
+var int PeriscopeIndex;
+var int ShooterIndex;
 
-var     bool        bWantsToUndeploy;
-var     bool        bWantsToFire;
+var bool bWantsToUndeploy;
+var bool bWantsToFire;
 
 replication
 {
@@ -93,9 +93,14 @@ simulated function PostNetReceive()
 //  *******************************  VIEW/DISPLAY  ********************************  //
 ///////////////////////////////////////////////////////////////////////////////////////
 
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    )
 {
-    local Coords  CameraCoords;
+    local Coords CameraCoords;
     local Rotator WeaponAimRot;
 
     ViewActor = self;
@@ -194,10 +199,10 @@ simulated function int GetIndex(class<Projectile> ProjectileClass)
 // Also to fix bug where HUDOverlay would be destroyed if function called before net client received Controller reference through replication
 simulated function DrawHUD(Canvas C)
 {
-    local DHPlayer                                      PC;
-    local DHHud                                         Hud;
-    local DHMortarVehicleWeapon                         MVW;
-    local int                                           AmmoCount;
+    local DHPlayer PC;
+    local DHHud Hud;
+    local DHMortarVehicleWeapon MVW;
+    local int AmmoCount;
 
     PC = DHPlayer(Controller);
     MVW = DHMortarVehicleWeapon(VehWep);
@@ -260,6 +265,7 @@ simulated function DrawHUD(Canvas C)
         Hud.DrawNumericWidget(C, AmmoAmount, Hud.Digits);
     }
 }
+
 ///////////////////////////////////////////////////////////////////////////////////////
 //  ************************ MORTAR ENTRY, UNDEPLYING & EXIT *********************** //
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -310,7 +316,7 @@ function ServerUndeploying()
 function Undeploy()
 {
     local DHMortarWeapon CarriedMortar;
-    local Pawn           MortarOperator;
+    local Pawn MortarOperator;
 
     if (Role == ROLE_Authority && IsInState('Undeploying') && Driver != none)
     {
@@ -420,7 +426,11 @@ function DriverEnterTransferAmmunition(Pawn P)
     if (DHP != none && Gun != none)
     {
         Gun.MainAmmoCharge[0] = Clamp(Gun.MainAmmoCharge[0] + DHP.MortarHEAmmo, 0, GunClass.default.InitialPrimaryAmmo);
-        Gun.MainAmmoCharge[1] = Clamp(Gun.MainAmmoCharge[1] + DHP.MortarSmokeAmmo, 0, GunClass.default.InitialSecondaryAmmo);
+        Gun.MainAmmoCharge[1] = Clamp(
+            Gun.MainAmmoCharge[1] + DHP.MortarSmokeAmmo,
+            0,
+            GunClass.default.InitialSecondaryAmmo
+            );
 
         DHP.MortarHEAmmo = 0;
         DHP.MortarSmokeAmmo = 0;
@@ -455,8 +465,9 @@ function CheckCanBeResupplied()
 {
     if (DHMortarVehicle(VehicleBase) != none)
     {
-        DHMortarVehicle(VehicleBase).bCanBeResupplied =
-            Gun != none && (Gun.MainAmmoCharge[0] < GunClass.default.InitialPrimaryAmmo || Gun.MainAmmoCharge[1] < GunClass.default.InitialSecondaryAmmo);
+        DHMortarVehicle(VehicleBase).bCanBeResupplied = Gun != none
+            && (Gun.MainAmmoCharge[0] < GunClass.default.InitialPrimaryAmmo
+                || Gun.MainAmmoCharge[1] < GunClass.default.InitialSecondaryAmmo);
     }
 }
 
@@ -532,7 +543,9 @@ simulated state Idle
 
             return;
         }
-        else if (PitchChange != 0.0 && (Level.TimeSeconds - LastElevationTime) > ElevationAdjustmentDelay && DHMortarVehicleWeapon(Gun) != none)
+        else if (PitchChange != 0.0
+            && (Level.TimeSeconds - LastElevationTime) > ElevationAdjustmentDelay
+            && DHMortarVehicleWeapon(Gun) != none)
         {
             LastElevationTime = Level.TimeSeconds;
 
@@ -555,13 +568,13 @@ simulated state Idle
 // New base state for various new states where mortar is busy doing something, so several operations are disabled (functions emptied out)
 simulated state Busy
 {
-    function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange) { }
-    simulated function Fire(optional float F) { }
-    exec simulated function SwitchFireMode() { }
-    exec function Deploy() { }
-    function bool KDriverLeave(bool bForceLeave) { return false; }
-    simulated function NextWeapon() { }
-    simulated function PrevWeapon() { }
+    function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange);
+    simulated function Fire(optional float F);
+    exec simulated function SwitchFireMode();
+    exec function Deploy();
+    function bool KDriverLeave(bool bForceLeave);
+    simulated function NextWeapon();
+    simulated function PrevWeapon();
 }
 
 // New state where player's hand is raising to traverse adjustment knob
@@ -604,7 +617,7 @@ simulated state KnobRaised
         if (DriverPositionIndex != ShooterIndex)
         {
             PrevWeapon();
-            bWantsToFire  = true;
+            bWantsToFire = true;
         }
         else if (!ArePlayersWeaponsLocked() && Gun != none && Gun.ReadyToFire(false))
         {
@@ -681,7 +694,6 @@ simulated state KnobRaised
             }
 
             global.HandleTurretRotation(DeltaTime, -YawChange, 0); // all the yaw/traverse for mortars has to be reversed (screwed up mesh rigging)
-
         }
         // We've stopped adjusting traverse
         else if (bTraversing)
@@ -1014,7 +1026,12 @@ simulated function PlayThirdPersonAnimations()
 }
 
 // New function to play a 1st person animation on the HUDOverlay
-simulated function PlayFirstPersonAnimation(name Anim, optional bool bLoop, optional float Rate, optional float TweenTime)
+simulated function PlayFirstPersonAnimation(
+    name Anim,
+    optional bool bLoop,
+    optional float Rate,
+    optional float TweenTime
+    )
 {
     if (HUDOverlay != none && HUDOverlay.HasAnim(Anim))
     {
@@ -1077,7 +1094,7 @@ simulated function UpdatePrecacheMaterials()
 
 // Functions emptied out as not relevant to a mortar:
 simulated function SwitchWeapon(byte F);
-simulated function bool CanSwitchToVehiclePosition(byte F) { return false; }
+simulated function bool CanSwitchToVehiclePosition(byte F);
 exec simulated function ToggleVehicleLock();
 function ServerToggleVehicleLock();
 

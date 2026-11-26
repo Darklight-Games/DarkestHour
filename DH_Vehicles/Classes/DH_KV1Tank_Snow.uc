@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_KV1Tank_Snow extends DH_KV1Tank;  //wip class
+class DH_KV1Tank_Snow extends DH_KV1Tank; // wip class
 
 /*
 defaultproperties
