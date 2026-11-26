@@ -8,45 +8,45 @@ class DHMeleeFire extends DHWeaponFire
 
 const SOUND_RADIUS = 32.0;
 
-var   protected float   VulnerableDamageFactor; // damage factor when instigator hits victim from behind or if victim is crawling
-var   protected float   RearAngleArc;       // angle in Unreal rotational units for a player's rear (used to calculate rear melee hits)
+var protected float VulnerableDamageFactor; // damage factor when instigator hits victim from behind or if victim is crawling
+var protected float RearAngleArc; // angle in Unreal rotational units for a player's rear (used to calculate rear melee hits)
 
 // From ROMeleeFire
-var   class<ROWeaponDamageType> DamageType;        // bash damage type
-var   class<ROWeaponDamageType> BayonetDamageType; // bayonet stab damage type
-var     int             DamageMin;          // min damage from a bash
-var     int             DamageMax;          // max damage from a bash
-var     int             BayonetDamageMin;   // min damage from a bayonet stab
-var     int             BayonetDamageMax;   // max damage from a bayonet stab
-var     float           TraceRange;         // how far to trace for a bash attack
-var     float           BayonetTraceRange;  // how far to trace for a bayonet stab
-var     float           MomentumTransfer;   // how much momentum to pass onto whatever we hit (was 100 in RO)
-var     float           MinHoldTime;        // held for this time or less will do minimum damage/force
-var     float           FullHeldTime;       // held for this long will do max damage
-var     float           MeleeAttackSpread;  // how "large" the impact area of the bayonet strike is - the larger this is, the easier it is to hit, but the less precise the strike is
-var     Sound           GroundStabSound;    // sound of stabbing the ground with the bayonet
-var     Sound           GroundBashSound;    // sound of bashing the ground with the rifle butt
-var     Sound           PlayerStabSound;    // sound of stabbing the player with the bayonet
-var     Sound           PlayerBashSound;    // sound of bashing the player with the rifle butt
+var class<ROWeaponDamageType> DamageType; // bash damage type
+var class<ROWeaponDamageType> BayonetDamageType; // bayonet stab damage type
+var int DamageMin; // min damage from a bash
+var int DamageMax; // max damage from a bash
+var int BayonetDamageMin; // min damage from a bayonet stab
+var int BayonetDamageMax; // max damage from a bayonet stab
+var float TraceRange; // how far to trace for a bash attack
+var float BayonetTraceRange; // how far to trace for a bayonet stab
+var float MomentumTransfer; // how much momentum to pass onto whatever we hit (was 100 in RO)
+var float MinHoldTime; // held for this time or less will do minimum damage/force
+var float FullHeldTime; // held for this long will do max damage
+var float MeleeAttackSpread; // how "large" the impact area of the bayonet strike is - the larger this is, the easier it is to hit, but the less precise the strike is
+var Sound GroundStabSound; // sound of stabbing the ground with the bayonet
+var Sound GroundBashSound; // sound of bashing the ground with the rifle butt
+var Sound PlayerStabSound; // sound of stabbing the player with the bayonet
+var Sound PlayerBashSound; // sound of bashing the player with the rifle butt
 
-var         name        BayoBackEmptyAnim;
-var         name        BayoStabEmptyAnim;
-var         name        BayoFinishEmptyAnim;
+var name BayoBackEmptyAnim;
+var name BayoStabEmptyAnim;
+var name BayoFinishEmptyAnim;
 
 // Modified to stop trying to make the weapon attachment play visual hit effects - they don't play & we don't want them anyway; it just creates pointless replication to all clients
 // Also to increase damage if striking a player from behind, & to generally optimised
 function DoTrace(Vector Start, Rotator Dir)
 {
-    local ROPawn            HitPawn;
-    local Actor             Other;
+    local ROPawn HitPawn;
+    local Actor Other;
     local class<DamageType> ThisDamageType;
-    local Vector            End, HitLocation, HitNormal, TempVec, X, Y, Z;
-    local Rotator           RotationDifference;
-    local float             Damage, Scale;
-    local array<int>        HitPoints;
-    local array<int>        DamageHitPoint;
-    local int               i;
-    local Material          HitMaterial;
+    local Vector End, HitLocation, HitNormal, TempVec, X, Y, Z;
+    local Rotator RotationDifference;
+    local float Damage, Scale;
+    local array<int> HitPoints;
+    local array<int> DamageHitPoint;
+    local int i;
+    local Material HitMaterial;
 
     if (Instigator == none || Weapon == none)
     {
@@ -121,7 +121,10 @@ function DoTrace(Vector Start, Rotator Dir)
     }
 
     // Calculate damage if it's something we could hurt (no damage to world geometry unless it's a destroyable mesh)
-    if (!Other.bWorldGeometry || Other.IsA('RODestroyableStaticMesh') || Other.IsA('DHConstruction') || Other.IsA('DHConstructionAttachment'))
+    if (!Other.bWorldGeometry
+        || Other.IsA('RODestroyableStaticMesh')
+        || Other.IsA('DHConstruction')
+        || Other.IsA('DHConstructionAttachment'))
     {
         Scale = (FClamp(HoldTime, MinHoldTime, FullHeldTime) - MinHoldTime) / (FullHeldTime - MinHoldTime);
 
@@ -142,8 +145,8 @@ function DoTrace(Vector Start, Rotator Dir)
     // Hit another player (note we don't make weapon attachment play hit effects, as blood effects etc get handled in ProcessLocationalDamage/TakeDamage)
     if (HitPawn != none)
     {
-         if (!HitPawn.bDeleteMe)
-         {
+        if (!HitPawn.bDeleteMe)
+        {
             // Calculate the rotational difference to determine if the instigator is behind the victim
             RotationDifference = Normalize(Other.Rotation) - Normalize(Instigator.Rotation);
 
@@ -163,7 +166,9 @@ function DoTrace(Vector Start, Rotator Dir)
             }
 
             // Apply hit point multiplier (this can reduce damage on areas such as limbs, hands, etc.)
-            HitPawn.ProcessLocationalDamage(int(Damage), Instigator, HitLocation, MomentumTransfer * X, ThisDamageType, DamageHitPoint);
+            HitPawn.ProcessLocationalDamage(
+                int(Damage), Instigator, HitLocation, MomentumTransfer * X, ThisDamageType, DamageHitPoint
+                );
 
             if (Weapon.bBayonetMounted)
             {
@@ -173,12 +178,15 @@ function DoTrace(Vector Start, Rotator Dir)
             {
                 Weapon.PlaySound(PlayerBashSound, SLOT_None, 1.0,, SOUND_RADIUS,, true);
             }
-         }
+        }
     }
     // Hit something other than a player
     else
     {
-        if (!Other.bWorldGeometry || Other.IsA('RODestroyableStaticMesh') || Other.IsA('DHConstruction') || Other.IsA('DHConstructionAttachment')) // no damage to world geometry unless it's a destroyable mesh
+        if (!Other.bWorldGeometry
+            || Other.IsA('RODestroyableStaticMesh')
+            || Other.IsA('DHConstruction')
+            || Other.IsA('DHConstructionAttachment')) // no damage to world geometry unless it's a destroyable mesh
         {
             Other.TakeDamage(int(Damage), Instigator, HitLocation, MomentumTransfer * X, ThisDamageType);
         }
@@ -307,7 +315,10 @@ simulated state MeleeAttacking
         Load = AmmoPerFire;
         HoldTime = 0.0;
 
-        if (Instigator != none && Instigator.PendingWeapon != Weapon && Instigator.PendingWeapon != none && Weapon != none)
+        if (Instigator != none
+            && Instigator.PendingWeapon != Weapon
+            && Instigator.PendingWeapon != none
+            && Weapon != none)
         {
             bIsFiring = false;
             Weapon.PutDown();
@@ -375,12 +386,12 @@ function PlayFiring()
             {
                 ShakeView();
                 Weapon.PlayAnim(Anim, FireAnimRate, TweenTime);
-                //Weapon.PlayOwnedSound(FireSounds[Rand(FireSounds.Length)], SLOT_None, FireVolume,,,, false); // put this back in if/when we get a bash sound
+                // Weapon.PlayOwnedSound(FireSounds[Rand(FireSounds.Length)], SLOT_None, FireVolume,,,, false); // put this back in if/when we get a bash sound
                 ClientPlayForceFeedback(FireForce);
             }
             else
             {
-                //ServerPlayFiring(); // put this back in if/when we get a bash sound
+                // ServerPlayFiring(); // put this back in if/when we get a bash sound
             }
         }
     }
@@ -388,7 +399,7 @@ function PlayFiring()
 
 function DoFireEffect()
 {
-    local Vector  StartTrace;
+    local Vector StartTrace;
     local Rotator Aim;
 
     if (Instigator != none)

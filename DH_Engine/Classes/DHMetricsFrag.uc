@@ -5,21 +5,21 @@
 
 class DHMetricsFrag extends JSONSerializable;
 
-var class<DamageType>   DamageType;
-var int                 HitIndex;
-var int                 RoundTime;
+var class<DamageType> DamageType;
+var int HitIndex;
+var int RoundTime;
 
-var string              KillerID;
-var class<Pawn>         KillerPawn;
-var Vector              KillerLocation;
-var byte                KillerTeam;
-var class<DHVehicle>    KillerVehicle;
+var string KillerID;
+var class<Pawn> KillerPawn;
+var Vector KillerLocation;
+var byte KillerTeam;
+var class<DHVehicle> KillerVehicle;
 
-var string              VictimID;
-var class<Pawn>         VictimPawn;
-var Vector              VictimLocation;
-var byte                VictimTeam;
-var class<DHVehicle>    VictimVehicle;
+var string VictimID;
+var class<Pawn> VictimPawn;
+var Vector VictimLocation;
+var byte VictimTeam;
+var class<DHVehicle> VictimVehicle;
 
 function JSONValue ToJSON()
 {
@@ -40,16 +40,22 @@ function JSONValue ToJSON()
         .PutString("damage_type", DamageType.Name)
         .PutInteger("hit_index", HitIndex)
         .PutInteger("time", RoundTime)
-        .Put("killer", (new Class'JSONObject')
-            .PutString("id", KillerID)
-            .PutInteger("team", KillerTeam)
-            .PutString("pawn", KillerPawn.Name)
-            .PutIVector("location", KillerLocation)
-            .Put("vehicle", KillerVehicleObject))
-        .Put("victim", (new Class'JSONObject')
-            .PutString("id", VictimID)
-            .PutInteger("team", VictimTeam)
-            .PutString("pawn", VictimPawn.Name)
-            .PutIVector("location", VictimLocation)
-            .Put("vehicle", VictimVehicleObject));
+        .Put(
+            "killer",
+            (new Class'JSONObject')
+                .PutString("id", KillerID)
+                .PutInteger("team", KillerTeam)
+                .PutString("pawn", KillerPawn.Name)
+                .PutIVector("location", KillerLocation)
+                .Put("vehicle", KillerVehicleObject)
+            )
+        .Put(
+            "victim",
+            (new Class'JSONObject')
+                .PutString("id", VictimID)
+                .PutInteger("team", VictimTeam)
+                .PutString("pawn", VictimPawn.Name)
+                .PutIVector("location", VictimLocation)
+                .Put("vehicle", VictimVehicleObject)
+            );
 }

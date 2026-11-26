@@ -6,9 +6,9 @@
 class DHPlaceableWeaponPickup extends DHWeaponPickup
     placeable;
 
-var(Pickup) bool    bRespawn;         // the pickup will respawn the weapon in RespawnTime seconds if true
-var() class<Weapon> WeaponType;       // the pickup weapon class - either specify in weapon-specific subclass, or leveller can place this generic class & set weapon in editor
-var   bool          bIsOneShotWeapon; // pickup weapon is a one shot weapon, e.g. a grenade, satchel or faust
+var(Pickup) bool bRespawn; // the pickup will respawn the weapon in RespawnTime seconds if true
+var() class<Weapon> WeaponType; // the pickup weapon class - either specify in weapon-specific subclass, or leveller can place this generic class & set weapon in editor
+var bool bIsOneShotWeapon; // pickup weapon is a one shot weapon, e.g. a grenade, satchel or faust
 
 replication
 {
@@ -19,7 +19,6 @@ replication
 
 // Emptied out as net client won't yet have InventoryType (have to wait until PostNetBeginPlay, when client receives replicated WeaponType)
 simulated function PreBeginPlay();
-
 // Emptied out as net client won't yet have InventoryType (have to wait until PostNetBeginPlay, when client receives replicated WeaponType)
 simulated event PostBeginPlay();
 
@@ -154,7 +153,7 @@ auto state Pickup
 // But even if it won't re-spawn we don't destroy the pickup, we just leave it sleeping, because if the round gets reset it can then be reactivated & the item re-spawned
 state Sleeping
 {
-ignores Touch;
+    ignores Touch;
 
 Begin:
     if (bRespawn && GetReSpawnTime() > 0.0)

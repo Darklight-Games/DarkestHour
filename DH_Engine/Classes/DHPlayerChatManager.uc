@@ -29,4 +29,3 @@ event bool AcceptVoice(PlayerReplicationInfo SenderPRI)
 
     return !bool(ChatRestrictions[i].Restriction & NOVOICE);
 }
-

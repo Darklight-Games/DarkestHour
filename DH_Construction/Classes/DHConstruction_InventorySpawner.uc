@@ -6,8 +6,8 @@
 class DHConstruction_InventorySpawner extends DHConstruction
     abstract;
 
-var class<DHInventorySpawner>   SpawnerClass;
-var DHInventorySpawner          Spawner;
+var class<DHInventorySpawner> SpawnerClass;
+var DHInventorySpawner Spawner;
 
 static function DHConstruction.ConstructionError GetPlayerError(DHActorProxy.Context Context)
 {
@@ -109,4 +109,3 @@ defaultproperties
 
     CompletionPointValue=100
 }
-

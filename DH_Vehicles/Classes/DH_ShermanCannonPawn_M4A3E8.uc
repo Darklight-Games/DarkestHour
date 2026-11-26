@@ -25,4 +25,3 @@ defaultproperties
     DrivePos=(X=0,Y=0,Z=0)
     DriveAnim="VTiger_com_idle_close"
 }
-

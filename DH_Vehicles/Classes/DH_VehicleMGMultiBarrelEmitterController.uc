@@ -11,8 +11,8 @@ class DH_VehicleMGMultiBarrelEmitterController extends WeaponAmbientEmitter;
 // But if we spawn this actor as a master controller, the native functionality will work on this class & we'll use this to control the real emitters
 simulated function SetEmitterStatus(bool bEnabled)
 {
-    local DHVehicleMG   MG;
-    local int           i;
+    local DHVehicleMG MG;
+    local int i;
 
     MG = DHVehicleMG(Owner);
 

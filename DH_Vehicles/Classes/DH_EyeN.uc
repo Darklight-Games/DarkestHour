@@ -3,7 +3,6 @@
 //-----------------------------------------------------------
 class DH_EyeN extends DH_EyeE;
 
-
 defaultproperties
 {
 

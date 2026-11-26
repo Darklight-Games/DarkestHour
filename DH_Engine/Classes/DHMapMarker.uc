@@ -11,18 +11,20 @@ enum EScopeType
 {
     PERSONAL,
     SQUAD,
-    TEAM
+    TEAM,
 };
-var EScopeType          Scope;
+
+var EScopeType Scope;
 
 // EOverwritingRule replaces DHMapMarker.bIsUnique and DHMapMarker.bShouldOverwriteGroup.
 enum EOverwritingRule
 {
-    UNIQUE_PER_GROUP,                           // there will always be exactly one or zero markers that have the given GroupIndex
-    UNIQUE,                                     // there will always be exactly one or zero such marker
-    OFF                                        // this marker can be drawn in any number on the map
+    UNIQUE_PER_GROUP, // there will always be exactly one or zero markers that have the given GroupIndex
+    UNIQUE, // there will always be exactly one or zero such marker
+    OFF, // this marker can be drawn in any number on the map
 };
-var EOverwritingRule    OverwritingRule;
+
+var EOverwritingRule OverwritingRule;
 
 // Used when evaluating permissions to place/remove/see the marker.
 // LevelSelector determines who should see it: team/squad/the player themself.
@@ -30,7 +32,7 @@ var EOverwritingRule    OverwritingRule;
 struct SVisibilityPermissions
 {
     var DHPlayerReplicationInfo.ERoleSelector RoleSelector;
-    var EScopeType                            LevelSelector;
+    var EScopeType LevelSelector;
 };
 
 var array<DHPlayerReplicationInfo.ERoleSelector> Permissions_CanPlace;
@@ -41,29 +43,29 @@ struct SExternalNotification
 {
     var DHPlayerReplicationInfo.ERoleSelector RoleSelector;
     var class<ROCriticalMessage> Message;
-    var int               MessageIndex;
+    var int MessageIndex;
 };
 
 // which roles should be notified in OnMapMarkerPlace()
-var array<SExternalNotification>  OnPlacedExternalNotifications;
+var array<SExternalNotification> OnPlacedExternalNotifications;
 
 // how the player should be notified in OnMapMarkerPlaced()
-var class<ROCriticalMessage>  OnPlacedMessage;
-var int                       OnPlacedMessageIndex;
+var class<ROCriticalMessage> OnPlacedMessage;
+var int OnPlacedMessageIndex;
 
-var localized string    MarkerName;
-var Material            IconMaterial;
-var IntBox              IconCoords;
-var Color               IconColor;
-var int                 LifetimeSeconds;        // Lifetime, in seconds, of the marker, or -1 for infinite
-var int                 GroupIndex;             // Used for grouping map markers (e.g. in the context menu when placing them).
-var bool                bShouldShowOnCompass;   // Whether or not this marker is displayed on the compass
-var bool                bShouldDrawBeeLine;     // If true, draw a line from the player to this marker on the situation map.
-var int                 RequiredSquadMembers;
-var int                 Cooldown;               // [s] reenabling interval between adding two consequent markers
-var int                 ActivationTimeout;      // [s] how long it takes after placing for this marker to become activated
+var localized string MarkerName;
+var Material IconMaterial;
+var IntBox IconCoords;
+var Color IconColor;
+var int LifetimeSeconds; // Lifetime, in seconds, of the marker, or -1 for infinite
+var int GroupIndex; // Used for grouping map markers (e.g. in the context menu when placing them).
+var bool bShouldShowOnCompass; // Whether or not this marker is displayed on the compass
+var bool bShouldDrawBeeLine; // If true, draw a line from the player to this marker on the situation map.
+var int RequiredSquadMembers;
+var int Cooldown; // [s] reenabling interval between adding two consequent markers
+var int ActivationTimeout; // [s] how long it takes after placing for this marker to become activated
 
-var localized string    CalculatingString;
+var localized string CalculatingString;
 
 enum EMarkerType
 {
@@ -75,7 +77,7 @@ enum EMarkerType
     MT_ArtilleryBarrage,
     MT_Measurement,
     MT_Movement,
-    MT_CounterBattery
+    MT_CounterBattery,
 };
 
 var EMarkerType Type;
@@ -90,7 +92,11 @@ static function bool CanBeUsed(DHGameReplicationInfo GRI)
     return true;
 }
 
-static function bool CheckPermissions(array<SVisibilityPermissions> Permissions, DHPlayerReplicationInfo PRI, DHGameReplicationInfo.MapMarker Marker)
+static function bool CheckPermissions(
+    array<SVisibilityPermissions> Permissions,
+    DHPlayerReplicationInfo PRI,
+    DHGameReplicationInfo.MapMarker Marker
+    )
 {
     local int i;
 
@@ -135,7 +141,10 @@ static function bool CanPlaceMarker(DHPlayerReplicationInfo PRI)
         return false;
     }
 
-    if (default.Scope == SQUAD && (default.RequiredSquadMembers == 0 && PC.SquadReplicationInfo == none || PC.SquadReplicationInfo.GetMemberCount(PC.GetTeamNum(), PC.GetSquadIndex()) < default.RequiredSquadMembers))
+    if (default.Scope == SQUAD
+        && (default.RequiredSquadMembers == 0 && PC.SquadReplicationInfo == none
+            || PC.SquadReplicationInfo.GetMemberCount(PC.GetTeamNum(), PC.GetSquadIndex())
+                < default.RequiredSquadMembers))
     {
         return false;
     }
@@ -226,7 +235,6 @@ static function OnMapMarkerPlaced(DHPlayer PC, DHGameReplicationInfo.MapMarker M
 
 // Override to run specific logic when this marker is removed.
 static function OnMapMarkerRemoved(DHPlayer PC, DHGameReplicationInfo.MapMarker Marker);
-
 // Override this to have a caption accompany the marker.
 static function string GetCaptionString(DHPlayer PC, DHGameReplicationInfo.MapMarker Marker);
 

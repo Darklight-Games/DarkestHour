@@ -6,30 +6,30 @@
 class DHMortarWeapon extends DHWeapon
     abstract;
 
-var     class<DHMortarVehicle>  VehicleClass;
+var class<DHMortarVehicle> VehicleClass;
 
 // Deploying
-var     bool    bDeploying;
-var     name    DeployAnimation;
-var     float   DeployRadius;
-var     float   DeployAngleMaximum;
+var bool bDeploying;
+var name DeployAnimation;
+var float DeployRadius;
+var float DeployAngleMaximum;
 
 // Ammo
-var     int     HighExplosiveMaximum;
-var     int     HighExplosiveResupplyCount;
-var     int     SmokeMaximum;
-var     int     SmokeResupplyCount;
+var int HighExplosiveMaximum;
+var int HighExplosiveResupplyCount;
+var int SmokeMaximum;
+var int SmokeResupplyCount;
 
 enum EDeployError
 {
-    DE_None,            // 0
-    DE_BadStance,       // 1
-    DE_Fatal,           // 2
-    DE_Moving,          // 3
-    DE_BadSurface,      // 4
-    DE_NotEnoughRoom,   // 5
-    DE_Leaning,         // 6
-    DE_BadVolume,       // 7
+    DE_None, // 0
+    DE_BadStance, // 1
+    DE_Fatal, // 2
+    DE_Moving, // 3
+    DE_BadSurface, // 4
+    DE_NotEnoughRoom, // 5
+    DE_Leaning, // 6
+    DE_BadVolume, // 7
 };
 
 replication
@@ -42,7 +42,10 @@ replication
 // Implemented to force player to equip the mortar if it isn't already his current weapon
 simulated function Tick(float DeltaTime)
 {
-    if (Instigator != none && Instigator.Weapon != self && Instigator.PendingWeapon != self && Instigator.IsLocallyControlled())
+    if (Instigator != none
+        && Instigator.Weapon != self
+        && Instigator.PendingWeapon != self
+        && Instigator.IsLocallyControlled())
     {
         Instigator.SwitchWeapon(InventoryGroup);
     }
@@ -61,17 +64,14 @@ simulated function BringUp(optional Weapon PrevWeapon)
 
 // Functions always returning false as carried mortar is too heavy & bulky to put away, or to sprint, crawl, or mantle with
 simulated function bool WeaponCanSwitch();
-
 simulated function bool WeaponAllowSprint();
-
 simulated function bool WeaponAllowProneChange();
-
 simulated function bool WeaponAllowMantle();
 
 // Implemented so pressing the deploy key will attempt to deploy a carried mortar
 exec simulated function Deploy()
 {
-    local DHPawn  P;
+    local DHPawn P;
     local Rotator LockedViewRotation;
 
     if (!bDeploying)
@@ -93,9 +93,9 @@ exec simulated function Deploy()
 
 simulated function EDeployError GetDeployError(DHPawn P)
 {
-    local Actor        HitActor;
-    local Vector       HitLocation, HitNormal, TraceEnd, TraceStart;
-    local Rotator      TraceRotation;
+    local Actor HitActor;
+    local Vector HitLocation, HitNormal, TraceEnd, TraceStart;
+    local Rotator TraceRotation;
 
     // Can't deploy if we're busy, raising the weapon, on fire or somehow crawling
     // If we don't check state RaisingWeapon, it allows the player to almost instantaneously redeploy a mortar after undeploying
@@ -233,8 +233,8 @@ simulated event AnimEnd(int Channel)
 function ServerDeployEnd()
 {
     local DHMortarVehicle DeployedMortar;
-    local Vector          TraceStart, TraceEnd, HitLocation, HitNormal;
-    local Rotator         SpawnRotation;
+    local Vector TraceStart, TraceEnd, HitLocation, HitNormal;
+    local Rotator SpawnRotation;
 
     TraceStart = Instigator.Location + (vect(0.0, 0.0, 1.0) * Instigator.CollisionHeight);
     TraceEnd = TraceStart + vect(0.0, 0.0, -128.0);
@@ -267,9 +267,11 @@ simulated function bool HasAmmo()
 function bool ResupplyAmmo()
 {
     local bool bResupplied;
+
     bResupplied = (Level.TimeSeconds > (LastResupplyTimestamp + ResupplyInterval))
         && DHPawn(Instigator) != none
         && DHPawn(Instigator).ResupplyMortarAmmunition();
+
     if (bResupplied)
     {
         LastResupplyTimestamp = Level.TimeSeconds;
@@ -279,7 +281,6 @@ function bool ResupplyAmmo()
 
 // Emptied out as mortar uses a different system in ammo resupply area, based on DHPawn.ResupplyMortarAmmunition(), with check whether the resupply area can resupply mortars
 function bool FillAmmo();
-
 // Functions emptied out as carried mortar weapons cannot be fired, ironsighted or reloaded:
 simulated function Fire(float F);
 simulated function AltFire(float F);

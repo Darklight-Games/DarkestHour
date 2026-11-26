@@ -5,8 +5,8 @@
 
 class DHBurningVolume extends PhysicsVolume;
 
-var()   int                 FireDamageAmount;
-var()   class<DamageType>   FireDamageType;
+var() int FireDamageAmount;
+var() class<DamageType> FireDamageType;
 
 // Modified to allow for DH fire damage type & and igniting players on fire
 function CausePainTo(Actor Other)
@@ -28,7 +28,7 @@ function CausePainTo(Actor Other)
         {
             if (P.Health <= 20)
             {
-               P.TakeDamage(FireDamageAmount, none, Location, vect(0.0, 0.0, 0.0), FireDamageType);
+                P.TakeDamage(FireDamageAmount, none, Location, vect(0.0, 0.0, 0.0), FireDamageType);
             }
 
             if (P.Controller != none)

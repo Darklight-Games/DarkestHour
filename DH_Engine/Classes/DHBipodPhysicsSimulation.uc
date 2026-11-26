@@ -32,10 +32,14 @@ function int GetRotationComponent(EAxis Axis, Rotator Rotation)
 {
     switch (Axis)
     {
-        case AXIS_X: return Rotation.Roll;
-        case AXIS_Y: return Rotation.Pitch;
-        case AXIS_Z: return Rotation.Yaw;
-        default:     return 0;
+        case AXIS_X:
+            return Rotation.Roll;
+        case AXIS_Y:
+            return Rotation.Pitch;
+        case AXIS_Z:
+            return Rotation.Yaw;
+        default:
+            return 0;
     }
 }
 
@@ -113,9 +117,17 @@ function PhysicsTick(DHWeapon Weapon, float DeltaTime)
 
     // Get the barrel bone roll (so that we know which way is down!)
     BarrelBoneRotation = Weapon.GetBoneRotation(Settings.BarrelBoneName) + Settings.BarrelBoneRotationOffset;
-    BarrelRoll = Class'UUnits'.static.UnrealToRadians(GetRotationComponent(Settings.BarrelRollAxis, BarrelBoneRotation));
-    BarrelPitch = Class'UUnits'.static.UnrealToRadians(GetRotationComponent(Settings.BarrelPitchAxis, BarrelBoneRotation));
-    BarrelPitch = FClamp(BarrelPitch, Class'UUnits'.static.DegreesToRadians(-90), Class'UUnits'.static.DegreesToRadians(90));
+    BarrelRoll = Class'UUnits'.static.UnrealToRadians(
+        GetRotationComponent(Settings.BarrelRollAxis, BarrelBoneRotation)
+        );
+    BarrelPitch = Class'UUnits'.static.UnrealToRadians(
+        GetRotationComponent(Settings.BarrelPitchAxis, BarrelBoneRotation)
+        );
+    BarrelPitch = FClamp(
+        BarrelPitch,
+        Class'UUnits'.static.DegreesToRadians(-90),
+        Class'UUnits'.static.DegreesToRadians(90)
+        );
 
     PendulumForce = (-1 * Settings.GravityScale / Settings.ArmLength) * Sin(Angle - BarrelRoll) * Cos(BarrelPitch);
 
@@ -158,11 +170,14 @@ function PhysicsTick(DHWeapon Weapon, float DeltaTime)
     switch (Settings.BipodRollAxis)
     {
         case AXIS_X:
-            BipodBoneRotation.Roll = BipodRoll; break;
+            BipodBoneRotation.Roll = BipodRoll;
+            break;
         case AXIS_Y:
-            BipodBoneRotation.Pitch = BipodRoll; break;
+            BipodBoneRotation.Pitch = BipodRoll;
+            break;
         case AXIS_Z:
-            BipodBoneRotation.Yaw = BipodRoll; break;
+            BipodBoneRotation.Yaw = BipodRoll;
+            break;
     }
 
     Weapon.SetBoneRotation(Settings.BipodBoneName, BipodBoneRotation);

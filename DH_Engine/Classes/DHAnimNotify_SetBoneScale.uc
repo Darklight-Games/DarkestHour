@@ -8,10 +8,10 @@ class DHAnimNotify_SetBoneScale extends AnimNotify_Scripted;
 
 // Actors can have multiple slots to store scalars in.
 // If a bone has multiple scalars (stored in different slots), its scalars are multiplied.
-var() int   Slot;
+var() int Slot;
 
 var() float BoneScale;
-var() name  BoneName;
+var() name BoneName;
 
 event Notify(Actor Owner)
 {

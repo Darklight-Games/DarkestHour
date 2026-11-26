@@ -6,15 +6,20 @@
 class DH_ModifyRoundTimeMessage extends ROCriticalMessage
     abstract;
 
-var localized string    IncreasedText;
-var localized string    DecreasedText;
-var localized string    ChangedText;
-var localized string    RoundTimeModifiedText;
+var localized string IncreasedText;
+var localized string DecreasedText;
+var localized string ChangedText;
+var localized string RoundTimeModifiedText;
 
-//The sound to play when this actor is triggered.
-var Sound               Sound;
+// The sound to play when this actor is triggered.
+var Sound Sound;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string S;
 
@@ -33,8 +38,13 @@ static function string GetString(optional int Switch, optional PlayerReplication
     }
 }
 
-simulated static function ClientReceive(PlayerController P, optional int Switch,
-    optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+simulated static function ClientReceive(
+    PlayerController P,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     super.ClientReceive(P, Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);
 

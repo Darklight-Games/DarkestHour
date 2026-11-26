@@ -5,15 +5,15 @@
 
 class DHConstruction_SupplyCache extends DHConstruction;
 
-var StaticMesh                              UnbuiltStaticMesh;
-var DHConstructionSupplyAttachment          SupplyAttachment;
-var class<DHConstructionSupplyAttachment>   SupplyAttachmentClass;
+var StaticMesh UnbuiltStaticMesh;
+var DHConstructionSupplyAttachment SupplyAttachment;
+var class<DHConstructionSupplyAttachment> SupplyAttachmentClass;
 
 var() int InitialSupplyCount;
 var() int BonusSupplyGenerationRate;
 
 var class<DHMapIconAttachment> MapIconAttachmentClass;
-var DHMapIconAttachment        MapIconAttachment;
+var DHMapIconAttachment MapIconAttachment;
 
 simulated function PostBeginPlay()
 {

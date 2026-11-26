@@ -5,7 +5,6 @@
 
 class DH20mmShellTrail_Red extends Emitter;
 
-
 defaultproperties
 {
     AutoDestroy=true

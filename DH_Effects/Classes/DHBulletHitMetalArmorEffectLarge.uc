@@ -8,7 +8,7 @@ class DHBulletHitMetalArmorEffectLarge extends Emitter;
 var Texture SparkGroup[4];
 var Texture ShrapGroup[4];
 
-//particles: 34
+// particles: 34
 
 simulated function PostBeginPlay()
 {

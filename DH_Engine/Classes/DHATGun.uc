@@ -20,31 +20,30 @@ enum ERotateError
     ERROR_Busy,
 };
 
-var DHPawn            RotateControllerPawn;
-var DHRotatingActor   RotatingActor;
-var Actor             OldBase;
+var DHPawn RotateControllerPawn;
+var DHRotatingActor RotatingActor;
+var Actor OldBase;
 
 var ROSoundAttachment RotateSoundAttachment;
-var Sound             RotateSound;
-var float             RotateSoundVolume;
+var Sound RotateSound;
+var float RotateSoundVolume;
 
-var bool              bIsBeingRotated;
-var bool              bCanBeRotated;
-var int               NextRotationTime;
-var int               PlayersNeededToRotate;
-var int               RotateCooldown;
-var float             RotateControlRadiusInMeters;
-var float             RotationsPerSecond;
+var bool bIsBeingRotated;
+var bool bCanBeRotated;
+var int NextRotationTime;
+var int PlayersNeededToRotate;
+var int RotateCooldown;
+var float RotateControlRadiusInMeters;
+var float RotationsPerSecond;
 
-var string            SentinelString;
-var Rotator           OldRotator;
-var bool              bOldIsRotating;
+var string SentinelString;
+var Rotator OldRotator;
+var bool bOldIsRotating;
 
-var Material          RotationProjectionTexture;
-var DynamicProjector    RotationProjector;
+var Material RotationProjectionTexture;
+var DynamicProjector RotationProjector;
 
-var float               CrushMomentumThreshold;
-
+var float CrushMomentumThreshold;
 
 replication
 {
@@ -71,9 +70,18 @@ function Vehicle FindEntryVehicle(Pawn P)
 function bool TryToDrive(Pawn P)
 {
     // Deny entry if gun is destroyed, or if player is on fire or reloading a weapon (plus several very obscure other reasons)
-    if (Health <= 0 || P == none || (DHPawn(P) != none && DHPawn(P).bOnFire) || (P.Weapon != none && P.Weapon.IsInState('Reloading')) ||
-        P.Controller == none || !P.Controller.bIsPlayer || P.DrivenVehicle != none || P.IsA('Vehicle') || bNonHumanControl || !Level.Game.CanEnterVehicle(self, P) ||
-        WeaponPawns.Length == 0 || WeaponPawns[0] == none)
+    if (Health <= 0
+        || P == none
+        || (DHPawn(P) != none && DHPawn(P).bOnFire)
+        || (P.Weapon != none && P.Weapon.IsInState('Reloading'))
+        || P.Controller == none
+        || !P.Controller.bIsPlayer
+        || P.DrivenVehicle != none
+        || P.IsA('Vehicle')
+        || bNonHumanControl
+        || !Level.Game.CanEnterVehicle(self, P)
+        || WeaponPawns.Length == 0
+        || WeaponPawns[0] == none)
     {
         return false;
     }
@@ -86,8 +94,8 @@ function bool TryToDrive(Pawn P)
     }
 
     // Deny entry to enemy gun
-    if ((bTeamLocked && P.GetTeamNum() != VehicleTeam) ||
-        (!bTeamLocked && WeaponPawns[0].Driver != none && P.GetTeamNum() != WeaponPawns[0].Driver.GetTeamNum())) // if gun not team locked, check enemy player isn't already manning it
+    if ((bTeamLocked && P.GetTeamNum() != VehicleTeam)
+        || (!bTeamLocked && WeaponPawns[0].Driver != none && P.GetTeamNum() != WeaponPawns[0].Driver.GetTeamNum())) // if gun not team locked, check enemy player isn't already manning it
     {
         DisplayVehicleMessage(1, P); // can't use enemy gun
 
@@ -168,10 +176,17 @@ simulated function DisplayVehicleMessage(int MessageNumber, optional Pawn P, opt
 
 // Modified to use APCDamageModifier, & to remove code preventing players damaging own team's gun that hasn't been entered (only designed to protect vehicles in spawn)
 // Also removes other stuff not relevant to a static AT gun (engine & tread stuff & stopping 'vehicle' giving itself impact damage)
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+function TakeDamage(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     local float DamageModifier;
-    local int   i;
+    local int i;
 
     ServerExitRotation();
 
@@ -314,11 +329,11 @@ simulated function int GetTeammatesInRadiusCount(DHPawn Pawn)
 
     foreach RadiusActors(Class'Pawn', OtherPawn, Class'DHUnits'.static.MetersToUnreal(RotateControlRadiusInMeters))
     {
-        if (OtherPawn != none &&
-            OtherPawn.GetTeamNum() == Pawn.GetTeamNum() &&
-            !OtherPawn.bDeleteMe &&
-            OtherPawn.Health > 0 &&
-            (!OtherPawn.IsA('ROVehicle') || !OtherPawn.IsA('ROVehicleWeaponPawn')))
+        if (OtherPawn != none
+            && OtherPawn.GetTeamNum() == Pawn.GetTeamNum()
+            && !OtherPawn.bDeleteMe
+            && OtherPawn.Health > 0
+            && (!OtherPawn.IsA('ROVehicle') || !OtherPawn.IsA('ROVehicleWeaponPawn')))
         {
             OtherPRI = DHPlayerReplicationInfo(OtherPawn.PlayerReplicationInfo);
 
@@ -345,7 +360,7 @@ function ServerEnterRotation(DHPawn Instigator)
         return;
     }
 
-    Instigator.GunToRotate =self;
+    Instigator.GunToRotate = self;
     RotateControllerPawn = Instigator;
     GotoState('Rotating');
 }
@@ -379,13 +394,12 @@ function ServerRotate(byte InputRotationFactor)
 /*Used to set any properties on the client when it enters rotation*/
 simulated function ClientEnterRotation()
 {
-
     local Vector X, Y, Z;
     local FinalBlend FinalMaterial;
     local FadeColor FadeMaterial;
     local Combiner CombinerMaterial;
 
-    //collision properties hack
+    // collision properties hack
 
     if (Role != ROLE_Authority)
     {
@@ -418,7 +432,7 @@ simulated function ClientEnterRotation()
     FinalMaterial.Material = CombinerMaterial;
     FinalMaterial.FallbackMaterial = CombinerMaterial;
 
-    RotationProjector = Spawn(Class'DHConstructionProxyProjector', self, ,Location,Rotation);
+    RotationProjector = Spawn(Class'DHConstructionProxyProjector', self,, Location, Rotation);
     RotationProjector.ProjTexture = FinalMaterial;
     RotationProjector.GotoState('');
     RotationProjector.bHidden = false;
@@ -431,7 +445,7 @@ simulated function ClientEnterRotation()
     RotationProjector.FOV = 1;
     RotationProjector.MaxTraceDistance = 1024.0;
     RotationProjector.bGradient = true;
-    RotationProjector.SetDrawScale((2.5 * CollisionRadius)/RotationProjector.ProjTexture.MaterialUSize());
+    RotationProjector.SetDrawScale((2.5 * CollisionRadius) / RotationProjector.ProjTexture.MaterialUSize());
     GetAxes(Rotation, X, Y, Z);
     RotationProjector.SetRelativeLocation(Z * 3);
     RotationProjector.SetRelativeRotation(rot(-16384, 0, 0));
@@ -451,7 +465,7 @@ simulated event Destroyed()
 simulated function ClientExitRotation()
 {
     bCollideWorld = true;
-    SetCollision(true,true,true);
+    SetCollision(true, true, true);
     SetPhysics(PHYS_Karma);
     bOldIsRotating = bIsBeingRotated;
     SetBase(none);
@@ -494,7 +508,7 @@ state Rotating
 
         // NOTE: This line avoids the hack of calling ClientEnterRotation client
         // side, but also causes issue where AT Gun falls through the world.
-        //SetCollision(false,true,true);
+        // SetCollision(false,true,true);
 
         SetBase(RotatingActor);
     }
@@ -546,7 +560,7 @@ state Rotating
         SentinelString = String(Rotation);
 
         bCollideWorld = true;
-        SetCollision(true,true,true);
+        SetCollision(true, true, true);
         SetPhysics(PHYS_Karma);
 
         bIsBeingRotated = false;
@@ -563,14 +577,15 @@ state Rotating
 simulated event PostNetReceive()
 {
     local Rotator UncompressedRotation;
-    local int FirstComma,SecondComma;
-    local String CutSentinel;
+    local int FirstComma, SecondComma;
+    local string CutSentinel;
+
     super.PostNetReceive();
 
     // Rotation is sent as string, process.
-    FirstComma = InStr(SentinelString,",");
+    FirstComma = InStr(SentinelString, ",");
     UncompressedRotation.Pitch = Int(Left(SentinelString, FirstComma));
-    CutSentinel = Mid(SentinelString,FirstComma + 1);
+    CutSentinel = Mid(SentinelString, FirstComma + 1);
     SecondComma = InStr(CutSentinel, ",");
     UncompressedRotation.Yaw = Int(Left(CutSentinel, SecondComma));
     UncompressedRotation.Roll = Int(Mid(CutSentinel, SecondComma + 1));
@@ -672,7 +687,13 @@ simulated function SetEngine();
 simulated function StopEmitters();
 simulated function StartEmitters();
 simulated function UpdateMovementSound(float MotionSoundVolume);
-function DamageEngine(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType);
+function DamageEngine(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType
+    );
 simulated function SetupTreads();
 simulated function DestroyTreads();
 function CheckTreadDamage(Vector HitLocation, Vector Momentum);
@@ -693,12 +714,26 @@ simulated function bool CanExit();
 function bool PlaceExitingDriver();
 simulated function Destroyed_HandleDriver();
 simulated function SetPlayerPosition();
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation);
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    );
 simulated function DrawHUD(Canvas C);
 simulated function DrawPeriscopeOverlay(Canvas C);
 simulated function POVChanged(PlayerController PC, bool bBehindViewChanged);
-simulated function int LimitYaw(int yaw) { return yaw; }
-function int LimitPawnPitch(int pitch) { return pitch; }
+
+simulated function int LimitYaw(int yaw)
+{
+    return yaw;
+}
+
+function int LimitPawnPitch(int pitch)
+{
+    return pitch;
+}
+
 simulated function float GetViewFOV(int PositionIndex);
 simulated function SetViewFOV(int PositionIndex, optional PlayerController PC);
 function bool ResupplyAmmo();

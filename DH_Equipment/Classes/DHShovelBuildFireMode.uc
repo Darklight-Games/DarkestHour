@@ -7,35 +7,38 @@ class DHShovelBuildFireMode extends DHWeaponFire;
 
 const SOUND_RADIUS = 32.0;
 
-var     DHConstruction  Construction;          // reference to the Construction actor we're building
-var     float           TraceDistanceInMeters; // player has to be within this distance of a construction to build it
+var DHConstruction Construction; // reference to the Construction actor we're building
+var float TraceDistanceInMeters; // player has to be within this distance of a construction to build it
 
 // Modified to check (via a trace) that player is facing an obstacle that can be built & that player is stationary & not diving to prone
 simulated function bool AllowFire()
 {
-    local Actor  HitActor;
+    local Actor HitActor;
     local Vector TraceStart, TraceEnd, HitLocation, HitNormal;
 
-    if (Weapon == none ||
-        Instigator == none ||
-        Instigator.Controller == none ||
-        Instigator.bIsCrawling ||
-        Instigator.IsProneTransitioning() ||
-        Instigator.Velocity != vect(0.0, 0.0, 0.0))
+    if (Weapon == none
+        || Instigator == none
+        || Instigator.Controller == none
+        || Instigator.bIsCrawling
+        || Instigator.IsProneTransitioning()
+        || Instigator.Velocity != vect(0.0, 0.0, 0.0))
     {
         return false;
     }
 
     TraceStart = Instigator.Location + Instigator.EyePosition();
-    TraceEnd = TraceStart + (Class'DHUnits'.static.MetersToUnreal(default.TraceDistanceInMeters) * Vector(Instigator.GetViewRotation()));
+    TraceEnd = TraceStart
+        + (Class'DHUnits'.static.MetersToUnreal(default.TraceDistanceInMeters) * Vector(Instigator.GetViewRotation()));
 
-    foreach Weapon.TraceActors(Class'Actor', HitActor, HitLocation, HitNormal, TraceEnd, TraceStart, vect(32.0, 32.0, 0.0))
+    foreach Weapon.TraceActors(
+        Class'Actor', HitActor, HitLocation, HitNormal, TraceEnd, TraceStart, vect(32.0, 32.0, 0.0)
+        )
     {
-        if (HitActor != none &&
-            HitActor.bStatic &&
-            !HitActor.IsA('Volume') &&
-            !HitActor.IsA('ROBulletWhipAttachment') ||
-            HitActor.IsA('DHConstruction'))
+        if (HitActor != none
+            && HitActor.bStatic
+            && !HitActor.IsA('Volume')
+            && !HitActor.IsA('ROBulletWhipAttachment')
+            || HitActor.IsA('DHConstruction'))
         {
             break;
         }
@@ -48,7 +51,9 @@ simulated function bool AllowFire()
         return false;
     }
 
-    return  (Construction.GetTeamIndex() == NEUTRAL_TEAM_INDEX || Construction.GetTeamIndex() == Instigator.GetTeamNum()) && Construction.CanBeBuilt();
+    return (Construction.GetTeamIndex() == NEUTRAL_TEAM_INDEX
+            || Construction.GetTeamIndex() == Instigator.GetTeamNum())
+        && Construction.CanBeBuilt();
 }
 
 event ModeDoFire()
@@ -95,7 +100,9 @@ simulated state Building
             // for the owning client.
             if (!Instigator.IsLocallyControlled())
             {
-                Weapon.PlayOwnedSound(FireSounds[Rand(FireSounds.Length)], SLOT_None, FireVolume,, SOUND_RADIUS,, false);
+                Weapon.PlayOwnedSound(
+                    FireSounds[Rand(FireSounds.Length)], SLOT_None, FireVolume,, SOUND_RADIUS,, false
+                    );
             }
         }
     }
@@ -106,7 +113,6 @@ simulated state Building
     {
         SetInitialState();
     }
-
 }
 
 simulated function DigDone()

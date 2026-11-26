@@ -11,4 +11,3 @@ defaultproperties
     Controls(0)=(Keys=("ROMANUALRELOAD"),Text="Load Supplies")
     Controls(1)=(Keys=("ROMGOPERATION"),Text="Unload Supplies")
 }
-

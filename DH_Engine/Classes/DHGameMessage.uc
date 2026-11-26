@@ -18,7 +18,12 @@ var localized string NeedMoreFriendliesToDeconstructHQMessage;
 
 // This is overridden to change the hard link to ROPlayer that caused a bug where
 // bUseNativeRoleNames was not being honored.
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string S;
     local DHSpawnManager SM;
@@ -246,4 +251,3 @@ defaultproperties
     RoleLockedMessage="{role} has been locked."
     RoleUnlockedMessage="{role} has been unlocked."
 }
-

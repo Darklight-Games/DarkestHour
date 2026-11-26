@@ -10,4 +10,3 @@ defaultproperties
     VehicleClass=Class'DH_WillysJeep_Airborne'
     Skins(0)=Texture'DH_Jeep_tex.Willys_Body_Airborne'
 }
-

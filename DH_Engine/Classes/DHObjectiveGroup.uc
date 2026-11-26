@@ -7,7 +7,7 @@ class DHObjectiveGroup extends Info
     placeable;
 
 var() float OwnedAttritionRate[2];
-var   int   GroupIndex;
+var int GroupIndex;
 
 var private array<DHObjective> Objectives;
 

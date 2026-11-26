@@ -5,28 +5,28 @@
 
 class DHVehicleDamagedEffect extends VehicleDamagedEffect;
 
-//Overriden to add cook-off sparks (DH)
+// Overriden to add cook-off sparks (DH)
 simulated event UpdateDamagedEffect(bool bFlame, float VelMag, bool bMediumSmoke, bool bHeavySmoke)
 {
     if (bFlame)
     {
-        //fire
+        // fire
         Emitters[1].ParticlesPerSecond = default.Emitters[1].ParticlesPerSecond;
         Emitters[1].InitialParticlesPerSecond = default.Emitters[1].InitialParticlesPerSecond;
         Emitters[1].AllParticlesDead = false;
 
-        //smoke
+        // smoke
         Emitters[2].ParticlesPerSecond = 4;
         Emitters[2].InitialParticlesPerSecond = 4;
         Emitters[2].LifetimeRange.Min = 8.0;
         Emitters[2].LifetimeRange.Max = 8.0;
         Emitters[2].AllParticlesDead = false;
 
-        //kill any light smoke
+        // kill any light smoke
         Emitters[0].ParticlesPerSecond = 0;
         Emitters[0].InitialParticlesPerSecond = 0;
 
-        //sparks
+        // sparks
         Emitters[3].ParticlesPerSecond = default.Emitters[3].ParticlesPerSecond;
         Emitters[3].InitialParticlesPerSecond = default.Emitters[3].InitialParticlesPerSecond;
         Emitters[3].AllParticlesDead = false;

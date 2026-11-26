@@ -6,19 +6,22 @@
 class DHThrownExplosiveFire extends DHProjectileFire
     abstract;
 
-var     float   MinimumThrowSpeed;      // minimum speed the explosive will have if just clicking, with no hold time
-var     float   MaximumThrowSpeed;      // the maximum speed an explosive can have with holding (not including pawn speed)
-var     float   SpeedFromHoldingPerSec; // speed increase projectile will have for each second the fire button is held
-var     float   AddedFuseTime;          // additional fuse time to add to compensate for the pin pull animation
-var     bool    bPullAnimCompensation;  // add time to the fuse time to compensate for the pin pull animation
-var     bool    bIsSmokeGrenade;        // is a smoke grenade, which will not harm the thrower
-var     float   MinHoldTime;            // require weapon to be primed for a certain time before throwing
+var float MinimumThrowSpeed; // minimum speed the explosive will have if just clicking, with no hold time
+var float MaximumThrowSpeed; // the maximum speed an explosive can have with holding (not including pawn speed)
+var float SpeedFromHoldingPerSec; // speed increase projectile will have for each second the fire button is held
+var float AddedFuseTime; // additional fuse time to add to compensate for the pin pull animation
+var bool bPullAnimCompensation; // add time to the fuse time to compensate for the pin pull animation
+var bool bIsSmokeGrenade; // is a smoke grenade, which will not harm the thrower
+var float MinHoldTime; // require weapon to be primed for a certain time before throwing
 
 // Modified to allow player to throw explosive while prone transitioning (removes restriction in Super)
 simulated function bool AllowFire()
 {
-    if (Level.NetMode == NM_Client && Instigator != none && Instigator.IsLocallyControlled()
-        && DHExplosiveWeapon(Weapon) != none && Weapon.AmmoAmount(ThisModeNum) < DHExplosiveWeapon(Weapon).StartFireAmmoAmount)
+    if (Level.NetMode == NM_Client
+        && Instigator != none
+        && Instigator.IsLocallyControlled()
+        && DHExplosiveWeapon(Weapon) != none
+        && Weapon.AmmoAmount(ThisModeNum) < DHExplosiveWeapon(Weapon).StartFireAmmoAmount)
     {
         return true;
     }
@@ -48,7 +51,9 @@ event ModeDoFire()
     // Stop an already drawn back explosive from being thrown if player's weapons become locked (due to spawn killing)
     // Happens because that forces the fire button to be released, which triggers this event
     // TODO: clean this up & perhaps find a better place to do this, it's just a quick fix with some problems (Matt, Jan 2017)
-    if (Instigator != none && DHPlayer(Instigator.Controller) != none && DHPlayer(Instigator.Controller).AreWeaponsLocked())
+    if (Instigator != none
+        && DHPlayer(Instigator.Controller) != none
+        && DHPlayer(Instigator.Controller).AreWeaponsLocked())
     {
         return;
     }
@@ -56,8 +61,11 @@ event ModeDoFire()
     super.ModeDoFire();
 
     // Consume ammo on the client as well, if the ammo count hasn't been net updated yet - this should prevent some of the ammo amount related lag bugs
-    if (Level.NetMode == NM_Client && Instigator != none && Instigator.IsLocallyControlled() &&
-        DHExplosiveWeapon(Weapon) != none && DHExplosiveWeapon(Weapon).StartFireAmmoAmount == Weapon.AmmoAmount(ThisModeNum))
+    if (Level.NetMode == NM_Client
+        && Instigator != none
+        && Instigator.IsLocallyControlled()
+        && DHExplosiveWeapon(Weapon) != none
+        && DHExplosiveWeapon(Weapon).StartFireAmmoAmount == Weapon.AmmoAmount(ThisModeNum))
     {
         Weapon.ConsumeAmmo(ThisModeNum, Load);
     }
@@ -78,7 +86,10 @@ function DoFireEffect()
 {
     super.DoFireEffect();
 
-    if (!bIsSmokeGrenade && DHExplosiveWeapon(Weapon) != none && DHExplosiveWeapon(Weapon).bAlreadyExploded && ROPawn(Weapon.Instigator) != none)
+    if (!bIsSmokeGrenade
+        && DHExplosiveWeapon(Weapon) != none
+        && DHExplosiveWeapon(Weapon).bAlreadyExploded
+        && ROPawn(Weapon.Instigator) != none)
     {
         ROPawn(Weapon.Instigator).KilledSelf(ProjectileClass.default.MyDamageType);
     }
@@ -108,8 +119,8 @@ function CalcSpreadModifiers()
 function Projectile SpawnProjectile(Vector Start, Rotator Dir)
 {
     local Projectile SpawnedProjectile;
-    local float      PawnSpeed, ThrowSpeed, SetFuseTime;
-    local Vector     X, Y, Z;
+    local float PawnSpeed, ThrowSpeed, SetFuseTime;
+    local Vector X, Y, Z;
 
     // Spawn the projectile
     Dir.Pitch += AddedPitch; // this will increase the angle the grenade is thrown at
@@ -248,7 +259,9 @@ event ModeHoldFire()
 
     ExplosiveWeapon = DHExplosiveWeapon(Weapon);
 
-    if (Weapon != none && Weapon.Role == ROLE_Authority && !(ExplosiveWeapon != none && ExplosiveWeapon.bHasReleaseLever))
+    if (Weapon != none
+        && Weapon.Role == ROLE_Authority
+        && !(ExplosiveWeapon != none && ExplosiveWeapon.bHasReleaseLever))
     {
         ExplosiveWeapon.bPrimed = true;
     }

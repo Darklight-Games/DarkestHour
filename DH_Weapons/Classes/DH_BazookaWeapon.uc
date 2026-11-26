@@ -33,4 +33,3 @@ defaultproperties
     RangeSettings(1)=(Range=200,FirePitch=1200,IronIdleAnim="iron_loop_100",IronFireAnim="iron_shoot_loop_100",AssistedReloadAnim="iron_reload_100")
     RangeSettings(2)=(Range=300,FirePitch=3000,IronIdleAnim="iron_loop_150",IronFireAnim="iron_shoot_loop_150",AssistedReloadAnim="iron_reload_150")
 }
-

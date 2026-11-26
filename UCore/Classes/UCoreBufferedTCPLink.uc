@@ -4,15 +4,15 @@
 
 class UCoreBufferedTCPLink extends BufferedTCPLink;
 
-var IpAddr          ServerIpAddr;
-var string          ReceiveState;
-var string          Waiting;
-var string          Match;
-var string          Timeout;
+var IpAddr ServerIpAddr;
+var string ReceiveState;
+var string Waiting;
+var string Match;
+var string Timeout;
 
 function ResolveFailed()
 {
-    ServerIpAddr.Port = -1;  // set error flag
+    ServerIpAddr.Port = -1; // set error flag
 }
 
 function Resolved(IpAddr Addr)
@@ -21,7 +21,7 @@ function Resolved(IpAddr Addr)
 
     // Set the address
     ServerIpAddr.Addr = Addr.Addr;
-    ServerIpAddr.Port = 80;  // connect to http port
+    ServerIpAddr.Port = 80; // connect to http port
 
     // Handle failure.
     if (ServerIpAddr.Addr == 0)
@@ -78,7 +78,7 @@ function GotMatchTimeout(int MatchData)
 
 function SendCommand(string Text)
 {
-    SendBufferedData(Text$CRLF);
+    SendBufferedData(Text $ CRLF);
 }
 
 defaultproperties

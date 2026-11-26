@@ -9,32 +9,33 @@
 class DHMortarCannonPawn extends DHATGunCannonPawn
     abstract;
 
-var     int     FiringDriverPositionIndex;      // The driver position index that allows the gun to be fired.
+var int FiringDriverPositionIndex; // The driver position index that allows the gun to be fired.
 
-var     float   FiringStartTimeSeconds;         // The time at which the firing animation started, relative to Level.TimeSeconds.
-var     float   OverlayFiringAnimDuration;      // The duration of the firing animation on the overlay mesh. Calculated when entering the Firing state.
-var()   float   FireDelaySeconds;               // The amount of time to wait into the firing animation before actually firing the round.
+var float FiringStartTimeSeconds; // The time at which the firing animation started, relative to Level.TimeSeconds.
+var float OverlayFiringAnimDuration; // The duration of the firing animation on the overlay mesh. Calculated when entering the Firing state.
+var() float FireDelaySeconds; // The amount of time to wait into the firing animation before actually firing the round.
 
-var()   name  HandsFiringCameraBone;    // The name of the bone to use for the camera while firing.
-var()   name  HandsFiringAnimName;      // The name of the firing animation on the hands mesh.
-var()   float FiringCameraInTime;       // How long it takes to interpolate the camera to the firing camera position at the start of the firing animation.
-var()   float FiringCameraOutTime;      // How long it takes to interpolate the camera back to the normal position at the end of the firing animation.
-var()   float ProjectileLifeSpan;       // The life span of the projectile attached to the gunner's hand.
+var() name HandsFiringCameraBone; // The name of the bone to use for the camera while firing.
+var() name HandsFiringAnimName; // The name of the firing animation on the hands mesh.
+var() float FiringCameraInTime; // How long it takes to interpolate the camera to the firing camera position at the start of the firing animation.
+var() float FiringCameraOutTime; // How long it takes to interpolate the camera back to the normal position at the end of the firing animation.
+var() float ProjectileLifeSpan; // The life span of the projectile attached to the gunner's hand.
 
 // First person hands.
-var     DHFirstPersonHands  HandsActor;             // The first person hands actor.
-var     Mesh                HandsMesh;              // The first person hands mesh.
-var     DHDecoAttachment    HandsProjectile;        // The first person projectile actor.
+var DHFirstPersonHands HandsActor; // The first person hands actor.
+var Mesh HandsMesh; // The first person hands mesh.
+var DHDecoAttachment HandsProjectile; // The first person projectile actor.
 
-var()   Vector              HandsRelativeLocation;  // The location of the hands in actor relation to it's attachment bone.
-var()   name                HandsAttachBone;        // The bone to attach the first person hands to.
-var()   name                HandsProjectileBone;    // The bone to attach the first person projectile to.
+var() Vector HandsRelativeLocation; // The location of the hands in actor relation to it's attachment bone.
+var() name HandsAttachBone; // The bone to attach the first person hands to.
+var() name HandsProjectileBone; // The bone to attach the first person projectile to.
 
 struct FireAnim
 {
     var float Angle;
     var name AnimName;
 };
+
 var private array<FireAnim> PlayerFireAnims;
 
 // Used for triggering the firing animation on the client since
@@ -52,7 +53,7 @@ replication
 }
 
 // TODO: move this to the base class, add sanity checks.
-simulated exec function HandsRelPos(float X)
+exec simulated function HandsRelPos(float X)
 {
     HandsRelativeLocation.X = X;
 
@@ -87,7 +88,7 @@ simulated function PostNetReceive()
 exec function CalibrateMortar(string AngleUnitString, int Samples)
 {
     local DHBallisticProjectile BP;
-    local int Pitch;    // Unreal units.
+    local int Pitch; // Unreal units.
     local int MinPitch, MaxPitch;
     local float PitchStep;
     local UUnits.EAngleUnit AngleUnit;
@@ -372,7 +373,12 @@ simulated state Firing
         return Theta;
     }
 
-    simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+    simulated function SpecialCalcFirstPersonView(
+        PlayerController PC,
+        out Actor ViewActor,
+        out Vector CameraLocation,
+        out Rotator CameraRotation
+        )
     {
         local float Theta;
         local Vector NormalCameraLocation, FiringCameraLocation;
@@ -386,7 +392,11 @@ simulated state Firing
 
         // Convert the X, Y and Z axis from the bone coords to a quaternion.
         FiringCameraRotation = QuatToRotator(
-            Class'UQuaternion'.static.FromAxes(FiringCameraBoneCoords.XAxis, FiringCameraBoneCoords.YAxis, FiringCameraBoneCoords.ZAxis)
+            Class'UQuaternion'.static.FromAxes(
+                FiringCameraBoneCoords.XAxis,
+                FiringCameraBoneCoords.YAxis,
+                FiringCameraBoneCoords.ZAxis
+                )
             );
 
         // Get the linear theta.
@@ -403,7 +413,9 @@ simulated state Firing
 
         ViewActor = self;
         CameraLocation = Class'UVector'.static.VLerp(Theta, NormalCameraLocation, FiringCameraLocation);
-        CameraRotation = QuatToRotator(QuatSlerp(QuatFromRotator(NormalCameraRotation), QuatFromRotator(FiringCameraRotation), Theta));
+        CameraRotation = QuatToRotator(
+            QuatSlerp(QuatFromRotator(NormalCameraRotation), QuatFromRotator(FiringCameraRotation), Theta)
+            );
 
         // Neutralize the roll to prevent motion sickness.
         CameraRotation.Roll = CameraRotation.Roll * (1.0 - Theta);
@@ -437,7 +449,7 @@ simulated state Firing
             }
 
             // TODO: turn off the rotate sound
-            //Cannon.Base.RotateSoundAttachment.SoundVolume = 0;
+            // Cannon.Base.RotateSoundAttachment.SoundVolume = 0;
 
             // Update the hands projectile mesh to the round we are about to fire.
             UpdateHandsProjectileStaticMesh();

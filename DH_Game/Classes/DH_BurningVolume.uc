@@ -6,5 +6,5 @@
 // TODO - this class should be removed in some future release when people have had time to convert maps to the new actor
 // NOTE: making this actor notplacable would not result in it being deleted from maps when rebuilt, but would stop it being added
 
-class DH_BurningVolume extends DHBurningVolume 
+class DH_BurningVolume extends DHBurningVolume
     placeable;

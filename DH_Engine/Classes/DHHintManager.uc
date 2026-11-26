@@ -8,17 +8,17 @@ class DHHintManager extends Info
 
 struct HintInfo
 {
-    var localized string    Title; // hint title, displayed on screen
-    var localized string    Text;  // hint display text
+    var localized string Title; // hint title, displayed on screen
+    var localized string Text; // hint display text
 };
 
-const                   HINT_COUNT = 70;
+const HINT_COUNT = 70;
 
-var     HintInfo        Hints[HINT_COUNT];        // array of hints in default properties
-var     array<byte>     QueuedHintIndices;        // queue of hints waiting to be displayed in turn
-var     config byte     bUsedUpHints[HINT_COUNT]; // 0 = hint unused, 1 = hint used before (saved in player's local DarkestHouseUser.ini config file)
-var     int             CurrentHintIndex;         // index number of the current or most recently displayed hint
-var     float           PostHintDisplayDelay;     // how long to wait before displaying any other hint (value higher than 0 needed)
+var HintInfo Hints[HINT_COUNT]; // array of hints in default properties
+var array<byte> QueuedHintIndices; // queue of hints waiting to be displayed in turn
+var config byte bUsedUpHints[HINT_COUNT]; // 0 = hint unused, 1 = hint used before (saved in player's local DarkestHouseUser.ini config file)
+var int CurrentHintIndex; // index number of the current or most recently displayed hint
+var float PostHintDisplayDelay; // how long to wait before displaying any other hint (value higher than 0 needed)
 
 function PostBeginPlay()
 {

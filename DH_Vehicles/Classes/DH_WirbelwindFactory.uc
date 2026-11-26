@@ -10,4 +10,3 @@ defaultproperties
     VehicleClass=Class'DH_WirbelwindTank'
     Mesh=SkeletalMesh'DH_PanzerIV_anm.Panzer4Glate_body_ext'
 }
-

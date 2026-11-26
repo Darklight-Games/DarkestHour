@@ -4,24 +4,22 @@
 //==============================================================================
 
 class DHResupplyAttachment extends RODummyAttachment
-  dependson(DHResupplyStrategy)
-  notplaceable;
+    dependson(DHResupplyStrategy)
+    notplaceable;
 
-var     private int     TeamIndex;      // Team this volume resupplies
+var private int TeamIndex; // Team this volume resupplies
 
+var private int SquadIndex; // Squad this volume resupplies. When set, vehicles are only resupplied when controlled by a squad memeber.
+var DHResupplyStrategy.EResupplyType ResupplyType; // Who this volume will resupply
+var array<Pawn> ResupplyActors;
+var float UpdateTime; // How often this thing needs to do it's business
 
-var     private int     SquadIndex; // Squad this volume resupplies. When set, vehicles are only resupplied when controlled by a squad memeber.
-var     DHResupplyStrategy.EResupplyType   ResupplyType;   // Who this volume will resupply
-var     array<Pawn>     ResupplyActors;
-var     float           UpdateTime;     // How often this thing needs to do it's business
+var class<DHMapIconAttachment> MapIconAttachmentClass;
+var DHMapIconAttachment MapIconAttachment;
 
-var     class<DHMapIconAttachment> MapIconAttachmentClass;
-var     DHMapIconAttachment        MapIconAttachment;
+var DHResupplyStrategy ResupplyStrategy;
 
-var     DHResupplyStrategy ResupplyStrategy;
-
-delegate OnPawnResupplied(Pawn P);            // Called for every pawn that is resupplied
-
+delegate OnPawnResupplied(Pawn P); // Called for every pawn that is resupplied
 function OnTeamIndexChanged();
 
 function PostBeginPlay()
@@ -109,9 +107,7 @@ function bool CanResupplyPawn(Pawn P)
 
         VWP = ROVehicleWeaponPawn(P);
 
-        if (VWP != none &&
-            VWP.VehicleBase != none &&
-            VWP.VehicleBase.default.VehicleTeam != TeamIndex)
+        if (VWP != none && VWP.VehicleBase != none && VWP.VehicleBase.default.VehicleTeam != TeamIndex)
         {
             return false;
         }
@@ -207,21 +203,21 @@ function Timer()
             P = ROPawn(recvr);
             V = Vehicle(recvr);
 
-            if (P != none &&
-                (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Players) ||
-                 (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Mortars) &&
-                  RI != none &&
-                  RI.bCanUseMortars)))
+            if (P != none
+                && (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Players)
+                    || (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Mortars)
+                        && RI != none
+                        && RI.bCanUseMortars)))
             {
-                //Add him into our resupply list.
+                // Add him into our resupply list.
                 ResupplyActors[ResupplyActors.Length] = P;
                 P.bTouchingResupply = true;
             }
-            else if (V != none &&
-                     V != Base &&
-                     (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Vehicles) ||
-                      (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Mortars) &&
-                       V.IsA('DHMortarVehicleWeaponPawn'))))
+            else if (V != none
+                && V != Base
+                && (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Vehicles)
+                    || (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Mortars)
+                        && V.IsA('DHMortarVehicleWeaponPawn'))))
             {
                 ResupplyActors[ResupplyActors.Length] = V;
                 V.bTouchingResupply = true;

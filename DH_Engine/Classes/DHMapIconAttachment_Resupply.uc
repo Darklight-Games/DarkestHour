@@ -8,7 +8,7 @@ class DHMapIconAttachment_Resupply extends DHMapIconAttachment
     notplaceable;
 
 var Material IconMaterialVehicle;
-var float    IconScaleVehicle;
+var float IconScaleVehicle;
 
 var private DHResupplyStrategy.EResupplyType ResupplyType;
 

@@ -9,7 +9,12 @@ class DHLastObjectiveMessage extends ROCriticalMessage
 var localized string AxisAboutToWinMessage;
 var localized string AlliesAboutToWinMessage;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     switch (Switch)
     {
@@ -22,7 +27,12 @@ static function string GetString(optional int Switch, optional PlayerReplication
     }
 }
 
-static function int GetIconID(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function int GetIconID(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     switch (Switch)
     {

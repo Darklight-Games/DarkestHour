@@ -65,4 +65,3 @@ final static function string Format(float Value, int Decimals)
 
     return S;
 }
-

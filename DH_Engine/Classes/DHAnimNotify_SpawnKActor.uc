@@ -5,15 +5,15 @@
 
 class DHAnimNotify_SpawnKActor extends AnimNotify_Scripted;
 
-var() StaticMesh    StaticMesh;
-var() name          BoneName;
-var() float         LifeSpan;
-var() Rotator       StartRotation;
-var() RangeVector   ImpulseRange;
-var() RangeVector   AngularImpulseRange;
+var() StaticMesh StaticMesh;
+var() name BoneName;
+var() float LifeSpan;
+var() Rotator StartRotation;
+var() RangeVector ImpulseRange;
+var() RangeVector AngularImpulseRange;
 
-var   bool          bDebug;
-var   Vector        DebugImpulse, DebugAngularImpulse;
+var bool bDebug;
+var Vector DebugImpulse, DebugAngularImpulse;
 
 event Notify(Actor Owner)
 {
@@ -35,7 +35,12 @@ event Notify(Actor Owner)
         AngularImpulse = Class'UVector'.static.RandomRange(AngularImpulseRange) >> Rotator(BoneCoords.XAxis);
     }
 
-    Shell = Owner.Spawn(Class'DHKActor', Owner,, BoneCoords.Origin, Rotator(Vector(StartRotation) >> Rotator(BoneCoords.XAxis)));
+    Shell = Owner.Spawn(
+        Class'DHKActor',
+        Owner,,
+        BoneCoords.Origin,
+        Rotator(Vector(StartRotation) >> Rotator(BoneCoords.XAxis))
+        );
 
     if (Shell != none)
     {

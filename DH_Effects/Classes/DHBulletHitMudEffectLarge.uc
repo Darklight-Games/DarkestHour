@@ -5,7 +5,7 @@
 
 class DHBulletHitMudEffectLarge extends Emitter;
 
-//particles: 31
+// particles: 31
 
 var Texture Impacts[4];
 

@@ -56,4 +56,3 @@ static function Box Scale(Box B, Vector Origin, float Scale)
     B = Translate(B, Origin);
     return B;
 }
-

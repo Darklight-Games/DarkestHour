@@ -13,10 +13,10 @@ const SPAWN_DAMAGE_PROTECTION_TIME = 2;
 
 // The amount of time, in seconds, that the player will have spawn protection
 // after using the teleporter.
-var()   int     SpawnProtectionTime;
+var() int SpawnProtectionTime;
 
 // When true, the player's stamina will be reset upon using the teleporter.
-var()   bool    bResetStamina;
+var() bool bResetStamina;
 
 // Set timer for spawn protection
 simulated function bool Accept(Actor Incoming, Actor Source)
@@ -47,7 +47,7 @@ simulated function bool Accept(Actor Incoming, Actor Source)
 
     if (DHP != none)
     {
-        //tell enemies about teleport
+        // tell enemies about teleport
         if (Role == ROLE_Authority)
         {
             for (P = Level.ControllerList; P != none; P = P.NextController)

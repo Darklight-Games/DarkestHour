@@ -8,20 +8,20 @@ class DHGUISquadComponent extends GUIPanel;
 var int SquadIndex;
 var bool bIsEditingName;
 
-var DHContextMenu_SquadMembers      MembersListContextMenuWrapper;
+var DHContextMenu_SquadMembers MembersListContextMenuWrapper;
 
-var automated   DHGUIListBox        lb_Members;
-var             DHGUIList           li_Members;
-var automated   GUILabel            l_SquadName;
-var automated   DHGUIButton         b_CreateSquad;  // Creates a squad. Only show if squad slot is empty.
-var automated   DHGUIButton         b_JoinSquad;    // Joins the squad. Only show to non-members. Disable if squad is full or locked.
-var automated   DHGUIButton         b_LeaveSquad;   // Leaves the squad. Only show to members of this squad.
-var automated   DHGUIButton         b_LockSquad;    // Locks and unlocks the squad. Only show to squad leader.
-var automated   GUIImage            i_LockSquad;
-var automated   GUIImage            i_Locked;       // Show this when the squad is locked an the user is not a member of this squad.
-var automated   GUIImage            i_NoRallyPoints;
-var automated   DHGUIEditBox        eb_SquadName;
-var automated   GUIImage            i_Background;
+var automated DHGUIListBox lb_Members;
+var DHGUIList li_Members;
+var automated GUILabel l_SquadName;
+var automated DHGUIButton b_CreateSquad; // Creates a squad. Only show if squad slot is empty.
+var automated DHGUIButton b_JoinSquad; // Joins the squad. Only show to non-members. Disable if squad is full or locked.
+var automated DHGUIButton b_LeaveSquad; // Leaves the squad. Only show to members of this squad.
+var automated DHGUIButton b_LockSquad; // Locks and unlocks the squad. Only show to squad leader.
+var automated GUIImage i_LockSquad;
+var automated GUIImage i_Locked; // Show this when the squad is locked an the user is not a member of this squad.
+var automated GUIImage i_NoRallyPoints;
+var automated DHGUIEditBox eb_SquadName;
+var automated GUIImage i_Background;
 
 var Color DarkBackgroundColor;
 var Color LightBackgroundColor;

@@ -8,42 +8,47 @@
 class DHAdminMenu_AdminMessages extends LocalMessage
     abstract;
 
-var     localized string    EnterNewPlayerName;
-var     localized string    EnterPrivateMessage;
-var     localized string    EnterWarningMessage;
-var     localized string    EnterKickReason;
-var     localized string    ConfirmKillPlayer;
-var     localized string    ConfirmGagPlayer;
-var     localized string    ConfirmSwitchToAlliesRole;
-var     localized string    ConfirmSwitchToAxisRole;
-var     localized string    ConfirmDropAtObjective;
-var     localized string    EnterGridLocation;
-var     localized string    ConfirmDropAtCurrentLocation;
-var     localized string    ConfirmEnableRealism;
-var     localized string    ConfirmDisableRealism;
-var     localized string    ConfirmMatchLive;
-var     localized string    ConfirmDropAlliesAtObjective;
-var     localized string    ConfirmDropAxisAtObjective;
-var     localized string    ConfirmDropAllAtObjective;
-var     localized string    ConfirmDisableMines;
-var     localized string    ConfirmEnableMines;
-var     localized string    ConfirmDisableCapProgress;
-var     localized string    ConfirmEnableCapProgress;
-var     localized string    ConfirmDisablePlayerIcon;
-var     localized string    ConfirmEnablePlayerIcon;
-var     localized string    ConfirmKillAll;
-var     localized string    EnterGameSpeed;
-var     localized string    EnterTimeRemaining;
-var     localized string    ConfirmToggleAdminCanPause;
-var     localized string    DestroyActorInSights;
-var     localized string    ChangeAlliesSquadSize;
-var     localized string    ChangeAxisSquadSize;
-var     localized string    SetGamePasswordText;
-var     localized string    ToggleWeaponLockText;
-var     localized string    ConfirmDisableRallyPoints;
-var     localized string    ConfirmEnableRallyPoints;
+var localized string EnterNewPlayerName;
+var localized string EnterPrivateMessage;
+var localized string EnterWarningMessage;
+var localized string EnterKickReason;
+var localized string ConfirmKillPlayer;
+var localized string ConfirmGagPlayer;
+var localized string ConfirmSwitchToAlliesRole;
+var localized string ConfirmSwitchToAxisRole;
+var localized string ConfirmDropAtObjective;
+var localized string EnterGridLocation;
+var localized string ConfirmDropAtCurrentLocation;
+var localized string ConfirmEnableRealism;
+var localized string ConfirmDisableRealism;
+var localized string ConfirmMatchLive;
+var localized string ConfirmDropAlliesAtObjective;
+var localized string ConfirmDropAxisAtObjective;
+var localized string ConfirmDropAllAtObjective;
+var localized string ConfirmDisableMines;
+var localized string ConfirmEnableMines;
+var localized string ConfirmDisableCapProgress;
+var localized string ConfirmEnableCapProgress;
+var localized string ConfirmDisablePlayerIcon;
+var localized string ConfirmEnablePlayerIcon;
+var localized string ConfirmKillAll;
+var localized string EnterGameSpeed;
+var localized string EnterTimeRemaining;
+var localized string ConfirmToggleAdminCanPause;
+var localized string DestroyActorInSights;
+var localized string ChangeAlliesSquadSize;
+var localized string ChangeAxisSquadSize;
+var localized string SetGamePasswordText;
+var localized string ToggleWeaponLockText;
+var localized string ConfirmDisableRallyPoints;
+var localized string ConfirmEnableRallyPoints;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     switch (Switch)
     {

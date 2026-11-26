@@ -7,17 +7,17 @@ class DHMortarProjectileHE extends DHMortarProjectile
     abstract;
 
 // Explosion effect emitters & sounds
-var     class<DHHitEffect>      ImpactEffect; // effect to spawn when round hits something other than a vehicle (handles sound & visual effect)
+var class<DHHitEffect> ImpactEffect; // effect to spawn when round hits something other than a vehicle (handles sound & visual effect)
 
 // View shake
-var     float           BlurTime;         // how long blur effect should last for this shell
-var     float           BlurEffectScalar; // how much to scale blur & shake effect
-var     Vector          ShakeRotMag;      // how far to rot view
-var     Vector          ShakeRotRate;     // how fast to rot view
-var     float           ShakeRotTime;     // how much time to rot the instigator's view
-var     Vector          ShakeOffsetMag;   // max view offset vertically
-var     Vector          ShakeOffsetRate;  // how fast to offset view vertically
-var     float           ShakeOffsetTime;  // how much time to offset view
+var float BlurTime; // how long blur effect should last for this shell
+var float BlurEffectScalar; // how much to scale blur & shake effect
+var Vector ShakeRotMag; // how far to rot view
+var Vector ShakeRotRate; // how fast to rot view
+var float ShakeRotTime; // how much time to rot the instigator's view
+var Vector ShakeOffsetMag; // max view offset vertically
+var Vector ShakeOffsetRate; // how fast to offset view vertically
+var float ShakeOffsetTime; // how much time to offset view
 
 // Modified to cause blast damage
 function BlowUp(Vector HitLocation)
@@ -57,7 +57,7 @@ simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal)
 simulated function DoShakeEffect()
 {
     local PlayerController PC;
-    local float            Distance, MaxShakeDistance, Scale;
+    local float Distance, MaxShakeDistance, Scale;
 
     PC = Level.GetLocalPlayerController();
 
@@ -70,7 +70,10 @@ simulated function DoShakeEffect()
         {
             // Screen shake
             Scale = (MaxShakeDistance - Distance) / MaxShakeDistance * BlurEffectScalar;
-            PC.ShakeView(ShakeRotMag * Scale, ShakeRotRate, ShakeRotTime, ShakeOffsetMag * Scale, ShakeOffsetRate, ShakeOffsetTime);
+            PC.ShakeView(
+                ShakeRotMag * Scale, ShakeRotRate, ShakeRotTime, ShakeOffsetMag * Scale, ShakeOffsetRate,
+                ShakeOffsetTime
+                );
 
             // Screen blur
             if (PC.IsA('ROPlayer'))

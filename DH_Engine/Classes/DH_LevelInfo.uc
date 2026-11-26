@@ -25,7 +25,7 @@ enum EAlliedNation
 enum ESpawnMode
 {
     ESM_RedOrchestra,
-    ESM_DarkestHour
+    ESM_DarkestHour,
 };
 
 enum ESeason
@@ -33,56 +33,57 @@ enum ESeason
     SEASON_Spring,
     SEASON_Summer,
     SEASON_Autumn,
-    SEASON_Winter
+    SEASON_Winter,
 };
 
 enum EWeather
 {
     WEATHER_Clear,
     WEATHER_Rainy,
-    WEATHER_Snowy
+    WEATHER_Snowy,
 };
 
 struct ArtilleryType
 {
-    var() int                   TeamIndex;
-    var() class<DHArtillery>    ArtilleryClass;             // The artillery class to use.
-    var() bool                  bIsInitiallyActive;         // Whether or not this type of artillery is initially available (can be made available and unavailable during a round).
-    var() int                   DelaySeconds;               // The amount of seconds it will take until the artillery actor is spawned.
-    var() int                   Limit;                      // The amount of these types of artillery strikes that are available.
-    var() int                   ConfirmIntervalSeconds;     // The amount of seconds it will take until another request can be confirmed.
+    var() int TeamIndex;
+    var() class<DHArtillery> ArtilleryClass; // The artillery class to use.
+    var() bool bIsInitiallyActive; // Whether or not this type of artillery is initially available (can be made available and unavailable during a round).
+    var() int DelaySeconds; // The amount of seconds it will take until the artillery actor is spawned.
+    var() int Limit; // The amount of these types of artillery strikes that are available.
+    var() int ConfirmIntervalSeconds; // The amount of seconds it will take until another request can be confirmed.
 };
+
 var(Artillery) array<ArtilleryType> ArtilleryTypes;
 
 // These are used as hints for skinning dynamically placed objects.
-var(DH_Atmosphere) ESeason          Season;
-var(DH_Atmosphere) EWeather         Weather;
+var(DH_Atmosphere) ESeason Season;
+var(DH_Atmosphere) EWeather Weather;
 
-var(DH_Nation) EAxisNation          AxisNation;
-var private class<DHNation>         AxisNationClass;
-var(DH_Nation) EAlliedNation        AlliedNation;
-var private class<DHNation>         AlliedNationClass;
-var(DH_Nation) sound                AxisWinsMusic;                  // Optional override for Axis victory music
-var(DH_Nation) sound                AlliesWinsMusic;                // Optional override for Allies victory music
+var(DH_Nation) EAxisNation AxisNation;
+var private class<DHNation> AxisNationClass;
+var(DH_Nation) EAlliedNation AlliedNation;
+var private class<DHNation> AlliedNationClass;
+var(DH_Nation) sound AxisWinsMusic; // Optional override for Axis victory music
+var(DH_Nation) sound AlliesWinsMusic; // Optional override for Allies victory music
 
-var(DH_Munitions) float             BaseMunitionPercentages[2];     // The starting munition percentage for each team
+var(DH_Munitions) float BaseMunitionPercentages[2]; // The starting munition percentage for each team
 
-var(DH_GameSettings) float                          AlliesToAxisRatio;              // Player ratio based on team, allows for unbalanced teams
-var(DH_GameSettings) bool                           bHardTeamRatio;                 // Determines if AlliesToAxisRatio should be hard or soft (affected by # of players)
-var(DH_GameSettings) class<DHGameType>              GameTypeClass;
-var(DH_GameSettings) ESpawnMode                     SpawnMode;
+var(DH_GameSettings) float AlliesToAxisRatio; // Player ratio based on team, allows for unbalanced teams
+var(DH_GameSettings) bool bHardTeamRatio; // Determines if AlliesToAxisRatio should be hard or soft (affected by # of players)
+var(DH_GameSettings) class<DHGameType> GameTypeClass;
+var(DH_GameSettings) ESpawnMode SpawnMode;
 
-var(DH_GameSettings) int                            InfantrySpawnVehicleDuration;
-var(DH_GameSettings) InterpCurve                    AttritionRateCurve;
+var(DH_GameSettings) int InfantrySpawnVehicleDuration;
+var(DH_GameSettings) InterpCurve AttritionRateCurve;
 
-var(DH_GameSettings) bool                           bIsDangerZoneInitiallyEnabled;
-var(DH_GameSettings) byte                           DangerZoneNeutral;                  // Affects the size of the neutral area
-var(DH_GameSettings) int                            DangerZoneBalance;                  // Shifts the balance between Axis and Allied zones (range: -127..127)
-var(DH_GameSettings) float                          DangerZoneIntensityScale;           // DEPRECATED
+var(DH_GameSettings) bool bIsDangerZoneInitiallyEnabled;
+var(DH_GameSettings) byte DangerZoneNeutral; // Affects the size of the neutral area
+var(DH_GameSettings) int DangerZoneBalance; // Shifts the balance between Axis and Allied zones (range: -127..127)
+var(DH_GameSettings) float DangerZoneIntensityScale; // DEPRECATED
 
-var(DH_GameSettings) float                          ObjectiveSpawnDistanceThreshold;    // Distance away an objective must be to be considered for an active Obj Spawn
-var(DH_GameSettings) int                            ObjectiveSpawnMinimumDepth;         // Override of gametype's minimum depth for calculating the closest valid Obj Spawn
-var(DH_SpecialEvents) float                         ZombieHealthMultiplier;
+var(DH_GameSettings) float ObjectiveSpawnDistanceThreshold; // Distance away an objective must be to be considered for an active Obj Spawn
+var(DH_GameSettings) int ObjectiveSpawnMinimumDepth; // Override of gametype's minimum depth for calculating the closest valid Obj Spawn
+var(DH_SpecialEvents) float ZombieHealthMultiplier;
 
 // Colin: AttritionRateCurve defines the rate of reinforcement drain per minute
 // when the enemy controls more objectives.
@@ -94,15 +95,15 @@ var(DH_SpecialEvents) float                         ZombieHealthMultiplier;
 
 // Used to stop loading screen image from being removed on save (not otherwise used)
 // Must be set to myLevel.GUI.LoadingScreen to work!
-var() Material              LoadingScreenRef;
+var() Material LoadingScreenRef;
 
 // TODO: remove this, since we never use this thing when debugging.
-var const bool              bDHDebugMode;            // flag for whether debug commands can be run
+var const bool bDHDebugMode; // flag for whether debug commands can be run
 
 struct SConstruction
 {
     var() byte TeamIndex;
-    var() class<DHConstruction> ConstructionClass;  // Construction class.
+    var() class<DHConstruction> ConstructionClass; // Construction class.
     var() int Limit; // The total limit alotted per round. -1 means no limit.
     var() int MaxActive; // The maximum amount active at a time. -1 means no limit.
 };
@@ -184,13 +185,19 @@ simulated function class<DHNation> GetTeamNationClass(int TeamIndex)
         case AXIS_TEAM_INDEX:
             if (AxisNationClass == none)
             {
-                AxisNationClass = class<DHNation>(DynamicLoadObject(GetTeamNationClassName(AXIS_TEAM_INDEX), Class'Class'));
+                AxisNationClass = class<DHNation>(DynamicLoadObject(
+                    GetTeamNationClassName(AXIS_TEAM_INDEX),
+                    Class'Class'
+                    ));
             }
             return AxisNationClass;
         case ALLIES_TEAM_INDEX:
             if (AlliedNationClass == none)
             {
-                AlliedNationClass = class<DHNation>(DynamicLoadObject(GetTeamNationClassName(ALLIES_TEAM_INDEX), Class'Class'));
+                AlliedNationClass = class<DHNation>(DynamicLoadObject(
+                    GetTeamNationClassName(ALLIES_TEAM_INDEX),
+                    Class'Class'
+                    ));
             }
             return AlliedNationClass;
     }
@@ -218,8 +225,8 @@ simulated function int GetConstructionIndex(int TeamIndex, class<DHConstruction>
 
     for (i = 0; i < ConstructionsEvaluated.Length; ++i)
     {
-        if (ConstructionsEvaluated[i].TeamIndex == TeamIndex &&
-            ConstructionsEvaluated[i].ConstructionClass == ConstructionClass)
+        if (ConstructionsEvaluated[i].TeamIndex == TeamIndex
+            && ConstructionsEvaluated[i].ConstructionClass == ConstructionClass)
         {
             return i;
         }
@@ -259,14 +266,14 @@ simulated function int GetConstructionMaxActive(int TeamIndex, class<DHConstruct
     return -1;
 }
 
-simulated private function bool HasConstruction(int TeamIndex, Class<DHConstruction> ConstructionClass)
+private simulated function bool HasConstruction(int TeamIndex, class<DHConstruction> ConstructionClass)
 {
     local int i;
 
     for (i = 0; i < ConstructionsEvaluated.Length; ++i)
     {
-        if (ConstructionsEvaluated[i].TeamIndex == TeamIndex &&
-            ConstructionsEvaluated[i].ConstructionClass == ConstructionClass)
+        if (ConstructionsEvaluated[i].TeamIndex == TeamIndex
+            && ConstructionsEvaluated[i].ConstructionClass == ConstructionClass)
         {
             return true;
         }
@@ -282,7 +289,7 @@ simulated function EvaluateConstructions()
     local class<DHNation> NationClass;
     local Stack_Object LoadoutClassStack;
     local class<DHConstructionLoadout> LoadoutClass;
-    local array< class<DHConstructionLoadout> > LoadoutClasses;
+    local array<class<DHConstructionLoadout> > LoadoutClasses;
     local SConstruction Construction;
 
     LoadoutClassStack = new Class'Stack_Object';
@@ -327,7 +334,7 @@ simulated function EvaluateConstructions()
         {
             LoadoutClass = class<DHConstructionLoadout>(LoadoutClassStack.Pop());
 
-            if (!class'UArray'.static.AddUnique(LoadoutClasses, LoadoutClass))
+            if (!Class'UArray'.static.AddUnique(LoadoutClasses, LoadoutClass))
             {
                 // Loadout was already added to the list, so ignore it.
                 continue;
@@ -357,7 +364,6 @@ simulated function EvaluateConstructions()
                 ConstructionsEvaluated[ConstructionsEvaluated.Length] = Construction;
             }
         }
-
     }
 
     // Now add or override any construction classes with the level's list.
@@ -381,9 +387,9 @@ simulated function EvaluateConstructions()
 
 function bool IsArtilleryInitiallyAvailable(int ArtilleryTypeIndex)
 {
-    if (ArtilleryTypeIndex < 0 ||
-        ArtilleryTypeIndex >= ArtilleryTypes.Length ||
-        ArtilleryTypes[ArtilleryTypeIndex].ArtilleryClass == none)
+    if (ArtilleryTypeIndex < 0
+        || ArtilleryTypeIndex >= ArtilleryTypes.Length
+        || ArtilleryTypes[ArtilleryTypeIndex].ArtilleryClass == none)
     {
         return false;
     }
@@ -395,14 +401,17 @@ function int GetArtilleryLimit(int ArtilleryTypeIndex)
 {
     local int Limit;
 
-    if (ArtilleryTypeIndex < 0 ||
-        ArtilleryTypeIndex >= ArtilleryTypes.Length ||
-        ArtilleryTypes[ArtilleryTypeIndex].ArtilleryClass == none)
+    if (ArtilleryTypeIndex < 0
+        || ArtilleryTypeIndex >= ArtilleryTypes.Length
+        || ArtilleryTypes[ArtilleryTypeIndex].ArtilleryClass == none)
     {
         return 0;
     }
 
-    Limit = ArtilleryTypes[ArtilleryTypeIndex].ArtilleryClass.static.GetLimitOverride(ArtilleryTypes[ArtilleryTypeIndex].TeamIndex, Level);
+    Limit = ArtilleryTypes[ArtilleryTypeIndex].ArtilleryClass.static.GetLimitOverride(
+        ArtilleryTypes[ArtilleryTypeIndex].TeamIndex,
+        Level
+        );
 
     if (Limit == -1)
     {

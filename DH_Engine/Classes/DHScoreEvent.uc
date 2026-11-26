@@ -6,11 +6,11 @@
 class DHScoreEvent extends Object
     abstract;
 
-var localized string            HumanReadableName;
-var class<DHScoreCategory>      CategoryClass;
-var int                         Value;
-var int                         LimitPerDuration;
-var int                         LimitDurationSeconds;
+var localized string HumanReadableName;
+var class<DHScoreCategory> CategoryClass;
+var int Value;
+var int LimitPerDuration;
+var int LimitDurationSeconds;
 
 function int GetValue()
 {

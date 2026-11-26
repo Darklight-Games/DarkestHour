@@ -7,16 +7,16 @@ class DHThrowableHEATProjectile extends DHCannonShellHEAT;
 
 // Obviously not a cannon shell but it is a HEAT explosive & by extending this we can make use of HEAT functionality & DH armour penetration calculations
 
-//TO DO: implement proper mechanic for penetration of top armor. Currently it thinks its top armor hit if grenade falls vertically downwards, which isnt really a good assumption at all.
-//A much better method would be looking at the angle of the armor, if armor is horizontal or close to horizontal - consider it to be top armor
-//If this new method gets implemented it should be used for RPG-40, RPG-43, other similar weapons and may be even satchels
+// TO DO: implement proper mechanic for penetration of top armor. Currently it thinks its top armor hit if grenade falls vertically downwards, which isnt really a good assumption at all.
+// A much better method would be looking at the angle of the armor, if armor is horizontal or close to horizontal - consider it to be top armor
+// If this new method gets implemented it should be used for RPG-40, RPG-43, other similar weapons and may be even satchels
 
-var     float           MinImpactSpeedToExplode;   // minimum impact speed at which grenade must hit a surface to explode on contact
-var     float           MaxImpactAOIToExplode;     // maximum angle, in degrees, at which grenade must hit a surface to explode on contact
-var     float           MaxVerticalAOIForTopArmor; // max impact angle from vertical (in degrees, relative to vehicle) that registers as a hit on relatively thin top armor
-var class<WeaponPickup> PickupClass;               // pickup class if grenade is thrown but does not explode & lies on ground
+var float MinImpactSpeedToExplode; // minimum impact speed at which grenade must hit a surface to explode on contact
+var float MaxImpactAOIToExplode; // maximum angle, in degrees, at which grenade must hit a surface to explode on contact
+var float MaxVerticalAOIForTopArmor; // max impact angle from vertical (in degrees, relative to vehicle) that registers as a hit on relatively thin top armor
+var class<WeaponPickup> PickupClass; // pickup class if grenade is thrown but does not explode & lies on ground
 
-var     bool    bIsStickGrenade; // if true then the grenade's spin, when thrown, will be tumbling end over end
+var bool bIsStickGrenade; // if true then the grenade's spin, when thrown, will be tumbling end over end
 
 // Functions entered out as not relevant to grenade
 simulated static function int GetPitchForRange(int Range);
@@ -48,7 +48,7 @@ simulated function PostBeginPlay()
 
     Acceleration = 0.5 * PhysicsVolume.Gravity;
 
-    if (bIsStickGrenade) //Enfield: i ripped this from DHGrenadeProjectile as the LType is technically a stick grenade and is very front heavy
+    if (bIsStickGrenade) // Enfield: i ripped this from DHGrenadeProjectile as the LType is technically a stick grenade and is very front heavy
     {
         RotationRate.Pitch = -(90000 + Rand(30000)); // end over end tumbling flight
     }
@@ -56,7 +56,6 @@ simulated function PostBeginPlay()
     {
         RandSpin(100000.0); // normal random 3D spin for egg-shaped or canister grenades
     }
-
 }
 
 // Modified to skip over Super in DHAntiVehicleProjectile, so we simply destroy the actor
@@ -88,7 +87,8 @@ simulated singular function Touch(Actor Other)
         return;
     }
 
-    if (Velocity == vect(0.0, 0.0, 0.0) || Other.IsA('Mover')
+    if (Velocity == vect(0.0, 0.0, 0.0)
+        || Other.IsA('Mover')
         || Other.TraceThisActor(HitLocation, HitNormal, Location, Location - (2.0 * Velocity), GetCollisionExtent()))
     {
         HitLocation = Location;
@@ -114,34 +114,42 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
 {
     local Vector TempHitLocation, HitNormal;
 
-    if (Other == none || SavedTouchActor == Other || Other.IsA('ROBulletWhipAttachment') || Other == Instigator || Other.Base == Instigator || Other.Owner == Instigator
-        || Other.bDeleteMe || (Other.IsA('Projectile') && !Other.bProjTarget))
+    if (Other == none
+        || SavedTouchActor == Other
+        || Other.IsA('ROBulletWhipAttachment')
+        || Other == Instigator
+        || Other.Base == Instigator
+        || Other.Owner == Instigator
+        || Other.bDeleteMe
+        || (Other.IsA('Projectile') && !Other.bProjTarget))
     {
         return;
     }
 
     SavedTouchActor = Other;
-    Trace(TempHitLocation, HitNormal, HitLocation + Normal(Velocity) * 50.0, HitLocation - Normal(Velocity) * 50.0, true); // get a reliable HitNormal for a deflection
+    Trace(
+        TempHitLocation, HitNormal, HitLocation + Normal(Velocity) * 50.0, HitLocation - Normal(Velocity) * 50.0, true
+        ); // get a reliable HitNormal for a deflection
 
     HitWall(HitNormal, Other);
 }
-
-
 
 // Based on DHCannonShellHEAT with elements from DHGrenadeProjectile
 // Modified to handle possible explosion on impact, depending on impact speed
 simulated function HitWall(Vector HitNormal, Actor Wall)
 {
     local RODestroyableStaticMesh DestroMesh;
-    local Actor  TraceHitActor;
+    local Actor TraceHitActor;
     local Vector Direction, TempHitLocation, TempHitNormal, VehicleRelativeVertical, X, Y;
-    local int    ImpactSpeed, xH, TempMaxWall, i;
-    local bool   bExplodeOnImpact, bFailedToPenetrate;
-    local float  ImpactAOI;  // Angle of incidence, in degrees
-    local float  ImpactDamageMultiplier;
+    local int ImpactSpeed, xH, TempMaxWall, i;
+    local bool bExplodeOnImpact, bFailedToPenetrate;
+    local float ImpactAOI; // Angle of incidence, in degrees
+    local float ImpactDamageMultiplier;
 
     // Exit without doing anything if we hit something we don't want to count a hit on (allowing Wall == none as grenade's Landed() passes none)
-    if (bInHitWall || (Wall != none && (SavedHitActor == Wall || (Wall.Base != none && Wall.Base == Instigator) || Wall.bDeleteMe))) // HEAT adds bInHitWall check to prevent recursive calls
+    if (bInHitWall
+        || (Wall != none
+            && (SavedHitActor == Wall || (Wall.Base != none && Wall.Base == Instigator) || Wall.bDeleteMe))) // HEAT adds bInHitWall check to prevent recursive calls
     {
         return;
     }
@@ -149,7 +157,10 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
     SavedHitActor = Pawn(Wall);
 
     // If we didn't hit a pawn, lets see if we hit a VehicleWeapon and if so get that weapon's base pawn and set it
-    if (SavedHitActor == none && VehicleWeapon(Wall) != none && VehicleWeapon(Wall).Base != none && Pawn(VehicleWeapon(Wall).Base) != none)
+    if (SavedHitActor == none
+        && VehicleWeapon(Wall) != none
+        && VehicleWeapon(Wall).Base != none
+        && Pawn(VehicleWeapon(Wall).Base) != none)
     {
         SavedHitActor = Pawn(VehicleWeapon(Wall).Base);
     }
@@ -169,7 +180,10 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
         // On a server (single player), we'll simply cause enough damage to break the mesh
         if (Role == ROLE_Authority)
         {
-            DestroMesh.TakeDamage(DestroMesh.Health + 1, Instigator, Location, MomentumTransfer * Normal(Velocity), Class'DHWeaponBashDamageType');
+            DestroMesh.TakeDamage(
+                DestroMesh.Health + 1, Instigator, Location, MomentumTransfer * Normal(Velocity),
+                Class'DHWeaponBashDamageType'
+                );
 
             // But it will only take damage if it's vulnerable to a weapon bash - so check if it's been reduced to zero Health & if so then we'll exit without deflecting
             if (DestroMesh.Health < 0)
@@ -184,7 +198,8 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
             for (i = 0; i < DestroMesh.TypesCanDamage.Length; ++i)
             {
                 // The destroyable mesh will be damaged by a weapon bash, so we'll exit without deflecting
-                if (DestroMesh.TypesCanDamage[i] == Class'DHWeaponBashDamageType' || ClassIsChildOf(Class'DHWeaponBashDamageType', DestroMesh.TypesCanDamage[i]))
+                if (DestroMesh.TypesCanDamage[i] == Class'DHWeaponBashDamageType'
+                    || ClassIsChildOf(Class'DHWeaponBashDamageType', DestroMesh.TypesCanDamage[i]))
                 {
                     return;
                 }
@@ -211,11 +226,23 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
             // If so we'll assume HEAT grenade's substantial penetration will defeat top armour of any vehicle's hull or turret, so skip penetration check
             // Top hits or armor are not modelled in this game, but it's a reasonable assumption as even heavy tanks only had 30-40mm top armor
             // Otherwise do normal armour penetration check & exit if it fails to penetrate (with suitable effects)
-            //TO DO: make a more proper method of handling of top armor hit. Ideally it should look at the angle of armor and detect if armor is horizontal or close to horizontal, then consider it a top armor
+            // TO DO: make a more proper method of handling of top armor hit. Ideally it should look at the angle of armor and detect if armor is horizontal or close to horizontal, then consider it a top armor
             if (DHArmoredVehicle(Wall) != none || DHVehicleCannon(Wall) != none)
             {
-                if (((Wall.IsA('DHArmoredVehicle') && !DHArmoredVehicle(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(Location)))
-                    || (Wall.IsA('DHVehicleCannon') && !DHVehicleCannon(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(Location)))))
+                if (((Wall.IsA('DHArmoredVehicle')
+                            && !DHArmoredVehicle(Wall).ShouldPenetrate(
+                                self,
+                                Location,
+                                Normal(Velocity),
+                                GetMaxPenetration(Location)
+                                ))
+                        || (Wall.IsA('DHVehicleCannon')
+                            && !DHVehicleCannon(Wall).ShouldPenetrate(
+                                self,
+                                Location,
+                                Normal(Velocity),
+                                GetMaxPenetration(Location)
+                                ))))
                 {
                     bFailedToPenetrate = true;
                 }
@@ -225,7 +252,9 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
                 {
                     // Re-calc AOI, this time relative to a line 'straight up' from the vehicle (relative to its rotation)
                     Wall.GetAxes(Wall.Rotation, X, Y, VehicleRelativeVertical);
-                    ImpactAOI = Class'UUnits'.static.RadiansToDegrees(Acos(-Normal(Velocity) dot VehicleRelativeVertical));
+                    ImpactAOI = Class'UUnits'.static.RadiansToDegrees(
+                        Acos(-Normal(Velocity) dot VehicleRelativeVertical)
+                        );
 
                     if (ImpactAOI <= default.MaxVerticalAOIForTopArmor)
                     {
@@ -278,12 +307,17 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
                     Wall.SetDelayedDamageInstigatorController(InstigatorController);
                 }
 
-                Wall.TakeDamage(ImpactDamage * ImpactDamageMultiplier, Instigator, Location, MomentumTransfer * Normal(Velocity), ShellImpactDamage);
+                Wall.TakeDamage(
+                    ImpactDamage * ImpactDamageMultiplier, Instigator, Location, MomentumTransfer * Normal(Velocity),
+                    ShellImpactDamage
+                    );
             }
 
             if (DamageRadius > 0.0 && ROVehicle(Wall) != none && ROVehicle(Wall).Health > 0)
             {
-                CheckVehicleOccupantsRadiusDamage(ROVehicle(Wall), Damage, DamageRadius, MyDamageType, MomentumTransfer, Location);
+                CheckVehicleOccupantsRadiusDamage(
+                    ROVehicle(Wall), Damage, DamageRadius, MyDamageType, MomentumTransfer, Location
+                    );
             }
 
             HurtWall = Wall;
@@ -318,7 +352,9 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
                 TempMaxWall = MaxWall;
             }
 
-            TraceHitActor = Trace(TempHitLocation, TempHitNormal, Location, Location + (Direction * TempMaxWall), false);
+            TraceHitActor = Trace(
+                TempHitLocation, TempHitNormal, Location, Location + (Direction * TempMaxWall), false
+                );
 
             // Due to static meshes resulting in a hit even with the trace starting right inside of them (terrain and BSP 'space' would return none)
             if (TraceHitActor != none && !SetLocation(TempHitLocation + (vect(0.5, 0.0, 0.0) * Direction)))
@@ -326,7 +362,7 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
                 TraceHitActor = none;
             }
         }
-        until (TraceHitActor != none || TempMaxWall >= MaxWall)
+        until (TraceHitActor != none || TempMaxWall >= MaxWall);
     }
     else
     {
@@ -353,7 +389,7 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
 simulated function Deflect(Vector HitLocation, Vector HitNormal, Actor Wall)
 {
     local ESurfaceTypes ST;
-    local Vector        VNorm;
+    local Vector VNorm;
 
     GetHitSurfaceType(ST, HitNormal);
     GetDampenAndSoundValue(ST); // gets the deflect dampen factor & the hit sound, based on the type of surface the projectile hit
@@ -381,7 +417,7 @@ simulated function Deflect(Vector HitLocation, Vector HitNormal, Actor Wall)
 // From DHThrowableExplosiveProjectile
 simulated function GetHitSurfaceType(out ESurfaceTypes ST, Vector HitNormal)
 {
-    local Vector   HitLoc, HitNorm;
+    local Vector HitLoc, HitNorm;
     local Material HitMat;
 
     Trace(HitLoc, HitNorm, Location - (HitNormal * 16.0), Location, false,, HitMat);
@@ -467,25 +503,25 @@ simulated function GetDampenAndSoundValue(ESurfaceTypes ST)
             ImpactSound = Sound'Inf_Weapons_Foley.grenadeland';
             break;
 
-        case EST_Custom01: //Sand
+        case EST_Custom01: // Sand
             DampenFactor = 0.1;
             DampenFactorParallel = 0.45;
             ImpactSound = Sound'Inf_Weapons_Foley.grenadeland';
             break;
 
-        case EST_Custom02: //SandBag
+        case EST_Custom02: // SandBag
             DampenFactor = 0.2;
             DampenFactorParallel = 0.55;
             ImpactSound = Sound'Inf_Weapons_Foley.grenadeland';
             break;
 
-        case EST_Custom03: //Brick
+        case EST_Custom03: // Brick
             DampenFactor = 0.2;
             DampenFactorParallel = 0.5;
             ImpactSound = Sound'Inf_Weapons_Foley.grenadeland';
             break;
 
-        case EST_Custom04: //Hedgerow
+        case EST_Custom04: // Hedgerow
             DampenFactor = 0.15;
             DampenFactorParallel = 0.55;
             ImpactSound = Sound'Inf_Weapons_Foley.grenadeland';

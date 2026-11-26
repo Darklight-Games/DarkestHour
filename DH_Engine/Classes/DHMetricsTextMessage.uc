@@ -22,4 +22,3 @@ function JSONValue ToJSON()
         .PutInteger("team_index", TeamIndex)
         .PutInteger("squad_index", SquadIndex);
 }
-

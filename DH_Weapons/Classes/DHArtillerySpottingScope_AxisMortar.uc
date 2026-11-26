@@ -57,4 +57,3 @@ defaultproperties
 
     YawIndicatorLength=100
 }
-

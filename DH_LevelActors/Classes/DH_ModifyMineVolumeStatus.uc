@@ -5,12 +5,12 @@
 
 class DH_ModifyMineVolumeStatus extends DH_ModifyActors;
 
-var()   name                    MineVolumeToModify; // the tag that the minefield uses
-var     array<ROMineVolume>     MineVolumes;
+var() name MineVolumeToModify; // the tag that the minefield uses
+var array<ROMineVolume> MineVolumes;
 // usagi:ignore[bool-name-prefix]
-var()   bool                    UseRandomness;
-var()   int                     RandomPercent; // 100 for always succeed, 0 for always fail
-var()   StatusModifyType        HowToModify;
+var() bool UseRandomness;
+var() int RandomPercent; // 100 for always succeed, 0 for always fail
+var() StatusModifyType HowToModify;
 
 function PostBeginPlay()
 {
@@ -50,10 +50,10 @@ event Trigger(Actor Other, Pawn EventInstigator)
         {
             case SMT_Activate:
                 MineVolumes[i].Activate();
-            break;
+                break;
             case SMT_Deactivate:
                 MineVolumes[i].Deactivate();
-            break;
+                break;
             case SMT_Toggle:
                 if (MineVolumes[i].bActive)
                 {
@@ -63,9 +63,9 @@ event Trigger(Actor Other, Pawn EventInstigator)
                 {
                     MineVolumes[i].Activate();
                 }
-            break;
+                break;
             default:
-            break;
+                break;
         }
     }
 }

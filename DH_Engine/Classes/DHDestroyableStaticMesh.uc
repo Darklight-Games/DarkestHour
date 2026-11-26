@@ -6,14 +6,14 @@
 class DHDestroyableStaticMesh extends Actor
     notplaceable;
 
-var int             Health;
-var StaticMesh      DestroyedStaticMesh;
-var class<Emitter>  DestroyedEmitterClass;
-var Vector          DestroyedEmitterOffset;
-var Sound           DestroyedSound;
-var float           DestroyedSoundVolume;
-var float           DestroyedSoundRadius;
-var float           DestroyedLifeSpan;
+var int Health;
+var StaticMesh DestroyedStaticMesh;
+var class<Emitter> DestroyedEmitterClass;
+var Vector DestroyedEmitterOffset;
+var Sound DestroyedSound;
+var float DestroyedSoundVolume;
+var float DestroyedSoundRadius;
+var float DestroyedLifeSpan;
 
 replication
 {
@@ -21,7 +21,14 @@ replication
         ClientPlayDestroyedEffects;
 }
 
-event TakeDamage(int Damage, Pawn EventInstigator, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+event TakeDamage(
+    int Damage,
+    Pawn EventInstigator,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     Health -= Damage;
 
@@ -96,4 +103,3 @@ defaultproperties
     bPathColliding=true
     bWorldGeometry=true
 }
-

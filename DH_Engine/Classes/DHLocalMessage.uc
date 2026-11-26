@@ -10,7 +10,7 @@ var localized string MessagePrefix;
 var localized string SpecPrefix;
 var localized string SquadLeaderID;
 var localized string SquadAssistantID;
-var           string SquadMemberIDFormat;
+var string SquadMemberIDFormat;
 
 static function string GetSquadMemberID(DHPlayerReplicationInfo PRI)
 {
@@ -33,17 +33,22 @@ static function string GetSquadMemberID(DHPlayerReplicationInfo PRI)
     }
 }
 
-static function string AssembleString(HUD myHUD, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional string MessageString)
+static function string AssembleString(
+    HUD myHUD,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional string MessageString
+    )
 {
     return MessageString;
 }
 
 static function Color GetDHConsoleColor(PlayerReplicationInfo RelatedPRI_1, bool bSimpleColours)
 {
-    if (RelatedPRI_1 != none &&
-        RelatedPRI_1.Team != none &&
-        RelatedPRI_1.Team.TeamIndex >= 0 &&
-        RelatedPRI_1.Team.TeamIndex < arraycount(Class'DHColor'.default.TeamColors))
+    if (RelatedPRI_1 != none
+        && RelatedPRI_1.Team != none
+        && RelatedPRI_1.Team.TeamIndex >= 0
+        && RelatedPRI_1.Team.TeamIndex < arraycount(Class'DHColor'.default.TeamColors))
     {
         return Class'DHColor'.default.TeamColors[RelatedPRI_1.Team.TeamIndex];
     }

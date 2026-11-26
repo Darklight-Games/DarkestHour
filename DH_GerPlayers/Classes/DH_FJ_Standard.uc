@@ -5,4 +5,3 @@
 
 class DH_FJ_Standard extends DHDeprecated
     abstract;
-

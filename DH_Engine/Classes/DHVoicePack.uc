@@ -50,7 +50,7 @@ function SetClientDefendMessage(int MessageIndex, PlayerReplicationInfo Recipien
 
     if (PC != none)
     {
-       GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
+        GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
     }
 
     MessageSound = OrderSound[1];
@@ -67,7 +67,7 @@ function SetClientHelpAtMessage(int MessageIndex, PlayerReplicationInfo Recipien
 
     if (PC != none)
     {
-       GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
+        GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
     }
 
     MessageSound = SupportSound[1];
@@ -84,7 +84,7 @@ function SetClientUnderAttackAtMessage(int MessageIndex, PlayerReplicationInfo R
 
     if (PC != none)
     {
-       GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
+        GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
     }
 
     MessageSound = AlertSound[8];
@@ -101,7 +101,7 @@ function SetClientGotoMessage(int MessageIndex, PlayerReplicationInfo Recipient,
 
     if (PC != none)
     {
-       GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
+        GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
     }
 
     MessageSound = VehicleDirectionSound[0];
@@ -118,7 +118,7 @@ function SetClientAttackMessage(int MessageIndex, PlayerReplicationInfo Recipien
 
     if (PC != none)
     {
-       GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
+        GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
     }
 
     MessageSound = OrderSound[0];
@@ -130,11 +130,13 @@ function Timer()
 {
     local PlayerController PlayerOwner;
     local ROVoiceMessageEffect SoundPlayer;
-    CONST VOICEREPEATTIME = 0.0;
+
+    const VOICEREPEATTIME = 0.0;
 
     PlayerOwner = PlayerController(Owner);
 
-    if ((Phrase[PhraseNum] != none) && ((Level.TimeSeconds - PlayerOwner.LastPlaySpeech > VOICEREPEATTIME) || (PhraseNum > 0)))
+    if ((Phrase[PhraseNum] != none)
+        && ((Level.TimeSeconds - PlayerOwner.LastPlaySpeech > VOICEREPEATTIME) || (PhraseNum > 0)))
     {
         PlayerOwner.LastPlaySpeech = Level.TimeSeconds;
 
@@ -150,7 +152,7 @@ function Timer()
                     // This makes it so that the sound will be attached to the pawn.
                     SoundPlayer.SetBase(PawnSender);
                     // TODO: if we wanna get crazy with it we could attach it to the head bone.
-                    SoundPlayer.SetRelativeLocation(vect(0,0,0));
+                    SoundPlayer.SetRelativeLocation(vect(0, 0, 0));
 
                     // Set the voice message effect for the pawn that sent the message.
                     // This will allow us to delete the effect when the pawn dies.
@@ -174,7 +176,9 @@ function Timer()
         {
             if (PlayerOwner.ViewTarget != none)
             {
-                PlayerOwner.ViewTarget.PlaySound(Phrase[PhraseNum], SLOT_Interface, ShoutVolume,, ShoutRadius, 1.0, true);
+                PlayerOwner.ViewTarget.PlaySound(
+                    Phrase[PhraseNum], SLOT_Interface, ShoutVolume,, ShoutRadius, 1.0, true
+                    );
             }
             else
             {
@@ -225,4 +229,3 @@ defaultproperties
     WhisperRadius=25.6
     ShoutVolume=10.0
 }
-

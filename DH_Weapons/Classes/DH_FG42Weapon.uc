@@ -22,7 +22,7 @@ class DH_FG42Weapon extends DHAutoWeapon;
 var private enum EBoltMode
 {
     BM_Open,
-    BM_Closed
+    BM_Closed,
 } BoltMode;
 var int BoltOpenSlot;
 var int BoltClosedSlot;

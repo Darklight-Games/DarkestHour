@@ -5,7 +5,7 @@
 
 class DHVehicleHitEffect extends ROVehicleHitEffect;
 
-var class<ProjectedDecal>       HitDecal;
+var class<ProjectedDecal> HitDecal;
 
 simulated function InitHitEffects(Vector HitLoc, Vector HitNormal)
 {
@@ -13,7 +13,7 @@ simulated function InitHitEffects(Vector HitLoc, Vector HitNormal)
 
     Spawn(Class'DHBulletHitMetalEffect',,, HitLoc, Rotator(HitNormal));
 
-    if (HitDecal != None)
+    if (HitDecal != none)
     {
         Spawn(HitDecal, self,, Location, Rotator(-HitNormal));
     }

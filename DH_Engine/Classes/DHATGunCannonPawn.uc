@@ -15,7 +15,6 @@ simulated function bool CanSwitchToVehiclePosition(byte F)
 
 // Emptied out so we just use plain RO rotate/pitch sounds & ignore DHVehicleCannonPawn's manual/powered sounds
 simulated function SetManualTurret(bool bManual);
-
 // Functions emptied out as not relevant to an AT gun:
 simulated function DrawPeriscopeOverlay(Canvas C);
 function AltFire(optional float F);

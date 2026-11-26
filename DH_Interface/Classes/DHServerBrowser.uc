@@ -5,10 +5,10 @@
 
 class DHServerBrowser extends ROUT2k4ServerBrowser;
 
-var     config bool             bDidShowWelcomeMessage;
-var     localized string        WelcomeMessageText;
-var     localized string        WelcomeMessageDiscordButtonText;
-var     localized string        WelcomeMessagePlayButtonText;
+var config bool bDidShowWelcomeMessage;
+var localized string WelcomeMessageText;
+var localized string WelcomeMessageDiscordButtonText;
+var localized string WelcomeMessagePlayButtonText;
 
 function CreateTabs()
 {
@@ -128,4 +128,3 @@ defaultproperties
     WelcomeMessagePlayButtonText="Just play!"
     OnOpen=InternalOnOpen
 }
-

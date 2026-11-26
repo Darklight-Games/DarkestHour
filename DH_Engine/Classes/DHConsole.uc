@@ -7,19 +7,19 @@ class DHConsole extends ROConsole;
 
 const RECONNECT_DELAY = 1.0;
 
-var bool        bLockConsoleOpen;
-var bool        bDelayForReconnect;
-var float       DelayWaitTime;
-var string      StoredServerAddress;
+var bool bLockConsoleOpen;
+var bool bDelayForReconnect;
+var float DelayWaitTime;
+var string StoredServerAddress;
 
-var array<string>           SayTypes;
-var string                  SayType;
+var array<string> SayTypes;
+var string SayType;
 
 // Since "say" messages are being treated differently now, we want to keep a
 // separate history so we don't accidentally broadcast console messages (like
 // admin login credentials etc.).
-var array<string>           SayHistory;
-var int                     SayHistoryCur;
+var array<string> SayHistory;
+var int SayHistoryCur;
 
 const SAY_HISTORY_MAX = 16;
 
@@ -73,7 +73,7 @@ exec function Reconnect()
 event ConnectFailure(string FailCode, string URL)
 {
     local string Error, Server;
-    local int    i,Index;
+    local int i, Index;
 
     LastURL = URL;
     Server = Left(URL, InStr(URL, "/"));
@@ -143,13 +143,21 @@ event ConnectFailure(string FailCode, string URL)
     else if (FailCode == "LOCALBAN")
     {
         ViewportOwner.Actor.ClearProgressMessages();
-        ViewportOwner.GUIController.OpenMenu(Class'GameEngine'.default.DisconnectMenuClass,Localize("Errors","ConnectionFailed", "Engine"), Class'DHAccessControl'.default.IPBanned);
+        ViewportOwner.GUIController.OpenMenu(
+            Class'GameEngine'.default.DisconnectMenuClass,
+            Localize("Errors", "ConnectionFailed", "Engine"),
+            Class'DHAccessControl'.default.IPBanned
+            );
         return;
     }
     else if (FailCode == "SESSIONBAN")
     {
         ViewportOwner.Actor.ClearProgressMessages();
-        ViewportOwner.GUIController.OpenMenu(Class'GameEngine'.default.DisconnectMenuClass,Localize("Errors","ConnectionFailed", "Engine"), Class'DHAccessControl'.default.SessionBanned);
+        ViewportOwner.GUIController.OpenMenu(
+            Class'GameEngine'.default.DisconnectMenuClass,
+            Localize("Errors", "ConnectionFailed", "Engine"),
+            Class'DHAccessControl'.default.SessionBanned
+            );
         return;
     }
     else if (FailCode == "SERVERFULL")
@@ -208,21 +216,21 @@ event ConnectFailure(string FailCode, string URL)
         // Check to see if the URL is more than just the IP, if so then use the cut off IP
         if (InStr(URL, "/") != -1)
         {
-            ViewportOwner.Actor.ClientTravel(Server,TRAVEL_Absolute, false);
+            ViewportOwner.Actor.ClientTravel(Server, TRAVEL_Absolute, false);
             ViewportOwner.GUIController.CloseAll(false, true);
             return;
         }
         else if (SteamLoginRetryCount < 5) // Try again a few times
         {
             SteamLoginRetryCount++;
-            ViewportOwner.Actor.ClientTravel(URL,TRAVEL_Absolute, false);
+            ViewportOwner.Actor.ClientTravel(URL, TRAVEL_Absolute, false);
             ViewportOwner.GUIController.CloseAll(false, true);
             return;
         }
         else
         {
             ViewportOwner.Actor.ClearProgressMessages();
-            ViewportOwner.Actor.ClientNetworkMessage("ST_Unknown","");
+            ViewportOwner.Actor.ClientNetworkMessage("ST_Unknown", "");
             return;
         }
     }
@@ -239,16 +247,16 @@ state SpeechMenuVisible
     //--------------------------------------------------------------------------
     function BuildSMAttackArray()
     {
-       local DHGameReplicationInfo DHGRI;
-       local DHPlayerReplicationInfo DHPRI;
-       local int i;
+        local DHGameReplicationInfo DHGRI;
+        local DHPlayerReplicationInfo DHPRI;
+        local int i;
 
-       DHGRI = DHGameReplicationInfo(ViewportOwner.Actor.GameReplicationInfo);
-       DHPRI = DHPlayerReplicationInfo(ViewportOwner.Actor.PlayerReplicationInfo);
-       SMArraySize = 0;
-       PreviousStateName = ROSMS_Commanders;
+        DHGRI = DHGameReplicationInfo(ViewportOwner.Actor.GameReplicationInfo);
+        DHPRI = DHPlayerReplicationInfo(ViewportOwner.Actor.PlayerReplicationInfo);
+        SMArraySize = 0;
+        PreviousStateName = ROSMS_Commanders;
 
-       for (i = 0; i < arraycount(DHGRI.DHObjectives); ++i)
+        for (i = 0; i < arraycount(DHGRI.DHObjectives); ++i)
         {
             if (DHGRI.DHObjectives[i] != none)
             {
@@ -259,24 +267,26 @@ state SpeechMenuVisible
 
                 switch (DHPRI.RoleInfo.Side)
                 {
-                   case SIDE_Axis:
-                       if ((DHGRI.DHObjectives[i].IsAllies() || DHGRI.DHObjectives[i].IsNeutral()) && DHGRI.DHObjectives[i].bActive)
-                       {
-                          SMNameArray[SMArraySize] = DHGRI.DHObjectives[i].ObjName;
-                          SMIndexArray[SMArraySize] = DHGRI.DHObjectives[i].ObjNum;
-                          SMArraySize++;
-                       }
-                       break;
+                    case SIDE_Axis:
+                        if ((DHGRI.DHObjectives[i].IsAllies() || DHGRI.DHObjectives[i].IsNeutral())
+                            && DHGRI.DHObjectives[i].bActive)
+                        {
+                            SMNameArray[SMArraySize] = DHGRI.DHObjectives[i].ObjName;
+                            SMIndexArray[SMArraySize] = DHGRI.DHObjectives[i].ObjNum;
+                            SMArraySize++;
+                        }
+                        break;
 
-                   case SIDE_Allies:
-                       if ((DHGRI.DHObjectives[i].IsAxis() || DHGRI.DHObjectives[i].IsNeutral()) && DHGRI.DHObjectives[i].bActive)
-                       {
-                          SMNameArray[SMArraySize] = DHGRI.DHObjectives[i].ObjName;
-                          SMIndexArray[SMArraySize] = DHGRI.DHObjectives[i].ObjNum;
-                          SMArraySize++;
-                       }
+                    case SIDE_Allies:
+                        if ((DHGRI.DHObjectives[i].IsAxis() || DHGRI.DHObjectives[i].IsNeutral())
+                            && DHGRI.DHObjectives[i].bActive)
+                        {
+                            SMNameArray[SMArraySize] = DHGRI.DHObjectives[i].ObjName;
+                            SMIndexArray[SMArraySize] = DHGRI.DHObjectives[i].ObjNum;
+                            SMArraySize++;
+                        }
 
-                       break;
+                        break;
                 }
             }
         }
@@ -287,18 +297,18 @@ state SpeechMenuVisible
     //--------------------------------------------------------------------------
     function BuildSMDefendArray()
     {
-       local DHGameReplicationInfo DHGRI;
-       local DHPlayerReplicationInfo DHPRI;
-       local int i;
+        local DHGameReplicationInfo DHGRI;
+        local DHPlayerReplicationInfo DHPRI;
+        local int i;
 
-       DHGRI = DHGameReplicationInfo(ViewportOwner.Actor.GameReplicationInfo);
-       DHPRI = DHPlayerReplicationInfo(ViewportOwner.Actor.PlayerReplicationInfo);
-       SMArraySize = 0;
-       PreviousStateName = ROSMS_Commanders;
+        DHGRI = DHGameReplicationInfo(ViewportOwner.Actor.GameReplicationInfo);
+        DHPRI = DHPlayerReplicationInfo(ViewportOwner.Actor.PlayerReplicationInfo);
+        SMArraySize = 0;
+        PreviousStateName = ROSMS_Commanders;
 
-       //TODO: find out if the number of objectives can be hardcoded (16)
-       for (i = 0; i < arraycount(DHGRI.DHObjectives); ++i)
-       {
+        // TODO: find out if the number of objectives can be hardcoded (16)
+        for (i = 0; i < arraycount(DHGRI.DHObjectives); ++i)
+        {
             if (DHGRI.DHObjectives[i] != none)
             {
                 if (DHGRI.DHObjectives[i].bHideOnMap)
@@ -308,42 +318,41 @@ state SpeechMenuVisible
 
                 switch (DHPRI.RoleInfo.Side)
                 {
-                   case SIDE_Axis:
-                       if (DHGRI.DHObjectives[i].IsAxis())
-                       {
-                          SMNameArray[SMArraySize] = DHGRI.DHObjectives[i].ObjName;
-                          SMIndexArray[SMArraySize] = DHGRI.DHObjectives[i].ObjNum;
-                          SMArraySize++;
-                       }
-                       break;
+                    case SIDE_Axis:
+                        if (DHGRI.DHObjectives[i].IsAxis())
+                        {
+                            SMNameArray[SMArraySize] = DHGRI.DHObjectives[i].ObjName;
+                            SMIndexArray[SMArraySize] = DHGRI.DHObjectives[i].ObjNum;
+                            SMArraySize++;
+                        }
+                        break;
 
-                   case SIDE_Allies:
-                       if (DHGRI.DHObjectives[i].IsAllies())
-                       {
-                          SMNameArray[SMArraySize] = DHGRI.DHObjectives[i].ObjName;
-                          SMIndexArray[SMArraySize] = DHGRI.DHObjectives[i].ObjNum;
-                          SMArraySize++;
-                       }
+                    case SIDE_Allies:
+                        if (DHGRI.DHObjectives[i].IsAllies())
+                        {
+                            SMNameArray[SMArraySize] = DHGRI.DHObjectives[i].ObjName;
+                            SMIndexArray[SMArraySize] = DHGRI.DHObjectives[i].ObjNum;
+                            SMArraySize++;
+                        }
 
-                       break;
+                        break;
                 }
             }
         }
-
     }
 
     function BuildSMGotoArray()
     {
-       local DHGameReplicationInfo DHGRI;
-       local int i;
+        local DHGameReplicationInfo DHGRI;
+        local int i;
 
-       DHGRI = DHGameReplicationInfo(ViewportOwner.Actor.GameReplicationInfo);
-       SMArraySize = 0;
-       PreviousStateName = ROSMS_Vehicle_Orders;
+        DHGRI = DHGameReplicationInfo(ViewportOwner.Actor.GameReplicationInfo);
+        SMArraySize = 0;
+        PreviousStateName = ROSMS_Vehicle_Orders;
 
-       //TODO: find out if the number of objectives can be hardcoded (16)
-       for (i = 0; i < arraycount(DHGRI.DHObjectives); ++i)
-       {
+        // TODO: find out if the number of objectives can be hardcoded (16)
+        for (i = 0; i < arraycount(DHGRI.DHObjectives); ++i)
+        {
             if (DHGRI.DHObjectives[i] != none)
             {
                 if (DHGRI.DHObjectives[i].bHideOnMap)
@@ -373,8 +382,7 @@ state SpeechMenuVisible
 
         for (i = 1; i < 9; i++)
         {
-            if (((i == 5 || i == 6) && !bCanUseVehicleCommands) ||
-                 (i == 7 && !bCanUseOrderCommands))
+            if (((i == 5 || i == 6) && !bCanUseVehicleCommands) || (i == 7 && !bCanUseOrderCommands))
             {
                 continue;
             }
@@ -406,7 +414,7 @@ state SpeechMenuVisible
         {
             for (i = 0; i < ROVP.default.numCommands; i++)
             {
-                if(ROVP.default.OrderAbbrev[i] != "")
+                if (ROVP.default.OrderAbbrev[i] != "")
                 {
                     SMNameArray[SMArraySize] = ROVP.default.OrderAbbrev[i];
                 }
@@ -436,7 +444,7 @@ state SpeechMenuVisible
             return;
         }
 
-        for(i=0; i< VoicePack.default.numVehicleDirections; i++)
+        for (i = 0; i < VoicePack.default.numVehicleDirections; i++)
         {
             if (VoicePack.default.VehicleDirectionAbbrev[i] != "")
             {
@@ -472,7 +480,7 @@ state SpeechMenuVisible
         {
             bCanUseVehicleCommands = CanUseVehicleCommands();
 
-            //only leaders are able to issue orders
+            // only leaders are able to issue orders
             if (CanUseOrderCommands())
             {
                 // don't show vehicle commands if not in vehicle
@@ -480,56 +488,134 @@ state SpeechMenuVisible
                 {
                     switch (KeyIn)
                     {
-                        case 1: SMType = 'SUPPORT'; EnterROState(ROSMS_Support); break;
-                        case 2: SMType = 'ACK'; EnterROState(ROSMS_Ack); break;
-                        case 3: SMType = 'ENEMY'; EnterROState(ROSMS_Enemy); break;
-                        case 4: SMType = 'ALERT'; EnterROState(ROSMS_Alert); break;
-                        case 5: SMType = 'VEH_ORDERS'; EnterROState(ROSMS_Vehicle_Orders); break;
-                        case 6: SMType = 'VEH_ALERTS'; EnterROState(ROSMS_Vehicle_Alerts); break;
-                        case 7: SMType = 'ORDER'; EnterROState(ROSMS_Commanders); break;
-                        case 8: SMType = 'TAUNT'; EnterROState(ROSMS_Extras); break;
+                        case 1:
+                            SMType = 'SUPPORT';
+                            EnterROState(ROSMS_Support);
+                            break;
+                        case 2:
+                            SMType = 'ACK';
+                            EnterROState(ROSMS_Ack);
+                            break;
+                        case 3:
+                            SMType = 'ENEMY';
+                            EnterROState(ROSMS_Enemy);
+                            break;
+                        case 4:
+                            SMType = 'ALERT';
+                            EnterROState(ROSMS_Alert);
+                            break;
+                        case 5:
+                            SMType = 'VEH_ORDERS';
+                            EnterROState(ROSMS_Vehicle_Orders);
+                            break;
+                        case 6:
+                            SMType = 'VEH_ALERTS';
+                            EnterROState(ROSMS_Vehicle_Alerts);
+                            break;
+                        case 7:
+                            SMType = 'ORDER';
+                            EnterROState(ROSMS_Commanders);
+                            break;
+                        case 8:
+                            SMType = 'TAUNT';
+                            EnterROState(ROSMS_Extras);
+                            break;
                     }
                 }
                 else
                 {
                     switch (KeyIn)
                     {
-                        case 1: SMType = 'SUPPORT'; EnterROState(ROSMS_Support); break;
-                        case 2: SMType = 'ACK'; EnterROState(ROSMS_Ack); break;
-                        case 3: SMType = 'ENEMY'; EnterROState(ROSMS_Enemy); break;
-                        case 4: SMType = 'ALERT'; EnterROState(ROSMS_Alert); break;
-                        case 5: SMType = 'ORDER'; EnterROState(ROSMS_Commanders); break;
-                        case 6: SMType = 'TAUNT'; EnterROState(ROSMS_Extras); break;
+                        case 1:
+                            SMType = 'SUPPORT';
+                            EnterROState(ROSMS_Support);
+                            break;
+                        case 2:
+                            SMType = 'ACK';
+                            EnterROState(ROSMS_Ack);
+                            break;
+                        case 3:
+                            SMType = 'ENEMY';
+                            EnterROState(ROSMS_Enemy);
+                            break;
+                        case 4:
+                            SMType = 'ALERT';
+                            EnterROState(ROSMS_Alert);
+                            break;
+                        case 5:
+                            SMType = 'ORDER';
+                            EnterROState(ROSMS_Commanders);
+                            break;
+                        case 6:
+                            SMType = 'TAUNT';
+                            EnterROState(ROSMS_Extras);
+                            break;
                     }
                 }
             }
             else
             {
-               // Non-leaders, no orders
-               if (bCanUseVehicleCommands)
-               {
+                // Non-leaders, no orders
+                if (bCanUseVehicleCommands)
+                {
                     switch (KeyIn)
                     {
-                        case 1: SMType = 'SUPPORT'; EnterROState(ROSMS_Support); break;
-                        case 2: SMType = 'ACK'; EnterROState(ROSMS_Ack); break;
-                        case 3: SMType = 'ENEMY'; EnterROState(ROSMS_Enemy); break;
-                        case 4: SMType = 'ALERT'; EnterROState(ROSMS_Alert); break;
-                        case 5: SMType = 'VEH_ORDERS'; EnterROState(ROSMS_Vehicle_Orders); break;
-                        case 6: SMType = 'VEH_ALERTS'; EnterROState(ROSMS_Vehicle_Alerts); break;
-                        case 7: SMType = 'TAUNT'; EnterROState(ROSMS_Extras); break;
+                        case 1:
+                            SMType = 'SUPPORT';
+                            EnterROState(ROSMS_Support);
+                            break;
+                        case 2:
+                            SMType = 'ACK';
+                            EnterROState(ROSMS_Ack);
+                            break;
+                        case 3:
+                            SMType = 'ENEMY';
+                            EnterROState(ROSMS_Enemy);
+                            break;
+                        case 4:
+                            SMType = 'ALERT';
+                            EnterROState(ROSMS_Alert);
+                            break;
+                        case 5:
+                            SMType = 'VEH_ORDERS';
+                            EnterROState(ROSMS_Vehicle_Orders);
+                            break;
+                        case 6:
+                            SMType = 'VEH_ALERTS';
+                            EnterROState(ROSMS_Vehicle_Alerts);
+                            break;
+                        case 7:
+                            SMType = 'TAUNT';
+                            EnterROState(ROSMS_Extras);
+                            break;
                     }
                 }
                 else
                 {
-                   switch (KeyIn)
-                   {
-                       case 1: SMType = 'SUPPORT'; EnterROState(ROSMS_Support); break;
-                       case 2: SMType = 'ACK'; EnterROState(ROSMS_Ack); break;
-                       case 3: SMType = 'ENEMY'; EnterROState(ROSMS_Enemy); break;
-                       case 4: SMType = 'ALERT'; EnterROState(ROSMS_Alert); break;
-                       case 5: SMType = 'TAUNT'; EnterROState(ROSMS_Extras); break;
-                   }
-               }
+                    switch (KeyIn)
+                    {
+                        case 1:
+                            SMType = 'SUPPORT';
+                            EnterROState(ROSMS_Support);
+                            break;
+                        case 2:
+                            SMType = 'ACK';
+                            EnterROState(ROSMS_Ack);
+                            break;
+                        case 3:
+                            SMType = 'ENEMY';
+                            EnterROState(ROSMS_Enemy);
+                            break;
+                        case 4:
+                            SMType = 'ALERT';
+                            EnterROState(ROSMS_Alert);
+                            break;
+                        case 5:
+                            SMType = 'TAUNT';
+                            EnterROState(ROSMS_Extras);
+                            break;
+                    }
+                }
             }
 
             return;
@@ -538,30 +624,37 @@ state SpeechMenuVisible
         {
             switch (KeyIn)
             {
-                case 1: SMType = 'ATTACK'; EnterROState(ROSMS_Attack);
-                        return;
-                case 2: SMType = 'DEFEND'; EnterROState(ROSMS_Defend);
-                        return;
+                case 1:
+                    SMType = 'ATTACK';
+                    EnterROState(ROSMS_Attack);
+                    return;
+                case 2:
+                    SMType = 'DEFEND';
+                    EnterROState(ROSMS_Defend);
+                    return;
             }
 
             if (KeyIn < 3) // Send messages for other orders
             {
-               return;
+                return;
             }
         }
         else if (ROSMState == ROSMS_Vehicle_Orders && KeyIn == 1)
         {
-            SMType = 'VEH_GOTO'; EnterROState(ROSMS_Vehicle_Goto);
+            SMType = 'VEH_GOTO';
+            EnterROState(ROSMS_Vehicle_Goto);
             return;
         }
         else if (ROSMState == ROSMS_Support && KeyIn == 2)
         {
-            SMType = 'HELPAT'; EnterROState(ROSMS_HelpAt);
+            SMType = 'HELPAT';
+            EnterROState(ROSMS_HelpAt);
             return;
         }
         else if (ROSMState == ROSMS_Alert && KeyIn == 9)
         {
-            SMType = 'UNDERATTACK'; EnterROState(ROSMS_UnderAttackAt);
+            SMType = 'UNDERATTACK';
+            EnterROState(ROSMS_UnderAttackAt);
             return;
         }
 
@@ -668,7 +761,11 @@ state SpeechMenuVisible
         YMax -= C.ClipY * SMOriginY;
         C.SetDrawColor(139, 28, 28, 255);
         C.SetPos(C.ClipX * SMOriginX, C.ClipY * SMOriginY);
-        C.DrawTileStretched(Texture'InterfaceArt_tex.RODisplay', XMax + (SMMargin * C.ClipX), YMax + (SMMargin * C.ClipY));
+        C.DrawTileStretched(
+            Texture'InterfaceArt_tex.RODisplay',
+            XMax + (SMMargin * C.ClipX),
+            YMax + (SMMargin * C.ClipY)
+            );
 
         // Draw highlight
         if (bSpeechMenuUseMouseWheel)
@@ -908,7 +1005,7 @@ static function class<DHLocalMessage> GetSayTypeMessageClass(string SayType)
 
 state Typing
 {
-    function bool KeyEvent(EInputKey Key, EInputAction Action, FLOAT Delta)
+    function bool KeyEvent(EInputKey Key, EInputAction Action, float Delta)
     {
         local string Temp;
 
@@ -931,7 +1028,7 @@ state Typing
                 TypingClose();
             }
 
-             return true;
+            return true;
         }
         else if (Action != IST_Press)
         {
@@ -986,7 +1083,6 @@ state Typing
             TypedStrPos = Len(TypedStr);
             return true;
         }
-
         else if (Key == IK_Down)
         {
             if (SayHistoryCur == -1)
@@ -1092,7 +1188,7 @@ state ConsoleVisible
         Canvas.SetDrawColor(255, 255, 255, 200);
         Canvas.Style = 4;
 
-        Canvas.DrawTileStretched(Texture'InterfaceArt_tex.console_background',Canvas.ClipX,YClip);
+        Canvas.DrawTileStretched(Texture'InterfaceArt_tex.console_background', Canvas.ClipX, YClip);
         Canvas.Style = 1;
 
         Canvas.SetPos(0, YClip - 1);
@@ -1100,7 +1196,11 @@ state ConsoleVisible
         Canvas.DrawTile(Texture'InterfaceArt_tex.RODisplay', Canvas.ClipX, 2, 0, 0, 64, 2);
         Canvas.SetDrawColor(255, 255, 255, 255);
         Canvas.SetPos(0, YClip - 5 - FH);
-        Canvas.DrawTextClipped("(>" @ Left(TypedStr, TypedStrPos) $ Chr(4) $ Eval(TypedStrPos < Len(TypedStr), Mid(TypedStr, TypedStrPos), "_"), true);
+        Canvas.DrawTextClipped(
+            "(>" @ Left(TypedStr, TypedStrPos) $ Chr(4)
+                $ Eval(TypedStrPos < Len(TypedStr), Mid(TypedStr, TypedStrPos), "_"),
+            true
+            );
 
         Index = SBHead - SBPos;
         Y = YClip - Y - 5 - (FH * 2);

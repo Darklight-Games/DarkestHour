@@ -15,14 +15,14 @@ enum EReloadState
     RS_PostReload,
 };
 
-var     EReloadState    ReloadState;        // weapon's current reloading state (none means not reloading)
-var     bool            bInterruptReload;   // set when one-by-one reload is stopped by player part way through, by pressing fire button
-var     name            PreReloadAnim;      // one-off anim when starting to reload
-var     name            SingleReloadAnim;   // looping anim for inserting a single round
-var     name            StripperReloadAnim; // stripper clip reload animation
-var     name            PostReloadAnim;     // one-off anim when reloading ends
-var     byte            NumRoundsToLoad;    // how many rounds to be loaded to fill the weapon
-var     byte            NumSingles;         // how many singles we have in reserve to be reloaded.
+var EReloadState ReloadState; // weapon's current reloading state (none means not reloading)
+var bool bInterruptReload; // set when one-by-one reload is stopped by player part way through, by pressing fire button
+var name PreReloadAnim; // one-off anim when starting to reload
+var name SingleReloadAnim; // looping anim for inserting a single round
+var name StripperReloadAnim; // stripper clip reload animation
+var name PostReloadAnim; // one-off anim when reloading ends
+var byte NumRoundsToLoad; // how many rounds to be loaded to fill the weapon
+var byte NumSingles; // how many singles we have in reserve to be reloaded.
 
 // TODO: for refactoring this, when we try to do a reload,
 // check if the magazine is empty enough for a full stripper clip to be
@@ -41,7 +41,7 @@ replication
 
 simulated function int GetStripperClipSize()
 {
-    return 5;   // TODO: get this from the ammo class??
+    return 5; // TODO: get this from the ammo class??
 }
 
 // Modified to update number of individual spare rounds
@@ -51,7 +51,7 @@ simulated function int GetStripperClipSize()
 function UpdateResupplyStatus(bool bCurrentWeapon)
 {
     local DHPawn P;
-    local int    NumSpareRounds, DummyMagCount, i;
+    local int NumSpareRounds, DummyMagCount, i;
 
     if (bCurrentWeapon)
     {
@@ -69,7 +69,10 @@ function UpdateResupplyStatus(bool bCurrentWeapon)
     {
         DummyMagCount = Max(0, PrimaryAmmoArray.Length - 1); // what CurrentMagCount would normally be, used below to set bWeaponNeedsResupply
 
-        P.bWeaponNeedsResupply = bCanBeResupplied && bCurrentWeapon && DummyMagCount < (MaxNumPrimaryMags - 1) && (TeamIndex == 2 || TeamIndex == P.GetTeamNum());
+        P.bWeaponNeedsResupply = bCanBeResupplied
+            && bCurrentWeapon
+            && DummyMagCount < (MaxNumPrimaryMags - 1)
+            && (TeamIndex == 2 || TeamIndex == P.GetTeamNum());
         P.bWeaponNeedsReload = false;
     }
 }
@@ -136,7 +139,7 @@ simulated state Reloading
     // Modified to progress through reload stages, playing appropriate anims
     simulated function AnimEnd(int Channel)
     {
-        local name  Anim;
+        local name Anim;
         local float Frame, Rate;
 
         if (InstigatorIsLocallyControlled())
@@ -326,7 +329,7 @@ simulated function int GetMaxLoadedRounds()
 // New function to calculate the number of rounds to be loaded to fill the weapon
 function byte GetRoundsToLoad()
 {
-    local int  CurrentLoadedRounds, MaxLoadedRounds;
+    local int CurrentLoadedRounds, MaxLoadedRounds;
     local byte AmountNeeded;
 
     if (PrimaryAmmoArray.Length == 0)

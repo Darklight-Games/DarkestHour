@@ -85,7 +85,7 @@ simulated state AutoLoweringWeapon
         }
     }
 
-// Take the player out of ironsights
+    // Take the player out of ironsights
 Begin:
     if (bUsingSights)
     {

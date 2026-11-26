@@ -13,4 +13,3 @@ defaultproperties
     IconMaterial=none
     IconCoords=(X1=445,Y1=75,X2=544,Y2=149)
 }
-

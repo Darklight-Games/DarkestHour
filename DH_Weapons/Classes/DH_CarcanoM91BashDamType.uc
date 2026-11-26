@@ -10,4 +10,3 @@ defaultproperties
 {
     WeaponClass=Class'DH_CarcanoM91Weapon'
 }
-

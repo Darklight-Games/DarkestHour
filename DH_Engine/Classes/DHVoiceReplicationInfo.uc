@@ -7,17 +7,17 @@ class DHVoiceReplicationInfo extends TeamVoiceReplicationInfo;
 
 const SQUAD_CHANNELS_MAX = 8;
 
-var VoiceChatRoom               AxisCommandChannel;
-var VoiceChatRoom               AlliesCommandChannel;
-var VoiceChatRoom               AxisSquadChannels[SQUAD_CHANNELS_MAX];
-var VoiceChatRoom               AlliesSquadChannels[SQUAD_CHANNELS_MAX];
+var VoiceChatRoom AxisCommandChannel;
+var VoiceChatRoom AlliesCommandChannel;
+var VoiceChatRoom AxisSquadChannels[SQUAD_CHANNELS_MAX];
+var VoiceChatRoom AlliesSquadChannels[SQUAD_CHANNELS_MAX];
 
-var localized string            LocalChannelText;
+var localized string LocalChannelText;
 
-var string                      UnassignedChannelName;
-var string                      LocalChannelName;
-var string                      SquadChannelName;
-var string                      CommandChannelName;
+var string UnassignedChannelName;
+var string LocalChannelName;
+var string SquadChannelName;
+var string CommandChannelName;
 
 replication
 {
@@ -63,6 +63,7 @@ simulated event InitChannels()
 
     // Axis Command Channel
     VCR = AddVoiceChannel();
+
     if (VCR != none)
     {
         AxisCommandChannel = VCR;
@@ -71,6 +72,7 @@ simulated event InitChannels()
 
     // Allied Command Channel
     VCR = AddVoiceChannel();
+
     if (VCR != none)
     {
         AlliesCommandChannel = VCR;
@@ -79,6 +81,7 @@ simulated event InitChannels()
 
     // Axis Unassigned Channel
     VCR = AddVoiceChannel();
+
     if (VCR != none)
     {
         VCR.SetTeam(AXIS_TEAM_INDEX);
@@ -86,6 +89,7 @@ simulated event InitChannels()
 
     // Allied Unassigned Channel
     VCR = AddVoiceChannel();
+
     if (VCR != none)
     {
         VCR.SetTeam(ALLIES_TEAM_INDEX);
@@ -215,7 +219,11 @@ function VerifyTeamChatters()
             {
                 FixedChannel = GetChannel(UnassignedChannelName, P.PlayerReplicationInfo.Team.TeamIndex);
 
-                Level.Game.ChangeVoiceChannel(P.PlayerReplicationInfo, FixedChannel.ChannelIndex, ChatChannel.ChannelIndex);
+                Level.Game.ChangeVoiceChannel(
+                    P.PlayerReplicationInfo,
+                    FixedChannel.ChannelIndex,
+                    ChatChannel.ChannelIndex
+                    );
 
                 if (P.PlayerReplicationInfo != none)
                 {
@@ -267,4 +275,3 @@ defaultproperties
     SquadChannelName="Squad"
     CommandChannelName="Command"
 }
-

@@ -30,4 +30,3 @@ defaultproperties
     Skins(0)=Texture'DH_ShermanM4A3E8_tex.turret_ext'
     StowageStaticMesh=StaticMesh'DH_ShermanM4A3E8_stc.turret_stowage'
 }
-

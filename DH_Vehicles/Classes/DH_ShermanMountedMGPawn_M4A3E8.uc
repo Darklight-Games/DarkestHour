@@ -11,4 +11,3 @@ defaultproperties
     GunClass=Class'DH_ShermanMountedMG_M4A3E8'
     FPCamPos=(X=4,Y=0,Z=7)
 }
-

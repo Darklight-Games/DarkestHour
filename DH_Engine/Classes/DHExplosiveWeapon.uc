@@ -6,19 +6,19 @@
 class DHExplosiveWeapon extends DHWeapon
     abstract;
 
-var     name    PreFireHoldAnim;     // animation for holding the arm back ready to throw
+var name PreFireHoldAnim; // animation for holding the arm back ready to throw
 
-var     bool    bPrimed;             // the nade is primed
-var     bool    bHasReleaseLever;    // this explosive has a lever that must be released to arm the weapon
-var     bool    bAlreadyExploded;    // the nade already blew up in your hands
-var     Range   FuzeLengthRange;     // how long this grenade will take to go off
-var     float   CurrentFuzeTime;     // how much fuse time is left
+var bool bPrimed; // the nade is primed
+var bool bHasReleaseLever; // this explosive has a lever that must be released to arm the weapon
+var bool bAlreadyExploded; // the nade already blew up in your hands
+var Range FuzeLengthRange; // how long this grenade will take to go off
+var float CurrentFuzeTime; // how much fuse time is left
 
-var     Sound   LeverReleaseSound;   // sound of the lever being released on this weapon
-var     float   LeverReleaseVolume;  // volume of the lever being released
-var     float   LeverReleaseRadius;  // radius of the lever being released
+var Sound LeverReleaseSound; // sound of the lever being released on this weapon
+var float LeverReleaseVolume; // volume of the lever being released
+var float LeverReleaseRadius; // radius of the lever being released
 
-var     int     StartFireAmmoAmount; // little hack so we don't decrement ammo count client side if we've already received a net update from server after firing
+var int StartFireAmmoAmount; // little hack so we don't decrement ammo count client side if we've already received a net update from server after firing
 
 replication
 {
@@ -251,9 +251,9 @@ simulated state RaisingWeapon
 
     simulated function BeginState()
     {
-       local int i;
-       local class<DHThrowableExplosiveProjectile> ProjectileClass;
-       local DHPlayer PC;
+        local int i;
+        local class<DHThrowableExplosiveProjectile> ProjectileClass;
+        local DHPlayer PC;
 
         super.BeginState();
 
@@ -369,7 +369,7 @@ simulated state AutoLoweringWeapon
 // Overridden to support our held back anims for throwing nades
 simulated function AnimEnd(int Channel)
 {
-    local name  Anim;
+    local name Anim;
     local float Frame, Rate;
 
     if (ClientState == WS_ReadyToFire)
@@ -400,8 +400,13 @@ simulated function SetSprinting(bool bNewSprintStatus)
 
     if (bNewSprintStatus)
     {
-        if (ClientState != WS_PutDown && ClientState != WS_Hidden && !IsInState('WeaponSprinting') && !IsInState('RaisingWeapon')
-            && !IsInState('LoweringWeapon') && !IsInState('PostFiring') && !IsInState('AutoLoweringWeapon'))
+        if (ClientState != WS_PutDown
+            && ClientState != WS_Hidden
+            && !IsInState('WeaponSprinting')
+            && !IsInState('RaisingWeapon')
+            && !IsInState('LoweringWeapon')
+            && !IsInState('PostFiring')
+            && !IsInState('AutoLoweringWeapon'))
         {
             GotoState('StartSprinting');
         }
@@ -428,8 +433,8 @@ simulated state WeaponSprinting
     simulated function PlayIdle()
     {
         local float LoopSpeed, Speed2d;
-        local name  Anim;
-        local int   i;
+        local name Anim;
+        local int i;
 
         if (InstigatorIsLocallyControlled())
         {

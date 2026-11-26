@@ -4,19 +4,19 @@
 //==============================================================================
 
 class DH_TriggerSunlight extends Sunlight
-    hidecategories(Emitter,Force,Karma,Corona);
+    hidecategories(Emitter, Force, Karma, Corona);
 
-var()   Color   OnColor;          // color when sunlight is on
-var()   Color   OffColor;         // color when light is off
-var()   float   ChangeTime;       // time light takes to change from on to off
-var()   float   ChangeTimeTwo;
-var()   bool    bInitiallyOn;     // whether it's initially on
-var()   bool    bInitiallyFading; // whether it's initially fading up or down
+var() Color OnColor; // color when sunlight is on
+var() Color OffColor; // color when light is off
+var() float ChangeTime; // time light takes to change from on to off
+var() float ChangeTimeTwo;
+var() bool bInitiallyOn; // whether it's initially on
+var() bool bInitiallyFading; // whether it's initially fading up or down
 
-var     Color   CurrentColor;
-var     float   TimeSinceTriggered;
-var     float   SwapTime;
-var     bool    bIsOn;
+var Color CurrentColor;
+var float TimeSinceTriggered;
+var float SwapTime;
+var bool bIsOn;
 
 event PostBeginPlay()
 {
@@ -109,7 +109,7 @@ simulated function RGBSetColor(Color inRGB)
 // Function ColorMap - code courtesy of DWeather by Mazerium, from the file DWParent.uc
 simulated function Vector ColourMap(Vector RGB)
 {
-    local float  Min, Max, R, G, B, H, L, S;
+    local float Min, Max, R, G, B, H, L, S;
     local Vector HLS;
 
     RGB.X = FClamp(RGB.X, 0.0, 1.0);
@@ -145,7 +145,7 @@ simulated function Vector ColourMap(Vector RGB)
 
     if (R == Max)
     {
-        H  = (G - B) / (Max - Min);
+        H = (G - B) / (Max - Min);
     }
 
     if (G == Max)

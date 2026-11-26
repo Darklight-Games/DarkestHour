@@ -11,7 +11,13 @@ var Material GunsightOverlay;
 var Material CannonScopeCenter;
 var float GunsightSize;
 
-static function DrawGunsightOverlay(Canvas C, int Range, float OverlayCorrectionX, float OverlayCorrectionY, optional int RangeTableIndex)
+static function DrawGunsightOverlay(
+    Canvas C,
+    int Range,
+    float OverlayCorrectionX,
+    float OverlayCorrectionY,
+    optional int RangeTableIndex
+    )
 {
     local float TextureSize, TileStartPosU, TileStartPosV, TilePixelWidth, TilePixelHeight;
 
@@ -28,7 +34,9 @@ static function DrawGunsightOverlay(Canvas C, int Range, float OverlayCorrection
     TileStartPosV = ((TextureSize - TilePixelHeight) / 2.0) - OverlayCorrectionY;
 
     C.SetPos(0.0, 0.0);
-    C.DrawTile(default.GunsightOverlay, C.SizeX, C.SizeY, TileStartPosU, TileStartPosV, TilePixelWidth, TilePixelHeight);
+    C.DrawTile(
+        default.GunsightOverlay, C.SizeX, C.SizeY, TileStartPosU, TileStartPosV, TilePixelWidth, TilePixelHeight
+        );
 }
 
 defaultproperties

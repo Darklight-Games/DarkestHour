@@ -7,10 +7,15 @@
 class DHAdminMenu_WarningMessage extends ROCriticalMessage
     abstract;
 
-var     localized string    WarningHeader;
-var     localized string    WarningChatPrefix;
+var localized string WarningHeader;
+var localized string WarningChatPrefix;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string Message;
 

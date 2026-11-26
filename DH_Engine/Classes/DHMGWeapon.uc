@@ -51,7 +51,7 @@ simulated function bool StartFire(int Mode)
 // Modified to prevent MG from playing fire end anims while auto firing
 simulated function AnimEnd(int Channel)
 {
-    local name  Anim;
+    local name Anim;
     local float Frame, Rate;
 
     if (FireMode[0].IsInState('FireLoop'))
@@ -63,11 +63,14 @@ simulated function AnimEnd(int Channel)
     {
         GetAnimParams(0, Anim, Frame, Rate);
 
-        if ((Anim == FireMode[0].FireAnim || Anim == DHAutomaticFire(FireMode[0]).BipodDeployFireLoopAnim) && !FireMode[0].bIsFiring)
+        if ((Anim == FireMode[0].FireAnim || Anim == DHAutomaticFire(FireMode[0]).BipodDeployFireLoopAnim)
+            && !FireMode[0].bIsFiring)
         {
             FireMode[0].PlayFireEnd();
         }
-        else if (DHProjectileFire(FireMode[0]) != none && Anim == DHProjectileFire(FireMode[0]).FireIronAnim && !FireMode[0].bIsFiring)
+        else if (DHProjectileFire(FireMode[0]) != none
+            && Anim == DHProjectileFire(FireMode[0]).FireIronAnim
+            && !FireMode[0].bIsFiring)
         {
             PlayIdle();
         }
@@ -111,7 +114,7 @@ Begin:
 
 simulated state StartSprinting
 {
-// Take the player out of ironsights (see DHProjectileWeapon's StartSprinting for why the server doesn't for a remote client)
+    // Take the player out of ironsights (see DHProjectileWeapon's StartSprinting for why the server doesn't for a remote client)
 Begin:
     if (bUsingSights && (Role < ROLE_Authority || InstigatorIsLocallyControlled()))
     {
@@ -125,7 +128,7 @@ Begin:
 
 simulated state StartCrawling
 {
-// Take the player out of ironsights
+    // Take the player out of ironsights
 Begin:
     if (bUsingSights)
     {
@@ -138,7 +141,7 @@ Begin:
 }
 
 // Modified to allow for different free aim conditions in this class (due to possibility of hip fire from ironsights key))
-function SetServerOrientation(Rotator  NewRotation)
+function SetServerOrientation(Rotator NewRotation)
 {
     local Rotator WeaponRotation;
 

@@ -31,4 +31,3 @@ defaultproperties
     bHidden=true
     DamageRadius=1024.0
 }
-

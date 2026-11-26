@@ -16,4 +16,3 @@ function JSONValue ToJSON()
         .PutString("started_at", StartedAt.IsoFormat())
         .PutString("ended_at", EndedAt.IsoFormat());
 }
-

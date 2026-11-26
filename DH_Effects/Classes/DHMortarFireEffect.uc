@@ -5,7 +5,7 @@
 
 class DHMortarFireEffect extends Emitter;
 
-//A flash of light when firing, similar to small arms WeaponLight firing effects
+// A flash of light when firing, similar to small arms WeaponLight firing effects
 simulated function PostBeginPlay()
 {
     if (!Level.bDropDetail)

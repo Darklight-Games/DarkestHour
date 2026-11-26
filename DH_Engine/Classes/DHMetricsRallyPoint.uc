@@ -8,26 +8,26 @@ class DHMetricsRallyPoint extends JSONSerializable;
 enum EDestroyedReason
 {
     REASON_None,
-    REASON_Overrun,     // An enemy soldier came too close
-    REASON_Exhausted,   // All spawns were exhausted
-    REASON_Damaged,     // Was critically damaged
-    REASON_Deleted,     // Squad leader forcibly deleted the rally point
-    REASON_Replaced,    // A new rally point was created while at max rally points
-    REASON_SpawnKill,   // Player was killed immediately after spawning
-    REASON_Abandoned,   // No squadmates nearby to establish
-    REASON_Encroached,  // Persistent nearby enemy presence
+    REASON_Overrun, // An enemy soldier came too close
+    REASON_Exhausted, // All spawns were exhausted
+    REASON_Damaged, // Was critically damaged
+    REASON_Deleted, // Squad leader forcibly deleted the rally point
+    REASON_Replaced, // A new rally point was created while at max rally points
+    REASON_SpawnKill, // Player was killed immediately after spawning
+    REASON_Abandoned, // No squadmates nearby to establish
+    REASON_Encroached, // Persistent nearby enemy presence
 };
 
-var int                 TeamIndex;
-var int                 SquadIndex;
-var string              PlayerID;
-var Vector              Location;
-var int                 SpawnCount;
-var bool                bIsEstablished;
-var int                 EstablisherCount;
-var DateTime            CreatedAt;
-var DateTime            DestroyedAt;
-var EDestroyedReason    DestroyedReason;
+var int TeamIndex;
+var int SquadIndex;
+var string PlayerID;
+var Vector Location;
+var int SpawnCount;
+var bool bIsEstablished;
+var int EstablisherCount;
+var DateTime CreatedAt;
+var DateTime DestroyedAt;
+var EDestroyedReason DestroyedReason;
 
 static function JSONValue GetDestroyedReasonValue(EDestroyedReason DestroyedReason)
 {
@@ -82,4 +82,3 @@ function JSONValue ToJSON()
 
     return JSON;
 }
-

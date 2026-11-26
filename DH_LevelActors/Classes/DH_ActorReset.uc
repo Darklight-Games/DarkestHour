@@ -5,8 +5,8 @@
 
 class DH_ActorReset extends DH_LevelActors;
 
-var()   name                ActorToReset;
-var     Actor               ActorReference;
+var() name ActorToReset;
+var Actor ActorReference;
 
 function PostBeginPlay()
 {
@@ -14,7 +14,7 @@ function PostBeginPlay()
 
     if (ActorToReset == '')
     {
-        return; //Actor tag wasn't set no reason to continue
+        return; // Actor tag wasn't set no reason to continue
     }
 
     foreach AllActors(Class'Actor', ActorReference, ActorToReset)

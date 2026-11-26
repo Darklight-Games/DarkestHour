@@ -31,7 +31,11 @@ simulated event Tick(float DeltaTime)
 
         if (Gun != none && P.GunToRotate != none)
         {
-            Instigator.ReceiveLocalizedMessage(Class'DHATGunRotateControlsMessage',, Instigator.PlayerReplicationInfo,, P.GunToRotate);
+            Instigator.ReceiveLocalizedMessage(
+                Class'DHATGunRotateControlsMessage',,
+                Instigator.PlayerReplicationInfo,,
+                P.GunToRotate
+                );
         }
         else
         {

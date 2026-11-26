@@ -13,7 +13,9 @@ function InitComponent(GUIController InController, GUIComponent InOwner)
     RuleInfo = new(none) Class'PlayInfo';
     c_Tabs.RemoveTab(PanelCaption[0]);
     c_Tabs.RemoveTab(PanelCaption[4]);
-    mcRules = DHIAMultiColumnRulesPanel(c_Tabs.ReplaceTab(c_Tabs.TabStack[1], PanelCaption[2], "DH_Interface.DHIAMultiColumnRulesPanel",, PanelHint[2]));
+    mcRules = DHIAMultiColumnRulesPanel(
+        c_Tabs.ReplaceTab(c_Tabs.TabStack[1], PanelCaption[2], "DH_Interface.DHIAMultiColumnRulesPanel",, PanelHint[2])
+        );
     DHTab_MainSP(c_Tabs.BorrowPanel(PanelCaption[1])).bHideDifficultyControl = true;
     p_game = none;
     Controller.LastGameType = "DH_Engine.DarkestHourGame";
@@ -23,7 +25,7 @@ function InitComponent(GUIController InController, GUIComponent InOwner)
 // We only have one game type so it is never locked
 function bool GameTypeLocked()
 {
-    local int          i;
+    local int i;
     local GUITabButton tb;
 
     for (i = 0; i < c_Tabs.TabStack.Length; ++i)

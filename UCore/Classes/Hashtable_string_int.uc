@@ -6,7 +6,7 @@
 
 class Hashtable_string_int extends Object;
 
-const NULL_VALUE = 0x80000000;  // -MAX_INT
+const NULL_VALUE = 0x80000000; // -MAX_INT
 
 var private int Size;
 var private array<string> Keys;
@@ -85,7 +85,7 @@ private function Resize(int Capacity)
     Values = T.Values;
 }
 
-function Put(coerce string Key,coerce int Value)
+function Put(coerce string Key, coerce int Value)
 {
     local int i;
 

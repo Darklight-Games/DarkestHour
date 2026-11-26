@@ -6,7 +6,7 @@
 class DHSpawnArea extends ROSpawnArea
     placeable;
 
-var()   bool    bMortarmanSpawnArea;
+var() bool bMortarmanSpawnArea;
 
 function PostBeginPlay()
 {

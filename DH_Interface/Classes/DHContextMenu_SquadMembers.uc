@@ -35,10 +35,7 @@ protected function AssembleMenu(GUIComponent Component)
     SelectedPRI = GetSelectedPRI(Component);
     SquadComponent = DHGUISquadComponent(Component);
 
-    if (PC == none ||
-        SRI == none ||
-        SelectedPRI == none ||
-        SquadComponent == none)
+    if (PC == none || SRI == none || SelectedPRI == none || SquadComponent == none)
     {
         return;
     }
@@ -58,14 +55,14 @@ protected function AssembleMenu(GUIComponent Component)
         {
             if (PRI.SquadIndex == SquadIndex)
             {
-                AddEntry(2);     // Kick player
-                AddEntry(3);     // Ban player
+                AddEntry(2); // Kick player
+                AddEntry(3); // Ban player
 
                 if (!SelectedPRI.bRestrictLeaderPositions)
                 {
-                    AddEntry(0);     // --------
-                    AddEntry(4);     // Promote to SL
-                    AddEntry(0);     // --------
+                    AddEntry(0); // --------
+                    AddEntry(4); // Promote to SL
+                    AddEntry(0); // --------
                 }
 
                 if (SelectedPRI.bIsSquadAssistant)
@@ -79,28 +76,28 @@ protected function AssembleMenu(GUIComponent Component)
             }
             else if (SelectedPRI.IsSquadLeader())
             {
-                AddEntry(8);     // Request merge
+                AddEntry(8); // Request merge
             }
             else if (SquadIndex == -1)
             {
-                AddEntry(1);     // Invite the unassigned player
+                AddEntry(1); // Invite the unassigned player
             }
         }
-        else if (SelectedPRI.IsSquadLeader() &&
-                 PRI.SquadIndex == SquadIndex &&
-                 !SRI.HasAssistant(PC.GetTeamNum(), PRI.SquadIndex) &&
-                 !PRI.bRestrictLeaderPositions)
+        else if (SelectedPRI.IsSquadLeader()
+            && PRI.SquadIndex == SquadIndex
+            && !SRI.HasAssistant(PC.GetTeamNum(), PRI.SquadIndex)
+            && !PRI.bRestrictLeaderPositions)
         {
-            AddEntry(7);         // Volunteer to assist
+            AddEntry(7); // Volunteer to assist
         }
     }
 
     if (PRI.IsLoggedInAsAdmin())
     {
         bParadropMarkerPlaced = PC.IsPersonalMarkerPlaced(PC.ParadropMarkerClass);
-        bSquadLeaderIsAlive = SquadIndex >= 0 &&
-                              SquadIndex < arraycount(PC.SquadLeaderLocations) &&
-                              PC.SquadLeaderLocations[SquadIndex] != 0;
+        bSquadLeaderIsAlive = SquadIndex >= 0
+            && SquadIndex < arraycount(PC.SquadLeaderLocations)
+            && PC.SquadLeaderLocations[SquadIndex] != 0;
 
         if (SelectedPRI.Team != none)
         {
@@ -113,7 +110,7 @@ protected function AssembleMenu(GUIComponent Component)
 
         if (bParadropMarkerPlaced)
         {
-            AddEntry(10);         // ADMIN: Paradrop PLAYER to MARKER
+            AddEntry(10); // ADMIN: Paradrop PLAYER to MARKER
         }
 
         if (SelectedPRI.SquadIndex >= 0)
@@ -122,7 +119,7 @@ protected function AssembleMenu(GUIComponent Component)
             {
                 if (PRI != SelectedPRI && bSquadLeaderIsAlive)
                 {
-                    AddEntry(9);  // ADMIN: Paradrop PLAYER to SL
+                    AddEntry(9); // ADMIN: Paradrop PLAYER to SL
                 }
             }
             else if (SRI.GetMemberCount(TeamIndex, SelectedPRI.SquadIndex) > 1)
@@ -140,7 +137,7 @@ protected function AssembleMenu(GUIComponent Component)
         }
         else if (SRI.GetUnassignedPlayerCount(TeamIndex) > 1 && bParadropMarkerPlaced)
         {
-            AddEntry(13);         // ADMIN: Paradrop ALL UNASSIGNED to MARKER
+            AddEntry(13); // ADMIN: Paradrop ALL UNASSIGNED to MARKER
         }
 
         if (InsertSeparatorIndex > 0 && InsertSeparatorIndex < GetMenuLength())
@@ -255,7 +252,10 @@ protected function ProcessEntry(int EntryIndex, GUIComponent Component)
             case 11: // ADMIN: Paradrop SQUAD to SL
                 if (PC.GetSquadLeaderParadropLocation(ParadropLocation, SelectedPRI) && SelectedPRI.Team != none)
                 {
-                    PC.ServerParadropSquad(SelectedPRI.Team.TeamIndex, SelectedPRI.SquadIndex, ParadropLocation, PC.ParadropSpreadModifier, false);
+                    PC.ServerParadropSquad(
+                        SelectedPRI.Team.TeamIndex, SelectedPRI.SquadIndex, ParadropLocation, PC.ParadropSpreadModifier,
+                        false
+                        );
                 }
 
                 return;
@@ -264,7 +264,10 @@ protected function ProcessEntry(int EntryIndex, GUIComponent Component)
             case 13: // ADMIN: Paradrop ALL UNASSIGED to MARKER
                 if (PC.GetMarkedParadropLocation(ParadropLocation) && SelectedPRI.Team != none)
                 {
-                    PC.ServerParadropSquad(SelectedPRI.Team.TeamIndex, SelectedPRI.SquadIndex, ParadropLocation, PC.ParadropSpreadModifier, false);
+                    PC.ServerParadropSquad(
+                        SelectedPRI.Team.TeamIndex, SelectedPRI.SquadIndex, ParadropLocation, PC.ParadropSpreadModifier,
+                        false
+                        );
                 }
 
                 return;
@@ -297,11 +300,7 @@ protected function string GetEntryString(int EntryIndex, GUIComponent Component)
         PlayerName = SelectedPRI.PlayerName;
     }
 
-    return Repl(Repl(default.EntryTexts[EntryIndex],
-                        "{0}",
-                        PlayerName),
-                "{1}",
-                default.AdminPrefixText);
+    return Repl(Repl(default.EntryTexts[EntryIndex], "{0}", PlayerName), "{1}", default.AdminPrefixText);
 }
 
 defaultproperties

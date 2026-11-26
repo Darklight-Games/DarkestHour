@@ -6,7 +6,7 @@
 // Displays a list of player roles when switching a player to a new role
 class DHAdminMenu_RolesMenu extends DHAdminMenu_MenuBase;
 
-var     array<string>   AlliesRoleNames, AxisRoleNames; // arrays of role names for each team, built from either DH or RO role arrays
+var array<string> AlliesRoleNames, AxisRoleNames; // arrays of role names for each team, built from either DH or RO role arrays
 
 exec function RolesMenu(string Team, string Action, string PlayerName)
 {
@@ -32,7 +32,7 @@ exec function RolesMenu(string Team, string Action, string PlayerName)
         }
 
         PreviousMenu = "PlayerActionsMenu" @ PlayerName; // means we will return to the actions menu for the selected player if we press the 'previous menu' key
-        SelectionPrefix = Action @ PlayerName;           // sets variable to be used in the generic HandleInput function, which avoids having to redefine it here
+        SelectionPrefix = Action @ PlayerName; // sets variable to be used in the generic HandleInput function, which avoids having to redefine it here
         GotoState('MenuVisible');
     }
 }
@@ -41,7 +41,7 @@ function GetAllRoleNames()
 {
     local DHGameReplicationInfo DHGRI;
     local ROGameReplicationInfo ROGRI;
-    local int                   i;
+    local int i;
 
     DHGRI = DHGameReplicationInfo(PC.GameReplicationInfo);
 

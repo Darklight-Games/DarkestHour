@@ -5,7 +5,7 @@
 
 class DHCommandMenu_SquadLeader extends DHCommandMenu;
 
-var localized string   InEnemyTerritory;
+var localized string InEnemyTerritory;
 
 function bool IsPlayerInSight()
 {
@@ -54,7 +54,7 @@ function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
                 PC.ConsoleCommand("SPEECH ALERT 6");
             }
 
-            PC.ServerSignal(Class'DHSignal_Fire', Location);  // TODO: project off of the location a bit
+            PC.ServerSignal(Class'DHSignal_Fire', Location); // TODO: project off of the location a bit
             break;
         case 2:
             Interaction.PushMenu("DH_Construction.DHCommandMenu_ConstructionGroups");
@@ -111,10 +111,10 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
     switch (OptionIndex)
     {
         case 0: // Rally Point
-            if (PC.SquadReplicationInfo != none &&
-                PC.SquadReplicationInfo.bAreRallyPointsEnabled &&
-                GRI != none &&
-                GRI.IsInDangerZone(PC.Pawn.Location.X, PC.Pawn.Location.Y, PC.GetTeamNum()))
+            if (PC.SquadReplicationInfo != none
+                && PC.SquadReplicationInfo.bAreRallyPointsEnabled
+                && GRI != none
+                && GRI.IsInDangerZone(PC.Pawn.Location.X, PC.Pawn.Location.Y, PC.GetTeamNum()))
             {
                 ORI.InfoText[0] = default.InEnemyTerritory;
 
@@ -155,14 +155,19 @@ function bool IsOptionDisabled(int OptionIndex)
 
     switch (OptionIndex)
     {
-    case 0: // Rally Point
-        return DHPawn(PC.Pawn) == none || PC.SquadReplicationInfo == none || !PC.SquadReplicationInfo.bAreRallyPointsEnabled;
-    case 2: // Construction
-        return DHPawn(PC.Pawn) == none || GRI == none || !GRI.bAreConstructionsEnabled;
-    case 3: // Player
-        return DHPawn(MenuObject) == none || DHPawn(MenuObject) == PC.Pawn || DHPawn(MenuObject).Health <= 0 || PC.GetTeamNum() != DHPawn(MenuObject).GetTeamNum();
-    default:
-        return false;
+        case 0: // Rally Point
+            return DHPawn(PC.Pawn) == none
+                || PC.SquadReplicationInfo == none
+                || !PC.SquadReplicationInfo.bAreRallyPointsEnabled;
+        case 2: // Construction
+            return DHPawn(PC.Pawn) == none || GRI == none || !GRI.bAreConstructionsEnabled;
+        case 3: // Player
+            return DHPawn(MenuObject) == none
+                || DHPawn(MenuObject) == PC.Pawn
+                || DHPawn(MenuObject).Health <= 0
+                || PC.GetTeamNum() != DHPawn(MenuObject).GetTeamNum();
+        default:
+            return false;
     }
 }
 

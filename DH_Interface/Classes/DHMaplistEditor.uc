@@ -5,7 +5,7 @@
 
 class DHMaplistEditor extends MaplistEditor;
 
-var automated GUISectionBackground  sb_container;
+var automated GUISectionBackground sb_container;
 
 function AddSystemMenu();
 

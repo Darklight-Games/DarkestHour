@@ -4,54 +4,54 @@
 //==============================================================================
 
 class DHRoleInfo extends RORoleInfo
-    showcategories(Events)
+    abstract
     placeable
-    abstract;
+    showcategories(Events);
 
 struct RolePawn
 {
-    var() class<Pawn>       PawnClass;              // possible pawn class for this role
-    var() float             Weight;                 // weighting to be assigned to this choice if randomly selected from a list
+    var() class<Pawn> PawnClass; // possible pawn class for this role
+    var() float Weight; // weighting to be assigned to this choice if randomly selected from a list
 };
 
-var()   array<RolePawn>     RolePawns;              // list of possible pawn classes for this role, selected randomly (with weighting) if more than 1
-var     array<float>        HeadgearProbabilities;  // chance of each Headgear type being randomly selected (linked to Headgear array in RORoleInfo)
+var() array<RolePawn> RolePawns; // list of possible pawn classes for this role, selected randomly (with weighting) if more than 1
+var array<float> HeadgearProbabilities; // chance of each Headgear type being randomly selected (linked to Headgear array in RORoleInfo)
 
-var     bool                bCanUseMortars;         // role has functionality of a mortar operator
-var     bool                bCanCarryExtraAmmo;     // role can carry extra ammo
-var     bool                bSpawnWithExtraAmmo;    // role spawns with extra ammo
-var     bool                bCarriesRadio;          // role can carry radios
-var     bool                bCanPickupWeapons;
+var bool bCanUseMortars; // role has functionality of a mortar operator
+var bool bCanCarryExtraAmmo; // role can carry extra ammo
+var bool bSpawnWithExtraAmmo; // role spawns with extra ammo
+var bool bCarriesRadio; // role can carry radios
+var bool bCanPickupWeapons;
 
-var     bool                bExemptSquadRequirement;// this role will be exempt from the requirement of being in a squad to select
-var     bool                bRequiresSLorASL;       // player must be a SL or ASL to select this role, only applies when gametype has bSquadSpecialRolesOnly=true
-var     bool                bRequiresSL;
-var     bool                bCanBeSquadLeader;      // squad leaders can take this role (disabled for special weapon roles!)
+var bool bExemptSquadRequirement; // this role will be exempt from the requirement of being in a squad to select
+var bool bRequiresSLorASL; // player must be a SL or ASL to select this role, only applies when gametype has bSquadSpecialRolesOnly=true
+var bool bRequiresSL;
+var bool bCanBeSquadLeader; // squad leaders can take this role (disabled for special weapon roles!)
 
-var     int                 AddedRoleRespawnTime;   // extra time in seconds before re-spawning
+var int AddedRoleRespawnTime; // extra time in seconds before re-spawning
 
-var()   bool                bStartsLocked;          // Role is locked at the start of the game.
-var     bool                bIsLocked;              // If true, role is locked and cannot be selected. Can be unlocked via DH_ModifyRole events.
+var() bool bStartsLocked; // Role is locked at the start of the game.
+var bool bIsLocked; // If true, role is locked and cannot be selected. Can be unlocked via DH_ModifyRole events.
 
 enum EHandType
 {
-    HAND_Automatic,     // Checks the season, if it's winter, gloves, otherwise bare.
+    HAND_Automatic, // Checks the season, if it's winter, gloves, otherwise bare.
     HAND_Bare,
     HAND_Gloved,
-    HAND_Custom
+    HAND_Custom,
 };
 
-var()   EHandType           HandType;
-var     Material            BareHandTexture;            // the hand texture this role should use
-var     Material            GlovedHandTexture;
-var()   Material            CustomHandTexture;
+var() EHandType HandType;
+var Material BareHandTexture; // the hand texture this role should use
+var Material GlovedHandTexture;
+var() Material CustomHandTexture;
 
 struct SBackpack
 {
     var class<DHBackpack> BackpackClass;
-    var float             Probability;
-    var Vector            LocationOffset;
-    var Rotator           RotationOffset;
+    var float Probability;
+    var Vector LocationOffset;
+    var Rotator RotationOffset;
 };
 
 var array<SBackpack> Backpacks;
@@ -74,8 +74,8 @@ function PostBeginPlay()
 simulated function HandlePrecache()
 {
     local xUtil.PlayerRecord PR;
-    local class<DHWeapon>    GivenItemClass;
-    local int                i;
+    local class<DHWeapon> GivenItemClass;
+    local int i;
 
     if (Level.NetMode != NM_DedicatedServer)
     {
@@ -193,9 +193,9 @@ static function string GetPawnClass()
             {
                 return string(default.RolePawns[i].PawnClass);
             }
-       }
+        }
 
-       return string(default.RolePawns[default.RolePawns.Length - 1].PawnClass);
+        return string(default.RolePawns[default.RolePawns.Length - 1].PawnClass);
     }
 
     return default.RolePawnClass;
@@ -205,7 +205,7 @@ static function string GetPawnClass()
 function class<DHBackpack> GetBackpack(out Vector LocationOffset, out Rotator RotationOffset)
 {
     local float R, ProbabilitySum;
-    local int   i;
+    local int i;
 
     if (Backpacks.Length == 0)
     {
@@ -235,13 +235,12 @@ function class<DHBackpack> GetBackpack(out Vector LocationOffset, out Rotator Ro
     }
 
     return none;
-
 }
 
 function class<ROHeadgear> GetHeadgear()
 {
     local float R, ProbabilitySum;
-    local int   i;
+    local int i;
 
     if (Headgear.Length == 0)
     {

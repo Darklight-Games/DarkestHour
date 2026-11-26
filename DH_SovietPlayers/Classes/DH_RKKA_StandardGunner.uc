@@ -3,6 +3,4 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_RKKA_StandardGunner extends DH_RKKA_StandardGunnerEarly;  //to be removed
-
-
+class DH_RKKA_StandardGunner extends DH_RKKA_StandardGunnerEarly; // to be removed

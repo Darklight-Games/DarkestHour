@@ -14,4 +14,3 @@ defaultproperties
     SpawnOverlay(0)=Material'DH_Jeep_tex.profile_roof'
     VehicleHudImage=Texture'DH_Jeep_tex.jeep_body2'
 }
-

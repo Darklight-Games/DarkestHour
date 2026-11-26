@@ -5,14 +5,18 @@
 
 class DHRadioHQAttachment extends DHConstructionAttachment;
 
-var byte                TeamIndex;
+var byte TeamIndex;
 
-var DHRadioHQ           Radio;
-var class<DHRadioHQ>    RadioClass;
-var Vector              RadioOffset;
+var DHRadioHQ Radio;
+var class<DHRadioHQ> RadioClass;
+var Vector RadioOffset;
 
 simulated function MakeVisible();
-simulated function MakeInvisible() { GotoState('Invisible'); }
+
+simulated function MakeInvisible()
+{
+    GotoState('Invisible');
+}
 
 function Setup()
 {
@@ -35,11 +39,15 @@ function Setup()
 
 simulated state Invisible
 {
-    simulated function MakeVisible() { GotoState(''); }
+    simulated function MakeVisible()
+    {
+        GotoState('');
+    }
+
     simulated function MakeInvisible();
 
     simulated function BeginState()
-    {   
+    {
         if (Radio != none)
         {
             Radio.bHidden = true;
@@ -50,7 +58,7 @@ simulated state Invisible
     }
 
     simulated function EndState()
-    {   
+    {
         if (Radio != none)
         {
             Radio.bHidden = false;

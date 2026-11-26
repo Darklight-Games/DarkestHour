@@ -6,18 +6,18 @@
 class DHWeaponBarrel extends Actor
     notplaceable;
 
-var     float       LevelTempCentigrade; // the temperature of the level we're playing in (all temps here are in centigrade)
-var     float       Temperature;         // current barrel temp
-var     float       SteamTemperature;    // temp barrel begins to steam
-var     float       CriticalTemperature; // temp barrel steams a lot and cone-fire error introduced
-var     float       FailureTemperature;  // temp at which barrel fails and unusable
-var     float       FiringHeatIncrement; // increase in barrel temp per shot fired
-var     float       BarrelTimerRate;     // how often to call the timer to handle barrel cooling
-var     float       BarrelCoolingRate;   // rate at which barrel cools off (degrees per second)
-var     bool        bBarrelSteamActive;  // if barrel passes SteamTemperature, we'll start steaming the barrel
-var     bool        bBarrelDamaged;      // if barrel passes CriticalTemperature, becomes true and cone-fire error introduced
-var     bool        bBarrelFailed;       // if barrel passes FailureTemperature, becomes true and barrel unusable
-var     bool        bIsCurrentBarrel;    // this is the weapon's current barrel, not a spare
+var float LevelTempCentigrade; // the temperature of the level we're playing in (all temps here are in centigrade)
+var float Temperature; // current barrel temp
+var float SteamTemperature; // temp barrel begins to steam
+var float CriticalTemperature; // temp barrel steams a lot and cone-fire error introduced
+var float FailureTemperature; // temp at which barrel fails and unusable
+var float FiringHeatIncrement; // increase in barrel temp per shot fired
+var float BarrelTimerRate; // how often to call the timer to handle barrel cooling
+var float BarrelCoolingRate; // rate at which barrel cools off (degrees per second)
+var bool bBarrelSteamActive; // if barrel passes SteamTemperature, we'll start steaming the barrel
+var bool bBarrelDamaged; // if barrel passes CriticalTemperature, becomes true and cone-fire error introduced
+var bool bBarrelFailed; // if barrel passes FailureTemperature, becomes true and barrel unusable
+var bool bIsCurrentBarrel; // this is the weapon's current barrel, not a spare
 
 // Modified to set the LevelTempCentigrade & match barrel's starting temperature to that, & to start a repeating timer to handle barrel cooling & updating
 simulated function PostBeginPlay()
@@ -41,7 +41,7 @@ simulated function Destroyed()
 {
     if (bBarrelSteamActive)
     {
-        if (DHProjectileWeapon(Owner)!= none)
+        if (DHProjectileWeapon(Owner) != none)
         {
             DHProjectileWeapon(Owner).SetBarrelSteamActive(false);
         }
@@ -86,7 +86,7 @@ function Timer()
 function UpdateBarrelStatus()
 {
     local DHProjectileWeapon W;
-    local DHWeaponPickup     PU;
+    local DHWeaponPickup PU;
 
     if (Role == ROLE_Authority)
     {

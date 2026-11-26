@@ -7,38 +7,38 @@ class DHAdminMenuMutator extends Mutator;
 
 #exec AUDIO IMPORT FILE="..\DH_AdminMenuMutator\Sounds\Submarine-Klaxon.wav" NAME="Klaxon"
 
-const   BOTH_TEAMS_INDEX = 99;             // an index no. representing that an action is to be performed on both teams (adding to RO's ALLIES_TEAM_INDEX & AXIS_TEAM_INDEX)
-const   ERROR_INDEX = -1;                  // an index number representing an error return, e.g. could not find a match
-const   NULL_VECTOR = vect(0.0, 0.0, 0.0); // just saves having lots of NullVector local variables
+const BOTH_TEAMS_INDEX = 99; // an index no. representing that an action is to be performed on both teams (adding to RO's ALLIES_TEAM_INDEX & AXIS_TEAM_INDEX)
+const ERROR_INDEX = -1; // an index number representing an error return, e.g. could not find a match
+const NULL_VECTOR = vect(0.0, 0.0, 0.0); // just saves having lots of NullVector local variables
 
-struct  Minefield
+struct Minefield
 {
-var     float   MVKillTime;
-var     float   MVWarnInterval;
+    var float MVKillTime;
+    var float MVWarnInterval;
 };
 
-var DHAdminMenu_Replicator  Replicator;             // a 'helper' actor that gets replicated to all clients to add menu interactions & replicate variables for client use
-var     ROTeamGame          ROTG;                   // reference to the ROTeamGame actor (which is RO's GameInfo class) - used by several functions
-var     AccessControl       AccessControl;          // reference to the AccessControl class actor, which handles kicks & bans - used by the kick with warning function
-var     PlayerController    Admin;                  // temporarily saves the admin performing the current action, which avoids passing it through lots & lots of functions
-var     array<Minefield>    SavedMinefields;        // an array of minefields that records their original properties, so they can be re-enabled later
-var     int                 ParaDropHeight;         // the Z co-ordinate used for the starting height in all paradrop options
-var     float               MapScale;               // size/scale of current map, used to calculate grid locations for paradrops
-var     Vector              MapCenter;              // centre location of map, also used to calculate grid locations for paradrops
+var DHAdminMenu_Replicator Replicator; // a 'helper' actor that gets replicated to all clients to add menu interactions & replicate variables for client use
+var ROTeamGame ROTG; // reference to the ROTeamGame actor (which is RO's GameInfo class) - used by several functions
+var AccessControl AccessControl; // reference to the AccessControl class actor, which handles kicks & bans - used by the kick with warning function
+var PlayerController Admin; // temporarily saves the admin performing the current action, which avoids passing it through lots & lots of functions
+var array<Minefield> SavedMinefields; // an array of minefields that records their original properties, so they can be re-enabled later
+var int ParaDropHeight; // the Z co-ordinate used for the starting height in all paradrop options
+var float MapScale; // size/scale of current map, used to calculate grid locations for paradrops
+var Vector MapCenter; // centre location of map, also used to calculate grid locations for paradrops
 
 // Settings that are replicated to clients via the Replicator
-var     bool                bRealismMutPresent;     // flags whether the realism match mutator is present on the server
-var     bool                bMinesDisabled;         // flags that all minefields have been disabled
-var     bool                bHideCapProgress;       // flags that capture progress bars have been disabled
-var     bool                bHidePlayerIcon;        // flags that the player icon on the map has been disabled
+var bool bRealismMutPresent; // flags whether the realism match mutator is present on the server
+var bool bMinesDisabled; // flags that all minefields have been disabled
+var bool bHideCapProgress; // flags that capture progress bars have been disabled
+var bool bHidePlayerIcon; // flags that the player icon on the map has been disabled
 
 // Config variables that can be set in the server's DarkestHour.ini file
 // (some default values are set here but can be overridden in the config file)
-var     config bool         bParaDropPlayerAllowed; // unless set to true, paradropping a single player will be disabled (replicated to clients via the Replicator)
-var     config bool         bShowRealismMenu;       // unless set to true, the realism/testing menu & its options will be disabled (replicated to clients via the Replicator)
-var     config bool         bBypassAdminLogin;      // allows the option of disabling admin checks, e.g. if used on a test server
-var     config bool         bDebug;                 // if true, various events will be logged
-var     config sound        WarningSound;           // the sound to play when sending an admin warning message to a player (default is a klaxon)
+var config bool bParaDropPlayerAllowed; // unless set to true, paradropping a single player will be disabled (replicated to clients via the Replicator)
+var config bool bShowRealismMenu; // unless set to true, the realism/testing menu & its options will be disabled (replicated to clients via the Replicator)
+var config bool bBypassAdminLogin; // allows the option of disabling admin checks, e.g. if used on a test server
+var config bool bDebug; // if true, various events will be logged
+var config sound WarningSound; // the sound to play when sending an admin warning message to a player (default is a klaxon)
 
 ////////////////////////////  INITIALIZATION FUNCTIONS  ////////////////////////////////////////////////////////////////////////////////
 
@@ -65,7 +65,9 @@ function SetInitialVariables()
 
     if (ROTG == none)
     {
-        Log("DHAdminMenu ERROR: an ROTeamGame actor wasn't found on the server - this is a serious problem & many functions will not work");
+        Log(
+            "DHAdminMenu ERROR: an ROTeamGame actor wasn't found on the server - this is a serious problem & many functions will not work"
+            );
     }
 
     // Get a reference to the AccessControl actor, which is used by the 'kick player with reason' option
@@ -73,7 +75,9 @@ function SetInitialVariables()
 
     if (AccessControl == none && Level.NetMode != NM_Standalone)
     {
-        Log("DHAdminMenu ERROR: an AccessControl actor wasn't found on the server - it won't be possible to kick a player with a message");
+        Log(
+            "DHAdminMenu ERROR: an AccessControl actor wasn't found on the server - it won't be possible to kick a player with a message"
+            );
     }
 
     // If we're in single player or DH debug mode (i.e. the development branch), always enable the extra menu options for convenience
@@ -126,7 +130,10 @@ function SaveMinefields()
 
             if (bDebug)
             {
-                Log("DHAdminMenu: building array SavedMinefields[" $ i $ "]: kill time =" @ SavedMinefields[i].MVKillTime $ ", warning interval =" @ SavedMinefields[i].MVWarnInterval);
+                Log(
+                    "DHAdminMenu: building array SavedMinefields[" $ i $ "]: kill time ="
+                        @ SavedMinefields[i].MVKillTime $ ", warning interval =" @ SavedMinefields[i].MVWarnInterval
+                    );
             }
         }
     }
@@ -138,7 +145,7 @@ function SaveMinefields()
 function Mutate(string MutateString, PlayerController Sender)
 {
     local array<string> Words;
-    local string        MutateOption;
+    local string MutateOption;
 
     // Splits the mutate arguments into an array of separate words (note the menus will have replaced spaces in names with non-breaking spaces, which stops those names being split up)
     Split(MutateString, " ", Words);
@@ -372,7 +379,7 @@ function ToggleIsInSetupPhase()
 function KickPlayerWithReason(string PlayerName, optional string KickMessage)
 {
     local PlayerController PlayerToKick;
-    local string           OriginalDefaultKickReason;
+    local string OriginalDefaultKickReason;
 
     if (!IsLoggedInAsAdmin())
     {
@@ -403,7 +410,10 @@ function KickPlayerWithReason(string PlayerName, optional string KickMessage)
             else
             {
                 ErrorMessageToSelf(13, PlayerName); // kick failed (may be because target is a logged in admin)
-                Log("DHAdminMenu: admin" @ GetAdminName() @ "tried to kick" @ PlayerName @ "but kick failed (message:" @ KickMessage $ ")");
+                Log(
+                    "DHAdminMenu: admin" @ GetAdminName() @ "tried to kick" @ PlayerName @ "but kick failed (message:"
+                        @ KickMessage $ ")"
+                    );
             }
 
             // Restore original DefaultKickReason for next person who gets kicked (who may not have a message specified)
@@ -413,7 +423,10 @@ function KickPlayerWithReason(string PlayerName, optional string KickMessage)
     else
     {
         ErrorMessageToSelf(14); // cannot kick, no AccessControl actor on server
-        Log("DHAdminMenu ERROR: AccessControl actor not found when admin" @ GetAdminName() @ "tried to kick" @ PlayerName @ "(message:" @ KickMessage $ ")");
+        Log(
+            "DHAdminMenu ERROR: AccessControl actor not found when admin" @ GetAdminName() @ "tried to kick"
+                @ PlayerName @ "(message:" @ KickMessage $ ")"
+            );
     }
 }
 
@@ -451,14 +464,13 @@ function GagPlayer(string PlayerName)
     }
 }
 
-
 function SwitchPlayer(string PlayerName, string TeamName, string RoleName, string RoleIndexString)
 {
     local DHGameReplicationInfo DHGRI;
-    local DHPlayer              PlayerToSwitch;
-    local DHRoleInfo            RoleInfo;
-    local int                   TeamIndex, RoleIndex, i;
-    local bool                  bOriginalPlayersBalanceTeams;
+    local DHPlayer PlayerToSwitch;
+    local DHRoleInfo RoleInfo;
+    local int TeamIndex, RoleIndex, i;
+    local bool bOriginalPlayersBalanceTeams;
 
     if (!IsLoggedInAsAdmin())
     {
@@ -533,9 +545,10 @@ function SwitchPlayer(string PlayerName, string TeamName, string RoleName, strin
 
         for (i = 0; i < arraycount(DHGRI.SpawnPoints); ++i)
         {
-            if (DHGRI.GetSpawnPoint(i) != none && DHGRI.GetSpawnPoint(i).CanSpawnWithParameters(DHGRI, TeamIndex, RoleIndex, -1, -1))
+            if (DHGRI.GetSpawnPoint(i) != none
+                && DHGRI.GetSpawnPoint(i).CanSpawnWithParameters(DHGRI, TeamIndex, RoleIndex, -1, -1))
             {
-                PlayerToSwitch.ServerSetPlayerInfo(255, 255, 0, 0, i , -1);
+                PlayerToSwitch.ServerSetPlayerInfo(255, 255, 0, 0, i, -1);
                 break;
             }
         }
@@ -544,7 +557,10 @@ function SwitchPlayer(string PlayerName, string TeamName, string RoleName, strin
     if (Admin != none)
     {
         NotifyPlayer(3, PlayerToSwitch); // admin switched your role/team
-        Log("DHAdminMenu: admin" @ GetAdminName() @ "switched player '" $ PlayerName $ "' to" @ Locs(TeamName) @ Locs(RoleName));
+        Log(
+            "DHAdminMenu: admin" @ GetAdminName() @ "switched player '" $ PlayerName $ "' to" @ Locs(TeamName)
+                @ Locs(RoleName)
+            );
     }
 }
 
@@ -572,7 +588,10 @@ function RenamePlayer(string OldPlayerName, string NewPlayerName)
         if (Admin != none)
         {
             NotifyPlayer(1, PlayerToRename); // admin changed your game name
-            Log("DHAdminMenu: admin" @ GetAdminName() @ "renamed player '" $ OldPlayerName $ "' to '" @ NewPlayerName $ "'");
+            Log(
+                "DHAdminMenu: admin" @ GetAdminName() @ "renamed player '" $ OldPlayerName $ "' to '" @ NewPlayerName
+                    $ "'"
+                );
         }
     }
 }
@@ -591,10 +610,15 @@ function SetGamePassword(string NewPassword)
     }
 }
 
-function ParaDropPlayer(string PlayerName, string TypeOfDropTarget, optional string DropTarget, optional string ObjectiveIndex)
+function ParaDropPlayer(
+    string PlayerName,
+    string TypeOfDropTarget,
+    optional string DropTarget,
+    optional string ObjectiveIndex
+    )
 {
     local Controller PlayerToDrop;
-    local Vector     ParaDropVector;
+    local Vector ParaDropVector;
 
     if (!IsLoggedInAsAdmin())
     {
@@ -641,7 +665,7 @@ function ParaDropPlayer(string PlayerName, string TypeOfDropTarget, optional str
 // Generic function that performs a player kill - called as required from other functions that are called directly from Mutate (e.g. KillPlayer, SwitchPlayer & KillAllPLayers)
 function KillThisPlayer(Controller PlayerToKill, optional string PlayerName)
 {
-    local Pawn  PlayerPawn;
+    local Pawn PlayerPawn;
     local float OriginalFriendlyFireScale;
 
     if (PlayerToKill == none)
@@ -749,8 +773,8 @@ function ForceRealismMatchLive()
 
 function ParaDropAll(string TeamName, string TypeOfDropTarget, string DropTarget, optional string ObjectiveIndex)
 {
-    local int        SelectedTeamIndex;
-    local Vector     ParaDropVector;
+    local int SelectedTeamIndex;
+    local Vector ParaDropVector;
     local Controller C;
 
     if (!bShowRealismMenu || !IsLoggedInAsAdmin())
@@ -821,7 +845,10 @@ function DisableMinefields() // doesn't actually disable them, but it makes thei
 
             if (bDebug)
             {
-                Log("DHAdminMenu: MINES OFF: MineVolumes[" $ i $ "] =" @ ROTG.MineVolumes[i] $ ",kill time =" @ ROTG.MineVolumes[i].KillTime $ ", warning interval =" @ ROTG.MineVolumes[i].WarnInterval);
+                Log(
+                    "DHAdminMenu: MINES OFF: MineVolumes[" $ i $ "] =" @ ROTG.MineVolumes[i] $ ",kill time ="
+                        @ ROTG.MineVolumes[i].KillTime $ ", warning interval =" @ ROTG.MineVolumes[i].WarnInterval
+                    );
             }
         }
 
@@ -863,7 +890,10 @@ function EnableMinefields()
 
             if (bDebug)
             {
-                Log("DHAdminMenu: MINES ON: MineVolumes[" $ i $ "] =" @ ROTG.MineVolumes[i] $ ",kill time =" @ ROTG.MineVolumes[i].KillTime $ ", warning interval =" @ ROTG.MineVolumes[i].WarnInterval);
+                Log(
+                    "DHAdminMenu: MINES ON: MineVolumes[" $ i $ "] =" @ ROTG.MineVolumes[i] $ ",kill time ="
+                        @ ROTG.MineVolumes[i].KillTime $ ", warning interval =" @ ROTG.MineVolumes[i].WarnInterval
+                    );
             }
         }
 
@@ -964,7 +994,10 @@ function SetRoundMinutesRemaining(float NewMinutesRemaining)
     if (NewMinutesRemaining > 0.0 && DarkestHourGame(ROTG) != none)
     {
         DarkestHourGame(ROTG).ModifyRoundTime(int(NewMinutesRemaining * 60.0), 2);
-        Log("DHAdminMenu: admin" @ GetAdminName() @ "set remaining round time to" @ Class'ROHud'.static.GetTimeString(NewMinutesRemaining * 60.0));
+        Log(
+            "DHAdminMenu: admin" @ GetAdminName() @ "set remaining round time to"
+                @ Class'ROHud'.static.GetTimeString(NewMinutesRemaining * 60.0)
+            );
     }
 }
 
@@ -990,9 +1023,9 @@ function ToggleAdminCanPauseGame()
 
 function DestroyActorInSights()
 {
-    local int    TraceDistance;
+    local int TraceDistance;
     local Vector AimDirection, StartTrace, EndTrace, HitLocation, HitNormal;
-    local Actor  HitActor;
+    local Actor HitActor;
 
     if (!bShowRealismMenu || !IsLoggedInAsAdmin())
     {
@@ -1128,7 +1161,11 @@ function NotifyPlayer(byte MessageNumber, Controller Receiver, optional bool bNo
         }
         else
         {
-            PlayerController(Receiver).ReceiveLocalizedMessage(Class'DHAdminMenu_NotifyMessages', MessageNumber, Admin.PlayerReplicationInfo);
+            PlayerController(Receiver).ReceiveLocalizedMessage(
+                Class'DHAdminMenu_NotifyMessages',
+                MessageNumber,
+                Admin.PlayerReplicationInfo
+                );
         }
     }
 }
@@ -1145,7 +1182,9 @@ function ErrorMessageToSelf(byte MessageNumber, optional string InsertedName)
 function bool IsLoggedInAsAdmin(optional bool bEnforceAdminLogin)
 {
     // Do an admin login check
-    if (Admin != none && Admin.PlayerReplicationInfo != none && (Admin.PlayerReplicationInfo.bAdmin || Admin.PlayerReplicationInfo.bSilentAdmin))
+    if (Admin != none
+        && Admin.PlayerReplicationInfo != none
+        && (Admin.PlayerReplicationInfo.bAdmin || Admin.PlayerReplicationInfo.bSilentAdmin))
     {
         return true;
     }
@@ -1218,7 +1257,7 @@ function int RemoveBracketsFromIndex(string IndexString)
 function string PutMessageTogether(array<string> Words, byte StartIndex)
 {
     local string Message;
-    local int    i;
+    local int i;
 
     if (Words.Length > StartIndex)
     {
@@ -1240,7 +1279,7 @@ function string PutMessageTogether(array<string> Words, byte StartIndex)
 function Controller FindControllerFromName(string PlayerName, optional bool bAllowActionOnBot)
 {
     local Controller FoundPlayer, C;
-    local string     CheckedPlayerName;
+    local string CheckedPlayerName;
 
     if (PlayerName == "")
     {
@@ -1254,7 +1293,7 @@ function Controller FindControllerFromName(string PlayerName, optional bool bAll
         if (C.PlayerReplicationInfo != none)
         {
             // Replace any spaces in name with non-breaking spaces - needed to match against names passed from menu choices because those will have had the same treatment
-            CheckedPlayerName = Repl(GetPlayerName(C)," "," ");
+            CheckedPlayerName = Repl(GetPlayerName(C), " ", " ");
 
             if (CheckedPlayerName == PlayerName)
             {
@@ -1296,7 +1335,7 @@ function int GetTeamIndexFromName(out string TeamName)
     {
         case "Allies":
             return ALLIES_TEAM_INDEX;
-            
+
         case "Axis":
             return AXIS_TEAM_INDEX;
 
@@ -1364,7 +1403,7 @@ function ParaDropThisPlayer(Controller PlayerToDrop, Vector ParaDropVector, opti
 function string ConcatenateGridRef(array<string> Characters, byte StartIndex)
 {
     local string GridRef;
-    local int    i;
+    local int i;
 
     for (i = StartIndex; i < Characters.Length; ++i)
     {
@@ -1380,11 +1419,11 @@ function string ConcatenateGridRef(array<string> Characters, byte StartIndex)
 function Vector GetGridDropLocation(string GridRef)
 {
     local string GridLetter;
-    local byte   GridNumber, KeypadNumber;
-    local float  GridX, GridY;
+    local byte GridNumber, KeypadNumber;
+    local float GridX, GridY;
     local Vector DropLocation;
 
-    GridRef = Repl(GridRef, " ", "");  // remove any unwanted spaces
+    GridRef = Repl(GridRef, " ", ""); // remove any unwanted spaces
     GridRef = Repl(GridRef, "kp", ""); // remove "kp" if the admin has entered a grid ref in format of "E 4 kp 3" (the original Builder mutator format)
 
     GridLetter = Left(GridRef, 1);
@@ -1404,77 +1443,77 @@ function Vector GetGridDropLocation(string GridRef)
     switch (GridLetter)
     {
         case "A":
-                GridY = -4.0;
-                break;
+            GridY = -4.0;
+            break;
         case "B":
-                GridY = -3.0;
-                break;
+            GridY = -3.0;
+            break;
         case "C":
-                GridY = -2.0;
-                break;
+            GridY = -2.0;
+            break;
         case "D":
-                GridY = -1.0;
-                break;
+            GridY = -1.0;
+            break;
         case "E":
-                GridY =  0.0;
-                break;
+            GridY = 0.0;
+            break;
         case "F":
-                GridY = 1.0;
-                break;
+            GridY = 1.0;
+            break;
         case "G":
-                GridY = 2.0;
-                break;
+            GridY = 2.0;
+            break;
         case "H":
-                GridY = 3.0;
-                break;
+            GridY = 3.0;
+            break;
         case "I":
-                GridY = 4.0;
-                break;
+            GridY = 4.0;
+            break;
 
         default:
-                ErrorMessageToSelf(22); // invalid grid ref
-                return NULL_VECTOR;
+            ErrorMessageToSelf(22); // invalid grid ref
+            return NULL_VECTOR;
     }
 
     // Adjust GridX & GridY for keypad sub-grid position
     switch (KeypadNumber)
     {
         case 0: // if no keypad sub-grid is entered we assume a central keypad 5 position (no adjustment)
-                break;
+            break;
         case 1:
-                GridX -= 0.333333;
-                GridY += 0.333333;
-                break;
+            GridX -= 0.333333;
+            GridY += 0.333333;
+            break;
         case 2:
-                GridY += 0.333333;
-                break;
+            GridY += 0.333333;
+            break;
         case 3:
-                GridX += 0.333333;
-                GridY += 0.333333;
-                break;
+            GridX += 0.333333;
+            GridY += 0.333333;
+            break;
         case 4:
-                GridX -= 0.333333;
-                break;
+            GridX -= 0.333333;
+            break;
         case 5:
-                break;
+            break;
         case 6:
-                GridX += 0.333333;
-                break;
+            GridX += 0.333333;
+            break;
         case 7:
-                GridX -= 0.333333;
-                GridY -= 0.333333;
-                break;
+            GridX -= 0.333333;
+            GridY -= 0.333333;
+            break;
         case 8:
-                GridY -= 0.333333;
-                break;
+            GridY -= 0.333333;
+            break;
         case 9:
-                GridX += 0.333333;
-                GridY -= 0.333333;
-                break;
+            GridX += 0.333333;
+            GridY -= 0.333333;
+            break;
 
         default:
-                ErrorMessageToSelf(22); // invalid grid ref
-                return NULL_VECTOR;
+            ErrorMessageToSelf(22); // invalid grid ref
+            return NULL_VECTOR;
     }
 
     // Convert DropLocation (currently just grid square offsets) to Unreal unit offsets from map centre, with Z as the established ParaDropHeight
@@ -1496,9 +1535,9 @@ function Vector GetGridDropLocation(string GridRef)
 function Vector GetObjectiveDropLocation(string ObjectiveName, string ObjectiveIndexString)
 {
     local DarkestHourGame DHG;
-    local Vector          DropLocation;
-    local int             ObjectiveIndex;
-    local DHObjective     Objective;
+    local Vector DropLocation;
+    local int ObjectiveIndex;
+    local DHObjective Objective;
 
     DHG = DarkestHourGame(ROTG);
     ObjectiveIndex = RemoveBracketsFromIndex(ObjectiveIndexString);
@@ -1544,7 +1583,7 @@ function Vector GetCurrentDropLocation(Controller PlayerToDrop)
 // Note this is from ROHud but that is not accessible serverside, so we need the same function here
 function Vector GetAdjustedHudLocation(Vector HudLoc, optional bool bInvert)
 {
-    local int   OverheadOffset;
+    local int OverheadOffset;
     local float SwapX, SwapY;
 
     if (ROGameReplicationInfo(Level.Game.GameReplicationInfo) != none)
@@ -1592,10 +1631,10 @@ function Vector GetAdjustedHudLocation(Vector HudLoc, optional bool bInvert)
 function SetParaDropVariables()
 {
     local ROGameReplicationInfo GRI;
-    local TerrainInfo           TI;
-    local Vector                TestLocation, MapDiagonal;
-    local Actor                 TestActor;
-    local int                   i;
+    local TerrainInfo TI;
+    local Vector TestLocation, MapDiagonal;
+    local Actor TestActor;
+    local int i;
 
     // Get the maximum safe height to paradrop a player, without him getting stuck in the skybox or whatever
     // For a starting location we get the location of the TerrainInfo actor

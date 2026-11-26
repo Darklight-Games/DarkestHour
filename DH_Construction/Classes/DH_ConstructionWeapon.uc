@@ -5,9 +5,9 @@
 
 class DH_ConstructionWeapon extends DH_ProxyWeapon;
 
-var class<DHConstruction>       ConstructionClass;
+var class<DHConstruction> ConstructionClass;
 
-var Sound                       ClickSound;
+var Sound ClickSound;
 
 struct TraceFromPlayerResult
 {
@@ -164,7 +164,9 @@ simulated function OnTick(float DeltaTime)
 
     R = TraceFromPlayer();
 
-    CP.UpdateParameters(R.HitLocation, PC.CalcViewRotation, R.HitActor, R.HitNormal, R.bLimitLocalRotation, R.LocalRotationYawRange);
+    CP.UpdateParameters(
+        R.HitLocation, PC.CalcViewRotation, R.HitActor, R.HitNormal, R.bLimitLocalRotation, R.LocalRotationYawRange
+        );
 
     if (CP.ProxyError.Type != ERROR_None)
     {
@@ -174,7 +176,12 @@ simulated function OnTick(float DeltaTime)
     else
     {
         // Display the construction controls message.
-        Instigator.ReceiveLocalizedMessage(Class'DHConstructionControlsMessage', 0, Instigator.PlayerReplicationInfo,, CP);
+        Instigator.ReceiveLocalizedMessage(
+            Class'DHConstructionControlsMessage',
+            0,
+            Instigator.PlayerReplicationInfo,,
+            CP
+            );
     }
 }
 
@@ -217,7 +224,10 @@ simulated function OnConfirmPlacement()
 
     if (CP != none)
     {
-        ServerCreateConstruction(CP.ConstructionClass, CP.GroundActor, ProxyCursor.Location, ProxyCursor.Rotation, CP.VariantIndex, CP.DefaultSkinIndex + CP.SkinIndex);
+        ServerCreateConstruction(
+            CP.ConstructionClass, CP.GroundActor, ProxyCursor.Location, ProxyCursor.Rotation, CP.VariantIndex,
+            CP.DefaultSkinIndex + CP.SkinIndex
+            );
     }
 }
 
@@ -260,7 +270,9 @@ simulated function TraceFromPlayerResult TraceFromPlayer()
 
     // Trace out into the world and try and hit something static.
     TraceStart = Instigator.Location + Instigator.EyePosition();
-    TraceEnd = TraceStart + (Vector(PC.CalcViewRotation) * Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.ProxyTraceDepthMeters));
+    TraceEnd = TraceStart
+        + (Vector(PC.CalcViewRotation)
+            * Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.ProxyTraceDepthMeters));
 
     // Trace for construction sockets.
     foreach TraceActors(Class'DHConstructionSocket', Socket, Result.HitLocation, Result.HitNormal, TraceStart, TraceEnd)
@@ -294,7 +306,8 @@ simulated function TraceFromPlayerResult TraceFromPlayer()
         // We didn't hit anything, trace down to the ground in hopes of finding
         // something solid to rest on
         TraceStart = TraceEnd;
-        TraceEnd = TraceStart + vect(0, 0, -1) * Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.ProxyTraceHeightMeters);
+        TraceEnd = TraceStart
+            + vect(0, 0, -1) * Class'DHUnits'.static.MetersToUnreal(ConstructionClass.default.ProxyTraceHeightMeters);
 
         foreach TraceActors(Class'Actor', TempHitActor, Result.HitLocation, Result.HitNormal, TraceEnd, TraceStart)
         {
@@ -314,7 +327,14 @@ simulated function TraceFromPlayerResult TraceFromPlayer()
     return Result;
 }
 
-function ServerCreateConstruction(class<DHConstruction> NewConstructionClass, Actor Owner, Vector Location, Rotator Rotation, int VariantIndex, int SkinIndex)
+function ServerCreateConstruction(
+    class<DHConstruction> NewConstructionClass,
+    Actor Owner,
+    Vector Location,
+    Rotator Rotation,
+    int VariantIndex,
+    int SkinIndex
+    )
 {
     local DHConstruction C;
     local DHPawn P;

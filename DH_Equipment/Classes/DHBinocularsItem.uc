@@ -86,7 +86,7 @@ function bool HandlePickupQuery(Pickup Item)
 // Modified to add fire button functionality for artillery observer or artillery officer roles to mark targets
 simulated function Fire(float F)
 {
-    local DHPlayer   PC;
+    local DHPlayer PC;
 
     if (bUsingSights && Instigator != none && Instigator.IsLocallyControlled())
     {

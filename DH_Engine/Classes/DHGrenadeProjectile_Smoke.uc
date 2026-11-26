@@ -11,14 +11,14 @@ var() class<DHSmokeEffectAttachment> SmokeAttachmentClass;
 var enum ESmokeType
 {
     ST_Hexachloroethane,
-    ST_WhitePhosphorus
+    ST_WhitePhosphorus,
 } SmokeType;
 
 // Gas damage for white phosphorus grenades.
-var() class<DamageType>   WhitePhosphorusGasDamageClass;
-var() float               WhitePhosphorusGasDamageAmount;
-var() float               WhitePhosphorusGasDamageRadius;
-var() float               WhitePhosphorusGasDamageLifeSpan;
+var() class<DamageType> WhitePhosphorusGasDamageClass;
+var() float WhitePhosphorusGasDamageAmount;
+var() float WhitePhosphorusGasDamageRadius;
+var() float WhitePhosphorusGasDamageLifeSpan;
 
 function SpawnGasHurtRadius()
 {

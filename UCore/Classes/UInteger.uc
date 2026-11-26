@@ -16,7 +16,13 @@ final static function UInteger Create(optional int Value)
     return I;
 }
 
-final static function ToBytes(int Integer, optional out byte Byte1, optional out byte Byte2, optional out byte Byte3, optional out byte Byte4)
+final static function ToBytes(
+    int Integer,
+    optional out byte Byte1,
+    optional out byte Byte2,
+    optional out byte Byte3,
+    optional out byte Byte4
+    )
 {
     Byte1 = Integer & 0xFF;
     Byte2 = (Integer >> 8) & 0xFF;
@@ -24,7 +30,12 @@ final static function ToBytes(int Integer, optional out byte Byte1, optional out
     Byte4 = (Integer >> 24) & 0xFF;
 }
 
-final static function int FromBytes(optional byte Byte1, optional byte Byte2, optional byte Byte3, optional byte Byte4)
+final static function int FromBytes(
+    optional byte Byte1,
+    optional byte Byte2,
+    optional byte Byte3,
+    optional byte Byte4
+    )
 {
     return (Byte4 << 24) | (Byte3 << 16) | (Byte2 << 8) | Byte1;
 }
@@ -77,4 +88,3 @@ final static function int FromHex(string S)
 
     return R;
 }
-

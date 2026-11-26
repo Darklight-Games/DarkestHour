@@ -103,4 +103,3 @@ defaultproperties
     End Object
     Emitters(2)=SpriteEmitter'SpriteEmitter3'
 }
-

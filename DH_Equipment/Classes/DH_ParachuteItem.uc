@@ -5,7 +5,7 @@
 
 class DH_ParachuteItem extends DHWeapon;
 
-var     bool    bUsedParachute;
+var bool bUsedParachute;
 
 // Functions emptied out or returning false, as parachute isn't a real weapon
 simulated function Fire(float F);
@@ -130,7 +130,7 @@ simulated state RaisingWeapon
 
         for (Inv = Instigator.Inventory; Inv != none; Inv = Inv.Inventory)
         {
-            W =  DHWeapon(Inv);
+            W = DHWeapon(Inv);
 
             Log(W);
 

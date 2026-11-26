@@ -13,10 +13,14 @@ var localized string UnknownText;
 function HandleParameters(string ServerIP, string ServerName)
 {
     if (ServerIP != "")
+    {
         ed_Data.SetText(StripProtocol(ServerIP));
+    }
 
     if (ServerName == "")
+    {
         ServerName = UnknownText;
+    }
 
     l_Name.Caption = ServerName;
 }
@@ -26,9 +30,12 @@ function ApplyURL(string URL)
     local string IP, Port;
 
     if (URL == "")
+    {
         return;
+    }
 
     URL = StripProtocol(URL);
+
     if (!Divide(URL, ":", IP, Port))
     {
         IP = URL;

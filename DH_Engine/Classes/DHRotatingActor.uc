@@ -8,14 +8,14 @@ class DHRotatingActor extends Actor;
 var DHGameReplicationInfo DHGRI;
 var DHPawn ControllerPawn;
 
-var int   RotationFactor;
-var int   ExpiryTime;
+var int RotationFactor;
+var int ExpiryTime;
 var float ControlRadius;
 
 var Rotator InitalRotation;
 var Rotator YawRotation;
 
-var int   LifespanTime;          // how long something can be hogged for rotation
+var int LifespanTime; // how long something can be hogged for rotation
 var float ControlRadiusInMeters; // how far a controlling player can stray away
 
 delegate OnDestroyed(int Time);
@@ -50,8 +50,8 @@ simulated function Timer()
 {
     // End rotation if the player takes too long or strayed too far
     // TODO: Notify why he was thrown out of the rotation mode
-    if ((DHGRI != none && DHGRI.ElapsedTime > ExpiryTime) ||
-        (ControllerPawn != none && VSize(ControllerPawn.Location - Location) > ControlRadius))
+    if ((DHGRI != none && DHGRI.ElapsedTime > ExpiryTime)
+        || (ControllerPawn != none && VSize(ControllerPawn.Location - Location) > ControlRadius))
     {
         Destroy();
     }
@@ -74,7 +74,7 @@ simulated function UpdateRotation(float DeltaTime)
         return;
     }
 
-    YawRotation.Pitch =0;
+    YawRotation.Pitch = 0;
     YawRotation.Yaw += RotationFactor * RotationRate.Yaw * DeltaTime;
     YawRotation.Roll = 0;
 

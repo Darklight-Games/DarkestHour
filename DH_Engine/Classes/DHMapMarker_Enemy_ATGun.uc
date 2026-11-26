@@ -13,4 +13,3 @@ defaultproperties
     LifetimeSeconds=300
     SpottingConsoleCommand="SPEECH ENEMY 8"
 }
-

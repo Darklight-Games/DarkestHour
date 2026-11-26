@@ -10,7 +10,7 @@ class DHMapIconAttachment extends Actor
 enum EMapIconAttachmentError
 {
     ERROR_None,
-    ERROR_SpawnFailed
+    ERROR_SpawnFailed,
 };
 
 enum EVisibleFor
@@ -18,32 +18,32 @@ enum EVisibleFor
     VISIBLE_None,
     VISIBLE_Team,
     VISIBLE_Enemy,
-    VISIBLE_All
+    VISIBLE_All,
 };
 
-var Material  IconMaterial;
-var IntBox    IconCoords;
-var float     IconScale;
+var Material IconMaterial;
+var IntBox IconCoords;
+var float IconScale;
 
-var Actor     AttachedTo;
-var bool      bTrackMovement;    // for moving actors
-var bool      bIgnoreGRIUpdates; // call updates from somewhere else
+var Actor AttachedTo;
+var bool bTrackMovement; // for moving actors
+var bool bIgnoreGRIUpdates; // call updates from somewhere else
 
-var           int  TimerCount;
-var           int  Quantized2DPose;
-var private   int  OldQuantized2DPose;
-var private   int  OldLocationX;
-var private   int  OldLocationY;
+var int TimerCount;
+var int Quantized2DPose;
+var private int OldQuantized2DPose;
+var private int OldLocationX;
+var private int OldLocationY;
 
-var private   byte TeamIndex;
+var private byte TeamIndex;
 var protected byte VisibilityIndex;
 
-var           int  TrackingUpdateIntervalSeconds;
-var           bool bTrackDangerZone;
-var           bool bInDangerZone;
-var private   bool bOldInDangerZone;
+var int TrackingUpdateIntervalSeconds;
+var bool bTrackDangerZone;
+var bool bInDangerZone;
+var private bool bOldInDangerZone;
 
-var           byte DrawOrder;
+var byte DrawOrder;
 
 replication
 {

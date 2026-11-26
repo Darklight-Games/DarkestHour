@@ -65,9 +65,11 @@ function DHFireSupport.EFireSupportError GetFireSupportError(DHPlayer PC, class<
     GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
     SRI = PC.SquadReplicationInfo;
 
-    if (GRI == none || SRI == none || FireSupportRequestClass == none
-      || !(FireSupportRequestClass.default.Type == MT_OffMapArtilleryRequest
-        || FireSupportRequestClass.default.Type == MT_OnMapArtilleryRequest))
+    if (GRI == none
+        || SRI == none
+        || FireSupportRequestClass == none
+        || !(FireSupportRequestClass.default.Type == MT_OffMapArtilleryRequest
+            || FireSupportRequestClass.default.Type == MT_OnMapArtilleryRequest))
     {
         return FSE_Fatal;
     }
@@ -115,10 +117,10 @@ function DHFireSupport.EFireSupportError GetFireSupportError(DHPlayer PC, class<
 
 function Tick()
 {
-    local DHPlayer              PC;
-    local Vector                HitLocation, HitNormal;
+    local DHPlayer PC;
+    local Vector HitLocation, HitNormal;
     local DHGameReplicationInfo GRI;
-    local Actor                 HitActor;
+    local Actor HitActor;
 
     PC = GetPlayerController();
 
@@ -180,12 +182,12 @@ function Tick()
 
 function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
 {
-    local class<DHMapMarker>     FireSupportRequestClass;
+    local class<DHMapMarker> FireSupportRequestClass;
     local DHSquadReplicationInfo SRI;
-    local DHPlayer               PC;
-    local int                    i, SquadMembersCount;
-    local int                    AvailableBarrages, AvailableParadrops, AvailableAirstrikes;
-    local DHGameReplicationInfo  GRI;
+    local DHPlayer PC;
+    local int i, SquadMembersCount;
+    local int AvailableBarrages, AvailableParadrops, AvailableAirstrikes;
+    local DHGameReplicationInfo GRI;
 
     if (!bIsArtilleryTargetValid)
     {
@@ -200,15 +202,22 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
     GRI = DHGameReplicationInfo(PC.GameReplicationInfo);
     SRI = PC.SquadReplicationInfo;
 
-    if (OptionIndex < 0 || OptionIndex >= Options.Length || SRI == none || PC == none || GRI == none || FireSupportRequestClass == none)
+    if (OptionIndex < 0
+        || OptionIndex >= Options.Length
+        || SRI == none
+        || PC == none
+        || GRI == none
+        || FireSupportRequestClass == none)
     {
         return;
     }
 
     if (!(FireSupportRequestClass.default.Type == MT_OffMapArtilleryRequest
-      || FireSupportRequestClass.default.Type == MT_OnMapArtilleryRequest))
+            || FireSupportRequestClass.default.Type == MT_OnMapArtilleryRequest))
     {
-        Warn("Unknown marker type passed to DHCommandMenu_FireSupport.GetOptionRenderInfo():" @ FireSupportRequestClass);
+        Warn(
+            "Unknown marker type passed to DHCommandMenu_FireSupport.GetOptionRenderInfo():" @ FireSupportRequestClass
+            );
         return;
     }
 
@@ -223,17 +232,17 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
 
                 for (i = 0; i < AvailableOffMapSupportArray.Length; ++i)
                 {
-                    switch(AvailableOffMapSupportArray[i].Type)
+                    switch (AvailableOffMapSupportArray[i].Type)
                     {
                         case ArtyType_Barrage:
-                          AvailableBarrages = AvailableOffMapSupportArray[i].Count;
-                          break;
+                            AvailableBarrages = AvailableOffMapSupportArray[i].Count;
+                            break;
                         case ArtyType_Paradrop:
-                          AvailableParadrops = AvailableOffMapSupportArray[i].Count;
-                          break;
+                            AvailableParadrops = AvailableOffMapSupportArray[i].Count;
+                            break;
                         case ArtyType_Airstrikes:
-                          AvailableAirstrikes = AvailableOffMapSupportArray[i].Count;
-                          break;
+                            AvailableAirstrikes = AvailableOffMapSupportArray[i].Count;
+                            break;
                     }
                 }
 
@@ -280,12 +289,12 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
 
 function bool IsOptionDisabled(int OptionIndex)
 {
-    local DHPlayer            PC;
+    local DHPlayer PC;
 
     if (OptionIndex < 0
-      || OptionIndex >= Options.Length
-      || Options[OptionIndex].OptionalObject == none
-      || !bIsArtilleryTargetValid)
+        || OptionIndex >= Options.Length
+        || Options[OptionIndex].OptionalObject == none
+        || !bIsArtilleryTargetValid)
     {
         return true;
     }

@@ -5,9 +5,9 @@
 
 class DHObjectiveTreeNode extends Object;
 
-var DHObjectiveTreeNode         Parent;
-var DHObjective                 Objective;
-var array<DHObjectiveTreeNode>  Children;
+var DHObjectiveTreeNode Parent;
+var DHObjective Objective;
+var array<DHObjectiveTreeNode> Children;
 
 function bool HasParent()
 {

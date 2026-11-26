@@ -11,4 +11,3 @@ defaultproperties
     VehicleClass=Class'DH_ShermanTank_M4A3E8'
     Mesh=SkeletalMesh'DH_ShermanM4A3E8_anm.body_ext'
 }
-

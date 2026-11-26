@@ -5,24 +5,24 @@
 
 class DHRadio extends Actor;
 
-var int                 TeamIndex;
-var float               ResponseDelaySeconds;
-var float               UsageDistanceMaximumMeters;
+var int TeamIndex;
+var float ResponseDelaySeconds;
+var float UsageDistanceMaximumMeters;
 
-var float               ResponseSoundVolume;
-var float               ResponseSoundRadius;
+var float ResponseSoundVolume;
+var float ResponseSoundRadius;
 
 // Map icon
-var bool                bShouldShowOnSituationMap;
-var Material            MapIconMaterial;
+var bool bShouldShowOnSituationMap;
+var Material MapIconMaterial;
 
-var DHArtilleryRequest  Request;
+var DHArtilleryRequest Request;
 
 // A reference to the pawn that carries this radio (used for scoring).
-var DHPawn              Carrier;
+var DHPawn Carrier;
 
 // Used to signal to the client that the radio cannot be used.
-var protected bool      bIsBusy;
+var protected bool bIsBusy;
 
 var class<LocalMessage> ArtilleryMessageClass;
 
@@ -35,7 +35,7 @@ enum ERadioUsageError
     ERROR_Busy,
     ERROR_TooFarAway,
     ERROR_Calibrating,
-    ERROR_Fatal
+    ERROR_Fatal,
 };
 
 replication
@@ -216,12 +216,12 @@ state Requesting extends Busy
             return;
         }
 
-        if (Request == none ||
-            Request.Sender == none ||
-            Request.ArtilleryTypeIndex < 0 ||
-            Request.ArtilleryTypeIndex >= LI.ArtilleryTypes.Length ||
-            LI.ArtilleryTypes[Request.ArtilleryTypeIndex].ArtilleryClass == none ||
-            LI.ArtilleryTypes[Request.ArtilleryTypeIndex].TeamIndex != Request.Sender.GetTeamNum())
+        if (Request == none
+            || Request.Sender == none
+            || Request.ArtilleryTypeIndex < 0
+            || Request.ArtilleryTypeIndex >= LI.ArtilleryTypes.Length
+            || LI.ArtilleryTypes[Request.ArtilleryTypeIndex].ArtilleryClass == none
+            || LI.ArtilleryTypes[Request.ArtilleryTypeIndex].TeamIndex != Request.Sender.GetTeamNum())
         {
             return;
         }
@@ -323,7 +323,7 @@ state Responding extends Busy
         SetTimer(FMax(1.0, GetSoundDuration(ResponseSound)), false);
 
         // Free request object.
-        Request = None;
+        Request = none;
     }
 
     function Timer()

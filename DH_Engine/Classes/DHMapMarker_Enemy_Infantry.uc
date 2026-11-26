@@ -13,4 +13,3 @@ defaultproperties
     LifetimeSeconds=120
     SpottingConsoleCommand="SPEECH ENEMY 0"
 }
-

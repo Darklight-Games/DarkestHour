@@ -6,4 +6,3 @@ class JSONSerializable extends Object
     abstract;
 
 function JSONValue ToJSON();
-

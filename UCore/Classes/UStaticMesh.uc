@@ -51,7 +51,7 @@ simulated function array<Material> FindStaticMeshSkins(StaticMesh SubjectMesh)
         // Create a reference to the Material used on the mesh
         SkinArray[i] = Material(DynamicLoadObject(sParseString, sClassPlaceholder));
 
-        Skip:
+Skip:
         iPointer = InStr(sMaterialsPropText, ",Material=");
         i++;
     }
@@ -59,4 +59,3 @@ simulated function array<Material> FindStaticMeshSkins(StaticMesh SubjectMesh)
     // Return the completed list of skins
     return SkinArray;
 }
-

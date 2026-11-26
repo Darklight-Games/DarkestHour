@@ -24,7 +24,7 @@ A change required would be in DHGame's state RoundInPlay BeginState() function, 
 simulated function PostBeginPlay()
 {
     local DHPlayer PC;
-    local Actor    A;
+    local Actor A;
 
     if (Role < ROLE_Authority)
     {

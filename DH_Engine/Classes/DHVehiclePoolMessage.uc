@@ -33,4 +33,3 @@ defaultproperties
     ActivatedMessage="A Vehicle Pool has been activated."
     DestroyedMessage="A Vehicle Pool has been destroyed."
 }
-

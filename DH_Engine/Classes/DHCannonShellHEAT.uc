@@ -7,14 +7,14 @@ class DHCannonShellHEAT extends DHCannonShell
     abstract;
 
 // Penetration:
-var bool  bInHitWall;
-var float MaxWall;                    // maximum wall penetration
-var float WScale;                     // penetration depth scale factor to take into account; weapon scale
-var float Hardness;                   // wall hardness, calculated in CheckWall for surface type
-var float EnergyFactor;               // for calculating penetration of projectile
-var float PeneExploWallOut;           // distance out from the wall to spawn penetration explosion
-var bool  bDidPenetrationExplosionFX; // already did the penetration explosion effects
-var bool  bHitWorldObject;            // flags that shell has hit a world object & should run a world penetration check (reversing original bHitWorldObject, as this way seems more logical)
+var bool bInHitWall;
+var float MaxWall; // maximum wall penetration
+var float WScale; // penetration depth scale factor to take into account; weapon scale
+var float Hardness; // wall hardness, calculated in CheckWall for surface type
+var float EnergyFactor; // for calculating penetration of projectile
+var float PeneExploWallOut; // distance out from the wall to spawn penetration explosion
+var bool bDidPenetrationExplosionFX; // already did the penetration explosion effects
+var bool bHitWorldObject; // flags that shell has hit a world object & should run a world penetration check (reversing original bHitWorldObject, as this way seems more logical)
 
 var globalconfig float PenetrationScale; // global penetration depth scale factor
 
@@ -22,12 +22,16 @@ var globalconfig float PenetrationScale; // global penetration depth scale facto
 simulated function HitWall(Vector HitNormal, Actor Wall)
 {
     local DHVehicleCannon Cannon;
-    local Actor           TraceHitActor;
-    local Vector          Direction, TempHitLocation, TempHitNormal;
-    local float           xH, TempMaxWall;
+    local Actor TraceHitActor;
+    local Vector Direction, TempHitLocation, TempHitNormal;
+    local float xH, TempMaxWall;
 
     // Exit without doing anything if we hit something we don't want to count a hit on
-    if (bInHitWall || Wall == none || SavedHitActor == Wall || (Wall.Base != none && Wall.Base == Instigator) || Wall.bDeleteMe) // HEAT adds bInHitWall check to prevent recursive calls
+    if (bInHitWall
+        || Wall == none
+        || SavedHitActor == Wall
+        || (Wall.Base != none && Wall.Base == Instigator)
+        || Wall.bDeleteMe) // HEAT adds bInHitWall check to prevent recursive calls
     {
         return;
     }
@@ -55,7 +59,8 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
     }
 
     // We hit an armored vehicle hull but failed to penetrate
-    if (Wall.IsA('DHArmoredVehicle') && !DHArmoredVehicle(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(Location)))
+    if (Wall.IsA('DHArmoredVehicle')
+        && !DHArmoredVehicle(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(Location)))
     {
         FailToPenetrateArmor(Location, HitNormal, Wall);
 
@@ -86,12 +91,16 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
                     Wall.SetDelayedDamageInstigatorController(InstigatorController);
                 }
 
-                Wall.TakeDamage(ImpactDamage, Instigator, Location, MomentumTransfer * Normal(Velocity), ShellImpactDamage);
+                Wall.TakeDamage(
+                    ImpactDamage, Instigator, Location, MomentumTransfer * Normal(Velocity), ShellImpactDamage
+                    );
             }
 
             if (DamageRadius > 0.0 && ROVehicle(Wall) != none && ROVehicle(Wall).Health > 0) // need this here as vehicle will be ignored by HurtRadius(), as it's the HurtWall actor
             {
-                CheckVehicleOccupantsRadiusDamage(ROVehicle(Wall), Damage, DamageRadius, MyDamageType, MomentumTransfer, Location);
+                CheckVehicleOccupantsRadiusDamage(
+                    ROVehicle(Wall), Damage, DamageRadius, MyDamageType, MomentumTransfer, Location
+                    );
             }
 
             HurtWall = Wall;
@@ -128,7 +137,9 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
                 TempMaxWall = MaxWall;
             }
 
-            TraceHitActor = Trace(TempHitLocation, TempHitNormal, Location, Location + (Direction * TempMaxWall), false);
+            TraceHitActor = Trace(
+                TempHitLocation, TempHitNormal, Location, Location + (Direction * TempMaxWall), false
+                );
 
             // Due to static meshes resulting in a hit even with the trace starting right inside of them (terrain and BSP 'space' would return none)
             if (TraceHitActor != none && !SetLocation(TempHitLocation + (vect(0.5, 0.0, 0.0) * Direction)))
@@ -136,7 +147,7 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
                 TraceHitActor = none;
             }
         }
-        until (TraceHitActor != none || TempMaxWall >= MaxWall)
+        until (TraceHitActor != none || TempMaxWall >= MaxWall);
     }
     else
     {
@@ -201,9 +212,9 @@ simulated function WorldPenetrationExplode(Vector HitLocation, Vector HitNormal)
 // Sets Hardness based on the surface type hit
 simulated function CheckWall(Vector HitNormal, Vector X)
 {
-    local Material      HitMaterial;
+    local Material HitMaterial;
     local ESurfaceTypes HitSurfaceType;
-    local Vector        TempHitLocation, TempHitNormal;
+    local Vector TempHitLocation, TempHitNormal;
 
     Trace(TempHitLocation, TempHitNormal, Location, Location + X * 16.0, false,, HitMaterial);
 
@@ -273,16 +284,16 @@ simulated function CheckWall(Vector HitNormal, Vector X)
             Hardness = 0.1;
             break;
         case EST_Custom01:
-            Hardness = 0.1; //Sand
+            Hardness = 0.1; // Sand
             break;
         case EST_Custom02:
-            Hardness = 0.4; //SandBag
+            Hardness = 0.4; // SandBag
             break;
         case EST_Custom03:
-            Hardness = 2.5; //Brick
+            Hardness = 2.5; // Brick
             break;
         case EST_Custom04:
-            Hardness = 1.0; //Hedgerow
+            Hardness = 1.0; // Hedgerow
             break;
         default:
             Hardness = 0.5;

@@ -3,7 +3,6 @@
 //-----------------------------------------------------------
 class DH_EyeW extends DH_EyeE;
 
-
 defaultproperties
 {
      DriverWeapons(0)=(WeaponClass=Class'DH_Vehicles.DH_EyeWGun',WeaponBone="Turret_placement3")

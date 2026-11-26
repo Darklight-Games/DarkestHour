@@ -9,10 +9,10 @@
 class DHVehicleComponentController extends Actor
     notplaceable;
 
-var int     Channel;
-var name    BoneName;
-var name    RaisingAnim;
-var name    LoweringAnim;
+var int Channel;
+var name BoneName;
+var name RaisingAnim;
+var name LoweringAnim;
 
 enum EControllerState
 {
@@ -107,7 +107,10 @@ simulated state Lowered
 
 simulated state Transitioning
 {
-    simulated function bool IsTransitioning() { return true; }
+    simulated function bool IsTransitioning()
+    {
+        return true;
+    }
 }
 
 simulated state Lowering extends Transitioning
@@ -139,8 +142,16 @@ function Lower()
 }
 
 simulated function bool IsTransitioning();
-simulated function bool IsRaised() { return GetControllerState() == STATE_Raised; }
-simulated function bool IsLowered() { return GetControllerState() == STATE_Lowered; }
+
+simulated function bool IsRaised()
+{
+    return GetControllerState() == STATE_Raised;
+}
+
+simulated function bool IsLowered()
+{
+    return GetControllerState() == STATE_Lowered;
+}
 
 // Returns true if the splash guard was toggled, false otherwise.
 function bool Toggle()

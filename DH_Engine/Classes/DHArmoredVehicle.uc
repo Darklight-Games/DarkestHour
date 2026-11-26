@@ -8,10 +8,10 @@ class DHArmoredVehicle extends DHVehicle
 
 struct ArmorSection
 {
-    var     float   Thickness;         // in cm
-    var     float   Slope;             // in degrees from vertical (must specify a negative if armor slopes 'inwards')
-    var     float   MaxRelativeHeight; // max height (in UU) of this armor section, relative to hull mesh's centre
-    var     string  LocationName;      // e.g. "lower front", "driver's upstand plate"
+    var float Thickness; // in cm
+    var float Slope; // in degrees from vertical (must specify a negative if armor slopes 'inwards')
+    var float MaxRelativeHeight; // max height (in UU) of this armor section, relative to hull mesh's centre
+    var string LocationName; // e.g. "lower front", "driver's upstand plate"
 };
 
 enum ENewHitPointType
@@ -25,92 +25,92 @@ enum ENewHitPointType
 
 struct NewHitpoint
 {
-    var   float             PointRadius;
-    var   name              PointBone;
-    var   Vector            PointOffset;
-    var   float             DamageMultiplier;
-    var   ENewHitPointType  NewHitPointType;
-    var   bool              bIsGun;
+    var float PointRadius;
+    var name PointBone;
+    var Vector PointOffset;
+    var float DamageMultiplier;
+    var ENewHitPointType NewHitPointType;
+    var bool bIsGun;
 };
 
 // General
-var     int         UnbuttonedPositionIndex;    // lowest DriverPositions index where driver is unbuttoned & exposed
-var     bool        bMustBeUnbuttonedToChangePositions; // if true, player must be unbuttoned to change positions (e.g. from driver to gunner), for use when the driver's compartment is not connected to the rest of the vehicle
-var     Vector      OverlayFPCamPos;            // optional camera offset for overlay position, so can snap to exterior view position, avoiding camera anims passing through hull
+var int UnbuttonedPositionIndex; // lowest DriverPositions index where driver is unbuttoned & exposed
+var bool bMustBeUnbuttonedToChangePositions; // if true, player must be unbuttoned to change positions (e.g. from driver to gunner), for use when the driver's compartment is not connected to the rest of the vehicle
+var Vector OverlayFPCamPos; // optional camera offset for overlay position, so can snap to exterior view position, avoiding camera anims passing through hull
 
 // Vehicle locking
-var     bool        bVehicleLocked;             // vehicle has been locked by a player, stopping new players from entering tank crew positions
-var     float       UnlockVehicleTime;          // the next time to check whether to unlock a locked vehicle that its crew may have abandoned
+var bool bVehicleLocked; // vehicle has been locked by a player, stopping new players from entering tank crew positions
+var float UnlockVehicleTime; // the next time to check whether to unlock a locked vehicle that its crew may have abandoned
 
 // Armor penetration
-var     array<ArmorSection> FrontArmor;        // array of armor properties (divided into horizontal bands) for each side of vehicle
-var     array<ArmorSection> RightArmor;
-var     array<ArmorSection> LeftArmor;
-var     array<ArmorSection> RearArmor;
-var     bool        bVehicleHit;                // A simple check used in TakeDamage to inflict non-penetrating damage; when we don't want to use radius damage
-var     bool        bHasAddedSideArmor;         // this vehicle has added side armour skirts (schurzen) that will stop HEAT rounds
-var     bool        bProjectilePenetrated;      // shell has passed penetration tests & has entered the vehicle (used in TakeDamage)
-var     bool        bTurretPenetration;         // shell has penetrated the turret (used in TakeDamage)
-var     float       TurretPenetrationHullDamageChanceModifier; // chance modifier for hull damage when a turret penetration occurs
-var     float       HullPenetrationTurretDamageChanceModifier; // chance modifier for turret damage when a hull penetration occurs
-var     float       TurretPenetrationDamageModifier; // damage modifier for incoming damage when a turret penetration occurs
-var     bool        bRearHullPenetration;       // shell has penetrated the rear hull (so TakeDamage can tell if an engine hit should stop the round penetrating any further)
+var array<ArmorSection> FrontArmor; // array of armor properties (divided into horizontal bands) for each side of vehicle
+var array<ArmorSection> RightArmor;
+var array<ArmorSection> LeftArmor;
+var array<ArmorSection> RearArmor;
+var bool bVehicleHit; // A simple check used in TakeDamage to inflict non-penetrating damage; when we don't want to use radius damage
+var bool bHasAddedSideArmor; // this vehicle has added side armour skirts (schurzen) that will stop HEAT rounds
+var bool bProjectilePenetrated; // shell has passed penetration tests & has entered the vehicle (used in TakeDamage)
+var bool bTurretPenetration; // shell has penetrated the turret (used in TakeDamage)
+var float TurretPenetrationHullDamageChanceModifier; // chance modifier for hull damage when a turret penetration occurs
+var float HullPenetrationTurretDamageChanceModifier; // chance modifier for turret damage when a hull penetration occurs
+var float TurretPenetrationDamageModifier; // damage modifier for incoming damage when a turret penetration occurs
+var bool bRearHullPenetration; // shell has penetrated the rear hull (so TakeDamage can tell if an engine hit should stop the round penetrating any further)
 
 // Damage
-var     array<NewHitpoint>  NewVehHitpoints;    // an array of extra hit points (new DH types) that may be hit & damaged
-var     int         GunOpticsHitPointIndex;     // index of any special hit point for exposed gunsight optics, which may be damaged by a bullet
-var     float       AmmoIgnitionProbability;    // chance that direct hit on ammo store will ignite it
-var     float       SpikeTime;                  // saved future time when a disabled vehicle will be automatically blown up, if empty at that time
+var array<NewHitpoint> NewVehHitpoints; // an array of extra hit points (new DH types) that may be hit & damaged
+var int GunOpticsHitPointIndex; // index of any special hit point for exposed gunsight optics, which may be damaged by a bullet
+var float AmmoIgnitionProbability; // chance that direct hit on ammo store will ignite it
+var float SpikeTime; // saved future time when a disabled vehicle will be automatically blown up, if empty at that time
 
 // The naming on these are extremely deceptive.
 // These are not "chances", but are damage thresholds that, when reached, will have a base 100% chance of doing damage to the thing in question.
-var     float       TurretDetonationThreshold;  // chance that shrapnel will detonate turret ammo
-var     float       DriverKillChance;           // chance that shrapnel will kill driver
-var     float       CommanderKillChance;        // chance that shrapnel will kill commander
-var     float       GunnerKillChance;           // chance that shrapnel will kill bow gunner
-var     float       GunDamageChance;            // chance that shrapnel will damage gun pivot mechanism
-var     float       TraverseDamageChance;       // chance that shrapnel will damage gun traverse mechanism or turret ring is jammed
-var     float       OpticsDamageChance;         // chance that shrapnel will break gunsight optics
+var float TurretDetonationThreshold; // chance that shrapnel will detonate turret ammo
+var float DriverKillChance; // chance that shrapnel will kill driver
+var float CommanderKillChance; // chance that shrapnel will kill commander
+var float GunnerKillChance; // chance that shrapnel will kill bow gunner
+var float GunDamageChance; // chance that shrapnel will damage gun pivot mechanism
+var float TraverseDamageChance; // chance that shrapnel will damage gun traverse mechanism or turret ring is jammed
+var float OpticsDamageChance; // chance that shrapnel will break gunsight optics
 
 // Fire stuff- Shurek & Ch!cKeN (modified by Matt)
-var     class<DamageType>           VehicleBurningDamType;
-var     class<VehicleDamagedEffect> FireEffectClass;
-var     VehicleDamagedEffect        DriverHatchFireEffect;
-var     name        FireAttachBone;
-var     Vector      FireEffectOffset;
-var     float       HullFirePercent; //helper variable
-var     bool        bOnFire;               // the vehicle itself is on fire
-var     float       HullFireDamagePer2Secs;
-var     float       PlayerFireDamagePer2Secs;
-var     float       NextHullFireDamageTime;
-var     float       EngineFirePercent; //helper variable
-var     bool        bEngineOnFire;
-var     float       EngineFireDamagePer3Secs;
-var     float       NextEngineFireDamageTime;
-var     bool        bSetHullFireEffects;
-var     bool        bDriverHatchFireNeeded;
-var     float       DriverHatchFireSpawnTime;
-var     bool        bTurretFireNeeded;
-var     float       TurretHatchFireSpawnTime;
-var     bool        bHullMGFireNeeded;
-var     float       HullMGHatchFireSpawnTime;
-var     float       FireDetonationChance;   // chance of a fire blowing a vehicle up, runs each time the fire does damage
-var     float       EngineToHullFireChance; // chance of an engine fire spreading to the rest of the vehicle
-var     bool        bEngineFireSpreadPending;  // if true, engine fire will spread to the rest of the vehicle once it has burned for a while.
-var     float       EngineFireSpreadTime;
-var     Range       EngineToHullFireDelayRange;
-var     bool        bFirstPenetratingHit;
-var     bool        bHEATPenetration;       // a penetrating round is a HEAT round
-var     Controller  WhoSetOnFire;
-var     int         HullFireStarterTeam;
-var     Controller  WhoSetEngineOnFire;
-var     int         EngineFireStarterTeam;
-var     Sound       SmokingEngineSound;
-var     bool        bEnableHatchFires;     // allow hatch fires for this vehicle
+var class<DamageType> VehicleBurningDamType;
+var class<VehicleDamagedEffect> FireEffectClass;
+var VehicleDamagedEffect DriverHatchFireEffect;
+var name FireAttachBone;
+var Vector FireEffectOffset;
+var float HullFirePercent; // helper variable
+var bool bOnFire; // the vehicle itself is on fire
+var float HullFireDamagePer2Secs;
+var float PlayerFireDamagePer2Secs;
+var float NextHullFireDamageTime;
+var float EngineFirePercent; // helper variable
+var bool bEngineOnFire;
+var float EngineFireDamagePer3Secs;
+var float NextEngineFireDamageTime;
+var bool bSetHullFireEffects;
+var bool bDriverHatchFireNeeded;
+var float DriverHatchFireSpawnTime;
+var bool bTurretFireNeeded;
+var float TurretHatchFireSpawnTime;
+var bool bHullMGFireNeeded;
+var float HullMGHatchFireSpawnTime;
+var float FireDetonationChance; // chance of a fire blowing a vehicle up, runs each time the fire does damage
+var float EngineToHullFireChance; // chance of an engine fire spreading to the rest of the vehicle
+var bool bEngineFireSpreadPending; // if true, engine fire will spread to the rest of the vehicle once it has burned for a while.
+var float EngineFireSpreadTime;
+var Range EngineToHullFireDelayRange;
+var bool bFirstPenetratingHit;
+var bool bHEATPenetration; // a penetrating round is a HEAT round
+var Controller WhoSetOnFire;
+var int HullFireStarterTeam;
+var Controller WhoSetEngineOnFire;
+var int EngineFireStarterTeam;
+var Sound SmokingEngineSound;
+var bool bEnableHatchFires; // allow hatch fires for this vehicle
 
 // Debugging
-var     bool        bDebugPenetration;    // debug lines & text on screen, relating to turret hits & penetration calculations
-var     bool        bLogDebugPenetration; // similar debug log entries
+var bool bDebugPenetration; // debug lines & text on screen, relating to turret hits & penetration calculations
+var bool bLogDebugPenetration; // similar debug log entries
 
 replication
 {
@@ -135,7 +135,7 @@ simulated function PostBeginPlay()
     if (Role == ROLE_Authority)
     {
         // Set fire damage rates
-        HullFireDamagePer2Secs = HealthMax * 0.02;             // so approx 100 seconds from full vehicle health to detonation due to fire
+        HullFireDamagePer2Secs = HealthMax * 0.02; // so approx 100 seconds from full vehicle health to detonation due to fire
         EngineFireDamagePer3Secs = default.EngineHealth * 0.1; // so approx 30 seconds engine fire until engine destroyed
     }
 }
@@ -177,7 +177,9 @@ simulated function PostNetReceive()
         }
     }
     // Engine is dead & engine fire has burned out, so set it to smoke instead of burn
-    else if (EngineHealth <= 0 && (DamagedEffectHealthFireFactor != 0.0 || DamagedEffectHealthHeavySmokeFactor != 1.0) && Health > 0)
+    else if (EngineHealth <= 0
+        && (DamagedEffectHealthFireFactor != 0.0 || DamagedEffectHealthHeavySmokeFactor != 1.0)
+        && Health > 0)
     {
         SetEngineFireEffects();
     }
@@ -296,7 +298,9 @@ simulated function Timer()
     }
 
     // Engine is dead, but there's no fire, so make sure it is set to smoke instead of burn
-    if (EngineHealth <= 0 && !IsEngineBurning() && (DamagedEffectHealthFireFactor != 0.0 || DamagedEffectHealthHeavySmokeFactor != 1.0))
+    if (EngineHealth <= 0
+        && !IsEngineBurning()
+        && (DamagedEffectHealthFireFactor != 0.0 || DamagedEffectHealthHeavySmokeFactor != 1.0))
     {
         SetEngineFireEffects();
     }
@@ -321,7 +325,9 @@ simulated function SetNextTimer(optional float Now)
             NextTimerTime = NextHullFireDamageTime;
         }
 
-        if (bEngineOnFire && (NextEngineFireDamageTime < NextTimerTime || NextTimerTime == 0.0) && NextEngineFireDamageTime > Now)
+        if (bEngineOnFire
+            && (NextEngineFireDamageTime < NextTimerTime || NextTimerTime == 0.0)
+            && NextEngineFireDamageTime > Now)
         {
             NextTimerTime = NextEngineFireDamageTime;
         }
@@ -339,17 +345,23 @@ simulated function SetNextTimer(optional float Now)
 
     if (Level.NetMode != NM_DedicatedServer && bOnFire)
     {
-        if (bDriverHatchFireNeeded && (DriverHatchFireSpawnTime < NextTimerTime || NextTimerTime == 0.0) && DriverHatchFireSpawnTime > Now)
+        if (bDriverHatchFireNeeded
+            && (DriverHatchFireSpawnTime < NextTimerTime || NextTimerTime == 0.0)
+            && DriverHatchFireSpawnTime > Now)
         {
             NextTimerTime = DriverHatchFireSpawnTime;
         }
 
-        if (bTurretFireNeeded && (TurretHatchFireSpawnTime < NextTimerTime || NextTimerTime == 0.0) && TurretHatchFireSpawnTime > Now)
+        if (bTurretFireNeeded
+            && (TurretHatchFireSpawnTime < NextTimerTime || NextTimerTime == 0.0)
+            && TurretHatchFireSpawnTime > Now)
         {
             NextTimerTime = TurretHatchFireSpawnTime;
         }
 
-        if (bHullMGFireNeeded && (HullMGHatchFireSpawnTime < NextTimerTime || NextTimerTime == 0.0) && HullMGHatchFireSpawnTime > Now)
+        if (bHullMGFireNeeded
+            && (HullMGHatchFireSpawnTime < NextTimerTime || NextTimerTime == 0.0)
+            && HullMGHatchFireSpawnTime > Now)
         {
             NextTimerTime = HullMGHatchFireSpawnTime;
         }
@@ -370,7 +382,7 @@ simulated function SetNextTimer(optional float Now)
 simulated function DrawHUD(Canvas C)
 {
     local PlayerController PC;
-    local float            SavedOpacity;
+    local float SavedOpacity;
 
     PC = PlayerController(Controller);
 
@@ -397,7 +409,12 @@ simulated function DrawHUD(Canvas C)
             {
                 HUDOverlay.SetLocation(PC.CalcViewLocation + (HUDOverlayOffset >> PC.CalcViewRotation));
                 HUDOverlay.SetRotation(PC.CalcViewRotation);
-                C.DrawActor(HUDOverlay, false, true, FClamp(HUDOverlayFOV * (PC.DesiredFOV / PC.DefaultFOV), 1.0, 170.0));
+                C.DrawActor(
+                    HUDOverlay,
+                    false,
+                    true,
+                    FClamp(HUDOverlayFOV * (PC.DesiredFOV / PC.DefaultFOV), 1.0, 170.0)
+                    );
             }
         }
 
@@ -423,8 +440,8 @@ simulated function DrawPeriscopeOverlay(Canvas C)
         TextureSize = float(PeriscopeOverlay.MaterialUSize());
         TilePixelWidth = TextureSize / PeriscopeSize * 0.955; // width based on vehicle's GunsightSize (0.955 factor widens visible FOV to full screen for 'standard' overlay if GS=1.0)
         TilePixelHeight = TilePixelWidth * float(C.SizeY) / float(C.SizeX); // height proportional to width, maintaining screen aspect ratio
-        TileStartPosU = (TextureSize - TilePixelWidth) / 2.0;// - OverlayCorrectionX;
-        TileStartPosV = (TextureSize - TilePixelHeight) / 2.0;// - OverlayCorrectionY;
+        TileStartPosU = (TextureSize - TilePixelWidth) / 2.0; // - OverlayCorrectionX;
+        TileStartPosV = (TextureSize - TilePixelHeight) / 2.0; // - OverlayCorrectionY;
 
         // Draw the periscope overlay
         C.SetPos(0.0, 0.0);
@@ -481,7 +498,9 @@ simulated state ViewTransition
     {
         super.HandleTransition();
 
-        if (OverlayFPCamPos != vect(0.0, 0.0, 0.0) && DriverPositions[PreviousPositionIndex].bDrawOverlays && IsFirstPerson())
+        if (OverlayFPCamPos != vect(0.0, 0.0, 0.0)
+            && DriverPositions[PreviousPositionIndex].bDrawOverlays
+            && IsFirstPerson())
         {
             FPCamPos = default.FPCamPos; // if moving away from overlay, remove offset immediately
         }
@@ -491,7 +510,9 @@ simulated state ViewTransition
     {
         super.EndState();
 
-        if (OverlayFPCamPos != vect(0.0, 0.0, 0.0) && DriverPositions[DriverPositionIndex].bDrawOverlays && IsFirstPerson())
+        if (OverlayFPCamPos != vect(0.0, 0.0, 0.0)
+            && DriverPositions[DriverPositionIndex].bDrawOverlays
+            && IsFirstPerson())
         {
             FPCamPos = OverlayFPCamPos; // if moving into overlay, apply offset at end of transition
         }
@@ -503,7 +524,9 @@ function bool KDriverLeave(bool bForceLeave)
 {
     local bool bAllowedCrewmanExitingLockedVehicle;
 
-    bAllowedCrewmanExitingLockedVehicle = bVehicleLocked && IsAnAllowedCrewman(Driver) && !(bForceLeave && DHPawn(Driver).SwitchingController != none);
+    bAllowedCrewmanExitingLockedVehicle = bVehicleLocked
+        && IsAnAllowedCrewman(Driver)
+        && !(bForceLeave && DHPawn(Driver).SwitchingController != none);
 
     if (super.KDriverLeave(bForceLeave))
     {
@@ -521,13 +544,17 @@ function bool KDriverLeave(bool bForceLeave)
 // Implemented to prevent exit if player is buttoned up, displaying an appropriate "unbutton the hatch" message if he can't
 simulated function bool CanExit()
 {
-    if ((DriverPositionIndex < UnbuttonedPositionIndex || (IsInState('ViewTransition') && DriverPositionIndex == UnbuttonedPositionIndex)) && IsHumanControlled())
+    if ((DriverPositionIndex < UnbuttonedPositionIndex
+            || (IsInState('ViewTransition') && DriverPositionIndex == UnbuttonedPositionIndex))
+        && IsHumanControlled())
     {
         if (DriverPositions.Length > UnbuttonedPositionIndex) // means it is possible to unbutton
         {
             DisplayVehicleMessage(9,, true); // must unbutton the hatch
         }
-        else if (MGun != none && MGun.WeaponPawn != none && MGun.WeaponPawn.DriverPositions.Length > MGun.WeaponPawn.UnbuttonedPositionIndex) // means it's possible to exit MG position
+        else if (MGun != none
+            && MGun.WeaponPawn != none
+            && MGun.WeaponPawn.DriverPositions.Length > MGun.WeaponPawn.UnbuttonedPositionIndex) // means it's possible to exit MG position
         {
             DisplayVehicleMessage(12); // must exit through commander's or MG hatch
         }
@@ -569,8 +596,8 @@ function ServerToggleVehicleLock()
 function SetVehicleLocked(bool bNewLockedStatus)
 {
     local Controller C;
-    local DHPawn     P;
-    local int        i;
+    local DHPawn P;
+    local int i;
 
     bVehicleLocked = bNewLockedStatus;
 
@@ -643,10 +670,10 @@ function UpdatePlayersLockedVehicleSettings(Vehicle PlayersVehiclePosition)
 // If vehicle isn't locked but new crewman has the 'lock tank on entry' option enabled & is a tanker, it attempts to lock the vehicle automatically
 function UpdateVehicleLockOnPlayerEntering(Vehicle EntryPosition)
 {
-    local DHPawn            Player;
+    local DHPawn Player;
     local VehicleWeaponPawn WP;
-    local bool              bEnteredTankCrewPosition, bFoundCrewman;
-    local int               i;
+    local bool bEnteredTankCrewPosition, bFoundCrewman;
+    local int i;
 
     if (EntryPosition != none)
     {
@@ -655,7 +682,7 @@ function UpdateVehicleLockOnPlayerEntering(Vehicle EntryPosition)
 
     if (Player == none)
     {
-         return;
+        return;
     }
 
     if (EntryPosition == self)
@@ -664,7 +691,8 @@ function UpdateVehicleLockOnPlayerEntering(Vehicle EntryPosition)
     }
     else
     {
-        bEnteredTankCrewPosition = EntryPosition.IsA('ROVehicleWeaponPawn') && ROVehicleWeaponPawn(EntryPosition).bMustBeTankCrew;
+        bEnteredTankCrewPosition = EntryPosition.IsA('ROVehicleWeaponPawn')
+            && ROVehicleWeaponPawn(EntryPosition).bMustBeTankCrew;
     }
 
     if (bVehicleLocked)
@@ -677,8 +705,11 @@ function UpdateVehicleLockOnPlayerEntering(Vehicle EntryPosition)
     }
     // If player has the 'lock tank on entry' option enabled & he's a tank crewman, he attempts to lock the vehicle automatically
     // This only works if there are no other tank crew in the vehicle (& the vehicle must be for tank crew only)
-    else if (bEnteredTankCrewPosition && DHPlayer(EntryPosition.Controller) != none && DHPlayer(EntryPosition.Controller).bLockTankOnEntry
-        && Class'DHPlayerReplicationInfo'.static.IsPlayerTankCrew(EntryPosition) && bMustBeTankCommander)
+    else if (bEnteredTankCrewPosition
+        && DHPlayer(EntryPosition.Controller) != none
+        && DHPlayer(EntryPosition.Controller).bLockTankOnEntry
+        && Class'DHPlayerReplicationInfo'.static.IsPlayerTankCrew(EntryPosition)
+        && bMustBeTankCommander)
     {
         // Check through vehicle positions to see if if there is a tank crewman already in the vehicle
         if (Driver != none && Driver != Player && Class'DHPlayerReplicationInfo'.static.IsPlayerTankCrew(self))
@@ -691,7 +722,10 @@ function UpdateVehicleLockOnPlayerEntering(Vehicle EntryPosition)
             {
                 WP = WeaponPawns[i];
 
-                if (WP != none && WP.Driver != none && WP.Driver != Player && Class'DHPlayerReplicationInfo'.static.IsPlayerTankCrew(WP))
+                if (WP != none
+                    && WP.Driver != none
+                    && WP.Driver != Player
+                    && Class'DHPlayerReplicationInfo'.static.IsPlayerTankCrew(WP))
                 {
                     bFoundCrewman = true;
                     break;
@@ -739,7 +773,7 @@ function CheckSetUnlockTimer()
 function CheckUnlockVehicle()
 {
     local Controller C;
-    local bool       bFoundAllowedCrewmanOutOfVehicle;
+    local bool bFoundAllowedCrewmanOutOfVehicle;
 
     for (C = Level.ControllerList; C != none; C = C.NextController)
     {
@@ -793,7 +827,7 @@ function CancelAnyVehicleUnlockTimer()
 // This is based on their position in the vehicle - any commander is most senior, then any driver, then any other crew (i.e. MG position)
 simulated function bool CanPlayerLockVehicle(Vehicle PlayersVehiclePosition)
 {
-    local int          FailMessageNumber;
+    local int FailMessageNumber;
 
     FailMessageNumber = -1; // start with an invalid number, so later we know if a genuine failure has occured
 
@@ -808,12 +842,16 @@ simulated function bool CanPlayerLockVehicle(Vehicle PlayersVehiclePosition)
         FailMessageNumber = 26; // only tank crew roles can lock or unlock vehicle
     }
     // Not if the player isn't a tank crew role
-    else if (PlayersVehiclePosition.IsA('ROVehicleWeaponPawn') && !ROVehicleWeaponPawn(PlayersVehiclePosition).bMustBeTankCrew)
+    else if (PlayersVehiclePosition.IsA('ROVehicleWeaponPawn')
+        && !ROVehicleWeaponPawn(PlayersVehiclePosition).bMustBeTankCrew)
     {
         FailMessageNumber = 27; // can only lock or unlock vehicle if you are in a tank crew position
     }
     // Not if another human player is in the vehicle commander's position
-    else if (Cannon != none && Cannon.WeaponPawn != none && Cannon.WeaponPawn.PlayerReplicationInfo != none && !Cannon.WeaponPawn.PlayerReplicationInfo.bBot)
+    else if (Cannon != none
+        && Cannon.WeaponPawn != none
+        && Cannon.WeaponPawn.PlayerReplicationInfo != none
+        && !Cannon.WeaponPawn.PlayerReplicationInfo.bBot)
     {
         if (PlayersVehiclePosition != Cannon.WeaponPawn)
         {
@@ -944,7 +982,8 @@ function StartEngineFire(Pawn InstigatedBy)
         bEngineFireSpreadPending = true;
 
         // Set the time that the engine fire will spread to the hull.
-        EngineFireSpreadTime = Level.TimeSeconds + Class'UInterp'.static.Linear(FRand(), EngineToHullFireDelayRange.Min, EngineToHullFireDelayRange.Max);
+        EngineFireSpreadTime = Level.TimeSeconds
+            + Class'UInterp'.static.Linear(FRand(), EngineToHullFireDelayRange.Min, EngineToHullFireDelayRange.Max);
 
         if (bDebuggingText)
         {
@@ -981,7 +1020,9 @@ simulated function SetFireEffects()
                     }
 
                     bDriverHatchFireNeeded = true;
-                    DriverHatchFireSpawnTime = FMax(TurretHatchFireSpawnTime, Level.TimeSeconds) + 2.0 + (FRand() * 3.0); // driver hatch fire starts 2-5 secs after turret fire
+                    DriverHatchFireSpawnTime = FMax(TurretHatchFireSpawnTime, Level.TimeSeconds)
+                        + 2.0
+                        + (FRand() * 3.0); // driver hatch fire starts 2-5 secs after turret fire
 
                     if (MGun != none)
                     {
@@ -1024,17 +1065,19 @@ simulated function SetEngineFireEffects()
             }
         }
         // Engine is dead, but there's no fire, so make sure it is set to smoke instead of burn
-        else if (EngineHealth <= 0 && (DamagedEffectHealthFireFactor != 0.0 || DamagedEffectHealthHeavySmokeFactor != 1.0))
+        else if (EngineHealth <= 0
+            && (DamagedEffectHealthFireFactor != 0.0 || DamagedEffectHealthHeavySmokeFactor != 1.0))
         {
             DamagedEffectHealthFireFactor = 0.0;
             DamagedEffectHealthHeavySmokeFactor = 1.0;
             // appears necessary to get native code to spawn a DamagedEffect if it doesn't already exist
             // (presumably doesn't check for fire or dark smoke unless vehicle is at least damaged enough to lightly smoke)
             DamagedEffectHealthSmokeFactor = 1.0;
+
             if (DamagedEffect != none)
             {
                 DamagedEffect.UpdateDamagedEffect(false, 0.0, false, false); // reset existing effect
-                DamagedEffect.UpdateDamagedEffect(false, 0.0, false, true);  // then set to dark smoke
+                DamagedEffect.UpdateDamagedEffect(false, 0.0, false, true); // then set to dark smoke
             }
             else if (Health == HealthMax) // clientside Health hack to get native code to spawn DamagedEffect (it won't unless vehicle has taken some damage)
             {
@@ -1049,7 +1092,6 @@ simulated function SetEngineFireEffects()
         SetEngine();
     }
 }
-
 
 // New function to start a driver's hatch fire effect
 simulated function StartDriverHatchFire()
@@ -1119,7 +1161,7 @@ simulated function Vector GetNewHitPointLocation(int Index)
 function bool IsNewPointShot(Vector HitLocation, Vector LineCheck, int Index, optional float CheckDistance)
 {
     local Vector HitPointLocation, Difference;
-    local float  t, DotMM, ClosestDistance;
+    local float t, DotMM, ClosestDistance;
 
     if (NewVehHitpoints[Index].PointBone == '')
     {
@@ -1165,15 +1207,20 @@ function bool IsNewPointShot(Vector HitLocation, Vector LineCheck, int Index, op
 
 // Re-written from deprecated ROTreadCraft class for DH's armour penetration system
 // Handles penetration calcs for any shell type, & adds including an option for multiple armor sections for each side
-simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLocation, Vector ProjectileDirection, float MaxArmorPenetration)
+simulated function bool ShouldPenetrate(
+    DHAntiVehicleProjectile P,
+    Vector HitLocation,
+    Vector ProjectileDirection,
+    float MaxArmorPenetration
+    )
 {
-    local Vector  HitLocationRelativeOffset, HitSideAxis, ArmorNormal, X, Y, Z;
+    local Vector HitLocationRelativeOffset, HitSideAxis, ArmorNormal, X, Y, Z;
     local Rotator ArmourSlopeRotator;
-    local float   HitLocationAngle, AngleOfIncidence, ArmorThickness, ArmorSlope;
-    local float   OverMatchFactor, SlopeMultiplier, EffectiveArmorThickness, PenetrationRatio, ShatterChance;
-    local int     i;
-    local string  HitSide, OppositeSide, DebugString1, DebugString2, DebugString3;
-    local bool    bRearHit, bSideHit;
+    local float HitLocationAngle, AngleOfIncidence, ArmorThickness, ArmorSlope;
+    local float OverMatchFactor, SlopeMultiplier, EffectiveArmorThickness, PenetrationRatio, ShatterChance;
+    local int i;
+    local string HitSide, OppositeSide, DebugString1, DebugString2, DebugString3;
+    local bool bRearHit, bSideHit;
     local array<ArmorSection> HitSideArmorArray;
 
     ProjectileDirection = Normal(ProjectileDirection); // should be passed as a normal but we need to be certain
@@ -1218,11 +1265,17 @@ simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLoc
     }
     else // didn't hit any side !! (angles must be screwed up, so fix those)
     {
-        Log("ERROR: hull angles not set up correctly for" @ VehicleNameString @ "(took hit from" @ HitLocationAngle @ "degrees & couldn't resolve which side that was");
+        Log(
+            "ERROR: hull angles not set up correctly for" @ VehicleNameString @ "(took hit from" @ HitLocationAngle
+                @ "degrees & couldn't resolve which side that was"
+            );
 
         if ((bDebugPenetration || Class'DH_LevelInfo'.static.DHDebugMode()) && Role == ROLE_Authority)
         {
-            Log("ERROR: hull angles not set up correctly for" @ VehicleNameString @ "(took hit from" @ HitLocationAngle @ "degrees & couldn't resolve which side that was");
+            Log(
+                "ERROR: hull angles not set up correctly for" @ VehicleNameString @ "(took hit from"
+                    @ HitLocationAngle @ "degrees & couldn't resolve which side that was"
+                );
         }
 
         ResetTakeDamageVariables();
@@ -1244,14 +1297,18 @@ simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLoc
         {
             if (bLogDebugPenetration || Class'DH_LevelInfo'.static.DHDebugMode())
             {
-                Log("Hit detection bug - switching from" @ HitSide @ "to" @ OppositeSide
-                    @ "as angle of incidence to original side was" @ int(Round(AngleOfIncidence)) @ "degrees");
+                Log(
+                    "Hit detection bug - switching from" @ HitSide @ "to" @ OppositeSide
+                        @ "as angle of incidence to original side was" @ int(Round(AngleOfIncidence)) @ "degrees"
+                    );
             }
 
             if ((bDebugPenetration || Class'DH_LevelInfo'.static.DHDebugMode()) && Role == ROLE_Authority)
             {
-                Log("Hit detection bug - switching from" @ HitSide @ "to" @ OppositeSide
-                    @ "as angle of incidence to original side was" @ int(Round(AngleOfIncidence)) @ "degrees");
+                Log(
+                    "Hit detection bug - switching from" @ HitSide @ "to" @ OppositeSide
+                        @ "as angle of incidence to original side was" @ int(Round(AngleOfIncidence)) @ "degrees"
+                    );
             }
 
             HitSide = OppositeSide;
@@ -1275,7 +1332,7 @@ simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLoc
 
         // No penetration if vehicle has extra side armor that stops small and med HE shells or armor-piercing bullet projectiles, so exit here (after any debug options)
         // This is per Kummersdorf testing in Feb. 1943
-        if (bHasAddedSideArmor && (P.RoundType == RT_APBULLET  || (P.RoundType == RT_HE && P.ShellDiameter < 8.5)))
+        if (bHasAddedSideArmor && (P.RoundType == RT_APBULLET || (P.RoundType == RT_HE && P.ShellDiameter < 8.5)))
         {
             if (bLogDebugPenetration)
             {
@@ -1341,7 +1398,7 @@ simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLoc
             return false;
         }
 
-        //Added side armor (schurzen) defeat HEAT projectiles if angle of shot is above 45°
+        // Added side armor (schurzen) defeat HEAT projectiles if angle of shot is above 45°
         if (bSideHit && bHasAddedSideArmor && (P.RoundType == RT_HEAT && AngleOfIncidence > 45))
         {
             ResetTakeDamageVariables();
@@ -1359,7 +1416,9 @@ simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLoc
     }
 
     // Check & record whether or not we penetrated the vehicle (including check if shattered on the armor)
-    P.bRoundShattered = P.bShatterProne && PenetrationRatio >= 1.0 && CheckIfShatters(P, PenetrationRatio, OverMatchFactor, ShatterChance);
+    P.bRoundShattered = P.bShatterProne
+        && PenetrationRatio >= 1.0
+        && CheckIfShatters(P, PenetrationRatio, OverMatchFactor, ShatterChance);
     bProjectilePenetrated = PenetrationRatio >= 1.0 && !P.bRoundShattered;
 
     // Set variables used in TakeDamage()
@@ -1373,20 +1432,26 @@ simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLoc
     // Debugging options
     if ((bLogDebugPenetration || bDebugPenetration) && P.NumDeflections == 0)
     {
-        DebugString1 = Caps("Hit hull" @ HitSide) $ ": penetrated =" @ Locs(bProjectilePenetrated && !P.bRoundShattered) $ ", hit location angle ="
-            @ int(Round(HitLocationAngle)) @ "deg, armor =" @ int(Round(ArmorThickness * 10.0)) $ "mm @" @ int(Round(ArmorSlope)) @ "deg";
+        DebugString1 = Caps("Hit hull" @ HitSide) $ ": penetrated ="
+            @ Locs(bProjectilePenetrated && !P.bRoundShattered) $ ", hit location angle ="
+            @ int(Round(HitLocationAngle)) @ "deg, armor =" @ int(Round(ArmorThickness * 10.0)) $ "mm @"
+            @ int(Round(ArmorSlope)) @ "deg";
 
-        DebugString2 = "Shot penetration =" @ int(Round(MaxArmorPenetration * 10.0)) $ "mm, effective armor =" @ int(Round(EffectiveArmorThickness * 10.0))
-            $ "mm, shot AOI =" @ int(Round(AngleOfIncidence)) @ "deg, armor slope multiplier =" @ SlopeMultiplier;
+        DebugString2 = "Shot penetration =" @ int(Round(MaxArmorPenetration * 10.0)) $ "mm, effective armor ="
+            @ int(Round(EffectiveArmorThickness * 10.0)) $ "mm, shot AOI =" @ int(Round(AngleOfIncidence))
+            @ "deg, armor slope multiplier =" @ SlopeMultiplier;
 
-        DebugString3 = "Penetration radio =" @ PenetrationRatio $ ", shatter chance =" @ (ShatterChance * 100) $ "%, shattered =" @ Locs(P.bRoundShattered);
+        DebugString3 = "Penetration radio =" @ PenetrationRatio $ ", shatter chance =" @ (ShatterChance * 100)
+            $ "%, shattered =" @ Locs(P.bRoundShattered);
 
         if (bLogDebugPenetration)
         {
             Log(DebugString1);
             Log(DebugString2);
             Log(DebugString3);
-            Log("------------------------------------------------------------------------------------------------------");
+            Log(
+                "------------------------------------------------------------------------------------------------------"
+                );
         }
 
         if (bDebugPenetration)
@@ -1421,9 +1486,14 @@ simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLoc
 
 // New function to calculate the appropriate armor slope multiplier for various projectile types & angles
 // A static function so it can be used by cannon class for turret armor, avoiding lots of armor code repetition (same with several others)
-simulated static function float GetArmorSlopeMultiplier(DHAntiVehicleProjectile P, float AngleOfIncidence, optional float OverMatchFactor)
+simulated static function float GetArmorSlopeMultiplier(
+    DHAntiVehicleProjectile P,
+    float AngleOfIncidence,
+    optional float OverMatchFactor
+    )
 {
-    local float CompoundExp, BaseLookupAngle, DegreesSpread, ExtraAngleDegrees, BaseSlopeMultiplier, NextSlopeMultiplier, MultiplierDifference;
+    local float CompoundExp, BaseLookupAngle, DegreesSpread, ExtraAngleDegrees, BaseSlopeMultiplier,
+        NextSlopeMultiplier, MultiplierDifference;
 
     if (P.RoundType == RT_HVAP)
     {
@@ -1431,30 +1501,30 @@ simulated static function float GetArmorSlopeMultiplier(DHAntiVehicleProjectile 
         {
             if (AngleOfIncidence <= 30.0)
             {
-               CompoundExp = AngleOfIncidence ** 1.75;
+                CompoundExp = AngleOfIncidence ** 1.75;
 
-               return 2.71828 ** (CompoundExp * 0.000662);
+                return 2.71828 ** (CompoundExp * 0.000662);
             }
             else
             {
-               CompoundExp = AngleOfIncidence ** 2.2;
+                CompoundExp = AngleOfIncidence ** 2.2;
 
-               return 0.9043 * (2.71828 ** (CompoundExp * 0.0001987));
+                return 0.9043 * (2.71828 ** (CompoundExp * 0.0001987));
             }
         }
         else // smaller HVAP rounds
         {
             if (AngleOfIncidence <= 25.0)
             {
-               CompoundExp = AngleOfIncidence ** 2.2;
+                CompoundExp = AngleOfIncidence ** 2.2;
 
-               return 2.71828 ** (CompoundExp * 0.0001727);
+                return 2.71828 ** (CompoundExp * 0.0001727);
             }
             else
             {
-               CompoundExp = AngleOfIncidence ** 1.5;
+                CompoundExp = AngleOfIncidence ** 1.5;
 
-               return 0.7277 * (2.71828 ** (CompoundExp * 0.003787));
+                return 0.7277 * (2.71828 ** (CompoundExp * 0.003787));
             }
         }
     }
@@ -1495,71 +1565,223 @@ simulated static function float GetArmorSlopeMultiplier(DHAntiVehicleProjectile 
 // New lookup function to calculate the appropriate armor slope multiplier for various projectile types & angles
 // All from "WWII Ballistics: Armor & Gunnery" by Bird & Livingston
 // A static function so it can be used by cannon class for turret armor, avoiding lots of armor code repetition (same with several others)
-simulated static function float ArmorSlopeTable(DHAntiVehicleProjectile P, float AngleOfIncidence, float OverMatchFactor)
+simulated static function float ArmorSlopeTable(
+    DHAntiVehicleProjectile P,
+    float AngleOfIncidence,
+    float OverMatchFactor
+    )
 {
     if (P.RoundType == RT_AP) // from Darkest Orchestra
     {
-        if      (AngleOfIncidence <= 10.0)  return 0.98  * (OverMatchFactor ** 0.06370); // at 10 degrees
-        else if (AngleOfIncidence <= 15.0)  return 1.00  * (OverMatchFactor ** 0.09690);
-        else if (AngleOfIncidence <= 20.0)  return 1.04  * (OverMatchFactor ** 0.13561);
-        else if (AngleOfIncidence <= 25.0)  return 1.11  * (OverMatchFactor ** 0.16164);
-        else if (AngleOfIncidence <= 30.0)  return 1.22  * (OverMatchFactor ** 0.19702);
-        else if (AngleOfIncidence <= 35.0)  return 1.38  * (OverMatchFactor ** 0.22546);
-        else if (AngleOfIncidence <= 40.0)  return 1.63  * (OverMatchFactor ** 0.26313);
-        else if (AngleOfIncidence <= 45.0)  return 2.00  * (OverMatchFactor ** 0.34717);
-        else if (AngleOfIncidence <= 50.0)  return 2.64  * (OverMatchFactor ** 0.57353);
-        else if (AngleOfIncidence <= 55.0)  return 3.23  * (OverMatchFactor ** 0.69075);
-        else if (AngleOfIncidence <= 60.0)  return 4.07  * (OverMatchFactor ** 0.81826);
-        else if (AngleOfIncidence <= 65.0)  return 6.27  * (OverMatchFactor ** 0.91920);
-        else if (AngleOfIncidence <= 70.0)  return 8.65  * (OverMatchFactor ** 1.00539);
-        else if (AngleOfIncidence <= 75.0)  return 13.75 * (OverMatchFactor ** 1.07400);
-        else if (AngleOfIncidence <= 80.0)  return 21.87 * (OverMatchFactor ** 1.17973);
-        else                                       return 34.49 * (OverMatchFactor ** 1.28631); // at 85 degrees
+        if (AngleOfIncidence <= 10.0)
+        {
+            return 0.98 * (OverMatchFactor ** 0.06370); // at 10 degrees
+        }
+        else if (AngleOfIncidence <= 15.0)
+        {
+            return 1.00 * (OverMatchFactor ** 0.09690);
+        }
+        else if (AngleOfIncidence <= 20.0)
+        {
+            return 1.04 * (OverMatchFactor ** 0.13561);
+        }
+        else if (AngleOfIncidence <= 25.0)
+        {
+            return 1.11 * (OverMatchFactor ** 0.16164);
+        }
+        else if (AngleOfIncidence <= 30.0)
+        {
+            return 1.22 * (OverMatchFactor ** 0.19702);
+        }
+        else if (AngleOfIncidence <= 35.0)
+        {
+            return 1.38 * (OverMatchFactor ** 0.22546);
+        }
+        else if (AngleOfIncidence <= 40.0)
+        {
+            return 1.63 * (OverMatchFactor ** 0.26313);
+        }
+        else if (AngleOfIncidence <= 45.0)
+        {
+            return 2.00 * (OverMatchFactor ** 0.34717);
+        }
+        else if (AngleOfIncidence <= 50.0)
+        {
+            return 2.64 * (OverMatchFactor ** 0.57353);
+        }
+        else if (AngleOfIncidence <= 55.0)
+        {
+            return 3.23 * (OverMatchFactor ** 0.69075);
+        }
+        else if (AngleOfIncidence <= 60.0)
+        {
+            return 4.07 * (OverMatchFactor ** 0.81826);
+        }
+        else if (AngleOfIncidence <= 65.0)
+        {
+            return 6.27 * (OverMatchFactor ** 0.91920);
+        }
+        else if (AngleOfIncidence <= 70.0)
+        {
+            return 8.65 * (OverMatchFactor ** 1.00539);
+        }
+        else if (AngleOfIncidence <= 75.0)
+        {
+            return 13.75 * (OverMatchFactor ** 1.07400);
+        }
+        else if (AngleOfIncidence <= 80.0)
+        {
+            return 21.87 * (OverMatchFactor ** 1.17973);
+        }
+        else
+        {
+            return 34.49 * (OverMatchFactor ** 1.28631); // at 85 degrees
+        }
     }
     else if (P.RoundType == RT_APBC) // from Darkest Orchestra
     {
-        if      (AngleOfIncidence <= 10.0)  return 1.04  * (OverMatchFactor ** 0.01555); // at 10 degrees
-        else if (AngleOfIncidence <= 15.0)  return 1.06  * (OverMatchFactor ** 0.02315);
-        else if (AngleOfIncidence <= 20.0)  return 1.08  * (OverMatchFactor ** 0.03448);
-        else if (AngleOfIncidence <= 25.0)  return 1.11  * (OverMatchFactor ** 0.05134);
-        else if (AngleOfIncidence <= 30.0)  return 1.16  * (OverMatchFactor ** 0.07710);
-        else if (AngleOfIncidence <= 35.0)  return 1.22  * (OverMatchFactor ** 0.11384);
-        else if (AngleOfIncidence <= 40.0)  return 1.31  * (OverMatchFactor ** 0.16952);
-        else if (AngleOfIncidence <= 45.0)  return 1.44  * (OverMatchFactor ** 0.24604);
-        else if (AngleOfIncidence <= 50.0)  return 1.68  * (OverMatchFactor ** 0.37910);
-        else if (AngleOfIncidence <= 55.0)  return 2.11  * (OverMatchFactor ** 0.56444);
-        else if (AngleOfIncidence <= 60.0)  return 3.50  * (OverMatchFactor ** 1.07411);
-        else if (AngleOfIncidence <= 65.0)  return 5.34  * (OverMatchFactor ** 1.46188);
-        else if (AngleOfIncidence <= 70.0)  return 9.48  * (OverMatchFactor ** 1.81520);
-        else if (AngleOfIncidence <= 75.0)  return 20.22 * (OverMatchFactor ** 2.19155);
-        else if (AngleOfIncidence <= 80.0)  return 56.20 * (OverMatchFactor ** 2.56210);
-        else                                       return 221.3 * (OverMatchFactor ** 2.93265); // at 85 degrees
+        if (AngleOfIncidence <= 10.0)
+        {
+            return 1.04 * (OverMatchFactor ** 0.01555); // at 10 degrees
+        }
+        else if (AngleOfIncidence <= 15.0)
+        {
+            return 1.06 * (OverMatchFactor ** 0.02315);
+        }
+        else if (AngleOfIncidence <= 20.0)
+        {
+            return 1.08 * (OverMatchFactor ** 0.03448);
+        }
+        else if (AngleOfIncidence <= 25.0)
+        {
+            return 1.11 * (OverMatchFactor ** 0.05134);
+        }
+        else if (AngleOfIncidence <= 30.0)
+        {
+            return 1.16 * (OverMatchFactor ** 0.07710);
+        }
+        else if (AngleOfIncidence <= 35.0)
+        {
+            return 1.22 * (OverMatchFactor ** 0.11384);
+        }
+        else if (AngleOfIncidence <= 40.0)
+        {
+            return 1.31 * (OverMatchFactor ** 0.16952);
+        }
+        else if (AngleOfIncidence <= 45.0)
+        {
+            return 1.44 * (OverMatchFactor ** 0.24604);
+        }
+        else if (AngleOfIncidence <= 50.0)
+        {
+            return 1.68 * (OverMatchFactor ** 0.37910);
+        }
+        else if (AngleOfIncidence <= 55.0)
+        {
+            return 2.11 * (OverMatchFactor ** 0.56444);
+        }
+        else if (AngleOfIncidence <= 60.0)
+        {
+            return 3.50 * (OverMatchFactor ** 1.07411);
+        }
+        else if (AngleOfIncidence <= 65.0)
+        {
+            return 5.34 * (OverMatchFactor ** 1.46188);
+        }
+        else if (AngleOfIncidence <= 70.0)
+        {
+            return 9.48 * (OverMatchFactor ** 1.81520);
+        }
+        else if (AngleOfIncidence <= 75.0)
+        {
+            return 20.22 * (OverMatchFactor ** 2.19155);
+        }
+        else if (AngleOfIncidence <= 80.0)
+        {
+            return 56.20 * (OverMatchFactor ** 2.56210);
+        }
+        else
+        {
+            return 221.3 * (OverMatchFactor ** 2.93265); // at 85 degrees
+        }
     }
     else // should mean RoundType is RT_APC (also covers APCBC) or RT_HE, but treating this as a catch-all default
     {
-        if      (AngleOfIncidence <= 10.0)  return 1.01  * (OverMatchFactor ** 0.0225); // at 10 degrees
-        else if (AngleOfIncidence <= 15.0)  return 1.03  * (OverMatchFactor ** 0.0327);
-        else if (AngleOfIncidence <= 20.0)  return 1.10  * (OverMatchFactor ** 0.0454);
-        else if (AngleOfIncidence <= 25.0)  return 1.17  * (OverMatchFactor ** 0.0549);
-        else if (AngleOfIncidence <= 30.0)  return 1.27  * (OverMatchFactor ** 0.0655);
-        else if (AngleOfIncidence <= 35.0)  return 1.39  * (OverMatchFactor ** 0.0993);
-        else if (AngleOfIncidence <= 40.0)  return 1.54  * (OverMatchFactor ** 0.1388);
-        else if (AngleOfIncidence <= 45.0)  return 1.72  * (OverMatchFactor ** 0.1655);
-        else if (AngleOfIncidence <= 50.0)  return 1.94  * (OverMatchFactor ** 0.2035);
-        else if (AngleOfIncidence <= 55.0)  return 2.12  * (OverMatchFactor ** 0.2427);
-        else if (AngleOfIncidence <= 60.0)  return 2.56  * (OverMatchFactor ** 0.2450);
-        else if (AngleOfIncidence <= 65.0)  return 3.20  * (OverMatchFactor ** 0.3354);
-        else if (AngleOfIncidence <= 70.0)  return 3.98  * (OverMatchFactor ** 0.3478);
-        else if (AngleOfIncidence <= 75.0)  return 5.17  * (OverMatchFactor ** 0.3831);
-        else if (AngleOfIncidence <= 80.0)  return 8.09  * (OverMatchFactor ** 0.4131);
-        else                                       return 11.32 * (OverMatchFactor ** 0.4550); // at 85 degrees
+        if (AngleOfIncidence <= 10.0)
+        {
+            return 1.01 * (OverMatchFactor ** 0.0225); // at 10 degrees
+        }
+        else if (AngleOfIncidence <= 15.0)
+        {
+            return 1.03 * (OverMatchFactor ** 0.0327);
+        }
+        else if (AngleOfIncidence <= 20.0)
+        {
+            return 1.10 * (OverMatchFactor ** 0.0454);
+        }
+        else if (AngleOfIncidence <= 25.0)
+        {
+            return 1.17 * (OverMatchFactor ** 0.0549);
+        }
+        else if (AngleOfIncidence <= 30.0)
+        {
+            return 1.27 * (OverMatchFactor ** 0.0655);
+        }
+        else if (AngleOfIncidence <= 35.0)
+        {
+            return 1.39 * (OverMatchFactor ** 0.0993);
+        }
+        else if (AngleOfIncidence <= 40.0)
+        {
+            return 1.54 * (OverMatchFactor ** 0.1388);
+        }
+        else if (AngleOfIncidence <= 45.0)
+        {
+            return 1.72 * (OverMatchFactor ** 0.1655);
+        }
+        else if (AngleOfIncidence <= 50.0)
+        {
+            return 1.94 * (OverMatchFactor ** 0.2035);
+        }
+        else if (AngleOfIncidence <= 55.0)
+        {
+            return 2.12 * (OverMatchFactor ** 0.2427);
+        }
+        else if (AngleOfIncidence <= 60.0)
+        {
+            return 2.56 * (OverMatchFactor ** 0.2450);
+        }
+        else if (AngleOfIncidence <= 65.0)
+        {
+            return 3.20 * (OverMatchFactor ** 0.3354);
+        }
+        else if (AngleOfIncidence <= 70.0)
+        {
+            return 3.98 * (OverMatchFactor ** 0.3478);
+        }
+        else if (AngleOfIncidence <= 75.0)
+        {
+            return 5.17 * (OverMatchFactor ** 0.3831);
+        }
+        else if (AngleOfIncidence <= 80.0)
+        {
+            return 8.09 * (OverMatchFactor ** 0.4131);
+        }
+        else
+        {
+            return 11.32 * (OverMatchFactor ** 0.4550); // at 85 degrees
+        }
     }
 
     return 1.0; // fail-safe neutral return value
 }
 
 // Shatter chance is plotted on a curve where the middle of the two shatter ratios is a 75% chance, and the outer-edges are 0% chance.
-simulated static function float GetShatterChance(float PenetrationRatio, float PenetrationRatioMin, float PenetrationRatioMax)
+simulated static function float GetShatterChance(
+    float PenetrationRatio,
+    float PenetrationRatioMin,
+    float PenetrationRatioMax
+    )
 {
     local float T;
 
@@ -1576,7 +1798,12 @@ simulated static function float GetShatterChance(float PenetrationRatio, float P
 // New function to check whether a projectile should shatter on vehicle's armor, based on the 'shatter gap' for different round types
 // A static function so it can be used by cannon class for turret armor, avoiding lots of armor code repetition (same with several others)
 // This data is based on the book WW2 Ballistics - Armor and Gunnery (p.29)
-simulated static function bool CheckIfShatters(DHAntiVehicleProjectile P, float PenetrationRatio, float OverMatchFactor, out float ShatterChance)
+simulated static function bool CheckIfShatters(
+    DHAntiVehicleProjectile P,
+    float PenetrationRatio,
+    float OverMatchFactor,
+    out float ShatterChance
+    )
 {
     if (P.RoundType == RT_HVAP)
     {
@@ -1613,14 +1840,21 @@ simulated static function bool CheckIfShatters(DHAntiVehicleProjectile P, float 
 
 // Modified to DH special damage points, random special damage and/or crew deaths if penetrated, & possibility of setting engine or vehicle on fire
 // Also to use TankDamageModifier instead of VehicleDamageModifier (unless an APC)
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+function TakeDamage(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     local class<ROWeaponDamageType> WepDamageType;
-    local DHVehicleCannonPawn       CannonPawn;
+    local DHVehicleCannonPawn CannonPawn;
     local Controller InstigatorController;
-    local float      DamageModifier, TreadDamageMod, HullChanceModifier, TurretChanceModifier;
-    local int        InstigatorTeam, i;
-    local bool       bEngineStoppedProjectile, bAmmoDetonation;
+    local float DamageModifier, TreadDamageMod, HullChanceModifier, TurretChanceModifier;
+    local int InstigatorTeam, i;
+    local bool bEngineStoppedProjectile, bAmmoDetonation;
 
     // Suicide/self-destruction
     if (DamageType == Class'Suicided' || DamageType == Class'ROSuicided')
@@ -1671,7 +1905,6 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
 
     if (WepDamageType != none)
     {
-
         if (bIsApc)
         {
             DamageModifier = WepDamageType.default.APCDamageModifier;
@@ -1693,7 +1926,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
             TreadDamageMod = WepDamageType.default.TreadDamageModifier;
         }
 
-        //A chance that a non-penetrating WP shell impact sets the engine on fire
+        // A chance that a non-penetrating WP shell impact sets the engine on fire
         if (WepDamageType == Class'DHShellSmokeWPDamageType' && bVehicleHit)
         {
             if (FRand() < (EngineFirePercent * 0.15))
@@ -1723,7 +1956,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
             {
                 if (bLogDebugPenetration)
                 {
-                    Log("We hit VehHitpoints[" $ i $ "]:" @ GetEnum(enum'EHitPointType', VehHitpoints[i].HitPointType));
+                    Log("We hit VehHitpoints[" $ i $ "]:" @ GetEnum(Enum'EHitPointType', VehHitpoints[i].HitPointType));
                 }
 
                 // Engine hit
@@ -1741,7 +1974,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
                     if (bRearHullPenetration)
                     {
                         bEngineStoppedProjectile = true;
-                        HullFirePercent=0.0; //the projectile has not passed into the hull compartment, thus no danger of setting ammo or other internal flammables on fire
+                        HullFirePercent = 0.0; // the projectile has not passed into the hull compartment, thus no danger of setting ammo or other internal flammables on fire
                         break;
                     }
                 }
@@ -1749,14 +1982,15 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
                 else if (VehHitpoints[i].HitPointType == HP_AmmoStore)
                 {
                     // Random chance that ammo explodes & vehicle is destroyed
-                    if ((bHEATPenetration && FRand() < 0.85) || (!bHEATPenetration && FRand() < AmmoIgnitionProbability))
+                    if ((bHEATPenetration && FRand() < 0.85)
+                        || (!bHEATPenetration && FRand() < AmmoIgnitionProbability))
                     {
                         if (bDebuggingText)
                         {
                             Log("Hit vehicle ammo store - exploded");
                         }
 
-                        Damage *= Health; //obliterate vehicle
+                        Damage *= Health; // obliterate vehicle
                         bAmmoDetonation = true;
                         break;
                     }
@@ -1769,7 +2003,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
                         }
 
                         HullFirePercent = FMax(0.75, HullFirePercent);
-                        //HullFireHEATChance = FMax(0.90, HullFireHEATChance);
+                        // HullFireHEATChance = FMax(0.90, HullFireHEATChance);
                     }
                 }
             }
@@ -1790,7 +2024,10 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
             {
                 if (bLogDebugPenetration)
                 {
-                    Log("We hit NewVehHitpoints[" $ i $ "]:" @ GetEnum(enum'EHitPointType', NewVehHitpoints[i].NewHitPointType));
+                    Log(
+                        "We hit NewVehHitpoints[" $ i $ "]:"
+                            @ GetEnum(Enum'EHitPointType', NewVehHitpoints[i].NewHitPointType)
+                        );
                 }
 
                 // Hit periscope optics
@@ -1866,7 +2103,9 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
                 if (CannonPawn != none)
                 {
                     // Random chance of shrapnel killing commander
-                    if (CannonPawn != none && CannonPawn.Driver != none && FRand() < (float(Damage) / CommanderKillChance * TurretChanceModifier))
+                    if (CannonPawn != none
+                        && CannonPawn.Driver != none
+                        && FRand() < (float(Damage) / CommanderKillChance * TurretChanceModifier))
                     {
                         if (bDebuggingText)
                         {
@@ -1935,7 +2174,10 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
                 }
 
                 // Random chance of shrapnel killing hull machine gunner
-                if (MGun != none && MGun.WeaponPawn != none && MGun.WeaponPawn.Driver != none && FRand() < (float(Damage) / GunnerKillChance * HullChanceModifier))
+                if (MGun != none
+                    && MGun.WeaponPawn != none
+                    && MGun.WeaponPawn.Driver != none
+                    && FRand() < (float(Damage) / GunnerKillChance * HullChanceModifier))
                 {
                     if (bDebuggingText)
                     {
@@ -1945,7 +2187,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
                     MGun.WeaponPawn.Driver.TakeDamage(150, InstigatedBy, Location, vect(0.0, 0.0, 0.0), DamageType);
                 }
 
-                Damage *= 0.75; //(reduce damage to vehicle itself from a turret hit, if the turret ammo didn't detonate)
+                Damage *= 0.75; // (reduce damage to vehicle itself from a turret hit, if the turret ammo didn't detonate)
             }
         }
 
@@ -1988,7 +2230,7 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
             {
                 bFirstPenetratingHit = false;
                 HullFirePercent = FMax(0.75, HullFirePercent);
-                //HullFireHEATChance = FMax(0.90, HullFireHEATChance);
+                // HullFireHEATChance = FMax(0.90, HullFireHEATChance);
             }
         }
 
@@ -2016,7 +2258,13 @@ function ResetTakeDamageVariables()
 }
 
 // Modified to add random chance of engine fire breaking out
-function DamageEngine(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType)
+function DamageEngine(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType
+    )
 {
     // Apply new damage
     if (EngineHealth > 0)
@@ -2069,7 +2317,7 @@ function DamageEngine(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector 
 function TakeFireDamage()
 {
     local Pawn PawnWhoSetOnFire;
-    local int  i;
+    local int i;
 
     if (Role == ROLE_Authority)
     {
@@ -2090,7 +2338,9 @@ function TakeFireDamage()
         // Burn the driver
         if (Driver != none)
         {
-            Driver.TakeDamage(PlayerFireDamagePer2Secs, PawnWhoSetOnFire, Location, vect(0.0, 0.0, 0.0), VehicleBurningDamType);
+            Driver.TakeDamage(
+                PlayerFireDamagePer2Secs, PawnWhoSetOnFire, Location, vect(0.0, 0.0, 0.0), VehicleBurningDamType
+                );
         }
 
         // Burn any other vehicle occupants
@@ -2098,7 +2348,9 @@ function TakeFireDamage()
         {
             if (WeaponPawns[i] != none && WeaponPawns[i].Driver != none)
             {
-                WeaponPawns[i].Driver.TakeDamage(PlayerFireDamagePer2Secs, PawnWhoSetOnFire, Location, vect(0.0, 0.0, 0.0), VehicleBurningDamType);
+                WeaponPawns[i].Driver.TakeDamage(
+                    PlayerFireDamagePer2Secs, PawnWhoSetOnFire, Location, vect(0.0, 0.0, 0.0), VehicleBurningDamType
+                    );
             }
         }
 
@@ -2115,7 +2367,10 @@ function TakeFireDamage()
         // Otherwise the vehicle takes normal fire damage
         else
         {
-            TakeDamage(HullFireDamagePer2Secs, PawnWhoSetOnFire, vect(0.0, 0.0, 0.0), vect(0.0, 0.0, 0.0), VehicleBurningDamType);
+            TakeDamage(
+                HullFireDamagePer2Secs, PawnWhoSetOnFire, vect(0.0, 0.0, 0.0), vect(0.0, 0.0, 0.0),
+                VehicleBurningDamType
+                );
         }
 
         // Set next hull damage due in another 2 seconds, unless vehicle is now dead
@@ -2150,7 +2405,10 @@ function TakeEngineFireDamage()
                 }
             }
 
-            DamageEngine(EngineFireDamagePer3Secs, PawnWhoSetOnFire, vect(0.0, 0.0, 0.0), vect(0.0, 0.0, 0.0), VehicleBurningDamType);
+            DamageEngine(
+                EngineFireDamagePer3Secs, PawnWhoSetOnFire, vect(0.0, 0.0, 0.0), vect(0.0, 0.0, 0.0),
+                VehicleBurningDamType
+                );
 
             // Engine not dead, so set next engine damage due in the normal 3 seconds
             if (EngineHealth > 0)
@@ -2174,7 +2432,7 @@ function TakeEngineFireDamage()
 // Modified to unlock a locked vehicle (unlocking isn't directly necessary, but unlocking it finds & clears any references to the now destroyed vehicle)
 state VehicleDestroyed
 {
-ignores Tick;
+    ignores Tick;
 
     function BeginState()
     {
@@ -2316,7 +2574,7 @@ function bool StronglyRecommended(Actor S, int TeamIndex, Actor Objective)
 function float ModifyThreat(float Current, Pawn Threat)
 {
     local Vector to, t;
-    local float  r;
+    local float r;
 
     if (Vehicle(Threat) != none)
     {

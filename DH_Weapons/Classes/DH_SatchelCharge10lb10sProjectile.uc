@@ -5,21 +5,21 @@
 
 class DH_SatchelCharge10lb10sProjectile extends DHThrowableExplosiveProjectile; // incorporating SatchelCharge10lb10sProjectile & ROSatchelChargeProjectile
 
-var float           UnderneathDamageMultiplier; // Damage Multiplier for when the satchel dets under a vehicle
+var float UnderneathDamageMultiplier; // Damage Multiplier for when the satchel dets under a vehicle
 
-var float           ConstructionDamageRadius;   // A radius that will damage Contructions
-var float           ConstructionDamageMax;
+var float ConstructionDamageRadius; // A radius that will damage Contructions
+var float ConstructionDamageMax;
 
-var float           ObstacleDamageRadius;       // A radius that will damage Obstacles
-var float           ObstacleDamageMax;
+var float ObstacleDamageRadius; // A radius that will damage Obstacles
+var float ObstacleDamageMax;
 
-var float           EngineDamageMassThreshold;  // A mass threshold at which a vehicle will take min damage instead of setting the engine on fire
-var float           EngineDamageRadius;         // A radius that will damage Vehicle Engines
-var float           EngineDamageMax;
+var float EngineDamageMassThreshold; // A mass threshold at which a vehicle will take min damage instead of setting the engine on fire
+var float EngineDamageRadius; // A radius that will damage Vehicle Engines
+var float EngineDamageMax;
 
-var float           TreadDamageMassThreshold;   // A mass threshold at which a vehicle will take min damage instead of destroying the tread outright
-var float           TreadDamageRadius;          // A radius that will damage Vehicle Treads
-var float           TreadDamageMax;
+var float TreadDamageMassThreshold; // A mass threshold at which a vehicle will take min damage instead of destroying the tread outright
+var float TreadDamageRadius; // A radius that will damage Vehicle Treads
+var float TreadDamageMax;
 
 // Modified to record SavedInstigator & SavedPRI
 // RODemolitionChargePlacedMsg from ROSatchelChargeProjectile is omitted
@@ -57,7 +57,7 @@ simulated function BlowUp(Vector HitLocation)
 function HandleObjSatchels(Vector HitLocation)
 {
     local DH_ObjSatchel SatchelObjActor;
-    local Volume        V;
+    local Volume V;
 
     foreach TouchingActors(Class'Volume', V)
     {
@@ -80,12 +80,12 @@ function HandleObjSatchels(Vector HitLocation)
 
 function HandleVehicles(Vector HitLocation)
 {
-    local Actor         A;
-    local Vector        HitLoc, HitNorm;
-    local DHVehicle     Veh;
-    local int           TrackNum;
-    local float         Distance, DistanceFactor;
-    local bool          bExplodedOnVehicle, bExplodedUnderVehicle;
+    local Actor A;
+    local Vector HitLoc, HitNorm;
+    local DHVehicle Veh;
+    local int TrackNum;
+    local float Distance, DistanceFactor;
+    local bool bExplodedOnVehicle, bExplodedUnderVehicle;
 
     // Find out if we are on a vehicle
     A = Trace(HitLoc, HitNorm, Location - vect(0.0, 0.0, 16.0), Location, true);
@@ -121,14 +121,19 @@ function HandleVehicles(Vector HitLocation)
                 }
                 else // Otherwise do minor damage to the engine
                 {
-                    Veh.DamageEngine(EngineDamageMax * (Distance / EngineDamageRadius), SavedInstigator, vect(0,0,0), vect(0,0,0), MyDamageType);
+                    Veh.DamageEngine(
+                        EngineDamageMax * (Distance / EngineDamageRadius), SavedInstigator, vect(0, 0, 0),
+                        vect(0, 0, 0), MyDamageType
+                        );
                 }
             }
 
             // Handle doing additional damage if exploded underneath vehicle
             if (bExplodedUnderVehicle)
             {
-                Veh.TakeDamage(Damage * UnderneathDamageMultiplier, SavedInstigator, vect(0,0,0), vect(0,0,0), MyDamageType);
+                Veh.TakeDamage(
+                    Damage * UnderneathDamageMultiplier, SavedInstigator, vect(0, 0, 0), vect(0, 0, 0), MyDamageType
+                    );
             }
         }
 
@@ -155,7 +160,7 @@ function HandleVehicles(Vector HitLocation)
 function HandleObstacles(Vector HitLocation)
 {
     local DHObstacleInstance O;
-    local float              Distance;
+    local float Distance;
 
     foreach RadiusActors(Class'DHObstacleInstance', O, ObstacleDamageRadius)
     {
@@ -163,7 +168,10 @@ function HandleObstacles(Vector HitLocation)
         if (O != none && !FastTrace(O.Location, Location))
         {
             Distance = VSize(Location - O.Location);
-            O.TakeDamage(ObstacleDamageMax * (Distance / ObstacleDamageRadius), SavedInstigator, vect(0,0,0), vect(0,0,0), MyDamageType);
+            O.TakeDamage(
+                ObstacleDamageMax * (Distance / ObstacleDamageRadius), SavedInstigator, vect(0, 0, 0), vect(0, 0, 0),
+                MyDamageType
+                );
         }
     }
 }
@@ -171,8 +179,8 @@ function HandleObstacles(Vector HitLocation)
 // Allows satchels to do damage to constructions when traces fail (useful if construction is on the otherside of terrain or origin under world)
 function HandleConstructions(Vector HitLocation)
 {
-    local DHConstruction    C;
-    local float             Distance;
+    local DHConstruction C;
+    local float Distance;
 
     foreach RadiusActors(Class'DHConstruction', C, ConstructionDamageRadius)
     {
@@ -180,7 +188,10 @@ function HandleConstructions(Vector HitLocation)
         if (C != none && !FastTrace(C.Location, Location))
         {
             Distance = VSize(Location - C.Location);
-            C.TakeDamage(ConstructionDamageMax * (Distance / ConstructionDamageRadius), SavedInstigator, vect(0,0,0), vect(0,0,0), MyDamageType);
+            C.TakeDamage(
+                ConstructionDamageMax * (Distance / ConstructionDamageRadius), SavedInstigator, vect(0, 0, 0),
+                vect(0, 0, 0), MyDamageType
+                );
         }
     }
 }

@@ -5,8 +5,8 @@
 
 class DHVehicleFactoryAdvance extends DHVehicleFactory;
 
-var()       int                         NumPlayersRequired;             // Required players in proximity to spawn
-var()       int                         ProximityRadius;                // Proxy radius used to determine spawning or not
+var() int NumPlayersRequired; // Required players in proximity to spawn
+var() int ProximityRadius; // Proxy radius used to determine spawning or not
 
 function Reset()
 {
@@ -16,8 +16,8 @@ function Reset()
 
 function Timer()
 {
-    local DHPawn    DHP;
-    local int       NumPlayersInRadius;
+    local DHPawn DHP;
+    local int NumPlayersInRadius;
 
     foreach RadiusActors(Class'DHPawn', DHP, ProximityRadius)
     {

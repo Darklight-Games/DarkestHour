@@ -96,4 +96,3 @@ defaultproperties
     //OnHide=InternalOnHide
     //OnShow=InternalOnShow
 }
-

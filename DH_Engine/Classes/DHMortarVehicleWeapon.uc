@@ -7,29 +7,29 @@ class DHMortarVehicleWeapon extends DHVehicleWeapon
     abstract;
 
 // Firing, effects & ammo
-var     name        GunFiringAnim;            // firing animation for the mortar
-var     float       SpreadYawMin;             // minimum & maximum lateral random firing spread
-var     float       SpreadYawMax;
-var     float       BlurTime;                 // how long screen blur effect should last when firing
-var     float       BlurEffectScalar;         // scale for the screen blur when firing
-var     int         PlayerResupplyAmounts[2]; // the amount of each round type supplied by another player
-var     bool        bLastUpdatedPrimaryAmmo;  // net client records last ammo type passed to server, so can decide if needs to update server
+var name GunFiringAnim; // firing animation for the mortar
+var float SpreadYawMin; // minimum & maximum lateral random firing spread
+var float SpreadYawMax;
+var float BlurTime; // how long screen blur effect should last when firing
+var float BlurEffectScalar; // scale for the screen blur when firing
+var int PlayerResupplyAmounts[2]; // the amount of each round type supplied by another player
+var bool bLastUpdatedPrimaryAmmo; // net client records last ammo type passed to server, so can decide if needs to update server
 
 // Mortar elevation
-var     float       Elevation;                // current elevation setting, in degrees
-var     float       ElevationMaximum;         // maximum & minimum elevation angles
-var     float       ElevationMinimum;
-var     float       ElevationStride;          // elevation adjustment per key press, in degrees
-var     float       LastUpdatedElevation;     // net client records last elevation setting passed to server, so can decide if needs to update server
+var float Elevation; // current elevation setting, in degrees
+var float ElevationMaximum; // maximum & minimum elevation angles
+var float ElevationMinimum;
+var float ElevationStride; // elevation adjustment per key press, in degrees
+var float LastUpdatedElevation; // net client records last elevation setting passed to server, so can decide if needs to update server
 
 // Debugging
-var     bool        bDebug;
-var     bool        bDebugNoSpread;
-var     bool        bDebugCalibrate;
+var bool bDebug;
+var bool bDebugNoSpread;
+var bool bDebugCalibrate;
 
 // Animations
-var     name        PrimaryShellBone;
-var     name        SecondaryShellBone;
+var name PrimaryShellBone;
+var name SecondaryShellBone;
 
 replication
 {
@@ -83,7 +83,11 @@ function ServerSetFiringSettings(byte PackedSettings)
 
     if (bDebug)
     {
-        Level.Game.Broadcast(self, "ServerSetFiringSettings: Role =" @ GetEnum(enum'ENetRole', Role) @ " Elevation =" @ Elevation @ " ProjectileClass =" @ ProjectileClass);
+        Level.Game.Broadcast(
+            self,
+            "ServerSetFiringSettings: Role =" @ GetEnum(Enum'ENetRole', Role) @ " Elevation =" @ Elevation
+                @ " ProjectileClass =" @ ProjectileClass
+            );
     }
 }
 
@@ -115,7 +119,7 @@ function Projectile SpawnProjectile(class<Projectile> ProjClass, bool bAltFire)
 function Rotator GetProjectileFireRotation(optional bool bAltFire)
 {
     local Rotator FireRotation;
-    local float   SpreadYaw;
+    local float SpreadYaw;
 
     FireRotation = WeaponFireRotation;
 
@@ -134,7 +138,7 @@ function Rotator GetProjectileFireRotation(optional bool bAltFire)
 // Modified for unique handling of mortar's elevation setting
 simulated function CalcWeaponFire(bool bWasAltFire)
 {
-    local Vector  CurrentFireOffset, X, Y, Z;
+    local Vector CurrentFireOffset, X, Y, Z;
     local Rotator R;
 
     // Calculate WeaponFireRotation
@@ -147,7 +151,9 @@ simulated function CalcWeaponFire(bool bWasAltFire)
     Y.Z = 0.0;
     Y = Normal(Y);
 
-    WeaponFireRotation = Rotator(QuatRotateVector(QuatFromAxisAndAngle(Y, Class'UUnits'.static.DegreesToRadians(-Elevation)), X));
+    WeaponFireRotation = Rotator(
+        QuatRotateVector(QuatFromAxisAndAngle(Y, Class'UUnits'.static.DegreesToRadians(-Elevation)), X)
+        );
 
     // Calculate WeaponFireLocation
     WeaponFireLocation = GetBoneCoords(WeaponFireAttachmentBone).Origin;
@@ -219,7 +225,6 @@ simulated function ShakeView(bool bWasAltFire)
 
 // Emptied out as mortar doesn't use FlashCount to trigger firing effects on all net clients, nor does it use any of the effects functionality
 simulated function FlashMuzzleFlash(bool bWasAltFire);
-
 // Emptied out as mortar doesn't use FlashCount to trigger firing effects on all net clients, so there's no point briefly sending a server into state ServerCeaseFire
 // And mortar doesn't use any of the other effects functionality
 function CeaseFire(Controller C, bool bWasAltFire);
@@ -247,14 +252,17 @@ function bool GiveInitialAmmo();
 // Implemented to handle mortar resupply based on specified resupply quantities, but only for an occupied mortar (ammo is transferred to player when he exits & mortar will be empty)
 function bool ResupplyAmmo()
 {
-    if (Level.TimeSeconds > LastResupplyTimestamp + ResupplyInterval && MainAmmoCharge[0] < default.InitialPrimaryAmmo || MainAmmoCharge[1] < default.InitialSecondaryAmmo)
+    if (Level.TimeSeconds > LastResupplyTimestamp + ResupplyInterval
+        && MainAmmoCharge[0] < default.InitialPrimaryAmmo
+        || MainAmmoCharge[1] < default.InitialSecondaryAmmo)
     {
         MainAmmoCharge[0] = Clamp(MainAmmoCharge[0] + PlayerResupplyAmounts[0], 0, default.InitialPrimaryAmmo);
         MainAmmoCharge[1] = Clamp(MainAmmoCharge[1] + PlayerResupplyAmounts[1], 0, default.InitialSecondaryAmmo);
 
         if (DHMortarVehicle(Base) != none)
         {
-            DHMortarVehicle(Base).bCanBeResupplied = MainAmmoCharge[0] < default.InitialPrimaryAmmo || MainAmmoCharge[1] < default.InitialSecondaryAmmo;
+            DHMortarVehicle(Base).bCanBeResupplied = MainAmmoCharge[0] < default.InitialPrimaryAmmo
+                || MainAmmoCharge[1] < default.InitialSecondaryAmmo;
         }
         LastResupplyTimestamp = Level.TimeSeconds;
         return true;

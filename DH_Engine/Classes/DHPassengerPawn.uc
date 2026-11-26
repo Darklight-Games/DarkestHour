@@ -31,11 +31,11 @@ And always check a WeaponPawns array member exists before trying to do anything 
 // Facilitates using a generic passenger pawn class for all vehicles, with properties being specified in vehicle's PassengerPawns array
 // Avoids need for lots of passenger pawn classes for every vehicle, but we need subclasses with PositionInArray as net client has to know its index position
 // Note that if really needed we can still use specific passenger classes with a vehicle, instead of the PassengerPawns array
-var     array<class<DHPassengerPawn> >  PassengerClasses;
+var array<class<DHPassengerPawn> > PassengerClasses;
 
-var     bool    bUseDriverHeadBoneCam; // use the driver's head bone for the camera location
+var bool bUseDriverHeadBoneCam; // use the driver's head bone for the camera location
 
-var     Rotator InitialViewRotationOffset;
+var Rotator InitialViewRotationOffset;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //  ************ ACTOR INITIALISATION, DESTRUCTION & KEY ENGINE EVENTS  ***********  //
@@ -72,7 +72,12 @@ function Timer()
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // Modified to avoid "accessed none" errors on VehicleBase & to generally optimise & match other DH vehicle classes
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    )
 {
     local Quat RelativeQuat, VehicleQuat, NonRelativeQuat;
 
@@ -140,8 +145,8 @@ simulated function Vector GetCameraLocationStart()
 // Modified so the player's view starts facing the same way his attached pawn is facing, which feels natural
 simulated function SetInitialViewRotation()
 {
-    local name    AttachBone;
-    local Vector  FacingDirection;
+    local name AttachBone;
+    local Vector FacingDirection;
     local Rotator NewRotation;
 
     if (VehicleBase != none)
@@ -149,7 +154,7 @@ simulated function SetInitialViewRotation()
         AttachBone = VehicleBase.PassengerWeapons[PositionInArray].WeaponBone;
         FacingDirection = Vector(VehicleBase.GetBoneRotation(AttachBone)) >> DriveRot; // apply DriveRot to attachment bone's rotation to get player's initial world facing direction
         FacingDirection = FacingDirection >> InitialViewRotationOffset;
-        NewRotation = Rotator(FacingDirection << VehicleBase.Rotation);                // now make that relative to vehicle's rotation (standard in weapon pawns)
+        NewRotation = Rotator(FacingDirection << VehicleBase.Rotation); // now make that relative to vehicle's rotation (standard in weapon pawns)
         NewRotation.Pitch = LimitPitch(NewRotation.Pitch);
         SetRotation(NewRotation);
     }
@@ -170,7 +175,7 @@ function KDriverEnter(Pawn P)
         }
 
         SetTimer(0.0, false); // clear any timer, so we don't risk setting bTearOff to true again just after we enter
-        bTearOff = false;     // note we don't need to force a quick net update of bTearOff, as normal possession functionality does it
+        bTearOff = false; // note we don't need to force a quick net update of bTearOff, as normal possession functionality does it
     }
 
     super.KDriverEnter(P);
@@ -226,7 +231,7 @@ simulated function DetachDriver(Pawn P)
 simulated function InitializeVehicleBase()
 {
     local DHVehicle V;
-    local int       Index;
+    local int Index;
 
     V = DHVehicle(VehicleBase);
 

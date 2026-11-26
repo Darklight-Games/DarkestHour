@@ -10,7 +10,12 @@ var localized string HaveResupplied;
 var localized string BeenResupplied;
 var localized string HaveResuppliedFriendlyMortar;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string S;
 
@@ -37,7 +42,12 @@ static function string GetString(optional int Switch, optional PlayerReplication
     return S;
 }
 
-static function int GetIconID(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function int GetIconID(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     if (RelatedPRI_1 != none && RelatedPRI_1.Team != none)
     {

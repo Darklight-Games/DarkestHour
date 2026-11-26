@@ -9,7 +9,15 @@ class DHATGunCannon extends DHVehicleCannon
 function bool ShouldPlayAutomaticVehicleAlerts();
 
 // Emptied out as AT gun will always be penetrated by a shell & needs no penetration functionality
-simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLocation, Vector ProjectileDirection, float MaxArmorPenetration) { return true; }
+simulated function bool ShouldPenetrate(
+    DHAntiVehicleProjectile P,
+    Vector HitLocation,
+    Vector ProjectileDirection,
+    float MaxArmorPenetration
+    )
+{
+    return true;
+}
 
 // Functions emptied out as irrelevant to an AT gun, which never has alt fire (i.e. coaxial MG) or a smoke launcher:
 simulated function AttemptFireSmokeLauncher();

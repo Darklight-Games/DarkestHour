@@ -8,7 +8,12 @@ class DHSpawnProtectMineVolMessage extends ROMineFieldMsg;
 // Modified to be used by a spawn protection minefield for a variety of messages during its initial safe period
 // Standard periodic warning message during safe period includes number of safe seconds remaining until minefield goes live (passed as optional Switch function argument)
 // Other messages to notify if player leaves minefield during safe period & special warning if pawn in safe period is in 'live' vehicle that will be blown up
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local DHSpawnProtectMineVolume MineVolume;
 
@@ -26,7 +31,7 @@ static function string GetString(optional int Switch, optional PlayerReplication
         return Repl(MineVolume.SafePeriodWarningMessage, "%remaining%", Switch);
     }
 
-    Switch (Switch)
+    switch (Switch)
     {
         case 0: // null value means just the standard 'live' minefield warning message
             return MineVolume.WarningMessage;

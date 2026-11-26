@@ -5,9 +5,9 @@
 
 class DHWireCuttersItem extends DHWeapon;
 
-var     float               CutDistance;
-var     DHObstacleInstance  ObstacleBeingCut, ObstacleShouldBeCut;
-var     DHConstruction      ConstructionBeingCut, ConstructionShouldBeCut;
+var float CutDistance;
+var DHObstacleInstance ObstacleBeingCut, ObstacleShouldBeCut;
+var DHConstruction ConstructionBeingCut, ConstructionShouldBeCut;
 
 // Functions emptied out or returning false, as wire cutters aren't a real weapon
 simulated function bool IsFiring();
@@ -16,7 +16,6 @@ function bool ResupplyAmmo();
 exec simulated function ROManualReload();
 simulated function bool IsBusy();
 simulated function bool ShouldUseFreeAim();
-
 // Overriden in Idle state
 simulated function Fire(float F);
 
@@ -94,9 +93,9 @@ simulated state Cutting
         super.Tick(DeltaTime);
 
         // A fail safe to get out of this state if either something went wrong or somehow we shouldn't continue
-        if ((ConstructionBeingCut == none && ObstacleBeingCut == none) ||
-            (ObstacleBeingCut != none && ObstacleBeingCut.Info.IsCleared()) ||
-            (ConstructionBeingCut != none && !ConstructionBeingCut.CanBeCut()))
+        if ((ConstructionBeingCut == none && ObstacleBeingCut == none)
+            || (ObstacleBeingCut != none && ObstacleBeingCut.Info.IsCleared())
+            || (ConstructionBeingCut != none && !ConstructionBeingCut.CanBeCut()))
         {
             GotoState('');
             PlayAnim('cutEnd', 1.0, 0.2);
@@ -127,7 +126,7 @@ simulated state Cutting
 
     simulated function AnimEnd(int Channel)
     {
-        local name  SeqName;
+        local name SeqName;
         local float AnimRate, AnimFrame;
 
         GetAnimParams(Channel, SeqName, AnimFrame, AnimRate);
@@ -176,17 +175,17 @@ simulated state Idle
             {
                 ConstructionBeingCut = ConstructionShouldBeCut;
             }
-            
+
             GotoState('Cutting');
-        }  
+        }
     }
-    
+
     simulated function Tick(float DeltaTime)
     {
         local DHPawn P;
 
         if (Level.NetMode != NM_DedicatedServer)
-        {   
+        {
             P = DHPawn(Instigator);
 
             if (P != none)
@@ -207,16 +206,22 @@ simulated state Idle
 
         P = DHPawn(Instigator);
 
-        if (P == none || P.Weapon != self || P.Controller == none || P.Velocity != vect(0.0, 0.0, 0.0) || P.IsProneTransitioning())
+        if (P == none
+            || P.Weapon != self
+            || P.Controller == none
+            || P.Velocity != vect(0.0, 0.0, 0.0)
+            || P.IsProneTransitioning())
         {
             return false;
         }
-        
+
         TraceStart = P.Location;
         TraceEnd = TraceStart + (Vector(P.Controller.Rotation) * CutDistance);
-        
+
         // Support for obstacles
-        foreach TraceActors(Class'DHObstacleInstance', O, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0))
+        foreach TraceActors(
+            Class'DHObstacleInstance', O, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0)
+            )
         {
             if (O != none && !O.Info.IsCleared() && O.Info.CanBeCut())
             {
@@ -234,10 +239,10 @@ simulated state Idle
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     simulated function EndState()
     {
         local DHPawn P;

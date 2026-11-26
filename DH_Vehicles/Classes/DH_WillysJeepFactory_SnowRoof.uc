@@ -12,4 +12,3 @@ defaultproperties
     Skins(1)=Texture'DH_Jeep_tex.Willys_Wheels_Winter'
     Skins(2)=Texture'DH_Jeep_tex.Willys_Gear_Snow'
 }
-

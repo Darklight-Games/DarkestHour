@@ -5,15 +5,15 @@
 
 class DHSupplyMessage extends ROGameMessage;
 
-var localized string    SuppliesUnloaded;
-var localized string    SuppliesLoaded;
-var localized string    VehicleFull;
-var localized string    VehicleEmpty;
-var localized string    NoSupplyCaches;
-var localized string    SupplyCacheEmpty;
-var localized string    SupplyCacheFull;
-var localized string    SupplyCacheFallbackName;
-var localized string    SuppliesRefunded;
+var localized string SuppliesUnloaded;
+var localized string SuppliesLoaded;
+var localized string VehicleFull;
+var localized string VehicleEmpty;
+var localized string NoSupplyCaches;
+var localized string SupplyCacheEmpty;
+var localized string SupplyCacheFull;
+var localized string SupplyCacheFallbackName;
+var localized string SuppliesRefunded;
 
 static function string GetStringFromSwitch(int Switch)
 {
@@ -40,7 +40,12 @@ static function string GetStringFromSwitch(int Switch)
     return "";
 }
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local int Switch1, SupplyCount;
     local DHConstructionSupplyAttachment CSA;
@@ -75,4 +80,3 @@ defaultproperties
     SupplyCacheFallbackName="supply cache"
     SuppliesRefunded="{0} supplies have been refunded to nearby caches."
 }
-

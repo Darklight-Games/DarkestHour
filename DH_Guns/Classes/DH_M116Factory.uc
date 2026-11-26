@@ -12,4 +12,3 @@ defaultproperties
     Skins(0)=Texture'DH_M116_tex.M116_body'
     TeamNum=ALLIES
 }
-

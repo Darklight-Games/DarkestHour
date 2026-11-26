@@ -13,12 +13,13 @@ class DHWeaponFire extends ROWeaponFire;
 struct ShellEjector
 {
     var class<ROShellEject> EjectClass;
-    var name                EjectBone;
-    var Vector              IronSightOffset;
-    var Vector              HipOffset;
-    var Rotator             RotOffsetIron;
-    var Rotator             RotOffsetHip;
+    var name EjectBone;
+    var Vector IronSightOffset;
+    var Vector HipOffset;
+    var Rotator RotOffsetIron;
+    var Rotator RotOffsetHip;
 };
+
 var array<ShellEjector> ShellEjectors;
 
 var bool bIgnoresWeaponLock;
@@ -183,7 +184,7 @@ event ModeDoFire()
     Load = AmmoPerFire;
     HoldTime = 0;
 
-    if (Instigator.PendingWeapon != Weapon && Instigator.PendingWeapon != None)
+    if (Instigator.PendingWeapon != Weapon && Instigator.PendingWeapon != none)
     {
         bIsFiring = false;
         Weapon.PutDown();
@@ -221,8 +222,8 @@ simulated function EjectShell()
             EjectOffset = (EjectCoords.Origin - Weapon.Location) / 5.0;
             EjectOffset += Weapon.Location;
             EjectOffset += (EjectCoords.XAxis * ShellEjectors[i].HipOffset.X)
-                         + (EjectCoords.YAxis * ShellEjectors[i].HipOffset.Y)
-                         + (EjectCoords.ZAxis * ShellEjectors[i].HipOffset.Z);
+                + (EjectCoords.YAxis * ShellEjectors[i].HipOffset.Y)
+                + (EjectCoords.ZAxis * ShellEjectors[i].HipOffset.Z);
 
             if (bReverseShellSpawnDirection)
             {
@@ -241,8 +242,8 @@ simulated function EjectShell()
             Weapon.GetViewAxes(X, Y, Z);
             EjectOffset = Instigator.Location + Instigator.EyePosition();
             EjectOffset += (X * ShellEjectors[i].IronSightOffset.X)
-                         + (Y * ShellEjectors[i].IronSightOffset.Y)
-                         + (Z * ShellEjectors[i].IronSightOffset.Z);
+                + (Y * ShellEjectors[i].IronSightOffset.Y)
+                + (Z * ShellEjectors[i].IronSightOffset.Z);
             EjectRot = Rotator(Y);
             EjectRot.Yaw += 16384;
             Shell = Weapon.Spawn(ShellEjectors[i].EjectClass, none,, EjectOffset, EjectRot);
@@ -259,7 +260,8 @@ simulated function EjectShell()
         EjectRot.Pitch = EjectRot.Pitch + Shell.RandomPitchRange - Rand(Shell.RandomPitchRange * 2);
         EjectRot.Roll = EjectRot.Roll + Shell.RandomRollRange - Rand(Shell.RandomRollRange * 2);
 
-        Shell.Velocity = Vector(EjectRot) * Class'UInterp'.static.Linear(FRand(), Shell.MinStartSpeed, Shell.MaxStartSpeed);
+        Shell.Velocity = Vector(EjectRot)
+            * Class'UInterp'.static.Linear(FRand(), Shell.MinStartSpeed, Shell.MaxStartSpeed);
     }
 }
 

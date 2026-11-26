@@ -5,7 +5,7 @@
 
 class DHBulletHitGravelEffectLarge extends Emitter;
 
-//Particle count: 33
+// Particle count: 33
 
 defaultproperties
 {

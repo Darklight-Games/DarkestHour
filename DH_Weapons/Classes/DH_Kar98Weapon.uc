@@ -37,4 +37,3 @@ defaultproperties
     PostReloadAnim="single_close"
     FullReloadAnim="reload"
 }
-

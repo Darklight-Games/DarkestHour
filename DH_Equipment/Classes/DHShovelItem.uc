@@ -9,7 +9,11 @@ class DHShovelItem extends DHWeapon
 function bool FillAmmo();
 function bool ResupplyAmmo();
 exec simulated function ROManualReload();
-simulated function bool ShouldUseFreeAim() { return true; }
+
+simulated function bool ShouldUseFreeAim()
+{
+    return true;
+}
 
 simulated function Fire(float F)
 {

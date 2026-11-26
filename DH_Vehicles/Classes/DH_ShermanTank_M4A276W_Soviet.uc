@@ -50,4 +50,3 @@ defaultproperties
 
     //to do: destroyed textures
 }
-

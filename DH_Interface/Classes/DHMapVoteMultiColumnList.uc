@@ -5,16 +5,16 @@
 
 class DHMapVoteMultiColumnList extends MapVoteMultiColumnList;
 
-var noexport           int       GameTypeIndex;
-var noexport protected string    FilterPattern;
+var noexport int GameTypeIndex;
+var protected noexport string FilterPattern;
 
 // Style for maps that are out of player range
-var(Style)             string    RedListStyleName;
-var(Style)    noexport GUIStyles RedListStyle;
+var(Style) string RedListStyleName;
+var(Style) noexport GUIStyles RedListStyle;
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
-    super.InitComponent(MyController,MyOwner);
+    super.InitComponent(MyController, MyOwner);
 
     if (RedListStyleName != "" && RedListStyle == none)
     {
@@ -22,7 +22,10 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     }
 }
 
-function string GetFilterPattern() { return FilterPattern; }
+function string GetFilterPattern()
+{
+    return FilterPattern;
+}
 
 function SetFilterPattern(string NewFilterPattern)
 {
@@ -138,7 +141,11 @@ function DrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, bool
 
             if (DropState == DRP_Source && i != DropIndex)
             {
-                OutlineStyle.Draw(Canvas, MenuState, Controller.MouseX - MouseOffset[0], Controller.MouseY - MouseOffset[1] + Y - ClientBounds[1], MouseOffset[2] + MouseOffset[0], ItemHeight);
+                OutlineStyle.Draw(
+                    Canvas, MenuState, Controller.MouseX - MouseOffset[0],
+                    Controller.MouseY - MouseOffset[1] + Y - ClientBounds[1], MouseOffset[2] + MouseOffset[0],
+                    ItemHeight
+                    );
             }
         }
     }
@@ -146,7 +153,7 @@ function DrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, bool
     // Draw the selection border
     if (bSelected)
     {
-        SelectedStyle.Draw(Canvas, MenuState, X, Y-2, W, H + 2);
+        SelectedStyle.Draw(Canvas, MenuState, X, Y - 2, W, H + 2);
         DrawStyle = SelectedStyle;
     }
     else
@@ -167,21 +174,33 @@ function DrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, bool
     // Begin Drawing!
     // Map Name
     GetCellLeftWidth(0, CellLeft, CellWidth);
-    DrawStyle.DrawText(Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left, Class'DHMapDatabase'.static.GetHumanReadableMapName(VRI.MapList[MapVoteData[SortData[i].SortItem]].MapName), FontScale);
+    DrawStyle.DrawText(
+        Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left,
+        Class'DHMapDatabase'.static.GetHumanReadableMapName(VRI.MapList[MapVoteData[SortData[i].SortItem]].MapName),
+        FontScale
+        );
 
     if (MapDatabase != none && MapDatabase.GetMapInfo(VRI.MapList[MapVoteData[SortData[i].SortItem]].MapName, MI))
     {
         // Allied Side
         GetCellLeftWidth(1, CellLeft, CellWidth);
-        DrawStyle.DrawText(Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left, Class'DHMapDatabase'.static.GetAlliedNationString(MI.AlliedNation), FontScale);
+        DrawStyle.DrawText(
+            Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left,
+            Class'DHMapDatabase'.static.GetAlliedNationString(MI.AlliedNation), FontScale
+            );
 
         // Axis Side
         GetCellLeftWidth(2, CellLeft, CellWidth);
-        DrawStyle.DrawText(Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left, Class'DHMapDatabase'.static.GetAxisNationString(MI.AxisNation), FontScale);
+        DrawStyle.DrawText(
+            Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left,
+            Class'DHMapDatabase'.static.GetAxisNationString(MI.AxisNation), FontScale
+            );
 
         // Type
         GetCellLeftWidth(3, CellLeft, CellWidth);
-        DrawStyle.DrawText(Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left, MI.GameTypeClass.default.GameTypeName, FontScale);
+        DrawStyle.DrawText(
+            Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left, MI.GameTypeClass.default.GameTypeName, FontScale
+            );
 
         // Map Size
         GetCellLeftWidth(4, CellLeft, CellWidth);
@@ -195,7 +214,10 @@ function DrawItem(Canvas Canvas, int i, float X, float Y, float W, float H, bool
             DrawStyle = RedListStyle;
         }
 
-        DrawStyle.DrawText(Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left, Class'DHMapDatabase'.static.GetMapSizeString(MI.Size), FontScale);
+        DrawStyle.DrawText(
+            Canvas, MState, CellLeft, Y, CellWidth, H, TXTA_Left, Class'DHMapDatabase'.static.GetMapSizeString(MI.Size),
+            FontScale
+            );
         DrawStyle = OldDrawStyle;
     }
 }
@@ -218,7 +240,6 @@ function string GetSortString(int i)
             bHasMapInfo = MD.GetMapInfo(VRI.MapList[i].MapName, MI);
         }
     }
-
 
     switch (SortColumn)
     {

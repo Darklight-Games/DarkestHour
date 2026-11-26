@@ -5,8 +5,8 @@
 
 class DH_LocustGunsightOverlay extends VehicleHUDOverlay;
 
-var     ScriptedTexture TelescopeScriptedTexture;  // a scripted texture that the magnified telescope view is drawn onto
-var     int             TelescopeFOV;              // the FOV of the telescope 'portal' to create a magnified telescope view
+var ScriptedTexture TelescopeScriptedTexture; // a scripted texture that the magnified telescope view is drawn onto
+var int TelescopeFOV; // the FOV of the telescope 'portal' to create a magnified telescope view
 
 // Implemented to set up the scripted texture & combiner for drawing the magnified telescope 'portal' view, & to set the overlay's size
 simulated function PostBeginPlay()
@@ -22,13 +22,16 @@ simulated function PostBeginPlay()
 
         // Make a scripted texture, which will display a zoomed 'portal' view for the telescope mounted within the Locust's persicopic gunsight
         TelescopeScriptedTexture = ScriptedTexture(Level.ObjectPool.AllocateObject(Class'ScriptedTexture'));
-        TelescopeScriptedTexture.SetSize(CannonPawn.GunsightOverlay.MaterialUSize(), CannonPawn.GunsightOverlay.MaterialVSize());
+        TelescopeScriptedTexture.SetSize(
+            CannonPawn.GunsightOverlay.MaterialUSize(),
+            CannonPawn.GunsightOverlay.MaterialVSize()
+            );
         TelescopeScriptedTexture.Client = self; // means this actor receives RenderTexture() events from the scripted texture
 
         // Now combine the scripted texture for the portal view with the gunsight texture, & set that as our telescope skin
         Skins[0] = CannonPawn.GunsightOverlay;
         Combiner(Skins[0]).Material2 = TelescopeScriptedTexture;
-     }
+    }
 }
 
 // Implemented to clean up objects that have been created

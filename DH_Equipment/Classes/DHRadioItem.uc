@@ -7,10 +7,9 @@ class DHRadioItem extends DHWeapon;
 
 // TODO: ArtilleryTrigger seems to serve no purpose as an instance variable & should be made a local variable in AttachToPawn()
 // The other 2 could probably also be removed & replaced with class/name literals as they are only used here & only once & will never change or be subclassed
-var class<DHRadio>      RadioClass;
-var DHRadio             Radio;
-var name                AttachBoneName;
-
+var class<DHRadio> RadioClass;
+var DHRadio Radio;
+var name AttachBoneName;
 
 // Functions emptied out or returning false, as radio isn't a real weapon
 simulated function Fire(float F);

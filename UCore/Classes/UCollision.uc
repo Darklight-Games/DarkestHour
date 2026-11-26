@@ -9,7 +9,7 @@ enum ECollisionType
     CT_Disjoint,
     CT_Intersect,
     CT_Contain,
-    CT_Parallel
+    CT_Parallel,
 };
 
 static function bool PointInCylinder(Vector Origin, float Radius, float HalfHeight, Rotator Rotation, Vector Point)
@@ -18,7 +18,7 @@ static function bool PointInCylinder(Vector Origin, float Radius, float HalfHeig
     return Sqrt(Point.X * Point.X + Point.Y * Point.Y) < Radius && Abs(Point.Z) < HalfHeight;
 }
 
-final private static function byte ComputeOutCode(float X, float Y, Box Viewport)
+private final static function byte ComputeOutCode(float X, float Y, Box Viewport)
 {
     local byte Code;
 

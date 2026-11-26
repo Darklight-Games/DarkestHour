@@ -14,40 +14,40 @@ const INNER_RADIUS = 16.0;
 const OUTER_RADIUS = 32.0;
 const TAU = 6.28318530718;
 
-var Stack_Object        Menus;
+var Stack_Object Menus;
 
-var float               MenuAlpha;
-var Vector              Cursor;
-var int                 SelectedIndex;
+var float MenuAlpha;
+var Vector Cursor;
+var int SelectedIndex;
 
 const MAX_OPTIONS = 8;
 
 // This is necessary because trying to DrawTile on identical TexRotators
 // and other procedural materials in the same frame ends up only drawing one
 // of them (probably due to engine-level render batching).
-var Texture             OptionTextures[MAX_OPTIONS];
-var array<TexRotator>   OptionTexRotators;
-var Texture             RingTexture;
+var Texture OptionTextures[MAX_OPTIONS];
+var array<TexRotator> OptionTexRotators;
+var Texture RingTexture;
 
-var Color               SelectedColor;
-var Color               DisabledColor;
-var Color               SubmenuColor;
+var Color SelectedColor;
+var Color DisabledColor;
+var Color SubmenuColor;
 
 var DHGameReplicationInfo GRI;
 
-var bool                bShouldHideOnLeftMouseRelease;
+var bool bShouldHideOnLeftMouseRelease;
 
-var Pawn                InstigatorPawn;
+var Pawn InstigatorPawn;
 
-var Sound               SelectSound;
-var Sound               HoverSound;
-var Sound               CancelSound;
+var Sound SelectSound;
+var Sound HoverSound;
+var Sound CancelSound;
 
-var Material            CrosshairMaterial;
+var Material CrosshairMaterial;
 
-var bool                bDebugCursor;
+var bool bDebugCursor;
 
-delegate                OnHidden();
+delegate OnHidden();
 
 event Initialized()
 {
@@ -237,7 +237,12 @@ function Tick(float DeltaTime)
 
     Menu = DHCommandMenu(Menus.Peek());
 
-    if (PC == none || PC.Pawn == none || PC.IsDead() || Menu == none || Menu.ShouldHideMenu() || PC.Pawn != InstigatorPawn)
+    if (PC == none
+        || PC.Pawn == none
+        || PC.IsDead()
+        || Menu == none
+        || Menu.ShouldHideMenu()
+        || PC.Pawn != InstigatorPawn)
     {
         Hide();
         return;
@@ -457,7 +462,10 @@ function PostRender(Canvas C)
                         C.DrawColor = ORI.InfoColor;
                         C.DrawColor.A = byte(255 * MenuAlpha);
                         C.SetPos(CenterX - (XL / 2) - XL2 - (GUIScale * 4), CenterY - YL2 - YL - (GUIScale * 8));
-                        C.DrawTile(ORI.InfoIcon, XL2, YL2, 0, 0, ORI.InfoIcon.MaterialUSize() - 1, ORI.InfoIcon.MaterialVSize() - 1);
+                        C.DrawTile(
+                            ORI.InfoIcon, XL2, YL2, 0, 0, ORI.InfoIcon.MaterialUSize() - 1,
+                            ORI.InfoIcon.MaterialVSize() - 1
+                            );
                     }
                 }
             }
@@ -596,9 +604,20 @@ function PlaySound(Sound Sound)
     }
 }
 
-function bool IsFadingIn() { return IsInState('FadeIn'); }
-function bool IsFadingOut() { return IsInState('FadeOut'); }
-function bool IsFadingInOrOut() { return IsFadingIn() || IsFadingOut(); }
+function bool IsFadingIn()
+{
+    return IsInState('FadeIn');
+}
+
+function bool IsFadingOut()
+{
+    return IsInState('FadeOut');
+}
+
+function bool IsFadingInOrOut()
+{
+    return IsFadingIn() || IsFadingOut();
+}
 
 defaultproperties
 {

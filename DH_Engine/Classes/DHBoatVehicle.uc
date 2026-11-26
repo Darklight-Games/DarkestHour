@@ -6,12 +6,12 @@
 class DHBoatVehicle extends DHVehicle
     abstract;
 
-var     Sound               WashSound;
-var     name                WashSoundBoneName;
-var     float               WashSoundRadius;
-var     ROSoundAttachment   WashSoundAttachment;
+var Sound WashSound;
+var name WashSoundBoneName;
+var float WashSoundRadius;
+var ROSoundAttachment WashSoundAttachment;
 
-var     name                DestroyedAnimName;
+var name DestroyedAnimName;
 
 // Modified to add wash sound attachment
 simulated function SpawnVehicleAttachments()
@@ -59,7 +59,7 @@ simulated event DestroyAppearance()
     // Zero the driving controls (vehicle will come to a stop naturally)
     Throttle = 0.0;
     Steering = 0.0;
-    Rise     = 0.0;
+    Rise = 0.0;
 
     // Destroy the vehicle weapons
     if (Role == ROLE_Authority)

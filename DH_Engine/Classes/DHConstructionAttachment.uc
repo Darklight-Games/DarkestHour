@@ -6,7 +6,14 @@
 class DHConstructionAttachment extends Actor
     abstract;
 
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+function TakeDamage(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     local DHConstruction C;
 
@@ -23,7 +30,7 @@ simulated function bool CanTakeTearDownDamageFromPawn(Pawn P, optional bool bSho
     local DHConstruction C;
 
     C = DHConstruction(Base);
-    
+
     if (C == none)
     {
         return false;

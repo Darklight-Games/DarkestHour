@@ -8,12 +8,12 @@ class DHLib extends Object
 
 struct ServerHealthStage
 {
-    var byte                    MinTick;
-    var localized string        Text;
-    var Color                   TextColor;
+    var byte MinTick;
+    var localized string Text;
+    var Color TextColor;
 };
 
-var ServerHealthStage           ServerHealthStages[6];
+var ServerHealthStage ServerHealthStages[6];
 
 // Returns current map name, stripping any ".rom" suffix to the name
 // The map name returned by the native GetURLMap() function includes the suffix on a server, but not in single player mode or on a net client
@@ -154,11 +154,23 @@ final static function string GetDurationString(int Seconds, string Format)
 }
 
 // Draws a debugging cylinder out of wireframe lines - same as in ROHud but uses DrawStayingDebugLine(), so they stay on the screen
-final static function DrawStayingDebugCylinder(Actor A, Vector Base, Vector X, Vector Y, Vector Z, float Radius, float HalfHeight, int NumSides, byte R, byte G, byte B)
+final static function DrawStayingDebugCylinder(
+    Actor A,
+    Vector Base,
+    Vector X,
+    Vector Y,
+    Vector Z,
+    float Radius,
+    float HalfHeight,
+    int NumSides,
+    byte R,
+    byte G,
+    byte B
+    )
 {
-    local float  AngleDelta;
+    local float AngleDelta;
     local Vector LastVertex, Vertex;
-    local int    SideIndex;
+    local int SideIndex;
 
     if (A != none && Radius > 0.0 && HalfHeight > 0.0 && NumSides > 0)
     {
@@ -167,7 +179,8 @@ final static function DrawStayingDebugCylinder(Actor A, Vector Base, Vector X, V
 
         for (SideIndex = 0; SideIndex < NumSides; ++SideIndex)
         {
-            Vertex = Base + (X * Cos(AngleDelta * (SideIndex + 1.0)) + Y * Sin(AngleDelta * (SideIndex + 1.0))) * Radius;
+            Vertex = Base
+                + (X * Cos(AngleDelta * (SideIndex + 1.0)) + Y * Sin(AngleDelta * (SideIndex + 1.0))) * Radius;
 
             A.DrawStayingDebugLine(LastVertex - Z * HalfHeight, Vertex - Z * HalfHeight, R, G, B);
             A.DrawStayingDebugLine(LastVertex + Z * HalfHeight, Vertex + Z * HalfHeight, R, G, B);
@@ -178,7 +191,7 @@ final static function DrawStayingDebugCylinder(Actor A, Vector Base, Vector X, V
     }
 }
 
-final static function String GetServerHealthString(byte Tick, optional out Color TextColor)
+final static function string GetServerHealthString(byte Tick, optional out Color TextColor)
 {
     local int i;
 

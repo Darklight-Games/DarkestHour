@@ -4,4 +4,3 @@
 //==============================================================================
 
 class DH_HetzerFactory_CamoThree extends DH_HetzerFactory_CamoTwo;
-

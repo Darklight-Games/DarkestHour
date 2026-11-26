@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_RKKA_GreatcoatAssault extends DH_RKKA_GreatcoatAssaultEarly;   //to be removed
+class DH_RKKA_GreatcoatAssault extends DH_RKKA_GreatcoatAssaultEarly; // to be removed
 
 defaultproperties
 {

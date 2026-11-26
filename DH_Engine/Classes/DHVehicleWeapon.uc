@@ -7,42 +7,43 @@ class DHVehicleWeapon extends ROVehicleWeapon
     abstract;
 
 // Vehicle weapon & weapon pawn
-var     DHVehicleWeaponPawn WeaponPawn;         // convenient reference to VehicleWeaponPawn actor
-var     Vector              WeaponAttachOffset; // optional positional offset when attaching VehicleWeapon to the hull
-var     bool                bHasTurret;         // this weapon is in a fully rotating turret
+var DHVehicleWeaponPawn WeaponPawn; // convenient reference to VehicleWeaponPawn actor
+var Vector WeaponAttachOffset; // optional positional offset when attaching VehicleWeapon to the hull
+var bool bHasTurret; // this weapon is in a fully rotating turret
 
 // Clientside flags to do set up when key actors are received, to fix problems caused by replication timing issues
-var     bool                bInitializedVehicleBase;          // done set up after receiving the (vehicle) Base actor
-var     bool                bInitializedVehicleAndWeaponPawn; // done set up after receiving both the (vehicle) Base & VehicleWeaponPawn actors
+var bool bInitializedVehicleBase; // done set up after receiving the (vehicle) Base actor
+var bool bInitializedVehicleAndWeaponPawn; // done set up after receiving both the (vehicle) Base & VehicleWeaponPawn actors
 
 // Turret/MG collision static mesh - new DHCollisionMeshActor allows us to use a collision static mesh with VehicleWeapon
 struct SCollisionStaticMesh
 {
     var StaticMesh CollisionStaticMesh;
-    var name AttachBone;    // If '', use YawBone.
+    var name AttachBone; // If '', use YawBone.
     var bool bWontStopBullet;
     var bool bWontStopBlastDamage;
     var DHCollisionMeshActor.ETransformSpace TransformSpace;
 };
 
-var     array<SCollisionStaticMesh> CollisionStaticMeshes;
-var     array<DHCollisionMeshActor> CollisionMeshActors;
+var array<SCollisionStaticMesh> CollisionStaticMeshes;
+var array<DHCollisionMeshActor> CollisionMeshActors;
 
 // Vehicle weapon attachments
 struct VehicleAttachment
 {
-    var class<Actor>    AttachClass;
-    var Actor           Actor;
-    var StaticMesh      StaticMesh;
-    var name            AttachBone;
-    var Vector          RelativeLocation;
-    var Rotator         RelativeRotation;
-    var float           RadioCollisionRadius;
-    var float           RadioCollisionHeight;
+    var class<Actor> AttachClass;
+    var Actor Actor;
+    var StaticMesh StaticMesh;
+    var name AttachBone;
+    var Vector RelativeLocation;
+    var Rotator RelativeRotation;
+    var float RadioCollisionRadius;
+    var float RadioCollisionHeight;
     // Note that when bServerOnly is true, RelativeLocation & Rotation are not guaranteed to be replicated correctly to clients.
     // Use AttachBone instead for reliable client-side attachment.
-    var bool            bServerOnly;
+    var bool bServerOnly;
 };
+
 var array<VehicleAttachment> VehicleAttachments;
 
 struct WeaponAttachments
@@ -59,29 +60,30 @@ enum ECounterBatteryReport
     CBR_Medium,
     CBR_Large,
 };
+
 var ECounterBatteryReport CounterBatteryReport;
 
 // Weapon fire
-var     bool                bUsesMags;          // main weapon uses magazines or similar (e.g. ammo belts), not single shot shells
-var     bool                bIsArtillery;       // report our hits to be tracked on artillery targets
-var     bool                bSkipFiringEffects; // stops SpawnProjectile() playing firing effects; used to prevent multiple effects for weapons that fire multiple projectiles
-var     Sound               DryFireSound;
+var bool bUsesMags; // main weapon uses magazines or similar (e.g. ammo belts), not single shot shells
+var bool bIsArtillery; // report our hits to be tracked on artillery targets
+var bool bSkipFiringEffects; // stops SpawnProjectile() playing firing effects; used to prevent multiple effects for weapons that fire multiple projectiles
+var Sound DryFireSound;
 
-var     float       ResupplyInterval;
-var     int         LastResupplyTimestamp;
+var float ResupplyInterval;
+var int LastResupplyTimestamp;
 
 // MG weapon (hull mounted or coaxial)
-const   ALTFIRE_AMMO_INDEX = 3;                    // ammo index for alt fire (coaxial MG)
-var     byte                NumMGMags;             // number of mags/belts for an MG (using byte for more efficient replication)
-var     class<Projectile>   TracerProjectileClass; // replaces DummyTracerClass as tracer is now a real bullet that damages, not just a client-only effect, so old name was misleading
-var     byte                TracerFrequency;       // how often a tracer is loaded in, as in 1 in X (deprecates mTracerInterval & mLastTracerTime)
+const ALTFIRE_AMMO_INDEX = 3; // ammo index for alt fire (coaxial MG)
+var byte NumMGMags; // number of mags/belts for an MG (using byte for more efficient replication)
+var class<Projectile> TracerProjectileClass; // replaces DummyTracerClass as tracer is now a real bullet that damages, not just a client-only effect, so old name was misleading
+var byte TracerFrequency; // how often a tracer is loaded in, as in 1 in X (deprecates mTracerInterval & mLastTracerTime)
 
 // Reloading
 struct ReloadStage
 {
-    var     Sound   Sound;         // part reload sound to play at this stage (set to 'none' if using a HUD reload animation that plays sounds via anim notifies)
-    var     float   Duration;      // optional Timer duration for reload stage - if omitted or zero, Timer uses duration of part reload sound for the stage
-    var     float   HUDProportion; // proportion of HUD reload indicator (the red bar) to show for this stage (0.0 to 1.0) - allows easy subclassing without overriding functions
+    var Sound Sound; // part reload sound to play at this stage (set to 'none' if using a HUD reload animation that plays sounds via anim notifies)
+    var float Duration; // optional Timer duration for reload stage - if omitted or zero, Timer uses duration of part reload sound for the stage
+    var float HUDProportion; // proportion of HUD reload indicator (the red bar) to show for this stage (0.0 to 1.0) - allows easy subclassing without overriding functions
 };
 
 enum EReloadState
@@ -94,47 +96,48 @@ enum EReloadState
     RL_Waiting, // put waiting at end as ReloadStages array then matches ReloadState numbering, & also "ReloadState < RL_ReadyToFire" conveniently signifies weapon is reloading
 };
 
-var     bool                bMultiStageReload;    // this weapon uses a multi-stage reload process, that can be paused & resumed
-var     EReloadState        ReloadState;          // the stage of weapon reload or readiness
-var     array<ReloadStage>  ReloadStages;         // stages for multi-part reload, including sounds, durations & HUD reload icon proportions
-var     bool                bReloadPaused;        // a reload has started but was paused, as no longer had a player in a valid reloading position
-var     bool                bNewOrResumedReload;  // tells Timer we're starting new reload or resuming paused reload, stopping it from advancing to next reload stage
+var bool bMultiStageReload; // this weapon uses a multi-stage reload process, that can be paused & resumed
+var EReloadState ReloadState; // the stage of weapon reload or readiness
+var array<ReloadStage> ReloadStages; // stages for multi-part reload, including sounds, durations & HUD reload icon proportions
+var bool bReloadPaused; // a reload has started but was paused, as no longer had a player in a valid reloading position
+var bool bNewOrResumedReload; // tells Timer we're starting new reload or resuming paused reload, stopping it from advancing to next reload stage
 
 // Hatch fire effects - Ch!cKeN
-var     DHTurretFireEffect          TurretFireEffect;
-var     class<DHTurretFireEffect>   FireEffectClass;
-var     name                        FireAttachBone;
-var     Vector                      FireEffectOffset;
-var     float                       FireEffectScale;
+var DHTurretFireEffect TurretFireEffect;
+var class<DHTurretFireEffect> FireEffectClass;
+var name FireAttachBone;
+var Vector FireEffectOffset;
+var float FireEffectScale;
 
 // Driver animation channel
-var     int         DriverAnimationChannel;      // animation channel index for driver camera bone
-var     name        DriverAnimationChannelBone;  // animation channel bone for driver camera
+var int DriverAnimationChannel; // animation channel index for driver camera bone
+var name DriverAnimationChannelBone; // animation channel bone for driver camera
 
 // Projectile rotation mode.
-var() enum EProjectileRotationMode {
-    PRM_CurrentAim,     // Use the `CurrentAim` to determine the rotation. Inaccurate, though this is the legacy behavior, but is kept for backwards compatibility reasons.
-    PRM_MuzzleBone,     // Use the muzzle bone coordinates to determine the rotation. Accurate, but requires the muzzle bone to be axis-aligned.
+var() enum EProjectileRotationMode
+{
+    PRM_CurrentAim, // Use the `CurrentAim` to determine the rotation. Inaccurate, though this is the legacy behavior, but is kept for backwards compatibility reasons.
+    PRM_MuzzleBone, // Use the muzzle bone coordinates to determine the rotation. Accurate, but requires the muzzle bone to be axis-aligned.
 } ProjectileRotationMode;
 
 // Blur effects when the weapon is fired.
-var()   float               FireBlurTime;
-var()   float               FireBlurScale;
+var() float FireBlurTime;
+var() float FireBlurScale;
 
 // TODO: this can go into the top-level weapon class.
 // Gun wheels
 enum ERotationType
 {
     ROTATION_Yaw,
-    ROTATION_Pitch
+    ROTATION_Pitch,
 };
 
 struct SGunWheel
 {
-    var() ERotationType   RotationType;
-    var() name            BoneName;
-    var() float           Scale;
-    var() EAxis           RotationAxis;
+    var() ERotationType RotationType;
+    var() name BoneName;
+    var() float Scale;
+    var() EAxis RotationAxis;
 };
 
 var() array<SGunWheel> GunWheels;
@@ -142,16 +145,15 @@ var() array<SGunWheel> GunWheels;
 // Animation drivers for playing animations based on the turret's rotation.
 struct SAnimationDriver
 {
-    var() name          BoneName;
-    var() name          AnimationName;
-    var() int           AnimationFrameCount;
-    var() int           Channel;
+    var() name BoneName;
+    var() name AnimationName;
+    var() int AnimationFrameCount;
+    var() int Channel;
     var() ERotationType RotationType;
-    var() bool          bIsReversed;
+    var() bool bIsReversed;
 };
 
 var() array<SAnimationDriver> AnimationDrivers;
-
 
 replication
 {
@@ -219,7 +221,10 @@ simulated function SpawnVehicleAttachments()
 
         if (VA.Actor == none)
         {
-            Log("Failed to spawn attachment actor for " @ self @ " at " @ VA.AttachBone @ " with class " @ VA.AttachClass @ ".");
+            Log(
+                "Failed to spawn attachment actor for " @ self @ " at " @ VA.AttachBone @ " with class "
+                    @ VA.AttachClass @ "."
+                );
             continue;
         }
 
@@ -303,7 +308,9 @@ simulated function SpawnWeaponAttachments()
                     VA.AttachClass = Class'DHDecoAttachment';
                 }
 
-                Attachment = V.SpawnAttachment(VA.AttachClass, VA.AttachBone, VA.StaticMesh, VA.Offset, VA.Rotation, self);
+                Attachment = V.SpawnAttachment(
+                    VA.AttachClass, VA.AttachBone, VA.StaticMesh, VA.Offset, VA.Rotation, self
+                    );
 
                 for (k = 0; k < VA.Skins.Length; ++k)
                 {
@@ -363,7 +370,12 @@ simulated function AttachCollisionMeshes()
             AttachBone = CollisionStaticMeshes[i].AttachBone;
         }
 
-        CMA = Class'DHCollisionMeshActor'.static.AttachCollisionMesh(self, CollisionStaticMeshes[i].CollisionStaticMesh, AttachBone,,,CollisionStaticMeshes[i].TransformSpace);
+        CMA = Class'DHCollisionMeshActor'.static.AttachCollisionMesh(
+            self,
+            CollisionStaticMeshes[i].CollisionStaticMesh,
+            AttachBone,,,
+            CollisionStaticMeshes[i].TransformSpace
+            );
 
         if (CMA != none)
         {
@@ -499,7 +511,7 @@ simulated function Timer()
 // Random projectile spread is moved to SpawnProjectile() as that allows weapons that fire more than one projectile to calculate random spread for each one
 event bool AttemptFire(Controller C, bool bAltFire)
 {
-    local byte  AmmoIndex;
+    local byte AmmoIndex;
 
     if (Role < ROLE_Authority)
     {
@@ -515,12 +527,12 @@ event bool AttemptFire(Controller C, bool bAltFire)
     // Stop firing if weapon not ready to fire, or if player has moved to ineligible firing position while holding down fire button
     if (!ReadyToFire(bAltFire) || (WeaponPawn != none && !WeaponPawn.CanFire()))
     {
-         if (WeaponPawn != none)
-         {
-             WeaponPawn.VehicleCeaseFire(bAltFire);
-         }
+        if (WeaponPawn != none)
+        {
+            WeaponPawn.VehicleCeaseFire(bAltFire);
+        }
 
-         return false;
+        return false;
     }
 
     // Calculate & record weapon's firing location & rotation
@@ -598,7 +610,10 @@ function Fire(Controller C)
 {
     local DarkestHourGame G;
 
-    if (bUsesTracers && !bAltFireTracersOnly && ((InitialPrimaryAmmo - PrimaryAmmoCount() - 1) % TracerFrequency == 0.0) && TracerProjectileClass != none)
+    if (bUsesTracers
+        && !bAltFireTracersOnly
+        && ((InitialPrimaryAmmo - PrimaryAmmoCount() - 1) % TracerFrequency == 0.0)
+        && TracerProjectileClass != none)
     {
         SpawnProjectile(TracerProjectileClass, false);
     }
@@ -618,7 +633,10 @@ function Fire(Controller C)
         }
     }
 
-    if (Level.NetMode == NM_ListenServer && AmbientEffectEmitter != none && !bAmbientEmitterAltFireOnly && !(Instigator != none && Instigator.IsLocallyControlled()))
+    if (Level.NetMode == NM_ListenServer
+        && AmbientEffectEmitter != none
+        && !bAmbientEmitterAltFireOnly
+        && !(Instigator != none && Instigator.IsLocallyControlled()))
     {
         AmbientEffectEmitter.SetEmitterStatus(true); // non-owning listen server doesn't get OwnerEffects() & no native code handles this emitter (unlike a non-owning net client)
     }
@@ -626,7 +644,9 @@ function Fire(Controller C)
 
 function AltFire(Controller C)
 {
-    if (bUsesTracers && ((InitialAltAmmo - AltAmmoCharge - 1) % TracerFrequency == 0.0) && TracerProjectileClass != none)
+    if (bUsesTracers
+        && ((InitialAltAmmo - AltAmmoCharge - 1) % TracerFrequency == 0.0)
+        && TracerProjectileClass != none)
     {
         SpawnProjectile(TracerProjectileClass, true);
     }
@@ -635,7 +655,10 @@ function AltFire(Controller C)
         SpawnProjectile(AltFireProjectileClass, true);
     }
 
-    if (Level.NetMode == NM_ListenServer && AmbientEffectEmitter != none && bAmbientEmitterAltFireOnly && !(Instigator != none && Instigator.IsLocallyControlled()))
+    if (Level.NetMode == NM_ListenServer
+        && AmbientEffectEmitter != none
+        && bAmbientEmitterAltFireOnly
+        && !(Instigator != none && Instigator.IsLocallyControlled()))
     {
         AmbientEffectEmitter.SetEmitterStatus(true); // non-owning listen server doesn't get OwnerEffects() & no native code handles this emitter (unlike a non-owning net client)
     }
@@ -702,8 +725,10 @@ function Vector GetProjectileFireLocation(class<Projectile> ProjClass)
         Extent = ProjClass.default.CollisionRadius * vect(1.0, 1.0, 0.0);
         Extent.Z = ProjClass.default.CollisionHeight;
 
-        if (!WeaponPawn.VehicleBase.TraceThisActor(HitLocation, HitNormal, WeaponFireLocation,
-                WeaponFireLocation + (Vector(WeaponFireRotation) * (WeaponPawn.VehicleBase.CollisionRadius * 1.5)), Extent))
+        if (!WeaponPawn.VehicleBase.TraceThisActor(
+            HitLocation, HitNormal, WeaponFireLocation,
+            WeaponFireLocation + (Vector(WeaponFireRotation) * (WeaponPawn.VehicleBase.CollisionRadius * 1.5)), Extent
+            ))
         {
             return HitLocation;
         }
@@ -914,8 +939,8 @@ simulated function UpdateTracer();
 // Also removed similar reset of HitCount as that is only relevant to instant fire weapons, which aren't used in DH (makes no difference but it's tidier)
 function CeaseFire(Controller C, bool bWasAltFire)
 {
-//  FlashCount = 0;
-//  HitCount = 0;
+    //  FlashCount = 0;
+    //  HitCount = 0;
 
     if (AmbientEffectEmitter != none)
     {
@@ -932,7 +957,12 @@ function CeaseFire(Controller C, bool bWasAltFire)
             }
             else if (AmbientSound == AltFireSoundClass && AltFireEndSound != none)
             {
-                PlaySound(AltFireEndSound, SLOT_None, AltFireSoundVolume / 255.0 * AltFireSoundScaling,, AltFireSoundRadius);
+                PlaySound(
+                    AltFireEndSound,
+                    SLOT_None,
+                    AltFireSoundVolume / 255.0 * AltFireSoundScaling,,
+                    AltFireSoundRadius
+                    );
             }
         }
 
@@ -996,7 +1026,10 @@ simulated function DryFireEffects(optional bool bAltFire)
 // Modified to include MG mags/belts
 function bool GiveInitialAmmo()
 {
-    if (MainAmmoCharge[0] != InitialPrimaryAmmo || MainAmmoCharge[1] != InitialSecondaryAmmo || AltAmmoCharge != InitialAltAmmo || NumMGMags != default.NumMGMags)
+    if (MainAmmoCharge[0] != InitialPrimaryAmmo
+        || MainAmmoCharge[1] != InitialSecondaryAmmo
+        || AltAmmoCharge != InitialAltAmmo
+        || NumMGMags != default.NumMGMags)
     {
         MainAmmoCharge[0] = InitialPrimaryAmmo;
         MainAmmoCharge[1] = InitialSecondaryAmmo;
@@ -1178,7 +1211,7 @@ simulated function AttemptAltReload();
 // Using PlayOwnedSound() to avoid broadcasting over network to owning net client as it will play locally there anyway
 simulated function PlayStageReloadSound()
 {
-    PlayOwnedSound(ReloadStages[ReloadState].Sound, SLOT_Misc, 1.0,, 25.0,, true); //reduced volume to 1.0 as do not want players outside tank to hear
+    PlayOwnedSound(ReloadStages[ReloadState].Sound, SLOT_Misc, 1.0,, 25.0,, true); // reduced volume to 1.0 as do not want players outside tank to hear
 }
 
 // New helper function to remove 1 spare mag, used when we begin a new mag reload (a separate function to allow easy subclassing)
@@ -1205,7 +1238,7 @@ simulated function bool HasAmmoToReload(byte AmmoIndex)
 {
     if (bUsesMags || AmmoIndex == ALTFIRE_AMMO_INDEX)
     {
-         return NumMGMags > 0;
+        return NumMGMags > 0;
     }
 
     return HasAmmo(AmmoIndex);
@@ -1213,20 +1246,23 @@ simulated function bool HasAmmoToReload(byte AmmoIndex)
 
 // New helper function to check if player uses manual reloading - implement functionality in subclasses as required
 simulated function bool PlayerUsesManualReloading();
-
 ///////////////////////////////////////////////////////////////////////////////////////
 //  **************************  HIT DETECTION & DAMAGE  ***************************  //
 ///////////////////////////////////////////////////////////////////////////////////////
-
 // Emptied out as suicide stuff is irrelevant & never called here, & because as shell & bullet's ProcessTouch now call TakeDamage directly on 'Driver' if he was hit
 // Note that shell's ProcessTouch also now calls TakeDamage on VehicleWeapon instead of Vehicle itself, so this function decides what to do with that damage
 // Add here if want to pass damage on to vehicle (& if DamageType is bDelayedDamage, need to call SetDelayedDamageInstigatorController(InstigatedBy.Controller) on relevant pawn)
 // Can also add any desired functionality in subclasses, e.g. a shell impact could wreck an exposed MG
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex);
-
+function TakeDamage(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    );
 // Deprecated functions - return false just in case they get called
 simulated function bool HitDriverArea(Vector HitLocation, Vector Momentum);
-
 simulated function bool HitDriver(Vector HitLocation, Vector Momentum);
 
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -1263,7 +1299,6 @@ static function StaticPrecache(LevelInfo L)
             L.AddPrecacheStaticMesh(default.CollisionStaticMeshes[i].CollisionStaticMesh);
         }
     }
-
 }
 
 // Modified to add extra material properties (note the Super in Actor already pre-caches the Skins array)
@@ -1330,7 +1365,10 @@ simulated function InitializeWeaponPawn(DHVehicleWeaponPawn WeaponPwn)
     }
     else
     {
-        Warn("ERROR:" @ Tag @ "somehow spawned without an owning DHVehicleWeaponPawn, so lots of things are not going to work!");
+        Warn(
+            "ERROR:" @ Tag
+                @ "somehow spawned without an owning DHVehicleWeaponPawn, so lots of things are not going to work!"
+            );
     }
 }
 
@@ -1392,12 +1430,17 @@ simulated function int LimitYaw(int Yaw)
         {
             CurrentPosition = WeaponPawn.DriverPositionIndex;
 
-            if (WeaponPawn.IsA('DHVehicleCannonPawn') && CurrentPosition >= DHVehicleCannonPawn(WeaponPawn).PeriscopePositionIndex)
+            if (WeaponPawn.IsA('DHVehicleCannonPawn')
+                && CurrentPosition >= DHVehicleCannonPawn(WeaponPawn).PeriscopePositionIndex)
             {
                 return Yaw;
             }
 
-            return Clamp(Yaw, WeaponPawn.DriverPositions[CurrentPosition].ViewNegativeYawLimit, WeaponPawn.DriverPositions[CurrentPosition].ViewPositiveYawLimit);
+            return Clamp(
+                Yaw,
+                WeaponPawn.DriverPositions[CurrentPosition].ViewNegativeYawLimit,
+                WeaponPawn.DriverPositions[CurrentPosition].ViewPositiveYawLimit
+                );
         }
     }
 
@@ -1526,7 +1569,11 @@ simulated function PlayClickSound()
 {
     if (Instigator != none && Instigator.IsHumanControlled() && Instigator.IsLocallyControlled())
     {
-        PlayerController(Instigator.Controller).ClientPlaySound(Sound'ROMenuSounds.msfxMouseClick', false,, SLOT_Interface);
+        PlayerController(Instigator.Controller).ClientPlaySound(
+            Sound'ROMenuSounds.msfxMouseClick',
+            false,,
+            SLOT_Interface
+            );
     }
 }
 
@@ -1602,7 +1649,7 @@ simulated function UpdateAnimationDrivers()
     local int i, Rotation;
     local float Theta;
 
-    for (i = 0;  i < AnimationDrivers.Length; ++i)
+    for (i = 0; i < AnimationDrivers.Length; ++i)
     {
         switch (AnimationDrivers[i].RotationType)
         {

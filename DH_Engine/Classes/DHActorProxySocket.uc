@@ -6,12 +6,12 @@
 class DHActorProxySocket extends Actor
     notplaceable;
 
-var() bool  bLimitLocalRotation;    // When true, the local rotation of the actor proxy is limited to the specified yaw range.
-var() Range LocalRotationYawRange;  // Limits the local rotation of the actor proxy attached to this hint.
-var() bool  bShouldDestroyOccupant;
+var() bool bLimitLocalRotation; // When true, the local rotation of the actor proxy is limited to the specified yaw range.
+var() Range LocalRotationYawRange; // Limits the local rotation of the actor proxy attached to this hint.
+var() bool bShouldDestroyOccupant;
 
-var private Actor Occupant;         // The current actor that is occupying this socket.
-var private DHActorProxy Proxy;     // The proxy actor that is snapped to this socket.
+var private Actor Occupant; // The current actor that is occupying this socket.
+var private DHActorProxy Proxy; // The proxy actor that is snapped to this socket.
 
 replication
 {
@@ -23,7 +23,7 @@ function Destroyed()
 {
     super.Destroyed();
 
-    if (bShouldDestroyOccupant && Occupant != None)
+    if (bShouldDestroyOccupant && Occupant != none)
     {
         Occupant.Destroy();
     }
@@ -31,7 +31,7 @@ function Destroyed()
 
 simulated function bool IsOccupied()
 {
-    return Occupant != None;
+    return Occupant != none;
 }
 
 function Actor GetOccupant()

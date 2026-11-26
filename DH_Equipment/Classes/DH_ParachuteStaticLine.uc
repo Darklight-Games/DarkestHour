@@ -5,8 +5,8 @@
 
 class DH_ParachuteStaticLine extends Weapon;
 
-var bool    bChuteDeployed;
-var Sound   DeploySound;
+var bool bChuteDeployed;
+var Sound DeploySound;
 
 // Functions emptied out or returning false, as parachute isn't a real weapon
 simulated function Fire(float F);
@@ -63,8 +63,9 @@ simulated function Tick(float DeltaTime)
     {
         // Keep trying to switch to the parachute item, as the current weapon ignores PutDown while it is busy (e.g.
         // sprinting or reloading), so a single attempt can be lost. Only done where the switch is driven from.
-        if (Instigator.IsLocallyControlled() && DH_ParachuteItem(Instigator.Weapon) == none &&
-            (Instigator.Weapon == none || Instigator.Weapon.IsInState('Idle')))
+        if (Instigator.IsLocallyControlled()
+            && DH_ParachuteItem(Instigator.Weapon) == none
+            && (Instigator.Weapon == none || Instigator.Weapon.IsInState('Idle')))
         {
             Instigator.SwitchWeapon(12);
         }

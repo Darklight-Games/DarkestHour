@@ -5,9 +5,9 @@
 
 class DH_TimedTrigger extends Trigger;
 
-var()   float   DelayTime;
+var() float DelayTime;
 
-var()   bool    bIsStateOne;
+var() bool bIsStateOne;
 
 // Modified to set a timer for specified DelayTime, then tell our parent
 simulated function PostBeginPlay()
@@ -26,6 +26,7 @@ simulated function Timer()
         bIsStateOne = false;
     }
 }
+
 /*
 function Timer() // THE SUPER
 {

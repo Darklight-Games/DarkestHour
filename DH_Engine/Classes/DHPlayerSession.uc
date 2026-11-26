@@ -5,14 +5,14 @@
 
 class DHPlayerSession extends Object;
 
-var string      IDHash;
-var int         WeaponLockViolations;
-var int         WeaponUnlockTime;
-var int         LastKilledTime;
-var int         Kills;
-var int         Deaths;
-var int         NextChangeTeamTime;
-var byte        TeamIndex;
+var string IDHash;
+var int WeaponLockViolations;
+var int WeaponUnlockTime;
+var int LastKilledTime;
+var int Kills;
+var int Deaths;
+var int NextChangeTeamTime;
+var byte TeamIndex;
 
 var DHScoreManager ScoreManager;
 

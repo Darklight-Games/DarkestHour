@@ -45,4 +45,3 @@ defaultproperties
     FireAttachBone="com_attachment"
     FireEffectOffset=(X=0,Y=0,Z=50)
 }
-

@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_T3476CannonShellSolid extends DHSovietCannonShell; //BR-350BSP
+class DH_T3476CannonShellSolid extends DHSovietCannonShell; // BR-350BSP
 
 defaultproperties
 {

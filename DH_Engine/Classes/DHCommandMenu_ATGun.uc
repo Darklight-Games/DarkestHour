@@ -15,7 +15,7 @@ var localized string CooldownText;
 var localized string BusyText;
 
 var DHATGun.ERotateError RotationError;
-var int                  TeammatesInRadiusCount;
+var int TeammatesInRadiusCount;
 
 function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
 {

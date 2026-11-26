@@ -9,13 +9,13 @@ enum ETriggerAction
 {
     TR_DoesNothing,
     TR_Triggers,
-    TR_Resets
+    TR_Resets,
 };
 
-var(MaterialTrigger)    ETriggerAction  TriggerAction;   // whether triggering resets or triggers the materials
-var(MaterialTrigger)    ETriggerAction  UntriggerAction; // whether un-triggering resets or triggers the materials
+var(MaterialTrigger) ETriggerAction TriggerAction; // whether triggering resets or triggers the materials
+var(MaterialTrigger) ETriggerAction UntriggerAction; // whether un-triggering resets or triggers the materials
 
-var  array<DH_MaterialTriggerReplicationInfo>   ReplicatedMaterialTriggers; // array holding the ReplicationInfos for clientside triggering
+var array<DH_MaterialTriggerReplicationInfo> ReplicatedMaterialTriggers; // array holding the ReplicationInfos for clientside triggering
 
 // Modified to spawn & set up a MaterialTriggerReplicationInfo for each triggered material
 function PostBeginPlay()

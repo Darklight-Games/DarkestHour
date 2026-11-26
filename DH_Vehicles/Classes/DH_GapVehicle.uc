@@ -8,28 +8,28 @@ class DH_GapVehicle extends ROChopperCraft;
 #exec OBJ LOAD FILE=..\textures\DH_UFO_tex.utx
 
 // wheel params
-var()    float          WheelSoftness;
-var()    float          WheelPenScale;
-var()    float          WheelPenOffset;
-var()    float          WheelRestitution;
-var()    float          WheelAdhesion;
-var()    float          WheelInertia;
-var()    InterpCurve    WheelLongFrictionFunc;
-var()    float          WheelLongSlip;
-var()    InterpCurve    WheelLatSlipFunc;
-var()    float          WheelLongFrictionScale;
-var()    float          WheelLatFrictionScale;
-var()    float          WheelHandbrakeSlip;
-var()    float          WheelHandbrakeFriction;
-var()    float          WheelSuspensionTravel;
-var()    float          WheelSuspensionOffset;
-var()    float          WheelSuspensionMaxRenderTravel;
+var() float WheelSoftness;
+var() float WheelPenScale;
+var() float WheelPenOffset;
+var() float WheelRestitution;
+var() float WheelAdhesion;
+var() float WheelInertia;
+var() InterpCurve WheelLongFrictionFunc;
+var() float WheelLongSlip;
+var() InterpCurve WheelLatSlipFunc;
+var() float WheelLongFrictionScale;
+var() float WheelLatFrictionScale;
+var() float WheelHandbrakeSlip;
+var() float WheelHandbrakeFriction;
+var() float WheelSuspensionTravel;
+var() float WheelSuspensionOffset;
+var() float WheelSuspensionMaxRenderTravel;
 
-var()    float          MinBrakeFriction;
+var() float MinBrakeFriction;
 
-var()    float          MaxPitchSpeed;
+var() float MaxPitchSpeed;
 
-var      int            PendingPositionIndex; // Position index the client is trying to switch to
+var int PendingPositionIndex; // Position index the client is trying to switch to
 
 /* =================================================================================== *
 * NextViewPoint()
@@ -40,19 +40,19 @@ var      int            PendingPositionIndex; // Position index the client is tr
 * =================================================================================== */
 simulated function NextViewPoint()
 {
-     GotoState('ViewTransition');
+    GotoState('ViewTransition');
 }
 
 function ServerChangeViewPoint(bool bForward)
 {
     if (bForward)
     {
-        if ( DriverPositionIndex < (DriverPositions.Length - 1) )
+        if (DriverPositionIndex < (DriverPositions.Length - 1))
         {
             PreviousPositionIndex = DriverPositionIndex;
             DriverPositionIndex++;
 
-            if(  Level.Netmode == NM_Standalone  || Level.NetMode == NM_ListenServer )
+            if (Level.Netmode == NM_Standalone || Level.NetMode == NM_ListenServer)
             {
                 NextViewPoint();
             }
@@ -60,12 +60,12 @@ function ServerChangeViewPoint(bool bForward)
     }
     else
     {
-        if ( DriverPositionIndex > 0 )
+        if (DriverPositionIndex > 0)
         {
             PreviousPositionIndex = DriverPositionIndex;
             DriverPositionIndex--;
 
-            if(  Level.Netmode == NM_Standalone  || Level.NetMode == NM_ListenServer )
+            if (Level.Netmode == NM_Standalone || Level.NetMode == NM_ListenServer)
             {
                 NextViewPoint();
             }
@@ -77,7 +77,7 @@ simulated function PostNetReceive()
 {
     super.PostNetReceive();
 
-    if ( DriverPositionIndex != SavedPositionIndex )
+    if (DriverPositionIndex != SavedPositionIndex)
     {
         PreviousPositionIndex = SavedPositionIndex;
         SavedPositionIndex = DriverPositionIndex;
@@ -85,29 +85,39 @@ simulated function PostNetReceive()
     }
 
     // Kill the engine sounds if the engine is dead
-    if( EngineHealth <= 0 )
+    if (EngineHealth <= 0)
     {
-        if( IdleSound != none )
-            IdleSound=none;
+        if (IdleSound != none)
+        {
+            IdleSound = none;
+        }
 
-        if( StartUpSound != none )
-            StartUpSound=none;
+        if (StartUpSound != none)
+        {
+            StartUpSound = none;
+        }
 
-        if( ShutDownSound != none )
-            ShutDownSound=none;
+        if (ShutDownSound != none)
+        {
+            ShutDownSound = none;
+        }
 
-        if( AmbientSound != none )
-            AmbientSound=none;
+        if (AmbientSound != none)
+        {
+            AmbientSound = none;
+        }
     }
 }
 
 simulated function NextWeapon()
 {
-    if( !bMultiPosition || IsInState('ViewTransition') || DriverPositionIndex != PendingPositionIndex)
+    if (!bMultiPosition || IsInState('ViewTransition') || DriverPositionIndex != PendingPositionIndex)
+    {
         return;
+    }
 
     // Make sure the client doesn't switch positions while the server is changing position indexes
-    if ( DriverPositionIndex < (DriverPositions.Length - 1) )
+    if (DriverPositionIndex < (DriverPositions.Length - 1))
     {
         PendingPositionIndex = DriverPositionIndex + 1;
     }
@@ -118,11 +128,13 @@ simulated function NextWeapon()
 // Overriden to switch viewpoints while driving
 simulated function PrevWeapon()
 {
-    if( !bMultiPosition || IsInState('ViewTransition') || DriverPositionIndex != PendingPositionIndex)
+    if (!bMultiPosition || IsInState('ViewTransition') || DriverPositionIndex != PendingPositionIndex)
+    {
         return;
+    }
 
     // Make sure the client doesn't switch positions while the server is changing position indexes
-    if ( DriverPositionIndex > 0 )
+    if (DriverPositionIndex > 0)
     {
         PendingPositionIndex = DriverPositionIndex - 1;
     }
@@ -136,55 +148,59 @@ simulated event TeamChanged();
 // Allow behindview for debugging
 exec function ToggleViewLimit()
 {
-    if( !class'ROEngine.ROLevelInfo'.static.RODebugMode() || Level.NetMode != NM_Standalone  )
-        return;
-
-    if( bAllowViewChange )
+    if (!Class'ROEngine.ROLevelInfo'.static.RODebugMode() || Level.NetMode != NM_Standalone)
     {
-        bAllowViewChange=false;
+        return;
+    }
+
+    if (bAllowViewChange)
+    {
+        bAllowViewChange = false;
         bDontUsePositionMesh = false;
         bLimitYaw = true;
         bLimitPitch = true;
     }
     else
     {
-        bAllowViewChange=true;
+        bAllowViewChange = true;
         bDontUsePositionMesh = true;
         bLimitYaw = false;
         bLimitPitch = false;
     }
 }
 
-
 simulated event DrivingStatusChanged()
 {
     if (bDriving)
+    {
         Enable('Tick');
+    }
     else
+    {
         Disable('Tick');
+    }
 }
 
 simulated function Tick(float DeltaTime)
 {
     local float EnginePitch;
 
-    if(Level.NetMode != NM_DedicatedServer)
+    if (Level.NetMode != NM_DedicatedServer)
     {
-        EnginePitch = 48.0 + VSize(Velocity)/MaxPitchSpeed *32.0;
+        EnginePitch = 48.0 + VSize(Velocity) / MaxPitchSpeed * 32.0;
         SoundPitch = FClamp(EnginePitch, 48, 96);
     }
 
-
-    Super.Tick(DeltaTime);
+    super.Tick(DeltaTime);
 }
 
 simulated event SVehicleUpdateParams()
 {
     local int i;
 
-    Super.SVehicleUpdateParams();
+    super.SVehicleUpdateParams();
 
-    for(i=0; i<Wheels.Length; i++)
+    for (i = 0; i < Wheels.Length; i++)
     {
         Wheels[i].Softness = WheelSoftness;
         Wheels[i].PenScale = WheelPenScale;
@@ -201,13 +217,13 @@ simulated event SVehicleUpdateParams()
         Wheels[i].SuspensionOffset = WheelSuspensionOffset;
         Wheels[i].SuspensionMaxRenderTravel = WheelSuspensionMaxRenderTravel;
     }
-
 }
+
 // Overridden to play the correct idle animation for the vehicle
 simulated function PostBeginPlay()
 {
     // RO functionality
-    if( HasAnim(BeginningIdleAnim))
+    if (HasAnim(BeginningIdleAnim))
     {
         LoopAnim(BeginningIdleAnim);
     }

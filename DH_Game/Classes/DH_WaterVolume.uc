@@ -7,5 +7,5 @@
 // NOTE: making this actor notplacable would not result in it being deleted from maps when rebuilt, but would stop it being added
 //==============================================================================
 
-class DH_WaterVolume extends DHWaterVolume 
+class DH_WaterVolume extends DHWaterVolume
     placeable;

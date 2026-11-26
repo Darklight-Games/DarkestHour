@@ -20,72 +20,71 @@ enum ESpawnPointBlockReason
     SPBR_InDangerZone,
 };
 
-var ESpawnPointBlockReason  BlockReason; // any reason why spawn point can't be used currently
+var ESpawnPointBlockReason BlockReason; // any reason why spawn point can't be used currently
 
 // TODO: remove this later as we get variable shadowing in functions, it's also only actually there on the server.
 var protected DHGameReplicationInfo GRI; // just a convenient reference to the GRI actor
 
-var     private bool    bIsActive;       // whether spawn point is currently active
-var     private int     TeamIndex;       // which team this spawn point belongs to
-var     int             SpawnPointIndex; // spawn point's index number in the GRI's SpawnPoints array
-var     bool            bCombatSpawn;    // is a combat spawn point (MDV, squad rally, HQ)
-var()   bool            bMainSpawn;      // is a main spawn for gametype: Advance
-var()   bool            bAirborneSpawn;  // the spawn is located on a plane or in the air
+var private bool bIsActive; // whether spawn point is currently active
+var private int TeamIndex; // which team this spawn point belongs to
+var int SpawnPointIndex; // spawn point's index number in the GRI's SpawnPoints array
+var bool bCombatSpawn; // is a combat spawn point (MDV, squad rally, HQ)
+var() bool bMainSpawn; // is a main spawn for gametype: Advance
+var() bool bAirborneSpawn; // the spawn is located on a plane or in the air
 
-var     string          SpawnPointStyle; // style name to use for spawnpoints (can be overriden in GetMapStyleName())
-var     float           SpawnPointIconOffsetMultiplierX; // offset icon horizontally by a product of its width; TODO: Replace this with pixel size?
-var     float           SpawnPointIconOffsetMultiplierY; // offset icon vertically by a product of its height
+var string SpawnPointStyle; // style name to use for spawnpoints (can be overriden in GetMapStyleName())
+var float SpawnPointIconOffsetMultiplierX; // offset icon horizontally by a product of its width; TODO: Replace this with pixel size?
+var float SpawnPointIconOffsetMultiplierY; // offset icon vertically by a product of its height
 
-var     int             BaseSpawnTimePenalty;    // how many seconds a player will have to addtionally wait to spawn on this spawn point
-var     float           SpawnProtectionTime;     // how many seconds a player will be invulnerable after spawning on this spawn point
-var     float           SpawnKillProtectionTime; // how many seconds a kill on a player will be considered a spawn kill after spawning on this spawn point
+var int BaseSpawnTimePenalty; // how many seconds a player will have to addtionally wait to spawn on this spawn point
+var float SpawnProtectionTime; // how many seconds a player will be invulnerable after spawning on this spawn point
+var float SpawnKillProtectionTime; // how many seconds a kill on a player will be considered a spawn kill after spawning on this spawn point
 
 // Parameters for spawning in a radius (NOTE: currently only works for infantry!)
-var     Vector          SpawnLocationOffset;
-var     float           SpawnRadius;
-var     int             SpawnRadiusSegmentCount;
-var     bool            bShouldTraceCheckSpawnLocations;
+var Vector SpawnLocationOffset;
+var float SpawnRadius;
+var int SpawnRadiusSegmentCount;
+var bool bShouldTraceCheckSpawnLocations;
 
-var     bool            bShouldDelegateTimer;           // When true, the SetTimer loop will not be initiated on start-up, and it will be up to another area of the code to call the Timer logic manually.
+var bool bShouldDelegateTimer; // When true, the SetTimer loop will not be initiated on start-up, and it will be up to another area of the code to call the Timer logic manually.
 
 // Spawn killing
-var int     SpawnKillPenalty;
-var int     SpawnKillPenaltyCounter;
-var int     SpawnKillPenaltyForgivenessPerSecond;
+var int SpawnKillPenalty;
+var int SpawnKillPenaltyCounter;
+var int SpawnKillPenaltyForgivenessPerSecond;
 
 // Encroachment
-var bool    bCanBeEncroachedUpon;
-var int     EncroachmentRadiusInMeters;                 // The distance, in meters, that enemies must be within to affect the EncroachmentPenaltyCounter
-var int     EncroachmentPenaltyBlockThreshold;          // The value that EncroachmentPenaltyCounter must reach for the spawn point to be "blocked".
-var int     EncroachmentPenaltyOverrunThreshold;        // The value that EncroachmentPenaltyCounter must reach for the spawn point to be "overrun".
-var int     EncroachmentPenaltyMax;                     // The maximum value that EncroachmentPenaltyCounter can reach.
-var int     EncroachmentPenaltyCounter;                 // Running counter of encroachment penalty.
-var int     EncroachmentPenaltyForgivenessPerSecond;    // The number of points deducted from the encroachment penalty counter when there are no longer any encroaching enemies.
-var int     EncroachmentSpawnTimePenalty;               // If being encroached upon, this amount of seconds will be added to the spawn timer
-var int     EncroachmentEnemyCountMin;                  // The amount of enemies needed nearby to increment encroachment penalty counter
-var bool    bCanEncroachmentOverrun;                    // When true, if the overrun timer exceeds EncroachmentPenaltyOverrunThreshold, OnOverrun will be called, destroying the spawn point.
+var bool bCanBeEncroachedUpon;
+var int EncroachmentRadiusInMeters; // The distance, in meters, that enemies must be within to affect the EncroachmentPenaltyCounter
+var int EncroachmentPenaltyBlockThreshold; // The value that EncroachmentPenaltyCounter must reach for the spawn point to be "blocked".
+var int EncroachmentPenaltyOverrunThreshold; // The value that EncroachmentPenaltyCounter must reach for the spawn point to be "overrun".
+var int EncroachmentPenaltyMax; // The maximum value that EncroachmentPenaltyCounter can reach.
+var int EncroachmentPenaltyCounter; // Running counter of encroachment penalty.
+var int EncroachmentPenaltyForgivenessPerSecond; // The number of points deducted from the encroachment penalty counter when there are no longer any encroaching enemies.
+var int EncroachmentSpawnTimePenalty; // If being encroached upon, this amount of seconds will be added to the spawn timer
+var int EncroachmentEnemyCountMin; // The amount of enemies needed nearby to increment encroachment penalty counter
+var bool bCanEncroachmentOverrun; // When true, if the overrun timer exceeds EncroachmentPenaltyOverrunThreshold, OnOverrun will be called, destroying the spawn point.
 
-var bool    bIsEncroachedUpon;                          // True if there are enemies encroaching upon the spawn point.
+var bool bIsEncroachedUpon; // True if there are enemies encroaching upon the spawn point.
 
-var bool    bIsLowPriority;                             // When true, this spawn point may be deleted in favor of spawning a newer high priority spawn point if the # of potential spawn points is reached.
+var bool bIsLowPriority; // When true, this spawn point may be deleted in favor of spawning a newer high priority spawn point if the # of potential spawn points is reached.
 
 // Map icon (used only for showing spotted spawn points)
 var class<DHMapIconAttachment> MapIconAttachmentClass;
-var DHMapIconAttachment        MapIconAttachment;
+var DHMapIconAttachment MapIconAttachment;
 
 // Reference to icon of the base actor for syncing map locations
-var DHMapIconAttachment        BaseMapIconAttachment;
+var DHMapIconAttachment BaseMapIconAttachment;
 
 // Danger zone
-var(DHDangerZone)   float BaseInfluenceModifier;
-var                 float InitialBaseInfluenceModifier;
+var(DHDangerZone) float BaseInfluenceModifier;
+var float InitialBaseInfluenceModifier;
 
 replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
-        SpawnPointIndex, TeamIndex, BlockReason, bIsActive, bIsEncroachedUpon,
-        BaseMapIconAttachment;
+        SpawnPointIndex, TeamIndex, BlockReason, bIsActive, bIsEncroachedUpon, BaseMapIconAttachment;
 }
 
 // Implemented to add this spawn point to the GRI's SpawnPoints array, setting the GRI reference & our index position in that array
@@ -218,8 +217,8 @@ function bool PerformSpawn(DHPlayer PC)
         return false;
     }
 
-    if (CanSpawnWithParameters(GRI, PC.GetTeamNum(), PC.GetRoleIndex(), PC.GetSquadIndex(), PC.VehiclePoolIndex) &&
-        GetSpawnPosition(SpawnLocation, SpawnRotation, PC.VehiclePoolIndex))
+    if (CanSpawnWithParameters(GRI, PC.GetTeamNum(), PC.GetRoleIndex(), PC.GetSquadIndex(), PC.VehiclePoolIndex)
+        && GetSpawnPosition(SpawnLocation, SpawnRotation, PC.VehiclePoolIndex))
     {
         P = G.SpawnPawn(PC, SpawnLocation, SpawnRotation, self);
 
@@ -262,9 +261,12 @@ function OnPawnSpawned(Pawn P)
 
 // Called when a pawn is spawn killed from this spawn point - override in child classes
 function OnSpawnKill(Pawn VictimPawn, Controller KillerController);
-
 // Override to specify which vehicles can spawn at this spawn point
-simulated function bool CanSpawnVehicle(DHGameReplicationInfo GRI, int VehiclePoolIndex, optional bool bSkipTimeCheck);
+simulated function bool CanSpawnVehicle(
+    DHGameReplicationInfo GRI,
+    int VehiclePoolIndex,
+    optional bool bSkipTimeCheck
+    );
 
 // Override to limit certain roles from using this spawn point
 simulated function bool CanSpawnRole(DHRoleInfo RI)
@@ -276,9 +278,9 @@ simulated function bool CanSpawnRole(DHRoleInfo RI)
 function bool GetSpawnPosition(out Vector SpawnLocation, out Rotator SpawnRotation, int VehiclePoolIndex)
 {
     local DHPawnCollisionTest CT;
-    local Vector              L;
-    local float               Angle, AngleInterval;
-    local int                 i, j, k;
+    local Vector L;
+    local float Angle, AngleInterval;
+    local int i, j, k;
 
     // TODO: The spawn radius only works for infantry spawns; in future it would
     // be handy to use a radius for vehicle spawns. Unfortunately this is less
@@ -339,7 +341,12 @@ simulated function bool IsVisibleToPlayer(DHPlayer PC)
 }
 
 // Returns true if the spawn point is "visible" to a player with the arguments provided
-simulated function bool IsVisibleTo(int PlayerTeamIndex, int PlayerRoleIndex, int PlayerSquadIndex, int PlayerVehiclePoolIndex)
+simulated function bool IsVisibleTo(
+    int PlayerTeamIndex,
+    int PlayerRoleIndex,
+    int PlayerSquadIndex,
+    int PlayerVehiclePoolIndex
+    )
 {
     if (TeamIndex != PlayerTeamIndex || !bIsActive)
     {
@@ -362,7 +369,14 @@ simulated function bool IsBlocked()
 }
 
 // Returns true if the given arguments are satisfactory for spawning on this spawn point
-simulated function bool CanSpawnWithParameters(DHGameReplicationInfo DHGRI, int PlayerTeamIndex, int PlayerRoleIndex, int PlayerSquadIndex, int PlayerVehiclePoolIndex, optional bool bSkipTimeCheck)
+simulated function bool CanSpawnWithParameters(
+    DHGameReplicationInfo DHGRI,
+    int PlayerTeamIndex,
+    int PlayerRoleIndex,
+    int PlayerSquadIndex,
+    int PlayerVehiclePoolIndex,
+    optional bool bSkipTimeCheck
+    )
 {
     if (DHGRI == none || TeamIndex != PlayerTeamIndex || !bIsActive || IsBlocked())
     {
@@ -435,7 +449,13 @@ simulated function string GetMapStyleName()
 simulated function string GetMapText();
 
 // TODO: I don't like this one bit! SEPARATE OUT INTO DIFFERENT FUNCTIONS
-function GetPlayerCountsWithinRadius(float RadiusInMeters, optional int SquadIndex, optional out int SquadmateCount, optional out int EnemyCount, optional out int TeammateCount)
+function GetPlayerCountsWithinRadius(
+    float RadiusInMeters,
+    optional int SquadIndex,
+    optional out int SquadmateCount,
+    optional out int EnemyCount,
+    optional out int TeammateCount
+    )
 {
     local Pawn P;
     local DHPlayerReplicationInfo OtherPRI;

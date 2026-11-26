@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DHCSTankCrewmanRoles extends DHAlliedTankCrewmanRoles //WIP; to do: radio voices, uniforms
+class DHCSTankCrewmanRoles extends DHAlliedTankCrewmanRoles // WIP; to do: radio voices, uniforms
     abstract;
 
 defaultproperties

@@ -12,4 +12,3 @@ defaultproperties
     DestroyedMeshSkins(0)=Combiner'DH_GMC_tex.GMC_Generic_Snow_Destroyed'
     DestroyedMeshSkins(1)=Shader'DH_GMC_tex.GMC_Canvas_Destroyed'
 }
-

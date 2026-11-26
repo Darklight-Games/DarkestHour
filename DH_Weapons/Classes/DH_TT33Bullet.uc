@@ -13,4 +13,3 @@ defaultproperties
     Damage=60.0
     MyDamageType=Class'DH_TT33DamType'
 }
-

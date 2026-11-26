@@ -11,7 +11,6 @@ function bool IsNumber();
 function bool IsBoolean();
 function bool IsObject();
 function bool IsArray();
-
 function string AsString();
 function JSONNumber AsNumber();
 function int AsInteger();
@@ -20,7 +19,10 @@ function bool AsBoolean();
 function JSONObject AsObject();
 function JSONArray AsArray();
 
-function string Encode() { return "null"; }
+function string Encode()
+{
+    return "null";
+}
 
 static function string GetSanitizedString(string S)
 {
@@ -28,4 +30,3 @@ static function string GetSanitizedString(string S)
     S = Repl(S, "\"", "\\\"");
     return S;
 }
-
