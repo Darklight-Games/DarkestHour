@@ -90,7 +90,7 @@ function Reset()
     }
 }
 
-simulated function OnExhausted(DHInventorySpawner Spawner)
+simulated function OnExhausted(DHInventorySpawner ExhaustedSpawner)
 {
     if (Owner != none)
     {

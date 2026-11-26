@@ -376,26 +376,26 @@ simulated function NotifySelected(Pawn User)
 
 // TODO: The way that RO and DH have traditionally handled "teams" is terrible
 // and results in nonsense like this needing to be coded up.
-function class<DHVoicePack> GetVoicePack(int TeamIndex, DH_LevelInfo LI)
+function class<DHVoicePack> GetVoicePack(int PlayerTeamIndex, DH_LevelInfo LI)
 {
-    return LI.GetTeamNationClass(TeamIndex).default.VoicePackClass.static.GetVoicePackClass(
-        LI.GetTeamNationClass(int(!bool(TeamIndex)))
+    return LI.GetTeamNationClass(PlayerTeamIndex).default.VoicePackClass.static.GetVoicePackClass(
+        LI.GetTeamNationClass(int(!bool(PlayerTeamIndex)))
         );
 }
 
-function SoundGroup GetRequestSound(int TeamIndex, DH_LevelInfo LI)
+function SoundGroup GetRequestSound(int PlayerTeamIndex, DH_LevelInfo LI)
 {
-    return GetVoicePack(TeamIndex, LI).default.RadioRequestSound;
+    return GetVoicePack(PlayerTeamIndex, LI).default.RadioRequestSound;
 }
 
-function SoundGroup GetConfirmSound(int TeamIndex, DH_LevelInfo LI)
+function SoundGroup GetConfirmSound(int PlayerTeamIndex, DH_LevelInfo LI)
 {
-    return GetVoicePack(TeamIndex, LI).default.RadioResponseConfirmSound;
+    return GetVoicePack(PlayerTeamIndex, LI).default.RadioResponseConfirmSound;
 }
 
-function SoundGroup GetDenySound(int TeamIndex, DH_LevelInfo LI)
+function SoundGroup GetDenySound(int PlayerTeamIndex, DH_LevelInfo LI)
 {
-    return GetVoicePack(TeamIndex, LI).default.RadioResponseDenySound;
+    return GetVoicePack(PlayerTeamIndex, LI).default.RadioResponseDenySound;
 }
 
 defaultproperties

@@ -62,9 +62,9 @@ simulated function Tick(float DeltaTime)
     UpdateRotation(DeltaTime);
 }
 
-function SetRotationFactor(int RotationFactor)
+function SetRotationFactor(int NewRotationFactor)
 {
-    self.RotationFactor = RotationFactor;
+    RotationFactor = NewRotationFactor;
 }
 
 simulated function UpdateRotation(float DeltaTime)

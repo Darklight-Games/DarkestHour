@@ -260,11 +260,11 @@ simulated function Tick(float DeltaTime)
 }
 
 // Borrowed from AB: just using a standard linear interpolation equation here
-simulated function float GetMaxPenetration(Vector LaunchLocation, Vector HitLocation)
+simulated function float GetMaxPenetration(Vector HitLocation)
 {
     local float DistanceMeters, MaxPenetration;
 
-    DistanceMeters = Class'DHUnits'.static.UnrealToMeters(VSize(LaunchLocation - Location));
+    DistanceMeters = Class'DHUnits'.static.UnrealToMeters(VSize(LaunchLocation - HitLocation));
 
     if      (DistanceMeters < 100.0)   MaxPenetration = DHPenetrationTable[0]  + (100.0  - DistanceMeters) * (DHPenetrationTable[0] - DHPenetrationTable[1])  / 100.0;
     else if (DistanceMeters < 250.0)   MaxPenetration = DHPenetrationTable[1]  + (250.0  - DistanceMeters) * (DHPenetrationTable[0] - DHPenetrationTable[1])  / 150.0;
@@ -389,7 +389,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
 
         // We hit a tank cannon (turret) but failed to penetrate its armor
         if (HitVehicleWeapon.IsA('DHVehicleCannon')
-            && !DHVehicleCannon(HitVehicleWeapon).ShouldPenetrate(self, HitLocation, Direction, GetMaxPenetration(LaunchLocation, HitLocation)))
+            && !DHVehicleCannon(HitVehicleWeapon).ShouldPenetrate(self, HitLocation, Direction, GetMaxPenetration(HitLocation)))
         {
             FailToPenetrateArmor(HitLocation, HitNormal, HitVehicleWeapon);
         }
@@ -520,7 +520,7 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
     }
 
     // We hit an armored vehicle hull but failed to penetrate
-    if (Wall.IsA('DHArmoredVehicle') && !DHArmoredVehicle(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(LaunchLocation, Location)))
+    if (Wall.IsA('DHArmoredVehicle') && !DHArmoredVehicle(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(Location)))
     {
         FailToPenetrateArmor(Location, HitNormal, Wall);
 

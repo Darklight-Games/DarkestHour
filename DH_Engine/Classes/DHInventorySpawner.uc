@@ -119,9 +119,9 @@ simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-function SetTeamIndex(int TeamIndex)
+function SetTeamIndex(int NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
 }
 
 simulated function bool ShouldBeOpen()
@@ -196,9 +196,9 @@ simulated event Timer()
     }
 }
 
-simulated function bool CanBeUsedByTeam(int TeamIndex)
+simulated function bool CanBeUsedByTeam(int UserTeamIndex)
 {
-    return !bIsTeamLocked || self.TeamIndex == NEUTRAL_TEAM_INDEX || self.TeamIndex == TeamIndex;
+    return !bIsTeamLocked || TeamIndex == NEUTRAL_TEAM_INDEX || TeamIndex == UserTeamIndex;
 }
 
 simulated function bool CanBeUsedByPawn(Pawn User)

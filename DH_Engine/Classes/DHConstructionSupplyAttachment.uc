@@ -341,13 +341,13 @@ simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-function SetTeamIndex(int TeamIndex)
+function SetTeamIndex(int NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
 
     if (MapIconAttachment != none)
     {
-        MapIconAttachment.SetTeamIndex(TeamIndex);
+        MapIconAttachment.SetTeamIndex(NewTeamIndex);
     }
 }
 

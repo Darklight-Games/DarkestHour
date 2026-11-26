@@ -39,11 +39,11 @@ function Actor GetOccupant()
     return Occupant;
 }
 
-function SetOccupant(Actor Occupant)
+function SetOccupant(Actor NewOccupant)
 {
-    if (self.Occupant != Occupant)
+    if (Occupant != NewOccupant)
     {
-        self.Occupant = Occupant;
+        Occupant = NewOccupant;
         OnOccupantChanged();
     }
 }
@@ -53,11 +53,11 @@ simulated function DHActorProxy GetProxy()
     return Proxy;
 }
 
-simulated function SetProxy(DHActorProxy Proxy)
+simulated function SetProxy(DHActorProxy NewProxy)
 {
-    if (self.Proxy != Proxy)
+    if (Proxy != NewProxy)
     {
-        self.Proxy = Proxy;
+        Proxy = NewProxy;
         OnProxyChanged();
     }
 }

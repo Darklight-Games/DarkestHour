@@ -302,14 +302,14 @@ simulated function bool IsExposed()
     return bIsExposed;
 }
 
-simulated function bool CanSpawnWithParameters(DHGameReplicationInfo GRI, int TeamIndex, int RoleIndex, int SquadIndex, int VehiclePoolIndex, optional bool bSkipTimeCheck)
+simulated function bool CanSpawnWithParameters(DHGameReplicationInfo GRI, int PlayerTeamIndex, int PlayerRoleIndex, int PlayerSquadIndex, int PlayerVehiclePoolIndex, optional bool bSkipTimeCheck)
 {
-    if (!super.CanSpawnWithParameters(GRI, TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex, bSkipTimeCheck))
+    if (!super.CanSpawnWithParameters(GRI, PlayerTeamIndex, PlayerRoleIndex, PlayerSquadIndex, PlayerVehiclePoolIndex, bSkipTimeCheck))
     {
         return false;
     }
 
-    if (self.SquadIndex != SquadIndex)
+    if (SquadIndex != PlayerSquadIndex)
     {
         return false;
     }
@@ -322,9 +322,9 @@ simulated function bool CanSpawnWithParameters(DHGameReplicationInfo GRI, int Te
     return true;
 }
 
-simulated function bool IsVisibleTo(int TeamIndex, int RoleIndex, int SquadIndex, int VehiclePoolIndex)
+simulated function bool IsVisibleTo(int PlayerTeamIndex, int PlayerRoleIndex, int PlayerSquadIndex, int PlayerVehiclePoolIndex)
 {
-    return super.IsVisibleTo(TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex) && self.SquadIndex == SquadIndex;
+    return super.IsVisibleTo(PlayerTeamIndex, PlayerRoleIndex, PlayerSquadIndex, PlayerVehiclePoolIndex) && SquadIndex == PlayerSquadIndex;
 }
 
 function OnPawnSpawned(Pawn P)

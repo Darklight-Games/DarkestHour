@@ -407,19 +407,19 @@ simulated function GenerateClientGUID()
     SaveConfig();
 }
 
-function ServerSetClientGUID(GUID ClientGUID)
+function ServerSetClientGUID(GUID NewClientGUID)
 {
     local DarkestHourGame G;
 
     // Send the client tag to the server.
-    self.ClientGUID = ClientGUID;
+    ClientGUID = NewClientGUID;
 
     // Send a metrics event.
     G = DarkestHourGame(Level.Game);
 
     if (G != none && G.Metrics != none)
     {
-        G.Metrics.OnPlayerClientGUIDReceived(self, ClientGUID);
+        G.Metrics.OnPlayerClientGUIDReceived(self, NewClientGUID);
     }
 }
 
@@ -980,11 +980,11 @@ exec function LazyCam(float Laziness)
     }
 }
 
-function SetLazyCam(bool bLazyCam)
+function SetLazyCam(bool bNewLazyCam)
 {
-    self.bLazyCam = bLazyCam;
+    bLazyCam = bNewLazyCam;
 
-    if (bLazyCam)
+    if (bNewLazyCam)
     {
         LazyCamRotationTarget = Rotation;
     }
@@ -2914,7 +2914,7 @@ exec function CommunicationMenu()
 
 // This function returns the time the player will be able to spawn next
 // given some spawn parameters (DHRoleInfo and VehiclePoolIndex).
-simulated function int GetNextSpawnTime(int SpawnPointIndex, DHRoleInfo RI, int VehiclePoolIndex)
+simulated function int GetNextSpawnTime(int TargetSpawnPointIndex, DHRoleInfo RI, int TargetVehiclePoolIndex)
 {
     local int T;
     local DHGameReplicationInfo GRI;
@@ -2925,14 +2925,14 @@ simulated function int GetNextSpawnTime(int SpawnPointIndex, DHRoleInfo RI, int 
         GRI == none ||
         PlayerReplicationInfo == none ||
         PlayerReplicationInfo.Team == none ||
-        SpawnPointIndex < 0 ||
-        SpawnPointIndex >= arraycount(GRI.SpawnPoints) ||
-        GRI.SpawnPoints[SpawnPointIndex] == none)
+        TargetSpawnPointIndex < 0 ||
+        TargetSpawnPointIndex >= arraycount(GRI.SpawnPoints) ||
+        GRI.SpawnPoints[TargetSpawnPointIndex] == none)
     {
         return 0;
     }
 
-    if (GRI.SpawnPoints[SpawnPointIndex].CanPlayerSpawnImmediately(self))
+    if (GRI.SpawnPoints[TargetSpawnPointIndex].CanPlayerSpawnImmediately(self))
     {
         // Spawn point is allowing this player to spawn immediately!
         return -1;
@@ -2947,12 +2947,12 @@ simulated function int GetNextSpawnTime(int SpawnPointIndex, DHRoleInfo RI, int 
     {
         // LastKilledTime is 0 the first time a player joins a server, but if he leaves, the time is stored (using the sessions thing)
         // this means the player can pretty much spawn right away the first time connecting, but from then on he will be subject to the respawn time factors
-        T = LastKilledTime + GRI.ReinforcementInterval[PlayerReplicationInfo.Team.TeamIndex] + RI.AddedRoleRespawnTime + GRI.SpawnPoints[SpawnPointIndex].GetSpawnTimePenalty();
+        T = LastKilledTime + GRI.ReinforcementInterval[PlayerReplicationInfo.Team.TeamIndex] + RI.AddedRoleRespawnTime + GRI.SpawnPoints[TargetSpawnPointIndex].GetSpawnTimePenalty();
     }
 
-    if (VehiclePoolIndex != -1)
+    if (TargetVehiclePoolIndex != -1)
     {
-        T = Max(T, GRI.VehiclePoolNextAvailableTimes[VehiclePoolIndex]);
+        T = Max(T, GRI.VehiclePoolNextAvailableTimes[TargetVehiclePoolIndex]);
         T = Max(T, NextVehicleSpawnTime);
     }
 
@@ -3449,9 +3449,9 @@ function Reset()
     LastFlinchTime = 0.0;
 }
 
-function ServerSetIsInSpawnMenu(bool bIsInSpawnMenu)
+function ServerSetIsInSpawnMenu(bool bNewIsInSpawnMenu)
 {
-    self.bIsInSpawnMenu = bIsInSpawnMenu;
+    bIsInSpawnMenu = bNewIsInSpawnMenu;
 }
 
 // Modified to add 'Begin:' label, to avoid "label not found" error on ClientGotoState calls to send client to state 'Spectating' or 'PlayerWaiting' (both child states of this)
@@ -7169,7 +7169,7 @@ function ServerSetPatronTier(string PatronTier)
 }
 
 // Client-to-server function that reports the player's incognito mode to the server.
-function ServerSetIncognitoMode(bool bIsIncognito)
+function ServerSetIncognitoMode(bool bNewIsIncognito)
 {
     local DHPlayerReplicationInfo PRI;
 
@@ -7177,7 +7177,7 @@ function ServerSetIncognitoMode(bool bIsIncognito)
 
     if (PRI != none)
     {
-        PRI.bIsIncognito = bIsIncognito;
+        PRI.bIsIncognito = bNewIsIncognito;
     }
 }
 

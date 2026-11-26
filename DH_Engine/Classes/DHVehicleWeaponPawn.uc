@@ -38,11 +38,11 @@ var     bool        bNeedToStoreVehicleRotation; // set StoredVehicleRotation wh
 // Animation Drivers
 // These are used to animate the occpants' body based on the yaw or pitch
 // of the weapon. In lieu of a proper IK system, this will suffice!
-var enum EAnimationDriverType
+enum EAnimationDriverType
 {
     ADT_Yaw,
     ADT_Pitch,
-} Type;
+};
 
 struct RangeInt
 {

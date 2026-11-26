@@ -23,9 +23,9 @@ final function DHResupplyStrategy.EResupplyType GetResupplyType()
     return ResupplyType;
 }
 
-final function SetResupplyType(DHResupplyStrategy.EResupplyType ResupplyType)
+final function SetResupplyType(DHResupplyStrategy.EResupplyType NewResupplyType)
 {
-    self.ResupplyType = ResupplyType;
+    ResupplyType = NewResupplyType;
 }
 
 function EVisibleFor GetVisibility()

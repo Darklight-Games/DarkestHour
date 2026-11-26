@@ -216,9 +216,9 @@ final simulated function byte GetVisibilityIndex()
     return VisibilityIndex;
 }
 
-final function SetTeamIndex(byte TeamIndex)
+final function SetTeamIndex(byte NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
 
     if (bTrackDangerZone)
     {

@@ -6,7 +6,6 @@
 class DHHurtRadius extends Actor
     notplaceable;
 
-var float DamageTimerRate;
 var int DamageAmount;
 var float DamageRadius;
 var class<DamageType> DamageType;
@@ -21,7 +20,7 @@ function Timer()
     HurtRadius(DamageAmount, DamageRadius, DamageType, 0, Location);
 }
 
-function SetDamageTimerRate(int DamageTimerRate)
+function SetDamageTimerRate(float DamageTimerRate)
 {
     SetTimer(DamageTimerRate, true);
 }
@@ -30,7 +29,6 @@ defaultproperties
 {
     RemoteRole=ROLE_None
     bHidden=true
-    DamageTimerRate=2.0
     DamageRadius=1024.0
 }
 

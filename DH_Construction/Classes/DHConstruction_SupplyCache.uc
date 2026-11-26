@@ -106,7 +106,7 @@ static function StaticMesh GetConstructedStaticMesh(DHActorProxy.Context Context
     return default.StaticMesh;
 }
 
-function StaticMesh GetStageStaticMesh(int StageIndex)
+function StaticMesh GetStageStaticMesh(int TargetStageIndex)
 {
     return default.UnbuiltStaticMesh;
 }

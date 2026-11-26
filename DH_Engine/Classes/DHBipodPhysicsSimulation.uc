@@ -39,9 +39,9 @@ function int GetRotationComponent(EAxis Axis, Rotator Rotation)
     }
 }
 
-function Initialize(DHBipodPhysicsSettings Settings)
+function Initialize(DHBipodPhysicsSettings NewSettings)
 {
-    self.Settings = Settings;
+    Settings = NewSettings;
 }
 
 function Impulse(float ImpulseAngularAcceleration)

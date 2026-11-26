@@ -57,9 +57,9 @@ function Tick(float DeltaTime)
     super.Tick(DeltaTime);
 }
 
-function WaitForCount(int Count, float TimeOut, int MatchData)
+function WaitForCount(int Count, float TimeoutSeconds, int MatchData)
 {
-    super.WaitForCount(Count, TimeOut, MatchData);
+    super.WaitForCount(Count, TimeoutSeconds, MatchData);
 
     ReceiveState = Waiting;
 }

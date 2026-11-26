@@ -22,6 +22,7 @@ enum ESpawnPointBlockReason
 
 var ESpawnPointBlockReason  BlockReason; // any reason why spawn point can't be used currently
 
+// TODO: remove this later as we get variable shadowing in functions, it's also only actually there on the server.
 var protected DHGameReplicationInfo GRI; // just a convenient reference to the GRI actor
 
 var     private bool    bIsActive;       // whether spawn point is currently active
@@ -338,9 +339,9 @@ simulated function bool IsVisibleToPlayer(DHPlayer PC)
 }
 
 // Returns true if the spawn point is "visible" to a player with the arguments provided
-simulated function bool IsVisibleTo(int TeamIndex, int RoleIndex, int SquadIndex, int VehiclePoolIndex)
+simulated function bool IsVisibleTo(int PlayerTeamIndex, int PlayerRoleIndex, int PlayerSquadIndex, int PlayerVehiclePoolIndex)
 {
-    if (self.TeamIndex != TeamIndex || !bIsActive)
+    if (TeamIndex != PlayerTeamIndex || !bIsActive)
     {
         return false;
     }
@@ -361,19 +362,19 @@ simulated function bool IsBlocked()
 }
 
 // Returns true if the given arguments are satisfactory for spawning on this spawn point
-simulated function bool CanSpawnWithParameters(DHGameReplicationInfo GRI, int TeamIndex, int RoleIndex, int SquadIndex, int VehiclePoolIndex, optional bool bSkipTimeCheck)
+simulated function bool CanSpawnWithParameters(DHGameReplicationInfo DHGRI, int PlayerTeamIndex, int PlayerRoleIndex, int PlayerSquadIndex, int PlayerVehiclePoolIndex, optional bool bSkipTimeCheck)
 {
-    if (GRI == none || self.TeamIndex != TeamIndex || !bIsActive || IsBlocked())
+    if (DHGRI == none || TeamIndex != PlayerTeamIndex || !bIsActive || IsBlocked())
     {
         return false;
     }
 
-    if (!CanSpawnRole(GRI.GetRole(TeamIndex, RoleIndex)))
+    if (!CanSpawnRole(DHGRI.GetRole(PlayerTeamIndex, PlayerRoleIndex)))
     {
         return false;
     }
 
-    if (VehiclePoolIndex >= 0 && !CanSpawnVehicle(GRI, VehiclePoolIndex, bSkipTimeCheck))
+    if (PlayerVehiclePoolIndex >= 0 && !CanSpawnVehicle(DHGRI, PlayerVehiclePoolIndex, bSkipTimeCheck))
     {
         return false;
     }
@@ -386,14 +387,14 @@ simulated function bool IsActive()
     return bIsActive;
 }
 
-function SetIsActive(bool bIsActive)
+function SetIsActive(bool bNewIsActive)
 {
     local Controller C;
     local DHPlayer PC;
 
-    self.bIsActive = bIsActive;
+    bIsActive = bNewIsActive;
 
-    if (!bIsActive)
+    if (!bNewIsActive)
     {
         // Invalidate spawns, if necessary.
         for (C = Level.ControllerList; C != none; C = C.NextController)
@@ -477,11 +478,11 @@ final simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-final function SetTeamIndex(int TeamIndex)
+final function SetTeamIndex(int NewTeamIndex)
 {
-    if (self.TeamIndex != TeamIndex)
+    if (TeamIndex != NewTeamIndex)
     {
-        self.TeamIndex = TeamIndex;
+        TeamIndex = NewTeamIndex;
 
         OnTeamIndexChanged();
 

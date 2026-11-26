@@ -58,13 +58,13 @@ simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-final function SetTeamIndex(int TeamIndex)
+final function SetTeamIndex(int NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
 
     if (MapIconAttachment != none)
     {
-        MapIconAttachment.SetTeamIndex(TeamIndex);
+        MapIconAttachment.SetTeamIndex(NewTeamIndex);
     }
 
     OnTeamIndexChanged();
@@ -75,18 +75,18 @@ simulated function int GetSquadIndex()
     return SquadIndex;
 }
 
-final function SetSquadIndex(int SquadIndex)
+final function SetSquadIndex(int NewSquadIndex)
 {
-    self.SquadIndex = SquadIndex;
+    SquadIndex = NewSquadIndex;
 }
 
-final function SetResupplyType(DHResupplyStrategy.EResupplyType ResupplyType)
+final function SetResupplyType(DHResupplyStrategy.EResupplyType NewResupplyType)
 {
-    self.ResupplyType = ResupplyType;
+    ResupplyType = NewResupplyType;
 
     if (MapIconAttachment != none)
     {
-        DHMapIconAttachment_Resupply(MapIconAttachment).SetResupplyType(ResupplyType);
+        DHMapIconAttachment_Resupply(MapIconAttachment).SetResupplyType(NewResupplyType);
     }
 }
 

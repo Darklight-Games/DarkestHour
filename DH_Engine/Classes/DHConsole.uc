@@ -856,7 +856,7 @@ function UpdateSayType()
     }
 }
 
-function bool CanUseSayType(string SayType)
+function bool CanUseSayType(string TargetSayType)
 {
     local DHPlayer PC;
     local DHPlayerReplicationInfo PRI;
@@ -868,7 +868,7 @@ function bool CanUseSayType(string SayType)
         return false;
     }
 
-    switch (SayType)
+    switch (TargetSayType)
     {
         case "Say":
             return true;

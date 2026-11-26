@@ -113,7 +113,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
     if (Other.IsA('ROVehicleWeapon'))
     {
         bPenetratedVehicle = !HasDeflected() && (!Other.IsA('DHVehicleCannon') ||
-            DHVehicleCannon(Other).ShouldPenetrate(self, HitLocation, Direction, GetMaxPenetration(LaunchLocation, HitLocation)));
+            DHVehicleCannon(Other).ShouldPenetrate(self, HitLocation, Direction, GetMaxPenetration(HitLocation)));
 
         PlayVehicleHitEffects(bPenetratedVehicle, HitLocation, -Direction);
 
@@ -340,7 +340,7 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
         if (!HasDeflected())
         {
             AV = DHArmoredVehicle(HitVehicle);
-            bPenetratedVehicle = AV == none || AV.ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(LaunchLocation, Location));
+            bPenetratedVehicle = AV == none || AV.ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(Location));
         }
 
         PlayVehicleHitEffects(bPenetratedVehicle, Location, HitNormal);

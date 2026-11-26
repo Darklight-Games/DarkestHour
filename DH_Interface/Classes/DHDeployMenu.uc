@@ -1528,9 +1528,9 @@ function OnTeamChanged(int TeamIndex)
     UpdateSquads();
 }
 
-function OnSpawnPointChanged(int SpawnPointIndex, optional bool bDoubleClick)
+function OnSpawnPointChanged(int NewSpawnPointIndex, optional bool bDoubleClick)
 {
-    self.SpawnPointIndex = SpawnPointIndex;
+    SpawnPointIndex = NewSpawnPointIndex;
 
     UpdateStatus();
     UpdateButtons();

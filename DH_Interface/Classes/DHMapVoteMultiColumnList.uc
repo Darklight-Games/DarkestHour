@@ -24,14 +24,14 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 
 function string GetFilterPattern() { return FilterPattern; }
 
-function SetFilterPattern(string FilterPattern)
+function SetFilterPattern(string NewFilterPattern)
 {
-    self.FilterPattern = Locs(FilterPattern);
+    FilterPattern = Locs(NewFilterPattern);
     Clear();
     LoadList(VRI, GameTypeIndex);
 }
 
-function LoadList(VotingReplicationInfo LoadVRI, int GameTypeIndex)
+function LoadList(VotingReplicationInfo LoadVRI, int NewGameTypeIndex)
 {
     local int i, m, p, l;
     local string MapName;
@@ -45,6 +45,8 @@ function LoadList(VotingReplicationInfo LoadVRI, int GameTypeIndex)
     {
         return;
     }
+
+    GameTypeIndex = NewGameTypeIndex;
 
     Split(VRI.GameConfig[GameTypeIndex].Prefix, ",", PrefixList);
 

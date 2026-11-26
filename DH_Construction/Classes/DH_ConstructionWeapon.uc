@@ -314,7 +314,7 @@ simulated function TraceFromPlayerResult TraceFromPlayer()
     return Result;
 }
 
-function ServerCreateConstruction(class<DHConstruction> ConstructionClass, Actor Owner, Vector Location, Rotator Rotation, int VariantIndex, int SkinIndex)
+function ServerCreateConstruction(class<DHConstruction> NewConstructionClass, Actor Owner, Vector Location, Rotator Rotation, int VariantIndex, int SkinIndex)
 {
     local DHConstruction C;
     local DHPawn P;
@@ -335,7 +335,7 @@ function ServerCreateConstruction(class<DHConstruction> ConstructionClass, Actor
     Context.VariantIndex = VariantIndex;
     Context.SkinIndex = SkinIndex;
 
-    if (ConstructionClass.static.GetPlayerError(Context).Type != ERROR_None)
+    if (NewConstructionClass.static.GetPlayerError(Context).Type != ERROR_None)
     {
         return;
     }
@@ -349,7 +349,7 @@ function ServerCreateConstruction(class<DHConstruction> ConstructionClass, Actor
     }
 
     TestProxy.GroundActor = Owner;
-    TestProxy.SetConstructionClass(ConstructionClass);
+    TestProxy.SetConstructionClass(NewConstructionClass);
     TestProxy.SetLocation(Location);
     TestProxy.SetRotation(Rotation);
 
@@ -368,12 +368,12 @@ function ServerCreateConstruction(class<DHConstruction> ConstructionClass, Actor
 
     P = DHPawn(Instigator);
 
-    if (P == none || !P.UseSupplies(ConstructionClass.static.GetSupplyCost(Context), Withdrawals))
+    if (P == none || !P.UseSupplies(NewConstructionClass.static.GetSupplyCost(Context), Withdrawals))
     {
         return;
     }
 
-    C = Spawn(ConstructionClass, Owner,, Location, Rotation);
+    C = Spawn(NewConstructionClass, Owner,, Location, Rotation);
 
     if (C == none)
     {

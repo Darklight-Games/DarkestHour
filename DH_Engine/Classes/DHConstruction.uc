@@ -307,9 +307,9 @@ final simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-final function SetTeamIndex(int TeamIndex)
+final function SetTeamIndex(int NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
     OnTeamIndexChanged();
     NetUpdateTime = Level.TimeSeconds - 1.0;
 }
@@ -600,14 +600,14 @@ simulated event Destroyed()
     super.Destroyed();
 }
 
-function array<DHConstructionSupplyAttachment> GetTouchingSupplyAttachments(int TeamIndex)
+function array<DHConstructionSupplyAttachment> GetTouchingSupplyAttachments(int TargetTeamIndex)
 {
     local array<DHConstructionSupplyAttachment> Attachments;
     local DHConstructionSupplyAttachment Attachment;
 
     foreach DynamicActors(Class'DHConstructionSupplyAttachment', Attachment)
     {
-        if (Attachment.IsTouchingActor(self) && Attachment.GetTeamIndex() == TeamIndex)
+        if (Attachment.IsTouchingActor(self) && Attachment.GetTeamIndex() == TargetTeamIndex)
         {
             Attachments[Attachments.Length] = Attachment;
         }
@@ -1066,15 +1066,15 @@ function StaticMesh GetBrokenStaticMesh()
     return default.BrokenStaticMesh;
 }
 
-function StaticMesh GetStageStaticMesh(int StageIndex)
+function StaticMesh GetStageStaticMesh(int TargetStageIndex)
 {
-    if (StageIndex < 0 || StageIndex >= default.Stages.Length)
+    if (TargetStageIndex < 0 || TargetStageIndex >= default.Stages.Length)
     {
         return default.StaticMesh;
     }
     else
     {
-        return default.Stages[StageIndex].StaticMesh;
+        return default.Stages[TargetStageIndex].StaticMesh;
     }
 
     return none;

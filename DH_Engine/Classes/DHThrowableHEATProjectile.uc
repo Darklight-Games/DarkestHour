@@ -214,8 +214,8 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
             //TO DO: make a more proper method of handling of top armor hit. Ideally it should look at the angle of armor and detect if armor is horizontal or close to horizontal, then consider it a top armor
             if (DHArmoredVehicle(Wall) != none || DHVehicleCannon(Wall) != none)
             {
-                if (((Wall.IsA('DHArmoredVehicle') && !DHArmoredVehicle(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(LaunchLocation, Location)))
-                    || (Wall.IsA('DHVehicleCannon') && !DHVehicleCannon(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(LaunchLocation, Location)))))
+                if (((Wall.IsA('DHArmoredVehicle') && !DHArmoredVehicle(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(Location)))
+                    || (Wall.IsA('DHVehicleCannon') && !DHVehicleCannon(Wall).ShouldPenetrate(self, Location, Normal(Velocity), GetMaxPenetration(Location)))))
                 {
                     bFailedToPenetrate = true;
                 }

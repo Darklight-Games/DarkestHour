@@ -5868,19 +5868,19 @@ function SetWalking(bool bNewIsWalking)
     }
 }
 
-simulated function SetLockViewRotation(bool bShouldLockViewRotation, optional Rotator LockViewRotation)
+simulated function SetLockViewRotation(bool bShouldLockViewRotation, optional Rotator NewLockViewRotation)
 {
     bLockViewRotation = bShouldLockViewRotation;
-    self.LockViewRotation = LockViewRotation;
+    LockViewRotation = NewLockViewRotation;
 }
 
-simulated function SetIsCuttingWire(bool bIsCuttingWire)
+simulated function SetIsCuttingWire(bool bNewIsCuttingWire)
 {
-    self.bIsCuttingWire = bIsCuttingWire;
+    bIsCuttingWire = bNewIsCuttingWire;
 
     if (Controller != none)
     {
-        SetLockViewRotation(bIsCuttingWire, Controller.Rotation);
+        SetLockViewRotation(bNewIsCuttingWire, Controller.Rotation);
     }
 }
 

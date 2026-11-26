@@ -101,11 +101,11 @@ simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-function SetTeamIndex(int TeamIndex)
+function SetTeamIndex(int NewTeamIndex)
 {
-    if (self.TeamIndex != TeamIndex)
+    if (TeamIndex != NewTeamIndex)
     {
-        self.TeamIndex = TeamIndex;
+        TeamIndex = NewTeamIndex;
 
         OnTeamIndexChanged();
     }

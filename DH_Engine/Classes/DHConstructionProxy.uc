@@ -54,9 +54,9 @@ function Destroyed()
     }
 }
 
-final function SetConstructionClass(class<DHConstruction> ConstructionClass)
+final function SetConstructionClass(class<DHConstruction> NewConstructionClass)
 {
-    if (ConstructionClass == none)
+    if (NewConstructionClass == none)
     {
         Warn("Cannot set the construction class to none");
         return;
@@ -66,7 +66,7 @@ final function SetConstructionClass(class<DHConstruction> ConstructionClass)
     VariantIndex = 0;
     SkinIndex = 0;
 
-    self.ConstructionClass = ConstructionClass;
+    ConstructionClass = NewConstructionClass;
 
     UpdateDefaultSkinIndex();
     UpdateAppearance();
@@ -469,7 +469,7 @@ function DHConstruction.ConstructionError GetPositionError()
     local Actor HitActor;
     local DHConstructionProxy CP;
     local bool bDidSatisfyProximityRequirement;
-    local DHConstructionSocket Socket;
+    local DHConstructionSocket GroundSocket;
 
     GRI = DHGameReplicationInfo(PlayerOwner.GameReplicationInfo);
 
@@ -615,16 +615,16 @@ function DHConstruction.ConstructionError GetPositionError()
     }
 
     // Don't allow the construction to be placed on a socket if it's occupied.
-    Socket = DHConstructionSocket(GroundActor);
+    GroundSocket = DHConstructionSocket(GroundActor);
 
-    if (Socket != none && Socket.GetOccupant() != none)
+    if (GroundSocket != none && GroundSocket.GetOccupant() != none)
     {
         E.Type = ERROR_SocketOccupied;
         return E;
     }
 
     // Don't allow the construction to touch blocking actors if we aren't on a socket.
-    if (Socket == none)
+    if (GroundSocket == none)
     {
         foreach TouchingActors(Class'Actor', TouchingActor)
         {
@@ -792,18 +792,18 @@ function DHConstruction.ConstructionError GetPositionError()
     return E;
 }
 
-function UpdateParameters(Vector Location, Rotator Direction, Actor GroundActor, Vector GroundNormal, bool bLimitLocalRotation, Range LocalRotationYawRange)
+function UpdateParameters(Vector NewLocation, Rotator NewDirection, Actor NewGroundActor, Vector NewGroundNormal, bool bNewLimitLocalRotation, Range NewLocalRotationYawRange)
 {
-    self.Direction = Direction;
-    self.GroundNormal = GroundNormal;
-    self.bLimitLocalRotation = bLimitLocalRotation;
-    self.LocalRotationYawRange = LocalRotationYawRange;
+    Direction = NewDirection;
+    GroundNormal = NewGroundNormal;
+    bLimitLocalRotation = bNewLimitLocalRotation;
+    LocalRotationYawRange = NewLocalRotationYawRange;
 
-    SetLocation(Location);
+    SetLocation(NewLocation);
 
-    if (self.GroundActor != GroundActor)
+    if (GroundActor != NewGroundActor)
     {
-        self.GroundActor = GroundActor;
+        GroundActor = NewGroundActor;
 
         // Ground actor changed so let's re-evaluate our collison size.
         // TODO: we may want to do more than just re-evaluate the collision size

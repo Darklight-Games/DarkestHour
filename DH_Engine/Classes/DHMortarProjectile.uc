@@ -6,8 +6,8 @@
 class DHMortarProjectile extends DHBallisticProjectile
     abstract;
 
-var     Vector  HitLocation;
-var     Vector  HitNormal;
+var     Vector  ImpactLocation;
+var     Vector  ImpactNormal;
 
 // Chance each shell is a dud & does not explode
 var     bool    bDud;
@@ -133,9 +133,9 @@ simulated singular function Touch(Actor Other)
     // But if that trace returns true then it somehow didn't hit the actor, so we fall back to using our current location as the HitLocation
     // Also skip trace & use our location if velocity is zero (touching actor when projectile spawns) or hit a Mover actor (legacy, don't know why)
     if (Velocity == vect(0.0, 0.0, 0.0) || Other.IsA('Mover')
-        || Other.TraceThisActor(HitLocation, HitNormal, Location, Location - (2.0 * Velocity), GetCollisionExtent()))
+        || Other.TraceThisActor(ImpactLocation, ImpactNormal, Location, Location - (2.0 * Velocity), GetCollisionExtent()))
     {
-        HitLocation = Location;
+        ImpactLocation = Location;
     }
 
     // Special handling for hit on a collision mesh actor - switch hit actor to CM's owner & proceed as if we'd hit that actor
@@ -152,14 +152,14 @@ simulated singular function Touch(Actor Other)
     // Now call ProcessTouch(), which is the where the class-specific Touch functionality gets handled
     // Record LastTouched to make sure that if HurtRadius() gets called to give blast damage, it will always 'find' the hit actor
     LastTouched = Other;
-    ProcessTouch(Other, HitLocation);
+    ProcessTouch(Other, ImpactLocation);
     LastTouched = none;
 
     // On a net client call ClientSideTouch() if we hit a pawn with an authority role on the client (in practice this can only be a ragdoll corpse)
     // TODO: probably remove this & empty out ClientSideTouch() as ProcessTouch() will get called clientside anyway & is much more class-specific & sophisticated
     if (Role < ROLE_Authority && Other.Role == ROLE_Authority && Pawn(Other) != none && Velocity != vect(0.0, 0.0, 0.0))
     {
-        ClientSideTouch(Other, HitLocation);
+        ClientSideTouch(Other, ImpactLocation);
     }
 }
 
@@ -178,7 +178,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
         return;
     }
 
-    HitNormal = Normal(HitLocation - Other.Location);
+    ImpactNormal = Normal(HitLocation - Other.Location);
 
     MortarExplode();
 }
@@ -193,14 +193,14 @@ simulated function MortarExplode()
     else
     {
         // Otherwise, explode immediately.
-        Explode(Location, HitNormal);
+        Explode(Location, ImpactNormal);
     }
 }
 
 // Modified to go into 'Whistle' state upon hitting something, so players always hear the DescendingSound before shell explodes & actor is destroyed
 simulated function HitWall(Vector HitNormal, Actor Wall)
 {
-    self.HitNormal = HitNormal;
+    ImpactNormal = HitNormal;
 
     MortarExplode();
 }
@@ -227,7 +227,7 @@ simulated state Whistle
 
     simulated function Timer()
     {
-        Explode(Location, HitNormal);
+        Explode(Location, ImpactNormal);
     }
 }
 
@@ -590,7 +590,7 @@ simulated function GetHitSurfaceType(out ESurfaceTypes HitSurfaceType, Vector Hi
         return;
     }
 
-    Trace(HitLocation, HitNormal, Location - (16.0 * HitNormal), Location, false,, M);
+    Trace(ImpactLocation, HitNormal, Location - (16.0 * HitNormal), Location, false,, M);
 
     if (M == none)
     {

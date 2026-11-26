@@ -86,10 +86,10 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     }
 }
 
-function SetViewport(Vector Origin, int ZoomLevel)
+function SetViewport(Vector Origin, int NewZoomLevel)
 {
-    SetZoomLevel(ZoomLevel);
-    Viewport = ConstrainViewport(Class'UBox'.static.Create(Origin, GetZoomScale(ZoomLevel)), vect(0, 0, 0), vect(1, 1, 0));
+    SetZoomLevel(NewZoomLevel);
+    Viewport = ConstrainViewport(Class'UBox'.static.Create(Origin, GetZoomScale(NewZoomLevel)), vect(0, 0, 0), vect(1, 1, 0));
 }
 
 function Vector GetViewportOrigin()
@@ -236,17 +236,17 @@ function bool InternalOnDraw(Canvas C)
     return false;
 }
 
-function Box ConstrainViewport(Box Viewport, Vector Min, Vector Max)
+function Box ConstrainViewport(Box ViewportBox, Vector Min, Vector Max)
 {
     local Vector Translation;
 
-    Translation = -Class'UVector'.static.MinComponent(Viewport.Min, vect(0, 0, 0));
-    Viewport = Class'UBox'.static.Translate(Viewport, Translation);
+    Translation = -Class'UVector'.static.MinComponent(ViewportBox.Min, vect(0, 0, 0));
+    ViewportBox = Class'UBox'.static.Translate(ViewportBox, Translation);
 
-    Translation = -(Class'UVector'.static.MaxComponent(Viewport.Max, vect(1, 1, 0)) - vect(1, 1, 0));
-    Viewport = Class'UBox'.static.Translate(Viewport, Translation);
+    Translation = -(Class'UVector'.static.MaxComponent(ViewportBox.Max, vect(1, 1, 0)) - vect(1, 1, 0));
+    ViewportBox = Class'UBox'.static.Translate(ViewportBox, Translation);
 
-    return Viewport;
+    return ViewportBox;
 }
 
 function SelectSpawnPoint(int SpawnPointIndex)
@@ -686,13 +686,13 @@ function InternalOnSelect(GUIContextMenu Sender, int ClickIndex)
 }
 
 // Gets the zoom scale based on the zoom level.
-function float GetZoomScale(int ZoomLevel)
+function float GetZoomScale(int TargetZoomLevel)
 {
     local int ZoomLevelRange;
     local float T;
 
     ZoomLevelRange = ZoomLevelMax - ZoomLevelMin;
-    T = float(ZoomLevel) * (1.0 / ZoomLevelRange);
+    T = float(TargetZoomLevel) * (1.0 / ZoomLevelRange);
     return Class'UInterp'.static.Deceleration(T, ZoomScaleRange.Max, ZoomScaleRange.Min);
 }
 
@@ -704,10 +704,10 @@ function SetZoomLevel(int NewZoomLevel)
 }
 
 // Given a viewport and a location within that viewport, get the frame coordinates.
-function Vector ViewportToFrame(Box Viewport, Vector Location)
+function Vector ViewportToFrame(Box ViewportBox, Vector Location)
 {
-    Location.X = Viewport.Min.X + (Location.X * (Viewport.Max.X - Viewport.Min.X));
-    Location.Y = Viewport.Min.Y + (Location.Y * (Viewport.Max.Y - Viewport.Min.Y));
+    Location.X = ViewportBox.Min.X + (Location.X * (ViewportBox.Max.X - ViewportBox.Min.X));
+    Location.Y = ViewportBox.Min.Y + (Location.Y * (ViewportBox.Max.Y - ViewportBox.Min.Y));
     return Location;
 }
 

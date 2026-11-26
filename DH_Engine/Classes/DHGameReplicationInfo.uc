@@ -973,16 +973,16 @@ simulated function bool IsRallyPointIndexValid(DHPlayer PC, byte RallyPointIndex
     return true;
 }
 
-simulated function bool CanSpawnWithParameters(int SpawnPointIndex, int TeamIndex, int RoleIndex, int SquadIndex, int VehiclePoolIndex, optional bool bSkipTimeCheck)
+simulated function bool CanSpawnWithParameters(int SpawnPointIndex, int PlayerTeamIndex, int PlayerRoleIndex, int PlayerSquadIndex, int PlayerVehiclePoolIndex, optional bool bSkipTimeCheck)
 {
     local DHSpawnPointBase SP;
     local class<DHVehicle> VehicleClass;
 
-    if (VehiclePoolIndex != -1)
+    if (PlayerVehiclePoolIndex != -1)
     {
-        VehicleClass = class<DHVehicle>(GetVehiclePoolVehicleClass(VehiclePoolIndex));
+        VehicleClass = class<DHVehicle>(GetVehiclePoolVehicleClass(PlayerVehiclePoolIndex));
 
-        if (VehicleClass == none || !CanSpawnVehicle(VehiclePoolIndex, bSkipTimeCheck))
+        if (VehicleClass == none || !CanSpawnVehicle(PlayerVehiclePoolIndex, bSkipTimeCheck))
         {
             return false;
         }
@@ -990,7 +990,7 @@ simulated function bool CanSpawnWithParameters(int SpawnPointIndex, int TeamInde
 
     SP = GetSpawnPoint(SpawnPointIndex);
 
-    return SP != none && SP.CanSpawnWithParameters(self, TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex, bSkipTimeCheck);
+    return SP != none && SP.CanSpawnWithParameters(self, PlayerTeamIndex, PlayerRoleIndex, PlayerSquadIndex, PlayerVehiclePoolIndex, bSkipTimeCheck);
 }
 
 simulated function bool CanSpawnVehicle(int VehiclePoolIndex, optional bool bSkipTimeCheck)
