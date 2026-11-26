@@ -1,0 +1,40 @@
+# Fails the pull request if `usagi lint` reports anything or `usagi format`
+# would change any file. To make this blocking, mark the "Lint & format" check
+# as required in the branch protection rules for the default branch.
+
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+env:
+  USAGI_VERSION: 0.5.0
+
+jobs:
+  lint:
+    name: Lint & format
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        lfs: false
+
+    - name: Cache usagi
+      id: cache-usagi
+      uses: actions/cache@v4
+      with:
+        path: ~/.cargo/bin/usagi
+        key: usagi-${{ env.USAGI_VERSION }}
+
+    - name: Install usagi
+      if: steps.cache-usagi.outputs.cache-hit != 'true'
+      run: cargo install usagi-cli --version "$USAGI_VERSION" --locked
+
+    - name: Lint
+      run: usagi lint --format=concise
+
+    - name: Check formatting
+      run: usagi format --check
