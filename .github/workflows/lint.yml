@@ -22,11 +22,16 @@ jobs:
       with:
         lfs: false
 
+    - name: Cache usagi
+      id: cache-usagi
+      uses: actions/cache@v4
+      with:
+        path: ~/.cargo/bin/usagi
+        key: usagi-${{ env.USAGI_VERSION }}
+
     - name: Install usagi
-      run: |
-        name="usagi-v${USAGI_VERSION}-x86_64-unknown-linux-musl"
-        curl -sSfL "https://github.com/DarklightGames/usagi/releases/download/v${USAGI_VERSION}/${name}.tar.gz" | tar -xz -C "$RUNNER_TEMP"
-        echo "$RUNNER_TEMP/$name" >> "$GITHUB_PATH"
+      if: steps.cache-usagi.outputs.cache-hit != 'true'
+      run: cargo install usagi-cli --version "$USAGI_VERSION" --locked
 
     - name: Lint
       run: usagi lint --format=concise
