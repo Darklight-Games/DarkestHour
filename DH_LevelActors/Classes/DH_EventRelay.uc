@@ -11,13 +11,13 @@ struct EventDelay
     var() float Delay;
 };
 
-var()   array<EventDelay>   Events;
-var     byte                EventIndex;
-var()   bool                bFireOnce;
+var() array<EventDelay> Events;
+var byte EventIndex;
+var() bool bFireOnce;
 
 event Trigger(Actor Other, Pawn EventInstigator)
 {
-    //No recursive calls, please.
+    // No recursive calls, please.
     if (EventInstigator == self)
     {
         return;

@@ -5,8 +5,8 @@
 
 class DH_Bofors40mmCannon extends DHVehicleAutoCannon;
 
-var     name        TraverseControlBone;
-var     name        ElevationControlBone;
+var name TraverseControlBone;
+var name ElevationControlBone;
 
 // New function to animate the traverse & elevation controls, called by cannon pawn when gun moves
 simulated function UpdateControlsRotation()
@@ -21,9 +21,14 @@ simulated function UpdateControlsRotation()
 }
 
 // From DHATGunCannon, as gun will always be penetrated by a shell
-simulated function bool ShouldPenetrate(DHAntiVehicleProjectile P, Vector HitLocation, Vector ProjectileDirection, float MaxArmorPenetration)
+simulated function bool ShouldPenetrate(
+    DHAntiVehicleProjectile P,
+    Vector HitLocation,
+    Vector ProjectileDirection,
+    float MaxArmorPenetration
+    )
 {
-   return true;
+    return true;
 }
 
 defaultproperties

@@ -7,25 +7,25 @@ class DHWeaponPickup extends ROWeaponPickup
     abstract;
 
 // General
-var     int                     PlayerNearbyRadius;
-var     int                     PlayerNearbyRetryTime;
+var int PlayerNearbyRadius;
+var int PlayerNearbyRetryTime;
 
 // Ammo
-var     array<int>              AmmoMags;
-var     int                     LoadedMagazineIndex;
+var array<int> AmmoMags;
+var int LoadedMagazineIndex;
 
 // Barrels
-var     array<DHWeaponBarrel>   Barrels;                  // array of any carried barrels for this weapon
-var     byte                    BarrelIndex;              // index number of current barrel
-var     bool                    bBarrelSteamActive;       // barrel is steaming
-var     bool                    bOldBarrelSteamActive;    // clientside record, so PostNetReceive can tell when bBarrelSteamActive changes
-var     class<ROMGSteam>        BarrelSteamEmitterClass;
-var     ROMGSteam               BarrelSteamEmitter;
-var     Vector                  BarrelSteamEmitterOffset; // offset for the emitter to position correctly on the pickup static mesh
+var array<DHWeaponBarrel> Barrels; // array of any carried barrels for this weapon
+var byte BarrelIndex; // index number of current barrel
+var bool bBarrelSteamActive; // barrel is steaming
+var bool bOldBarrelSteamActive; // clientside record, so PostNetReceive can tell when bBarrelSteamActive changes
+var class<ROMGSteam> BarrelSteamEmitterClass;
+var ROMGSteam BarrelSteamEmitter;
+var Vector BarrelSteamEmitterOffset; // offset for the emitter to position correctly on the pickup static mesh
 
-var     StaticMesh              EmptyStaticMesh;
+var StaticMesh EmptyStaticMesh;
 
-var    bool                     bWaitingToBolt;
+var bool bWaitingToBolt;
 
 replication
 {
@@ -74,10 +74,8 @@ auto state Pickup
 {
     function bool ValidTouch(Actor Other)
     {
-        return !(DHPawn(Other) != none &&
-                 (DHPawn(Other).bOnFire ||
-                 !DHPawn(Other).bCanPickupWeapons)) &&
-               super.ValidTouch(Other);
+        return !(DHPawn(Other) != none && (DHPawn(Other).bOnFire || !DHPawn(Other).bCanPickupWeapons))
+            && super.ValidTouch(Other);
     }
 
     function Timer()
@@ -97,7 +95,7 @@ auto state Pickup
 // New function that returns true if players are nearby
 function bool ArePlayersNearby()
 {
-    local DHPawn    DHP;
+    local DHPawn DHP;
 
     foreach RadiusActors(Class'DHPawn', DHP, PlayerNearbyRadius)
     {
@@ -211,7 +209,10 @@ simulated function Tick(float DeltaTime)
 
 simulated event NotifySelected(Pawn User)
 {
-    if (Level.NetMode != NM_DedicatedServer && User != none && User.IsHumanControlled() && ((Level.TimeSeconds - LastNotifyTime) >= TouchMessageClass.default.LifeTime))
+    if (Level.NetMode != NM_DedicatedServer
+        && User != none
+        && User.IsHumanControlled()
+        && ((Level.TimeSeconds - LastNotifyTime) >= TouchMessageClass.default.LifeTime))
     {
         User.ReceiveLocalizedMessage(TouchMessageClass, 1, User.PlayerReplicationInfo,, InventoryType);
         LastNotifyTime = Level.TimeSeconds;

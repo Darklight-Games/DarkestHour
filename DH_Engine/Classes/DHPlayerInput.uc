@@ -55,7 +55,7 @@ event PlayerInput(float DeltaTime)
     }
     else // forward
     {
-        aTurn  += aBaseX * FOVScale + aMouseX;
+        aTurn += aBaseX * FOVScale + aMouseX;
     }
 
     aBaseX = 0;

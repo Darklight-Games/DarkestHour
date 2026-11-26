@@ -8,7 +8,12 @@ class DHVoteMessage extends ROGameMessage;
 var localized string VoteReceievedText;
 var localized string VoteConcludedText;
 
-static function string GetString(optional int S, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int S,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     switch (S)
     {
@@ -24,4 +29,3 @@ defaultproperties
     VoteReceievedText="Your vote has been received."
     VoteConcludedText="The vote has concluded."
 }
-

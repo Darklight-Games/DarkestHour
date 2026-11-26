@@ -5,10 +5,10 @@
 
 class DH_FG42Attachment extends DHWeaponAttachment;
 
-var     name    WA_BipodDeploy_Idle;
-var     name    WA_BipodDeploy_Fire;
-var     name    WA_BipodDeploy_Reload;
-var     name    WA_BipodDeploy_ReloadEmpty;
+var name WA_BipodDeploy_Idle;
+var name WA_BipodDeploy_Fire;
+var name WA_BipodDeploy_Reload;
+var name WA_BipodDeploy_ReloadEmpty;
 
 // Modified to allow for bipod deployed animations
 // Changing the fire & reload anims is not the best way of doing this, but saves having to override functions in ROPawn

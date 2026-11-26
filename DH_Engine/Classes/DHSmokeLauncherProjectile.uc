@@ -6,10 +6,10 @@
 class DHSmokeLauncherProjectile extends DHMortarProjectileSmoke
     abstract;
 
-var bool        bHasSmokeTrail;  // some smoke pots ignite immediately upon firing
-var             class<Emitter>      MortarSmokeTrailClass;  // some smoke pots ignite immediately upon firing
-var             Emitter             SmokeTrail;
-var float       SmokeTrailDuration; // we want to destroy the trail a few seconds after landing (but not immediately b/c it looks weird)
+var bool bHasSmokeTrail; // some smoke pots ignite immediately upon firing
+var class<Emitter> MortarSmokeTrailClass; // some smoke pots ignite immediately upon firing
+var Emitter SmokeTrail;
+var float SmokeTrailDuration; // we want to destroy the trail a few seconds after landing (but not immediately b/c it looks weird)
 
 simulated function PostBeginPlay()
 {
@@ -36,7 +36,10 @@ simulated function HandleDestruction()
 // Also to ignore any collision with a vehicle weapon on the launcher's own vehicle
 simulated function ProcessTouch(Actor Other, Vector HitLocation)
 {
-    if (Other == none || Other.IsA('ROBulletWhipAttachment') || Other.bDeleteMe || (Other.IsA('Projectile') && !Other.bProjTarget))
+    if (Other == none
+        || Other.IsA('ROBulletWhipAttachment')
+        || Other.bDeleteMe
+        || (Other.IsA('Projectile') && !Other.bProjTarget))
     {
         return;
     }
@@ -47,7 +50,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
     }
 
     HitWall(Normal(HitLocation - Other.Location), Other);
-    self.HitNormal = Normal(HitLocation - Other.Location);
+    ImpactNormal = Normal(HitLocation - Other.Location);
 }
 
 // Modified so remove mortar shell's 'Whistle' state, with its descending sound & delayed impact effects
@@ -64,7 +67,7 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
         return;
     }
 
-    self.HitNormal = HitNormal;
+    ImpactNormal = HitNormal;
     Explode(Location, HitNormal);
 }
 
@@ -72,7 +75,7 @@ simulated function HitWall(Vector HitNormal, Actor Wall)
 simulated function SpawnFiringEffect()
 {
     local DHVehicleCannon Cannon;
-    local Vector          FireLocation;
+    local Vector FireLocation;
 
     if (DHVehicleCannonPawn(Instigator) != none)
     {

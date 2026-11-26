@@ -5,7 +5,7 @@
 
 class DHBulletHitBrickEffectLarge extends Emitter;
 
-//particles: 34
+// particles: 34
 
 defaultproperties
 {

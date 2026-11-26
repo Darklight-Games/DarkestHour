@@ -8,20 +8,20 @@ class DHCannonShell extends DHAntiVehicleProjectile
 
 struct RangePoint
 {
-    var() int               Range;                // the distance for this range setting
-    var() float             RangeValue;           // the adjustment value for this range setting
+    var() int Range; // the distance for this range setting
+    var() float RangeValue; // the adjustment value for this range setting
 };
 
-var()   bool                bMechanicalAiming;    // uses the mechanical range settings for this projectile
-var()   array<RangePoint>   MechanicalRanges;     // the range setting values for tank cannons that do mechanical pitch adjustments for aiming
+var() bool bMechanicalAiming; // uses the mechanical range settings for this projectile
+var() array<RangePoint> MechanicalRanges; // the range setting values for tank cannons that do mechanical pitch adjustments for aiming
 
 // DEPRECATED: Use the DHGunOptics system instead from now on!
-var()   bool                bOpticalAiming;       // uses the optical range settings for this projectile
-var()   array<RangePoint>   OpticalRanges;        // the range setting values for tank cannons that do optical sight adjustments for aiming
+var() bool bOpticalAiming; // uses the optical range settings for this projectile
+var() array<RangePoint> OpticalRanges; // the range setting values for tank cannons that do optical sight adjustments for aiming
 
-var()   class<DHMapMarker_ArtilleryHit>  HitMapMarkerClass;
+var() class<DHMapMarker_ArtilleryHit> HitMapMarkerClass;
 
-var()   float   HitSoundRadius;
+var() float HitSoundRadius;
 
 simulated function PostBeginPlay()
 {
@@ -168,14 +168,18 @@ simulated function BlowUp(Vector HitLocation)
 }
 
 // New function just to consolidate long code that's repeated in more than one function
-simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal, optional float ActualLocationAdjustment)
+simulated function SpawnExplosionEffects(
+    Vector HitLocation,
+    Vector HitNormal,
+    optional float ActualLocationAdjustment
+    )
 {
-    local Sound          HitSound;
+    local Sound HitSound;
     local class<Emitter> HitEmitterClass;
-    local Vector         TraceHitLocation, TraceHitNormal;
-    local Material       HitMaterial;
-    local ESurfaceTypes  SurfType;
-    local bool           bShowDecal, bSnowDecal;
+    local Vector TraceHitLocation, TraceHitNormal;
+    local Material HitMaterial;
+    local ESurfaceTypes SurfType;
+    local bool bShowDecal, bSnowDecal;
 
     if (Level.NetMode == NM_DedicatedServer)
     {
@@ -185,7 +189,7 @@ simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal, o
     // Hit a vehicle - set hit effects and play a suppression/shell shock effect for vehicle occupants
     if (ROVehicle(SavedHitActor) != none)
     {
-        //VehicleShellShockEffect();
+        // VehicleShellShockEffect();
         HitSound = VehicleHitSound;
         HitEmitterClass = ShellHitVehicleEffectClass;
         PlayOwnedSound(Sound'DH_SundrySounds.shellshock', SLOT_None, 1.0, true, 10.0, 1.0, true);
@@ -193,7 +197,9 @@ simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal, o
     // Hit something else - get material type & set effects
     else if (!(PhysicsVolume != none && PhysicsVolume.bWaterVolume))
     {
-        Trace(TraceHitLocation, TraceHitNormal, HitLocation + (16.0 * Vector(Rotation)), HitLocation, false,, HitMaterial);
+        Trace(
+            TraceHitLocation, TraceHitNormal, HitLocation + (16.0 * Vector(Rotation)), HitLocation, false,, HitMaterial
+            );
 
         if (HitMaterial == none)
         {
@@ -217,7 +223,7 @@ simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal, o
             case EST_Rock:
             case EST_Gravel:
             case EST_Concrete:
-            case EST_Custom03:  //Brick
+            case EST_Custom03: // Brick
                 HitSound = RockHitSound;
                 HitEmitterClass = ShellHitRockEffectClass;
                 bShowDecal = true;
@@ -258,7 +264,11 @@ simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal, o
     // Play random explosion sound if this shell has any
     if (ExplosionSound.Length > 0)
     {
-        PlaySound(ExplosionSound[Rand(ExplosionSound.Length - 1)], SLOT_None, ExplosionSoundVolume * TransientSoundVolume);
+        PlaySound(
+            ExplosionSound[Rand(ExplosionSound.Length - 1)],
+            SLOT_None,
+            ExplosionSoundVolume * TransientSoundVolume
+            );
     }
 
     // Play explosion effect

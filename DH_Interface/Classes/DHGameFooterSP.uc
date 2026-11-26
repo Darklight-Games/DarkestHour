@@ -15,7 +15,7 @@ function InitComponent(GUIController InController, GUIComponent InOwner)
     super.InitComponent(InController, InOwner);
     Owner = UT2K4GamePageBase(MenuOwner);
     b_Primary.OnClick = Owner.InternalOnClick;
-    //b_Secondary.OnClick = Owner.InternalOnClick;
+    // b_Secondary.OnClick = Owner.InternalOnClick;
     b_Back.OnClick = Owner.InternalOnClick;
 }
 

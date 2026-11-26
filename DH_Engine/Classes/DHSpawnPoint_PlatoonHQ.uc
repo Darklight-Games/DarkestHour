@@ -8,13 +8,13 @@ class DHSpawnPoint_PlatoonHQ extends DHSpawnPointBase
 
 var DHConstruction Construction;
 
-var bool    bIsEstablished;
-var int     EstablishmentCounter;
-var int     EstablishmentCounterThreshold;
+var bool bIsEstablished;
+var int EstablishmentCounter;
+var int EstablishmentCounterThreshold;
 
-var int     CapturingEnemiesCount;
-var float   CaptureRadiusInMeters;
-var int     EnemiesNeededToDeconstruct;
+var int CapturingEnemiesCount;
+var float CaptureRadiusInMeters;
+var int EnemiesNeededToDeconstruct;
 
 replication
 {
@@ -79,7 +79,9 @@ function Timer()
         if (bIsEstablished)
         {
             // "A Command Post has been overrun by the enemy."
-            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHCommandPostMessage', 2,,, Construction.Class);
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                Level, GetTeamIndex(), Class'DHCommandPostMessage', 2,,, Construction.Class
+                );
         }
 
         Construction.BreakMe();
@@ -102,7 +104,9 @@ function Timer()
             bIsEstablished = true;
 
             // "A Command Post has been established."
-            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHCommandPostMessage', 0,,, Construction.Class);
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                Level, GetTeamIndex(), Class'DHCommandPostMessage', 0,,, Construction.Class
+                );
         }
     }
 

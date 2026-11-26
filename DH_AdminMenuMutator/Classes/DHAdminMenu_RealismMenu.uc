@@ -158,7 +158,7 @@ function bool RealismMutatorIsPresent()
 
     AdminLogoutIfNecessary();
     ErrorMessageToSelf(3); // mutator isn't present
-    bKeepMenuOpen = true;  // tells HandleInput not to close this menu if RM mutator isn't enabled, so allowing another realism menu choice
+    bKeepMenuOpen = true; // tells HandleInput not to close this menu if RM mutator isn't enabled, so allowing another realism menu choice
 
     return false;
 }
@@ -176,7 +176,7 @@ function bool AreRallyPointsAllowed()
 
     AdminLogoutIfNecessary();
     ErrorMessageToSelf(25); // "The game mode does not allow rally points..."
-    bKeepMenuOpen = true;  // tells HandleInput not to close this menu if RM mutator isn't enabled, so allowing another realism menu choice
+    bKeepMenuOpen = true; // tells HandleInput not to close this menu if RM mutator isn't enabled, so allowing another realism menu choice
 
     return false;
 }

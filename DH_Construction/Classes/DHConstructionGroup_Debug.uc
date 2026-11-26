@@ -9,4 +9,3 @@ defaultproperties
 {
     GroupName="Debug"
 }
-

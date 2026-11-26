@@ -11,4 +11,3 @@ defaultproperties
     Skins(0)=Texture'DH_Weapon_tex.Mills_3rdP'
     MenuImage=Texture'DH_InterfaceArt_tex.MillsBomb'
 }
-

@@ -7,48 +7,48 @@ class DHConstructionSupplyAttachment extends Actor
     abstract
     notplaceable;
 
-var int                 SupplyPointIndex;
-var private float       SupplyCount;
-var int                 SupplyCountMax;
-var private int         TeamIndex;
-var bool                bIsMainSupplyCache;
+var int SupplyPointIndex;
+var private float SupplyCount;
+var int SupplyCountMax;
+var private int TeamIndex;
+var bool bIsMainSupplyCache;
 
-var localized private string   HumanReadableName;
+var private localized string HumanReadableName;
 
 var class<DHMapIconAttachment> MapIconAttachmentClass;
-var DHMapIconAttachment        MapIconAttachment;
+var DHMapIconAttachment MapIconAttachment;
 
 // Whether or not this supply attachment can be resupplied from a static resupply point.
-var bool                bCanBeResupplied;
+var bool bCanBeResupplied;
 
 // Whether or not this supply attachment can have it's supplies loaded and unloaded from a vehicle.
-var bool                bAreSuppliesTransactable;
+var bool bAreSuppliesTransactable;
 
 // Used to resolve the order in which supplies will be drawn from in the case
 // where the the player is near multiple supply attachments when placing
 // constructions. A higher value means it will be drawn from first.
-var int                 SortPriority;
+var int SortPriority;
 
-var array<Pawn>         TouchingPawns;
+var array<Pawn> TouchingPawns;
 
 // The distance, in meters, a player must be within to have access to these supplies.
-var float               TouchDistanceInMeters;
+var float TouchDistanceInMeters;
 
 // Used to circumvent an engine bug (see PostNetReceive below)
-var bool                bIsBaseInitialized;
+var bool bIsBaseInitialized;
 
 // Whether or not this supply attachment is attached to a vehicle
-var bool                bIsAttachedToVehicle;
+var bool bIsAttachedToVehicle;
 
 //==============================================================================
 // Supply Generation
 //==============================================================================
-var bool                bIsInDangerZone;                    // Whether or not this supply attachment is in the danger zone.
-var bool                bCanGenerateSupplies;               // Whether or not this supply attachment is able to generate supplies.
-var int                 SupplyDepositInterval;              // The amount of seconds before generated supplies are deposited into the supply count.
-var int                 SupplyDepositCounter;               // The next time that generated supplies will be deposited.
-var int                 SupplyGenerationRate;               // The base amount of supplies that are generated every minute, gets reduced per cache.
-var int                 BonusSupplyGenerationRate;          // Bonus amount of supplies that are generated on top of SupplyGenerationRate every minute (does not get reduced per # of caches).
+var bool bIsInDangerZone; // Whether or not this supply attachment is in the danger zone.
+var bool bCanGenerateSupplies; // Whether or not this supply attachment is able to generate supplies.
+var int SupplyDepositInterval; // The amount of seconds before generated supplies are deposited into the supply count.
+var int SupplyDepositCounter; // The next time that generated supplies will be deposited.
+var int SupplyGenerationRate; // The base amount of supplies that are generated every minute, gets reduced per cache.
+var int BonusSupplyGenerationRate; // Bonus amount of supplies that are generated on top of SupplyGenerationRate every minute (does not get reduced per # of caches).
 
 struct Withdrawal
 {
@@ -279,7 +279,8 @@ function Timer()
             NumOfGeneratingSupplyPoints = Max(GRI.GetNumberOfGeneratingSupplyPointsForTeam(TeamIndex), 1);
 
             // Calculate the base and bonus generation
-            SuppliesToDeposit = float(SupplyGenerationRate / NumOfGeneratingSupplyPoints) + float(BonusSupplyGenerationRate);
+            SuppliesToDeposit = float(SupplyGenerationRate / NumOfGeneratingSupplyPoints)
+                + float(BonusSupplyGenerationRate);
 
             // Calculate the rate
             SuppliesToDeposit = SuppliesToDeposit / 60.0 * SupplyDepositInterval;
@@ -341,13 +342,13 @@ simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-function SetTeamIndex(int TeamIndex)
+function SetTeamIndex(int NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
 
     if (MapIconAttachment != none)
     {
-        MapIconAttachment.SetTeamIndex(TeamIndex);
+        MapIconAttachment.SetTeamIndex(NewTeamIndex);
     }
 }
 

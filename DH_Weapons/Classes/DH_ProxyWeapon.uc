@@ -5,7 +5,7 @@
 
 class DH_ProxyWeapon extends DHWeapon;
 
-var DHActorProxy                ProxyCursor;
+var DHActorProxy ProxyCursor;
 
 simulated function OnTick(float DeltaTime);
 simulated function DHActorProxy CreateProxyCursor();
@@ -279,4 +279,3 @@ defaultproperties
     bForceSwitch=false
     bNoVoluntarySwitch=true
 }
-

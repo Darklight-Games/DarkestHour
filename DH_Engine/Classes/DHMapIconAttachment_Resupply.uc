@@ -8,7 +8,7 @@ class DHMapIconAttachment_Resupply extends DHMapIconAttachment
     notplaceable;
 
 var Material IconMaterialVehicle;
-var float    IconScaleVehicle;
+var float IconScaleVehicle;
 
 var private DHResupplyStrategy.EResupplyType ResupplyType;
 
@@ -23,9 +23,9 @@ final function DHResupplyStrategy.EResupplyType GetResupplyType()
     return ResupplyType;
 }
 
-final function SetResupplyType(DHResupplyStrategy.EResupplyType ResupplyType)
+final function SetResupplyType(DHResupplyStrategy.EResupplyType NewResupplyType)
 {
-    self.ResupplyType = ResupplyType;
+    ResupplyType = NewResupplyType;
 }
 
 function EVisibleFor GetVisibility()

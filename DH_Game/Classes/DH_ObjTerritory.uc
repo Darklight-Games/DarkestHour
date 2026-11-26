@@ -10,5 +10,5 @@
 // At this point this actor should NOT ever be deleted as it would break even official maps.
 
 class DH_ObjTerritory extends DHObjective
-    hidecategories(Assault,GameObjective,JumpDest,JumpSpot,MothershipHack)
+    hidecategories(Assault, GameObjective, JumpDest, JumpSpot, MothershipHack)
     placeable;

@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_KV1Cannon extends DH_KV1ECannon;  //wip class
+class DH_KV1Cannon extends DH_KV1ECannon; // wip class
 
 defaultproperties
 {

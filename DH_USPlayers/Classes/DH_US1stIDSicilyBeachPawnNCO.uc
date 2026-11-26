@@ -12,4 +12,3 @@ defaultproperties
     BodySkins(0)=Texture'DHUSCharactersTex.US_1stID_Sicily_Sarg_1'
     BodySkins(1)=Texture'DHUSCharactersTex.US_1stID_Sicily_Sarg_2'
 }
-

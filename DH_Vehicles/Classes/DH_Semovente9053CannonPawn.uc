@@ -8,8 +8,11 @@ class DH_Semovente9053CannonPawn extends DHAssaultGunCannonPawn;
 // New debug execs to adjust OpticalRanges values (why is this not in a parent?)
 exec function SetOpticalRange(float NewValue)
 {
-    Log(Cannon.ProjectileClass @ "OpticalRanges[" $ Cannon.CurrentRangeIndex $ "]=" @ NewValue @
-        "(was" @ class<DHCannonShell>(Cannon.ProjectileClass).default.OpticalRanges[Cannon.CurrentRangeIndex].RangeValue $ ")");
+    Log(
+        Cannon.ProjectileClass @ "OpticalRanges[" $ Cannon.CurrentRangeIndex $ "]=" @ NewValue @ "(was"
+            @ class<DHCannonShell>(Cannon.ProjectileClass).default.OpticalRanges[Cannon.CurrentRangeIndex].RangeValue
+            $ ")"
+        );
 
     class<DHCannonShell>(Cannon.ProjectileClass).default.OpticalRanges[Cannon.CurrentRangeIndex].RangeValue = NewValue;
 }
@@ -21,7 +24,7 @@ simulated function ClientKDriverEnter(PlayerController PC)
 
     DHPC = DHPlayer(PC);
 
-    if (DHPC != None)
+    if (DHPC != none)
     {
         DHPC.QueueHint(65, true);
     }

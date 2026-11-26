@@ -4,9 +4,9 @@
 //==============================================================================
 
 class DHLocationHint extends Info
+    abstract
     hidecategories(Sound)
-    showcategories(Movement,Collision)
-    abstract;
+    showcategories(Movement, Collision);
 
 defaultproperties
 {
@@ -16,4 +16,3 @@ defaultproperties
     CollisionRadius=+00040.0
     CollisionHeight=+00043.0
 }
-

@@ -5,41 +5,42 @@
 
 class DHMainMenu extends UT2K4GUIPage;
 
-var()   config string           MenuSong;
+var() config string MenuSong;
 
-var automated       FloatingImage           i_Overlay, i_Announcement;
-var automated       GUIButton               b_MultiPlayer, b_Practice, b_Settings, b_Host, b_Quit, b_LearnToPlay;
-var automated       GUISectionBackground    sb_MainMenu, sb_HelpMenu, sb_ConfigFixMenu, sb_ShowVersion, sb_Social;
-var automated       GUIButton               b_Credits, b_Manual, b_Demos, b_Website, b_Back, b_MOTDTitle, b_Facebook, b_GitHub, b_SteamCommunity, b_Discord, b_Weblate, b_VK;
-var automated       GUILabel                l_Version;
-var automated       GUIImage                i_DHTextLogo;
-var automated       DHGUIScrollTextBox      tb_MOTDContent;
-var automated       GUIImage                i_MOTDLoading;
-var automated       ROGUIProportionalContainerNoSkin c_MOTD;
+var automated FloatingImage i_Overlay, i_Announcement;
+var automated GUIButton b_MultiPlayer, b_Practice, b_Settings, b_Host, b_Quit, b_LearnToPlay;
+var automated GUISectionBackground sb_MainMenu, sb_HelpMenu, sb_ConfigFixMenu, sb_ShowVersion, sb_Social;
+var automated GUIButton b_Credits, b_Manual, b_Demos, b_Website, b_Back, b_MOTDTitle, b_Facebook, b_GitHub,
+    b_SteamCommunity, b_Discord, b_Weblate, b_VK;
+var automated GUILabel l_Version;
+var automated GUIImage i_DHTextLogo;
+var automated DHGUIScrollTextBox tb_MOTDContent;
+var automated GUIImage i_MOTDLoading;
+var automated ROGUIProportionalContainerNoSkin c_MOTD;
 
 var array<ExtendedConsole.ServerFavorite> StaticFavorites;
 
-var     string                  MOTDURL;
-var     string                  FacebookURL;
-var     string                  GitHubURL;
-var     string                  SteamCommunityURL;
-var     string                  DiscordURL;
-var     string                  WeblateURL;
-var     string                  VKURL;
-var     string                  ResetINIGuideURL;
+var string MOTDURL;
+var string FacebookURL;
+var string GitHubURL;
+var string SteamCommunityURL;
+var string DiscordURL;
+var string WeblateURL;
+var string VKURL;
+var string ResetINIGuideURL;
 
-var     localized string        SteamMustBeRunningText;
-var     localized string        MOTDErrorString;
+var localized string SteamMustBeRunningText;
+var localized string MOTDErrorString;
 
-var     localized string        ControlsChangedMessage;
-var     localized string        BadConfigMessage;
+var localized string ControlsChangedMessage;
+var localized string BadConfigMessage;
 
-var     bool                    bAllowClose;
-var     int                     EllipseCount;
-var     bool                    bShouldRequestMOTD;
-var     bool                    bShouldPromptBadConfig;
+var bool bAllowClose;
+var int EllipseCount;
+var bool bShouldRequestMOTD;
+var bool bShouldPromptBadConfig;
 
-var     config string           SavedVersion;
+var config string SavedVersion;
 
 delegate OnHideAnnouncement();
 
@@ -82,20 +83,13 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
 
     // If they have not changed their name from the default, change their
     // name to their Steam name!
-    if (PlayerOwner() != none &&
-        PlayerOwner().GetUrlOption("Name") ~= "DHPlayer" &&
-        Controller != none &&
-        Controller.SteamGetUserName() != "")
+    if (PlayerOwner() != none
+        && PlayerOwner().GetUrlOption("Name") ~= "DHPlayer"
+        && Controller != none
+        && Controller.SteamGetUserName() != "")
     {
         // This converts an underscore to a non-breaking space (0xA0)
         PlayerOwner().ConsoleCommand("SetName" @ Controller.SteamGetUserName());
-    }
-
-    // Fix the player's name if it has been garbled with mojibake.
-    // A previous bug would replace an underscore with this string, so this undoes that.
-    if (InStr(PlayerOwner().GetUrlOption("Name"), "�") >= 0)
-    {
-        PlayerOwner().ConsoleCommand("SetName" @ Repl(PlayerOwner().GetUrlOption("Name"), "�", "_"));
     }
 
     // The default near-clip is 2.0, which is needlessly close and causes
@@ -159,10 +153,14 @@ function InternalOnOpen()
 // Means the key is either already bound to what we want (so no need to change) or the player is using it for something else (so don't mess up his config)
 // Secondly checks whether our new command is already bound to another key or keys - if it is bound to two keys then we don't make any changes
 // But if the command is already bound to only one key, we'll also bound it to the new key, as the config menu can handle two key assignments
-function SetKeyBindIfAvailable(string BindKeyName, string NewBoundCommand, optional string ExistingCommandCanBeOverridden)
+function SetKeyBindIfAvailable(
+    string BindKeyName,
+    string NewBoundCommand,
+    optional string ExistingCommandCanBeOverridden
+    )
 {
     local array<string> ExistingAssignedKeys, s;
-    local string        ExistingBoundCommand;
+    local string ExistingBoundCommand;
 
     Controller.GetCurrentBind(BindKeyName, ExistingBoundCommand); // finds any command that our key is already assigned to
 
@@ -172,19 +170,35 @@ function SetKeyBindIfAvailable(string BindKeyName, string NewBoundCommand, optio
 
         if (ExistingAssignedKeys.Length < 2) // only proceed if no more than one other key is already assigned to our command (we can add a 2nd if a slot is free)
         {
-            if (ExistingBoundCommand != "") log("BINDING" @ NewBoundCommand @ "TO" @ BindKeyName @ "KEY, overriding existing command" @ ExistingBoundCommand);
-            else log("BINDING" @ NewBoundCommand @ "TO" @ BindKeyName @ "KEY"); // TEMPDEBUG
+            if (ExistingBoundCommand != "")
+            {
+                log(
+                    "BINDING" @ NewBoundCommand @ "TO" @ BindKeyName @ "KEY, overriding existing command"
+                        @ ExistingBoundCommand
+                    );
+            }
+            else
+            {
+                log("BINDING" @ NewBoundCommand @ "TO" @ BindKeyName @ "KEY"); // TEMPDEBUG
+            }
 
             Controller.SetKeyBind(BindKeyName, NewBoundCommand);
         }
-        else log(NewBoundCommand @ "is already bound to" @ ExistingAssignedKeys[0] @ "and" @ ExistingAssignedKeys[1] @ "keys"); // TEMPDEBUG
+        else
+        {
+            log(
+                NewBoundCommand @ "is already bound to" @ ExistingAssignedKeys[0] @ "and" @ ExistingAssignedKeys[1]
+                    @ "keys"
+                ); // TEMPDEBUG
+        }
     }
-    else log(BindKeyName @ "is already assigned to" @ ExistingBoundCommand); // TEMPDEBUG
+    else
+    {
+        log(BindKeyName @ "is already assigned to" @ ExistingBoundCommand); // TEMPDEBUG
+    }
 }
 
-function OnClose(optional bool bCanceled)
-{
-}
+function OnClose(optional bool bCanceled);
 
 function bool MyKeyEvent(out byte Key, out byte State, float delta)
 {
@@ -211,14 +225,7 @@ function bool CanClose(optional bool bCanceled)
 
 function bool ButtonClick(GUIComponent Sender)
 {
-    local GUIButton selected;
-
-    if (GUIButton(Sender) != none)
-    {
-        selected = GUIButton(Sender);
-    }
-
-    switch (sender)
+    switch (Sender)
     {
         case b_Practice:
             Profile("InstantAction");
@@ -294,6 +301,7 @@ function bool ButtonClick(GUIComponent Sender)
 
         case b_Weblate:
             PlayerOwner().ConsoleCommand("START" @ default.WeblateURL);
+            break;
 
         case i_Overlay:
             HideAnnouncement();
@@ -325,7 +333,6 @@ function HideAnnouncement()
 event Opened(GUIComponent Sender)
 {
     local UVersion SavedVersionObject;
-    local string TextureDetail, CharacterDetail;
 
     sb_ShowVersion.SetVisibility(true);
 
@@ -413,7 +420,8 @@ event Opened(GUIComponent Sender)
     }
 
     // Force the correct NetworkStatusMsg class
-    if (PlayerOwner().ConsoleCommand("get DH_Interface.DHGUIController NetworkMsgMenu") != "DH_Interface.DHNetworkStatusMsg")
+    if (PlayerOwner().ConsoleCommand("get DH_Interface.DHGUIController NetworkMsgMenu")
+        != "DH_Interface.DHNetworkStatusMsg")
     {
         PlayerOwner().ConsoleCommand("set DH_Interface.DHGUIController NetworkMsgMenu DH_Interface.DHNetworkStatusMsg");
         PlayerOwner().SaveConfig();
@@ -426,7 +434,8 @@ event Opened(GUIComponent Sender)
     }
 
     // Force voice quality to higher quality
-    if (PlayerOwner().VoiceChatCodec != "CODEC_96WB" || PlayerOwner().ConsoleCommand("get Engine.PlayerController VoiceChatCodec") != "CODEC_96WB")
+    if (PlayerOwner().VoiceChatCodec != "CODEC_96WB"
+        || PlayerOwner().ConsoleCommand("get Engine.PlayerController VoiceChatCodec") != "CODEC_96WB")
     {
         Log("Forcing codec to 96WB...");
         PlayerOwner().VoiceChatCodec = "CODEC_96WB";
@@ -435,9 +444,6 @@ event Opened(GUIComponent Sender)
         PlayerOwner().ConsoleCommand("set Engine.PlayerController VoiceChatLANCodec CODEC_96WB");
         PlayerOwner().SaveConfig();
     }
-
-    TextureDetail = PlayerOwner().ConsoleCommand("get ini:Engine.Engine.ViewportManager TextureDetailWorld");
-    CharacterDetail = PlayerOwner().ConsoleCommand("get ini:Engine.Engine.ViewportManager TextureDetailPlayerSkin");
 
     // Due to a bug introduced in 9.0, the VoiceVolume was being
     // set to 0.0 upon saving settings. Originally we thought the setting
@@ -540,7 +546,7 @@ function AddOfficialServersToFavorites()
 
     for (i = 0; i < default.StaticFavorites.Length; ++i)
     {
-        class'ExtendedConsole'.static.AddFavorite(StaticFavorites[i]);
+        Class'ExtendedConsole'.static.AddFavorite(StaticFavorites[i]);
     }
 }
 

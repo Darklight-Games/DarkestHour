@@ -6,17 +6,17 @@
 class DHShovelItem extends DHWeapon
     abstract;
 
-function bool FillAmmo() { return false; }
-function bool ResupplyAmmo() { return false; }
-exec simulated function ROManualReload() { return; }
-simulated function bool ShouldUseFreeAim() { return true; }
+function bool FillAmmo();
+function bool ResupplyAmmo();
+exec simulated function ROManualReload();
+
+simulated function bool ShouldUseFreeAim()
+{
+    return true;
+}
 
 simulated function Fire(float F)
 {
-    local DHPawn P;
-
-    P = DHPawn(Instigator);
-
     if (Instigator != none && Instigator.bIsCrawling)
     {
         Class'DHShovelWarningMessage'.static.ClientReceive(PlayerController(Instigator.Controller), 0);

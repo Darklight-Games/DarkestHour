@@ -10,4 +10,3 @@ defaultproperties
     InventoryType=Class'DH_BARWeapon'
     StaticMesh=StaticMesh'DH_WeaponPickups.BAR'
 }
-

@@ -123,4 +123,3 @@ function array<Object> ToArray()
 {
     return Items;
 }
-

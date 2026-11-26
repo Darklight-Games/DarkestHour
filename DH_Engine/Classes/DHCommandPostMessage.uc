@@ -33,7 +33,11 @@ static function string GetString(
             S = default.DestroyedMessage;
             break;
         case 4:
-            S = Repl(default.ConstructedMessage, "{seconds}", Class'DHSpawnPoint_PlatoonHQ'.default.EstablishmentCounterThreshold);
+            S = Repl(
+                default.ConstructedMessage,
+                "{seconds}",
+                Class'DHSpawnPoint_PlatoonHQ'.default.EstablishmentCounterThreshold
+                );
             break;
     }
 
@@ -55,4 +59,3 @@ defaultproperties
     DestroyedMessage="A {name} has been destroyed."
     ConstructedMessage="A {name} has been constructed and will be established in {seconds} seconds."
 }
-

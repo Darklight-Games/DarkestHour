@@ -6,9 +6,9 @@
 class DHScoreCategory extends Object
     abstract;
 
-var int                 CategoryIndex;
-var localized string    HumanReadableName;
-var Material            IconMaterial;
+var int CategoryIndex;
+var localized string HumanReadableName;
+var Material IconMaterial;
 
 defaultproperties
 {

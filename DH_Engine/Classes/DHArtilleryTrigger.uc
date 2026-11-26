@@ -10,7 +10,7 @@
 
 class DHArtilleryTrigger extends ROArtilleryTrigger;
 
-var()   bool        bShouldShowOnSituationMap;    // whether HUD overhead map should show an icon to mark this arty trigger's position
+var() bool bShouldShowOnSituationMap; // whether HUD overhead map should show an icon to mark this arty trigger's position
 
 function PostBeginPlay()
 {

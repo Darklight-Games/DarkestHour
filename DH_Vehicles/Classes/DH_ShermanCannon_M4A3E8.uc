@@ -3,6 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
+// usagi: ignore[class-name-ends-in-digit]
 class DH_ShermanCannon_M4A3E8 extends DH_ShermanCannonA_76mm;
 
 defaultproperties
@@ -44,4 +45,3 @@ defaultproperties
     FireAttachBone="com_attachment"
     FireEffectOffset=(X=0,Y=0,Z=50)
 }
-

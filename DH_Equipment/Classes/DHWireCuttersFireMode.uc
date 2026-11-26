@@ -9,11 +9,13 @@ class DHWireCuttersFireMode extends DHWeaponFire;
 simulated function bool AllowFire()
 {
     local DHObstacleInstance TracedObstacle;
-    local Vector             HitLocation, HitNormal;
+    local Vector HitLocation, HitNormal;
 
     if (Instigator != none && !Instigator.IsProneTransitioning() && Instigator.Velocity == vect(0.0, 0.0, 0.0))
     {
-        TracedObstacle = DHObstacleInstance(Trace(HitLocation, HitNormal, Weapon.Location + (100.0 * Vector(Weapon.Rotation)), Weapon.Location, true));
+        TracedObstacle = DHObstacleInstance(
+            Trace(HitLocation, HitNormal, Weapon.Location + (100.0 * Vector(Weapon.Rotation)), Weapon.Location, true)
+            );
 
         if (TracedObstacle != none && TracedObstacle.Info.CanBeCut())
         {
@@ -32,4 +34,3 @@ defaultproperties
     bFireOnRelease=false
     bIgnoresWeaponLock=true
 }
-

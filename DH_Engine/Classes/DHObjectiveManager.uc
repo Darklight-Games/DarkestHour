@@ -17,8 +17,8 @@ function PostBeginPlay()
 function ObjectiveStateChanged()
 {
     local DarkestHourGame DHGame;
-    local bool            bReadyToModify;
-    local int             i, j, k;
+    local bool bReadyToModify;
+    local int i, j, k;
 
     DHGame = DarkestHourGame(Level.Game);
 

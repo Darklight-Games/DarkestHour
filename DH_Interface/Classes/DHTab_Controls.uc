@@ -26,19 +26,20 @@ enum ECategoryIDs
     CID_Comm,
     CID_Game,
     CID_Misc,
-    CID_Interface
+    CID_Interface,
 };
 
-var localized string            Section_Inventory;
-var array<string>               Bindings_Inventory;
-var localized string            Captions_Inventory[15];
+var localized string Section_Inventory;
+var array<string> Bindings_Inventory;
+var localized string Captions_Inventory[15];
 
-var CPKeys                      ControlProfileKeys[CONTROL_PROFILE_AMOUNT];
-var CPCmds                      ControlProfileCommands[CONTROL_PROFILE_AMOUNT];
-var localized string            ControlProfiles[CONTROL_PROFILE_AMOUNT];
+var CPKeys ControlProfileKeys[CONTROL_PROFILE_AMOUNT];
+var CPCmds ControlProfileCommands[CONTROL_PROFILE_AMOUNT];
+var localized string ControlProfiles[CONTROL_PROFILE_AMOUNT];
 
-var     automated moComboBox    co_ControlProfiles;
-//var()   ControlProfileBinds     ControlProfileBindings[6];
+var automated moComboBox co_ControlProfiles;
+
+// var()   ControlProfileBinds     ControlProfileBindings[6];
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
@@ -69,14 +70,14 @@ function LoadCommands()
     ClearBindings();
 
     // Load RO keybinds
-    AddControlBindings(Section_Game,      Bindings_Game.length,       CID_Game);
-    AddControlBindings(Section_Movement,  Bindings_Movement.length,   CID_Movement);
-    AddControlBindings(Section_Weapons,   Bindings_Weapons.length,    CID_Weapons);
-    AddControlBindings(Section_Inventory, Bindings_Inventory.length,  CID_Inventory);
-    AddControlBindings(Section_Looking,   Bindings_Looking.length,    CID_Looking);
-    AddControlBindings(Section_Comm,      Bindings_Comm.length,       CID_Comm);
-    AddControlBindings(Section_Interface, Bindings_Interface.length,  CID_Interface);
-    AddControlBindings(Section_Misc,      Bindings_Misc.length,       CID_Misc);
+    AddControlBindings(Section_Game, Bindings_Game.length, CID_Game);
+    AddControlBindings(Section_Movement, Bindings_Movement.length, CID_Movement);
+    AddControlBindings(Section_Weapons, Bindings_Weapons.length, CID_Weapons);
+    AddControlBindings(Section_Inventory, Bindings_Inventory.length, CID_Inventory);
+    AddControlBindings(Section_Looking, Bindings_Looking.length, CID_Looking);
+    AddControlBindings(Section_Comm, Bindings_Comm.length, CID_Comm);
+    AddControlBindings(Section_Interface, Bindings_Interface.length, CID_Interface);
+    AddControlBindings(Section_Misc, Bindings_Misc.length, CID_Misc);
 
     // Load custom keybinds
     LoadCustomBindings();
@@ -86,7 +87,8 @@ function LoadCommands()
 
     // Support requests
     CreateAliasMapping("", Section_Speech_Prefix $ Class'ROConsole'.default.SMStateName[1], true);
-    VoicePackClass.static.GetAllSupports( VoiceCommands );
+    VoicePackClass.static.GetAllSupports(VoiceCommands);
+
     for (i = 0; i < VoiceCommands.Length; ++i)
     {
         CreateAliasMapping("speech SUPPORT" @ i, VoiceCommands[i], false);
@@ -94,7 +96,8 @@ function LoadCommands()
 
     // Acknowledgements requests
     CreateAliasMapping("", Section_Speech_Prefix $ Class'ROConsole'.default.SMStateName[2], true);
-    VoicePackClass.static.GetAllAcknowledges( VoiceCommands );
+    VoicePackClass.static.GetAllAcknowledges(VoiceCommands);
+
     for (i = 0; i < VoiceCommands.Length; ++i)
     {
         CreateAliasMapping("speech ACK" @ i, VoiceCommands[i], false);
@@ -102,7 +105,8 @@ function LoadCommands()
 
     // Enemy spotted
     CreateAliasMapping("", Section_Speech_Prefix $ Class'ROConsole'.default.SMStateName[3], true);
-    VoicePackClass.static.GetAllEnemies( VoiceCommands );
+    VoicePackClass.static.GetAllEnemies(VoiceCommands);
+
     for (i = 0; i < VoiceCommands.Length; ++i)
     {
         CreateAliasMapping("speech ENEMY" @ i, VoiceCommands[i], false);
@@ -110,7 +114,8 @@ function LoadCommands()
 
     // Alerts
     CreateAliasMapping("", Section_Speech_Prefix $ Class'ROConsole'.default.SMStateName[4], true);
-    VoicePackClass.static.GetAllAlerts( VoiceCommands );
+    VoicePackClass.static.GetAllAlerts(VoiceCommands);
+
     for (i = 0; i < VoiceCommands.Length; ++i)
     {
         CreateAliasMapping("speech ALERT" @ i, VoiceCommands[i], false);
@@ -118,7 +123,8 @@ function LoadCommands()
 
     // Vehicle orders
     CreateAliasMapping("", Section_Speech_Prefix $ Class'ROConsole'.default.SMStateName[5], true);
-    VoicePackClass.static.GetAllVehicleDirections( VoiceCommands );
+    VoicePackClass.static.GetAllVehicleDirections(VoiceCommands);
+
     for (i = 0; i < VoiceCommands.Length; ++i)
     {
         CreateAliasMapping("speech VEH_ORDERS" @ i, VoiceCommands[i], false);
@@ -126,7 +132,8 @@ function LoadCommands()
 
     // Vehicle alerts
     CreateAliasMapping("", Section_Speech_Prefix $ Class'ROConsole'.default.SMStateName[6], true);
-    VoicePackClass.static.GetAllVehicleAlerts( VoiceCommands );
+    VoicePackClass.static.GetAllVehicleAlerts(VoiceCommands);
+
     for (i = 0; i < VoiceCommands.Length; ++i)
     {
         CreateAliasMapping("speech VEH_ALERTS" @ i, VoiceCommands[i], false);
@@ -134,7 +141,8 @@ function LoadCommands()
 
     // Commands
     CreateAliasMapping("", Section_Speech_Prefix $ Class'ROConsole'.default.SMStateName[7], true);
-    VoicePackClass.static.GetAllOrders( VoiceCommands );
+    VoicePackClass.static.GetAllOrders(VoiceCommands);
+
     for (i = 0; i < VoiceCommands.Length; ++i)
     {
         CreateAliasMapping("speech ORDER" @ i, VoiceCommands[i], false);
@@ -142,7 +150,8 @@ function LoadCommands()
 
     // Extras
     CreateAliasMapping("", Section_Speech_Prefix $ Class'ROConsole'.default.SMStateName[8], true);
-    VoicePackClass.static.GetAllExtras( VoiceCommands );
+    VoicePackClass.static.GetAllExtras(VoiceCommands);
+
     for (i = 0; i < VoiceCommands.Length; ++i)
     {
         CreateAliasMapping("speech TAUNT" @ i, VoiceCommands[i], false);
@@ -157,22 +166,49 @@ function AddControlBindings(string Section_Title, int Num_Elements, ECategoryIDs
 
     if (Section_Title != "")
     {
-        CreateAliasMapping("", Section_Title, true );
+        CreateAliasMapping("", Section_Title, true);
     }
 
     for (i = 0; i < Num_Elements; i++)
     {
         switch (Category_ID)
         {
-            case CID_Movement: BindStr = Bindings_Movement[i]; CaptionStr = Captions_Movement[i]; break;
-            case CID_Looking: BindStr = Bindings_Looking[i]; CaptionStr = Captions_Looking[i]; break;
-            case CID_Weapons: BindStr = Bindings_Weapons[i]; CaptionStr = Captions_Weapons[i]; break;
-            case CID_Inventory: BindStr = Bindings_Inventory[i]; CaptionStr = Captions_Inventory[i]; break;
-            case CID_Comm: BindStr = Bindings_Comm[i]; CaptionStr = Captions_Comm[i]; break;
-            case CID_Game: BindStr = Bindings_Game[i]; CaptionStr = Captions_Game[i]; break;
-            case CID_Misc: BindStr = Bindings_Misc[i]; CaptionStr = Captions_Misc[i]; break;
-            case CID_Interface: BindStr = Bindings_Interface[i]; CaptionStr = Captions_Interface[i]; break;
-            default: BindStr = ""; CaptionStr = "Unknown ID: " $ Category_ID; break;
+            case CID_Movement:
+                BindStr = Bindings_Movement[i];
+                CaptionStr = Captions_Movement[i];
+                break;
+            case CID_Looking:
+                BindStr = Bindings_Looking[i];
+                CaptionStr = Captions_Looking[i];
+                break;
+            case CID_Weapons:
+                BindStr = Bindings_Weapons[i];
+                CaptionStr = Captions_Weapons[i];
+                break;
+            case CID_Inventory:
+                BindStr = Bindings_Inventory[i];
+                CaptionStr = Captions_Inventory[i];
+                break;
+            case CID_Comm:
+                BindStr = Bindings_Comm[i];
+                CaptionStr = Captions_Comm[i];
+                break;
+            case CID_Game:
+                BindStr = Bindings_Game[i];
+                CaptionStr = Captions_Game[i];
+                break;
+            case CID_Misc:
+                BindStr = Bindings_Misc[i];
+                CaptionStr = Captions_Misc[i];
+                break;
+            case CID_Interface:
+                BindStr = Bindings_Interface[i];
+                CaptionStr = Captions_Interface[i];
+                break;
+            default:
+                BindStr = "";
+                CaptionStr = "Unknown ID: " $ Category_ID;
+                break;
         }
 
         CreateAliasMapping(BindStr, CaptionStr, false);
@@ -208,7 +244,9 @@ function SetUpProfileControls(int Index)
         // Integrity check
         if (ControlProfileKeys[Index].Keys.Length != ControlProfileCommands[Index].Cmds.Length)
         {
-            Warn("A control profile doesn't have the same number of keys as commands, exiting control profile setup!!!");
+            Warn(
+                "A control profile doesn't have the same number of keys as commands, exiting control profile setup!!!"
+                );
             return;
         }
 

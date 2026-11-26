@@ -10,4 +10,3 @@ defaultproperties
 {
     WeaponClass=Class'DH_Nagant1895BramitWeapon'
 }
-

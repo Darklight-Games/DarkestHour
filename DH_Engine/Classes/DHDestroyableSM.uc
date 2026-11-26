@@ -4,7 +4,8 @@
 //==============================================================================
 
 class DHDestroyableSM extends RODestroyableStaticMesh
-    abstract placeable;
+    abstract
+    placeable;
 
 // This class exists because we need it in DH_Engine as classes in DH_Engine access these class variables
 // It is abstract because we have DH_DestroyableSM (notice the _) which is in DH_LevelActors and already used by maps
@@ -17,11 +18,11 @@ enum ETeamCanDamage
     TD_Allies,
 };
 
-var()   ETeamCanDamage  TeamCanDamage;                     // option for leveller to specify that only one team can damage the mesh
-var     Controller      DelayedDamageInstigatorController; // projectiles set this when they explode so we have reference to player responsible for damage, even if his pawn dies
+var() ETeamCanDamage TeamCanDamage; // option for leveller to specify that only one team can damage the mesh
+var Controller DelayedDamageInstigatorController; // projectiles set this when they explode so we have reference to player responsible for damage, even if his pawn dies
 
-var()   bool            bInitiallyActive; // leveller can set DSM to be inactive at start of round, so it can be activated later by an event
-var     bool            bActive;          // option for DSM to only be treated as 'active' at certain map stages or conditions, so it can't be destroyed at other times
+var() bool bInitiallyActive; // leveller can set DSM to be inactive at start of round, so it can be activated later by an event
+var bool bActive; // option for DSM to only be treated as 'active' at certain map stages or conditions, so it can't be destroyed at other times
 
 replication
 {
@@ -80,7 +81,14 @@ function DestroyDSM(Pawn EventInstigator)
 // Specifically requires damage to be caused by the opposing team, to prevent exploits by player switching to spectator or exiting the server
 auto state Working
 {
-    function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+    function TakeDamage(
+        int Damage,
+        Pawn InstigatedBy,
+        Vector HitLocation,
+        Vector Momentum,
+        class<DamageType> DamageType,
+        optional int HitIndex
+        )
     {
         if (!bActive)
         {

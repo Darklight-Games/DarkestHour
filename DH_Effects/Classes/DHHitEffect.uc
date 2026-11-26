@@ -6,29 +6,29 @@
 class DHHitEffect extends Effects
     abstract;
 
-//Merging modifications from 'old' DHBulletHitEffect into this new parent class to
-//support additional material surface types and new funtionality for a variety
-//of DH projectile classes (bullets, rockets, mortars, tank shells, etc.) if we want.
+// Merging modifications from 'old' DHBulletHitEffect into this new parent class to
+// support additional material surface types and new funtionality for a variety
+// of DH projectile classes (bullets, rockets, mortars, tank shells, etc.) if we want.
 
 struct DHHitEffectData
 {
-    var class<ProjectedDecal>       HitDecal;
-    var class<Emitter>      HitEffect;
-    var class<Emitter>      FlashEffect; //new for DH
-    var Sound               HitSound;
+    var class<ProjectedDecal> HitDecal;
+    var class<Emitter> HitEffect;
+    var class<Emitter> FlashEffect; // new for DH
+    var Sound HitSound;
 };
 
-//overwritten from ROHitEffect to expand array to 50 from 20
-var()   DHHitEffectData     HitEffects[50];
+// overwritten from ROHitEffect to expand array to 50 from 20
+var() DHHitEffectData HitEffects[50];
 
-var()   float MinSoundRadius;
-var()   float MaxSoundRadius;
+var() float MinSoundRadius;
+var() float MaxSoundRadius;
 
 simulated function PostNetBeginPlay()
 {
     local ESurfaceTypes ST;
-    local Vector        HitLoc, HitNormal;
-    local Material      HitMat;
+    local Vector HitLoc, HitNormal;
+    local Material HitMat;
 
     if (Level.NetMode == NM_DedicatedServer)
     {
@@ -54,7 +54,10 @@ simulated function PostNetBeginPlay()
 
     if (HitEffects[ST].HitSound != none)
     {
-        PlaySound(HitEffects[ST].HitSound, SLOT_None, TransientSoundVolume, false, RandRange(MinSoundRadius, MaxSoundRadius),, true);
+        PlaySound(
+            HitEffects[ST].HitSound, SLOT_None, TransientSoundVolume, false, RandRange(MinSoundRadius, MaxSoundRadius),,
+            true
+            );
     }
 
     if (Owner == none || Owner.EffectIsRelevant(HitLoc, false)) // added effect relevance check, using owning bullet actor to call the function

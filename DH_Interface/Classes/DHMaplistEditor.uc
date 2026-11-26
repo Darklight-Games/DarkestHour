@@ -5,9 +5,9 @@
 
 class DHMaplistEditor extends MaplistEditor;
 
-var automated GUISectionBackground  sb_container;
+var automated GUISectionBackground sb_container;
 
-function AddSystemMenu(){}
+function AddSystemMenu();
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
@@ -20,10 +20,7 @@ function InitComponent(GUIController MyController, GUIComponent MyOwner)
     sb_container.ManageComponent(b_New);
 }
 
-function bool ButtonPreDraw(Canvas C)
-{
-    return false;
-}
+function bool ButtonPreDraw(Canvas C);
 
 defaultproperties
 {

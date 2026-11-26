@@ -14,4 +14,3 @@ defaultproperties
     Images(3)=Material'DH_InterfaceArt2_tex.paratroopers'
     Images(4)=Material'DH_InterfaceArt2_tex.paratroopers'
 }
-

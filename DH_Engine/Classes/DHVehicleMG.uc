@@ -6,22 +6,22 @@
 class DHVehicleMG extends DHVehicleWeapon
     abstract;
 
-var     bool    bMatchSkinToVehicle;  // option to automatically match MG skin zero to vehicle skin zero (e.g. for gunshield), avoiding need for separate MG pawn & MG classes
-var     name    HUDOverlayReloadAnim; // reload animation to play if the MG uses a HUDOverlay
+var bool bMatchSkinToVehicle; // option to automatically match MG skin zero to vehicle skin zero (e.g. for gunshield), avoiding need for separate MG pawn & MG classes
+var name HUDOverlayReloadAnim; // reload animation to play if the MG uses a HUDOverlay
 
 // Multiple barrels (used for compound weapons like the M45 Quadmount)
 struct DHBarrel
 {
-    var     name                        MuzzleBone;             // bone name for this barrel
-    var     WeaponAmbientEmitter        EffectEmitter;          // separate emitter for this barrel, for muzzle flash & ejected shell cases
-    var     class<WeaponAmbientEmitter> EffectEmitterClass;     // class for the barrel firing effect emitters
+    var name MuzzleBone; // bone name for this barrel
+    var WeaponAmbientEmitter EffectEmitter; // separate emitter for this barrel, for muzzle flash & ejected shell cases
+    var class<WeaponAmbientEmitter> EffectEmitterClass; // class for the barrel firing effect emitters
 };
 
-var bool            bHasMultipleBarrels;
-var byte            FiringBarrelIndex;        // barrel index that is due to fire next, so SpawnProjectile() can get location of barrel bone
+var bool bHasMultipleBarrels;
+var byte FiringBarrelIndex; // barrel index that is due to fire next, so SpawnProjectile() can get location of barrel bone
 var array<DHBarrel> Barrels;
 
-var bool            bShouldBaseTakeDamage;       // When true, damage will not be transferred to the base vehicle. Used for things like the external MG on the StuG and Hetzer.
+var bool bShouldBaseTakeDamage; // When true, damage will not be transferred to the base vehicle. Used for things like the external MG on the StuG and Hetzer.
 
 // Modified to incrementally resupply MG mags (only resupplies spare mags; doesn't reload the MG)
 function bool ResupplyAmmo()
@@ -48,8 +48,12 @@ simulated function AttemptReload()
 {
     super.AttemptReload();
 
-    if ((ReloadState == RL_Waiting || (bReloadPaused && ReloadState < RL_ReadyToFire)) && DHVehicleMGPawn(WeaponPawn) != none && WeaponPawn.IsLocallyControlled()
-        && DHVehicleMGPawn(WeaponPawn).bMustUnbuttonToReload && !WeaponPawn.CanReload() && DHPlayer(WeaponPawn.Controller) != none)
+    if ((ReloadState == RL_Waiting || (bReloadPaused && ReloadState < RL_ReadyToFire))
+        && DHVehicleMGPawn(WeaponPawn) != none
+        && WeaponPawn.IsLocallyControlled()
+        && DHVehicleMGPawn(WeaponPawn).bMustUnbuttonToReload
+        && !WeaponPawn.CanReload()
+        && DHPlayer(WeaponPawn.Controller) != none)
     {
         DHPlayer(WeaponPawn.Controller).QueueHint(48, true);
     }
@@ -59,7 +63,7 @@ simulated function AttemptReload()
 simulated function StartReload(optional bool bResumingPausedReload)
 {
     local float ReloadSecondsElapsed, TotalReloadDuration;
-    local int   i;
+    local int i;
 
     super.StartReload(bResumingPausedReload);
 
@@ -144,7 +148,8 @@ function Vector GetProjectileFireLocation(class<Projectile> ProjClass)
 {
     if (bHasMultipleBarrels && Barrels.Length > 0)
     {
-        return GetBoneCoords(Barrels[FiringBarrelIndex].MuzzleBone).Origin + ((WeaponFireOffset * vect(1.0, 0.0, 0.0)) >> WeaponFireRotation);
+        return GetBoneCoords(Barrels[FiringBarrelIndex].MuzzleBone).Origin
+            + ((WeaponFireOffset * vect(1.0, 0.0, 0.0)) >> WeaponFireRotation);
     }
 
     return super.GetProjectileFireLocation(ProjClass);
@@ -173,7 +178,10 @@ simulated function InitEffects()
 
                 if (Emitter == none)
                 {
-                    Warn("DHVehicleMG.InitEffects() - Failed to spawn BarrelEffectEmitter for barrel " $ string(i) $ " of " $ string(Barrels.Length) $ " barrels");
+                    Warn(
+                        "DHVehicleMG.InitEffects() - Failed to spawn BarrelEffectEmitter for barrel " $ string(i)
+                            $ " of " $ string(Barrels.Length) $ " barrels"
+                        );
                     continue;
                 }
 
@@ -248,7 +256,14 @@ simulated function DestroyBarrelEffects()
 
 // Modified to pass damage on to vehicle base, same as a vehicle cannon
 // TODO: should we just put this in the base class?
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+function TakeDamage(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     super.TakeDamage(Damage, InstigatedBy, HitLocation, Momentum, DamageType, HitIndex);
 

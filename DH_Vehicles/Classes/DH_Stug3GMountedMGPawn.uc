@@ -8,7 +8,8 @@ class DH_Stug3GMountedMGPawn extends DHVehicleMGPawn;
 // Can't fire unless unbuttoned & controlling the external MG (not on binocs)
 function bool CanFire()
 {
-    return (DriverPositionIndex == UnbuttonedPositionIndex && (!IsInState('ViewTransition') || LastPositionIndex > DriverPositionIndex))
+    return (DriverPositionIndex == UnbuttonedPositionIndex
+            && (!IsInState('ViewTransition') || LastPositionIndex > DriverPositionIndex))
         || (DriverPositionIndex > UnbuttonedPositionIndex && DriverPositionIndex != BinocPositionIndex)
         || !IsHumanControlled();
 }

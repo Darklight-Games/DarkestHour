@@ -6,40 +6,40 @@
 class DHMortarProjectile extends DHBallisticProjectile
     abstract;
 
-var     Vector  HitLocation;
-var     Vector  HitNormal;
+var Vector ImpactLocation;
+var Vector ImpactNormal;
 
 // Chance each shell is a dud & does not explode
-var     bool    bDud;
-var     float   DudChance;
+var bool bDud;
+var float DudChance;
 
 // Effects for firing mortar & for shell descending just before it lands
-var     class<Emitter>  FireEmitterClass;
-var     Sound   DescendingSound;
+var class<Emitter> FireEmitterClass;
+var Sound DescendingSound;
 
 // Impact effects & sounds for a dud round
-var     class<Emitter>  HitDirtEmitterClass;
-var     class<Emitter>  HitSnowEmitterClass;
-var     class<Emitter>  HitWoodEmitterClass;
-var     class<Emitter>  HitRockEmitterClass;
-var     class<Emitter>  HitWaterEmitterClass;
+var class<Emitter> HitDirtEmitterClass;
+var class<Emitter> HitSnowEmitterClass;
+var class<Emitter> HitWoodEmitterClass;
+var class<Emitter> HitRockEmitterClass;
+var class<Emitter> HitWaterEmitterClass;
 
-var     Sound   HitDirtSound;
-var     Sound   HitRockSound;
-var     Sound   HitWaterSound;
-var     Sound   HitWoodSound;
+var Sound HitDirtSound;
+var Sound HitRockSound;
+var Sound HitWaterSound;
+var Sound HitWoodSound;
 
 // Debug
-var     Vector  DebugForward;
-var     Vector  DebugRight;
-var     Vector  DebugLocation;
-var     bool    bDebug;
+var Vector DebugForward;
+var Vector DebugRight;
+var Vector DebugLocation;
+var bool bDebug;
 
-var     Texture HudTexture;
+var Texture HudTexture;
 
-var     class<DHMapMarker_ArtilleryHit> HitMapMarkerClass;
+var class<DHMapMarker_ArtilleryHit> HitMapMarkerClass;
 
-var     bool   bHitWater;
+var bool bHitWater;
 
 replication
 {
@@ -132,10 +132,13 @@ simulated singular function Touch(Actor Other)
     // It's more accurate than using our current location as projectile has often travelled further by the time this event gets called
     // But if that trace returns true then it somehow didn't hit the actor, so we fall back to using our current location as the HitLocation
     // Also skip trace & use our location if velocity is zero (touching actor when projectile spawns) or hit a Mover actor (legacy, don't know why)
-    if (Velocity == vect(0.0, 0.0, 0.0) || Other.IsA('Mover')
-        || Other.TraceThisActor(HitLocation, HitNormal, Location, Location - (2.0 * Velocity), GetCollisionExtent()))
+    if (Velocity == vect(0.0, 0.0, 0.0)
+        || Other.IsA('Mover')
+        || Other.TraceThisActor(
+            ImpactLocation, ImpactNormal, Location, Location - (2.0 * Velocity), GetCollisionExtent()
+            ))
     {
-        HitLocation = Location;
+        ImpactLocation = Location;
     }
 
     // Special handling for hit on a collision mesh actor - switch hit actor to CM's owner & proceed as if we'd hit that actor
@@ -152,14 +155,14 @@ simulated singular function Touch(Actor Other)
     // Now call ProcessTouch(), which is the where the class-specific Touch functionality gets handled
     // Record LastTouched to make sure that if HurtRadius() gets called to give blast damage, it will always 'find' the hit actor
     LastTouched = Other;
-    ProcessTouch(Other, HitLocation);
+    ProcessTouch(Other, ImpactLocation);
     LastTouched = none;
 
     // On a net client call ClientSideTouch() if we hit a pawn with an authority role on the client (in practice this can only be a ragdoll corpse)
     // TODO: probably remove this & empty out ClientSideTouch() as ProcessTouch() will get called clientside anyway & is much more class-specific & sophisticated
     if (Role < ROLE_Authority && Other.Role == ROLE_Authority && Pawn(Other) != none && Velocity != vect(0.0, 0.0, 0.0))
     {
-        ClientSideTouch(Other, HitLocation);
+        ClientSideTouch(Other, ImpactLocation);
     }
 }
 
@@ -178,7 +181,7 @@ simulated function ProcessTouch(Actor Other, Vector HitLocation)
         return;
     }
 
-    self.HitNormal = Normal(HitLocation - Other.Location);
+    ImpactNormal = Normal(HitLocation - Other.Location);
 
     MortarExplode();
 }
@@ -193,14 +196,14 @@ simulated function MortarExplode()
     else
     {
         // Otherwise, explode immediately.
-        Explode(Location, HitNormal);
+        Explode(Location, ImpactNormal);
     }
 }
 
 // Modified to go into 'Whistle' state upon hitting something, so players always hear the DescendingSound before shell explodes & actor is destroyed
 simulated function HitWall(Vector HitNormal, Actor Wall)
 {
-    self.HitNormal = HitNormal;
+    ImpactNormal = HitNormal;
 
     MortarExplode();
 }
@@ -227,7 +230,7 @@ simulated state Whistle
 
     simulated function Timer()
     {
-        Explode(Location, HitNormal);
+        Explode(Location, ImpactNormal);
     }
 }
 
@@ -261,7 +264,10 @@ simulated function Explode(Vector HitLocation, Vector HitNormal)
             DrawStayingDebugLine(DebugLocation, DebugLocation, 255, 0, 255);
         }
 
-        Log(Class'DHUnits'.static.UnrealToMeters(DebugForward dot (HitLocation - OrigLoc)) @ Class'DHUnits'.static.UnrealToMeters(DebugRight dot (HitLocation - OrigLoc)));
+        Log(
+            Class'DHUnits'.static.UnrealToMeters(DebugForward dot (HitLocation - OrigLoc))
+                @ Class'DHUnits'.static.UnrealToMeters(DebugRight dot (HitLocation - OrigLoc))
+            );
     }
 
     HandleDestruction(); // allows subclasses to handle destruction differently rather than always Destroy()
@@ -277,9 +283,9 @@ function BlowUp(Vector HitLocation)
 // New function to spawn impact effects when the shell lands
 simulated function SpawnImpactEffects(Vector HitLocation, Vector HitNormal)
 {
-    local ESurfaceTypes  HitSurfaceType;
+    local ESurfaceTypes HitSurfaceType;
     local class<Emitter> HitEmitterClass;
-    local Sound          HitSound;
+    local Sound HitSound;
 
     if (Level.NetMode != NM_DedicatedServer)
     {
@@ -294,9 +300,7 @@ simulated function SpawnImpactEffects(Vector HitLocation, Vector HitNormal)
 }
 
 // New function to spawn explosion effects - implement is subclasses as required
-simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal)
-{
-}
+simulated function SpawnExplosionEffects(Vector HitLocation, Vector HitNormal);
 
 // New function to spawn a firing effect, allowing a net client to calculate correct location for effect, rather than just use projectile's location
 // This is because (1) client & server locations of weapon differ, & (2) projectile will have travelled upwards some distance before replicating to client
@@ -323,17 +327,26 @@ simulated function SpawnFiringEffect()
 // Also to call CheckVehicleOccupantsRadiusDamage() instead of DriverRadiusDamage() on a hit vehicle, to properly handle blast damage to any exposed vehicle occupants
 // And to fix problem affecting many vehicles with hull mesh modelled with origin on the ground, where even a slight ground bump could block all blast damage
 // Also to update Instigator, so HurtRadius attributes damage to the player's current pawn
-function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> DamageType, float Momentum, Vector HitLocation)
+function HurtRadius(
+    float DamageAmount,
+    float DamageRadius,
+    class<DamageType> DamageType,
+    float Momentum,
+    Vector HitLocation
+    )
 {
-    local Actor         Victim, TraceActor;
-    local DHVehicle     V;
+    local Actor Victim, TraceActor;
+    local DHVehicle V;
     local DHConstruction C;
-    local ROPawn        P;
+    local ROPawn P;
     local array<ROPawn> CheckedROPawns;
-    local bool          bAlreadyChecked, bAlreadyDead;
-    local Vector        VictimLocation, Direction, TraceHitLocation, TraceHitNormal;
-    local float         DamageScale, Distance, DamageExposure;
-    local int           i;
+    local bool bAlreadyChecked;
+    // NOTE: investigate if this is missing functionality.
+    // usagi:ignore[local-set-but-never-used]
+    local bool bAlreadyDead;
+    local Vector VictimLocation, Direction, TraceHitLocation, TraceHitNormal;
+    local float DamageScale, Distance, DamageExposure;
+    local int i;
 
     // Make sure nothing else runs HurtRadius() while we are in the middle of the function
     if (bHurtEntry)
@@ -367,7 +380,12 @@ function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> Da
 
         // Don't damage this projectile, an actor already damaged by projectile impact (HurtWall), cannon actors, non-authority actors, or fluids
         // We skip damage on cannons because the blast will hit the vehicle base so we don't want to double up on damage to the same vehicle
-        if (Victim == none || Victim == self || Victim == HurtWall || Victim.IsA('DHVehicleCannon') || Victim.Role < ROLE_Authority || Victim.IsA('FluidSurfaceInfo'))
+        if (Victim == none
+            || Victim == self
+            || Victim == HurtWall
+            || Victim.IsA('DHVehicleCannon')
+            || Victim.Role < ROLE_Authority
+            || Victim.IsA('FluidSurfaceInfo'))
         {
             continue;
         }
@@ -407,7 +425,11 @@ function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> Da
         }
 
         // Ignore the actor if the blast is blocked by world geometry, a vehicle, or a turret (but don't let a turret block damage to its own vehicle)
-        if (TraceActor != none && TraceActor != Victim && (TraceActor.bWorldGeometry || TraceActor.IsA('ROVehicle') || (TraceActor.IsA('DHVehicleCannon') && Victim != TraceActor.Base)))
+        if (TraceActor != none
+            && TraceActor != Victim
+            && (TraceActor.bWorldGeometry
+                || TraceActor.IsA('ROVehicle')
+                || (TraceActor.IsA('DHVehicleCannon') && Victim != TraceActor.Base)))
         {
             continue;
         }
@@ -469,35 +491,50 @@ function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> Da
         }
 
         // Damage the actor hit by the blast - if it's a vehicle, check for damage to any exposed occupants
-        Victim.TakeDamage(DamageScale * DamageAmount, Instigator, VictimLocation - 0.5 * (Victim.CollisionHeight + Victim.CollisionRadius) * Direction,
-            DamageScale * Momentum * Direction, DamageType);
+        Victim.TakeDamage(
+            DamageScale * DamageAmount, Instigator,
+            VictimLocation - 0.5 * (Victim.CollisionHeight + Victim.CollisionRadius) * Direction,
+            DamageScale * Momentum * Direction, DamageType
+            );
 
         if (ROVehicle(Victim) != none && ROVehicle(Victim).Health > 0)
         {
-            CheckVehicleOccupantsRadiusDamage(ROVehicle(Victim), DamageAmount, DamageRadius, DamageType, Momentum, HitLocation);
+            CheckVehicleOccupantsRadiusDamage(
+                ROVehicle(Victim), DamageAmount, DamageRadius, DamageType, Momentum, HitLocation
+                );
         }
     }
 
     // Same (or very similar) process for the last actor this projectile hit (Touched), but only happens if actor wasn't found by the check for CollidingActors
-    if (LastTouched != none && LastTouched != self && LastTouched.Role == ROLE_Authority && !LastTouched.IsA('FluidSurfaceInfo'))
+    if (LastTouched != none
+        && LastTouched != self
+        && LastTouched.Role == ROLE_Authority
+        && !LastTouched.IsA('FluidSurfaceInfo'))
     {
         Direction = LastTouched.Location - HitLocation;
         Distance = FMax(1.0, VSize(Direction));
         Direction = Direction / Distance;
-        DamageScale = FMax(LastTouched.CollisionRadius / (LastTouched.CollisionRadius + LastTouched.CollisionHeight),
-            1.0 - FMax(0.0, (Distance - LastTouched.CollisionRadius) / DamageRadius));
+        DamageScale = FMax(
+            LastTouched.CollisionRadius / (LastTouched.CollisionRadius + LastTouched.CollisionHeight),
+            1.0 - FMax(0.0, (Distance - LastTouched.CollisionRadius) / DamageRadius)
+            );
 
         if (Instigator == none || Instigator.Controller == none)
         {
             LastTouched.SetDelayedDamageInstigatorController(InstigatorController);
         }
 
-        LastTouched.TakeDamage(DamageScale * DamageAmount, Instigator,
-            LastTouched.Location - 0.5 * (LastTouched.CollisionHeight + LastTouched.CollisionRadius) * Direction, DamageScale * Momentum * Direction, DamageType);
+        LastTouched.TakeDamage(
+            DamageScale * DamageAmount, Instigator,
+            LastTouched.Location - 0.5 * (LastTouched.CollisionHeight + LastTouched.CollisionRadius) * Direction,
+            DamageScale * Momentum * Direction, DamageType
+            );
 
         if (ROVehicle(LastTouched) != none && ROVehicle(LastTouched).Health > 0)
         {
-            CheckVehicleOccupantsRadiusDamage(ROVehicle(LastTouched), DamageAmount, DamageRadius, DamageType, Momentum, HitLocation);
+            CheckVehicleOccupantsRadiusDamage(
+                ROVehicle(LastTouched), DamageAmount, DamageRadius, DamageType, Momentum, HitLocation
+                );
         }
 
         LastTouched = none;
@@ -507,12 +544,22 @@ function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> Da
 }
 
 // New function to check for possible blast damage to all vehicle occupants that don't have collision of their own & so won't be 'caught' by HurtRadius()
-function CheckVehicleOccupantsRadiusDamage(ROVehicle V, float DamageAmount, float DamageRadius, class<DamageType> DamageType, float Momentum, Vector HitLocation)
+function CheckVehicleOccupantsRadiusDamage(
+    ROVehicle V,
+    float DamageAmount,
+    float DamageRadius,
+    class<DamageType> DamageType,
+    float Momentum,
+    Vector HitLocation
+    )
 {
     local ROVehicleWeaponPawn WP;
     local int i;
 
-    if (V.Driver != none && V.DriverPositions[V.DriverPositionIndex].bExposed && !V.Driver.bCollideActors && !V.bRemoteControlled)
+    if (V.Driver != none
+        && V.DriverPositions[V.DriverPositionIndex].bExposed
+        && !V.Driver.bCollideActors
+        && !V.bRemoteControlled)
     {
         VehicleOccupantRadiusDamage(V.Driver, DamageAmount, DamageRadius, DamageType, Momentum, HitLocation);
     }
@@ -521,8 +568,12 @@ function CheckVehicleOccupantsRadiusDamage(ROVehicle V, float DamageAmount, floa
     {
         WP = ROVehicleWeaponPawn(V.WeaponPawns[i]);
 
-        if (WP != none && WP.Driver != none && ((WP.bMultiPosition && WP.DriverPositions[WP.DriverPositionIndex].bExposed) || WP.bSinglePositionExposed)
-            && !WP.bCollideActors && !WP.bRemoteControlled)
+        if (WP != none
+            && WP.Driver != none
+            && ((WP.bMultiPosition && WP.DriverPositions[WP.DriverPositionIndex].bExposed)
+                || WP.bSinglePositionExposed)
+            && !WP.bCollideActors
+            && !WP.bRemoteControlled)
         {
             VehicleOccupantRadiusDamage(WP.Driver, DamageAmount, DamageRadius, DamageType, Momentum, HitLocation);
         }
@@ -530,17 +581,25 @@ function CheckVehicleOccupantsRadiusDamage(ROVehicle V, float DamageAmount, floa
 }
 
 // New function to handle blast damage to vehicle occupants
-function VehicleOccupantRadiusDamage(Pawn P, float DamageAmount, float DamageRadius, class<DamageType> DamageType, float Momentum, Vector HitLocation)
+function VehicleOccupantRadiusDamage(
+    Pawn P,
+    float DamageAmount,
+    float DamageRadius,
+    class<DamageType> DamageType,
+    float Momentum,
+    Vector HitLocation
+    )
 {
-    local Actor  TraceHitActor;
+    local Actor TraceHitActor;
     local Coords HeadBoneCoords;
     local Vector HeadLocation, TraceHitLocation, TraceHitNormal, Direction;
-    local float  Distance, DamageScale;
+    local float Distance, DamageScale;
 
     if (P != none)
     {
         HeadBoneCoords = P.GetBoneCoords(P.HeadBone);
-        HeadLocation = HeadBoneCoords.Origin + ((P.HeadHeight + (0.5 * P.HeadRadius)) * P.HeadScale * HeadBoneCoords.XAxis);
+        HeadLocation = HeadBoneCoords.Origin
+            + ((P.HeadHeight + (0.5 * P.HeadRadius)) * P.HeadScale * HeadBoneCoords.XAxis);
 
         // Trace from the explosion to the top of player pawn's head & if there's a blocking actor in between (probably the vehicle), exit without damaging pawn
         foreach TraceActors(Class'Actor', TraceHitActor, TraceHitLocation, TraceHitNormal, HeadLocation, HitLocation)
@@ -561,9 +620,11 @@ function VehicleOccupantRadiusDamage(Pawn P, float DamageAmount, float DamageRad
         if (DamageScale > 0.0)
         {
             P.SetDelayedDamageInstigatorController(InstigatorController);
-            P.TakeDamage(DamageScale * DamageAmount, InstigatorController.Pawn,
-                         P.Location - (0.5 * (P.CollisionHeight + P.CollisionRadius)) * Direction,
-                         DamageScale * Momentum * Direction, DamageType);
+            P.TakeDamage(
+                DamageScale * DamageAmount, InstigatorController.Pawn,
+                P.Location - (0.5 * (P.CollisionHeight + P.CollisionRadius)) * Direction,
+                DamageScale * Momentum * Direction, DamageType
+                );
         }
     }
 }
@@ -589,7 +650,7 @@ simulated function GetHitSurfaceType(out ESurfaceTypes HitSurfaceType, Vector Hi
         return;
     }
 
-    Trace(HitLocation, HitNormal, Location - (16.0 * HitNormal), Location, false,, M);
+    Trace(ImpactLocation, HitNormal, Location - (16.0 * HitNormal), Location, false,, M);
 
     if (M == none)
     {
@@ -668,22 +729,16 @@ simulated function GetDescendingSoundPitchAndVolume(out float Pitch, out float V
     const VOLUME_MIN = 0.0;
     const VOLUME_MAX = 1.0;
 
-    Distance = Class'DHUnits'.static.UnrealToMeters(VSize(Location - Level.GetLocalPlayerController().CalcViewLocation));
+    Distance = Class'DHUnits'.static.UnrealToMeters(
+        VSize(Location - Level.GetLocalPlayerController().CalcViewLocation)
+        );
 
     Pitch = Class'UInterp'.static.MapRangeClamped(
-        Distance,
-        PITCH_DISTANCE_METERS_MIN,
-        PITCH_DISTANCE_METERS_MAX,
-        PITCH_MAX,
-        PITCH_MIN
-    );
+        Distance, PITCH_DISTANCE_METERS_MIN, PITCH_DISTANCE_METERS_MAX, PITCH_MAX, PITCH_MIN
+        );
     Volume = Class'UInterp'.static.MapRangeClamped(
-        Distance,
-        VOLUME_DISTANCE_METERS_MIN,
-        VOLUME_DISTANCE_METERS_MAX,
-        VOLUME_MIN,
-        VOLUME_MAX
-    );
+        Distance, VOLUME_DISTANCE_METERS_MIN, VOLUME_DISTANCE_METERS_MAX, VOLUME_MIN, VOLUME_MAX
+        );
 }
 
 // New function updating Instigator reference to ensure damage is attributed to correct player, as may have switched to different pawn since firing, e.g. undeployed mortar

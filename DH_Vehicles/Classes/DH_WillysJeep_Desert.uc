@@ -17,4 +17,3 @@ defaultproperties
 
     VehicleAttachments(0)=(Skins=(Texture'DH_Jeep_tex.Willys_Gear_Desert'))
 }
-

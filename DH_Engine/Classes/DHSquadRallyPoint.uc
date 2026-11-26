@@ -7,27 +7,27 @@ class DHSquadRallyPoint extends DHSpawnPointBase
     abstract
     notplaceable;
 
-var DHSquadReplicationInfo SRI;                 // Convenience variable to access the SquadReplicationInfo.
-var int SquadIndex;                             // The squad index of the squad that owns this rally point.
-var int RallyPointIndex;                        // The index into SRI.RallyPoints.
-var int SpawnsRemaining;                        // The amount of spawns remaining on the rally point.
+var DHSquadReplicationInfo SRI; // Convenience variable to access the SquadReplicationInfo.
+var int SquadIndex; // The squad index of the squad that owns this rally point.
+var int RallyPointIndex; // The index into SRI.RallyPoints.
+var int SpawnsRemaining; // The amount of spawns remaining on the rally point.
 
 // Creation
-var float CreatedTimeSeconds;                   // The time (relative to Level.TimeSeconds) that this rally point was created
-var Sound CreationSound;                        // Sound that is played when the squad rally point is first placed.
+var float CreatedTimeSeconds; // The time (relative to Level.TimeSeconds) that this rally point was created
+var Sound CreationSound; // Sound that is played when the squad rally point is first placed.
 
 // Establishment
-var int   EstablishmentRadiusInMeters;          // The distance, in meters, that squadmates and enemies must be within to influence the EstablishmentCounter.
-var float EstablishmentStartTimeSeconds;        // The value of Level.TimeSeconds when this rally point began Establishment.
-var float EstablishmentCounter;                 // Running counter to keep track of Establishment status.
-var float EstablishmentCounterThreshold;        // The value that EstablishmentCounter must reach for the rally point to be "established".
+var int EstablishmentRadiusInMeters; // The distance, in meters, that squadmates and enemies must be within to influence the EstablishmentCounter.
+var float EstablishmentStartTimeSeconds; // The value of Level.TimeSeconds when this rally point began Establishment.
+var float EstablishmentCounter; // Running counter to keep track of Establishment status.
+var float EstablishmentCounterThreshold; // The value that EstablishmentCounter must reach for the rally point to be "established".
 
 // Overrun
-var int   OverrunRadiusInMeters;                // The distance, in meters, that enemies must be within to immediately overrun a rally point.
-var float OverrunMinimumTimeSeconds;            // The number of seconds a rally point must be "alive" for in order to be overrun by enemies. (To stop squad rally points being used as "enemy radar".
+var int OverrunRadiusInMeters; // The distance, in meters, that enemies must be within to immediately overrun a rally point.
+var float OverrunMinimumTimeSeconds; // The number of seconds a rally point must be "alive" for in order to be overrun by enemies. (To stop squad rally points being used as "enemy radar".
 
 // Abandonment
-var bool bCanSendAbandonmentWarningMessage;     // Whether or not we should send the abandonment message the next time the squad rally point has no teammates nearby while establishing
+var bool bCanSendAbandonmentWarningMessage; // Whether or not we should send the abandonment message the next time the squad rally point has no teammates nearby while establishing
 
 // Accrual timer (used for adding available spawns at regular intervals)
 var int SpawnAccrualTimer;
@@ -53,12 +53,12 @@ var int InActiveObjectivePenaltySeconds;
 var int IsExposedPenaltySeconds;
 
 // Attachments
-var class<DHResupplyAttachment>         ResupplyAttachmentClass;
-var DHResupplyAttachment                ResupplyAttachment;
-var DHResupplyStrategy.EResupplyType    ResupplyType;
-var float                               ResupplyAttachmentCollisionRadius;
-var float                               ResupplyAttachmentCollisionHeight;
-var float                               ResupplyTime;
+var class<DHResupplyAttachment> ResupplyAttachmentClass;
+var DHResupplyAttachment ResupplyAttachment;
+var DHResupplyStrategy.EResupplyType ResupplyType;
+var float ResupplyAttachmentCollisionRadius;
+var float ResupplyAttachmentCollisionHeight;
+var float ResupplyTime;
 
 replication
 {
@@ -302,14 +302,23 @@ simulated function bool IsExposed()
     return bIsExposed;
 }
 
-simulated function bool CanSpawnWithParameters(DHGameReplicationInfo GRI, int TeamIndex, int RoleIndex, int SquadIndex, int VehiclePoolIndex, optional bool bSkipTimeCheck)
+simulated function bool CanSpawnWithParameters(
+    DHGameReplicationInfo GRI,
+    int PlayerTeamIndex,
+    int PlayerRoleIndex,
+    int PlayerSquadIndex,
+    int PlayerVehiclePoolIndex,
+    optional bool bSkipTimeCheck
+    )
 {
-    if (!super.CanSpawnWithParameters(GRI, TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex, bSkipTimeCheck))
+    if (!super.CanSpawnWithParameters(
+        GRI, PlayerTeamIndex, PlayerRoleIndex, PlayerSquadIndex, PlayerVehiclePoolIndex, bSkipTimeCheck
+        ))
     {
         return false;
     }
 
-    if (self.SquadIndex != SquadIndex)
+    if (SquadIndex != PlayerSquadIndex)
     {
         return false;
     }
@@ -322,9 +331,15 @@ simulated function bool CanSpawnWithParameters(DHGameReplicationInfo GRI, int Te
     return true;
 }
 
-simulated function bool IsVisibleTo(int TeamIndex, int RoleIndex, int SquadIndex, int VehiclePoolIndex)
+simulated function bool IsVisibleTo(
+    int PlayerTeamIndex,
+    int PlayerRoleIndex,
+    int PlayerSquadIndex,
+    int PlayerVehiclePoolIndex
+    )
 {
-    return super.IsVisibleTo(TeamIndex, RoleIndex, SquadIndex, VehiclePoolIndex) && self.SquadIndex == SquadIndex;
+    return super.IsVisibleTo(PlayerTeamIndex, PlayerRoleIndex, PlayerSquadIndex, PlayerVehiclePoolIndex)
+        && SquadIndex == PlayerSquadIndex;
 }
 
 function OnPawnSpawned(Pawn P)
@@ -333,10 +348,10 @@ function OnPawnSpawned(Pawn P)
 
     SpawnsRemaining -= 1;
 
-    if (InstigatorController != none &&
-        InstigatorController != P.Controller &&
-        InstigatorController.GetTeamNum() == GetTeamIndex() &&
-        InstigatorController.GetSquadIndex() == SquadIndex)
+    if (InstigatorController != none
+        && InstigatorController != P.Controller
+        && InstigatorController.GetTeamNum() == GetTeamIndex()
+        && InstigatorController.GetSquadIndex() == SquadIndex)
     {
         InstigatorController.ReceiveScoreEvent(Class'DHScoreEvent_SquadRallyPointSpawn'.static.Create());
     }
@@ -420,7 +435,14 @@ simulated function int GetSpawnTimePenalty()
     return SpawnTimePenalty;
 }
 
-function TakeDamage(int Damage, Pawn EventInstigator, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+function TakeDamage(
+    int Damage,
+    Pawn EventInstigator,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     if (EventInstigator == none || EventInstigator.GetTeamNum() == GetTeamIndex())
     {
@@ -456,7 +478,11 @@ function AwardScoreOnEstablishment()
 
     foreach RadiusActors(Class'Pawn', P, Class'DHUnits'.static.MetersToUnreal(EstablishmentRadiusInMeters))
     {
-        if (P != none && !P.bDeleteMe && P.Health > 0 && P.PlayerReplicationInfo != none && P.GetTeamNum() == GetTeamIndex())
+        if (P != none
+            && !P.bDeleteMe
+            && P.Health > 0
+            && P.PlayerReplicationInfo != none
+            && P.GetTeamNum() == GetTeamIndex())
         {
             PC = DHPlayer(P.Controller);
 

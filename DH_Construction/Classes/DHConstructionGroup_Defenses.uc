@@ -11,4 +11,3 @@ defaultproperties
     GroupName="Defenses"
     SortOrder=1
 }
-

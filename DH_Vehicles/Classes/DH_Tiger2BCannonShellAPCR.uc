@@ -6,7 +6,6 @@
 class DH_Tiger2BCannonShellAPCR extends DHCannonShellAPDS;
 
 defaultproperties
-
 {
     Speed=68198.0
     MaxSpeed=68198.0

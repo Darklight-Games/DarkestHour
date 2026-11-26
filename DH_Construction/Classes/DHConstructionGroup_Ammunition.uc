@@ -11,4 +11,3 @@ defaultproperties
     MenuIcon=Texture'DH_InterfaceArt2_tex.resupply_box'   // TODO: change
     SortOrder=2
 }
-

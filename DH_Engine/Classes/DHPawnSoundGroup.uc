@@ -6,11 +6,11 @@
 class DHPawnSoundGroup extends ROPawnSoundGroup
     abstract;
 
-var     Sound   BurningPainSoundGroup;
-var     Sound   GaggingPainSoundGroup;  // Exposure to WP and other poisonous gases.
+var Sound BurningPainSoundGroup;
+var Sound GaggingPainSoundGroup; // Exposure to WP and other poisonous gases.
 
-var     array<Sound>    CustomLandSounds;
-var     array<Sound>    CustomJumpSounds;
+var array<Sound> CustomLandSounds;
+var array<Sound> CustomJumpSounds;
 
 static function Sound GetSound(ESoundType SoundType, optional int SurfaceID)
 {

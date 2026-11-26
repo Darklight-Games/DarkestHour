@@ -56,9 +56,9 @@ delegate MoveGripBy(int items)
         CurPos = 0;
     }
 
-    if (CurPos > ItemCount-ItemsPerPage)
+    if (CurPos > ItemCount - ItemsPerPage)
     {
-        CurPos = ItemCount-ItemsPerPage;
+        CurPos = ItemCount - ItemsPerPage;
     }
 
     if (List == none && ItemCount > 0)

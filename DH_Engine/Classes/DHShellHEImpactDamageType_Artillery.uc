@@ -10,4 +10,3 @@ defaultproperties
 {
     bIsArtilleryImpact=true
 }
-

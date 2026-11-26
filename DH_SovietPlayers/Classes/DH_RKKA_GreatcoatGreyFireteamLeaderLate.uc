@@ -4,5 +4,3 @@
 //==============================================================================
 
 class DH_RKKA_GreatcoatGreyFireteamLeaderLate extends DHDeprecated;
-
-

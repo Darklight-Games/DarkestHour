@@ -5,10 +5,10 @@
 
 class DHMetricsPlayer extends JSONSerializable;
 
-var string                          ID;
-var array<string>                   Names;
-var array<string>                   ClientGUIDs;
-var array<DHMetricsPlayerSession>   Sessions;
+var string ID;
+var array<string> Names;
+var array<string> ClientGUIDs;
+var array<DHMetricsPlayerSession> Sessions;
 
 function JSONValue ToJSON()
 {
@@ -18,4 +18,3 @@ function JSONValue ToJSON()
         .Put("client_guids", Class'JSONArray'.static.FromStrings(ClientGUIDs))
         .Put("sessions", Class'JSONArray'.static.FromSerializables(Sessions));
 }
-

@@ -28,4 +28,3 @@ defaultproperties
     Permissions_CanPlace(0)=ERS_ALL
     ActivationTimeout=15
 }
-

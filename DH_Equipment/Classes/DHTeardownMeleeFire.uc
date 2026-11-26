@@ -12,7 +12,7 @@ function Sound GetGroundBashSound(Actor HitActor, Material HitMaterial)
 {
     local DHConstruction C;
     local DHConstructionAttachment CA;
-    
+
     C = DHConstruction(HitActor);
 
     if (C != none && C.CanTakeTearDownDamageFromPawn(Instigator))
@@ -24,7 +24,7 @@ function Sound GetGroundBashSound(Actor HitActor, Material HitMaterial)
 
     if (CA != none && CA.CanTakeTearDownDamageFromPawn(Instigator))
     {
-        return TearDownSound;   
+        return TearDownSound;
     }
 
     return super.GetGroundBashSound(HitActor, HitMaterial);

@@ -5,11 +5,17 @@
 
 class DHGUITabControl extends GUITabControl;
 
-function GUITabPanel AddTab(string InCaption, string PanelClass, optional GUITabPanel ExistingPanel, optional string InHint, optional bool bForceActive)
+function GUITabPanel AddTab(
+    string InCaption,
+    string PanelClass,
+    optional GUITabPanel ExistingPanel,
+    optional string InHint,
+    optional bool bForceActive
+    )
 {
     local class<GUITabPanel> NewPanelClass;
-    local DHGUITabButton     NewTabButton;
-    local GUITabPanel        NewTabPanel;
+    local DHGUITabButton NewTabButton;
+    local GUITabPanel NewTabPanel;
     local int i;
 
     for (i = 0; i < TabStack.Length; ++i)
@@ -38,9 +44,9 @@ function GUITabPanel AddTab(string InCaption, string PanelClass, optional GUITab
 
         if (NewTabPanel == none)
         {
-                Log("Could not create panel for" @ NewPanelClass);
+            Log("Could not create panel for" @ NewPanelClass);
 
-                return none;
+            return none;
         }
 
         if (NewTabPanel.MyButton != none)
@@ -63,20 +69,20 @@ function GUITabPanel AddTab(string InCaption, string PanelClass, optional GUITab
             if (!bDrawTabAbove)
             {
                 NewTabPanel.MyButton.bBoundToParent = false;
-                NewTabPanel.MyButton.Style = Controller.GetStyle("FlippedTabButton",NewTabPanel.FontScale);
+                NewTabPanel.MyButton.Style = Controller.GetStyle("FlippedTabButton", NewTabPanel.FontScale);
             }
         }
 
-        NewTabPanel.MyButton.Hint         = Eval(InHint != "", InHint, NewTabPanel.Hint);
-        NewTabPanel.MyButton.Caption      = Eval(InCaption != "", InCaption, NewTabPanel.PanelCaption);
-        NewTabPanel.MyButton.OnClick      = InternalTabClick;
-        NewTabPanel.MyButton.MyPanel      = NewTabPanel;
+        NewTabPanel.MyButton.Hint = Eval(InHint != "", InHint, NewTabPanel.Hint);
+        NewTabPanel.MyButton.Caption = Eval(InCaption != "", InCaption, NewTabPanel.PanelCaption);
+        NewTabPanel.MyButton.OnClick = InternalTabClick;
+        NewTabPanel.MyButton.MyPanel = NewTabPanel;
         NewTabPanel.MyButton.FocusInstead = self;
-        NewTabPanel.MyButton.bNeverFocus  = true;
+        NewTabPanel.MyButton.bNeverFocus = true;
         NewTabPanel.InitPanel();
         TabStack[TabStack.Length] = NewTabPanel.MyButton;
 
-        if ((TabStack.Length==1 && bVisible) || (bForceActive))
+        if ((TabStack.Length == 1 && bVisible) || bForceActive)
         {
             ActivateTab(NewTabPanel.MyButton, true);
         }
@@ -91,11 +97,18 @@ function GUITabPanel AddTab(string InCaption, string PanelClass, optional GUITab
     return none;
 }
 
-function GUITabPanel InsertTab(int Pos, string Caption, string PanelClass, optional GUITabPanel ExistingPanel, optional string InHint, optional bool bForceActive)
+function GUITabPanel InsertTab(
+    int Pos,
+    string Caption,
+    string PanelClass,
+    optional GUITabPanel ExistingPanel,
+    optional string InHint,
+    optional bool bForceActive
+    )
 {
     local class<GUITabPanel> NewPanelClass;
-    local GUITabPanel        NewTabPanel;
-    local DHGUITabButton     NewTabButton;
+    local GUITabPanel NewTabPanel;
+    local DHGUITabButton NewTabButton;
 
     if (ExistingPanel == none)
     {
@@ -147,7 +160,7 @@ function GUITabPanel InsertTab(int Pos, string Caption, string PanelClass, optio
         TabStack.Insert(Pos, 1);
         TabStack[Pos] = NewTabPanel.MyButton;
 
-        if (TabStack.Length==1 || bForceActive)
+        if (TabStack.Length == 1 || bForceActive)
         {
             ActivateTab(NewTabPanel.MyButton, true);
         }

@@ -40,4 +40,3 @@ defaultproperties
     DamageTypeScales(5)=(DamageType=Class'DH_SatchelDamType',Scale=1.4)             // Satchel/Grenades
     DamageTypeScales(6)=(DamageType=Class'DHMortarDamageType',Scale=0.5)            // Mortar
 }
-

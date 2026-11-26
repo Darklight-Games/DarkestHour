@@ -4,4 +4,3 @@
 //==============================================================================
 
 class DH_WHPanzerGrenadier_Greatcoat extends DHDeprecated;
-

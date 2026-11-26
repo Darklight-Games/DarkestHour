@@ -6,14 +6,14 @@
 class DHDestroyableStaticMesh extends Actor
     notplaceable;
 
-var int             Health;
-var StaticMesh      DestroyedStaticMesh;
-var class<Emitter>  DestroyedEmitterClass;
-var Vector          DestroyedEmitterOffset;
-var Sound           DestroyedSound;
-var float           DestroyedSoundVolume;
-var float           DestroyedSoundRadius;
-var float           DestroyedLifeSpan;
+var int Health;
+var StaticMesh DestroyedStaticMesh;
+var class<Emitter> DestroyedEmitterClass;
+var Vector DestroyedEmitterOffset;
+var Sound DestroyedSound;
+var float DestroyedSoundVolume;
+var float DestroyedSoundRadius;
+var float DestroyedLifeSpan;
 
 replication
 {
@@ -21,7 +21,14 @@ replication
         ClientPlayDestroyedEffects;
 }
 
-event TakeDamage(int Damage, Pawn EventInstigator, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+event TakeDamage(
+    int Damage,
+    Pawn EventInstigator,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     Health -= Damage;
 
@@ -67,13 +74,12 @@ state Broken // NOTE: can't name it "Destroyed" because that's the name of a fun
 
 simulated function ClientPlayDestroyedEffects()
 {
-    local Emitter DestroyedEmitter;
     local Vector SpawnLocation;
 
     if (DestroyedEmitterClass != none)
     {
         SpawnLocation = Location + (DestroyedEmitterOffset << Rotation);
-        DestroyedEmitter = Spawn(DestroyedEmitterClass,,, SpawnLocation, Rotation);
+        Spawn(DestroyedEmitterClass,,, SpawnLocation, Rotation);
     }
 }
 
@@ -97,4 +103,3 @@ defaultproperties
     bPathColliding=true
     bWorldGeometry=true
 }
-

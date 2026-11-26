@@ -13,4 +13,3 @@ defaultproperties
     SupplyCost=850
     MenuIcon=Texture'DH_InterfaceArt2_tex.at_crate'
 }
-

@@ -75,10 +75,7 @@ function ApplyURL(string URL)
 
 function bool InternalOnKeyEvent(out byte Key, out byte State, float Delta)
 {
-    if (!super.InternalOnKeyEvent(Key,State,Delta))
-    {
-        return ed_Data.MyEditBox.InternalOnKeyEvent(Key,State,Delta);
-    }
+    return super.InternalOnKeyEvent(Key, State, Delta) || ed_Data.MyEditBox.InternalOnKeyEvent(Key, State, Delta);
 }
 
 function string StripProtocol(string s)

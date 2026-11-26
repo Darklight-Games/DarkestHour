@@ -19,4 +19,3 @@ defaultproperties
     Permissions_CanPlace(0)=ERS_SL
     Permissions_CanPlace(1)=ERS_ASL
 }
-

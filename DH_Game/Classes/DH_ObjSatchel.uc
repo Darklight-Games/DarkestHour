@@ -4,7 +4,7 @@
 //==============================================================================
 
 class DH_ObjSatchel extends DHObjective // was ROObjSatchel, but had to extend from DHObjective so can be part of new DHObjectives arrays
-    hidecategories(DHObjective,ROObjTerritory,DH_CaptureActions,DH_ClearedActions,DH_GroupedActions,DH_ContestedActions,DH_ContestEndActions);
+    hidecategories(DHObjective, ROObjTerritory, DH_CaptureActions, DH_ClearedActions, DH_GroupedActions, DH_ContestedActions, DH_ContestEndActions);
 
 // Empty out unwanted/irrelevant functions inherited from DHObjective & ROObjTerritory
 // We effectively make this so it inherits from ROObjective, as the original ROObjSatchel did

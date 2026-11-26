@@ -26,4 +26,3 @@ defaultproperties
     Skins(1)=Texture'DH_Artillery_tex.Wirberlwind_turret'
     CollisionStaticMeshes(0)=(CollisionStaticMesh=StaticMesh'DH_German_vehicles_stc4.wirbelwind_turret_col')
 }
-

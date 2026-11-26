@@ -10,7 +10,7 @@ class DH_GiveChuteTrigger extends Trigger;
 // player (e.g. a group of paratroopers spawning in or jumping from a plane together).
 function Touch(Actor Other)
 {
-    local Actor  Inst;
+    local Actor Inst;
     local DHPawn P;
 
     super.Touch(Other);

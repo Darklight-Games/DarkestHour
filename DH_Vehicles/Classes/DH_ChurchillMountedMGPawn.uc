@@ -5,8 +5,8 @@
 
 class DH_ChurchillMountedMGPawn extends DHVehicleMGPawn; // TODO: make this extra functionality generic in DHVehicleMGPawn and/or DHVehicleWeaponPawn
 
-var     int         PeriscopePositionIndex;
-var     Texture     PeriscopeOverlay;
+var int PeriscopePositionIndex;
+var Texture PeriscopeOverlay;
 
 // Can't fire if on binoculars or if moving between positions
 function bool CanFire()
@@ -15,7 +15,12 @@ function bool CanFire()
 }
 
 // Modified to only use the position 0 for the gunsight, as player can fire the gun in other 'look around' positions (also some redundancy removed)
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    )
 {
     local Quat RelativeQuat, VehicleQuat, NonRelativeQuat;
 
@@ -67,7 +72,7 @@ simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor Vie
 simulated function DrawHUD(Canvas C)
 {
     local PlayerController PC;
-    local float            SavedOpacity;
+    local float SavedOpacity;
 
     PC = PlayerController(Controller);
 
@@ -113,15 +118,18 @@ simulated function DrawPeriscopeOverlay(Canvas C)
 
     ScreenRatio = float(C.SizeY) / float(C.SizeX);
     C.SetPos(0.0, 0.0);
-    C.DrawTile(PeriscopeOverlay, C.SizeX, C.SizeY, 0.0, (1.0 - ScreenRatio) * float(PeriscopeOverlay.VSize) / 2.0, PeriscopeOverlay.USize, float(PeriscopeOverlay.VSize) * ScreenRatio);
+    C.DrawTile(
+        PeriscopeOverlay, C.SizeX, C.SizeY, 0.0, (1.0 - ScreenRatio) * float(PeriscopeOverlay.VSize) / 2.0,
+        PeriscopeOverlay.USize, float(PeriscopeOverlay.VSize) * ScreenRatio
+        );
 }
 
 // Modified so when unbuttoned, the MG only moves with player's view if it's within the gun's traverse limits (player's view may look wider than this)
 function UpdateRocketAcceleration(float DeltaTime, float YawChange, float PitchChange)
 {
     local DHPlayer PC;
-    local float    MaxChange;
-    local bool     bMoveTheMG;
+    local float MaxChange;
+    local bool bMoveTheMG;
 
     PC = DHPlayer(Controller);
 
@@ -178,7 +186,9 @@ simulated state ViewTransition
     {
         super.HandleTransition();
 
-        if (DriverPositionIndex == UnbuttonedPositionIndex && LastPositionIndex == PeriscopePositionIndex && IsFirstPerson())
+        if (DriverPositionIndex == UnbuttonedPositionIndex
+            && LastPositionIndex == PeriscopePositionIndex
+            && IsFirstPerson())
         {
             SetRotation(Gun.CurrentAim);
         }
@@ -189,7 +199,7 @@ simulated state ViewTransition
 simulated function bool ShouldViewSnapInPosition(byte PositionIndex)
 {
     return super(DHVehicleWeaponPawn).ShouldViewSnapInPosition(PositionIndex);
-//  return DriverPositions[PositionIndex].bDrawOverlays && (PositionIndex == 0 || PositionIndex == PeriscopePositionIndex || PositionIndex == BinocPositionIndex); // would be a 'pure' override
+    //  return DriverPositions[PositionIndex].bDrawOverlays && (PositionIndex == 0 || PositionIndex == PeriscopePositionIndex || PositionIndex == BinocPositionIndex); // would be a 'pure' override
 }
 
 defaultproperties

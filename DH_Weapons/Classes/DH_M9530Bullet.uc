@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_M9530Bullet extends DHBullet;  //8x56R
+class DH_M9530Bullet extends DHBullet; // 8x56R
 
 defaultproperties
 {

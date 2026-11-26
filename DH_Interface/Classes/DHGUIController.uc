@@ -6,7 +6,7 @@
 class DHGUIController extends UT2K4GUIController;
 
 // Holds the name of all styles to use
-var     array<string>   RODefaultStyleNames;
+var array<string> RODefaultStyleNames;
 
 event InitializeController()
 {
@@ -62,8 +62,8 @@ function SetControllerStatus(bool On)
     }
     else
     {
-//        ResetDesigner();
-//        ViewportOwner.Actor.ConsoleCommand("toggleime 0");
+        //        ResetDesigner();
+        //        ViewportOwner.Actor.ConsoleCommand("toggleime 0");
     }
 
     PurgeComponentClasses();
@@ -209,7 +209,7 @@ event bool CloseMenu(optional bool bCancelled)
         ResetInput();
     }
 
-    ActivePage.PlayCloseSound();       // Play the closing sound
+    ActivePage.PlayCloseSound(); // Play the closing sound
 
     PopMenu(FindMenuIndex(ActivePage), ActivePage, bCancelled);
 
@@ -256,7 +256,7 @@ event bool CloseMenu(optional bool bCancelled)
     return true;
 }
 
-function PurgeObjectReferences() { }
+function PurgeObjectReferences();
 
 simulated static event Validate()
 {

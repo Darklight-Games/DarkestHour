@@ -5,7 +5,6 @@
 // Has APCR round.
 //==============================================================================
 
-
 class DH_ZiS3CannonLate extends DH_ZiS3Cannon;
 
 defaultproperties

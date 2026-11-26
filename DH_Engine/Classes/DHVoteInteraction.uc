@@ -7,8 +7,8 @@
 
 class DHVoteInteraction extends DHPromptInteraction;
 
-var int                 VoteId;
-var class<DHVoteInfo>   VoteInfoClass;
+var int VoteId;
+var class<DHVoteInfo> VoteInfoClass;
 
 function Initialize()
 {

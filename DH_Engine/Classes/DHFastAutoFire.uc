@@ -6,21 +6,21 @@
 class DHFastAutoFire extends DHAutomaticFire;
 
 // internal class vars
-var     float                   LastCalcTime;           // Internal var used to calculate when to replicate the dual shots
-var DHHighROFWeaponAttachment   HiROFWeaponAttachment;  // A high ROF WA that this class will use to pack fire info
+var float LastCalcTime; // Internal var used to calculate when to replicate the dual shots
+var DHHighROFWeaponAttachment HiROFWeaponAttachment; // A high ROF WA that this class will use to pack fire info
 
 // Animation
-var     float                   LoopFireAnimRate;       // The rate to play the looped fire animation when hipped
-var     float                   IronLoopFireAnimRate;   // The rate to play the looped fire animation when deployed or in iron sights
+var float LoopFireAnimRate; // The rate to play the looped fire animation when hipped
+var float IronLoopFireAnimRate; // The rate to play the looped fire animation when deployed or in iron sights
 
 // sound
-var     Sound                   FireEndSound;           // The sound to play at the end of the ambient fire sound
-var     float                   AmbientFireSoundRadius; // The sound radius for the ambient fire sound
-var     Sound                   AmbientFireSound;       // How loud to play the looping ambient fire sound
-var     byte                    AmbientFireVolume;      // The ambient fire sound
+var Sound FireEndSound; // The sound to play at the end of the ambient fire sound
+var float AmbientFireSoundRadius; // The sound radius for the ambient fire sound
+var Sound AmbientFireSound; // How loud to play the looping ambient fire sound
+var byte AmbientFireVolume; // The ambient fire sound
 
 // High ROF system
-var     float                   PackingThresholdTime;   // If the shots are closer than this amount, the dual shot will be used
+var float PackingThresholdTime; // If the shots are closer than this amount, the dual shot will be used
 
 // Modified to support packing two shots together to save net bandwidth
 // The high rate of fire system packs shots together, replicates the shot info to net clients & then they spawn their own client bullets
@@ -70,7 +70,7 @@ function Projectile SpawnProjectile(Vector Start, Rotator Dir)
 
             if (HiROFWeaponAttachment.DualShotCount < 254) // skip 255 as we will use it for a special trigger
             {
-                HiROFWeaponAttachment.DualShotCount ++;
+                HiROFWeaponAttachment.DualShotCount++;
             }
             else
             {
@@ -137,7 +137,10 @@ simulated function UpdateMagazineDriver()
 // Make sure we are in the fire looping state when we fire
 event ModeDoFire()
 {
-    if (ROWeapon(Owner) != none && !ROWeapon(Owner).IsBusy() && AllowFire() && (IsInState('FireLoop') || bWaitForRelease))
+    if (ROWeapon(Owner) != none
+        && !ROWeapon(Owner).IsBusy()
+        && AllowFire()
+        && (IsInState('FireLoop') || bWaitForRelease))
     {
         UpdateMagazineDriver();
 
@@ -182,8 +185,8 @@ state FireLoop
     }
 
     // Emptied out because we play an ambient fire sound
-    function PlayFiring() { }
-    function ServerPlayFiring() { }
+    function PlayFiring();
+    function ServerPlayFiring();
 
     function EndState()
     {
@@ -204,7 +207,9 @@ state FireLoop
 
     function StopFiring()
     {
-        if (Level.NetMode == NM_DedicatedServer && HiROFWeaponAttachment != none && HiROFWeaponAttachment.bUnReplicatedShot)
+        if (Level.NetMode == NM_DedicatedServer
+            && HiROFWeaponAttachment != none
+            && HiROFWeaponAttachment.bUnReplicatedShot)
         {
             HiROFWeaponAttachment.SavedDualShot.FirstShot = HiROFWeaponAttachment.LastShot;
 
@@ -228,7 +233,10 @@ state FireLoop
     {
         super(WeaponFire).ModeTick(DeltaTime);
 
-        if (!bIsFiring || (ROWeapon(Weapon) != none && ROWeapon(Weapon).IsBusy()) || !AllowFire() || (DHProjectileWeapon(Weapon) != none && DHProjectileWeapon(Weapon).bBarrelFailed))
+        if (!bIsFiring
+            || (ROWeapon(Weapon) != none && ROWeapon(Weapon).IsBusy())
+            || !AllowFire()
+            || (DHProjectileWeapon(Weapon) != none && DHProjectileWeapon(Weapon).bBarrelFailed))
         {
             GotoState('');
         }

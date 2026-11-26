@@ -24,11 +24,13 @@ Then the usual GunsightSize property is used to scale [its size on screen, by se
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////// TEMP DEBUG stuff:
 var bool bHideGunsightPeriscope;
+
 exec function SetTeleFOV(int NewValue)
 {
     Log(Tag @ "TelescopeFOV =" @ NewValue @ "(was" @ DH_LocustGunsightOverlay(HUDOverlay).TelescopeFOV $ ")");
     DH_LocustGunsightOverlay(HUDOverlay).TelescopeFOV = NewValue;
 }
+
 exec function SetHUDOffset(string NewX, string NewY, string NewZ)
 {
     Log(Tag @ "HUDOverlayOffset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ "(was" @ HUDOverlayOffset $ ")");
@@ -36,24 +38,29 @@ exec function SetHUDOffset(string NewX, string NewY, string NewZ)
     HUDOverlayOffset.Y = float(NewY);
     HUDOverlayOffset.Z = float(NewZ);
 }
+
 exec function SetHudFOV(float NewValue)
 {
     Log(Tag @ "HUDOverlayFOV =" @ NewValue @ "(was" @ HUDOverlayFOV $ ")");
     HUDOverlayFOV = NewValue;
 }
+
 exec function SetMod(optional bool Modulate2X, optional bool Modulate4X)
 {
     Combiner(HUDOverlay.Skins[0]).Modulate2X = Modulate2X;
     Combiner(HUDOverlay.Skins[0]).Modulate4X = Modulate4X;
 }
+
 exec function HidePeri()
 {
     bHideGunsightPeriscope = !bHideGunsightPeriscope;
 }
+
 exec function DamageSight()
 {
     DamageCannonOverlay();
 }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 exec function SetTex(int Slot) // TEMP to allow switching between different sized versions of the vehicle skins, to compare them & look for detail loss
@@ -66,7 +73,7 @@ exec function SetTex(int Slot) // TEMP to allow switching between different size
 simulated function DrawHUD(Canvas C)
 {
     local PlayerController PC;
-    local float            SavedOpacity;
+    local float SavedOpacity;
 
     PC = PlayerController(Controller);
 
@@ -118,7 +125,10 @@ simulated function DrawGunsightOverlay(Canvas C);
 // Modified so if gunsight has been damaged & we're on the sight, switch to a damaged periscope overlay texture
 simulated function DrawPeriscopeOverlay(Canvas C)
 {
-    if (bHideGunsightPeriscope && DriverPositionIndex < GunsightPositions) return; // TEMP debug
+    if (bHideGunsightPeriscope && DriverPositionIndex < GunsightPositions)
+    {
+        return; // TEMP debug
+    }
 
     if (bOpticsDamaged && DriverPositionIndex < GunsightPositions)
     {

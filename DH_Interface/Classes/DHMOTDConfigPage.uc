@@ -5,7 +5,7 @@
 
 class DHMOTDConfigPage extends MOTDConfigPage;
 
-function AddSystemMenu(){}
+function AddSystemMenu();
 
 defaultproperties
 {

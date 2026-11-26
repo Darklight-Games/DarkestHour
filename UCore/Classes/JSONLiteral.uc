@@ -15,7 +15,7 @@ var enum EJSONLiteralType
 {
     JLT_Null,
     JLT_True,
-    JLT_False
+    JLT_False,
 } Type;
 
 static function JSONLiteral Create(string Value)
@@ -120,4 +120,3 @@ function string Encode()
             return NULL_STRING;
     }
 }
-

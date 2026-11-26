@@ -9,8 +9,8 @@ class DHBackAttachment extends BackAttachment;
 // `ServerSideOnly` cannot be serialized and would arrive on clients as `None`.
 // Instead, we replicate the attachment class and each client applies the
 // appearance (mesh, skins, idle animation) from the class defaults itself.
-var     class<InventoryAttachment>  AttachmentClass;
-var     class<InventoryAttachment>  AppliedAttachmentClass; // Client-side only, used to detect a change of `AttachmentClass`.
+var class<InventoryAttachment> AttachmentClass;
+var class<InventoryAttachment> AppliedAttachmentClass; // Client-side only, used to detect a change of `AttachmentClass`.
 
 replication
 {

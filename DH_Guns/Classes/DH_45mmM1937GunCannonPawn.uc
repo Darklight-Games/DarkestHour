@@ -5,9 +5,9 @@
 
 class DH_45mmM1937GunCannonPawn extends DHATGunCannonPawn; // all overrides from DHSovietCannonPawn class // TODO: merge functionality
 
-var     float   ScopeCenterPositionX; // horizontal positioning of CannonScopeCenter overlay for aiming reticle or moving range indicator
-var     float   ScopeCenterScaleX;    // width & height scaling of CannonScopeCenter overlay
-var     float   ScopeCenterScaleY;
+var float ScopeCenterPositionX; // horizontal positioning of CannonScopeCenter overlay for aiming reticle or moving range indicator
+var float ScopeCenterScaleX; // width & height scaling of CannonScopeCenter overlay
+var float ScopeCenterScaleY;
 
 simulated function DrawGunsightOverlay(Canvas C)
 {
@@ -30,7 +30,8 @@ simulated function DrawGunsightOverlay(Canvas C)
         {
             Scale = float(C.SizeY) / TilePixelHeight;
             PosX = ((ScopeCenterPositionX * TextureSize) - TileStartPosU) * Scale;
-            PosY = ((Gun.ProjectileClass.static.GetYAdjustForRange(Gun.GetRange()) * TextureSize) - TileStartPosV) * Scale;
+            PosY = ((Gun.ProjectileClass.static.GetYAdjustForRange(Gun.GetRange()) * TextureSize) - TileStartPosV)
+                * Scale;
             C.SetPos(PosX, PosY);
             Scale *= TextureSize / 1200.0;
 
@@ -69,4 +70,3 @@ defaultproperties
 
     CameraBone="GUNSIGHT_CAMERA"
 }
-

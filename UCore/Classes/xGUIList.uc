@@ -24,4 +24,3 @@ final static function int GetIndexOfObject(GUIList L, Object Object)
 
     return -1;
 }
-

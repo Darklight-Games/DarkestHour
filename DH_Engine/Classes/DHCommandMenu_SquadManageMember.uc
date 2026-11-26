@@ -174,4 +174,3 @@ defaultproperties
     Options(3)=(SubjectText="Make assistant",Material=Texture'DH_InterfaceArt2_tex.assistant')
     Options(4)=(SubjectText="Remove assistant",Material=Texture'DH_InterfaceArt2_tex.assistant')
 }
-

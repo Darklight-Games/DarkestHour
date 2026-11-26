@@ -5,16 +5,16 @@
 
 class DHMetricsRound extends JSONSerializable;
 
-var DateTime                        StartedAt;
-var DateTime                        EndedAt;
-var array<DHMetricsRound>           Rounds;
-var array<DHMetricsFrag>            Frags;
-var array<DHMetricsVehicleFrag>     VehicleFrags;
-var array<DHMetricsCapture>         Captures;
-var array<DHMetricsConstruction>    Constructions;
-var array<DHMetricsRallyPoint>      RallyPoints;
-var array<JSONObject>               Events;
-var int                             Winner;
+var DateTime StartedAt;
+var DateTime EndedAt;
+var array<DHMetricsRound> Rounds;
+var array<DHMetricsFrag> Frags;
+var array<DHMetricsVehicleFrag> VehicleFrags;
+var array<DHMetricsCapture> Captures;
+var array<DHMetricsConstruction> Constructions;
+var array<DHMetricsRallyPoint> RallyPoints;
+var array<JSONObject> Events;
+var int Winner;
 
 function JSONValue ToJSON()
 {
@@ -46,4 +46,3 @@ defaultproperties
 {
     Winner=-1
 }
-

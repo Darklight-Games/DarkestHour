@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_KV1sTank_Late extends DH_KV1sTank; //with subcalibers for `43-`45
+class DH_KV1sTank_Late extends DH_KV1sTank; // with subcalibers for `43-`45
 
 defaultproperties
 {

@@ -11,4 +11,3 @@ defaultproperties
     APCDamageModifier=0.5
     VehicleDamageModifier=1.0
 }
-

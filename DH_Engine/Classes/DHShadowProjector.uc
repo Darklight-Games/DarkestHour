@@ -5,8 +5,9 @@
 
 class DHShadowProjector extends ShadowProjector;
 
-var     float       ShadowZOffset; // vertical position offset for shadow, replacing literal value that's hard-coded into UpdateShadow() in ShadowProjector parent class
-                                   // allows a vehicle shadow position to be adjusted to suit the vehicle to produce a good shadow
+// vertical position offset for shadow, replacing literal value that's hard-coded into UpdateShadow() in ShadowProjector parent class
+// allows a vehicle shadow position to be adjusted to suit the vehicle to produce a good shadow
+var float ShadowZOffset;
 
 // Modified to set shadow rotation initially, as it never changes so we no longer update it every tick in UpdateShadow()
 function InitShadow()
@@ -26,7 +27,11 @@ function UpdateShadow()
 
     DetachProjector(true);
 
-    if (ShadowActor != none && !ShadowActor.bHidden && (Level.TimeSeconds - ShadowActor.LastRenderTime) < 4.0 && ShadowTexture != none && bShadowActive)
+    if (ShadowActor != none
+        && !ShadowActor.bHidden
+        && (Level.TimeSeconds - ShadowActor.LastRenderTime) < 4.0
+        && ShadowTexture != none
+        && bShadowActive)
     {
         if (ShadowTexture.Invalid)
         {

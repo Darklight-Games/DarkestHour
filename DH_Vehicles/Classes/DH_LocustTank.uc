@@ -9,16 +9,31 @@ class DH_LocustTank extends DHArmoredVehicle;
 
 exec function SetTex(int Slot) // TEMP (incl compiler directive) to allow switching between different sized versions of the vehicle skins, to compare them & look for detail loss
 {
-    Switch(Slot)
+    switch (Slot)
     {
         case 0:
-            if (Skins[Slot] == default.Skins[Slot]) Skins[Slot] = Texture'DH_Locust_tex.Locust_body_ext_2048'; // 2048 slightly sharper than 1024 but acceptable
-            else Skins[Slot] = default.Skins[Slot];
+            if (Skins[Slot] == default.Skins[Slot])
+            {
+                Skins[Slot] = Texture'DH_Locust_tex.Locust_body_ext_2048'; // 2048 slightly sharper than 1024 but acceptable
+            }
+            else
+            {
+                Skins[Slot] = default.Skins[Slot];
+            }
             break;
         case 1:
-            if (Skins[Slot] == default.Skins[Slot]) Skins[Slot] = Texture'DH_Locust_tex.Locust_wheels_1024'; // 1024 sharper than 512 (2048 no diff from 1024)
-            else if (Skins[Slot] == Texture'DH_Locust_tex.Locust_wheels_1024') Skins[Slot] = Texture'DH_Locust_tex.Locust_wheels_2048';
-            else Skins[Slot] = default.Skins[Slot];
+            if (Skins[Slot] == default.Skins[Slot])
+            {
+                Skins[Slot] = Texture'DH_Locust_tex.Locust_wheels_1024'; // 1024 sharper than 512 (2048 no diff from 1024)
+            }
+            else if (Skins[Slot] == Texture'DH_Locust_tex.Locust_wheels_1024')
+            {
+                Skins[Slot] = Texture'DH_Locust_tex.Locust_wheels_2048';
+            }
+            else
+            {
+                Skins[Slot] = default.Skins[Slot];
+            }
             break;
         case 2:
             if (Skins[Slot] == default.Skins[Slot]) // 2048 sharper than 1024 but acceptable
@@ -45,8 +60,14 @@ exec function SetTex(int Slot) // TEMP (incl compiler directive) to allow switch
             }
             break;
         case 4:
-            if (Skins[Slot] == default.Skins[Slot]) Skins[Slot] = Texture'DH_Locust_tex.Locust_treads_1024'; // no difference
-            else Skins[Slot] = default.Skins[Slot];
+            if (Skins[Slot] == default.Skins[Slot])
+            {
+                Skins[Slot] = Texture'DH_Locust_tex.Locust_treads_1024'; // no difference
+            }
+            else
+            {
+                Skins[Slot] = default.Skins[Slot];
+            }
             break;
     }
 }
@@ -59,12 +80,18 @@ simulated state ViewTransition // TEMP to fake camera position changes until ani
 
         if (Level.NetMode != NM_DedicatedServer && IsHumanControlled() && !PlayerController(Controller).bBehindView)
         {
-             if (DriverPositionIndex == 0)
+            if (DriverPositionIndex == 0)
+            {
                 FPCamPos = vect(13.0, -2.75, 0.0);
-             else if (DriverPositionIndex == 1) // on pericope: move 0/-1.5/+3.75 up to scope, then snap another +7/0/+5 to exterior view
-                 FPCamPos = vect(0.0, -1.5, 3.75);
-             else if (DriverPositionIndex == 3) // hatch open
-                 FPCamPos = vect(9.0, 0.0, 0.0);
+            }
+            else if (DriverPositionIndex == 1) // on pericope: move 0/-1.5/+3.75 up to scope, then snap another +7/0/+5 to exterior view
+            {
+                FPCamPos = vect(0.0, -1.5, 3.75);
+            }
+            else if (DriverPositionIndex == 3) // hatch open
+            {
+                FPCamPos = vect(9.0, 0.0, 0.0);
+            }
         }
     }
 }

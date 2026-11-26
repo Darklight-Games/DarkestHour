@@ -7,7 +7,9 @@ class DH_HetzerVehicleMGEmitter extends WeaponAmbientEmitter; // TODO: after nex
 
 simulated function SetEmitterStatus(bool bEnabled)
 {
-    Emitters[0].UseCollision = !Level.bDropDetail && Level.DetailMode != DM_Low && VSizeSquared(Level.GetLocalPlayerController().ViewTarget.Location - Location) < 2560000.0;
+    Emitters[0].UseCollision = !Level.bDropDetail
+        && Level.DetailMode != DM_Low
+        && VSizeSquared(Level.GetLocalPlayerController().ViewTarget.Location - Location) < 2560000.0;
 
     if (bEnabled)
     {

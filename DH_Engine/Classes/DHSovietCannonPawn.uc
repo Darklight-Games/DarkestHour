@@ -6,9 +6,9 @@
 class DHSovietCannonPawn extends DHVehicleCannonPawn
     abstract;
 
-var     float   ScopeCenterPositionX; // horizontal positioning of CannonScopeCenter overlay for aiming reticle or moving range indicator (0 to 1, from left of gunsight texture)
-var     float   ScopeCenterScaleX;    // width & height scaling of CannonScopeCenter overlay
-var     float   ScopeCenterScaleY;
+var float ScopeCenterPositionX; // horizontal positioning of CannonScopeCenter overlay for aiming reticle or moving range indicator (0 to 1, from left of gunsight texture)
+var float ScopeCenterScaleX; // width & height scaling of CannonScopeCenter overlay
+var float ScopeCenterScaleY;
 
 // Modified to include different handling for Soviet optical range adjustment (from RO's RussianTankCannonPawn)
 // Some cannons have optical (not mechanically linked) range setting, so range adjustment moves vertical position of reticle to facilitate aiming for range
@@ -34,7 +34,8 @@ simulated function DrawGunsightOverlay(Canvas C)
         {
             Scale = float(C.SizeY) / TilePixelHeight; // how much the tile has been scaled to fit the screen
             PosX = ((ScopeCenterPositionX * TextureSize) - TileStartPosU) * Scale;
-            PosY = ((Gun.ProjectileClass.static.GetYAdjustForRange(Gun.GetRange()) * TextureSize) - TileStartPosV) * Scale; // vertical adjustment of reticle or range indicator position
+            PosY = ((Gun.ProjectileClass.static.GetYAdjustForRange(Gun.GetRange()) * TextureSize) - TileStartPosV)
+                * Scale; // vertical adjustment of reticle or range indicator position
             C.SetPos(PosX, PosY);
             Scale *= TextureSize / 1200.0; // 'mover' texture is sized for a 1200 pixel screen height, so finally adjust draw scale to suit actual screen height
 
@@ -51,11 +52,13 @@ exec function SetPosX(float NewValue)
     Log(Tag @ "ScopeCenterPositionX =" @ NewValue @ "(was" @ ScopeCenterPositionX $ ")");
     ScopeCenterPositionX = NewValue;
 }
+
 exec function SetScaleX(float NewValue)
 {
     Log(Tag @ "ScopeCenterScaleX =" @ NewValue @ "(was" @ ScopeCenterScaleX $ ")");
     ScopeCenterScaleX = NewValue;
 }
+
 exec function SetScaleY(float NewValue)
 {
     Log(Tag @ "ScopeCenterScaleY =" @ NewValue @ "(was" @ ScopeCenterScaleY $ ")");
@@ -65,8 +68,11 @@ exec function SetScaleY(float NewValue)
 // New debug execs to adjust OpticalRanges values
 exec function SetOpticalRange(float NewValue)
 {
-    Log(Cannon.ProjectileClass @ "OpticalRanges[" $ Cannon.CurrentRangeIndex $ "]=" @ NewValue @
-        "(was" @ class<DHCannonShell>(Cannon.ProjectileClass).default.OpticalRanges[Cannon.CurrentRangeIndex].RangeValue $ ")");
+    Log(
+        Cannon.ProjectileClass @ "OpticalRanges[" $ Cannon.CurrentRangeIndex $ "]=" @ NewValue @ "(was"
+            @ class<DHCannonShell>(Cannon.ProjectileClass).default.OpticalRanges[Cannon.CurrentRangeIndex].RangeValue
+            $ ")"
+        );
 
     class<DHCannonShell>(Cannon.ProjectileClass).default.OpticalRanges[Cannon.CurrentRangeIndex].RangeValue = NewValue;
 }

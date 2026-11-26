@@ -215,39 +215,39 @@ final static function Color HSV2RGB(HSV HSV)
     Q = HSV.V * (1.0 - (HSV.S * FF));
     T = HSV.V * (1.0 - (HSV.S * (1.0 - FF)));
 
-    switch(i) {
-    case 0:
-        RGB.R = HSV.V * 255;
-        RGB.G = T * 255;
-        RGB.B = P * 255;
-        break;
-    case 1:
-        RGB.R = Q * 255;
-        RGB.G = HSV.V * 255;
-        RGB.B = P * 255;
-        break;
-    case 2:
-        RGB.R = P * 255;
-        RGB.G = HSV.V * 255;
-        RGB.B = T * 255;
-        break;
+    switch (i)
+    {
+        case 0:
+            RGB.R = HSV.V * 255;
+            RGB.G = T * 255;
+            RGB.B = P * 255;
+            break;
+        case 1:
+            RGB.R = Q * 255;
+            RGB.G = HSV.V * 255;
+            RGB.B = P * 255;
+            break;
+        case 2:
+            RGB.R = P * 255;
+            RGB.G = HSV.V * 255;
+            RGB.B = T * 255;
+            break;
 
-    case 3:
-        RGB.R = P * 255;
-        RGB.G = Q * 255;
-        RGB.B = HSV.V * 255;
-        break;
-    case 4:
-        RGB.R = T * 255;
-        RGB.G = P * 255;
-        RGB.B = HSV.V * 255;
-        break;
-    case 5:
-    default:
-        RGB.R = HSV.V * 255;
-        RGB.G = P * 255;
-        RGB.B = Q * 255;
-        break;
+        case 3:
+            RGB.R = P * 255;
+            RGB.G = Q * 255;
+            RGB.B = HSV.V * 255;
+            break;
+        case 4:
+            RGB.R = T * 255;
+            RGB.G = P * 255;
+            RGB.B = HSV.V * 255;
+            break;
+        default:
+            RGB.R = HSV.V * 255;
+            RGB.G = P * 255;
+            RGB.B = Q * 255;
+            break;
     }
 
     return RGB;

@@ -18,11 +18,22 @@ simulated function InitializeVehicleBase()
 
 // Modified to hack damage passed to vehicle base, as it ought to use APCDamageModifier for hit on an AT gun, but instead will use VehicleDamageModifier
 // Adjust damage so when vehicle base applies VehicleDamageModifier, result is the same as if it had applied APCDamageModifier to original damage
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+function TakeDamage(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    )
 {
     if (class<ROWeaponDamageType>(DamageType) != none)
     {
-        Damage = Round(float(Damage) * class<ROWeaponDamageType>(DamageType).default.APCDamageModifier / class<ROWeaponDamageType>(DamageType).default.VehicleDamageModifier);
+        Damage = Round(
+            float(Damage)
+                * class<ROWeaponDamageType>(DamageType).default.APCDamageModifier
+                / class<ROWeaponDamageType>(DamageType).default.VehicleDamageModifier
+            );
     }
 
     super.TakeDamage(Damage, InstigatedBy, HitLocation, Momentum, DamageType, HitIndex);

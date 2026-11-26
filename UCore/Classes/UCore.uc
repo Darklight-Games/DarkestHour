@@ -78,4 +78,3 @@ final static function Vector VClampSize(Vector V, float Min, float Max)
 
     return Normal(V) * FClamp(VSize(V), Min, Max);
 }
-

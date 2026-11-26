@@ -8,12 +8,12 @@ class DHAnimNotify_WeaponComponentAnimationOperation extends AnimNotify_Scripted
 var() DHProjectileWeapon.EWeaponComponentAnimationDriverType DriverType;
 var() enum EOperation
 {
-    OP_Set,     // Set the animation driver to the specified value.
-    OP_Update,  // Update the animation driver using the natural theta value.
-    OP_Mute,    // Mute the animation driver, allowing it to be controlled by the primary animation channel.
-    OP_Unmute,  // Unmute the animation driver.
+    OP_Set, // Set the animation driver to the specified value.
+    OP_Update, // Update the animation driver using the natural theta value.
+    OP_Mute, // Mute the animation driver, allowing it to be controlled by the primary animation channel.
+    OP_Unmute, // Unmute the animation driver.
 } Operation;
-var() float Theta;  // The theta value to use when using the OP_Set operation.
+var() float Theta; // The theta value to use when using the OP_Set operation.
 
 event Notify(Actor Owner)
 {

@@ -16,10 +16,7 @@ simulated function BringUp(optional Weapon PrevWeapon)
     }
 }
 
-function bool CanDeadThrow()
-{
-    return false;
-}
+function bool CanDeadThrow();
 
 defaultproperties
 {

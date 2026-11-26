@@ -9,7 +9,7 @@ class DH_EnfieldNo4ScopedAttachment extends DHWeaponAttachment;
 // This is because the reload anims play in a sequence, ending with the post-reload anim
 simulated function AnimEnd(int Channel) // TODO: re-factor into a parent as this is in all the bolt action sniper rifles
 {
-    local name  Anim;
+    local name Anim;
     local float Frame, Rate;
 
     GetAnimParams(0, Anim, Frame, Rate);

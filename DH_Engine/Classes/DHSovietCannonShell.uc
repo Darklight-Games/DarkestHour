@@ -4,7 +4,7 @@
 //==============================================================================
 
 class DHSovietCannonShell extends DHCannonShellAP // a solid shot armor-piercing shell (with no armor-piercing cap or ballistic cap)
-    abstract;                                     // for Soviet APBC shells (with ballistic cap), specify RoundType=RT_APBC in defaultproperties
+    abstract; // for Soviet APBC shells (with ballistic cap), specify RoundType=RT_APBC in defaultproperties
 
 defaultproperties
 {

@@ -6,17 +6,17 @@
 class DHSignal extends Object
     abstract;
 
-var localized string    SignalName;
-var Material            MenuIconMaterial;
-var Material            WorldIconMaterial;
-var float               DurationSeconds;
-var Color               MyColor;
-var bool                bIsUnique;
-var bool                bShouldShowLabel;
-var bool                bShouldShowDistance;
-var float               WorldIconScale;
-var float               SignalRadiusInMeters;
-var bool                bSquadMembersOnly;
+var localized string SignalName;
+var Material MenuIconMaterial;
+var Material WorldIconMaterial;
+var float DurationSeconds;
+var Color MyColor;
+var bool bIsUnique;
+var bool bShouldShowLabel;
+var bool bShouldShowDistance;
+var float WorldIconScale;
+var float SignalRadiusInMeters;
+var bool bSquadMembersOnly;
 
 static function Material GetWorldIconMaterial(optional Object OptionalObject)
 {
@@ -59,5 +59,4 @@ defaultproperties
     DurationSeconds=10.0
     WorldIconScale=1.0
     SignalRadiusInMeters=25.0
-    bSquadMembersOnly=false
 }

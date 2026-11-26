@@ -11,8 +11,8 @@ class DHLocalization extends Object
     abstract;
 
 // ISO-639-3 (3 character) language code of the current language. (e.g. "eng" for English, "rus" for Russian)
-var localized string    LanguageCode;
-var localized string    LanguageName;
+var localized string LanguageCode;
+var localized string LanguageName;
 
 defaultproperties
 {

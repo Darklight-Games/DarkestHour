@@ -7,35 +7,32 @@
 
 class DHZoneInfo extends ZoneInfo;
 
-const FOG_RATIO_CHANGE_TIME =       200.0;                      // Time in changing the fog ratio value, it needs to be very slow so it doesn't pulse
-const FOG_CHANGE_TIME =             20.0;                       // Time in changing the fog distance
-const MIN_DESIRED_UPDATE_TIME =     60.0;                       // After changing min deisred FPS, how quickly its change takes affect
-const CLIENTFRAMERATE_UPDATETIME =  5.0;                        // How often to calculate the average fps
+const FOG_RATIO_CHANGE_TIME = 200.0; // Time in changing the fog ratio value, it needs to be very slow so it doesn't pulse
+const FOG_CHANGE_TIME = 20.0; // Time in changing the fog distance
+const MIN_DESIRED_UPDATE_TIME = 60.0; // After changing min deisred FPS, how quickly its change takes affect
+const CLIENTFRAMERATE_UPDATETIME = 5.0; // How often to calculate the average fps
 
-var()   bool            bUseDynamicFogDistance;                 // ...
+var() bool bUseDynamicFogDistance; // ...
 
-var     float           OriginalFogDistanceEnd,                 // Saves at the beginning of the level, but only then
-                        TargetDistanceFog,                      // Target fog distance for both the client and server, this is replicated to all clients
-                        FogChangeStart,                         // Not replicated, but used by both server and client
-                        FogChangeEnd,                           // Not replicated, but used by both server and client
-                        SavedDistanceEndFog;                    // The fog value at which point the fog was changed (this gives us a starting point to change from)
+var float OriginalFogDistanceEnd, // Saves at the beginning of the level, but only then
+    TargetDistanceFog, // Target fog distance for both the client and server, this is replicated to all clients
+    FogChangeStart, // Not replicated, but used by both server and client
+    FogChangeEnd, // Not replicated, but used by both server and client
+    SavedDistanceEndFog; // The fog value at which point the fog was changed (this gives us a starting point to change from)
 
-var     float           ClientFogRatio,                         // Client-sided fog ratio
-                        TargetFogRatio,                         // Client target for fog distance ratio (to make fog adjustments smooth)
-                        FogRatioChangeStart,                    // Used to make fog adjustments smooth
-                        FogRatioChangeEnd;                      // ...
+var float ClientFogRatio, // Client-sided fog ratio
+    TargetFogRatio, // Client target for fog distance ratio (to make fog adjustments smooth)
+    FogRatioChangeStart, // Used to make fog adjustments smooth
+    FogRatioChangeEnd; // ...
 
-var     InterpCurve     ClientFogRatioCurve;                    // Curve used for more control over fog ratio (makes it so we can drop to min fog distance before 0 fps)
+var InterpCurve ClientFogRatioCurve; // Curve used for more control over fog ratio (makes it so we can drop to min fog distance before 0 fps)
 
-var     float           ClientAverageFrameRate;
-var     float           ClientFrameRateConsolidated;            // Keeps track of tick rates over time, used to calculate average
-var     int             ClientFrameRateCount;                   // Keeps track of how many frames are between ClientFrameRateConsolidated
+var float ClientAverageFrameRate;
+var float ClientFrameRateConsolidated; // Keeps track of tick rates over time, used to calculate average
+var int ClientFrameRateCount; // Keeps track of how many frames are between ClientFrameRateConsolidated
 
-var     float           ClientFrameChangeStart,
-                        ClientFrameChangeEnd;
-var     int             ClientSavedDesiredFrame,
-                        ClientMinDesiredFrame,
-                        TargetMinDesiredFrame;                  // Keeps track of clients desired frame and will blend (smoothly) if client changes it
+var float ClientFrameChangeStart, ClientFrameChangeEnd;
+var int ClientSavedDesiredFrame, ClientMinDesiredFrame, TargetMinDesiredFrame; // Keeps track of clients desired frame and will blend (smoothly) if client changes it
 
 replication
 {
@@ -44,7 +41,10 @@ replication
         TargetDistanceFog;
 }
 
-simulated function float GetDistanceFogEndMin() { return FMax(DistanceFogEndMin, DistanceFogStart + 100.0); }
+simulated function float GetDistanceFogEndMin()
+{
+    return FMax(DistanceFogEndMin, DistanceFogStart + 100.0);
+}
 
 simulated event PostBeginPlay()
 {
@@ -81,11 +81,11 @@ function Reset()
     }
 }
 
-simulated function Tick( float DeltaTime )
+simulated function Tick(float DeltaTime)
 {
-    local float         T;
-    local bool          bUpdate;
-    local DHPlayer      C;
+    local float T;
+    local bool bUpdate;
+    local DHPlayer C;
 
     super.Tick(DeltaTime);
 
@@ -141,7 +141,11 @@ simulated function Tick( float DeltaTime )
         // Update MinDesiredFrames
         if (ClientMinDesiredFrame != TargetMinDesiredFrame && C.bDynamicFogRatio)
         {
-            T = FClamp((Level.TimeSeconds - ClientFrameChangeStart) / (ClientFrameChangeEnd - ClientFrameChangeStart), 0.0, 1.0);
+            T = FClamp(
+                (Level.TimeSeconds - ClientFrameChangeStart) / (ClientFrameChangeEnd - ClientFrameChangeStart),
+                0.0,
+                1.0
+                );
             ClientMinDesiredFrame = Class'UInterp'.static.Linear(T, ClientSavedDesiredFrame, TargetMinDesiredFrame);
             bUpdate = true;
         }
@@ -214,7 +218,10 @@ function SetFogDistanceWithRatio(float Ratio)
 {
     if (Ratio >= 0.0 && Ratio <= 1.0)
     {
-        SetNewTargetFogDistance(GetDistanceFogEndMin() + ((OriginalFogDistanceEnd - FMin(OriginalFogDistanceEnd, GetDistanceFogEndMin())) * Ratio));
+        SetNewTargetFogDistance(
+            GetDistanceFogEndMin()
+                + ((OriginalFogDistanceEnd - FMin(OriginalFogDistanceEnd, GetDistanceFogEndMin())) * Ratio)
+            );
     }
 }
 

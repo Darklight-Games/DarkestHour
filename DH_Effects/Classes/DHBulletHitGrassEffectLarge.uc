@@ -5,7 +5,7 @@
 
 class DHBulletHitGrassEffectLarge extends Emitter;
 
-//Particle count: 48
+// Particle count: 48
 
 defaultproperties
 {

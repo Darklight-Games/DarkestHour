@@ -30,4 +30,3 @@ defaultproperties
     PickupBoneNames(15)="grenade.015"
     PickupBoneNames(16)="grenade.016"
 }
-

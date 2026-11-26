@@ -14,7 +14,7 @@ var float AngleMax;
 var float AngleFactor;
 var float ArmLength;
 var float AngularDamping;
-var float AngularVelocityThreshold;    // The angular velocity must be greater than or equal to this value in order for the bipod to move.
+var float AngularVelocityThreshold; // The angular velocity must be greater than or equal to this value in order for the bipod to move.
 var name BarrelBoneName;
 var name BipodBoneName;
 var float CoefficientOfRestitution;

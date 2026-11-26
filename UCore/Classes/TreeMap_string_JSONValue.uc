@@ -145,7 +145,10 @@ function Erase(string Key)
     Head = EraseStatic(self, Head);
 }
 
-private static function TreeMapNode_string_JSONValue EraseStatic(TreeMap_string_JSONValue D, TreeMapNode_string_JSONValue Node)
+private static function TreeMapNode_string_JSONValue EraseStatic(
+    TreeMap_string_JSONValue D,
+    TreeMapNode_string_JSONValue Node
+    )
 {
     local int Balance;
     local TreeMapNode_string_JSONValue Temp;
@@ -272,7 +275,10 @@ private static function TreeMapNode_string_JSONValue RotateLeft(TreeMapNode_stri
     return Y;
 }
 
-private static function TreeMapNode_string_JSONValue PutStatic(TreeMap_string_JSONValue D, TreeMapNode_string_JSONValue Node)
+private static function TreeMapNode_string_JSONValue PutStatic(
+    TreeMap_string_JSONValue D,
+    TreeMapNode_string_JSONValue Node
+    )
 {
     local int Balance;
 
@@ -318,7 +324,7 @@ private static function TreeMapNode_string_JSONValue PutStatic(TreeMap_string_JS
 
         return RotateRight(Node);
     }
-    else if (Balance  < -1 && D.RecursiveKey < Node.RHS.Key)
+    else if (Balance < -1 && D.RecursiveKey < Node.RHS.Key)
     {
         Node.RHS = RotateRight(Node.RHS);
 
@@ -327,4 +333,3 @@ private static function TreeMapNode_string_JSONValue PutStatic(TreeMap_string_JS
 
     return Node;
 }
-

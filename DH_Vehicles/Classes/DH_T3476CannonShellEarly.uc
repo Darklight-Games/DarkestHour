@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_T3476CannonShellEarly extends DH_T3476CannonShell; //BR-350A
+class DH_T3476CannonShellEarly extends DH_T3476CannonShell; // BR-350A
 
 defaultproperties
 {

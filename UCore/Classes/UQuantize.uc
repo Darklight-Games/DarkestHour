@@ -36,15 +36,17 @@ static function float DequantizeClampedFloat(int Value, byte Precision)
 // bits of precision are used for the rotation component.
 static function int QuantizeClamped2DPose(float X, float Y, int Rotation)
 {
-    return QuantizeRotationUnit(Rotation) |
-           QuantizeClampedFloat(Y, 12) << 8 |
-           QuantizeClampedFloat(X, 12) << 20;
+    return QuantizeRotationUnit(Rotation) | QuantizeClampedFloat(Y, 12) << 8 | QuantizeClampedFloat(X, 12) << 20;
 }
 
-static function DequantizeClamped2DPose(int Value, optional out float X, optional out float Y, optional out int Rotation)
+static function DequantizeClamped2DPose(
+    int Value,
+    optional out float X,
+    optional out float Y,
+    optional out int Rotation
+    )
 {
     Y = DequantizeClampedFloat((Value >> 8) & 0xFFF, 12);
     X = DequantizeClampedFloat((Value >> 20) & 0xFFF, 12);
     Rotation = DequantizeRotationUnit(Value & 0xFF);
 }
-

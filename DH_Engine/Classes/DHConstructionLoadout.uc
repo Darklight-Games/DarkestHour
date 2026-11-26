@@ -11,9 +11,9 @@ class DHConstructionLoadout extends Object
 struct SConstruction
 {
     var class<DHConstruction> ConstructionClass;
-    var int Limit;      // The total limit alotted per round. -1 means no limit.
-    var int MaxActive;  // The maximum amount active at a time. -1 means no limit.
+    var int Limit; // The total limit alotted per round. -1 means no limit.
+    var int MaxActive; // The maximum amount active at a time. -1 means no limit.
 };
 
 var array<SConstruction> Constructions;
-var array<Class<DHConstructionLoadout> > Loadouts;
+var array<class<DHConstructionLoadout> > Loadouts;

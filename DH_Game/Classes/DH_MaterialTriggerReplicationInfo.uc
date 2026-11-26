@@ -5,17 +5,17 @@
 
 class DH_MaterialTriggerReplicationInfo extends ReplicationInfo;
 
-var     Material    MaterialToTrigger;
-var     string      MaterialName;
-var     int         ClientTriggerCount;
-var     int         ClientUnTriggerCount;
-var     int         TriggerCount;
+var Material MaterialToTrigger;
+var string MaterialName;
+var int ClientTriggerCount;
+var int ClientUnTriggerCount;
+var int TriggerCount;
 
 var struct TTriggerData
 {
-    var Actor       Triggerer;
-    var Pawn        EventInstigator;
-    var byte        TriggerAction; // 0 = nothing/idle, 1 = trigger, 2 = reset
+    var Actor Triggerer;
+    var Pawn EventInstigator;
+    var byte TriggerAction; // 0 = nothing/idle, 1 = trigger, 2 = reset
 } LastTriggerings[10];
 
 replication
@@ -63,7 +63,9 @@ simulated function Timer()
         }
     }
 
-    if (MaterialToTrigger != none && TriggerCount > ClientTriggerCount && LastTriggerings[(ClientTriggerCount + 1) % arraycount(LastTriggerings)].TriggerAction != 0)
+    if (MaterialToTrigger != none
+        && TriggerCount > ClientTriggerCount
+        && LastTriggerings[(ClientTriggerCount + 1) % arraycount(LastTriggerings)].TriggerAction != 0)
     {
         ++ClientTriggerCount;
 
@@ -75,7 +77,8 @@ simulated function Timer()
         {
             MaterialToTrigger.Trigger(
                 LastTriggerings[ClientTriggerCount % arraycount(LastTriggerings)].Triggerer,
-                LastTriggerings[ClientTriggerCount % arraycount(LastTriggerings)].EventInstigator);
+                LastTriggerings[ClientTriggerCount % arraycount(LastTriggerings)].EventInstigator
+                );
         }
     }
 }

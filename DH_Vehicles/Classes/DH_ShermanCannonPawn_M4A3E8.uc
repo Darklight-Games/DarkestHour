@@ -3,6 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
+// usagi: ignore[class-name-ends-in-digit]
 class DH_ShermanCannonPawn_M4A3E8 extends DH_ShermanCannonPawnA_76mm;
 
 defaultproperties
@@ -24,4 +25,3 @@ defaultproperties
     DrivePos=(X=0,Y=0,Z=0)
     DriveAnim="VTiger_com_idle_close"
 }
-

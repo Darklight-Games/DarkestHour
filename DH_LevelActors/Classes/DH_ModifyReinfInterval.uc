@@ -5,8 +5,8 @@
 
 class DH_ModifyReinfInterval extends DH_ModifyActors;
 
-var()   ROSideIndex         TeamToModify;
-var()   int                 NewIntervalTime;
+var() ROSideIndex TeamToModify;
+var() int NewIntervalTime;
 
 event Trigger(Actor Other, Pawn EventInstigator)
 {
@@ -19,5 +19,3 @@ event Trigger(Actor Other, Pawn EventInstigator)
         G.SetReinforcementInterval(TeamToModify, NewIntervalTime);
     }
 }
-
-

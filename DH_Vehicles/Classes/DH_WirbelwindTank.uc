@@ -20,4 +20,3 @@ defaultproperties
     AmmoIgnitionProbability=0.2  // 0.75 default
     TurretDetonationThreshold=5000.0 // increased from 1750
 }
-

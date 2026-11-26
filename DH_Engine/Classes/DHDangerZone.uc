@@ -45,8 +45,7 @@ static function float GetIntensity(DHGameReplicationInfo GRI, float PointerX, fl
 
     for (i = 0; i < arraycount(GRI.DHObjectives); ++i)
     {
-        if (GRI.DHObjectives[i] == none ||
-            GRI.DHObjectives[i].BaseInfluenceModifier <= 0.0)
+        if (GRI.DHObjectives[i] == none || GRI.DHObjectives[i].BaseInfluenceModifier <= 0.0)
         {
             continue;
         }
@@ -54,7 +53,8 @@ static function float GetIntensity(DHGameReplicationInfo GRI, float PointerX, fl
         V1.X = GRI.DHObjectives[i].Location.X;
         V1.Y = GRI.DHObjectives[i].Location.Y;
 
-        Intensity = Class'UVector'.static.InverseSquareLaw(V1, V2) * FMax(0.0, GRI.DHObjectives[i].BaseInfluenceModifier);
+        Intensity = Class'UVector'.static.InverseSquareLaw(V1, V2)
+            * FMax(0.0, GRI.DHObjectives[i].BaseInfluenceModifier);
 
         if (GRI.DHObjectives[i].IsActive() || GRI.DHObjectives[i].IsOwnedByTeam(NEUTRAL_TEAM_INDEX))
         {
@@ -84,10 +84,10 @@ static function float GetIntensity(DHGameReplicationInfo GRI, float PointerX, fl
 
     for (i = 0; i < arraycount(GRI.SpawnPoints); ++i)
     {
-        if (GRI.SpawnPoints[i] == none ||
-            !GRI.SpawnPoints[i].bMainSpawn ||
-            !GRI.SpawnPoints[i].IsActive() ||
-            GRI.SpawnPoints[i].BaseInfluenceModifier <= 0.0)
+        if (GRI.SpawnPoints[i] == none
+            || !GRI.SpawnPoints[i].bMainSpawn
+            || !GRI.SpawnPoints[i].IsActive()
+            || GRI.SpawnPoints[i].BaseInfluenceModifier <= 0.0)
         {
             continue;
         }
@@ -95,7 +95,8 @@ static function float GetIntensity(DHGameReplicationInfo GRI, float PointerX, fl
         V1.X = GRI.SpawnPoints[i].Location.X;
         V1.Y = GRI.SpawnPoints[i].Location.Y;
 
-        Intensity = Class'UVector'.static.InverseSquareLaw(V1, V2) * FMax(0.0, GRI.SpawnPoints[i].BaseInfluenceModifier);
+        Intensity = Class'UVector'.static.InverseSquareLaw(V1, V2)
+            * FMax(0.0, GRI.SpawnPoints[i].BaseInfluenceModifier);
 
         switch (GRI.SpawnPoints[i].GetTeamIndex())
         {
@@ -111,10 +112,10 @@ static function float GetIntensity(DHGameReplicationInfo GRI, float PointerX, fl
 
     NeutralMagnitude = GRI.GetDangerZoneNeutral() / Max(NeutralCount, 1);
 
-    return TeamModifier *
-           (AxisIntensity * (GRI.GetDangerZoneBalance() + NeutralMagnitude) / Max(AxisCount, 1) -
-            AlliedIntensity * (256 - GRI.GetDangerZoneBalance() + NeutralMagnitude) / Max(AlliedCount, 1)) -
-           NeutralIntensity * NeutralMagnitude;
+    return TeamModifier
+        * (AxisIntensity * (GRI.GetDangerZoneBalance() + NeutralMagnitude) / Max(AxisCount, 1)
+            - AlliedIntensity * (256 - GRI.GetDangerZoneBalance() + NeutralMagnitude) / Max(AlliedCount, 1))
+        - NeutralIntensity * NeutralMagnitude;
 }
 
 static function bool IsIn(DHGameReplicationInfo GRI, float PointerX, float PointerY, byte TeamIndex)
@@ -276,15 +277,22 @@ static function array<Vector> GetContour(DHGameReplicationInfo GRI, byte TeamInd
             Mask += Normal[Class'UArray'.static.RavelIndices(i, j, Resolution)];
 
             CellCoords = static.IndicesToCoords(i, j, StepX, StepY, Origin);
-            VertexIndices = GetVertexIndices(i, j, Mask, static.IsIn(GRI, CellCoords.X + StepX / 2.0, CellCoords.Y - StepY / 2.0, TeamIndex));
+            VertexIndices = GetVertexIndices(
+                i,
+                j,
+                Mask,
+                static.IsIn(GRI, CellCoords.X + StepX / 2.0, CellCoords.Y - StepY / 2.0, TeamIndex)
+                );
 
             for (k = 0; k < VertexIndices.Length; ++k)
             {
-                Segments[Segments.Length] = GetInterpCoords(0,
-                                                            Intensity[Class'UArray'.static.RavelIndices(VertexIndices[k].X1, VertexIndices[k].Y1, Resolution)],
-                                                            Intensity[Class'UArray'.static.RavelIndices(VertexIndices[k].X2, VertexIndices[k].Y2, Resolution)],
-                                                            static.IndicesToCoords(VertexIndices[k].X1, VertexIndices[k].Y1, StepX, StepY, Origin),
-                                                            static.IndicesToCoords(VertexIndices[k].X2, VertexIndices[k].Y2, StepX, StepY, Origin));
+                Segments[Segments.Length] = GetInterpCoords(
+                    0,
+                    Intensity[Class'UArray'.static.RavelIndices(VertexIndices[k].X1, VertexIndices[k].Y1, Resolution)],
+                    Intensity[Class'UArray'.static.RavelIndices(VertexIndices[k].X2, VertexIndices[k].Y2, Resolution)],
+                    static.IndicesToCoords(VertexIndices[k].X1, VertexIndices[k].Y1, StepX, StepY, Origin),
+                    static.IndicesToCoords(VertexIndices[k].X2, VertexIndices[k].Y2, StepX, StepY, Origin)
+                    );
             }
         }
     }
@@ -318,8 +326,8 @@ static function array<Vector> GetContour(DHGameReplicationInfo GRI, byte TeamInd
             {
                 PairIndex = j + 1 - int(Ceil(j % 2.0)) * 2;
 
-                if (Segments[j].X ~= LineStringsX[i].Points[LineStringsX[i].Points.Length - 1].OutVal &&
-                    Segments[j].Y ~= LineStringsY[i].Points[LineStringsY[i].Points.Length - 1].OutVal)
+                if (Segments[j].X ~= LineStringsX[i].Points[LineStringsX[i].Points.Length - 1].OutVal
+                    && Segments[j].Y ~= LineStringsY[i].Points[LineStringsY[i].Points.Length - 1].OutVal)
                 {
                     LineStringsX[i].Points.Insert(LineStringsX[i].Points.Length, 1);
                     LineStringsX[i].Points[LineStringsX[i].Points.Length - 1].OutVal = Segments[PairIndex].X;
@@ -327,8 +335,8 @@ static function array<Vector> GetContour(DHGameReplicationInfo GRI, byte TeamInd
                     LineStringsY[i].Points.Insert(LineStringsY[i].Points.Length, 1);
                     LineStringsY[i].Points[LineStringsY[i].Points.Length - 1].OutVal = Segments[PairIndex].Y;
                 }
-                else if (Segments[j].X ~= LineStringsX[i].Points[0].OutVal &&
-                         Segments[j].Y ~= LineStringsY[i].Points[0].OutVal)
+                else if (Segments[j].X ~= LineStringsX[i].Points[0].OutVal
+                    && Segments[j].Y ~= LineStringsY[i].Points[0].OutVal)
                 {
                     LineStringsX[i].Points.Insert(0, 1);
                     LineStringsX[i].Points[0].OutVal = Segments[PairIndex].X;
@@ -349,7 +357,7 @@ static function array<Vector> GetContour(DHGameReplicationInfo GRI, byte TeamInd
                 Segments.Remove(j - int(Ceil(j % 2.0)), 2);
             }
         }
-        until(InitLength == LineStringsX[i].Points.Length)
+        until (InitLength == LineStringsX[i].Points.Length);
 
         ++i;
     }
@@ -373,8 +381,8 @@ static function array<Vector> GetContour(DHGameReplicationInfo GRI, byte TeamInd
         PointCount = LineStringsX[i].Points[LineStringsX[i].Points.Length - 1].InVal / PointInterval;
         AdjustedPointInterval = LineStringsX[i].Points[LineStringsX[i].Points.Length - 1].InVal / PointCount;
 
-        if (LineStringsX[i].Points[0].OutVal ~= LineStringsX[i].Points[LineStringsX[i].Points.Length - 1].OutVal &&
-            LineStringsY[i].Points[0].OutVal ~= LineStringsY[i].Points[LineStringsX[i].Points.Length - 1].OutVal)
+        if (LineStringsX[i].Points[0].OutVal ~= LineStringsX[i].Points[LineStringsX[i].Points.Length - 1].OutVal
+            && LineStringsY[i].Points[0].OutVal ~= LineStringsY[i].Points[LineStringsX[i].Points.Length - 1].OutVal)
         {
             --PointCount;
         }

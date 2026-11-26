@@ -5,7 +5,7 @@
 
 class DHAdmin extends AdminIni;
 
-function DoLoginSilent( string Username, string Password)
+function DoLoginSilent(string Username, string Password)
 {
     if (Level.Game.AccessControl.AdminLoginSilent(Outer, Username, Password))
     {

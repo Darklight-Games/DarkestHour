@@ -5,30 +5,30 @@
 
 class DH_ParachuteStaticLine extends Weapon;
 
-var bool    bChuteDeployed;
-var Sound   DeploySound;
+var bool bChuteDeployed;
+var Sound DeploySound;
 
 // Functions emptied out or returning false, as parachute isn't a real weapon
-simulated function Fire(float F) {return;}
-simulated event ClientStartFire(int Mode) {return;}
-simulated event StopFire(int Mode) {return;}
-simulated function bool IsFiring() {return false;}
-function bool FillAmmo() {return false;}
-function bool ResupplyAmmo() {return false;}
-exec simulated function ROManualReload() {return;}
-simulated function bool IsBusy() {return false;} // not busy in the idle state because we never fire
-simulated function bool ShouldUseFreeAim() {return false;}
+simulated function Fire(float F);
+simulated event ClientStartFire(int Mode);
+simulated event StopFire(int Mode);
+simulated function bool IsFiring();
+function bool FillAmmo();
+function bool ResupplyAmmo();
+exec simulated function ROManualReload();
+simulated function bool IsBusy(); // not busy in the idle state because we never fire
+simulated function bool ShouldUseFreeAim();
 
 simulated state RaisingWeapon
 {
-    simulated function BeginState() {return;}
-    simulated function EndState() {return;}
+    simulated function BeginState();
+    simulated function EndState();
 }
 
 simulated state LoweringWeapon
 {
-    simulated function BeginState() {return;}
-    simulated function EndState() {return;}
+    simulated function BeginState();
+    simulated function EndState();
 }
 
 // Modified (from DH 5.1) to stop most stuff happening on net client, to avoid "accessed none" errors, & to play appropriate landing sound based on surface we land on
@@ -63,8 +63,9 @@ simulated function Tick(float DeltaTime)
     {
         // Keep trying to switch to the parachute item, as the current weapon ignores PutDown while it is busy (e.g.
         // sprinting or reloading), so a single attempt can be lost. Only done where the switch is driven from.
-        if (Instigator.IsLocallyControlled() && DH_ParachuteItem(Instigator.Weapon) == none &&
-            (Instigator.Weapon == none || Instigator.Weapon.IsInState('Idle')))
+        if (Instigator.IsLocallyControlled()
+            && DH_ParachuteItem(Instigator.Weapon) == none
+            && (Instigator.Weapon == none || Instigator.Weapon.IsInState('Idle')))
         {
             Instigator.SwitchWeapon(12);
         }
@@ -238,10 +239,7 @@ simulated function AnimEnd(int Channel)
 }
 
 // Modified to prevent sprinting as it interrupts the parachute un/deploy animation
-simulated function bool WeaponAllowSprint()
-{
-    return false;
-}
+simulated function bool WeaponAllowSprint();
 
 defaultproperties
 {

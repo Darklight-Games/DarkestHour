@@ -13,4 +13,3 @@ defaultproperties
     Damage=50.0
     MyDamageType=Class'DH_BerettaM1934DamType'
 }
-

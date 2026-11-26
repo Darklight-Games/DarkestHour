@@ -325,7 +325,7 @@ private static function TreeMapNode_Object_float PutStatic(TreeMap_Object_float 
 
         return RotateRight(Node);
     }
-    else if (Balance  < -1 && D.RecursiveKeyString < Node.RHS.KeyString)
+    else if (Balance < -1 && D.RecursiveKeyString < Node.RHS.KeyString)
     {
         Node.RHS = RotateRight(Node.RHS);
 
@@ -334,4 +334,3 @@ private static function TreeMapNode_Object_float PutStatic(TreeMap_Object_float 
 
     return Node;
 }
-

@@ -4,7 +4,7 @@
 //==============================================================================
 
 class DHObjective extends ROObjTerritory
-    hidecategories(Assault,GameObjective,JumpDest,JumpSpot,MothershipHack)
+    hidecategories(Assault, GameObjective, JumpDest, JumpSpot, MothershipHack)
     placeable;
 
 enum EObjectiveOperation
@@ -13,7 +13,7 @@ enum EObjectiveOperation
     EOO_Deactivate,
     EOO_Toggle,
     EOO_Lock,
-    EOO_Unlock
+    EOO_Unlock,
 };
 
 enum ESpawnPointOperation
@@ -22,7 +22,7 @@ enum ESpawnPointOperation
     ESPO_Disable,
     ESPO_Toggle,
     ESPO_Lock,
-    ESPO_Unlock
+    ESPO_Unlock,
 };
 
 enum EVehiclePoolOperation
@@ -33,7 +33,7 @@ enum EVehiclePoolOperation
     EVPO_MaxSpawnsAdd,
     EVPO_MaxSpawnsSet,
     EVPO_MaxActiveAdd,
-    EVPO_MaxActiveSet
+    EVPO_MaxActiveSet,
 };
 
 struct SpawnPointAction
@@ -57,108 +57,108 @@ struct ObjOperationAction
 };
 
 // Territory variables
-var(ROObjTerritory) bool            bUseHardBaseRate;           // Tells the capture rate to always be the base value, so we can have consistent capture times
+var(ROObjTerritory) bool bUseHardBaseRate; // Tells the capture rate to always be the base value, so we can have consistent capture times
 
 // Basic Obj variables
-var(ROObjective) bool               bIsInitiallyActive;         // Purpose is mainly to consolidate the variables of actors into one area (less confusing to new levelers)
-var(ROObjective) name               NoArtyVolumeProtectionTag;  // optional Tag for associated no arty volume that protects this SP only when the SP is active
+var(ROObjective) bool bIsInitiallyActive; // Purpose is mainly to consolidate the variables of actors into one area (less confusing to new levelers)
+var(ROObjective) name NoArtyVolumeProtectionTag; // optional Tag for associated no arty volume that protects this SP only when the SP is active
 
 // Objective Spawn variables
-var(DHObjectiveSpawn) name          SpawnPointHintTags[2];          // Tags of hints for obj spawns (0 = Axis, 1 = Allies)
-var(DHObjectiveSpawn) name          VehicleSpawnPointHintTags[2];   // Tags of hints for vehicle obj spawns (0 = Axis, 1 = Allies)
-var DHSpawnPoint_Objective          SpawnPoint;                     // Reference to the attached DHSpawnPoint_Objective if one exists
+var(DHObjectiveSpawn) name SpawnPointHintTags[2]; // Tags of hints for obj spawns (0 = Axis, 1 = Allies)
+var(DHObjectiveSpawn) name VehicleSpawnPointHintTags[2]; // Tags of hints for vehicle obj spawns (0 = Axis, 1 = Allies)
+var DHSpawnPoint_Objective SpawnPoint; // Reference to the attached DHSpawnPoint_Objective if one exists
 
 // Capture/Actions variables
-var(DHObjectiveCapture) bool        bLockDownOnCapture;
-var(DHObjectiveCapture) bool        bUsePostCaptureOperations;  // Enables below variables to be used for post capture clear check/calls
-var(DHObjectiveCapture) bool        bSetInactiveOnCapture;      // Simliar to bRecaptureable, but doesn't disable timer, just sets to inactive (bRecaptureable must = true)
-var(DHObjectiveCapture) bool        bNeutralizeBeforeCapture;   // if this is true the objective will neutralize first (then can be captured by either team)
-var(DHObjectiveCapture) int         PreventCaptureTime;         // time to prevent capture after the objective is activated
-var(DHObjectiveCapture) int         LockDownOnCaptureTime;      // time to prevent capture after the objective is captured
-var(DHObjectiveCapture) int         AlliesAddedLockDown;        // added time to lock down if Allies take the objective
-var(DHObjectiveCapture) int         AxisAddedLockDown;          // added time to lock down if Axis takle the objective
-var(DHObjectiveCapture) bool        bNeutralOnActivation;       // Should this capture be neutral when it is activated
-var(DHObjectiveCapture) bool        bLockDownNeverControlled;   // Lock objectives on capture regardless of whether they were recently controlled or not
-var(DHObjectiveCapture) bool        bGroupActionsAtDisable;
+var(DHObjectiveCapture) bool bLockDownOnCapture;
+var(DHObjectiveCapture) bool bUsePostCaptureOperations; // Enables below variables to be used for post capture clear check/calls
+var(DHObjectiveCapture) bool bSetInactiveOnCapture; // Simliar to bRecaptureable, but doesn't disable timer, just sets to inactive (bRecaptureable must = true)
+var(DHObjectiveCapture) bool bNeutralizeBeforeCapture; // if this is true the objective will neutralize first (then can be captured by either team)
+var(DHObjectiveCapture) int PreventCaptureTime; // time to prevent capture after the objective is activated
+var(DHObjectiveCapture) int LockDownOnCaptureTime; // time to prevent capture after the objective is captured
+var(DHObjectiveCapture) int AlliesAddedLockDown; // added time to lock down if Allies take the objective
+var(DHObjectiveCapture) int AxisAddedLockDown; // added time to lock down if Axis takle the objective
+var(DHObjectiveCapture) bool bNeutralOnActivation; // Should this capture be neutral when it is activated
+var(DHObjectiveCapture) bool bLockDownNeverControlled; // Lock objectives on capture regardless of whether they were recently controlled or not
+var(DHObjectiveCapture) bool bGroupActionsAtDisable;
 
 // Requirements
-var(DHObjectiveRequirements) array<name>    AxisRequiredObjTagForCapture;       // ObjTag
-var(DHObjectiveRequirements) array<name>    AlliesRequiredObjTagForCapture;     // ObjTag
-var(DHObjectiveRequirements) array<int>     AxisRequiredObjForCapture;          // TODO: Once a lot of levels are using the tag system, make this variable un(configuratable)
-var(DHObjectiveRequirements) array<int>     AlliesRequiredObjForCapture;        // TODO: Once a lot of levels are using the tag system, make this variable un(configuratable)
-var(DHObjectiveRequirements) int            PlayersNeededToCapture;
-var(DHObjectiveRequirements) bool           bVehiclesCanCapture;
-var(DHObjectiveRequirements) bool           bTankersCanCapture;
+var(DHObjectiveRequirements) array<name> AxisRequiredObjTagForCapture; // ObjTag
+var(DHObjectiveRequirements) array<name> AlliesRequiredObjTagForCapture; // ObjTag
+var(DHObjectiveRequirements) array<int> AxisRequiredObjForCapture; // TODO: Once a lot of levels are using the tag system, make this variable un(configuratable)
+var(DHObjectiveRequirements) array<int> AlliesRequiredObjForCapture; // TODO: Once a lot of levels are using the tag system, make this variable un(configuratable)
+var(DHObjectiveRequirements) int PlayersNeededToCapture;
+var(DHObjectiveRequirements) bool bVehiclesCanCapture;
+var(DHObjectiveRequirements) bool bTankersCanCapture;
 
 // Clear variables
-var(DHObjectiveClear) bool          bSetInactiveOnClear;        // Sets the objective inactive when cleared
-var(DHObjectiveClear) bool          bDisableWhenAlliesClearObj;
-var(DHObjectiveClear) bool          bDisableWhenAxisClearObj;
+var(DHObjectiveClear) bool bSetInactiveOnClear; // Sets the objective inactive when cleared
+var(DHObjectiveClear) bool bDisableWhenAlliesClearObj;
+var(DHObjectiveClear) bool bDisableWhenAxisClearObj;
 
 // Visual variables
-var(DHObjectiveVisual) bool         bHideOnMap;
-var(DHObjectiveVisual) bool         bHideOnMapWhenInactive;
-var(DHObjectiveVisual) bool         bHideLabelWhenInactive;
+var(DHObjectiveVisual) bool bHideOnMap;
+var(DHObjectiveVisual) bool bHideOnMapWhenInactive;
+var(DHObjectiveVisual) bool bHideLabelWhenInactive;
 
 // Award variables
-var(DHObjectiveAwards) int          AlliedAwardedReinforcements;// Amount of reinforcement to award for allies if the obj is captured
-var(DHObjectiveAwards) int          AxisAwardedReinforcements;  // Amount of reinforcement to award for axis if the obj is captured
-var(DHObjectiveAwards) int          MinutesAwarded;             // Time in minutes awarded to round time when objective is captured
-var(DHObjectiveAwards) int          AlliedOwnedAttritionRate;   // Rate of Axis Attrition when Allies control this objective
-var(DHObjectiveAwards) int          AxisOwnedAttritionRate;     // Rate of Allies Attrition when Axis control this objective
+var(DHObjectiveAwards) int AlliedAwardedReinforcements; // Amount of reinforcement to award for allies if the obj is captured
+var(DHObjectiveAwards) int AxisAwardedReinforcements; // Amount of reinforcement to award for axis if the obj is captured
+var(DHObjectiveAwards) int MinutesAwarded; // Time in minutes awarded to round time when objective is captured
+var(DHObjectiveAwards) int AlliedOwnedAttritionRate; // Rate of Axis Attrition when Allies control this objective
+var(DHObjectiveAwards) int AxisOwnedAttritionRate; // Rate of Allies Attrition when Axis control this objective
 
 // Non configurable variables
-var     bool                        bCheckIfAxisCleared;
-var     bool                        bCheckIfAlliesCleared;
-var     bool                        bIsLocked;
-var     bool                        bDidAwardAxisReinf;
-var     bool                        bDidAwardAlliesReinf;
-var     bool                        bRecentlyControlledByAxis;
-var     bool                        bRecentlyControlledByAllies;
-var     float                       AwardedReinforcementFactor;
+var bool bCheckIfAxisCleared;
+var bool bCheckIfAlliesCleared;
+var bool bIsLocked;
+var bool bDidAwardAxisReinf;
+var bool bDidAwardAlliesReinf;
+var bool bRecentlyControlledByAxis;
+var bool bRecentlyControlledByAllies;
+var float AwardedReinforcementFactor;
 
 // Replicated variables
-var     int                         UnfreezeTime;               // The time at which the objective will be unlocked and ready to be capured again, relative to GRI.ElapsedTime
+var int UnfreezeTime; // The time at which the objective will be unlocked and ready to be capured again, relative to GRI.ElapsedTime
 
 // Capture operations (after capture)
-var(DH_CaptureActions)      array<ObjOperationAction>   AlliesCaptureObjActions;
-var(DH_CaptureActions)      array<ObjOperationAction>   AxisCaptureObjActions;
-var(DH_CaptureActions)      array<SpawnPointAction>     AlliesCaptureSpawnPointActions;
-var(DH_CaptureActions)      array<SpawnPointAction>     AxisCaptureSpawnPointActions;
-var(DH_CaptureActions)      array<VehiclePoolAction>    AlliesCaptureVehiclePoolActions;
-var(DH_CaptureActions)      array<VehiclePoolAction>    AxisCaptureVehiclePoolActions;
-var(DH_CaptureActions)      array<name>                 AlliesCaptureEvents;
-var(DH_CaptureActions)      array<name>                 AxisCaptureEvents;
+var(DH_CaptureActions) array<ObjOperationAction> AlliesCaptureObjActions;
+var(DH_CaptureActions) array<ObjOperationAction> AxisCaptureObjActions;
+var(DH_CaptureActions) array<SpawnPointAction> AlliesCaptureSpawnPointActions;
+var(DH_CaptureActions) array<SpawnPointAction> AxisCaptureSpawnPointActions;
+var(DH_CaptureActions) array<VehiclePoolAction> AlliesCaptureVehiclePoolActions;
+var(DH_CaptureActions) array<VehiclePoolAction> AxisCaptureVehiclePoolActions;
+var(DH_CaptureActions) array<name> AlliesCaptureEvents;
+var(DH_CaptureActions) array<name> AxisCaptureEvents;
 
 // Post capture cleared operations (after capture and cleared of enemies)
-var(DH_ClearedActions)      array<ObjOperationAction>   AlliesClearedCaptureObjActions;
-var(DH_ClearedActions)      array<ObjOperationAction>   AxisClearedCaptureObjActions;
-var(DH_ClearedActions)      array<SpawnPointAction>     AlliesClearedCaptureSpawnPointActions;
-var(DH_ClearedActions)      array<SpawnPointAction>     AxisClearedCaptureSpawnPointActions;
-var(DH_ClearedActions)      array<VehiclePoolAction>    AlliesClearedCaptureVehiclePoolActions;
-var(DH_ClearedActions)      array<VehiclePoolAction>    AxisClearedCaptureVehiclePoolActions;
-var(DH_ClearedActions)      array<name>                 AlliesClearedCaptureEvents;
-var(DH_ClearedActions)      array<name>                 AxisClearedCaptureEvents;
+var(DH_ClearedActions) array<ObjOperationAction> AlliesClearedCaptureObjActions;
+var(DH_ClearedActions) array<ObjOperationAction> AxisClearedCaptureObjActions;
+var(DH_ClearedActions) array<SpawnPointAction> AlliesClearedCaptureSpawnPointActions;
+var(DH_ClearedActions) array<SpawnPointAction> AxisClearedCaptureSpawnPointActions;
+var(DH_ClearedActions) array<VehiclePoolAction> AlliesClearedCaptureVehiclePoolActions;
+var(DH_ClearedActions) array<VehiclePoolAction> AxisClearedCaptureVehiclePoolActions;
+var(DH_ClearedActions) array<name> AlliesClearedCaptureEvents;
+var(DH_ClearedActions) array<name> AxisClearedCaptureEvents;
 
 // Grouped capture operations (these will need to be the same in each grouped objective, unless you desire different actions based on the last captured grouped objective)
-var(DH_GroupedActions)      array<int>                  GroupedObjectiveReliances; // array of Objective Nums this objective is grouped with (doesn't need to list itself)
-var(DH_GroupedActions)      array<name>                 GroupedObjectiveReliancesTags;  // TODO: populate above array based on tag lookups
-var(DH_GroupedActions)      array<ObjOperationAction>   AlliesCaptureGroupObjActions;
-var(DH_GroupedActions)      array<ObjOperationAction>   AxisCaptureGroupObjActions;
-var(DH_GroupedActions)      array<SpawnPointAction>     AlliesGroupSpawnPointActions;
-var(DH_GroupedActions)      array<SpawnPointAction>     AxisGroupSpawnPointActions;
-var(DH_GroupedActions)      array<VehiclePoolAction>    AlliesGroupVehiclePoolActions;
-var(DH_GroupedActions)      array<VehiclePoolAction>    AxisGroupVehiclePoolActions;
-var(DH_GroupedActions)      array<name>                 AlliesGroupCaptureEvents;
-var(DH_GroupedActions)      array<name>                 AxisGroupCaptureEvents;
+var(DH_GroupedActions) array<int> GroupedObjectiveReliances; // array of Objective Nums this objective is grouped with (doesn't need to list itself)
+var(DH_GroupedActions) array<name> GroupedObjectiveReliancesTags; // TODO: populate above array based on tag lookups
+var(DH_GroupedActions) array<ObjOperationAction> AlliesCaptureGroupObjActions;
+var(DH_GroupedActions) array<ObjOperationAction> AxisCaptureGroupObjActions;
+var(DH_GroupedActions) array<SpawnPointAction> AlliesGroupSpawnPointActions;
+var(DH_GroupedActions) array<SpawnPointAction> AxisGroupSpawnPointActions;
+var(DH_GroupedActions) array<VehiclePoolAction> AlliesGroupVehiclePoolActions;
+var(DH_GroupedActions) array<VehiclePoolAction> AxisGroupVehiclePoolActions;
+var(DH_GroupedActions) array<name> AlliesGroupCaptureEvents;
+var(DH_GroupedActions) array<name> AxisGroupCaptureEvents;
 
 // New group system
-var()       name             ObjectiveGroupTag;
-var         DHObjectiveGroup ObjectiveGroup;
+var() name ObjectiveGroupTag;
+var DHObjectiveGroup ObjectiveGroup;
 
 // Replication
-var                         EObjectiveState             OldObjState;
-var                         bool                        bOldActive;
+var EObjectiveState OldObjState;
+var bool bOldActive;
 
 // Danger zone
 var(DHDangerZone) float BaseInfluenceModifier;
@@ -169,8 +169,8 @@ var private float InitialBaseInfluenceModifier;
 var private float InitialAxisInfluenceModifier;
 var private float InitialAlliesInfluenceModifier;
 var private float InitialNeutralInfluenceModifier;
-var private int         OldInfluenceReplicationCounter;
-var private int         InfluenceReplicationCounter;
+var private int OldInfluenceReplicationCounter;
+var private int InfluenceReplicationCounter;
 
 // Team capture variable
 var() enum ETeamCapture
@@ -184,16 +184,16 @@ replication
 {
     // Variables the server will replicate to all clients
     reliable if (bNetDirty && Role == ROLE_Authority)
-        UnfreezeTime, InfluenceReplicationCounter, BaseInfluenceModifier,
-        AxisInfluenceModifier, AlliesInfluenceModifier, NeutralInfluenceModifier;
+        UnfreezeTime, InfluenceReplicationCounter, BaseInfluenceModifier, AxisInfluenceModifier,
+        AlliesInfluenceModifier, NeutralInfluenceModifier;
 }
 
 simulated function PostBeginPlay()
 {
     local DHGameReplicationInfo GRI;
-    local RONoArtyVolume        NAV;
-    local DHObjectiveGroup      ObjectiveGroupFound;
-    local DarkestHourGame       G;
+    local RONoArtyVolume NAV;
+    local DHObjectiveGroup ObjectiveGroupFound;
+    local DarkestHourGame G;
 
     // Call super above ROObjective
     super(GameObjective).PostBeginPlay();
@@ -241,14 +241,20 @@ simulated function PostBeginPlay()
             // a missing objective is a hell of a lot more noticeable than a slightly misbehaving objective.
             if (ObjNum >= arraycount(G.DHObjectives))
             {
-                Warn("BAD OBJECTIVE!!! The objective \"" $ GetHumanReadableName() $ "\" has an invalid ObjNum of" @ ObjNum $ "! ObjNum must be between 0 and" @ (arraycount(G.DHObjectives) - 1) @ "(inclusive)");
+                Warn(
+                    "BAD OBJECTIVE!!! The objective \"" $ GetHumanReadableName() $ "\" has an invalid ObjNum of"
+                        @ ObjNum $ "! ObjNum must be between 0 and" @ (arraycount(G.DHObjectives) - 1) @ "(inclusive)"
+                    );
                 Destroy();
                 return;
             }
 
             if (G.DHObjectives[ObjNum] != none)
             {
-                Warn("BAD OBJECTIVE!!! The objective \"" $ GetHumanReadableName() $ "\" has an identical ObjNum value as objective" @ G.DHObjectives[ObjNum].ObjectiveName);
+                Warn(
+                    "BAD OBJECTIVE!!! The objective \"" $ GetHumanReadableName()
+                        $ "\" has an identical ObjNum value as objective" @ G.DHObjectives[ObjNum].ObjectiveName
+                    );
                 Destroy();
                 return;
             }
@@ -424,8 +430,10 @@ function DoObjectiveAction(ObjOperationAction OOA)
     if (OOA.ObjectiveTag != '')
     {
         if (!GRI.DHObjectiveTable.Get(string(OOA.ObjectiveTag), ObjIndex)) // This gets the objective's index by tag, and sets it as ObjIndex
-        {   // if it returns false, then return out of function as something went wrong
-            Warn("Something went wrong in getting objective index by tag from table in DHObjective.DoObjectiveAction()");
+        { // if it returns false, then return out of function as something went wrong
+            Warn(
+                "Something went wrong in getting objective index by tag from table in DHObjective.DoObjectiveAction()"
+                );
             return;
         }
     }
@@ -466,7 +474,7 @@ function HandleGroupActions(int Team)
 {
     local DarkesthourGame DHGame;
     local bool bGroupedObjNotSame;
-    local int  i;
+    local int i;
 
     DHGame = DarkesthourGame(Level.Game);
 
@@ -544,7 +552,7 @@ function HandleGroupActions(int Team)
     }
 }
 
-function GetCapturingControllers(int Teamindex, out array<Controller> Controllers)
+function GetCapturingControllers(int TeamIndex, out array<Controller> Controllers)
 {
     local Controller C;
     local Pawn P;
@@ -584,7 +592,11 @@ function GetCapturingControllers(int Teamindex, out array<Controller> Controller
             RI = DHRoleInfo(PRI.RoleInfo);
         }
 
-        if (!C.bIsPlayer || P == none || !WithinArea(P) || C.PlayerReplicationInfo.Team == none || C.PlayerReplicationInfo.Team.TeamIndex != TeamIndex)
+        if (!C.bIsPlayer
+            || P == none
+            || !WithinArea(P)
+            || C.PlayerReplicationInfo.Team == none
+            || C.PlayerReplicationInfo.Team.TeamIndex != TeamIndex)
         {
             continue;
         }
@@ -600,12 +612,12 @@ function GetCapturingControllers(int Teamindex, out array<Controller> Controller
 
 function HandleCompletion(PlayerReplicationInfo CompletePRI, int Team)
 {
-    local DarkestHourGame           G;
-    local int                       i;
-    local array<string>             PlayerIDs;
-    local int                       RoundTime, AwardedReinf;
-    local int                       NumTotal[2], Num[2], NumForCheck[2];
-    local array<Controller>         CapturingControllers;
+    local DarkestHourGame G;
+    local int i;
+    local array<string> PlayerIDs;
+    local int RoundTime, AwardedReinf;
+    local int NumTotal[2], Num[2], NumForCheck[2];
+    local array<Controller> CapturingControllers;
 
     CurrentCapProgress = 0.0;
 
@@ -641,24 +653,27 @@ function HandleCompletion(PlayerReplicationInfo CompletePRI, int Team)
 
     for (i = 0; i < CapturingControllers.Length; ++i)
     {
-        DarkestHourGame(Level.Game).SendScoreEvent(CapturingControllers[i], Class'DHScoreEvent_ObjectiveCapture'.static.Create());
+        DarkestHourGame(Level.Game).SendScoreEvent(
+            CapturingControllers[i],
+            Class'DHScoreEvent_ObjectiveCapture'.static.Create()
+            );
 
         if (PlayerController(CapturingControllers[i]) != none)
         {
-             PlayerIDs[PlayerIDs.Length] = PlayerController(CapturingControllers[i]).GetPlayerIDHash();
+            PlayerIDs[PlayerIDs.Length] = PlayerController(CapturingControllers[i]).GetPlayerIDHash();
         }
     }
 
     if (G.Metrics != none)
     {
-        RoundTime = Level.Game.GameReplicationInfo.ElapsedTime -  Level.Game.GameReplicationInfo.RoundStartTime;
+        RoundTime = Level.Game.GameReplicationInfo.ElapsedTime - Level.Game.GameReplicationInfo.RoundStartTime;
         G.Metrics.OnObjectiveCaptured(ObjNum, Team, RoundTime, PlayerIDs);
     }
 
     // Award round time
     if (MinutesAwarded != 0 && !bUsePostCaptureOperations)
     {
-        G.ModifyRoundTime(MinutesAwarded*60, 0);
+        G.ModifyRoundTime(MinutesAwarded * 60, 0);
     }
 
     switch (Team)
@@ -677,13 +692,18 @@ function HandleCompletion(PlayerReplicationInfo CompletePRI, int Team)
                 if (AxisAwardedReinforcements >= 0)
                 {
                     G.ModifyReinforcements(AXIS_TEAM_INDEX, AxisAwardedReinforcements);
-                    Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, AXIS_TEAM_INDEX, Class'DHReinforcementAwardMsg', AxisAwardedReinforcements, none, none, self);
+                    Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                        Level, AXIS_TEAM_INDEX, Class'DHReinforcementAwardMsg', AxisAwardedReinforcements, none, none,
+                        self
+                        );
                 }
                 else
                 {
                     AwardedReinf = int(G.GetNumPlayers() * AwardedReinforcementFactor);
                     G.ModifyReinforcements(AXIS_TEAM_INDEX, AwardedReinf);
-                    Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, AXIS_TEAM_INDEX, Class'DHReinforcementAwardMsg', AwardedReinf, none, none, self);
+                    Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                        Level, AXIS_TEAM_INDEX, Class'DHReinforcementAwardMsg', AwardedReinf, none, none, self
+                        );
                 }
             }
 
@@ -713,7 +733,7 @@ function HandleCompletion(PlayerReplicationInfo CompletePRI, int Team)
             // Do a check for the post capture clear system
             if (bUsePostCaptureOperations)
             {
-                bCheckIfAxisCleared = false;  // stop checking for when Axis are cleared (supports recapturable objectives)
+                bCheckIfAxisCleared = false; // stop checking for when Axis are cleared (supports recapturable objectives)
                 bCheckIfAlliesCleared = true; // begin checking for when Allies are cleared
             }
 
@@ -738,13 +758,18 @@ function HandleCompletion(PlayerReplicationInfo CompletePRI, int Team)
                 if (AlliedAwardedReinforcements >= 0)
                 {
                     G.ModifyReinforcements(ALLIES_TEAM_INDEX, AlliedAwardedReinforcements);
-                    Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, ALLIES_TEAM_INDEX, Class'DHReinforcementAwardMsg', AlliedAwardedReinforcements, none, none, self);
+                    Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                        Level, ALLIES_TEAM_INDEX, Class'DHReinforcementAwardMsg', AlliedAwardedReinforcements, none,
+                        none, self
+                        );
                 }
                 else
                 {
                     AwardedReinf = int(G.GetNumPlayers() * AwardedReinforcementFactor);
                     G.ModifyReinforcements(ALLIES_TEAM_INDEX, AwardedReinf);
-                    Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, ALLIES_TEAM_INDEX, Class'DHReinforcementAwardMsg', AwardedReinf, none, none, self);
+                    Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                        Level, ALLIES_TEAM_INDEX, Class'DHReinforcementAwardMsg', AwardedReinf, none, none, self
+                        );
                 }
             }
 
@@ -775,7 +800,7 @@ function HandleCompletion(PlayerReplicationInfo CompletePRI, int Team)
             if (bUsePostCaptureOperations)
             {
                 bCheckIfAlliesCleared = false; // stop checking for when Allies are cleared (supports recapturable objectives)
-                bCheckIfAxisCleared = true;    // begin checking for when Axis are cleared
+                bCheckIfAxisCleared = true; // begin checking for when Axis are cleared
             }
 
             if (!bGroupActionsAtDisable)
@@ -787,13 +812,17 @@ function HandleCompletion(PlayerReplicationInfo CompletePRI, int Team)
     }
 
     // Broadcast the objective capture messages (sound + message)
-    if (bUsePostCaptureOperations) //Is using clear system
+    if (bUsePostCaptureOperations) // Is using clear system
     {
-        if (HasEnemiesPresent() || (bDisableWhenAxisClearObj && Team == ALLIES_TEAM_INDEX) || (bDisableWhenAlliesClearObj && Team == AXIS_TEAM_INDEX))
+        if (HasEnemiesPresent()
+            || (bDisableWhenAxisClearObj && Team == ALLIES_TEAM_INDEX)
+            || (bDisableWhenAlliesClearObj && Team == AXIS_TEAM_INDEX))
         {
             // If enemies are present in a clear objective, it will still be active, so broadcast capture
             // If the obj is set to disable when a team clears it, then check to make sure its not the opposite team
-            BroadcastLocalizedMessage(Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(1, Team), none, none, self);
+            BroadcastLocalizedMessage(
+                Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(1, Team), none, none, self
+                );
         }
         else if (!HasEnemiesPresent())
         {
@@ -803,7 +832,9 @@ function HandleCompletion(PlayerReplicationInfo CompletePRI, int Team)
 
             if (bActive && !HandleClearedLogic(NumForCheck))
             {
-                BroadcastLocalizedMessage(Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(1, Team), none, none, self);
+                BroadcastLocalizedMessage(
+                    Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(1, Team), none, none, self
+                    );
             }
         }
         // Otherwise don't inform that it was captured, as timer will handle notification from here
@@ -812,15 +843,21 @@ function HandleCompletion(PlayerReplicationInfo CompletePRI, int Team)
     {
         if (bActive && IsNeutral())
         {
-            BroadcastLocalizedMessage(Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(0, Team), none, none, self);
+            BroadcastLocalizedMessage(
+                Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(0, Team), none, none, self
+                );
         }
         else if (bActive)
         {
-            BroadcastLocalizedMessage(Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(1, Team), none, none, self);
+            BroadcastLocalizedMessage(
+                Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(1, Team), none, none, self
+                );
         }
         else
         {
-            BroadcastLocalizedMessage(Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(2, Team), none, none, self);
+            BroadcastLocalizedMessage(
+                Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(2, Team), none, none, self
+                );
         }
     }
 }
@@ -834,20 +871,29 @@ function bool HasEnemiesPresent()
     return PlayerNums[int(!bool(ObjState))] > 0;
 }
 
-function GetPlayersInObjective(out int PlayerNums[2], optional out int TeamTotals[2], optional out int PlayerCheckNums[2])
+function GetPlayersInObjective(
+    out int PlayerNums[2],
+    optional out int TeamTotals[2],
+    optional out int PlayerCheckNums[2]
+    )
 {
-    local Controller                C;
-    local DHPlayerReplicationInfo   PRI;
-    local DHRoleInfo                RI;
-    local ROVehicle                 ROVeh;
-    local ROVehicleWeaponPawn       VehWepPawn;
+    local Controller C;
+    local DHPlayerReplicationInfo PRI;
+    local DHRoleInfo RI;
+    local ROVehicle ROVeh;
+    local ROVehicleWeaponPawn VehWepPawn;
 
     // Loop through Controller list & determine how many players from each team are inside the attached volume, or if there is no volume, within the Radius that was set
     for (C = Level.ControllerList; C != none; C = C.NextController)
     {
-        if (C.bIsPlayer && C.PlayerReplicationInfo.Team != none && ((ROPlayer(C) != none && ROPlayer(C).GetRoleInfo() != none) || ROBot(C) != none))
+        if (C.bIsPlayer
+            && C.PlayerReplicationInfo.Team != none
+            && ((ROPlayer(C) != none && ROPlayer(C).GetRoleInfo() != none) || ROBot(C) != none))
         {
-            if (C.Pawn != none && C.Pawn.Health > 0 && WithinArea(C.Pawn) && (TeamCanCapture == TEAM_Both || TeamCanCapture == C.GetTeamNum()))
+            if (C.Pawn != none
+                && C.Pawn.Health > 0
+                && WithinArea(C.Pawn)
+                && (TeamCanCapture == TEAM_Both || TeamCanCapture == C.GetTeamNum()))
             {
                 ROVeh = ROVehicle(C.Pawn);
                 VehWepPawn = ROVehicleWeaponPawn(C.Pawn);
@@ -858,7 +904,8 @@ function GetPlayersInObjective(out int PlayerNums[2], optional out int TeamTotal
                     RI = DHRoleInfo(PRI.RoleInfo);
                 }
 
-                if ((!bTankersCanCapture && RI != none && RI.bCanBeTankCrew) || (!bVehiclesCanCapture && (ROVeh != none || VehWepPawn != none)))
+                if ((!bTankersCanCapture && RI != none && RI.bCanBeTankCrew)
+                    || (!bVehiclesCanCapture && (ROVeh != none || VehWepPawn != none)))
                 {
                     continue;
                 }
@@ -957,7 +1004,9 @@ function bool HandleClearedLogic(int NumForCheck[2])
                 CurrentCapProgress = 0.0;
                 SetActive(false);
                 DisableCapBarsForThisObj();
-                BroadcastLocalizedMessage(Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(2, int(ObjState)), none, none, self);
+                BroadcastLocalizedMessage(
+                    Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(2, int(ObjState)), none, none, self
+                    );
 
                 // Award time as the objective was cleared and objective is inactive
                 if (MinutesAwarded != 0)
@@ -973,7 +1022,9 @@ function bool HandleClearedLogic(int NumForCheck[2])
                 SetActive(false);
                 SetTimer(0.0, false); // Disable the objective (not just set inactive, it is not meant to be enabled again until reset)
                 DisableCapBarsForThisObj();
-                BroadcastLocalizedMessage(Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(2, int(ObjState)), none, none, self);
+                BroadcastLocalizedMessage(
+                    Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(2, int(ObjState)), none, none, self
+                    );
 
                 // Award time as the objective was cleared and objective is disabled
                 if (MinutesAwarded != 0)
@@ -986,7 +1037,9 @@ function bool HandleClearedLogic(int NumForCheck[2])
             else if (!bRecaptureable)
             {
                 SetTimer(0.0, false);
-                BroadcastLocalizedMessage(Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(2, int(ObjState)), none, none, self);
+                BroadcastLocalizedMessage(
+                    Class'DHObjectiveMessage', Class'UInteger'.static.FromShorts(2, int(ObjState)), none, none, self
+                    );
                 return true;
             }
         }
@@ -1003,16 +1056,18 @@ simulated function bool IsTeamNeutralLocked(DHGameReplicationInfo GRI, int TeamI
 
 function Timer()
 {
-    local Controller            C;
-    local DHPawn                P;
-    local ROVehicle             ROVeh;
-    local ROVehicleWeaponPawn   VehWepPawn;
+    local Controller C;
+    local DHPawn P;
+    local ROVehicle ROVeh;
+    local ROVehicleWeaponPawn VehWepPawn;
     local DHGameReplicationInfo GRI;
-    local float                 OldCapProgress, Rate[2];
-    local int                   NumTotal[2], Num[2], NumForCheck[2], i;
-    local byte                  CurrentCapAxisCappers, CurrentCapAlliesCappers;
+    local float OldCapProgress, Rate[2];
+    local int NumTotal[2], Num[2], NumForCheck[2], i;
+    local byte CurrentCapAxisCappers, CurrentCapAlliesCappers;
 
-    if (ROTeamGame(Level.Game) == none || !ROTeamGame(Level.Game).IsInState('RoundInPlay') || (!bActive && !bUsePostCaptureOperations))
+    if (ROTeamGame(Level.Game) == none
+        || !ROTeamGame(Level.Game).IsInState('RoundInPlay')
+        || (!bActive && !bUsePostCaptureOperations))
     {
         return;
     }
@@ -1258,7 +1313,7 @@ function ObjectiveCompleted(PlayerReplicationInfo CompletePRI, int Team)
 
         if (AxisEvent != '')
         {
-            TriggerEvent(AxisEvent, self, None);
+            TriggerEvent(AxisEvent, self, none);
         }
     }
     else
@@ -1269,7 +1324,7 @@ function ObjectiveCompleted(PlayerReplicationInfo CompletePRI, int Team)
 
         if (AlliesEvent != '')
         {
-            TriggerEvent(AlliesEvent, self, None);
+            TriggerEvent(AlliesEvent, self, none);
         }
     }
 
@@ -1389,9 +1444,13 @@ simulated function bool IsFrozen(GameReplicationInfo GRI)
 simulated function bool IsOwnedByTeam(byte TeamIndex)
 {
     if (TeamIndex == AXIS_TEAM_INDEX)
+    {
         return IsAxis();
+    }
     else if (TeamIndex == ALLIES_TEAM_INDEX)
+    {
         return IsAllies();
+    }
 
     return false;
 }
