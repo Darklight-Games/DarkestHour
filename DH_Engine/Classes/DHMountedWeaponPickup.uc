@@ -42,9 +42,7 @@ function Inventory SpawnCopy(Pawn Other)
         {
             MW.WeaponBarrelBundles[i] = WeaponBarrelBundles[i];
             MW.WeaponBarrelBundles[i].SetOwner(MW);
-            MW.WeaponBarrelBundles[i].OnConditionChanged = none;
-            MW.WeaponBarrelBundles[i].OnTemperatureChanged = none;
-            MW.WeaponBarrelBundles[i].OnIsSteamActiveChanged = none;
+            MW.WeaponBarrelBundles[i].ClearCallbacks();
             MW.WeaponBarrelBundles[i].ForceUpdateBarrelStatuses();
 
             WeaponBarrelBundles[i] = none;
@@ -85,9 +83,7 @@ function InitDroppedPickupFor(Inventory Inv)
     {
         WeaponBarrelBundles[i] = MountedWeapon.WeaponBarrelBundles[i];
         WeaponBarrelBundles[i].SetOwner(self);
-        WeaponBarrelBundles[i].OnConditionChanged = none;
-        WeaponBarrelBundles[i].OnTemperatureChanged = none;
-        WeaponBarrelBundles[i].OnIsSteamActiveChanged = none;
+        WeaponBarrelBundles[i].ClearCallbacks();
         WeaponBarrelBundles[i].ForceUpdateBarrelStatuses();
 
         MountedWeapon.WeaponBarrelBundles[i] = none;

@@ -107,6 +107,14 @@ function bool IsBarrelActive(int BarrelIndex)
     return GetActiveBarrelIndex(BarrelIndex) != -1;
 }
 
+function ClearCallbacks()
+{
+    OnConditionChanged = none;
+    OnIsSteamActiveChanged = none;
+    OnTemperatureChanged = none;
+    OnSpareBarrelCountChanged = none;
+}
+
 simulated function Destroyed()
 {
     local int i, BarrelIndex;
@@ -117,13 +125,14 @@ simulated function Destroyed()
 
         if (Barrels[BarrelIndex].bIsSteamActive)
         {
-            OnIsSteamActiveChanged(BarrelIndex, false);
+            OnIsSteamActiveChanged(i, false);
         }
 
-        OnConditionChanged(BarrelIndex, BC_Good);
-        OnTemperatureChanged(BarrelIndex, 0);
-        OnSpareBarrelCountChanged(0);
+        OnConditionChanged(i, BC_Good);
+        OnTemperatureChanged(i, 0);
     }
+
+    OnSpareBarrelCountChanged(0);
 
     super.Destroyed();
 }
@@ -155,10 +164,12 @@ private function int GetNextBestBarrelIndex()
         if (NextBestBarrelIndex == -1)
         {
             NextBestBarrelIndex = i;
-            continue;
         }
-
-        if (Barrels[i].Condition <= Barrels[NextBestBarrelIndex].Condition
+        else if (Barrels[i].Condition < Barrels[NextBestBarrelIndex].Condition)
+        {
+            NextBestBarrelIndex = i;
+        }
+        else if (Barrels[i].Condition == Barrels[NextBestBarrelIndex].Condition
             && Barrels[i].Temperature <= Barrels[NextBestBarrelIndex].Temperature)
         {
             NextBestBarrelIndex = i;
@@ -188,6 +199,9 @@ function PerformBarrelChange(optional int ActiveBarrelIndex)
     ActiveBarrelIndices[ActiveBarrelIndex] = NextBarrelIndex;
 
     ForceUpdateBarrelStatus(ActiveBarrelIndex);
+
+    // Spare barrel count may have changed, so send the change event.
+    OnSpareBarrelCountChanged(GetSpareBarrelCount());
 }
 
 // Increases barrel temperature whenever the weapon fires.

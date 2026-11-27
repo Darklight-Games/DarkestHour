@@ -183,9 +183,8 @@ function InitDroppedPickupFor(Inventory Inv)
         if (BarrelBundle != none)
         {
             BarrelBundle.SetOwner(self);
-            BarrelBundle.OnTemperatureChanged = none;
+            BarrelBundle.ClearCallbacks();
             BarrelBundle.OnIsSteamActiveChanged = OnBarrelIsSteamActiveChanged;
-            BarrelBundle.OnConditionChanged = none;
             BarrelBundle.ForceUpdateBarrelStatuses();
         }
 

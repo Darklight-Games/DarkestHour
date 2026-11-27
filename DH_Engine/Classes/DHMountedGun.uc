@@ -1026,9 +1026,7 @@ function PickUpMountedWeapon(DHPawn Pawn)
         {
             MountedWeapon.WeaponBarrelBundles[i] = MG.BarrelBundle;
             MountedWeapon.WeaponBarrelBundles[i].SetOwner(MountedWeapon);
-            MountedWeapon.WeaponBarrelBundles[i].OnConditionChanged = none;
-            MountedWeapon.WeaponBarrelBundles[i].OnIsSteamActiveChanged = none;
-            MountedWeapon.WeaponBarrelBundles[i].OnTemperatureChanged = none;
+            MountedWeapon.WeaponBarrelBundles[i].ClearCallbacks();
 
             // Critical to null this since we destroy it indirectly below.
             MG.BarrelBundle = none;
