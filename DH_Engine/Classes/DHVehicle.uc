@@ -127,6 +127,25 @@ var int DriverAnimationChannel; // animation channel index for driver camera bon
 var name DriverAnimationChannelBone; // animation channel bone for driver camera
 
 // Damage
+enum ENewHitPointType
+{
+    NHP_Normal,
+    NHP_GunOptics,
+    NHP_PeriscopeOptics,
+    NHP_Traverse,
+    NHP_Elevation,
+};
+
+struct NewHitpoint
+{
+    var   float             PointRadius;
+    var   name              PointBone;
+    var   Vector            PointOffset;
+    var   ENewHitPointType  NewHitPointType;
+    var   bool              bIsGun;
+};
+
+var     array<NewHitpoint>  NewVehHitpoints;
 var float FrontLeftAngle, FrontRightAngle, RearRightAngle, RearLeftAngle; // used by the hit detection system to determine which side of the vehicle was hit
 var float HeavyEngineDamageThreshold; // proportion of remaining engine health below which the engine is so badly damaged it limits speed
 var bool bCanCrash; // vehicle can be damaged by static geometry during impacts (damages the engine)
@@ -281,27 +300,6 @@ var Vector DestructionEffectOffset; // Offset for the destruction effect emitter
 
 // Vehicle state, used to restore a saved state.
 var DHVehicleState SavedVehicleState;
-
-enum ENewHitPointType
-{
-    NHP_Normal,
-    NHP_GunOptics,
-    NHP_PeriscopeOptics,
-    NHP_Traverse,
-    NHP_Elevation,
-};
-
-struct NewHitpoint
-{
-    var()   float             PointRadius;
-    var()   name              PointBone;
-    var()   Vector            PointOffset;
-    var()   float             DamageMultiplier; // TODO: is this neccessary?
-    var()   ENewHitPointType  NewHitPointType;
-    var()   bool              bIsGun;
-};
-
-var()     array<NewHitpoint>  NewVehHitpoints;
 
 replication
 {

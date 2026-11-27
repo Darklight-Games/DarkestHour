@@ -427,6 +427,46 @@ function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Mo
     super(Vehicle).TakeDamage(Damage, InstigatedBy, HitLocation, Momentum, DamageType);
 }
 
+// Overriden to support MMGs features.
+simulated function Vector GetNewHitPointLocation(int Index)
+{
+    local Coords HitPointCoords;
+    local Vector HitPointLocation;
+    local DHMountedMGPawn MGP;
+    local int             i;
+
+    for (i = 0; i < WeaponPawns.Length; i++)
+    {
+        MGP = DHMountedMGPawn(WeaponPawns[i]);    
+        
+        if (MGP != none && (NewVehHitpoints[Index].bIsGun || NewVehHitpoints[Index].PointBone == MGP.GunsightCameraBone))
+        {
+            HitPointCoords = MGP.Gun.GetBoneCoords(NewVehHitpoints[Index].PointBone);
+        }
+    }        
+    
+    if (HitPointCoords.Origin == vect(0.0, 0.0, 0.0))
+    {
+        if (Cannon != none && (NewVehHitpoints[Index].bIsGun || NewVehHitpoints[Index].PointBone == Cannon.YawBone))
+        {
+            HitPointCoords = Cannon.GetBoneCoords(NewVehHitpoints[Index].PointBone);
+        }
+        else
+        {
+            HitPointCoords = GetBoneCoords(NewVehHitpoints[Index].PointBone);
+        }   
+    }
+
+    HitPointLocation = HitPointCoords.Origin;
+
+    if (NewVehHitpoints[Index].PointOffset != vect(0.0, 0.0, 0.0))
+    {
+        HitPointLocation += NewVehHitpoints[Index].PointOffset >> Rotator(HitPointCoords.XAxis);
+    }
+
+    return HitPointLocation;
+}
+
 function Died(Controller Killer, class<DamageType> DamageType, Vector HitLocation)
 {
     super.Died(Killer, DamageType, HitLocation);
@@ -1003,6 +1043,7 @@ function PickUpMountedWeapon(DHPawn Pawn)
 {
     local DHMountedWeapon MountedWeapon;
     local DHMountedMG MG;
+    local DHMountedMGPawn MGP;
     local int i;
 
     if (Role != ROLE_Authority || Pawn == none || MountedWeaponClass == none)
@@ -1048,7 +1089,9 @@ function PickUpMountedWeapon(DHPawn Pawn)
     // Transfer the barrel bundles to the weapon.
     for (i = 0; i < WeaponPawns.Length; ++i)
     {
-        MG = DHMountedMG(WeaponPawns[i].Gun);
+        MGP = DHMountedMGPawn(WeaponPawns[i]);
+        
+        MG = DHMountedMG(MGP.Gun);
 
         if (MG != none)
         {
@@ -1058,6 +1101,11 @@ function PickUpMountedWeapon(DHPawn Pawn)
 
             // Critical to null this since we destroy it indirectly below.
             MG.BarrelBundle = none;
+        }
+
+        if (MGP != none )
+        {
+            MountedWeapon.bIsMGSightDestroyed = MGP.bGunsightOpticsDestroyed;
         }
     }
 

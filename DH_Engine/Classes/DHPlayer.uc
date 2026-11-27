@@ -5361,8 +5361,11 @@ exec function SetHitPoint(
                     NewRadius = string(V.NewVehHitpoints[Index].PointRadius);
                 }
 
-                Log(V.Tag @ "NewVehHitpoints[" $ Index $ "] Offset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " Radius =" @ float(NewRadius)
-                    @ "(was" @ V.NewVehHitpoints[Index].PointOffset $ ", radius" @ V.NewVehHitpoints[Index].PointRadius $ ")");
+                Log(
+                V.Tag @ "NewVehHitpoints[" $ Index $ "] Offset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " Radius =" 
+                @ float(NewRadius) @ "(was" @ V.NewVehHitpoints[Index].PointOffset $ ", radius"
+                @ V.NewVehHitpoints[Index].PointRadius $ ")"
+                );
 
                 V.NewVehHitpoints[Index].PointOffset.X = float(NewX);
                 V.NewVehHitpoints[Index].PointOffset.Y = float(NewY);

@@ -38,4 +38,6 @@ defaultproperties
     ExitPositions(3)=(X=0,Y=+80.0,Z=30)
     ExitPositions(4)=(X=-80,Y=-80.0,Z=30)
     ExitPositions(5)=(X=-80,Y=80.0,Z=30)
+
+    NewVehHitpoints(0)=(PointRadius=5.5,PointBone="GUNSIGHT_CAMERA",PointOffset=(X=-4.6,Y=1,Z=-2.0),NewHitPointType=NHP_GunOptics)
 }

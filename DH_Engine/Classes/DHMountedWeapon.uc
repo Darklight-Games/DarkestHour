@@ -35,9 +35,11 @@ var() bool bCanDeployWhileCrawling;
 
 var() bool bShouldAlignToGround;
 
-var bool bIsEncumbering; // When true, player cannot run, go prone or switch weapons
+var bool bIsEncumbering; // When true, player cannot run, go prone or switch weapons.
 
 var bool bHasDeployed;
+
+var bool bIsMGSightDestroyed;
 
 replication
 {
@@ -462,6 +464,7 @@ function ServerDeployEnd(Actor GroundActor, Vector Location, Rotator Rotation, i
     local DHVehicle Vehicle;
     local class<DHVehicle> VehicleClass;
     local DHMountedMG MG;
+    local DHMountedMGPawn MGP;
     local int i;
 
     if (bDeleteMe || Instigator == none)
@@ -513,13 +516,20 @@ function ServerDeployEnd(Actor GroundActor, Vector Location, Rotator Rotation, i
         {
             continue;
         }
+        
+        MGP = DHMountedMGPawn(Vehicle.WeaponPawns[i]);
 
-        MG = DHMountedMG(Vehicle.WeaponPawns[i].Gun);
+        MG = DHMountedMG(MGP.Gun);
 
         if (MG != none && i < WeaponBarrelBundles.Length && WeaponBarrelBundles[i] != none)
         {
             MG.SetBarrelBundle(WeaponBarrelBundles[i]);
             WeaponBarrelBundles[i] = none;
+        }
+
+        if (MGP != none)
+        {
+            MGP.bGunsightOpticsDestroyed = bIsMGSightDestroyed;
         }
     }
 
