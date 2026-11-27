@@ -4342,10 +4342,39 @@ simulated function bool IsDisabled()
     return false;
 }
 
-// New function to get the location of the Engine VehHitPoint
+// Get location of the engine hitpoint (vehicle location is returned if engine is not set)
 function Vector GetEngineLocation()
 {
-    return GetBoneCoords(VehHitPoints[0].PointBone).Origin;
+    local Coords EngineCoords;
+    local int HPIndex, i;
+
+    if (VehHitPoints.Length < 1)
+    {
+        Warn("Attemped to get engine location but vehicle has no hitpoints configured");
+        return Location;
+    }
+
+    // Assume that engine is at index 0 by default to speed things up
+    if (VehHitPoints[HPIndex].HitPointType != HP_Engine)
+    {
+        for (i = 1; i < VehHitPoints.Length; ++i)
+        {
+            if (VehHitPoints[i].HitPointType == HP_Engine)
+            {
+                HPIndex = i;
+                break;
+            }
+        }
+
+        if (HPIndex == 0)
+        {
+            Warn("Attempted to get engine location but vehicle is missing the engine hitpoint");
+            return Location;
+        }
+    }
+
+    EngineCoords = GetBoneCoords(VehHitPoints[HPIndex].PointBone);
+    return EngineCoords.Origin + (VehHitPoints[HPIndex].PointOffset >> Rotator(EngineCoords.XAxis));
 }
 
 // New helper function to check whether vehicle is burning
