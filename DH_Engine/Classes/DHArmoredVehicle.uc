@@ -14,24 +14,6 @@ struct ArmorSection
     var string LocationName; // e.g. "lower front", "driver's upstand plate"
 };
 
-enum ENewHitPointType
-{
-    NHP_Normal,
-    NHP_GunOptics,
-    NHP_PeriscopeOptics,
-    NHP_Traverse,
-    NHP_Elevation,
-};
-
-struct NewHitpoint
-{
-    var float PointRadius;
-    var name PointBone;
-    var Vector PointOffset;
-    var float DamageMultiplier;
-    var ENewHitPointType NewHitPointType;
-    var bool bIsGun;
-};
 
 // General
 var int UnbuttonedPositionIndex; // lowest DriverPositions index where driver is unbuttoned & exposed
@@ -57,7 +39,6 @@ var float TurretPenetrationDamageModifier; // damage modifier for incoming damag
 var bool bRearHullPenetration; // shell has penetrated the rear hull (so TakeDamage can tell if an engine hit should stop the round penetrating any further)
 
 // Damage
-var array<NewHitpoint> NewVehHitpoints; // an array of extra hit points (new DH types) that may be hit & damaged
 var int GunOpticsHitPointIndex; // index of any special hit point for exposed gunsight optics, which may be damaged by a bullet
 var float AmmoIgnitionProbability; // chance that direct hit on ammo store will ignite it
 var float SpikeTime; // saved future time when a disabled vehicle will be automatically blown up, if empty at that time
@@ -1162,79 +1143,6 @@ simulated function bool IsEngineBurning()
 //  ************************  HIT DETECTION & PENETRATION  ************************  //
 ///////////////////////////////////////////////////////////////////////////////////////
 
-simulated function Vector GetNewHitPointLocation(int Index)
-{
-    local Coords HitPointCoords;
-    local Vector HitPointLocation;
-
-    // Get location of the hit point we're going to check (with option to handle turret's yaw bone being specified, so hit point rotates with turret)
-    if (Cannon != none && (NewVehHitpoints[Index].bIsGun || NewVehHitpoints[Index].PointBone == Cannon.YawBone))
-    {
-        HitPointCoords = Cannon.GetBoneCoords(NewVehHitpoints[Index].PointBone);
-    }
-    else
-    {
-        HitPointCoords = GetBoneCoords(NewVehHitpoints[Index].PointBone);
-    }
-
-    HitPointLocation = HitPointCoords.Origin;
-
-    if (NewVehHitpoints[Index].PointOffset != vect(0.0, 0.0, 0.0))
-    {
-        HitPointLocation += NewVehHitpoints[Index].PointOffset >> Rotator(HitPointCoords.XAxis);
-    }
-
-    return HitPointLocation;
-}
-
-// New function to check if something hit a certain DH NewVehHitpoints (the same as IsPointShot checks for hits on VehHitpoints)
-function bool IsNewPointShot(Vector HitLocation, Vector LineCheck, int Index, optional float CheckDistance)
-{
-    local Vector HitPointLocation, Difference;
-    local float t, DotMM, ClosestDistance;
-
-    if (NewVehHitpoints[Index].PointBone == '')
-    {
-        return false;
-    }
-
-    HitPointLocation = GetNewHitPointLocation(Index);
-
-    // Set the hit line to check
-    if (CheckDistance > 0.0)
-    {
-        LineCheck = Normal(LineCheck) * CheckDistance;
-    }
-    else
-    {
-        LineCheck *= 150.0;
-    }
-
-    // Find closest distance of line check to hit point (all squared for now, for efficiency)
-    Difference = HitPointLocation - HitLocation;
-    t = LineCheck dot Difference;
-
-    if (t > 0.0) // if not positive it means line check is heading away from hit point, so distance is simply based on HitLocation as that's the closest point
-    {
-        DotMM = LineCheck dot LineCheck;
-
-        if (t < DotMM)
-        {
-            t /= DotMM;
-            Difference -= t * LineCheck;
-        }
-        else
-        {
-            Difference -= LineCheck;
-        }
-    }
-
-    // Convert distance back from squared & return true if within the hit point's radius (including any scaling)
-    ClosestDistance = Sqrt(Difference dot Difference);
-
-    return ClosestDistance < NewVehHitpoints[Index].PointRadius;
-}
-
 // Re-written from deprecated ROTreadCraft class for DH's armour penetration system
 // Handles penetration calcs for any shell type, & adds including an option for multiple armor sections for each side
 simulated function bool ShouldPenetrate(
@@ -1428,7 +1336,7 @@ simulated function bool ShouldPenetrate(
             return false;
         }
 
-        // Added side armor (schurzen) defeat HEAT projectiles if angle of shot is above 45°
+        // Added side armor (schurzen) defeat HEAT projectiles if angle of shot is above 45ï¿½
         if (bSideHit && bHasAddedSideArmor && (P.RoundType == RT_HEAT && AngleOfIncidence > 45))
         {
             ResetTakeDamageVariables();

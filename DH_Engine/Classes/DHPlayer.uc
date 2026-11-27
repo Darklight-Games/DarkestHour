@@ -5348,32 +5348,26 @@ exec function SetHitPoint(
     optional bool bIsDHNewHitPoint
     )
 {
-    local DHArmoredVehicle AV;
     local DHVehicle V;
 
     if (IsVehicleDebugModeAllowed(V))
     {
         if (bIsDHNewHitPoint)
         {
-            AV = DHArmoredVehicle(V);
-
-            if (AV != none && Index < AV.NewVehHitpoints.Length)
+            if (V != none && Index < V.NewVehHitpoints.Length)
             {
                 if (!(float(NewRadius) > 0.0))
                 {
-                    NewRadius = string(AV.NewVehHitpoints[Index].PointRadius);
+                    NewRadius = string(V.NewVehHitpoints[Index].PointRadius);
                 }
 
-                Log(
-                    AV.Tag @ "NewVehHitpoints[" $ Index $ "] Offset =" @ float(NewX) @ float(NewY) @ float(NewZ)
-                        @ " Radius =" @ float(NewRadius) @ "(was" @ AV.NewVehHitpoints[Index].PointOffset $ ", radius"
-                        @ AV.NewVehHitpoints[Index].PointRadius $ ")"
-                    );
+                Log(V.Tag @ "NewVehHitpoints[" $ Index $ "] Offset =" @ float(NewX) @ float(NewY) @ float(NewZ) @ " Radius =" @ float(NewRadius)
+                    @ "(was" @ V.NewVehHitpoints[Index].PointOffset $ ", radius" @ V.NewVehHitpoints[Index].PointRadius $ ")");
 
-                AV.NewVehHitpoints[Index].PointOffset.X = float(NewX);
-                AV.NewVehHitpoints[Index].PointOffset.Y = float(NewY);
-                AV.NewVehHitpoints[Index].PointOffset.Z = float(NewZ);
-                AV.NewVehHitpoints[Index].PointRadius = float(NewRadius);
+                V.NewVehHitpoints[Index].PointOffset.X = float(NewX);
+                V.NewVehHitpoints[Index].PointOffset.Y = float(NewY);
+                V.NewVehHitpoints[Index].PointOffset.Z = float(NewZ);
+                V.NewVehHitpoints[Index].PointRadius = float(NewRadius);
             }
         }
         else if (Index < V.VehHitpoints.Length)

@@ -3353,11 +3353,10 @@ function DrawNetworkActorsOnMap(Canvas C, AbsoluteCoordsInfo SubCoords, float My
 function DrawVehiclePointSphere()
 {
     local DHVehicle V;
-    local DHArmoredVehicle AV;
-    local Coords HitPointCoords;
-    local Vector HitPointLocation;
-    local Color C;
-    local int i;
+    local Coords           HitPointCoords;
+    local Vector           HitPointLocation;
+    local Color            C;
+    local int              i;
 
     foreach DynamicActors(Class'DHVehicle', V)
     {
@@ -3399,36 +3398,30 @@ function DrawVehiclePointSphere()
             V.DrawDebugSphere(HitPointLocation, V.VehHitpoints[i].PointRadius, 10, C.R, C.G, C.B);
         }
 
-        AV = DHArmoredVehicle(V);
 
-        if (AV != none)
+        for (i = 0; i < V.NewVehHitpoints.Length; ++i)
         {
-            for (i = 0; i < AV.NewVehHitpoints.Length; ++i)
+            if (V.NewVehHitpoints[i].PointBone == '')
             {
-                if (AV.NewVehHitpoints[i].PointBone == '')
-                {
-                    continue;
-                }
-
-                HitPointLocation = AV.GetNewHitPointLocation(i);
-
-                if (AV.NewVehHitpoints[i].NewHitPointType == NHP_Traverse
-                    || AV.NewVehHitpoints[i].NewHitPointType == NHP_Elevation)
-                {
-                    C = GoldColor;
-                }
-                else if (AV.NewVehHitpoints[i].NewHitPointType == NHP_GunOptics
-                    || AV.NewVehHitpoints[i].NewHitPointType == NHP_PeriscopeOptics)
-                {
-                    C = PurpleColor;
-                }
-                else
-                {
-                    C = WhiteColor;
-                }
-
-                AV.DrawDebugSphere(HitPointLocation, AV.NewVehHitpoints[i].PointRadius, 10, C.R, C.G, C.B);
+                continue;
             }
+
+            HitPointLocation = V.GetNewHitPointLocation(i);
+
+            if (V.NewVehHitpoints[i].NewHitPointType == NHP_Traverse || V.NewVehHitpoints[i].NewHitPointType == NHP_Elevation)
+            {
+                C = GoldColor;
+            }
+            else if (V.NewVehHitpoints[i].NewHitPointType == NHP_GunOptics || V.NewVehHitpoints[i].NewHitPointType == NHP_PeriscopeOptics)
+            {
+                C = PurpleColor;
+            }
+            else
+            {
+                C = WhiteColor;
+            }
+
+            V.DrawDebugSphere(HitPointLocation, V.NewVehHitpoints[i].PointRadius, 10, C.R, C.G, C.B);
         }
     }
 }

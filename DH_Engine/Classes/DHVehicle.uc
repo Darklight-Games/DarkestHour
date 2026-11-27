@@ -282,6 +282,27 @@ var Vector DestructionEffectOffset; // Offset for the destruction effect emitter
 // Vehicle state, used to restore a saved state.
 var DHVehicleState SavedVehicleState;
 
+enum ENewHitPointType
+{
+    NHP_Normal,
+    NHP_GunOptics,
+    NHP_PeriscopeOptics,
+    NHP_Traverse,
+    NHP_Elevation,
+};
+
+struct NewHitpoint
+{
+    var()   float             PointRadius;
+    var()   name              PointBone;
+    var()   Vector            PointOffset;
+    var()   float             DamageMultiplier; // TODO: is this neccessary?
+    var()   ENewHitPointType  NewHitPointType;
+    var()   bool              bIsGun;
+};
+
+var()     array<NewHitpoint>  NewVehHitpoints;
+
 replication
 {
     // Variables the server will replicate to clients when this actor is 1st replicated
@@ -3007,6 +3028,79 @@ function bool IsPointShot(
     ClosestDistance = Sqrt(Difference dot Difference);
 
     return ClosestDistance < (VehHitpoints[Index].PointRadius * AdditionalScale);
+}
+
+// New function to check if something hit a certain DH NewVehHitpoints (the same as IsPointShot checks for hits on VehHitpoints)
+function bool IsNewPointShot(Vector HitLocation, Vector LineCheck, int Index, optional float CheckDistance)
+{
+    local Vector HitPointLocation, Difference;
+    local float  t, DotMM, ClosestDistance;
+
+    if (NewVehHitpoints[Index].PointBone == '')
+    {
+        return false;
+    }
+
+    HitPointLocation = GetNewHitPointLocation(Index);
+
+    // Set the hit line to check
+    if (CheckDistance > 0.0)
+    {
+        LineCheck = Normal(LineCheck) * CheckDistance;
+    }
+    else
+    {
+        LineCheck *= 150.0;
+    }
+
+    // Find closest distance of line check to hit point (all squared for now, for efficiency)
+    Difference = HitPointLocation - HitLocation;
+    t = LineCheck dot Difference;
+
+    if (t > 0.0) // if not positive it means line check is heading away from hit point, so distance is simply based on HitLocation as that's the closest point
+    {
+        DotMM = LineCheck dot LineCheck;
+
+        if (t < DotMM)
+        {
+            t /= DotMM;
+            Difference -= t * LineCheck;
+        }
+        else
+        {
+            Difference -= LineCheck;
+        }
+    }
+
+    // Convert distance back from squared & return true if within the hit point's radius (including any scaling)
+    ClosestDistance = Sqrt(Difference dot Difference);
+
+    return ClosestDistance < NewVehHitpoints[Index].PointRadius;
+}
+
+simulated function Vector GetNewHitPointLocation(int Index)
+{
+    local Coords HitPointCoords;
+    local Vector HitPointLocation;
+
+    // Get location of the hit point we're going to check (with option to handle turret's yaw bone being specified, so hit point rotates with turret)
+    if (Cannon != none && (NewVehHitpoints[Index].bIsGun || NewVehHitpoints[Index].PointBone == Cannon.YawBone))
+    {
+        HitPointCoords = Cannon.GetBoneCoords(NewVehHitpoints[Index].PointBone);
+    }
+    else
+    {
+        HitPointCoords = GetBoneCoords(NewVehHitpoints[Index].PointBone);
+    }
+
+    HitPointLocation = HitPointCoords.Origin;
+
+    if (NewVehHitpoints[Index].PointOffset != vect(0.0, 0.0, 0.0))
+    {
+        HitPointLocation += NewVehHitpoints[Index].PointOffset >> Rotator(HitPointCoords.XAxis);
+    }
+
+    return HitPointLocation;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

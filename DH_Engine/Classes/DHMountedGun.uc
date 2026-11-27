@@ -344,17 +344,11 @@ simulated function DisplayVehicleMessage(int MessageNumber, optional Pawn P, opt
 
 // Modified to use APCDamageModifier, & to remove code preventing players damaging own team's gun that hasn't been entered (only designed to protect vehicles in spawn)
 // Also removes other stuff not relevant to a static AT gun (engine & tread stuff & stopping 'vehicle' giving itself impact damage)
-function TakeDamage(
-    int Damage,
-    Pawn InstigatedBy,
-    Vector HitLocation,
-    Vector Momentum,
-    class<DamageType> DamageType,
-    optional int HitIndex
-    )
+function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
 {
+    local DHVehicleWeaponPawn VWP;
     local float DamageModifier;
-    local int i;
+    local int   i, w;
 
     ServerExitRotation();
 
@@ -364,6 +358,40 @@ function TakeDamage(
         super(Vehicle).TakeDamage(Damage, InstigatedBy, HitLocation, Momentum, Class'ROSuicided');
 
         return;
+    }
+    
+    // Check additional DH NewVehHitPoints
+    for (i = 0; i < NewVehHitpoints.Length; ++i)
+    {
+        if (IsNewPointShot(HitLocation, Momentum, i))
+        {
+            for (w = 0; w < WeaponPawns.Length; w++)
+            {
+                VWP = DHVehicleWeaponPawn(WeaponPawns[w]);
+
+                if (VWP != none)
+                {
+                    switch (NewVehHitpoints[i].NewHitPointType)
+                    {
+                        case NHP_PeriscopeOptics:
+                            VWP.DamagePeriscopeOptics();
+                            break;
+
+                        case NHP_GunOptics:
+                            VWP.DamageGunsightOptics();
+                            break;
+
+                        case NHP_Traverse:
+                            VWP.bTraverseDamaged = true;
+                            break;
+
+                        case NHP_Elevation:
+                            VWP.bElevationDamaged = true;
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     // Apply damage modifier from the DamageType, plus a little damage randomisation

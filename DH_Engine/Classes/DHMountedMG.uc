@@ -1037,6 +1037,14 @@ simulated function CalcWeaponFire(bool bWasAltFire)
     }
 }
 
+function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
+{
+    if (DHVehicle(Base) != none)
+    {
+        DHVehicle(Base).TakeDamage(Damage, InstigatedBy, HitLocation, Momentum, DamageType, HitIndex);
+    }
+}
+
 defaultproperties
 {
     YawBone="MG_YAW"

@@ -6,6 +6,39 @@
 class DHMountedMachineGun extends DHMountedGun
     abstract;
 
+// Overriden to remove cannon stuff and support MG features (destroyable gunsight).
+simulated function Vector GetNewHitPointLocation(int Index)
+{
+    local Coords HitPointCoords;
+    local Vector HitPointLocation;
+    local DHMountedMGPawn MGP;
+    local int             i;
+
+    for (i = 0; i < WeaponPawns.Length; i++)
+    {
+        MGP = DHMountedMGPawn(WeaponPawns[i]);    
+        
+        if (MGP != none && (NewVehHitpoints[Index].bIsGun || NewVehHitpoints[Index].PointBone == MGP.GunsightCameraBone))
+        {
+            HitPointCoords = MGP.Gun.GetBoneCoords(NewVehHitpoints[Index].PointBone);
+        }
+    }        
+    
+    if (HitPointCoords.Origin == vect(0.0, 0.0, 0.0))
+    {
+        HitPointCoords = GetBoneCoords(NewVehHitpoints[Index].PointBone);
+    }
+
+    HitPointLocation = HitPointCoords.Origin;
+
+    if (NewVehHitpoints[Index].PointOffset != vect(0.0, 0.0, 0.0))
+    {
+        HitPointLocation += NewVehHitpoints[Index].PointOffset >> Rotator(HitPointCoords.XAxis);
+    }
+
+    return HitPointLocation;
+}
+
 // There's nothing really to explode in mmgs.
 function VehicleExplosion(Vector MomentumNormal, float PercentMomentum);
 
@@ -18,4 +51,6 @@ defaultproperties
         KMaxAngularSpeed=0.0
     End Object
     KParams=KParams0
-}
+
+    NewVehHitpoints(0)=(PointRadius=5.5,PointBone="GUNSIGHT_CAMERA",PointOffset=(X=-4.6,Y=1,Z=-2.0),DamageMultiplier=50.0,NewHitPointType=NHP_GunOptics)
+}   
