@@ -33,12 +33,12 @@ static function string AssembleString(
 
 static function Color GetDHConsoleColor(PlayerReplicationInfo RelatedPRI_1, bool bSimpleColours)
 {
-    return Class'DHColor'.default.SquadColor;
+    return default.DrawColor;
 }
 
 defaultproperties
 {
-    DrawColor=(R=124,G=252,B=0,A=255)
+    DrawColor=(R=0,G=204,B=0,A=255)
     MessagePrefix="[SQUAD]"
     bComplexString=true
     bBeep=true

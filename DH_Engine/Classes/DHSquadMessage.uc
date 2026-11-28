@@ -231,7 +231,7 @@ static function string GetString(
 
 defaultproperties
 {
-    DrawColor=(R=124,G=252,B=0,A=255)
+    DrawColor=(R=0,G=252,B=126,A=255)
     JoinedMessage="{0} has joined the squad."
     LeftMessage="{0} has left the squad."
     KickedMessage="You have been kicked from the squad."
