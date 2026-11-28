@@ -97,19 +97,13 @@ function GiveUnderbodyDamage()
             continue;
         }
 
-        ActorAbove = Trace(HitLoc,
-                           HitNorm,
-                           Location + (vect(0, 0, 1) >> V.Rotation) * UNDER_VEHICLE_TRACE_HEIGHT,
-                           Location,
-                           true);
+        ActorAbove = Trace(
+            HitLoc, HitNorm, Location + (vect(0, 0, 1) >> V.Rotation) * UNDER_VEHICLE_TRACE_HEIGHT, Location, true
+            );
 
         if (ActorAbove == V)
         {
-            V.TakeDamage(UnderVehicleDamageBonus,
-                        SavedInstigator,
-                        vect(0, 0, 0),
-                        vect(0, 0, 0),
-                        MyDamageType);
+            V.TakeDamage(UnderVehicleDamageBonus, SavedInstigator, vect(0, 0, 0), vect(0, 0, 0), MyDamageType);
         }
     }
 }
@@ -146,11 +140,9 @@ function DHVehicle GetEngineDamageTarget()
             continue;
         }
 
-        ActorBelow = Trace(HitLoc,
-                           HitNorm,
-                           Location + (vect(0, 0, -1) >> V.Rotation) * EngineDamageRadius,
-                           Location,
-                           true);
+        ActorBelow = Trace(
+            HitLoc, HitNorm, Location + (vect(0, 0, -1) >> V.Rotation) * EngineDamageRadius, Location, true
+            );
 
         if (ActorBelow == V)
         {
@@ -208,9 +200,9 @@ function GiveEngineDamage(DHVehicle V)
 
 function HandleVehicles()
 {
-    local DHVehicle     V, EngineDamageTarget;
-    local int           TrackNum;
-    local float         Distance;
+    local DHVehicle V, EngineDamageTarget;
+    local int TrackNum;
+    local float Distance;
 
     // DEAL UNDERBODY DAMAGE OR ENGINE DAMAGE
 
@@ -278,11 +270,10 @@ function HandleObstacles()
         // If we cannot trace the obstacle (because of world geometry), then apply special radius damage
         if (O != none && !FastTrace(O.Location, Location))
         {
-            O.TakeDamage(ObstacleDamageMax * (1 - VSize(Location - O.Location) / ObstacleDamageRadius),
-                         SavedInstigator,
-                         vect(0, 0, 0),
-                         vect(0, 0, 0),
-                         MyDamageType);
+            O.TakeDamage(
+                ObstacleDamageMax * (1 - VSize(Location - O.Location) / ObstacleDamageRadius), SavedInstigator,
+                vect(0, 0, 0), vect(0, 0, 0), MyDamageType
+                );
         }
     }
 }
@@ -302,11 +293,10 @@ function HandleConstructions()
         // If we cannot trace the construction (because trace hit world geometry), then apply special radius damage
         if (C != none && !FastTrace(C.Location, Location))
         {
-            C.TakeDamage(ConstructionDamageMax * (1 - VSize(Location - C.Location) / ConstructionDamageRadius),
-                         SavedInstigator,
-                         vect(0, 0, 0),
-                         vect(0, 0, 0),
-                         MyDamageType);
+            C.TakeDamage(
+                ConstructionDamageMax * (1 - VSize(Location - C.Location) / ConstructionDamageRadius), SavedInstigator,
+                vect(0, 0, 0), vect(0, 0, 0), MyDamageType
+                );
         }
     }
 }
