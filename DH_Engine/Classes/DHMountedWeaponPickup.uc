@@ -9,6 +9,7 @@ class DHMountedWeaponPickup extends DHWeaponPickup
 var DHVehicleState VehicleState;
 var array<DHWeaponBarrelBundle> WeaponBarrelBundles;
 var DHMapIconAttachment_Vehicle MapIconAttachment;
+var bool bIsMGSightDestroyed;
 
 var int VariantIndex;
 var int SkinIndex;
@@ -51,6 +52,7 @@ function Inventory SpawnCopy(Pawn Other)
         MW.ConstructionSkinIndex = SkinIndex;
         MW.ConstructionVariantIndex = VariantIndex;
         MW.UpdateProxyCursor();
+        MW.bIsMGSightDestroyed = bIsMGSightDestroyed;
     }
 
     return Copy;
@@ -71,6 +73,7 @@ function InitDroppedPickupFor(Inventory Inv)
         VehicleState = MountedWeapon.GetVehicleState();
         VariantIndex = MountedWeapon.ConstructionVariantIndex;
         SkinIndex = MountedWeapon.ConstructionSkinIndex;
+        bIsMGSightDestroyed = MountedWeapon.bIsMGSightDestroyed;
     }
 
     if (MapIconAttachment != none)
