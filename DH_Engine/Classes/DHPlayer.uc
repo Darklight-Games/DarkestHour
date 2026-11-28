@@ -7941,15 +7941,11 @@ function ClientLocationalVoiceMessage(
             V.bUseLocationalVoice = true;
             V.ClientInitializeLocational(Sender, Recipient, MessageType, MessageID, SenderPawn, SenderLocation);
 
-            if (bIsTeamVoice)
+            if (bIsTeamVoice && CanSeeVoiceMessageText(Sender, MessageType, SenderPawn, SenderLocation))
             {
                 if (MessageType == 'VEH_ORDERS' || MessageType == 'VEH_ALERTS' || MessageType == 'VEH_GOTO')
                 {
                     VehicleVoiceMessage(Sender, V.getClientParsedMessage());
-                }
-                else if (MessageType == 'TAUNT')
-                {
-                    TeamMessage(Sender, V.getClientParsedMessage(), 'VOICESAY');
                 }
                 else
                 {
@@ -7968,6 +7964,30 @@ function ClientLocationalVoiceMessage(
             Voice.ClientInitialize(Sender, Recipient, MessageType, MessageID);
         }
     }
+}
+
+// Returns whether this player is close enough to the sender of a voice message
+// to see its text in the chat. The sound of the message is not affected.
+function bool CanSeeVoiceMessageText(
+    PlayerReplicationInfo Sender,
+    name MessageType,
+    Pawn SenderPawn,
+    Vector SenderLocation
+    )
+{
+    // Players always see their own messages. Players without a pawn are not
+    // anywhere in the world, so there is no distance to limit them by.
+    if (Sender == PlayerReplicationInfo || Pawn == none)
+    {
+        return true;
+    }
+
+    if (SenderPawn != none)
+    {
+        SenderLocation = SenderPawn.Location;
+    }
+
+    return Class'DHVoicePack'.static.IsMessageTextInRange(MessageType, VSize(SenderLocation - Pawn.Location));
 }
 
 function VehicleVoiceMessage(PlayerReplicationInfo Sender, string Msg)
@@ -7997,7 +8017,6 @@ function SendVoiceMessage(
     local Controller P;
     local ROPlayer ROP;
     local ROBot ROB;
-    local float DistanceToOther;
     local array<Controller> VehicleOccupants;
     local int i;
 
@@ -8037,27 +8056,13 @@ function SendVoiceMessage(
                 continue;
             }
 
+            // The sound fades with distance on its own, and the recipient
+            // decides whether it is close enough to see the text.
             if (Pawn != none)
             {
-                // do we want people who are dead to hear voice commands? - Antarian
-                if (ROP.Pawn != none && Pawn != ROP.Pawn)
-                {
-                    DistanceToOther = VSize(Pawn.Location - ROP.Pawn.Location);
-
-                    if (Class'ROVoicePack'.static.isValidDistanceForMessageType(MessageType, DistanceToOther))
-                    {
-                        ROP.ClientLocationalVoiceMessage(
-                            Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation
-                            );
-                    }
-                }
-                else
-                {
-                    // Sending to self
-                    ROP.ClientLocationalVoiceMessage(
-                        Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation
-                        );
-                }
+                ROP.ClientLocationalVoiceMessage(
+                    Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation
+                    );
             }
         }
         else if ((MessageType == 'ORDER' || MessageType == 'ATTACK' || MessageType == 'DEFEND')
