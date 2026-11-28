@@ -10,7 +10,7 @@ Before cloning this repository, all of the following requirements must be satisf
 
 ### Dependencies & Tools
 * [Git](https://git-scm.com/downloads) with [Git LFS](https://git-lfs.com/) (on Windows, [Git for Windows](https://git-scm.com/downloads) includes both)
-* [usagi](https://crates.io/crates/usagi-cli) (0.4.1 or later; builds the game's code). Install [Rust](https://rustup.rs/), then run `cargo install usagi-cli`.
+* [usagi](https://crates.io/crates/usagi-cli) (builds the game's code and more). Install [Rust](https://rustup.rs/), then run `cargo install usagi-cli`.
 * [Python ≥3.11.0](https://www.python.org/downloads/) (optional; only needed for some auxiliary tools, such as localization and deployment)
 
 ### Base game & SDK
