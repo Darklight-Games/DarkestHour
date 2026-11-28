@@ -17,9 +17,11 @@ defaultproperties
     Damage=760.0 // 1260 gramms TNT
     DamageRadius=1100 // about 18 meters. practically, user has to either throw from cover or run away immediately
 
-    EngineDamageMassThreshold=15.1  //1260 gramms TNT should penetrate every top armor, EXCEPT the jagdtiger (~40mm top armor) and KV-1 (30-40mm), which should be problematic
-    EngineDamageRadius=240.0
-    EngineDamageMax=800.0
+    EngineDamageMax=700.0
+
+    // Arbitrary value scaled down from larger satchel;
+    // penetrates most engine decks except on some heavy tanks.
+    EngineDeckArmorThicknessThreshold=25.0
 
     TreadDamageMassThreshold=12.0
     TreadDamageRadius=64.0
