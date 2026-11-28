@@ -7968,7 +7968,12 @@ function ClientLocationalVoiceMessage(
 
 // Returns whether this player is close enough to the sender of a voice message
 // to see its text in the chat. The sound of the message is not affected.
-function bool CanSeeVoiceMessageText(PlayerReplicationInfo Sender, name MessageType, Pawn SenderPawn, Vector SenderLocation)
+function bool CanSeeVoiceMessageText(
+    PlayerReplicationInfo Sender,
+    name MessageType,
+    Pawn SenderPawn,
+    Vector SenderLocation
+    )
 {
     // Players always see their own messages. Players without a pawn are not
     // anywhere in the world, so there is no distance to limit them by.
@@ -8055,7 +8060,9 @@ function SendVoiceMessage(
             // decides whether it is close enough to see the text.
             if (Pawn != none)
             {
-                ROP.ClientLocationalVoiceMessage(Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation);
+                ROP.ClientLocationalVoiceMessage(
+                    Sender, Recipient, MessageType, MessageID, SoundSender, SenderLocation
+                    );
             }
         }
         else if ((MessageType == 'ORDER' || MessageType == 'ATTACK' || MessageType == 'DEFEND')
