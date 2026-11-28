@@ -27,4 +27,3 @@ final static function Logf(FileLog F, string S)
         F.Logf(Mid(S, i, BUFFER_LIMIT));
     }
 }
-

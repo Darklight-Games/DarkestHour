@@ -6,9 +6,7 @@
 class DHDecoAttachment extends RODummyAttachment;
 
 // Emptied out to remove auto-attachment to bone
-simulated function PostBeginPlay()
-{
-}
+simulated function PostBeginPlay();
 
 defaultproperties
 {

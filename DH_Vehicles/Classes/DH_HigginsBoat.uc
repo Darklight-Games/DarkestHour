@@ -5,14 +5,14 @@
 
 class DH_HigginsBoat extends DHBoatVehicle;
 
-var     name        RampUpIdleAnim; // effectively replacements for BeginningIdleAnim, which is set to null (easier that overriding functions to stop unwanted BeginningIdleAnim)
-var     name        RampDownIdleAnim;
+var name RampUpIdleAnim; // effectively replacements for BeginningIdleAnim, which is set to null (easier that overriding functions to stop unwanted BeginningIdleAnim)
+var name RampDownIdleAnim;
 
 // TODO: Just use animation notifies!
-var     Sound       RampOpenSound;
-var     Sound       RampCloseSound;
+var Sound RampOpenSound;
+var Sound RampCloseSound;
 
-var     Texture     BinocsOverlay;
+var Texture BinocsOverlay;
 
 // Modified to loop either the ramp up or down idle animation based on current position index, & set the destroyed vehicle animation to be the same
 // But don't bother on dedicated server as (1) visuals aren't relevant & (2) due to continuous wave motion of animation, which starts at different times on server & net clients,
@@ -40,7 +40,7 @@ simulated function PostNetBeginPlay()
 simulated function DrawHUD(Canvas C)
 {
     local PlayerController PC;
-    local float            SavedOpacity, ScreenRatio;
+    local float SavedOpacity, ScreenRatio;
 
     PC = PlayerController(Controller);
 
@@ -56,9 +56,15 @@ simulated function DrawHUD(Canvas C)
             ScreenRatio = float(C.SizeY) / float(C.SizeX);
             C.SetPos(0.0, 0.0);
 
-            C.DrawTile(BinocsOverlay, C.SizeX, C.SizeY,                         // screen drawing area (to fill screen)
-                0.0, (1.0 - ScreenRatio) * float(BinocsOverlay.VSize) / 2.0,    // position in texture to begin drawing tile (from left edge, with vertical position to suit screen aspect ratio)
-                BinocsOverlay.USize, float(BinocsOverlay.VSize) * ScreenRatio); // width & height of tile within texture
+            C.DrawTile(
+                BinocsOverlay,
+                C.SizeX,
+                C.SizeY, // screen drawing area (to fill screen)
+                0.0,
+                (1.0 - ScreenRatio) * float(BinocsOverlay.VSize) / 2.0, // position in texture to begin drawing tile (from left edge, with vertical position to suit screen aspect ratio)
+                BinocsOverlay.USize,
+                float(BinocsOverlay.VSize) * ScreenRatio
+                ); // width & height of tile within texture
 
             C.ColorModulate.W = SavedOpacity; // reset HudOpacity to original value
         }
@@ -141,7 +147,7 @@ simulated state ViewTransition
 function bool KDriverLeave(bool bForceLeave)
 {
     local Controller SavedController;
-    local bool       bSwitchingVehiclePosition;
+    local bool bSwitchingVehiclePosition;
 
     // Prevent exit from vehicle if player is buttoned up (or if game type or mutator prevents exit)
     if (!bForceLeave && (!CanExit() || (Level.Game != none && !Level.Game.CanLeaveVehicle(self, Driver))))
@@ -214,7 +220,7 @@ function bool KDriverLeave(bool bForceLeave)
         {
             Driver.bSetPCRotOnPossess = Driver.default.bSetPCRotOnPossess;
             Driver.StopDriving(self);
-/*
+            /*
             // Give a player exiting the vehicle the same momentum as vehicle, with a little added height kick // REMOVED
             ExitVelocity = Velocity;
             ExitVelocity.Z += 60.0;
@@ -280,7 +286,6 @@ simulated function SpawnVehicleAttachments()
 // Emptied as Higgins boat can't stop/re-start its engine
 function Fire(optional float F);
 function ServerStartEngine();
-
 // Emptied out so we don't damage things we run into
 event RanInto(Actor Other);
 

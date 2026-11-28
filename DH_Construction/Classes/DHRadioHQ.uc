@@ -16,7 +16,7 @@ simulated function ERadioUsageError GetRadioUsageError(Pawn User)
     {
         return ERROR_Fatal;
     }
-    
+
     SP = HQ.SpawnPoint;
 
     if (SP == none)

@@ -12,13 +12,13 @@ class DHSPECIES_Human extends ROSPECIES_Human
 // Without PlayerRecords virtually all that's left is voice stuff that doesn't vary, certainly not within same nation, & it's in the pawn classes or can be
 static function bool Setup(Pawn P, xUtil.PlayerRecord Rec)
 {
-    local ROPawn                  ROP;
+    local ROPawn ROP;
     local ROPlayerReplicationInfo PRI;
-    local Mesh                    NewMesh;
-    local Class<VoicePack>        VoiceClass;
-    local Class<DHVoicePack>      DHVC;
-    local DH_LevelInfo            LI;
-    local int                     EnemyTeamIndex;
+    local Mesh NewMesh;
+    local class<VoicePack> VoiceClass;
+    local class<DHVoicePack> DHVC;
+    local DH_LevelInfo LI;
+    local int EnemyTeamIndex;
 
     ROP = ROPawn(P);
 
@@ -96,7 +96,7 @@ static function bool Setup(Pawn P, xUtil.PlayerRecord Rec)
 static function LoadResources(xUtil.PlayerRecord Rec, LevelInfo Level, PlayerReplicationInfo PRI, int TeamNum)
 {
     local class<VoicePack> VoiceClass;
-    local mesh             CustomSkeleton;
+    local mesh CustomSkeleton;
 
     if (Rec.MeshName != "")
     {

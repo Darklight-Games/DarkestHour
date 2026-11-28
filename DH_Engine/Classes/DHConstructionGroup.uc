@@ -10,10 +10,10 @@
 class DHConstructionGroup extends Object
     abstract;
 
-var Material                        MenuIcon;
-var localized string                GroupName;
-var array<class<DHConstruction> >   ConstructionClasses;
-var int                             SortOrder;
+var Material MenuIcon;
+var localized string GroupName;
+var array<class<DHConstruction> > ConstructionClasses;
+var int SortOrder;
 
 static function bool SortFunction(Object LHS, Object RHS)
 {

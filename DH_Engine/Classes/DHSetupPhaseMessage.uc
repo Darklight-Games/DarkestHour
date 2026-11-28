@@ -5,8 +5,8 @@
 
 class DHSetupPhaseMessage extends LocalMessage;
 
-var localized string    PhaseMessage;       // Message to send periodically when phase is current
-var localized string    PhaseEndMessage;    // Message to send to team when end is reached
+var localized string PhaseMessage; // Message to send periodically when phase is current
+var localized string PhaseEndMessage; // Message to send to team when end is reached
 
 static function string GetString(
     optional int Switch,
@@ -44,4 +44,3 @@ defaultproperties
     PosX=0.5
     PosY=0.75  // used to be 0.5, moved to get it out of the middle
 }
-

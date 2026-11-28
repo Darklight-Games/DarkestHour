@@ -12,4 +12,3 @@ defaultproperties
     Skins(0)=Texture'DH_Bofors_tex.Bofors40mmGun'
     TeamNum=ALLIES
 }
-

@@ -7,20 +7,21 @@
 // It then gets replicated to all clients to add menu interactions & to replicate some variables for client use
 class DHAdminMenu_Replicator extends Actor;
 
-var     array<string>   MenuArray;        // the standard local menu interactions to be created
-var     string          PrivateMessage;   // stores any private message from an admin to a player, which can then be accessed by the message class
-var     bool            bHasInteraction;  // client fail-safe to make sure we don't create more than 1 grid overlay interaction
-var     config bool     bClientDebug;     // client config flag to log various events, which can be set in the local player's own DarkestHour.ini file
-var     float           NewElapsedTime;   // set if mutator modifies the round time remaining, allowing it to be replicated & used to update GRI.ElapsedTime on clients
+var array<string> MenuArray; // the standard local menu interactions to be created
+var string PrivateMessage; // stores any private message from an admin to a player, which can then be accessed by the message class
+var bool bHasInteraction; // client fail-safe to make sure we don't create more than 1 grid overlay interaction
+var config bool bClientDebug; // client config flag to log various events, which can be set in the local player's own DarkestHour.ini file
+var float NewElapsedTime; // set if mutator modifies the round time remaining, allowing it to be replicated & used to update GRI.ElapsedTime on clients
 
 // Clientside records of last received values, so PostNetReceive can tell if they've changed
-var     bool            bSavedHideCapProgress;
-var     bool            bSavedHidePlayerIcon;
-var     float           SavedNewElapsedTime;
+var bool bSavedHideCapProgress;
+var bool bSavedHidePlayerIcon;
+var float SavedNewElapsedTime;
 
 // Copies of same-named variables from the mutator itself, replicated to clients so they know the server's settings
-var     bool            bBypassAdminLogin, bParaDropPlayerAllowed, bShowRealismMenu, bRealismMutPresent, bMinesDisabled, bHideCapProgress, bHidePlayerIcon;
-var     Sound           WarningSound;
+var bool bBypassAdminLogin, bParaDropPlayerAllowed, bShowRealismMenu, bRealismMutPresent, bMinesDisabled,
+    bHideCapProgress, bHidePlayerIcon;
+var Sound WarningSound;
 
 replication
 {
@@ -49,19 +50,22 @@ simulated function PostBeginPlay()
     {
         AMMutator = DHAdminMenuMutator(Owner);
 
-        bBypassAdminLogin      = AMMutator.bBypassAdminLogin;
+        bBypassAdminLogin = AMMutator.bBypassAdminLogin;
         bParaDropPlayerAllowed = AMMutator.bParaDropPlayerAllowed;
-        bShowRealismMenu       = AMMutator.bShowRealismMenu;
-        bRealismMutPresent     = AMMutator.bRealismMutPresent;
-        bMinesDisabled         = AMMutator.bMinesDisabled;
-        bHidePlayerIcon        = AMMutator.bHidePlayerIcon;
-        bHideCapProgress       = AMMutator.bHideCapProgress;
-        WarningSound           = AMMutator.WarningSound;
+        bShowRealismMenu = AMMutator.bShowRealismMenu;
+        bRealismMutPresent = AMMutator.bRealismMutPresent;
+        bMinesDisabled = AMMutator.bMinesDisabled;
+        bHidePlayerIcon = AMMutator.bHidePlayerIcon;
+        bHideCapProgress = AMMutator.bHideCapProgress;
+        WarningSound = AMMutator.WarningSound;
 
         if (AMMutator != none && AMMutator.bDebug)
         {
-            Log("DHAdminMenu_Replicator: bBypassAdminLogin =" @ bBypassAdminLogin @ " bParaDropPlayerAllowed =" @ bParaDropPlayerAllowed @ " bShowRealismMenu =" @
-                bShowRealismMenu @ " bRealismMutPresent =" @ bRealismMutPresent @ " bMinesDisabled =" @ bMinesDisabled @ " WarningSound =" @ WarningSound);
+            Log(
+                "DHAdminMenu_Replicator: bBypassAdminLogin =" @ bBypassAdminLogin @ " bParaDropPlayerAllowed ="
+                    @ bParaDropPlayerAllowed @ " bShowRealismMenu =" @ bShowRealismMenu @ " bRealismMutPresent ="
+                    @ bRealismMutPresent @ " bMinesDisabled =" @ bMinesDisabled @ " WarningSound =" @ WarningSound
+                );
         }
     }
 
@@ -77,8 +81,8 @@ static function SetMessageClassLifeTimes(float GameSpeed)
     Class'DHAdminMenu_NotifyMessages'.default.LifeTime = int(Round(8.0 * GameSpeed));
     Class'DHAdminMenu_WarningMessage'.default.LifeTime = int(Round(9.0 * GameSpeed));
     Class'DHAdminMenu_PrivateMessage'.default.LifeTime = int(Round(9.0 * GameSpeed));
-    Class'DHAdminMenu_AdminMessages'.default.LifeTime  = int(Round(5.0 * GameSpeed));
-    Class'DHAdminMenu_ErrorMessages'.default.LifeTime  = int(Round(3.0 * GameSpeed));
+    Class'DHAdminMenu_AdminMessages'.default.LifeTime = int(Round(5.0 * GameSpeed));
+    Class'DHAdminMenu_ErrorMessages'.default.LifeTime = int(Round(3.0 * GameSpeed));
 }
 
 // On clients this waits until the local PlayerController has been replicated & then creates the local menu interactions
@@ -105,7 +109,7 @@ simulated function Tick(float DeltaTime)
 simulated function CreateLocalMenus(PlayerController PC)
 {
     local DHAdminMenu_MenuBase NewInteraction;
-    local int                   i;
+    local int i;
 
     if (PC == none)
     {
@@ -140,8 +144,10 @@ simulated function CreateLocalMenus(PlayerController PC)
     // If the local player has set bClientDebug to true in their own DarkestHour.ini file, this logs replicated variables & a list of their local interactions
     if (bClientDebug)
     {
-        Log("DHAdminMenu_Replicator: bParaDropPlayerAllowed =" @ bParaDropPlayerAllowed @ " bShowRealismMenu =" @ bShowRealismMenu @
-            " bRealismMutPresent =" @ bRealismMutPresent @ " bMinesDisabled =" @ bMinesDisabled);
+        Log(
+            "DHAdminMenu_Replicator: bParaDropPlayerAllowed =" @ bParaDropPlayerAllowed @ " bShowRealismMenu ="
+                @ bShowRealismMenu @ " bRealismMutPresent =" @ bRealismMutPresent @ " bMinesDisabled =" @ bMinesDisabled
+            );
 
         for (i = 0; i < PC.Player.LocalInteractions.Length; ++i)
         {
@@ -188,7 +194,12 @@ simulated function ClientRenamePlayer(Controller PlayerToRename, string NewPlaye
 }
 
 // Serverside function called from the mutator to give a message to a player - it passes the info to the relevant client using a replicated client function
-function ServerPrivateMessage(PlayerController Receiver, PlayerController Admin, string Message, optional bool bIsAdminWarning)
+function ServerPrivateMessage(
+    PlayerController Receiver,
+    PlayerController Admin,
+    string Message,
+    optional bool bIsAdminWarning
+    )
 {
     if (Receiver != none && Admin != none && Message != "")
     {
@@ -200,7 +211,12 @@ function ServerPrivateMessage(PlayerController Receiver, PlayerController Admin,
 
 // Replicated clientside function that passes info to client for player to receive private message on an ROCriticalMessage background in the middle of the their screen
 // Crucial part is when message function is called, this actor is included as OptionalObject parameter, allowing message to access this actor's PrivateMessage variable
-simulated function ClientPrivateMessage(PlayerController Receiver, PlayerReplicationInfo AdminPRI, string Message, bool bIsAdminWarning)
+simulated function ClientPrivateMessage(
+    PlayerController Receiver,
+    PlayerReplicationInfo AdminPRI,
+    string Message,
+    bool bIsAdminWarning
+    )
 {
     if (Receiver != none && AdminPRI != none && Message != "")
     {
@@ -212,7 +228,10 @@ simulated function ClientPrivateMessage(PlayerController Receiver, PlayerReplica
             Receiver.ReceiveLocalizedMessage(Class'DHAdminMenu_WarningMessage', 1, AdminPRI,, self);
 
             // As a backup, display the message as white chat text at the bottom of the player's screen
-            Receiver.ClientMessage(Class'DHAdminMenu_WarningMessage'.default.WarningChatPrefix @ "'" $ AdminPRI.PlayerName $ "':" @ PrivateMessage);
+            Receiver.ClientMessage(
+                Class'DHAdminMenu_WarningMessage'.default.WarningChatPrefix @ "'" $ AdminPRI.PlayerName $ "':"
+                    @ PrivateMessage
+                );
 
             // Play a warning sound to highlight the message
             if (WarningSound != none)
@@ -226,7 +245,10 @@ simulated function ClientPrivateMessage(PlayerController Receiver, PlayerReplica
             Receiver.ReceiveLocalizedMessage(Class'DHAdminMenu_PrivateMessage', 0, AdminPRI,, self);
 
             // As a backup, display the message as white chat text at the bottom of the player's screen
-            Receiver.ClientMessage(Class'DHAdminMenu_PrivateMessage'.default.MessageChatPrefix @ "'" $ AdminPRI.PlayerName $ "':" @ PrivateMessage);
+            Receiver.ClientMessage(
+                Class'DHAdminMenu_PrivateMessage'.default.MessageChatPrefix @ "'" $ AdminPRI.PlayerName $ "':"
+                    @ PrivateMessage
+                );
         }
 
         PrivateMessage = ""; // re-set
@@ -375,9 +397,9 @@ simulated function ClientTogglePlayerIcon()
 // Including setting all actor references in menus to 'none', which is important when dealing with actor references in non-actor objects
 simulated function Destroyed()
 {
-    local PlayerController      PC;
+    local PlayerController PC;
     local DHAdminMenu_MenuBase AdminMenu;
-    local int                   i;
+    local int i;
 
     PC = Level.GetLocalPlayerController();
 

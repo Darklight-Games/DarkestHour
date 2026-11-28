@@ -5,4 +5,3 @@
 
 class DHMapList extends MapList
     config;
-

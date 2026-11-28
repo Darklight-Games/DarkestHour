@@ -6,7 +6,12 @@
 class DHSquadSayMessage extends DHLocalMessage
     abstract;
 
-static function string AssembleString(HUD myHUD, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional string MessageString)
+static function string AssembleString(
+    HUD myHUD,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional string MessageString
+    )
 {
     local string SquadMemberID;
 
@@ -16,14 +21,14 @@ static function string AssembleString(HUD myHUD, optional int Switch, optional P
     }
 
     SquadMemberID = GetSquadMemberID(DHPlayerReplicationInfo(RelatedPRI_1));
-    if (SquadMemberID != "") SquadMemberID $= " ";
 
-    return default.MessagePrefix @
-           SquadMemberID $
-           RelatedPRI_1.PlayerName @
-           ":" @
-           Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White) $
-           MessageString;
+    if (SquadMemberID != "")
+    {
+        SquadMemberID $= " ";
+    }
+
+    return default.MessagePrefix @ SquadMemberID $ RelatedPRI_1.PlayerName @ ":"
+        @ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White) $ MessageString;
 }
 
 static function Color GetDHConsoleColor(PlayerReplicationInfo RelatedPRI_1, bool bSimpleColours)

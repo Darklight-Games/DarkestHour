@@ -5,50 +5,50 @@
 
 class DHSpawnManager extends SVehicleFactory;
 
-const   SPAWN_POINTS_MAX = 63;
-const   VEHICLE_POOLS_MAX = 32;
-const   SPAWN_VEHICLES_MAX = 8;
-const   SPAWN_PROTECTION_TIME = 2; // The full protection time given to players/vehicles (they cannot be damaged/killed within this time)
+const SPAWN_POINTS_MAX = 63;
+const VEHICLE_POOLS_MAX = 32;
+const SPAWN_VEHICLES_MAX = 8;
+const SPAWN_PROTECTION_TIME = 2; // The full protection time given to players/vehicles (they cannot be damaged/killed within this time)
 
 struct VehiclePoolSlot
 {
-    var ROVehicle   Vehicle;
-    var int         RespawnTime;
+    var ROVehicle Vehicle;
+    var int RespawnTime;
 };
 
 struct VehiclePool
 {
-    var() name              Tag;
-    var() class<ROVehicle>  VehicleClass;
-    var() bool              bIsInitiallyActive;
-    var() bool              bIsSpawnVehicle;
-    var() int               InitialSpawnTimer;       // the amount of delay (in seconds )until this vehicle can be spawned initially
-    var() float             RespawnTime;             // respawn interval in seconds
-    var() byte              MaxSpawns;               // how many vehicles can be spawned from this pool
-    var() byte              MaxActive;               // how many vehicles from this pool can be active at once
-    var() bool              bIgnoreMaxTeamVehicles;  // if true, this vehicle will not add to the team's active vehicle count when spawned
+    var() name Tag;
+    var() class<ROVehicle> VehicleClass;
+    var() bool bIsInitiallyActive;
+    var() bool bIsSpawnVehicle;
+    var() int InitialSpawnTimer; // the amount of delay (in seconds )until this vehicle can be spawned initially
+    var() float RespawnTime; // respawn interval in seconds
+    var() byte MaxSpawns; // how many vehicles can be spawned from this pool
+    var() byte MaxActive; // how many vehicles from this pool can be active at once
+    var() bool bIgnoreMaxTeamVehicles; // if true, this vehicle will not add to the team's active vehicle count when spawned
 
-    var() name              OnActivatedEvent;        // event to trigger when pool is activated (also gets triggered when initially activated)
-    var() name              OnDeactivatedEvent;      // event to trigger when pool is deactivated (does NOT get triggered when initially deactivated)
-    var() name              OnDepletedEvent;         // event to trigger when pool has been depleted (SpawnCount meets or exceeds MaxSpawns)
-    var() name              OnDepleteActivatePool;   // vehicle pool to activate when this pool has been depleted (uses pool tag)
-    var() name              OnVehicleDestroyedEvent; // event to trigger when vehicle from this pool is destroyed
-    var() name              OnVehicleSpawnedEvent;   // event to trigger when vehicle from this pool is spawned
+    var() name OnActivatedEvent; // event to trigger when pool is activated (also gets triggered when initially activated)
+    var() name OnDeactivatedEvent; // event to trigger when pool is deactivated (does NOT get triggered when initially deactivated)
+    var() name OnDepletedEvent; // event to trigger when pool has been depleted (SpawnCount meets or exceeds MaxSpawns)
+    var() name OnDepleteActivatePool; // vehicle pool to activate when this pool has been depleted (uses pool tag)
+    var() name OnVehicleDestroyedEvent; // event to trigger when vehicle from this pool is destroyed
+    var() name OnVehicleSpawnedEvent; // event to trigger when vehicle from this pool is spawned
 
     var array<VehiclePoolSlot> Slots;
 };
 
-var()   array<VehiclePool>  VehiclePools;
-var()   byte                MaxTeamVehicles[2];
+var() array<VehiclePool> VehiclePools;
+var() byte MaxTeamVehicles[2];
 
-var     private     array<ROVehicle>        Vehicles;
-var     private     array<DHSpawnPoint>     SpawnPoints;
-var     private     DHGameReplicationInfo   GRI;
+var private array<ROVehicle> Vehicles;
+var private array<DHSpawnPoint> SpawnPoints;
+var private DHGameReplicationInfo GRI;
 
 function PostBeginPlay()
 {
     local DHSpawnPoint SP;
-    local int          i;
+    local int i;
 
     GRI = DHGameReplicationInfo(Level.Game.GameReplicationInfo);
 
@@ -76,11 +76,13 @@ function PostBeginPlay()
     for (i = VehiclePools.Length - 1; i >= 0; --i)
     {
         // VP doesn't have a specified vehicle class, so is invalid
-        if (VehiclePools[i].VehicleClass == none ||
-            !ClassIsChildOf(VehiclePools[i].VehicleClass, Class'ROVehicle'))
+        if (VehiclePools[i].VehicleClass == none || !ClassIsChildOf(VehiclePools[i].VehicleClass, Class'ROVehicle'))
         {
             // Remove VP if it is invalid (no specified class or it's a duplicate)
-            Warn("VehiclePools[" $ i $ "] is invalid & has been removed! (VehicleClass =" @ VehiclePools[i].VehicleClass $ ")");
+            Warn(
+                "VehiclePools[" $ i $ "] is invalid & has been removed! (VehicleClass ="
+                    @ VehiclePools[i].VehicleClass $ ")"
+                );
             VehiclePools.Remove(i, 1);
         }
     }
@@ -161,7 +163,6 @@ function bool SpawnPlayer(DHPlayer PC)
         return false;
     }
 
-
     // We store the value of bCombatSpawn here because the spawn point may destroy
     // itself when calling PerformSpawn, which would invalidate the reference.
     bResult = SP.PerformSpawn(PC);
@@ -178,14 +179,14 @@ function bool SpawnPlayer(DHPlayer PC)
 
 function ROVehicle SpawnVehicle(DHPlayer PC, Vector SpawnLocation, Rotator SpawnRotation)
 {
-    local DHPlayerReplicationInfo   PRI;
-    local DHSpawnPointBase          SP;
-    local ROVehicle                 V;
-    local DHVehicle                 DHV;
-    local DHPawn                    Driver;
-    local int                       i;
-    local class<DHVehicle>          DHVC;
-    local DH_LevelInfo              LI;
+    local DHPlayerReplicationInfo PRI;
+    local DHSpawnPointBase SP;
+    local ROVehicle V;
+    local DHVehicle DHV;
+    local DHPawn Driver;
+    local int i;
+    local class<DHVehicle> DHVC;
+    local DH_LevelInfo LI;
 
     if (DarkestHourGame(Level.Game) != none)
     {
@@ -199,7 +200,9 @@ function ROVehicle SpawnVehicle(DHPlayer PC, Vector SpawnLocation, Rotator Spawn
 
     SP = GRI.SpawnPoints[PC.SpawnPointIndex];
 
-    if (!GRI.CanSpawnWithParameters(PC.SpawnPointIndex, PC.GetTeamNum(), PC.GetRoleIndex(), PC.GetSquadIndex(), PC.VehiclePoolIndex))
+    if (!GRI.CanSpawnWithParameters(
+        PC.SpawnPointIndex, PC.GetTeamNum(), PC.GetRoleIndex(), PC.GetSquadIndex(), PC.VehiclePoolIndex
+        ))
     {
         return none;
     }
@@ -219,7 +222,11 @@ function ROVehicle SpawnVehicle(DHPlayer PC, Vector SpawnLocation, Rotator Spawn
     // Make sure the player is in a squad if the vehicle requires them to be
     DHVC = class<DHVehicle>(VehiclePools[PC.VehiclePoolIndex].VehicleClass);
 
-    if (DHVC != none && DHVC.default.bRequiresDriverLicense && PRI != none && !PRI.IsPlayerLicensedToDrive(PC) && PC.bRestrictVehicleAccess)
+    if (DHVC != none
+        && DHVC.default.bRequiresDriverLicense
+        && PRI != none
+        && !PRI.IsPlayerLicensedToDrive(PC)
+        && PC.bRestrictVehicleAccess)
     {
         GRI.UnreserveVehicle(PC);
         return none;
@@ -279,7 +286,8 @@ function ROVehicle SpawnVehicle(DHPlayer PC, Vector SpawnLocation, Rotator Spawn
             DHV.ServerStartEngine();
         }
 
-        if (VehiclePools[PC.VehiclePoolIndex].bIsSpawnVehicle || (LI != none && LI.GameTypeClass.default.bHasTemporarySpawnVehicles))
+        if (VehiclePools[PC.VehiclePoolIndex].bIsSpawnVehicle
+            || (LI != none && LI.GameTypeClass.default.bHasTemporarySpawnVehicles))
         {
             DHV.CreateSpawnPointAttachment(!VehiclePools[PC.VehiclePoolIndex].bIsSpawnVehicle);
         }
@@ -338,8 +346,8 @@ function ROVehicle SpawnVehicle(DHPlayer PC, Vector SpawnLocation, Rotator Spawn
 event VehicleDestroyed(Vehicle V)
 {
     local ROVehicle ROV;
-    local int       NextAvailableTime, i, j;
-    local bool      bWasSpawnKilled;
+    local int NextAvailableTime, i, j;
+    local bool bWasSpawnKilled;
     local DHVehicle DHV;
 
     const SPAWN_KILL_RESPAWN_TIME = 2;
@@ -356,7 +364,9 @@ event VehicleDestroyed(Vehicle V)
         // Find out if the vehicle was spawned killed
         if (DHV.IsSpawnKillProtected())
         {
-            if (DHV.SpawnPoint != none)
+            // Only penalize the spawn point if the vehicle was last damaged by the enemy.
+            // This excludes friendly fire & self-inflicted destruction (e.g. crashing).
+            if (DHV.SpawnPoint != none && DHV.LastHitBy != none && DHV.LastHitBy.GetTeamNum() != DHV.VehicleTeam)
             {
                 DHV.SpawnPoint.OnSpawnKill(V, none);
             }
@@ -405,7 +415,10 @@ event VehicleDestroyed(Vehicle V)
                     SetVehiclePoolIsActiveByTag(VehiclePools[i].OnDepleteActivatePool, true);
                 }
 
-                Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, VehiclePools[i].VehicleClass.default.VehicleTeam, Level.Game.default.GameMessageClass, 200 + i,,, self); // vehicle reinforcements have been depleted
+                Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                    Level, VehiclePools[i].VehicleClass.default.VehicleTeam, Level.Game.default.GameMessageClass,
+                    200 + i,,, self
+                    ); // vehicle reinforcements have been depleted
             }
 
             // Find this vehicle's slot & set its re-spawn time
@@ -489,7 +502,7 @@ private function SetSpawnPointIsActive(int SpawnPointIndex, bool bIsActive)
 function SetSpawnPointIsActiveByTag(name SpawnPointTag, bool bIsActive)
 {
     local array<byte> SpawnPointIndices;
-    local int         i;
+    local int i;
 
     GetSpawnPointIndicesByTag(SpawnPointTag, SpawnPointIndices);
 
@@ -502,7 +515,7 @@ function SetSpawnPointIsActiveByTag(name SpawnPointTag, bool bIsActive)
 function SetSpawnPointIsLockedByTag(name SpawnPointTag, bool bIsLocked)
 {
     local array<byte> SpawnPointIndices;
-    local int         i;
+    local int i;
 
     GetSpawnPointIndicesByTag(SpawnPointTag, SpawnPointIndices);
 
@@ -515,7 +528,7 @@ function SetSpawnPointIsLockedByTag(name SpawnPointTag, bool bIsLocked)
 function ToggleSpawnPointIsActiveByTag(name SpawnPointTag)
 {
     local array<byte> SpawnPointIndices;
-    local int         i;
+    local int i;
     local DHSpawnPoint SP;
 
     if (GRI == none)
@@ -559,22 +572,32 @@ private function AddVehiclePoolMaxSpawns(byte VehiclePoolIndex, int Value)
         if (Value > 0)
         {
             // Send "vehicle reinforcements have arrived" message
-            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, VehiclePools[VehiclePoolIndex].VehicleClass.default.VehicleTeam, Level.Game.default.GameMessageClass, 300 + VehiclePoolIndex,,, self);
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                Level, VehiclePools[VehiclePoolIndex].VehicleClass.default.VehicleTeam,
+                Level.Game.default.GameMessageClass, 300 + VehiclePoolIndex,,, self
+                );
         }
 
-        GRI.VehiclePoolMaxSpawns[VehiclePoolIndex] = Clamp(int(GRI.VehiclePoolMaxSpawns[VehiclePoolIndex]) + Value, 0, 254);
+        GRI.VehiclePoolMaxSpawns[VehiclePoolIndex] = Clamp(
+            int(GRI.VehiclePoolMaxSpawns[VehiclePoolIndex]) + Value,
+            0,
+            254
+            );
 
         if (Value < 0 && GRI.VehiclePoolMaxSpawns[VehiclePoolIndex] == 0)
         {
             // Send "vehicle reinforcements have been cut off" message
-            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, VehiclePools[VehiclePoolIndex].VehicleClass.default.VehicleTeam, Level.Game.default.GameMessageClass, 400 + VehiclePoolIndex,,, self);
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                Level, VehiclePools[VehiclePoolIndex].VehicleClass.default.VehicleTeam,
+                Level.Game.default.GameMessageClass, 400 + VehiclePoolIndex,,, self
+                );
         }
     }
 }
 
 private function SetVehiclePoolIsActive(int VehiclePoolIndex, bool bIsActive)
 {
-    if (GRI == none ||GRI.IsVehiclePoolActive(VehiclePoolIndex) == bIsActive)
+    if (GRI == none || GRI.IsVehiclePoolActive(VehiclePoolIndex) == bIsActive)
     {
         return; // no change
     }
@@ -601,7 +624,7 @@ private function SetVehiclePoolIsActive(int VehiclePoolIndex, bool bIsActive)
 function AddVehiclePoolMaxSpawnsByTag(name VehiclePoolTag, int Value)
 {
     local array<byte> VehiclePoolIndices;
-    local int         i;
+    local int i;
 
     GetVehiclePoolIndicesByTag(VehiclePoolTag, VehiclePoolIndices);
 
@@ -614,7 +637,7 @@ function AddVehiclePoolMaxSpawnsByTag(name VehiclePoolTag, int Value)
 function SetVehiclePoolMaxSpawnsByTag(name VehiclePoolTag, byte MaxSpawns)
 {
     local array<byte> VehiclePoolIndices;
-    local int         i;
+    local int i;
 
     if (GRI != none)
     {
@@ -630,8 +653,8 @@ function SetVehiclePoolMaxSpawnsByTag(name VehiclePoolTag, byte MaxSpawns)
 function AddVehiclePoolMaxActiveByTag(name VehiclePoolTag, int Value)
 {
     local array<byte> VehiclePoolIndices;
-    local int         i, NewMax;
-    local byte        VehiclePoolIndex;
+    local int i, NewMax;
+    local byte VehiclePoolIndex;
 
     if (GRI != none)
     {
@@ -643,7 +666,10 @@ function AddVehiclePoolMaxActiveByTag(name VehiclePoolTag, int Value)
 
             if (Value > 0)
             {
-                Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, VehiclePools[VehiclePoolIndex].VehicleClass.default.VehicleTeam, Level.Game.default.GameMessageClass, 300 + VehiclePoolIndices[i],,, self);
+                Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                    Level, VehiclePools[VehiclePoolIndex].VehicleClass.default.VehicleTeam,
+                    Level.Game.default.GameMessageClass, 300 + VehiclePoolIndices[i],,, self
+                    );
             }
 
             NewMax = Clamp(int(GRI.VehiclePoolMaxActives[VehiclePoolIndex]) + Value, 0, 254);
@@ -655,7 +681,10 @@ function AddVehiclePoolMaxActiveByTag(name VehiclePoolTag, int Value)
 
             if (Value < 0 && GRI.VehiclePoolMaxActives[VehiclePoolIndex] == 0)
             {
-                Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, VehiclePools[VehiclePoolIndex].VehicleClass.default.VehicleTeam, Level.Game.default.GameMessageClass, 400 + VehiclePoolIndices[i],,, self);
+                Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                    Level, VehiclePools[VehiclePoolIndex].VehicleClass.default.VehicleTeam,
+                    Level.Game.default.GameMessageClass, 400 + VehiclePoolIndices[i],,, self
+                    );
             }
         }
     }
@@ -664,7 +693,7 @@ function AddVehiclePoolMaxActiveByTag(name VehiclePoolTag, int Value)
 function SetVehiclePoolMaxActiveByTag(name VehiclePoolTag, byte Value)
 {
     local array<byte> VehiclePoolIndices;
-    local int        i;
+    local int i;
 
     if (GRI != none)
     {
@@ -683,7 +712,7 @@ function SetVehiclePoolMaxActiveByTag(name VehiclePoolTag, byte Value)
 function SetVehiclePoolIsActiveByTag(name VehiclePoolTag, bool bIsActive)
 {
     local array<byte> VehiclePoolIndices;
-    local int         i;
+    local int i;
 
     GetVehiclePoolIndicesByTag(VehiclePoolTag, VehiclePoolIndices);
 
@@ -696,7 +725,7 @@ function SetVehiclePoolIsActiveByTag(name VehiclePoolTag, bool bIsActive)
 function ToggleVehiclePoolIsActiveByTag(name VehiclePoolTag)
 {
     local array<byte> VehiclePoolIndices;
-    local int         i;
+    local int i;
 
     GetVehiclePoolIndicesByTag(VehiclePoolTag, VehiclePoolIndices);
 

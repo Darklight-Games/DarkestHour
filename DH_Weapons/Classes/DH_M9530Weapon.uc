@@ -4,10 +4,11 @@
 //==============================================================================
 
 class DH_M9530Weapon extends DHBoltActionWeapon;
-//Austrian 1930 modification of Mannlicher M95
-//Meant for volkssturm loadouts
-//8x56R ammo was non-standard for Germany, so this weapon cannot be resupplied
-//Volkssturm roles with this weapon should have another resuppliable option, like G98 for example
+
+// Austrian 1930 modification of Mannlicher M95
+// Meant for volkssturm loadouts
+// 8x56R ammo was non-standard for Germany, so this weapon cannot be resupplied
+// Volkssturm roles with this weapon should have another resuppliable option, like G98 for example
 
 simulated function BringUp(optional Weapon PrevWeapon)
 {
@@ -18,7 +19,6 @@ simulated function BringUp(optional Weapon PrevWeapon)
         DHPlayer(Instigator.Controller).QueueHint(61, false);
     }
 }
-
 
 defaultproperties
 {

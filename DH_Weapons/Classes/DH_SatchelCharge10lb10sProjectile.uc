@@ -10,21 +10,21 @@ const UNDER_VEHICLE_SEARCH_RADIUS = 200.0; // Used to check if explosive is unde
                                            // Search radius should be about half-length of the longest vehicle
                                            // (keep it on the low for better performance).
 
-var float           UnderVehicleDamageBonus;    // Extra damage applied on top of normal damage if explosive is under a vehicle
+var float UnderVehicleDamageBonus; // Extra damage applied on top of normal damage if explosive is under a vehicle
 
-var float           ConstructionDamageRadius;   // A radius that will damage Contructions
-var float           ConstructionDamageMax;
+var float ConstructionDamageRadius; // A radius that will damage Contructions
+var float ConstructionDamageMax;
 
-var float           ObstacleDamageRadius;       // A radius that will damage Obstacles
-var float           ObstacleDamageMax;
+var float ObstacleDamageRadius; // A radius that will damage Obstacles
+var float ObstacleDamageMax;
 
-var float           EngineDamageRadius;         // A radius that will damage Vehicle Engines
-var float           EngineDamageMax;
-var float           EngineDeckArmorThicknessThreshold; // How much engine deck armor the explosive can get through
+var float EngineDeckArmorThicknessThreshold; // How much engine deck armor the explosive can get through
+var float EngineDamageRadius; // A radius that will damage Vehicle Engines
+var float EngineDamageMax;
 
-var float           TreadDamageMassThreshold;   // A mass threshold at which a vehicle will take min damage instead of destroying the tread outright
-var float           TreadDamageRadius;          // A radius that will damage Vehicle Treads
-var float           TreadDamageMax;
+var float TreadDamageMassThreshold; // A mass threshold at which a vehicle will take min damage instead of destroying the tread outright
+var float TreadDamageRadius; // A radius that will damage Vehicle Treads
+var float TreadDamageMax;
 
 // Modified to record SavedInstigator & SavedPRI
 // RODemolitionChargePlacedMsg from ROSatchelChargeProjectile is omitted
@@ -62,7 +62,7 @@ simulated function BlowUp(Vector HitLocation)
 function HandleObjSatchels()
 {
     local DH_ObjSatchel SatchelObjActor;
-    local Volume        V;
+    local Volume V;
 
     foreach TouchingActors(Class'Volume', V)
     {

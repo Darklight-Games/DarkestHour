@@ -7,7 +7,7 @@ class DHBulletHitMetalEffectLarge extends Emitter;
 
 var Texture SparkGroup[4];
 
-//particles: 34
+// particles: 34
 
 simulated function PostBeginPlay()
 {

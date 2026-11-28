@@ -5,8 +5,8 @@
 
 class DH_ModifySpawnPoint extends DH_ModifyActors;
 
-var()   array<name>         SpawnPointsToModify; // leveller specifies the tag(s) of spawn point(s) to be modified
-var()   StatusModifyType    HowToModify;         // leveller specifies whether the spawn point(s) is to be enabled, disabled or have its status toggled
+var() array<name> SpawnPointsToModify; // leveller specifies the tag(s) of spawn point(s) to be modified
+var() StatusModifyType HowToModify; // leveller specifies whether the spawn point(s) is to be enabled, disabled or have its status toggled
 
 function PostBeginPlay()
 {
@@ -22,7 +22,7 @@ function PostBeginPlay()
 event Trigger(Actor Other, Pawn EventInstigator)
 {
     local DHSpawnManager SM;
-    local int            i;
+    local int i;
 
     if (DarkestHourGame(Level.Game) != none)
     {
@@ -50,5 +50,3 @@ event Trigger(Actor Other, Pawn EventInstigator)
         }
     }
 }
-
-

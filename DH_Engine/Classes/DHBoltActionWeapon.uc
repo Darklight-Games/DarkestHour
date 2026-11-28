@@ -13,37 +13,36 @@ enum EReloadState
     RS_ReloadLooped,
     RS_ReloadLoopedStripper,
     RS_PostReload,
-    RS_FullReload
+    RS_FullReload,
 };
 
-var     EReloadState    ReloadState;        // weapon's current reloading state (none means not reloading)
-var     bool            bInterruptReload;   // set when one-by-one reload is stopped by player part way through, by pressing fire button
+var EReloadState ReloadState; // weapon's current reloading state (none means not reloading)
+var bool bInterruptReload; // set when one-by-one reload is stopped by player part way through, by pressing fire button
 
-var     name            PreReloadAnim;       // one-off anim when starting to reload
-var     name            PreReloadHalfAnim;   // same as above, but when there are one or more rounds in the chamber
-var     name            PreReloadEmptyAnim;  // same as above, but when the weapon is empty
-var     name            PreReloadCockedAnim; // same as half and regular pre-reload, but with a cocked hammer
+var name PreReloadAnim; // one-off anim when starting to reload
+var name PreReloadHalfAnim; // same as above, but when there are one or more rounds in the chamber
+var name PreReloadEmptyAnim; // same as above, but when the weapon is empty
+var name PreReloadCockedAnim; // same as half and regular pre-reload, but with a cocked hammer
 
-var     name            SingleReloadAnim;       // looping anim for inserting a single round
-var     name            SingleReloadHalfAnim;   // same as above, but when there are one or more rounds in the chamber
+var name SingleReloadAnim; // looping anim for inserting a single round
+var name SingleReloadHalfAnim; // same as above, but when there are one or more rounds in the chamber
 
-var     name            StripperReloadAnim; // stripper clip reload animation
+var name StripperReloadAnim; // stripper clip reload animation
 
-var     name            PostReloadAnim;       // one-off anim when reloading ends
-var     name            PostReloadNoBoltAnim; // alternative "post reload" when bolting is not required (e.g. on shotguns)
+var name PostReloadAnim; // one-off anim when reloading ends
+var name PostReloadNoBoltAnim; // alternative "post reload" when bolting is not required (e.g. on shotguns)
 
-var     name            FullReloadAnim;     // full reload animation (takes precedence!)
+var name FullReloadAnim; // full reload animation (takes precedence!)
 
-var     int             NumRoundsToLoad;    // how many rounds to be loaded to fill the weapon
+var int NumRoundsToLoad; // how many rounds to be loaded to fill the weapon
 
-var     bool            bShouldSkipBolt;
-var     bool            bCanUseUnfiredRounds; // add ejected unfired rounds back into the ammo pile
-var     bool            bEjectRoundOnReload;  // eject the chambered round when reloading
-                                              // (overrides bCanUseUnfiredRounds when disabled)
+var bool bShouldSkipBolt;
+var bool bCanUseUnfiredRounds; // add ejected unfired rounds back into the ammo pile
+var bool bEjectRoundOnReload; // eject the chambered round when reloading (overrides bCanUseUnfiredRounds when disabled)
 
-var     bool            bShouldZoomWhenBolting; // if true, do a zoom cycle when working the bolt (similar to reloads)
+var bool bShouldZoomWhenBolting; // if true, do a zoom cycle when working the bolt (similar to reloads)
 
-var     int             StripperClipSize;
+var int StripperClipSize;
 
 // TODO: for refactoring this, when we try to do a reload,
 // check if the magazine is empty enough for a full stripper clip to be
@@ -116,29 +115,19 @@ simulated state WorkingBolt extends WeaponBusy
         return global.ShouldUseFreeAim();
     }
 
-    simulated function bool WeaponAllowSprint()
-    {
-        return false;
-    }
-
-    simulated function bool CanStartCrawlMoving()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowSprint();
+    simulated function bool CanStartCrawlMoving();
 
     simulated function AnimEnd(int Channel)
     {
-        local name  Anim;
+        local name Anim;
         local float Frame, Rate;
 
         if (InstigatorIsLocallyControlled())
         {
             GetAnimParams(0, Anim, Frame, Rate);
 
-            if (Anim == BoltIronAnim ||
-                Anim == BoltHipAnim ||
-                Anim == BoltIronLastAnim ||
-                Anim == BoltHipLastAnim)
+            if (Anim == BoltIronAnim || Anim == BoltHipAnim || Anim == BoltIronLastAnim || Anim == BoltHipLastAnim)
             {
                 bWaitingToBolt = false;
             }
@@ -227,10 +216,7 @@ simulated function PostFire()
 // State where the weapon has just been fired
 simulated state PostFiring
 {
-    simulated function bool ReadyToFire(int Mode)
-    {
-        return false;
-    }
+    simulated function bool ReadyToFire(int Mode);
 
     simulated function Timer()
     {
@@ -242,7 +228,7 @@ simulated state PostFiring
             }
             else
             {
-               GotoState('Reloading');
+                GotoState('Reloading');
             }
         }
         else
@@ -286,7 +272,7 @@ simulated function int GetStripperClipSize()
 function UpdateResupplyStatus(bool bCurrentWeapon)
 {
     local DHPawn P;
-    local int    NumSpareRounds, DummyMagCount, i;
+    local int NumSpareRounds, DummyMagCount, i;
 
     if (bCurrentWeapon)
     {
@@ -304,7 +290,10 @@ function UpdateResupplyStatus(bool bCurrentWeapon)
     {
         DummyMagCount = Max(0, PrimaryAmmoArray.Length - 1); // what CurrentMagCount would normally be, used below to set bWeaponNeedsResupply
 
-        P.bWeaponNeedsResupply = bCanBeResupplied && bCurrentWeapon && DummyMagCount < (MaxNumPrimaryMags - 1) && (TeamIndex == 2 || TeamIndex == P.GetTeamNum());
+        P.bWeaponNeedsResupply = bCanBeResupplied
+            && bCurrentWeapon
+            && DummyMagCount < (MaxNumPrimaryMags - 1)
+            && (TeamIndex == 2 || TeamIndex == P.GetTeamNum());
         P.bWeaponNeedsReload = false;
     }
 }
@@ -312,7 +301,12 @@ function UpdateResupplyStatus(bool bCurrentWeapon)
 // Modified to prevent reloading if weapon is already reloading or has maximum ammo
 simulated function bool AllowReload()
 {
-    return ReloadState == RS_None && !AmmoMaxed(0) && !IsFiring() && !IsBusy() && CurrentMagCount > 0 && GetRoundsToLoad() > 0;
+    return ReloadState == RS_None
+        && !AmmoMaxed(0)
+        && !IsFiring()
+        && !IsBusy()
+        && CurrentMagCount > 0
+        && GetRoundsToLoad() > 0;
 }
 
 // Modified to allow reloading of individual rounds
@@ -347,13 +341,10 @@ simulated function ClientDoReload(optional byte NumRounds)
 }
 
 // Out of state this does nothing & should never be called anyway - it is only effective in state Reloading
-function ServerSetInterruptReload()
-{
-}
-
-simulated function PostPreReload() {}
-simulated function PostFullReloadEnd() {}
-simulated function PostLoop() {}
+function ServerSetInterruptReload();
+simulated function PostPreReload();
+simulated function PostFullReloadEnd();
+simulated function PostLoop();
 
 // Modified to handle substantially different one round at a time reload system
 simulated state Reloading
@@ -491,7 +482,7 @@ simulated state Reloading
     // Modified to progress through reload stages, playing appropriate anims
     simulated function AnimEnd(int Channel)
     {
-        local name  Anim;
+        local name Anim;
         local float Frame, Rate;
 
         if (InstigatorIsLocallyControlled())
@@ -499,10 +490,10 @@ simulated state Reloading
             GetAnimParams(0, Anim, Frame, Rate);
 
             // Just finished playing pre-reload anim so now load 1st round
-            if (Anim == PreReloadAnim ||
-                Anim == PreReloadHalfAnim ||
-                Anim == PreReloadEmptyAnim ||
-                Anim == PreReloadCockedAnim)
+            if (Anim == PreReloadAnim
+                || Anim == PreReloadHalfAnim
+                || Anim == PreReloadEmptyAnim
+                || Anim == PreReloadCockedAnim)
             {
                 PostPreReload();
                 return;
@@ -626,7 +617,7 @@ simulated function PlayStripperReload()
 {
     if (InstigatorIsLocallyControlled() && HasAnim(StripperReloadAnim))
     {
-       PlayAnim(StripperReloadAnim, 1.0);
+        PlayAnim(StripperReloadAnim, 1.0);
     }
 }
 
@@ -676,10 +667,6 @@ simulated function name GetSingleReloadAnim()
 
 simulated function PlayFullReload()
 {
-    local float Duration;
-
-    Duration = GetAnimDuration(FullReloadAnim, 1.0);
-
     SetTimer(GetAnimDuration(FullReloadAnim, 1.0), false);
 
     if (InstigatorIsLocallyControlled() && HasAnim(FullReloadAnim))
@@ -724,7 +711,7 @@ simulated function int GetMaxLoadedRounds()
 // New function to calculate the number of rounds to be loaded to fill the weapon
 simulated function byte GetRoundsToLoad()
 {
-    local int  CurrentLoadedRounds, MaxLoadedRounds;
+    local int CurrentLoadedRounds, MaxLoadedRounds;
     local byte AmountNeeded;
 
     if (CurrentMagCount == 0)
@@ -732,12 +719,10 @@ simulated function byte GetRoundsToLoad()
         return 0;
     }
 
-    CurrentLoadedRounds = AmmoAmount(0) - int(!bShouldSkipBolt &&
-                                              !bWaitingToBolt &&
-                                              bEjectRoundOnReload);
+    CurrentLoadedRounds = AmmoAmount(0) - int(!bShouldSkipBolt && !bWaitingToBolt && bEjectRoundOnReload);
 
-    //ensure we haven't dipped below 0
-    CurrentLoadedRounds = Max(0,CurrentLoadedRounds);
+    // ensure we haven't dipped below 0
+    CurrentLoadedRounds = Max(0, CurrentLoadedRounds);
 
     MaxLoadedRounds = GetMaxLoadedRounds();
     AmountNeeded = MaxLoadedRounds - CurrentLoadedRounds;

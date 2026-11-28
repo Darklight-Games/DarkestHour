@@ -5,20 +5,20 @@
 
 class DHActorProxy extends Actor;
 
-var DHPawn                          PawnOwner;
-var DHPlayer                        PlayerOwner;
+var DHPawn PawnOwner;
+var DHPlayer PlayerOwner;
 
 // Projector
-var DHConstructionProxyProjector    Projector;
+var DHConstructionProxyProjector Projector;
 
 // Attachments
-var array<Actor>                    Attachments;
+var array<Actor> Attachments;
 
 // Rotation
-var Rotator                         LocalRotation;
-var Rotator                         LocalRotationRate;
-var bool                            bLimitLocalRotation;    // Whether or not the limit the local rotation.
-var Range                           LocalRotationYawRange;
+var Rotator LocalRotation;
+var Rotator LocalRotationRate;
+var bool bLimitLocalRotation; // Whether or not the limit the local rotation.
+var Range LocalRotationYawRange;
 
 // A context object used for passing context-relevant values to functions that
 // determine various parameters of the construction.
@@ -83,7 +83,7 @@ function DestroyAttachments()
     Attachments.Length = 0;
 }
 
-function static Material CreateProxyMaterial(Material M)
+static function Material CreateProxyMaterial(Material M)
 {
     local Combiner C;
     local FadeColor FC;
@@ -133,7 +133,7 @@ function static Material CreateProxyMaterial(Material M)
     return FB;
 }
 
-function static UpdateProxyMaterialColors(Actor A, Color Color)
+static function UpdateProxyMaterialColors(Actor A, Color Color)
 {
     local FinalBlend FB;
     local Combiner C;
@@ -235,7 +235,7 @@ function Context GetContext()
     Context.TeamIndex = PlayerOwner.GetTeamNum();
     Context.LevelInfo = Class'DH_LevelInfo'.static.GetInstance(Level);
     Context.PlayerController = PlayerOwner;
-    Context.GroundActor = none/*GroundActor*/;  // TODO: we want ground actor in the actor proxy???
+    Context.GroundActor = none /*GroundActor*/; // TODO: we want ground actor in the actor proxy???
 
     return Context;
 }

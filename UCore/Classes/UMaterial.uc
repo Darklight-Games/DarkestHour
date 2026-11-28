@@ -15,4 +15,3 @@ static function float AspectRatio(Material M)
 
     return 0.0;
 }
-

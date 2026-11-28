@@ -15,7 +15,7 @@ enum EAngleUnit
     AU_Unreal,
     AU_Degrees,
     AU_Milliradians,
-    AU_Radians
+    AU_Radians,
 };
 
 // Used for debugging purposes.

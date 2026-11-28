@@ -10,6 +10,7 @@ event Query(WebRequest Request, WebResponse Response)
     local string Image;
 
     Image = Request.URI;
+
     if (Right(Caps(Image), 4) == ".JPG" || Right(Caps(Image), 5) == ".JPEG")
     {
         Response.SendStandardHeaders("image/jpeg", true);
@@ -28,5 +29,5 @@ event Query(WebRequest Request, WebResponse Response)
         return;
     }
 
-    Response.IncludeBinaryFile( Path $ Image );
+    Response.IncludeBinaryFile(Path $ Image);
 }

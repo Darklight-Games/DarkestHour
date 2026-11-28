@@ -5,8 +5,9 @@
 
 class DHGUICheckBoxButton extends GUICheckBoxButton;
 
-var bool bIsActive; // HACK: A hacky workaround to indicate that this button is
-                    // active but temporarily hidden (e.g. outside of the viewport).
+// HACK: A hacky workaround to indicate that this button is
+// active but temporarily hidden (e.g. outside of the viewport).
+var bool bIsActive;
 
 var bool bCanClickUncheck;
 
@@ -54,7 +55,7 @@ function InternalOnRendered(Canvas C)
 
     if (CenterText != "")
     {
-        C.Font = Class'ROHud'.static.LoadSmallFontStatic(7);
+        C.Font = Class'DHFonts'.static.GetDHTinyFontByResolution(C.SizeX, C.SizeY);
         C.SetDrawColor(0, 0, 0);
         C.TextSize(CenterText, XL, YL);
         C.SetPos(ActualLeft() + (ActualWidth() / 2) - (XL / 2), ActualTop() + (ActualHeight() / 2) - (YL / 2));

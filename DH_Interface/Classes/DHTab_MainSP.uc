@@ -5,10 +5,10 @@
 
 class DHTab_MainSP extends UT2K4Tab_MainSP;
 
-var automated       DHGUISectionBackground  sb_options2;
-var automated       DHmoComboBox            co_Difficulty;
-var array<float>    Difficulties;
-var bool            bHideDifficultyControl;
+var automated DHGUISectionBackground sb_options2;
+var automated DHmoComboBox co_Difficulty;
+var array<float> Difficulties;
+var bool bHideDifficultyControl;
 
 var localized string MapCaptionText;
 var localized string MapAuthorText;
@@ -100,9 +100,7 @@ function InitGameType() // TODO: this is being called twice in single player (cu
     li_Maps.Expand(i);
 }
 
-function CheckGameTutorial()
-{
-}
+function CheckGameTutorial();
 
 function MapListChange(GUIComponent Sender)
 {
@@ -117,7 +115,7 @@ function MapListChange(GUIComponent Sender)
     {
         if (li_Maps.IsValid())
         {
-           // Puma 05-03-2004 - changed to the Anchor's Primary and Secondary
+            // Puma 05-03-2004 - changed to the Anchor's Primary and Secondary
             EnableComponent(p_Anchor.b_Primary);
             EnableComponent(p_Anchor.b_Secondary);
         }
@@ -152,9 +150,9 @@ function MaplistConfigClick(GUIComponent Sender)
 
 function InitDifficulty()
 {
-    local string        props;
+    local string props;
     local array<string> splits;
-    local int           i, count;
+    local int i, count;
 
     props = Class'DarkestHourGame'.static.GetPropsExtra(0);
     count = Split(props, ";", splits);
@@ -176,7 +174,7 @@ function InitDifficulty()
 function UpdateCurrentGameDifficulty()
 {
     local float currentDifficulty;
-    local int   i;
+    local int i;
 
     currentDifficulty = Class'DarkestHourGame'.default.GameDifficulty;
 
@@ -257,7 +255,7 @@ function ReadMapInfo(string MapName)
         mDesc = MessageNoInfo;
     }
 
-    lb_MapDesc.SetContent( mDesc );
+    lb_MapDesc.SetContent(mDesc);
 
     if (CacheMaps[Index].Author != "" && !Class'CacheManager'.static.IsDefaultContent(CacheMaps[Index].MapName))
     {

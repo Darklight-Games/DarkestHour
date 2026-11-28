@@ -6,7 +6,7 @@
 class DHSpottingMarker extends Actor;
 
 var FadeColor FC;
-var bool      bIsDisabled;
+var bool bIsDisabled;
 
 simulated function PostBeginPlay()
 {

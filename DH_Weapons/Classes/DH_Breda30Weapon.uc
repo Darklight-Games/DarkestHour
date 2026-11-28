@@ -8,8 +8,8 @@
 class DH_Breda30Weapon extends DHAutoWeapon;
 
 // Bullets spill out of the friggin' magazine when it's opened.
-var array<ROFPAmmoRound>    SpillBullets;
-var array<name>             SpillBulletBones;
+var array<ROFPAmmoRound> SpillBullets;
+var array<name> SpillBulletBones;
 
 simulated function PostBeginPlay()
 {

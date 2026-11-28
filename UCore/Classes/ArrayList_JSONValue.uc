@@ -101,4 +101,3 @@ function array<JSONValue> ToArray()
 {
     return Items;
 }
-

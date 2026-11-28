@@ -5,8 +5,8 @@
 
 class DHVoiceChatRoom extends UnrealChatRoom;
 
-var     int     SquadIndex;
-var     float   LocalBroadcastRangeSquared;
+var int SquadIndex;
+var float LocalBroadcastRangeSquared;
 
 // Called after LeaveChannel, or when player exits the server
 // NOTE: overridden to eliminate "has left channel" chat messages, & also to allow more than 32 VoiceIDs
@@ -22,7 +22,7 @@ function RemoveMember(PlayerReplicationInfo PRI)
 function AddMember(PlayerReplicationInfo PRI)
 {
     local array<PlayerReplicationInfo> Members;
-    local int                          i;
+    local int i;
 
     if (PRI == none || PRI.VoiceID == 255 || IsMember(PRI))
     {
@@ -71,22 +71,21 @@ simulated function bool IsUnassignedChannel()
 simulated event bool IsMember(PlayerReplicationInfo PRI, optional bool bNoCascade)
 {
     local DHPlayerReplicationInfo MyPRI;
-    local PlayerReplicationInfo   OwnerPRI;
-    local PlayerController        OwnerPC;
-    local Pawn                    OwnerPawn, CheckPawn;
+    local PlayerReplicationInfo OwnerPRI;
+    local PlayerController OwnerPC;
+    local Pawn OwnerPawn, CheckPawn;
 
     MyPRI = DHPlayerReplicationInfo(PRI);
 
     if (MyPRI != none && MyPRI.Team != none && MyPRI.Team.TeamIndex == GetTeam())
     {
-        if (IsSquadChannel() &&
-            MyPRI.SquadIndex == SquadIndex)
+        if (IsSquadChannel() && MyPRI.SquadIndex == SquadIndex)
         {
             return true;
         }
-        else if (((IsAlliesCommandChannel() && MyPRI.Team.TeamIndex == ALLIES_TEAM_INDEX) ||
-                  (IsAxisCommandChannel() && MyPRI.Team.TeamIndex == AXIS_TEAM_INDEX)) &&
-                 MyPRI.CanAccessCommandChannel())
+        else if (((IsAlliesCommandChannel() && MyPRI.Team.TeamIndex == ALLIES_TEAM_INDEX)
+                || (IsAxisCommandChannel() && MyPRI.Team.TeamIndex == AXIS_TEAM_INDEX))
+            && MyPRI.CanAccessCommandChannel())
         {
             return true;
         }
@@ -120,7 +119,8 @@ simulated event bool IsMember(PlayerReplicationInfo PRI, optional bool bNoCascad
             }
 
             // Now do a check on the pawn distance and return results
-            return CheckPawn != none && VSizeSquared(OwnerPawn.Location - CheckPawn.Location) < LocalBroadcastRangeSquared;
+            return CheckPawn != none
+                && VSizeSquared(OwnerPawn.Location - CheckPawn.Location) < LocalBroadcastRangeSquared;
         }
         else if (IsUnassignedChannel() && !MyPRI.IsInSquad())
         {
@@ -136,13 +136,14 @@ simulated event bool IsMember(PlayerReplicationInfo PRI, optional bool bNoCascad
 simulated function array<PlayerReplicationInfo> GetMembers()
 {
     local array<PlayerReplicationInfo> PRIArray;
-    local int                          i;
+    local int i;
 
     if (GRI != none)
     {
         for (i = 0; i < GRI.PRIArray.Length; ++i)
         {
-            if (IsMember(GRI.PRIArray[i]) || (IsPrivateChannel() && GRI.PRIArray[i].Team != none && GRI.PRIArray[i].Team.TeamIndex == GetTeam()))
+            if (IsMember(GRI.PRIArray[i])
+                || (IsPrivateChannel() && GRI.PRIArray[i].Team != none && GRI.PRIArray[i].Team.TeamIndex == GetTeam()))
             {
                 PRIArray[PRIArray.Length] = GRI.PRIArray[i];
             }

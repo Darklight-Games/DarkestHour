@@ -5,7 +5,7 @@
 
 class DH_PanzerIIIJFactory extends DH_GermanVehicles;
 
-//WIP
+// WIP
 
 defaultproperties
 {

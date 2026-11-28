@@ -8,21 +8,22 @@ class DHAutomaticFire extends DHProjectileFire
 
 // Firing animations when player has a bipod deployed
 // For weapons that can be fired three ways - from the hip, from ironsights, or from bipod deployed, e.g. Bren gun
-var     name    BipodDeployFireAnim;
-var     name    BipodDeployFireLoopAnim;
-var     name    BipodDeployFireEndAnim;
-var     name    BipodDeployFireLastAnim;
+var name BipodDeployFireAnim;
+var name BipodDeployFireLoopAnim;
+var name BipodDeployFireEndAnim;
+var name BipodDeployFireLastAnim;
 
-var     bool    bHasSemiAutoFireRate;
-var     float   SemiAutoFireRate;
+var bool bHasSemiAutoFireRate;
+var float SemiAutoFireRate;
 
 // Modified to make the player stop firing if they are sprinting or switching to or from ironsights
 simulated function bool AllowFire()
 {
-    if ((Instigator != none && Instigator.bIsSprinting) || (Weapon != none &&
-        (Weapon.IsInState('IronSightZoomIn') ||
-        Weapon.IsInState('IronSightZoomOut') ||
-        Weapon.IsInState('TweenDown'))))
+    if ((Instigator != none && Instigator.bIsSprinting)
+        || (Weapon != none
+            && (Weapon.IsInState('IronSightZoomIn')
+                || Weapon.IsInState('IronSightZoomOut')
+                || Weapon.IsInState('TweenDown'))))
     {
         return false;
     }
@@ -135,7 +136,9 @@ function PlayFiring()
 
         if (FireSounds.Length > 0)
         {
-            Weapon.PlayOwnedSound(FireSounds[Rand(FireSounds.Length)], SLOT_None, FireVolume,,, GetFiringSoundPitch(), false);
+            Weapon.PlayOwnedSound(
+                FireSounds[Rand(FireSounds.Length)], SLOT_None, FireVolume,,, GetFiringSoundPitch(), false
+                );
         }
     }
 
@@ -243,4 +246,3 @@ defaultproperties
 
     SemiAutoFireRate=0.18
 }
-

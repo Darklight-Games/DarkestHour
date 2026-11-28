@@ -7,11 +7,7 @@ class DH_FJCap extends DHHeadgear;
 
 // Current cap doesn't fit new FJ model, so this is temporarily displaying as a grey helmet instead
 
-static function StaticPrecache(LevelInfo L)
-{
-//  L.AddPrecacheMaterial(Material'DHGermanCharactersTex.LW_HG');
-//  L.AddPrecacheMaterial(Material'DHGermanCharactersTex.FJ_Helmet1');
-}
+static function StaticPrecache(LevelInfo L);
 
 defaultproperties
 {

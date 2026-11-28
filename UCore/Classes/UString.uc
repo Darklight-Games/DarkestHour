@@ -107,11 +107,19 @@ final static function bool IsWhitespace(string S)
 
     A = Asc(S);
 
-    return (A >= 0x0009 && A <= 0x000D) || (A == 0x0020 || A == 0x1680) ||
-           (A >= 0x2000 && A <= 0x200A) || (A >= 0x2028 && A <= 0x2029) ||
-           (A == 0x202F || A == 0x205F  || A == 0x3000  || A == 0x180E ||
-            A == 0x200B || A == 0x200C  || A == 0x200D  || A == 0x2060 ||
-            A == 0xFEFF);
+    return (A >= 0x0009 && A <= 0x000D)
+        || (A == 0x0020 || A == 0x1680)
+        || (A >= 0x2000 && A <= 0x200A)
+        || (A >= 0x2028 && A <= 0x2029)
+        || (A == 0x202F
+            || A == 0x205F
+            || A == 0x3000
+            || A == 0x180E
+            || A == 0x200B
+            || A == 0x200C
+            || A == 0x200D
+            || A == 0x2060
+            || A == 0xFEFF);
 }
 
 final static function bool IsAlpha(string S)
@@ -196,4 +204,3 @@ final static function string StripColor(string S)
 
     return S;
 }
-

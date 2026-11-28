@@ -14,4 +14,3 @@ defaultproperties
     FireLastAnim="shoot_last"
     FireIronLastAnim="Scope_Shoot_Last"
 }
-

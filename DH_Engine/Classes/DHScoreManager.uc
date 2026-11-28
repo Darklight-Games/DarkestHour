@@ -10,30 +10,30 @@ const SCORE_CATEGORIES_MAX = 2;
 struct EventScore
 {
     var class<DHScoreEvent> EventClass;
-    var int                 Count;      // The amount of scoring events handled with this type
-    var int                 Score;      // The amount of score accumulated from this type
+    var int Count; // The amount of scoring events handled with this type
+    var int Score; // The amount of score accumulated from this type
 };
 
 struct ScoreEvent
 {
-    var class<DHScoreEvent>     EventClass;
-    var int                     TimeSeconds;
+    var class<DHScoreEvent> EventClass;
+    var int TimeSeconds;
 };
 
-var int                     TotalScore;
-var int                     CategoryScores[SCORE_CATEGORIES_MAX];
-var array<EventScore>       EventScores;
-var array<ScoreEvent>       ScoreEvents;
+var int TotalScore;
+var int CategoryScores[SCORE_CATEGORIES_MAX];
+var array<EventScore> EventScores;
+var array<ScoreEvent> ScoreEvents;
 
-var class<DHScoreCategory>  ScoreCategoryClasses[SCORE_CATEGORIES_MAX];
+var class<DHScoreCategory> ScoreCategoryClasses[SCORE_CATEGORIES_MAX];
 
 // NextScoreManager is the score manager to route score events to once they have been
 // registered in this one. This allows passing score events to a team-specific
 // score manager.
-var DHScoreManager          NextScoreManager;
+var DHScoreManager NextScoreManager;
 
 // When true, the normal limit-per-duration checks are skipped.
-var bool                    bSkipLimits;
+var bool bSkipLimits;
 
 // Event listeners for score changes.
 delegate OnCategoryScoreChanged(int CategoryIndex, int Score);
@@ -62,9 +62,9 @@ function int GetCategoryScoreByIndex(int Index)
 // Gets the cumulative score for the specified category.
 function int GetCategoryScoreByClass(class<DHScoreCategory> CategoryClass)
 {
-    if (CategoryClass == none ||
-        CategoryClass.default.CategoryIndex < 0 ||
-        CategoryClass.default.CategoryIndex >= arraycount(CategoryScores))
+    if (CategoryClass == none
+        || CategoryClass.default.CategoryIndex < 0
+        || CategoryClass.default.CategoryIndex >= arraycount(CategoryScores))
     {
         return 0;
     }
@@ -98,8 +98,8 @@ function int GetCountOfScoreEvents(class<DHScoreEvent> EventClass, GameReplicati
 
     for (i = 0; i < ScoreEvents.Length; ++i)
     {
-        if (ScoreEvents[i].EventClass == EventClass &&
-            GRI.ElapsedTime - ScoreEvents[i].TimeSeconds < EventClass.default.LimitDurationSeconds)
+        if (ScoreEvents[i].EventClass == EventClass
+            && GRI.ElapsedTime - ScoreEvents[i].TimeSeconds < EventClass.default.LimitDurationSeconds)
         {
             ++Count;
         }

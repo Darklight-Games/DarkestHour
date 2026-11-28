@@ -96,4 +96,3 @@ final static function INet4Address FromString(string S)
 
     return Address;
 }
-

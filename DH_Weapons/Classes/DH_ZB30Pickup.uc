@@ -10,4 +10,3 @@ defaultproperties
     InventoryType=Class'DH_ZB30Weapon'
     StaticMesh=StaticMesh'DH_WeaponPickups.ZB30'
 }
-

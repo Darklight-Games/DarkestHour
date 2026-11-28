@@ -22,8 +22,11 @@ function Tick(float DeltaTime)
         {
             VolunteerPRI = PC.GetSquadAssistantVolunteer(VolunteerIndex);
 
-            if (Class'DHPlayerReplicationInfo'.static.IsInSameSquad(DHPlayerReplicationInfo(PC.PlayerReplicationInfo), VolunteerPRI) &&
-                !VolunteerPRI.bIsSquadAssistant)
+            if (Class'DHPlayerReplicationInfo'.static.IsInSameSquad(
+                DHPlayerReplicationInfo(PC.PlayerReplicationInfo),
+                VolunteerPRI
+                )
+                && !VolunteerPRI.bIsSquadAssistant)
             {
                 return;
             }
@@ -79,7 +82,12 @@ function string GetPromptText()
 
     if (VolunteerPRI != none)
     {
-        S = Repl(S, "{volunteer}", Class'GameInfo'.static.MakeColorCode(Class'DHColor'.default.SquadColor) $ VolunteerPRI.PlayerName $ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White));
+        S = Repl(
+            S,
+            "{volunteer}",
+            Class'GameInfo'.static.MakeColorCode(Class'DHColor'.default.SquadColor) $ VolunteerPRI.PlayerName
+                $ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White)
+            );
     }
 
     return S;

@@ -6,10 +6,10 @@
 class DHRocketProjectile extends DHCannonShellHEAT // originally extended DHAntiVehicleProjectile, but has so much in common with HEAT shell it's simpler & cleaner to extend that
     abstract;
 
-var     float               StraightFlightTime; // how long the rocket has propellant & flies straight
-var     bool                bHasSmokeTrail; // some rockets - like the PIAT bomb - don't issue smoke trails
-var     class<Emitter>      RocketSmokeTrailClass;         //modifying RO code here to allow custom smoke trails
-var     Emitter             SmokeTrail;
+var float StraightFlightTime; // how long the rocket has propellant & flies straight
+var bool bHasSmokeTrail; // some rockets - like the PIAT bomb - don't issue smoke trails
+var class<Emitter> RocketSmokeTrailClass; // modifying RO code here to allow custom smoke trails
+var Emitter SmokeTrail;
 
 // Modified to spawn a rocket smoke trail & set a timer to cut off the rocket after a set time
 simulated function PostBeginPlay()
@@ -74,7 +74,7 @@ simulated function Timer()
 {
     SetPhysics(PHYS_Projectile);
 
-    //Kill the light
+    // Kill the light
     bDynamicLight = false;
     LightType = LT_None;
 
@@ -139,7 +139,6 @@ defaultproperties
 
     //Effects
     bHasTracer=true
-    bHasSmokeTrail=false
     bHasShellTrail=false
     CoronaClass=Class'DHShellTracer_Orange'
     RocketSmokeTrailClass=Class'PanzerfaustTrail'

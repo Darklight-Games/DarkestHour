@@ -15,5 +15,5 @@ enum EFireSupportError
     FSE_NotEnoughSquadmates,
     FSE_InsufficientPrivileges,
     FSE_Fatal,
-    FSE_Exhausted
+    FSE_Exhausted,
 };

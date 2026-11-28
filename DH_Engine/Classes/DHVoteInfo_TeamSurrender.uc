@@ -5,8 +5,8 @@
 
 class DHVoteInfo_TeamSurrender extends DHVoteInfo;
 
-var() config int    EndRoundDelaySeconds;       // The time delay before the round ends after the vote has passed.
-var() config int    RoundTimeRequiredSeconds;   // How soon the vote can be nominated after a round begins.
+var() config int EndRoundDelaySeconds; // The time delay before the round ends after the vote has passed.
+var() config int RoundTimeRequiredSeconds; // How soon the vote can be nominated after a round begins.
 
 function array<PlayerController> GetEligibleVoters()
 {
@@ -58,9 +58,7 @@ function OnVoteEnded()
     VotesThresholdCount = GetVotesThresholdCount(G);
 
     bVotePassed = Options[0].Voters.Length >= VotesThresholdCount;
-    VoteResults = Class'UInteger'.static.FromBytes(int(!bVotePassed),
-                                                   Options[0].Voters.Length,
-                                                   VotesThresholdCount);
+    VoteResults = Class'UInteger'.static.FromBytes(int(!bVotePassed), Options[0].Voters.Length, VotesThresholdCount);
 
     // Inform the team that the vote has concluded.
     for (C = Level.ControllerList; C != none; C = C.nextController)
@@ -79,13 +77,10 @@ function OnVoteEnded()
     if (bVotePassed)
     {
         // Inform both teams and end the round after a brief delay.
-        G.DelayedEndRound(default.EndRoundDelaySeconds,
-                          REASON_Surrendered,
-                          int(!bool(TeamIndex)),
-                          Class'DHEnemyInformationMsg',
-                          1,
-                          Class'DHFriendlyinformationmsg',
-                          0);
+        G.DelayedEndRound(
+            default.EndRoundDelaySeconds, REASON_Surrendered, int(!bool(TeamIndex)), Class'DHEnemyInformationMsg', 1,
+            Class'DHFriendlyinformationmsg', 0
+            );
     }
 
     GRI = DHGameReplicationInfo(Level.Game.GameReplicationInfo);
@@ -120,11 +115,10 @@ static function OnNominated(PlayerController Player, LevelInfo Level, optional i
         PC.bSurrendered = true;
 
         // DHPlayer wants to surrender.
-        Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level,
-                                                                    PC.GetTeamNum(),
-                                                                    Class'DHTeamSurrenderVoteMessage',
-                                                                    Class'UInteger'.static.FromBytes(2, NominationsRemaining),
-                                                                    PC.PlayerReplicationInfo);
+        Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+            Level, PC.GetTeamNum(), Class'DHTeamSurrenderVoteMessage',
+            Class'UInteger'.static.FromBytes(2, NominationsRemaining), PC.PlayerReplicationInfo
+            );
     }
 }
 
@@ -193,8 +187,7 @@ static function bool CanNominate(PlayerController Player, DarkestHourGame Game)
     }
 
     // You cannot vote to surrender during the setup phase.
-    if (!Class'DH_LevelInfo'.static.DHDebugMode() &&
-        GRI.bIsInSetupPhase)
+    if (!Class'DH_LevelInfo'.static.DHDebugMode() && GRI.bIsInSetupPhase)
     {
         PC.ClientTeamSurrenderResponse(10);
         return false;

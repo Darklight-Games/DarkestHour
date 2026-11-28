@@ -6,20 +6,20 @@
 class DHConstruction_PlatoonHQ extends DHConstruction
     notplaceable;
 
-var DHSpawnPoint_PlatoonHQ          SpawnPoint;
-var int                             FlagSkinIndex;
-var Material                        FlagMaterial;
-var class<DHSpawnPoint_PlatoonHQ>   SpawnPointClass;
+var DHSpawnPoint_PlatoonHQ SpawnPoint;
+var int FlagSkinIndex;
+var Material FlagMaterial;
+var class<DHSpawnPoint_PlatoonHQ> SpawnPointClass;
 
-var localized string                CustomErrorString;
-var float                           EnemySecuredObjectiveDistanceMinMeters;     // The minimum distance, in meters, that this construction must be placed away from inactive enemy objectives. Can be overriden by PermittedFriendlyControlledDistanceMeters.
-var float                           PermittedFriendlyControlledDistanceMeters;  // The distance, in meters, that will allow this construction to be placed closer to inactive enemy objectives, if a friendly duplicate exists in
+var localized string CustomErrorString;
+var float EnemySecuredObjectiveDistanceMinMeters; // The minimum distance, in meters, that this construction must be placed away from inactive enemy objectives. Can be overriden by PermittedFriendlyControlledDistanceMeters.
+var float PermittedFriendlyControlledDistanceMeters; // The distance, in meters, that will allow this construction to be placed closer to inactive enemy objectives, if a friendly duplicate exists in
 
 // Radio attachment
-var DHRadioHQAttachment        Radio;
+var DHRadioHQAttachment Radio;
 var class<DHRadioHQAttachment> RadioClass;
-var Vector                     RadioLocationOffset;
-var Rotator                    RadioRotationOffset;
+var Vector RadioLocationOffset;
+var Rotator RadioRotationOffset;
 
 replication
 {
@@ -105,8 +105,6 @@ function DHSpawnPoint_PlatoonHQ InitializeSpawnPoint()
 
 simulated function OnConstructed()
 {
-    local Vector HitLocation, HitNormal, TraceEnd, TraceStart;
-
     super.OnConstructed();
 
     if (Role == ROLE_Authority)
@@ -114,17 +112,9 @@ simulated function OnConstructed()
         if (SpawnPoint != none)
         {
             // "A Command Post has been constructed and will be established in N seconds."
-            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHCommandPostMessage', 4,,, Class);
-
-            TraceStart = Location + vect(0, 0, 32);
-            TraceEnd = Location - vect(0, 0, 32);
-            HitLocation = Location;
-
-            if (Trace(HitLocation, HitNormal, TraceEnd, TraceStart) == none)
-            {
-                Warn("Hey yo something done fucked up, bad spawn locations afoot");
-                Destroy();
-            }
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                Level, GetTeamIndex(), Class'DHCommandPostMessage', 4,,, Class
+                );
         }
 
         if (Radio == none)
@@ -183,7 +173,9 @@ simulated state Broken
         if (SpawnPoint != none && SpawnPoint.BlockReason != SPBR_InDangerZone)
         {
             // "A Command Post has been destroyed."
-            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHCommandPostMessage', 3,,, Class);
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                Level, GetTeamIndex(), Class'DHCommandPostMessage', 3,,, Class
+                );
         }
 
         DestroyAttachments();
@@ -215,7 +207,11 @@ static function DHConstruction.ConstructionError GetCustomProxyError(DHConstruct
     GRI = DHGameReplicationInfo(P.GetContext().PlayerController.GameReplicationInfo);
 
     // Do we have a friendly duplicate within PermittedFriendlyControlledDistanceMeters distance?
-    foreach P.RadiusActors(default.Class, A, Class'DHUnits'.static.MetersToUnreal(default.PermittedFriendlyControlledDistanceMeters))
+    foreach P.RadiusActors(
+        default.Class,
+        A,
+        Class'DHUnits'.static.MetersToUnreal(default.PermittedFriendlyControlledDistanceMeters)
+        )
     {
         C = DHConstruction(A);
 
@@ -229,9 +225,15 @@ static function DHConstruction.ConstructionError GetCustomProxyError(DHConstruct
     // If we have not found a friendly HQ, then lets check if we are near main spawn
     if (!bFoundFriendlyDuplicate)
     {
-        foreach P.RadiusActors(Class'DHSpawnPoint', SP, Class'DHUnits'.static.MetersToUnreal(default.PermittedFriendlyControlledDistanceMeters))
+        foreach P.RadiusActors(
+            Class'DHSpawnPoint',
+            SP,
+            Class'DHUnits'.static.MetersToUnreal(default.PermittedFriendlyControlledDistanceMeters)
+            )
         {
-            if (SP != none && SP.bMainSpawn && (SP.GetTeamIndex() == NEUTRAL_TEAM_INDEX || SP.GetTeamIndex() == TeamIndex))
+            if (SP != none
+                && SP.bMainSpawn
+                && (SP.GetTeamIndex() == NEUTRAL_TEAM_INDEX || SP.GetTeamIndex() == TeamIndex))
             {
                 bFoundFriendlyDuplicate = true;
                 break;
@@ -242,7 +244,9 @@ static function DHConstruction.ConstructionError GetCustomProxyError(DHConstruct
     // If we have not found a friendly duplicate, then check if we are trying to place too close to an inactive enemy objective
     if (!bFoundFriendlyDuplicate)
     {
-        ControlledObjDistanceMin = Class'DHUnits'.static.MetersToUnreal(default.PermittedFriendlyControlledDistanceMeters);
+        ControlledObjDistanceMin = Class'DHUnits'.static.MetersToUnreal(
+            default.PermittedFriendlyControlledDistanceMeters
+            );
         DistanceMin = Class'DHUnits'.static.MetersToUnreal(default.EnemySecuredObjectiveDistanceMinMeters);
         ObjectiveIndex = -1;
 
@@ -293,7 +297,7 @@ static function DHConstruction.ConstructionError GetCustomProxyError(DHConstruct
 }
 
 // Modified to put the correct nation flag on the flag skin.
-function static UpdateProxy(DHActorProxy CP)
+static function UpdateProxy(DHActorProxy CP)
 {
     super.UpdateProxy(CP);
 

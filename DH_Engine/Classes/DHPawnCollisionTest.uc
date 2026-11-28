@@ -25,4 +25,3 @@ defaultproperties
     CollisionHeight=52
     bCollideWorld=true
 }
-

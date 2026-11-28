@@ -17,7 +17,7 @@ static function string GetString(
     optional Object OptionalObject
     )
 {
-    if( Switch <= 10 )
+    if (Switch <= 10)
     {
         return Repl(default.CountdownText, "{seconds}", Switch);
     }

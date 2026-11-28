@@ -8,7 +8,12 @@ class DHBallisticProjectile extends ROBallisticProjectile
 
 var DHProjectileCalibrationInfo DebugCalibrationInfo;
 
-function DHProjectileCalibrationInfo CreateCalibrationInfo(DHVehicleWeapon VehicleWeapon, Vector StartLocation, float DebugAngleValue, UUnits.EAngleUnit DebugAngleUnit)
+function DHProjectileCalibrationInfo CreateCalibrationInfo(
+    DHVehicleWeapon VehicleWeapon,
+    Vector StartLocation,
+    float DebugAngleValue,
+    UUnits.EAngleUnit DebugAngleUnit
+    )
 {
     DebugCalibrationInfo = new Class'DHProjectileCalibrationInfo';
     DebugCalibrationInfo.VehicleWeapon = VehicleWeapon;

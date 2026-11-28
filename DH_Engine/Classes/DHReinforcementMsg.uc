@@ -11,7 +11,13 @@ var localized string ReinforcementsDepleted;
 var Sound MessageSound;
 
 // Modified to play a sound to go with screen screen message
-static function ClientReceive(PlayerController P, optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function ClientReceive(
+    PlayerController P,
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     P.ClientPlaySound(default.MessageSound,,, SLOT_Interface);
 
@@ -22,7 +28,8 @@ static function string GetString(
     optional int Switch,
     optional PlayerReplicationInfo RelatedPRI_1,
     optional PlayerReplicationInfo RelatedPRI_2,
-    optional Object OptionalObject)
+    optional Object OptionalObject
+    )
 {
     switch (Switch)
     {

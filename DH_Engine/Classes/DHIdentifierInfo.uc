@@ -15,11 +15,11 @@ class DHIdentifierInfo extends Object
 // TODO: move this definition data to its own class.
 enum EIdentifierType
 {
-    ID_UserNumber,  // User-defined decimal number.
-    ID_UserLetter,  // User-defined letter.
-    ID_UserString,  // User-defined string.
+    ID_UserNumber, // User-defined decimal number.
+    ID_UserLetter, // User-defined letter.
+    ID_UserString, // User-defined string.
     ID_SquadNumber, // The squad number.
-    ID_SquadName,   // The squad name.
+    ID_SquadName, // The squad name.
 };
 
 enum EJustification
@@ -34,7 +34,7 @@ struct Identifier
     var() EIdentifierType Type;
     var() EJustification Justification;
     var() class<DHGlyphSet> GlyphSetClass;
-    var() array<int> SkinIndices;   // The length of this array is the maximum length of the identifier.
+    var() array<int> SkinIndices; // The length of this array is the maximum length of the identifier.
 };
 
 var() array<Identifier> Identifiers;
@@ -43,13 +43,13 @@ static function SetIdentifierByType(Actor AttachmentActor, EIdentifierType Type,
 {
     local int i, j;
     local int StartSkinIndex, SkinIndex;
-    local string TrimmedString, Character;
+    local string TrimmedString;
     local array<Material> StaticMeshSkins;
     local Material GlyphMaterial, CombinerMaterial;
 
     // Get the original skins from the static mesh.
     // TODO: this might be expensive so we want to avoid doing this every time.
-    StaticMeshSkins = (new class'UStaticMesh').FindStaticMeshSkins(AttachmentActor.StaticMesh);
+    StaticMeshSkins = (new Class'UStaticMesh').FindStaticMeshSkins(AttachmentActor.StaticMesh);
 
     for (i = 0; i < default.Identifiers.Length; ++i)
     {
@@ -88,8 +88,6 @@ static function SetIdentifierByType(Actor AttachmentActor, EIdentifierType Type,
 
         for (j = 0; j < Len(TrimmedString); ++j)
         {
-            Character = Mid(TrimmedString, j, 1);
-
             GlyphMaterial = default.Identifiers[i].GlyphSetClass.static.GetGlyphMaterial(Mid(TrimmedString, j, 1));
 
             if (GlyphMaterial == none)
@@ -109,11 +107,11 @@ static function Material CreateGlyphMaterial(Material BaseMaterial, Material Gly
     local Combiner Combiner;
     local TexCoordSource TexCoordSource;
 
-    TexCoordSource = new class'TexCoordSource';
+    TexCoordSource = new Class'TexCoordSource';
     TexCoordSource.TexCoordSource = TCS_Stream1;
     TexCoordSource.Material = GlyphMaterial;
 
-    Combiner = new class'Combiner';
+    Combiner = new Class'Combiner';
     Combiner.CombineOperation = CO_AlphaBlend_With_Mask;
     Combiner.AlphaOperation = AO_Use_Mask;
     Combiner.Material1 = BaseMaterial;

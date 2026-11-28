@@ -96,7 +96,10 @@ function bool IsOptionDisabled(int OptionIndex)
         OtherPRI = DHPlayerReplicationInfo(P.PlayerReplicationInfo);
     }
 
-    return OtherPRI == none || OtherPRI.IsInSquad() || PC.SquadReplicationInfo == none || PC.SquadReplicationInfo.IsSquadFull(PC.GetTeamNum(), PC.GetSquadIndex());
+    return OtherPRI == none
+        || OtherPRI.IsInSquad()
+        || PC.SquadReplicationInfo == none
+        || PC.SquadReplicationInfo.IsSquadFull(PC.GetTeamNum(), PC.GetSquadIndex());
 }
 
 function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
@@ -122,7 +125,9 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
             ORI.InfoText[0] = default.AlreadyInASquadText;
             ORI.InfoColor = Class'UColor'.default.Red;
         }
-        else if (PC != none && PC.SquadReplicationInfo != none && PC.SquadReplicationInfo.IsSquadFull(PC.GetTeamNum(), PC.GetSquadIndex()))
+        else if (PC != none
+            && PC.SquadReplicationInfo != none
+            && PC.SquadReplicationInfo.IsSquadFull(PC.GetTeamNum(), PC.GetSquadIndex()))
         {
             ORI.InfoText[0] = default.SquadIsFullText;
             ORI.InfoColor = Class'UColor'.default.Red;
@@ -137,4 +142,3 @@ defaultproperties
     Options(0)=(ActionText="Invite to Squad",Material=Material'DH_InterfaceArt2_tex.squad_invite')
     SlotCountOverride=4
 }
-

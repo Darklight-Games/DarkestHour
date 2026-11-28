@@ -17,8 +17,6 @@ replication
 
 simulated function PostBeginPlay()
 {
-    local DHConstructionSocket Socket;
-
     super.PostBeginPlay();
 
     if (Role == ROLE_Authority)
@@ -39,7 +37,7 @@ simulated function Destroyed()
 {
     super.Destroyed();
 
-    if (Socket != none)
+    if (Role == ROLE_Authority && Socket != none)
     {
         Socket.Destroy();
     }

@@ -50,8 +50,8 @@ if "%1"=="--no-build" set "no_build=1" & goto :next_arg
 if "%1"=="--no-run" set "no_run=1" & goto :next_arg
 if "%1"=="--no-pause" set "no_pause=1" & goto :next_arg
 if "%1"=="--safe" set "safe=1" & goto :next_arg
-if "%1"=="--clean" set "make_args=%make_args% -clean" & goto :next_arg
-if "%1"=="--dumpint" set "make_args=%make_args% -dumpint" & goto :next_arg
+if "%1"=="--clean" set "make_args=%make_args% --clean" & goto :next_arg
+if "%1"=="--dumpint" set "make_args=%make_args% --dumpint" & goto :next_arg
 
 rem Value arguments
 set arg_size=2
@@ -114,7 +114,7 @@ if %no_build% neq 0 goto :run
 echo Starting a build...
 cd "%~dp0"
 echo 1280 > ..\System\steam_appid.txt
-call python ..\tools\make\make.py%make_args% -mod DarkestHourDev ..
+call usagi build%make_args%
 if %ERRORLEVEL% neq 0 goto :error_exit
 
 :run

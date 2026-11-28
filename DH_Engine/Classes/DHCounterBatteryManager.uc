@@ -15,11 +15,11 @@ const LARGE_GUN_DEVIATION = 25;
 var int TeamIndex;
 
 // Gets the deviation range in meters based on the counter-battery report type.
-static function float GetDeviationMax(Class<DHVehicleWeapon> VehicleClass)
+static function float GetDeviationMax(class<DHVehicleWeapon> VehicleClass)
 {
     if (VehicleClass == none)
     {
-        return MEDIUM_GUN_DEVIATION;    // Fallback value, mainly for debugging.
+        return MEDIUM_GUN_DEVIATION; // Fallback value, mainly for debugging.
     }
 
     switch (VehicleClass.default.CounterBatteryReport)
@@ -35,7 +35,7 @@ static function float GetDeviationMax(Class<DHVehicleWeapon> VehicleClass)
     }
 }
 
-function OnArtilleryFired(Class<DHVehicleWeapon> VehicleWeaponClass, Vector WorldLocation)
+function OnArtilleryFired(class<DHVehicleWeapon> VehicleWeaponClass, Vector WorldLocation)
 {
     local Controller C;
     local DHPlayer PC;
@@ -44,7 +44,7 @@ function OnArtilleryFired(Class<DHVehicleWeapon> VehicleWeaponClass, Vector Worl
 
     // Get a random range deviation using a uniform distribution so that it's spread evenly across the cicle.
     Deviation = GetDeviationMax(VehicleWeaponClass) * Sqrt(FRand());
-    Deviation = class'DHUnits'.static.MetersToUnreal(Deviation);
+    Deviation = Class'DHUnits'.static.MetersToUnreal(Deviation);
 
     // Pick a random direction for the deviation.
     Theta = FRand() * Pi * 2;

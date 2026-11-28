@@ -37,7 +37,7 @@ function Send()
     SetTimer(1.0, true);
 }
 
-function static int ParseStatus(string S)
+static function int ParseStatus(string S)
 {
     local string Version;
     local string StatusCode;
@@ -55,7 +55,7 @@ function static int ParseStatus(string S)
     return -1;
 }
 
-function static TreeMap_string_string ParseHeaders(string S)
+static function TreeMap_string_string ParseHeaders(string S)
 {
     local int i;
     local int j;
@@ -123,10 +123,10 @@ function Timer()
 
             switch (Status)
             {
-                case 301:   // Moved Permanently
-                case 302:   // Found
-                case 307:   // Temporary Redirect
-                case 308:   // Permanent Redirect
+                case 301: // Moved Permanently
+                case 302: // Found
+                case 307: // Temporary Redirect
+                case 308: // Permanent Redirect
                     if (bAllowRedirects && ResponseHeaders.Get("Location", Loc) && !OnRedirect(self, Status, Loc))
                     {
                         U = Class'URL'.static.FromString(Loc);
@@ -134,12 +134,12 @@ function Timer()
                         if (U != none)
                         {
                             R = Spawn(Class'HTTPRequest');
-                            R.Method = self.Method;
+                            R.Method = Method;
                             R.Host = U.Host;
                             R.Path = U.Path;
                             R.Protocol = U.Scheme;
-                            R.bAllowRedirects = self.bAllowRedirects;
-                            R.Headers = self.Headers;
+                            R.bAllowRedirects = bAllowRedirects;
+                            R.Headers = Headers;
                             R.Send();
                         }
                         else
@@ -153,8 +153,7 @@ function Timer()
                     break;
             }
 
-            if (ResponseHeaders.Get("Transfer-Encoding", TransferEncoding) &&
-                TransferEncoding ~= "chunked")
+            if (ResponseHeaders.Get("Transfer-Encoding", TransferEncoding) && TransferEncoding ~= "chunked")
             {
                 while (true)
                 {
@@ -189,8 +188,7 @@ function Timer()
     }
     else if (MyLink.ReceiveState == "" && MyLink.ServerIpAddr.Port != 0 && MyLink.IsConnected())
     {
-        Command = Method @ Path @ Protocol $ MyLink.CRLF $
-                  "Host:" @ Host $ MyLink.CRLF;
+        Command = Method @ Path @ Protocol $ MyLink.CRLF $ "Host:" @ Host $ MyLink.CRLF;
 
         HeaderKeys = Headers.GetKeys();
 

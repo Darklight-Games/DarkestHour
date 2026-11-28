@@ -60,7 +60,7 @@ function DrawTable(Canvas C, float X, float Y)
     local float X1, Y1, XL, YL, TX, TY, X2, X3, XL2;
     local int TableWidth, TableHeight;
 
-    C.Font = Font;  // TODO: have font not enter into this at all, just use whatever is set
+    C.Font = Font; // TODO: have font not enter into this at all, just use whatever is set
     C.TextSize("W", XL, YL);
     YL += PaddingVertical * 2;
 
@@ -92,13 +92,8 @@ function DrawTable(Canvas C, float X, float Y)
 
         C.DrawColor = Columns[i].TextColor;
         C.DrawTextJustified(
-            Columns[i].Header,
-            Columns[i].HeaderJustification,
-            X2,
-            Y1 + PaddingVertical,
-            X3,
-            Y1 + YL - PaddingVertical
-        );
+            Columns[i].Header, Columns[i].HeaderJustification, X2, Y1 + PaddingVertical, X3, Y1 + YL - PaddingVertical
+            );
 
         if (i > 0)
         {
@@ -128,13 +123,9 @@ function DrawTable(Canvas C, float X, float Y)
             C.DrawColor = Rows[i].Columns[k].TextColor;
 
             C.DrawTextJustified(
-                Rows[i].Columns[k].Value,
-                Columns[k].RowJustification,
-                X1 + PaddingHorizontal,
-                Y1 + PaddingVertical,
-                X1 + Columns[k].Width - PaddingHorizontal,
-                Y1 + YL - PaddingVertical
-            );
+                Rows[i].Columns[k].Value, Columns[k].RowJustification, X1 + PaddingHorizontal, Y1 + PaddingVertical,
+                X1 + Columns[k].Width - PaddingHorizontal, Y1 + YL - PaddingVertical
+                );
 
             X1 += Columns[k].Width;
         }

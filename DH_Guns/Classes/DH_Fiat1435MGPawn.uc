@@ -18,13 +18,13 @@ var bool bIsZoomed;
 var() float ZoomFOV;
 
 // Reload
-var() name  ReloadCameraBone;
+var() name ReloadCameraBone;
 
 // First Person Hands
-var DHFirstPersonHands  HandsActor;
-var Mesh                HandsMesh;
-var() name              HandsReloadSequence;
-var name                HandsAttachBone;
+var DHFirstPersonHands HandsActor;
+var Mesh HandsMesh;
+var() name HandsReloadSequence;
+var name HandsAttachBone;
 
 // TODO: maybe use a state while reloading to make this easier to manage.
 
@@ -151,7 +151,12 @@ simulated function bool IsReloading()
     return MG != none && MG.IsReloading();
 }
 
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    )
 {
     local float T;
     local DH_Fiat1435MG VW;
@@ -168,19 +173,30 @@ simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor Vie
         ReloadCameraCoords = VW.GetBoneCoords(ReloadCameraBone);
         ReloadCameraLocation = ReloadCameraCoords.Origin;
         ReloadCameraRotation = QuatToRotator(
-            Class'UQuaternion'.static.FromAxes(ReloadCameraCoords.XAxis, ReloadCameraCoords.YAxis, ReloadCameraCoords.ZAxis)
-        );
+            Class'UQuaternion'.static.FromAxes(
+                ReloadCameraCoords.XAxis,
+                ReloadCameraCoords.YAxis,
+                ReloadCameraCoords.ZAxis
+                )
+            );
 
-        T = Class'UInterp'.static.LerpBilateral(Level.TimeSeconds, VW.ReloadStartTimeSeconds, VW.ReloadEndTimeSeconds, VW.ReloadCameraTweenTime);
+        T = Class'UInterp'.static.LerpBilateral(
+            Level.TimeSeconds,
+            VW.ReloadStartTimeSeconds,
+            VW.ReloadEndTimeSeconds,
+            VW.ReloadCameraTweenTime
+            );
         T = Class'UInterp'.static.SmoothStep(T, 0.0, 1.0);
 
         CameraLocation = Class'UVector'.static.VLerp(T, CameraLocation, ReloadCameraLocation);
-        CameraRotation = QuatToRotator(QuatSlerp(QuatFromRotator(CameraRotation), QuatFromRotator(ReloadCameraRotation), T));
+        CameraRotation = QuatToRotator(
+            QuatSlerp(QuatFromRotator(CameraRotation), QuatFromRotator(ReloadCameraRotation), T)
+            );
     }
 }
 
 // Despite the name, this function is used to update the gun's rotation.
-public function UpdateRocketAcceleration(Float DeltaTime, Float YawChange, Float PitchChange)
+public function UpdateRocketAcceleration(float DeltaTime, float YawChange, float PitchChange)
 {
     PitchChange *= 0.5;
 
@@ -201,7 +217,7 @@ public function UpdateRocketAcceleration(Float DeltaTime, Float YawChange, Float
 }
 
 // Pitch is handled with W/S keys.
-function HandleTurretRotation(Float DeltaTime, Float YawChange, Float PitchChange)
+function HandleTurretRotation(float DeltaTime, float YawChange, float PitchChange)
 {
     UpdateTurretRotation(DeltaTime, YawChange, PitchChange);
 
@@ -213,7 +229,7 @@ function HandleTurretRotation(Float DeltaTime, Float YawChange, Float PitchChang
 }
 
 // Debugging functions.
-simulated exec function SpawnRangeTarget()
+exec simulated function SpawnRangeTarget()
 {
     local Coords MuzzleCoords;
     local Vector Direction, TargetLocation;
@@ -242,15 +258,17 @@ simulated exec function SpawnRangeTarget()
         TargetActor.Destroy();
     }
 
-    TargetLocation = MuzzleCoords.Origin + (Direction * Class'DHUnits'.static.MetersToUnreal(MG.RangeTable[MG.RangeIndex].Range));
+    TargetLocation = MuzzleCoords.Origin
+        + (Direction * Class'DHUnits'.static.MetersToUnreal(MG.RangeTable[MG.RangeIndex].Range));
 
     TargetActor = Spawn(Class'DHRangeTargetActor', self,, TargetLocation, Rotator(-Direction));
     TargetActor.SetStaticMesh(TargetStaticMesh);
 }
 
-simulated exec function SetRangeTheta(float NewTheta)
+exec simulated function SetRangeTheta(float NewTheta)
 {
     local DH_Fiat1435MG MG;
+
     MG = DH_Fiat1435MG(Gun);
 
     if (Level.NetMode != NM_Standalone && !Class'DH_LevelInfo'.static.DHDebugMode())
@@ -262,7 +280,7 @@ simulated exec function SetRangeTheta(float NewTheta)
     MG.UpdateRangeDriverFrameTarget();
 }
 
-simulated exec function DumpRangeTable()
+exec simulated function DumpRangeTable()
 {
     local int i;
     local DH_Fiat1435MG MG;
@@ -276,7 +294,10 @@ simulated exec function DumpRangeTable()
 
     for (i = 0; i < MG.RangeTable.Length; ++i)
     {
-        Log("RangeTable(" $ i $ ")=(Range=" $ MG.RangeTable[i].Range $ ",AnimationTime=" $ MG.RangeTable[i].AnimationTime $ ")");
+        Log(
+            "RangeTable(" $ i $ ")=(Range=" $ MG.RangeTable[i].Range $ ",AnimationTime="
+                $ MG.RangeTable[i].AnimationTime $ ")"
+            );
     }
 }
 

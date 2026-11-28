@@ -25,4 +25,3 @@ defaultproperties
 
     ObjSpawnMinimumDepth=1
 }
-

@@ -4,5 +4,3 @@
 //==============================================================================
 
 class DH_LWP_GreatcoatGreyGunner extends DHDeprecated;
-
-

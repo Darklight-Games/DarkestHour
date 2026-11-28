@@ -61,9 +61,9 @@ function Setup()
 
         ConstructionClass = Context.LevelInfo.ConstructionsEvaluated[i].ConstructionClass;
 
-        if (ConstructionClass != none &&
-            ConstructionClass.default.GroupClass == GroupClass &&
-            ConstructionClass.static.ShouldShowOnMenu(Context))
+        if (ConstructionClass != none
+            && ConstructionClass.default.GroupClass == GroupClass
+            && ConstructionClass.static.ShouldShowOnMenu(Context))
         {
             Options.Insert(j, 1);
             Options[j].OptionalObject = ConstructionClass;
@@ -105,11 +105,11 @@ function OnSelect(int OptionIndex, Vector Location, optional Vector HitNormal)
 
     P = DHPawn(Interaction.ViewportOwner.Actor.Pawn);
 
-    if (P == none ||
-        Interaction == none ||
-        Interaction.ViewportOwner == none ||
-        OptionIndex < 0 ||
-        OptionIndex >= Options.Length)
+    if (P == none
+        || Interaction == none
+        || Interaction.ViewportOwner == none
+        || OptionIndex < 0
+        || OptionIndex >= Options.Length)
     {
         return;
     }
@@ -168,8 +168,7 @@ function bool IsOptionDisabled(int OptionIndex)
 {
     local class<DHConstruction> C;
 
-    if (Options[OptionIndex].OptionalInteger != MORE_BUTTON_FLAG &&
-        Options[OptionIndex].OptionalObject == none)
+    if (Options[OptionIndex].OptionalInteger != MORE_BUTTON_FLAG && Options[OptionIndex].OptionalObject == none)
     {
         return true;
     }
@@ -242,7 +241,8 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
             }
 
             ORI.InfoIcon = default.SquadIcon;
-            ORI.InfoText[0] = string(SquadMemberCount) $ "/" $ string(ConstructionClass.default.SquadMemberCountMinimum);
+            ORI.InfoText[0] = string(SquadMemberCount) $ "/"
+                $ string(ConstructionClass.default.SquadMemberCountMinimum);
             break;
         case ERROR_NoSquadmatesNearby:
             ORI.InfoIcon = default.SquadIcon;
@@ -273,7 +273,11 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
         if (MaxActive != -1)
         {
             Active = GRI.GetTeamConstructionActive(PC.GetTeamNum(), ConstructionClass);
-            ORI.InfoText[InfoTextIndex] = Repl(Repl(default.MaxActiveText, "{0}", string(Active)), "{1}", string(MaxActive));
+            ORI.InfoText[InfoTextIndex] = Repl(
+                Repl(default.MaxActiveText, "{0}", string(Active)),
+                "{1}",
+                string(MaxActive)
+                );
             ++InfoTextIndex;
         }
     }
@@ -281,10 +285,10 @@ function GetOptionRenderInfo(int OptionIndex, out OptionRenderInfo ORI)
 
 function bool ShouldHideMenu()
 {
-    return Interaction == none ||
-           Interaction.ViewportOwner == none ||
-           Interaction.ViewportOwner.Actor == none ||
-           DHPawn(Interaction.ViewportOwner.Actor.Pawn) == none;
+    return Interaction == none
+        || Interaction.ViewportOwner == none
+        || Interaction.ViewportOwner.Actor == none
+        || DHPawn(Interaction.ViewportOwner.Actor.Pawn) == none;
 }
 
 defaultproperties

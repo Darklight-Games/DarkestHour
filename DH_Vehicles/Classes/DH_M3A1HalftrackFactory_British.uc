@@ -15,6 +15,9 @@ simulated function PostBeginPlay()
 
     if (Role == ROLE_Authority)
     {
-        Log("Leveller, please replace use of DH_M3A1HalftrackFactory_British with DH_M3A1HalftrackFactory, as this is a temporary legacy actor & in future the map will break", 'MAP WARNING');
+        Log(
+            "Leveller, please replace use of DH_M3A1HalftrackFactory_British with DH_M3A1HalftrackFactory, as this is a temporary legacy actor & in future the map will break",
+            'MAP WARNING'
+            );
     }
 }

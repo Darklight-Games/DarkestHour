@@ -11,4 +11,3 @@ defaultproperties
     InitialAmount=200
     IconMaterial=Texture'InterfaceArt_tex.mg42_ammo'
 }
-

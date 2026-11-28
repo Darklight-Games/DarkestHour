@@ -51,7 +51,7 @@ simulated function bool StartFire(int Mode)
 // Modified to prevent MG from playing fire end anims while auto firing
 simulated function AnimEnd(int Channel)
 {
-    local name  Anim;
+    local name Anim;
     local float Frame, Rate;
 
     if (FireMode[0].IsInState('FireLoop'))
@@ -63,11 +63,14 @@ simulated function AnimEnd(int Channel)
     {
         GetAnimParams(0, Anim, Frame, Rate);
 
-        if ((Anim == FireMode[0].FireAnim || Anim == DHAutomaticFire(FireMode[0]).BipodDeployFireLoopAnim) && !FireMode[0].bIsFiring)
+        if ((Anim == FireMode[0].FireAnim || Anim == DHAutomaticFire(FireMode[0]).BipodDeployFireLoopAnim)
+            && !FireMode[0].bIsFiring)
         {
             FireMode[0].PlayFireEnd();
         }
-        else if (DHProjectileFire(FireMode[0]) != none && Anim == DHProjectileFire(FireMode[0]).FireIronAnim && !FireMode[0].bIsFiring)
+        else if (DHProjectileFire(FireMode[0]) != none
+            && Anim == DHProjectileFire(FireMode[0]).FireIronAnim
+            && !FireMode[0].bIsFiring)
         {
             PlayIdle();
         }
@@ -87,9 +90,7 @@ simulated function bool ShouldUseFreeAim()
 // Modified to avoid ironsights stuff because an 'ironsighted' MG is actually just hipped fire mode
 simulated state IronSightZoomIn
 {
-    simulated function EndState() // avoids setting DisplayFOV & PlayerViewOffset
-    {
-    }
+    simulated function EndState(); // avoids setting DisplayFOV & PlayerViewOffset;
 
 Begin: // do nothing (avoids calling SmoothZoom)
 }
@@ -113,9 +114,9 @@ Begin:
 
 simulated state StartSprinting
 {
-// Take the player out of ironsights
+    // Take the player out of ironsights (see DHProjectileWeapon's StartSprinting for why the server doesn't for a remote client)
 Begin:
-    if (bUsingSights)
+    if (bUsingSights && (Role < ROLE_Authority || InstigatorIsLocallyControlled()))
     {
         ZoomOut();
     }
@@ -127,7 +128,7 @@ Begin:
 
 simulated state StartCrawling
 {
-// Take the player out of ironsights
+    // Take the player out of ironsights
 Begin:
     if (bUsingSights)
     {
@@ -140,7 +141,7 @@ Begin:
 }
 
 // Modified to allow for different free aim conditions in this class (due to possibility of hip fire from ironsights key))
-function SetServerOrientation(Rotator  NewRotation)
+function SetServerOrientation(Rotator NewRotation)
 {
     local Rotator WeaponRotation;
 
@@ -162,10 +163,7 @@ function SetServerOrientation(Rotator  NewRotation)
 }
 
 // Overridden because we have no melee attack
-simulated function bool IsBusy()
-{
-    return false;
-}
+simulated function bool IsBusy();
 
 // Modified to add BeltBulletClass static mesh
 static function StaticPrecache(LevelInfo L)

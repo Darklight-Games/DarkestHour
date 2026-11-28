@@ -47,7 +47,12 @@ function UpdateRocketAcceleration(float DeltaTime, float YawChange, float PitchC
 
 // Modified so camera rotation & offset positioning is always based on the weapon's aim, so player's view always moves with turret
 // But with 'look around' rotation added in when player's head is raised above the reflector sight
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    )
 {
     local Quat RelativeQuat, TurretQuat, NonRelativeQuat;
 

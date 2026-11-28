@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_RKKF_TeloFireteamLeaderNorth extends DHSOVCorporalRoles; //this role wears a naval cap, which has a different writing on it depending on the fleet, so this role is separated on fleets
+class DH_RKKF_TeloFireteamLeaderNorth extends DHSOVCorporalRoles; // this role wears a naval cap, which has a different writing on it depending on the fleet, so this role is separated on fleets
 
 defaultproperties
 {

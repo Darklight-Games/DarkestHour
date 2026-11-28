@@ -30,9 +30,7 @@ simulated function int GetHudAmmoCount()
 }
 
 // Emptied out as faust doesn't use CurrentMagCount & can't be resupplied or reloaded
-function UpdateResupplyStatus(bool bCurrentWeapon)
-{
-}
+function UpdateResupplyStatus(bool bCurrentWeapon);
 
 // Modified as faust is one-shot weapon, so auto-lowers after firing & then either switches to a new weapon or brings up another faust (if player has another - not normally in DH)
 simulated function PostFire()
@@ -87,7 +85,7 @@ simulated state AutoLoweringWeapon
         }
     }
 
-// Take the player out of ironsights
+    // Take the player out of ironsights
 Begin:
     if (bUsingSights)
     {

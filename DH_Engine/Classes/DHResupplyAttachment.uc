@@ -4,24 +4,22 @@
 //==============================================================================
 
 class DHResupplyAttachment extends RODummyAttachment
-  dependson(DHResupplyStrategy)
-  notplaceable;
+    dependson(DHResupplyStrategy)
+    notplaceable;
 
-var     private int     TeamIndex;      // Team this volume resupplies
-var     private int     SquadIndex;     // Squad this volume resupplies. When
-                                        // set, vehicles are only resupplied
-                                        // when controlled by a squad memeber.
-var     DHResupplyStrategy.EResupplyType   ResupplyType;   // Who this volume will resupply
-var     array<Pawn>     ResupplyActors;
-var     float           UpdateTime;     // How often this thing needs to do it's business
+var private int TeamIndex; // Team this volume resupplies
 
-var     class<DHMapIconAttachment> MapIconAttachmentClass;
-var     DHMapIconAttachment        MapIconAttachment;
+var private int SquadIndex; // Squad this volume resupplies. When set, vehicles are only resupplied when controlled by a squad memeber.
+var DHResupplyStrategy.EResupplyType ResupplyType; // Who this volume will resupply
+var array<Pawn> ResupplyActors;
+var float UpdateTime; // How often this thing needs to do it's business
 
-var     DHResupplyStrategy ResupplyStrategy;
+var class<DHMapIconAttachment> MapIconAttachmentClass;
+var DHMapIconAttachment MapIconAttachment;
 
-delegate OnPawnResupplied(Pawn P);            // Called for every pawn that is resupplied
+var DHResupplyStrategy ResupplyStrategy;
 
+delegate OnPawnResupplied(Pawn P); // Called for every pawn that is resupplied
 function OnTeamIndexChanged();
 
 function PostBeginPlay()
@@ -58,13 +56,13 @@ simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-final function SetTeamIndex(int TeamIndex)
+final function SetTeamIndex(int NewTeamIndex)
 {
-    self.TeamIndex = TeamIndex;
+    TeamIndex = NewTeamIndex;
 
     if (MapIconAttachment != none)
     {
-        MapIconAttachment.SetTeamIndex(TeamIndex);
+        MapIconAttachment.SetTeamIndex(NewTeamIndex);
     }
 
     OnTeamIndexChanged();
@@ -75,18 +73,18 @@ simulated function int GetSquadIndex()
     return SquadIndex;
 }
 
-final function SetSquadIndex(int SquadIndex)
+final function SetSquadIndex(int NewSquadIndex)
 {
-    self.SquadIndex = SquadIndex;
+    SquadIndex = NewSquadIndex;
 }
 
-final function SetResupplyType(DHResupplyStrategy.EResupplyType ResupplyType)
+final function SetResupplyType(DHResupplyStrategy.EResupplyType NewResupplyType)
 {
-    self.ResupplyType = ResupplyType;
+    ResupplyType = NewResupplyType;
 
     if (MapIconAttachment != none)
     {
-        DHMapIconAttachment_Resupply(MapIconAttachment).SetResupplyType(ResupplyType);
+        DHMapIconAttachment_Resupply(MapIconAttachment).SetResupplyType(NewResupplyType);
     }
 }
 
@@ -109,9 +107,7 @@ function bool CanResupplyPawn(Pawn P)
 
         VWP = ROVehicleWeaponPawn(P);
 
-        if (VWP != none &&
-            VWP.VehicleBase != none &&
-            VWP.VehicleBase.default.VehicleTeam != TeamIndex)
+        if (VWP != none && VWP.VehicleBase != none && VWP.VehicleBase.default.VehicleTeam != TeamIndex)
         {
             return false;
         }
@@ -138,6 +134,8 @@ function bool CanResupplyPawn(Pawn P)
 
         return true;
     }
+
+    return false;
 }
 
 function ProcessActorLeave()
@@ -205,21 +203,21 @@ function Timer()
             P = ROPawn(recvr);
             V = Vehicle(recvr);
 
-            if (P != none &&
-                (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Players) ||
-                 (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Mortars) &&
-                  RI != none &&
-                  RI.bCanUseMortars)))
+            if (P != none
+                && (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Players)
+                    || (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Mortars)
+                        && RI != none
+                        && RI.bCanUseMortars)))
             {
-                //Add him into our resupply list.
+                // Add him into our resupply list.
                 ResupplyActors[ResupplyActors.Length] = P;
                 P.bTouchingResupply = true;
             }
-            else if (V != none &&
-                     V != Base &&
-                     (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Vehicles) ||
-                      (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Mortars) &&
-                       V.IsA('DHMortarVehicleWeaponPawn'))))
+            else if (V != none
+                && V != Base
+                && (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Vehicles)
+                    || (ResupplyStrategy.static.CanResupplyType(ResupplyType, RT_Mortars)
+                        && V.IsA('DHMortarVehicleWeaponPawn'))))
             {
                 ResupplyActors[ResupplyActors.Length] = V;
                 V.bTouchingResupply = true;

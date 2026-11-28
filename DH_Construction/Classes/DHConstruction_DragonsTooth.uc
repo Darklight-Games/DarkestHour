@@ -32,7 +32,6 @@ defaultproperties
     TatteredHealthThreshold=300
 
     // Damage
-    bCanTakeImpactDamage=false
     DamageTypeScales(0)=(DamageType=Class'DHArtilleryDamageType',Scale=1.5)         // Artillery
     DamageTypeScales(1)=(DamageType=Class'ROTankShellExplosionDamage',Scale=0.5)    // HE Splash
     DamageTypeScales(2)=(DamageType=Class'DHShellHEImpactDamageType',Scale=0.8)     // HE Impact
@@ -41,4 +40,3 @@ defaultproperties
     DamageTypeScales(5)=(DamageType=Class'DH_SatchelDamType',Scale=1.4)             // Satchel/Grenades
     DamageTypeScales(6)=(DamageType=Class'DHMortarDamageType',Scale=0.5)            // Mortar
 }
-

@@ -95,10 +95,10 @@ function int CountOf(int TeamIndex, class<DHConstruction> ConstructionClass)
 
     for (i = 0; i < Constructions.Length; ++i)
     {
-        if (Constructions[i] != none &&
-            Constructions[i].GetTeamIndex() == TeamIndex &&
-            (Constructions[i].Class == ConstructionClass ||
-            ClassIsChildOf(Constructions[i].Class, ConstructionClass)))
+        if (Constructions[i] != none
+            && Constructions[i].GetTeamIndex() == TeamIndex
+            && (Constructions[i].Class == ConstructionClass
+                || ClassIsChildOf(Constructions[i].Class, ConstructionClass)))
         {
             ++Count;
         }

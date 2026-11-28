@@ -18,4 +18,3 @@ defaultproperties
     VehicleHudTurretLook=TexRotator'DH_ShermanM4A3E8_tex.turret_fury_rot'
     SpawnOverlay(0)=Texture'DH_ShermanM4A3E8_tex.sherman_m4a3e8_fury'
 }
-

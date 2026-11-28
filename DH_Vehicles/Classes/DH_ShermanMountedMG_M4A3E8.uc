@@ -3,6 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
+// usagi: ignore[class-name-ends-in-digit]
 class DH_ShermanMountedMG_M4A3E8 extends DH_ShermanMountedMG;
 
 defaultproperties
@@ -16,4 +17,3 @@ defaultproperties
     WeaponAttachOffset=(X=0,Y=0,Z=0)
     FireAttachBone="muzzle"
 }
-

@@ -5,12 +5,12 @@
 
 class DHGUIMapContainer extends GUIPanel;
 
-var automated GUIImage              i_Border;
-var automated DHGUIMapComponent     p_Map;
-var automated GUIImage              c_BorderTop;
-var automated GUIImage              c_BorderBottom;
-var automated GUIImage              c_BorderLeft;
-var automated GUIImage              c_BorderRight;
+var automated GUIImage i_Border;
+var automated DHGUIMapComponent p_Map;
+var automated GUIImage c_BorderTop;
+var automated GUIImage c_BorderBottom;
+var automated GUIImage c_BorderLeft;
+var automated GUIImage c_BorderRight;
 
 delegate OnSpawnPointChanged(int SpawnPointIndex, optional bool bDoubleClick);
 delegate OnZoomLevelChanged(int ZoomLevel);
@@ -38,13 +38,13 @@ function bool InternalOnPostDraw(Canvas C)
 
     // Draw horizontal grid lines
     Step = 1.0 / GRID_COUNT;
-    D = p_Map.Viewport.Max.X -  p_Map.Viewport.Min.X;
+    D = p_Map.Viewport.Max.X - p_Map.Viewport.Min.X;
     i = int(p_Map.Viewport.Min.X / Step);
     j = Ceil(p_Map.Viewport.Max.X / Step);
 
     for (i = i; i < j; ++i)
     {
-        X = ((i * Step) -  p_Map.Viewport.Min.X) / D;
+        X = ((i * Step) - p_Map.Viewport.Min.X) / D;
 
         if (X < 1)
         {
@@ -76,7 +76,7 @@ function bool InternalOnPostDraw(Canvas C)
     for (i = i; i < j; ++i)
     {
         // Convert from viewport-space to view-space.
-        Y = ((i * Step) -  p_Map.Viewport.Min.Y) / D;
+        Y = ((i * Step) - p_Map.Viewport.Min.Y) / D;
 
         if (Y < 1)
         {
@@ -161,4 +161,3 @@ defaultproperties
     End Object
     p_Map=MapComponentObject
 }
-

@@ -4,7 +4,7 @@
 //==============================================================================
 
 class DHAmmoResupplyVolume extends Volume
-  dependson(DHResupplyStrategy);
+    dependson(DHResupplyStrategy);
 
 enum EOwningTeam
 {
@@ -13,15 +13,15 @@ enum EOwningTeam
     OWNER_Neutral,
 };
 
-var()   EOwningTeam                       Team;                    // team this volume resupplies
-var()   bool                              bUsesSpawnAreas;         // is activated/deactivated based on a spawn area associated with a tag
-var()   DHResupplyStrategy.EResupplyType  ResupplyType;            // who this volume will resupply
+var() EOwningTeam Team; // team this volume resupplies
+var() bool bUsesSpawnAreas; // is activated/deactivated based on a spawn area associated with a tag
+var() DHResupplyStrategy.EResupplyType ResupplyType; // who this volume will resupply
 
-var     float           UpdateTime;              // how often this thing needs to do it's business
-var     bool            bActive;                 // whether this ammo resupply volume is active
-var     bool            bControlledBySpawnPoint; // flags that this resupply is activated or deactivated by a spawn point, based on whether that spawn is active (set by SP)
+var float UpdateTime; // how often this thing needs to do it's business
+var bool bActive; // whether this ammo resupply volume is active
+var bool bControlledBySpawnPoint; // flags that this resupply is activated or deactivated by a spawn point, based on whether that spawn is active (set by SP)
 
-var     DHResupplyStrategy ResupplyStrategy;
+var DHResupplyStrategy ResupplyStrategy;
 
 // Modified so doesn't activate if controlled by a DH spawn point, as well as if linked to an RO spawn area
 function PostBeginPlay()
@@ -87,10 +87,11 @@ event Touch(Actor Other)
 
     if (P != none)
     {
-        if (Team == OWNER_Neutral ||
-           (P.PlayerReplicationInfo != none && P.PlayerReplicationInfo.Team != none
-           && ((P.PlayerReplicationInfo.Team.TeamIndex == AXIS_TEAM_INDEX && Team == OWNER_Axis) ||
-               (P.PlayerReplicationInfo.Team.TeamIndex == ALLIES_TEAM_INDEX && Team == OWNER_Allies))))
+        if (Team == OWNER_Neutral
+            || (P.PlayerReplicationInfo != none
+                && P.PlayerReplicationInfo.Team != none
+                && ((P.PlayerReplicationInfo.Team.TeamIndex == AXIS_TEAM_INDEX && Team == OWNER_Axis)
+                    || (P.PlayerReplicationInfo.Team.TeamIndex == ALLIES_TEAM_INDEX && Team == OWNER_Allies))))
         {
             P.bTouchingResupply = true;
         }
@@ -98,9 +99,9 @@ event Touch(Actor Other)
 
     if (V != none)
     {
-        if (Team == OWNER_Neutral ||
-           ((V.GetTeamNum() == AXIS_TEAM_INDEX && Team == OWNER_Axis) ||
-            (V.GetTeamNum() == ALLIES_TEAM_INDEX && Team == OWNER_Allies)))
+        if (Team == OWNER_Neutral
+            || ((V.GetTeamNum() == AXIS_TEAM_INDEX && Team == OWNER_Axis)
+                || (V.GetTeamNum() == ALLIES_TEAM_INDEX && Team == OWNER_Allies)))
         {
             V.EnteredResupply();
         }

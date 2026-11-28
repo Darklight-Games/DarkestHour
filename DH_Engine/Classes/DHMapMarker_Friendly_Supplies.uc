@@ -17,4 +17,3 @@ defaultproperties
     MarkerName="Request Supplies"
     LifetimeSeconds=300
 }
-

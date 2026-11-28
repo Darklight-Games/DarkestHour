@@ -8,8 +8,8 @@ class DHObstacleManager extends Actor
 
 const BITFIELD_COUNT = 8;
 const BITFIELD_LENGTH = 32;
-const BITS_PER_FIELD = 256; //BITFIELD_LENGTH * 8
-const MAX_OBSTACLES = 2048; //BITFIELD_COUNT * BITS_PER_FIELD;
+const BITS_PER_FIELD = 256; // BITFIELD_LENGTH * 8
+const MAX_OBSTACLES = 2048; // BITFIELD_COUNT * BITS_PER_FIELD;
 const OBSTACLE_TYPE_INDEX_INVALID = -1;
 
 // In order to keep network traffic down while keeping the number of managed
@@ -20,27 +20,27 @@ const OBSTACLE_TYPE_INDEX_INVALID = -1;
 // pass-by-reference and static array copying functionality, we have to have a
 // lot of ugly code duplication to handle drawing data from multiple sources.
 
-var byte            Bitfield0[BITFIELD_LENGTH];
-var byte            Bitfield1[BITFIELD_LENGTH];
-var byte            Bitfield2[BITFIELD_LENGTH];
-var byte            Bitfield3[BITFIELD_LENGTH];
-var byte            Bitfield4[BITFIELD_LENGTH];
-var byte            Bitfield5[BITFIELD_LENGTH];
-var byte            Bitfield6[BITFIELD_LENGTH];
-var byte            Bitfield7[BITFIELD_LENGTH];
+var byte Bitfield0[BITFIELD_LENGTH];
+var byte Bitfield1[BITFIELD_LENGTH];
+var byte Bitfield2[BITFIELD_LENGTH];
+var byte Bitfield3[BITFIELD_LENGTH];
+var byte Bitfield4[BITFIELD_LENGTH];
+var byte Bitfield5[BITFIELD_LENGTH];
+var byte Bitfield6[BITFIELD_LENGTH];
+var byte Bitfield7[BITFIELD_LENGTH];
 
-var byte            SavedBitfield0[BITFIELD_LENGTH];
-var byte            SavedBitfield1[BITFIELD_LENGTH];
-var byte            SavedBitfield2[BITFIELD_LENGTH];
-var byte            SavedBitfield3[BITFIELD_LENGTH];
-var byte            SavedBitfield4[BITFIELD_LENGTH];
-var byte            SavedBitfield5[BITFIELD_LENGTH];
-var byte            SavedBitfield6[BITFIELD_LENGTH];
-var byte            SavedBitfield7[BITFIELD_LENGTH];
+var byte SavedBitfield0[BITFIELD_LENGTH];
+var byte SavedBitfield1[BITFIELD_LENGTH];
+var byte SavedBitfield2[BITFIELD_LENGTH];
+var byte SavedBitfield3[BITFIELD_LENGTH];
+var byte SavedBitfield4[BITFIELD_LENGTH];
+var byte SavedBitfield5[BITFIELD_LENGTH];
+var byte SavedBitfield6[BITFIELD_LENGTH];
+var byte SavedBitfield7[BITFIELD_LENGTH];
 
-var DHObstacleInfo  Info;
+var DHObstacleInfo Info;
 
-var config bool     bDebug;
+var config bool bDebug;
 
 replication
 {
@@ -233,9 +233,9 @@ simulated event PostNetBeginPlay()
 
                     ObstacleIndex = (k * BITS_PER_FIELD) + (i * 8) + j;
 
-                    if (ObstacleIndex >= 0 &&
-                        ObstacleIndex < Info.Obstacles.Length &&
-                        Info.Obstacles[ObstacleIndex] != none)
+                    if (ObstacleIndex >= 0
+                        && ObstacleIndex < Info.Obstacles.Length
+                        && Info.Obstacles[ObstacleIndex] != none)
                     {
                         Info.Obstacles[ObstacleIndex].SetCleared(bIsCleared);
                     }
@@ -344,9 +344,9 @@ simulated event PostNetReceive()
                     {
                         ObstacleIndex = (k * BITS_PER_FIELD) + (i * 8) + j;
 
-                        if (ObstacleIndex < 0 ||
-                            ObstacleIndex >= Info.Obstacles.Length ||
-                            Info.Obstacles[ObstacleIndex] == none)
+                        if (ObstacleIndex < 0
+                            || ObstacleIndex >= Info.Obstacles.Length
+                            || Info.Obstacles[ObstacleIndex] == none)
                         {
                             break;
                         }
@@ -503,7 +503,6 @@ function SetCleared(DHObstacleInstance Obstacle, bool bIsCleared)
 
 defaultproperties
 {
-    bDebug=false
     bHidden=true
     bAlwaysRelevant=true
     RemoteRole=ROLE_SimulatedProxy

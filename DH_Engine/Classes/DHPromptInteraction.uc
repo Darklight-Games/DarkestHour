@@ -17,6 +17,7 @@ struct Option
     var EInputKey Key;
     var localized string Text;
 };
+
 var array<Option> Options;
 var string OptionsText;
 var Color KeyTextColor;
@@ -35,8 +36,9 @@ function Initialize()
 
     for (i = 0; i < Options.Length; ++i)
     {
-        OptionStrings[OptionStrings.Length] = Class'GameInfo'.static.MakeColorCode(KeyTextColor) $
-        "[" $ GetFriendlyName(Options[i].Key) $ "]" $ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White) @ Options[i].Text;
+        OptionStrings[OptionStrings.Length] = Class'GameInfo'.static.MakeColorCode(KeyTextColor) $ "["
+            $ GetFriendlyName(Options[i].Key) $ "]"
+            $ Class'GameInfo'.static.MakeColorCode(Class'UColor'.default.White) @ Options[i].Text;
     }
 
     OptionsText = Class'UString'.static.Join(" ", OptionStrings);
@@ -136,4 +138,3 @@ defaultproperties
     bVisible=true
     KeyTextColor=(R=255,G=255,B=0,A=255)
 }
-

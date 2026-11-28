@@ -7,8 +7,8 @@
 class DHAdminMenu_ErrorMessages extends LocalMessage
     abstract;
 
-var     localized string    MissingNameText;
-var     localized string    ErrorMessage[28];
+var localized string MissingNameText;
+var localized string ErrorMessage[28];
 
 static function string AssembleMessage(byte MessageNumber, optional string InsertedName)
 {

@@ -9,18 +9,18 @@ class DHVoteManager extends Actor
 struct NominationBase
 {
     var class<DHVoteInfo> VoteClass;
-    var byte              TeamIndex;
-    var PlayerController  Player;
+    var byte TeamIndex;
+    var PlayerController Player;
 };
 
 struct CooldownTimesBase
 {
     var class<DHVoteInfo> VoteClass;
-    var float             Timestamps[2];
+    var float Timestamps[2];
 };
 
-var private array<DHVoteInfo>        Votes;
-var private array<NominationBase>    Nominations;
+var private array<DHVoteInfo> Votes;
+var private array<NominationBase> Nominations;
 var private array<CooldownTimesBase> CooldownTimes;
 
 // NOMINATIONS
@@ -42,7 +42,7 @@ function AddNomination(PlayerController Player, class<DHVoteInfo> VoteClass)
 
     if (VoteClass.default.bIsGlobalVote)
     {
-        TeamIndex = -1;
+        TeamIndex = 255;
     }
     else
     {
@@ -86,9 +86,9 @@ function AddNomination(PlayerController Player, class<DHVoteInfo> VoteClass)
         {
             if (Nominations[i].VoteClass == VoteClass && Nominations[i].TeamIndex == TeamIndex)
             {
-                if (Nominations[i].Player != none &&
-                    (Nominations[i].VoteClass.default.bIsGlobalVote ||
-                     Nominations[i].Player.GetTeamNum() == Nominations[i].TeamIndex))
+                if (Nominations[i].Player != none
+                    && (Nominations[i].VoteClass.default.bIsGlobalVote
+                        || Nominations[i].Player.GetTeamNum() == Nominations[i].TeamIndex))
                 {
                     PlayerNominators[PlayerNominators.Length] = Nominations[i].Player;
                 }
@@ -116,29 +116,29 @@ function AddNomination(PlayerController Player, class<DHVoteInfo> VoteClass)
 
 function RemoveNomination(PlayerController Player, class<DHVoteInfo> VoteClass)
 {
-   local int i;
-   local bool bNotified;
+    local int i;
+    local bool bNotified;
 
-   if (Player == none || VoteClass == none)
-   {
-       return;
-   }
+    if (Player == none || VoteClass == none)
+    {
+        return;
+    }
 
     for (i = Nominations.Length - 1; i >= 0; --i)
     {
-       if (Nominations[i].VoteClass == VoteClass && Nominations[i].Player == Player)
-       {
-           // Avoid sending multiple notifications in case we have stale
-           // nominations listed
-           if (!bNotified)
-           {
-               VoteClass.static.OnNominationRemoved(Player);
-               bNotified = true;
-           }
+        if (Nominations[i].VoteClass == VoteClass && Nominations[i].Player == Player)
+        {
+            // Avoid sending multiple notifications in case we have stale
+            // nominations listed
+            if (!bNotified)
+            {
+                VoteClass.static.OnNominationRemoved(Player);
+                bNotified = true;
+            }
 
-           Nominations.Remove(i, 1);
-       }
-   }
+            Nominations.Remove(i, 1);
+        }
+    }
 }
 
 function ClearNominations(class<DHVoteInfo> VoteClass, byte TeamIndex)
@@ -171,11 +171,14 @@ function bool HasPlayerNominatedVote(PlayerController Player)
 
     for (i = 0; i < Nominations.Length; ++i)
     {
-        if (Nominations[i].Player == Player && (Nominations[i].VoteClass.default.bIsGlobalVote || Nominations[i].TeamIndex == Player.GetTeamNum()))
+        if (Nominations[i].Player == Player
+            && (Nominations[i].VoteClass.default.bIsGlobalVote || Nominations[i].TeamIndex == Player.GetTeamNum()))
         {
             return true;
         }
     }
+
+    return false;
 }
 
 // VOTES
@@ -260,10 +263,10 @@ function int GetVoteIndex(class<DHVoteInfo> VoteClass, optional byte TeamIndex)
 
     for (i = 0; i < Votes.Length; ++i)
     {
-        if (Votes[i] != none &&
-            Votes[i].Class == VoteClass &&
-            !Votes[i].bDeleteMe &&
-            (Votes[i].default.bIsGlobalVote || Votes[i].TeamIndex == TeamIndex))
+        if (Votes[i] != none
+            && Votes[i].Class == VoteClass
+            && !Votes[i].bDeleteMe
+            && (Votes[i].default.bIsGlobalVote || Votes[i].TeamIndex == TeamIndex))
         {
             return i;
         }
@@ -351,6 +354,8 @@ function int GetVoteTime(class<DHVoteInfo> VoteClass, byte TeamIndex)
             return CooldownTimes[i].Timestamps[TeamIndex];
         }
     }
+
+    return 0;
 }
 
 defaultproperties

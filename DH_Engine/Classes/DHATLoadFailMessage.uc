@@ -8,7 +8,12 @@ class DHATLoadFailMessage extends ROCriticalMessage
 
 var localized string CantLoad;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string S;
 
@@ -20,7 +25,7 @@ static function string GetString(optional int Switch, optional PlayerReplication
     }
     else
     {
-        S = Repl(S, "{0}", class'GameInfo'.default.DefaultPlayerName);
+        S = Repl(S, "{0}", Class'GameInfo'.default.DefaultPlayerName);
     }
 
     return S;

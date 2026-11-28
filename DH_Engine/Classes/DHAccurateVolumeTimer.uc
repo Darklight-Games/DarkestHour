@@ -8,7 +8,7 @@ class DHAccurateVolumeTimer extends VolumeTimer;
 // Keeps accurate timing over a period, with Timer being called exactly every TimerFrequency seconds, without losing time
 // In a normal VolumeTimer a small amount of time passes in between fixed duration timers, so over a period timing drifts & becomes slightly off
 
-var     float   NextTimerCallTime; // the time when the next Timer should be called, so we can keep accurate timing over a period
+var float NextTimerCallTime; // the time when the next Timer should be called, so we can keep accurate timing over a period
 
 // Modified to set the initial NextTimerCallTime
 // Also uses TimerFrequency value for the 1st timer duration, instead of assuming default 1 second, & makes sure we have an owning Actor

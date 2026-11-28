@@ -149,4 +149,3 @@ defaultproperties
     PA_CrouchFireLastShot="crouch_shoot_kar"
     PA_ProneFireLastShot="prone_shoot_kar"
 }
-

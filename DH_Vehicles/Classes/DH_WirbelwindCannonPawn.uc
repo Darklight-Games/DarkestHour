@@ -16,4 +16,3 @@ defaultproperties
     DriverPositions(2)=(PositionMesh=SkeletalMesh'DH_Flak38_anm.Wirbelwind_turret',TransitionDownAnim="lookover_down",ViewPitchUpLimit=6000,ViewPitchDownLimit=63500,ViewPositiveYawLimit=20000,ViewNegativeYawLimit=-20000,bExposed=true,DriverTransitionAnim="stand_idlehip_binoc")
     DriverPositions(3)=(ViewFOV=12.0,PositionMesh=SkeletalMesh'DH_Flak38_anm.Wirbelwind_turret',ViewPitchUpLimit=6000,ViewPitchDownLimit=63500,ViewPositiveYawLimit=20000,ViewNegativeYawLimit=-20000,bDrawOverlays=true,bExposed=true,DriverTransitionAnim="stand_idleiron_binoc")
 }
-

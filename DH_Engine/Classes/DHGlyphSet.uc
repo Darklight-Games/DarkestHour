@@ -13,7 +13,7 @@ struct Glyph
 };
 
 var() array<Glyph> Glyphs;
-var() int GlyphFallbackIndex;   // Index of the fallback glyph to use if the requested glyph is not found, or -1 if no fallback should be used.
+var() int GlyphFallbackIndex; // Index of the fallback glyph to use if the requested glyph is not found, or -1 if no fallback should be used.
 
 // Returns the material for the given character.
 static function Texture GetGlyphMaterial(string Character)

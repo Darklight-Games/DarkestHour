@@ -5,17 +5,17 @@
 
 class DHWireCuttersItem extends DHWeapon;
 
-var     float               CutDistance;
-var     DHObstacleInstance  ObstacleBeingCut;
-var     DHConstruction      ConstructionBeingCut;
+var float CutDistance;
+var DHObstacleInstance ObstacleBeingCut, ObstacleShouldBeCut;
+var DHConstruction ConstructionBeingCut, ConstructionShouldBeCut;
 
 // Functions emptied out or returning false, as wire cutters aren't a real weapon
-simulated function bool IsFiring(){return false;}
-function bool FillAmmo(){return false;}
-function bool ResupplyAmmo(){return false;}
-exec simulated function ROManualReload() {return;}
-simulated function bool IsBusy() {return false;}
-simulated function bool ShouldUseFreeAim() {return false;}
+simulated function bool IsFiring();
+function bool FillAmmo();
+function bool ResupplyAmmo();
+exec simulated function ROManualReload();
+simulated function bool IsBusy();
+simulated function bool ShouldUseFreeAim();
 
 // Modified to allow same InventoryGroup item (this shares same slot as shovel/satchel, each item on the slot requires multi-item support)
 function bool HandlePickupQuery(Pickup Item)
@@ -53,6 +53,85 @@ function bool HandlePickupQuery(Pickup Item)
     return Inventory != none && Inventory.HandlePickupQuery(Item);
 }
 
+simulated function Fire(float F)
+{
+    if (CanCut())
+    {
+        if (ObstacleShouldBeCut != none)
+        {
+            ObstacleBeingCut = ObstacleShouldBeCut;
+        }
+
+        if (ConstructionShouldBeCut != none)
+        {
+            ConstructionBeingCut = ConstructionShouldBeCut;
+        }
+
+        GotoState('Cutting');
+    }
+}
+
+simulated function Tick(float DeltaTime)
+{
+    local DHPawn P;
+
+    if (Level.NetMode != NM_DedicatedServer)
+    {
+        P = DHPawn(Instigator);
+
+        if (P != none)
+        {
+            P.bCanCutWire = CanCut();
+        }
+    }
+
+    super.Tick(DeltaTime);
+}
+
+simulated function bool CanCut()
+{
+    local DHConstruction C;
+    local DHObstacleInstance O;
+    local DHPawn P;
+    local Vector HitLocation, HitNormal, TraceEnd, TraceStart;
+
+    P = DHPawn(Instigator);
+
+    if (P == none
+        || P.Weapon != self
+        || P.Controller == none
+        || P.Velocity != vect(0.0, 0.0, 0.0)
+        || P.IsProneTransitioning())
+    {
+        return false;
+    }
+
+    TraceStart = P.Location;
+    TraceEnd = TraceStart + (Vector(P.Controller.Rotation) * CutDistance);
+
+    // Support for obstacles
+    foreach TraceActors(Class'DHObstacleInstance', O, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0))
+    {
+        if (O != none && !O.IsCleared() && O.Info.CanBeCut())
+        {
+            ObstacleShouldBeCut = O;
+            return true;
+        }
+    }
+
+    // Support for constructions
+    foreach TraceActors(Class'DHConstruction', C, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0))
+    {
+        if (C != none && C.CanBeCut())
+        {
+            ConstructionShouldBeCut = C;
+            return true;
+        }
+    }
+
+    return false;
+}
+
 simulated state Cutting
 {
     simulated function BeginState()
@@ -88,12 +167,12 @@ simulated state Cutting
 
     simulated function Tick(float DeltaTime)
     {
-        super.Tick(DeltaTime);
+        global.Tick(DeltaTime);
 
         // A fail safe to get out of this state if either something went wrong or somehow we shouldn't continue
-        if ((ConstructionBeingCut == none && ObstacleBeingCut == none) ||
-            (ObstacleBeingCut != none && ObstacleBeingCut.Info.IsCleared()) ||
-            (ConstructionBeingCut != none && !ConstructionBeingCut.CanBeCut()))
+        if ((ConstructionBeingCut == none && ObstacleBeingCut == none)
+            || (ObstacleBeingCut != none && ObstacleBeingCut.IsCleared())
+            || (ConstructionBeingCut != none && !ConstructionBeingCut.CanBeCut()))
         {
             GotoState('');
             PlayAnim('cutEnd', 1.0, 0.2);
@@ -124,7 +203,7 @@ simulated state Cutting
 
     simulated function AnimEnd(int Channel)
     {
-        local name  SeqName;
+        local name SeqName;
         local float AnimRate, AnimFrame;
 
         GetAnimParams(Channel, SeqName, AnimFrame, AnimRate);
@@ -153,61 +232,24 @@ simulated state Cutting
         }
     }
 
-    simulated function bool WeaponCanSwitch()
-    {
-        return false;
-    }
-
-    simulated function bool WeaponAllowCrouchChange()
-    {
-        return false;
-    }
-
-    simulated function bool WeaponAllowProneChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponCanSwitch();
+    simulated function bool WeaponAllowCrouchChange();
+    simulated function bool WeaponAllowProneChange();
+    simulated function bool CanCut();
 }
 
-simulated function Fire(float F)
+simulated event Destroyed()
 {
-    local DHConstruction C;
-    local DHObstacleInstance O;
-    local Vector HitLocation, HitNormal, TraceEnd, TraceStart;
+    local DHPawn P;
 
-    if (Instigator == none ||
-        Instigator.Controller == none ||
-        Instigator.IsProneTransitioning() ||
-        Instigator.Velocity != vect(0.0, 0.0, 0.0) ||
-        IsInState('Cutting'))
+    P = DHPawn(Instigator);
+
+    if (P != none)
     {
-        return;
+        P.bCanCutWire = false;
     }
 
-    TraceStart = Instigator.Location;
-    TraceEnd = TraceStart + (Vector(Instigator.Controller.Rotation) * CutDistance);
-
-    // Support for obstacles
-    foreach TraceActors(Class'DHObstacleInstance', O, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0))
-    {
-        if (O != none && !O.Info.IsCleared() && O.Info.CanBeCut())
-        {
-            ObstacleBeingCut = O;
-            GotoState('Cutting');
-            break;
-        }
-    }
-
-    // Support for constructions
-    foreach TraceActors(Class'DHConstruction', C, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0))
-    {
-        if (C != none && C.CanBeCut())
-        {
-            ConstructionBeingCut = C;
-            GotoState('Cutting');
-            break;
-        }
-    }
+    super.Destroyed();
 }
 
 defaultproperties
@@ -232,13 +274,8 @@ defaultproperties
     bCanSway=false
     bCanResupplyWhenEmpty=false
 
-    SelectAnim="Draw" // TODO: rename anims to standard, inherited names & then delete these properties
+    SelectAnim="Draw"
     PutDownAnim="putaway"
-    CrawlStartAnim="crawlIn"
-    CrawlEndAnim="crawlOut"
-    SprintStartAnim="sprintStart"
-    SprintLoopAnim="sprintMiddle"
-    SprintEndAnim="sprintEnd"
 
     AIRating=0.0
     CurrentRating=0.0

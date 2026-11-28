@@ -6,7 +6,7 @@
 class DHConstruction_VehiclePool extends DHConstruction;
 
 var class<DHSpawnPoint> SpawnPointClass;
-var DHSpawnPoint        SpawnPoint;
+var DHSpawnPoint SpawnPoint;
 
 simulated function OnConstructed()
 {
@@ -31,17 +31,38 @@ simulated function OnConstructed()
     }
 }
 
+// Destroys the spawn point, if it exists, and clears the reference so that a
+// new one can be created if the construction is rebuilt (e.g., on round reset).
+function DestroySpawnPoint()
+{
+    if (SpawnPoint != none)
+    {
+        SpawnPoint.Destroy();
+        SpawnPoint = none;
+    }
+}
+
+simulated state Constructed
+{
+    // The spawn point is only usable while the vehicle pool is constructed.
+    // This covers it being broken, torn down or reset. Level-placed vehicle
+    // pools are never destroyed (they go to the Dummy state instead), so this
+    // cannot be left to Destroyed().
+    simulated function EndState()
+    {
+        super.EndState();
+
+        if (Role == ROLE_Authority)
+        {
+            DestroySpawnPoint();
+        }
+    }
+}
+
 simulated function OnBroken()
 {
     super.OnBroken();
 
-    if (Role == ROLE_Authority)
-    {
-        if (SpawnPoint != none)
-        {
-            SpawnPoint.Destroy();
-        }
-    }
     // "A Vehicle Pool has been destroyed."
     Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, GetTeamIndex(), Class'DHVehiclePoolMessage', 3);
 }
@@ -52,12 +73,8 @@ simulated event Destroyed()
 
     if (Role == ROLE_Authority)
     {
-        if (SpawnPoint != none)
-        {
-            SpawnPoint.Destroy();
-        }
+        DestroySpawnPoint();
     }
-
 }
 
 defaultproperties
@@ -110,4 +127,3 @@ defaultproperties
 
     CompletionPointValue=500
 }
-

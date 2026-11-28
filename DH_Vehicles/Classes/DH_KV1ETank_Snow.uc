@@ -5,7 +5,6 @@
 
 class DH_KV1ETank_Snow extends DH_KV1ETank;
 
-
 defaultproperties
 {
     Skins(0)=Texture'DH_VehiclesSOV_tex.KV1_body_snow'

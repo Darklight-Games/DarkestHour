@@ -6,17 +6,17 @@
 class DHRocketWarningMessage extends ROCriticalMessage
     abstract;
 
-var     localized string    NoHipFire,
-                            CrouchOrRestToFire,
-                            ProneOrRestToFire,
-                            NoProneReload,
-                            RestToReload,
-                            ShoulderForAssistedReload,
-                            CantBeMoving;
+var localized string NoHipFire, CrouchOrRestToFire, ProneOrRestToFire, NoProneReload, RestToReload,
+    ShoulderForAssistedReload, CantBeMoving;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
-    local string    S;
+    local string S;
     local Inventory I;
 
     switch (Switch)

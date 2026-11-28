@@ -18,4 +18,3 @@ defaultproperties
     HitMapMarkerClass=Class'DHMapMarker_ArtilleryHit_Smoke'
     GasDamageClass=Class'DHShellSmokeWPGasDamageType_Artillery'
 }
-

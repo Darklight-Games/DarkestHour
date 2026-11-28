@@ -6,8 +6,8 @@
 class DHMortarVehicle extends DHVehicle
     abstract;
 
-var     DHPawn      OwningPawn;       // reference to the player pawn that owns this mortar (the current operator or the last player to man it)
-var     bool        bCanBeResupplied; // flags that the mortar doesn't have full ammo & so can receive passed ammo
+var DHPawn OwningPawn; // reference to the player pawn that owns this mortar (the current operator or the last player to man it)
+var bool bCanBeResupplied; // flags that the mortar doesn't have full ammo & so can receive passed ammo
 
 replication
 {
@@ -38,15 +38,25 @@ function ServerDestroyMortar()
 // Modified to handle special requirements to use mortar, with custom messages
 function bool TryToDrive(Pawn P)
 {
-    local DHPawn     DHP;
+    local DHPawn DHP;
     local DHRoleInfo RI;
 
     DHP = DHPawn(P);
 
     // Deny entry if player is on fire, or is crawling, or reloading a weapon (plus several very obscure other reasons)
-    if (Health <= 0 || DHP == none || DHP.bOnFire || DHP.bIsCrawling || (DHP.Weapon != none && DHP.Weapon.IsInState('Reloading')) ||
-        DHP.Controller == none || !DHP.Controller.bIsPlayer || DHP.DrivenVehicle != none || DHP.IsA('Vehicle') || bNonHumanControl || !Level.Game.CanEnterVehicle(self, DHP) ||
-        WeaponPawns.Length == 0 || WeaponPawns[0] == none)
+    if (Health <= 0
+        || DHP == none
+        || DHP.bOnFire
+        || DHP.bIsCrawling
+        || (DHP.Weapon != none && DHP.Weapon.IsInState('Reloading'))
+        || DHP.Controller == none
+        || !DHP.Controller.bIsPlayer
+        || DHP.DrivenVehicle != none
+        || DHP.IsA('Vehicle')
+        || bNonHumanControl
+        || !Level.Game.CanEnterVehicle(self, DHP)
+        || WeaponPawns.Length == 0
+        || WeaponPawns[0] == none)
     {
         return false;
     }
@@ -117,9 +127,14 @@ function KDriverEnter(Pawn P)
 }
 
 // No possibility of damage to mortar base
-function TakeDamage(int Damage, Pawn InstigatedBy, Vector HitLocation, Vector Momentum, class<DamageType> DamageType, optional int HitIndex)
-{
-}
+function TakeDamage(
+    int Damage,
+    Pawn InstigatedBy,
+    Vector HitLocation,
+    Vector Momentum,
+    class<DamageType> DamageType,
+    optional int HitIndex
+    );
 
 // From ROWheeledVehicle, to use VehicleTeam, same as all other vehicles
 simulated function int GetTeamNum()
@@ -138,14 +153,13 @@ simulated event NotifySelected(Pawn User)
 
     P = DHPawn(User);
 
-    if (Level.NetMode != NM_DedicatedServer &&
-        P != none &&
-        P.IsHumanControlled() &&
-        P.GetTeamNum() == VehicleTeam &&
-        ((Level.TimeSeconds - LastNotifyTime) >= TouchMessageClass.default.LifeTime))
+    if (Level.NetMode != NM_DedicatedServer
+        && P != none
+        && P.IsHumanControlled()
+        && P.GetTeamNum() == VehicleTeam
+        && ((Level.TimeSeconds - LastNotifyTime) >= TouchMessageClass.default.LifeTime))
     {
-        if (P.GetRoleInfo() != none &&
-            P.GetRoleInfo().bCanUseMortars)
+        if (P.GetRoleInfo() != none && P.GetRoleInfo().bCanUseMortars)
         {
             User.ReceiveLocalizedMessage(TouchMessageClass, 0, User.PlayerReplicationInfo,, self);
             LastNotifyTime = Level.TimeSeconds;
@@ -166,16 +180,30 @@ simulated function PrevWeapon();
 function ServerChangeViewPoint(bool bForward);
 simulated function SwitchWeapon(byte F);
 function ServerChangeDriverPosition(byte F);
-function bool KDriverLeave(bool bForceLeave) { return false; }
+function bool KDriverLeave(bool bForceLeave);
 function DriverDied();
 function DriverLeft();
-function bool PlaceExitingDriver() { return false; }
+function bool PlaceExitingDriver();
 simulated function SetPlayerPosition();
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation);
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    );
 simulated function DrawHUD(Canvas C);
 simulated function POVChanged(PlayerController PC, bool bBehindViewChanged);
-simulated function int LimitYaw(int yaw) { return yaw; }
-function int LimitPawnPitch(int pitch) { return pitch; }
+
+simulated function int LimitYaw(int yaw)
+{
+    return yaw;
+}
+
+function int LimitPawnPitch(int pitch)
+{
+    return pitch;
+}
+
 function Fire(optional float F);
 event CheckReset();
 

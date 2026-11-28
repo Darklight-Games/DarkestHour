@@ -10,4 +10,3 @@ defaultproperties
 {
     IconColor=(R=250,G=250,B=250,A=255)
 }
-

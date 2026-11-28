@@ -47,4 +47,3 @@ defaultproperties
     Mesh=SkeletalMesh'DH_Mortars_3rd.Kz8cmGrW42_carried'
     CullDistance=0.0 // no cull as it's too big
 }
-

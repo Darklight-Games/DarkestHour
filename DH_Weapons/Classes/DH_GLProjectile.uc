@@ -15,8 +15,7 @@ defaultproperties
     ExplosionSound(2)=SoundGroup'DH_MN_InfantryWeapons_sound.GeballteLadungExp01'
 
     Damage=760.0 // 1260 gramms TNT
-    DamageRadius=1100 // about 18 meters
-                      // practically, user has to either throw from cover or run away immediately
+    DamageRadius=1100 // about 18 meters. practically, user has to either throw from cover or run away immediately
 
     EngineDamageMax=700.0
     EngineDeckArmorThicknessThreshold=25.0 // arbitrary value scaled down from larger satchel

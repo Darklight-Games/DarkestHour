@@ -5,6 +5,7 @@
 
 class DH_ModifyDSMStatus extends DH_ModifyActors;
 
+// usagi:ignore[enum-name-prefix]
 enum DSMModifyType
 {
     DSM_Destroy,
@@ -12,15 +13,16 @@ enum DSMModifyType
     DSM_ToggleDestroyed,
     DSM_Activate,
     DSM_Deactivate,
-    DSM_ToggleActiveStatus
+    DSM_ToggleActiveStatus,
 };
 
-var()   DSMModifyType       HowToModify;            // the way in which we will modify the specified destroyable static mesh (DSM) when this actor gets triggered
-var()   name                DSMToModify;            // the Tag of the DSM that we are set up to modify
-var()   bool                UseRandomness;          // option for random chance of modifying the DSM each time this modify actor is triggered
-var()   int                 RandomPercent;          // percentage chance of modifying the DSM if the UseRandomness option is enabled
-var()   bool                bRepairIfNotFullHealth; // extra option to restore DSM to full health if it's been damaged but not destroyed (used with DSM_Repair option)
-var     DHDestroyableSM     DSMReference;           // our actor reference to the DSM we are to modify, found from matching our specified DSMToModify with the DSM's Tag
+var() DSMModifyType HowToModify; // the way in which we will modify the specified destroyable static mesh (DSM) when this actor gets triggered
+var() name DSMToModify; // the Tag of the DSM that we are set up to modify
+// usagi:ignore[bool-name-prefix]
+var() bool UseRandomness; // option for random chance of modifying the DSM each time this modify actor is triggered
+var() int RandomPercent; // percentage chance of modifying the DSM if the UseRandomness option is enabled
+var() bool bRepairIfNotFullHealth; // extra option to restore DSM to full health if it's been damaged but not destroyed (used with DSM_Repair option)
+var DHDestroyableSM DSMReference; // our actor reference to the DSM we are to modify, found from matching our specified DSMToModify with the DSM's Tag
 
 // Implemented to find our paired DSM by matching our specified DSMToModify to its Tag name
 function PostBeginPlay()

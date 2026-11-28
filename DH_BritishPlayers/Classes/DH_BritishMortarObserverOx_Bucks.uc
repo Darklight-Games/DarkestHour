@@ -4,4 +4,3 @@
 //==============================================================================
 
 class DH_BritishMortarObserverOx_Bucks extends DHDeprecated;
-

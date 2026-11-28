@@ -5,7 +5,7 @@
 
 class DHEditFavoritePage extends DHBrowser_OpenIP;
 
-var automated GUILabel l_name;
+var automated GUILabel l_Name;
 var GameInfo.ServerResponseLine Server;
 
 var localized string UnknownText;
@@ -13,22 +13,29 @@ var localized string UnknownText;
 function HandleParameters(string ServerIP, string ServerName)
 {
     if (ServerIP != "")
+    {
         ed_Data.SetText(StripProtocol(ServerIP));
+    }
 
     if (ServerName == "")
+    {
         ServerName = UnknownText;
+    }
 
     l_Name.Caption = ServerName;
 }
 
 function ApplyURL(string URL)
 {
-    local string IP, port;
+    local string IP, Port;
 
     if (URL == "")
+    {
         return;
+    }
 
     URL = StripProtocol(URL);
+
     if (!Divide(URL, ":", IP, Port))
     {
         IP = URL;
@@ -38,7 +45,7 @@ function ApplyURL(string URL)
     Server.IP = IP;
     Server.Port = int(Port);
     Server.QueryPort = Server.Port + 1;
-    Server.ServerName = l_name.Caption;
+    Server.ServerName = l_Name.Caption;
     Controller.CloseMenu(false);
 }
 
@@ -52,7 +59,7 @@ defaultproperties
         WinWidth=0.854492
         WinHeight=0.05
     End Object
-    l_name=GUILabel'DH_Interface.ServerName'
+    l_Name=GUILabel'DH_Interface.ServerName'
     UnknownText="Unknown Server"
     Begin Object Class=DHmoEditBox Name=IpEntryBox
         ComponentJustification=TXTA_Left

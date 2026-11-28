@@ -16,15 +16,16 @@ function Fire(Controller C)
     if (Base != none && WeaponFireAttachmentBone != 'None')
     {
         BoneCoords = Base.GetBoneCoords(WeaponFireAttachmentBone);
-        
-        ForwardVector = Normal(Vector(WeaponFireRotation)); 
-        if (ForwardVector == vect(0,0,0)) 
+
+        ForwardVector = Normal(Vector(WeaponFireRotation));
+
+        if (ForwardVector == vect(0, 0, 0))
         {
-            ForwardVector = BoneCoords.XAxis; 
+            ForwardVector = BoneCoords.XAxis;
         }
 
         // Safety offset in Unreal Units to clear the vehicle structure instantly
-        SafetyDistance = 400.000000; 
+        SafetyDistance = 400.000000;
 
         // Update the internal firing location variable before passing control up
         WeaponFireLocation = BoneCoords.Origin + (ForwardVector * SafetyDistance);
@@ -46,7 +47,7 @@ function Projectile SpawnProjectile(class<Projectile> ProjClass, bool bAltFire)
     if (SpawnedProj != none && Base != none)
     {
         SpawnedProj.Instigator = Instigator;
-        
+
         if (Instigator != none)
         {
             SpawnedProj.Disable('Touch'); // Bypasses immediate frame-0 contact checks

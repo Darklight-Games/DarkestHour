@@ -9,7 +9,7 @@ enum ESeekDirection
 {
     SEEK_Begin,
     SEEK_End,
-    SEEK_Current
+    SEEK_Current,
 };
 
 var private string Buffer;
@@ -43,13 +43,13 @@ function Seekg(ESeekDirection Direction, optional int Position)
     switch (Direction)
     {
         case SEEK_Begin:
-            self.ReadPosition = Position;
+            ReadPosition = Position;
             break;
         case SEEK_End:
-            self.ReadPosition = Len(Buffer);
+            ReadPosition = Len(Buffer);
             break;
         case SEEK_Current:
-            self.ReadPosition += Position;
+            ReadPosition += Position;
             break;
     }
 }
@@ -59,13 +59,13 @@ function Seekp(ESeekDirection Direction, optional int Position)
     switch (Direction)
     {
         case SEEK_Begin:
-            self.WritePosition = Position;
+            WritePosition = Position;
             break;
         case SEEK_End:
-            self.WritePosition = Len(Buffer);
+            WritePosition = Len(Buffer);
             break;
         case SEEK_Current:
-            self.WritePosition += Position;
+            WritePosition += Position;
             break;
     }
 }

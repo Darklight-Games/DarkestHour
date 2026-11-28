@@ -6,8 +6,8 @@
 class DHShellTracer extends Effects
     abstract;
 
-var     float   DrawScaleIncreaseRate;
-var     float   MaximumDrawScale;
+var float DrawScaleIncreaseRate;
+var float MaximumDrawScale;
 
 simulated function Tick(float DeltaTime)
 {

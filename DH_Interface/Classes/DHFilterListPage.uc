@@ -5,20 +5,20 @@
 
 class DHFilterListPage extends UT2K4_FilterListPage;
 
-function AddSystemMenu(){}
+function AddSystemMenu();
 
 function InitFilterList()
 {
     local array<string> FilterNames;
-    local moCheckbox    ch;
-    local int           i;
+    local moCheckbox ch;
+    local int i;
 
     li_Filters.Clear();
     FilterNames = FM.GetFilterNames();
 
     for (i = 0; i < FilterNames.Length; ++i)
     {
-        ch = moCheckBox(li_Filters.AddItem("DH_Interface.DHmoCheckbox",,FilterNames[i]));
+        ch = moCheckBox(li_Filters.AddItem("DH_Interface.DHmoCheckbox",, FilterNames[i]));
 
         if (ch != none)
         {
@@ -36,13 +36,12 @@ function InitFilterList()
     }
 
     li_Filters.SetIndex(0);
-
 }
 
 function bool CreateClick(GUIComponent Sender)
 {
-    local string     FN;
-    local int        i,cnt;
+    local string FN;
+    local int i, cnt;
     local moCheckbox cb;
 
     cnt = 0;
@@ -57,9 +56,9 @@ function bool CreateClick(GUIComponent Sender)
         }
     }
 
-    if (cnt==0)
+    if (cnt == 0)
     {
-        FN ="New Filter";
+        FN = "New Filter";
     }
     else
     {
@@ -76,8 +75,8 @@ function bool CreateClick(GUIComponent Sender)
 
 function bool EditClick(GUIComponent Sender)
 {
-    local string     FN;
-    local int        i;
+    local string FN;
+    local int i;
     local moCheckbox cb;
 
     cb = moCheckbox(li_Filters.Get());

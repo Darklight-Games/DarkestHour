@@ -5,10 +5,7 @@
 
 class DH_USTankerHat extends DHHeadgear;
 
-static function StaticPrecache(LevelInfo L)
-{
-//  L.AddPrecacheMaterial(Material'DHUSCharactersTex.US_Tanker_Headgear');
-}
+static function StaticPrecache(LevelInfo L);
 
 defaultproperties
 {

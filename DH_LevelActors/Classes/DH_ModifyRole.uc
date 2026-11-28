@@ -11,8 +11,8 @@ var() enum ERoleAction
     ACTION_Lock,
 } RoleAction;
 
-var() bool bSendMessage;    // Sends a message to the team that the role has been modified.
-var() name RoleTag;         // The tag of the role to modify.
+var() bool bSendMessage; // Sends a message to the team that the role has been modified.
+var() name RoleTag; // The tag of the role to modify.
 
 event Trigger(Actor Other, Pawn EventInstigator)
 {
@@ -24,10 +24,20 @@ event Trigger(Actor Other, Pawn EventInstigator)
         switch (RoleAction)
         {
             case ACTION_Lock:
+                if (RoleInfo.bIsLocked)
+                {
+                    // Role already locked.
+                    return;
+                }
                 RoleInfo.bIsLocked = true;
                 MessageId = 25;
                 break;
             case ACTION_Unlock:
+                if (!RoleInfo.bIsLocked)
+                {
+                    // Role already unlocked.
+                    return;
+                }
                 RoleInfo.bIsLocked = false;
                 MessageId = 26;
                 break;
@@ -35,7 +45,9 @@ event Trigger(Actor Other, Pawn EventInstigator)
 
         if (bSendMessage)
         {
-            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(Level, int(RoleInfo.Side), Class'DHGameMessage', MessageID,,, RoleInfo);
+            Class'DarkestHourGame'.static.BroadcastTeamLocalizedMessage(
+                Level, int(RoleInfo.Side), Class'DHGameMessage', MessageId,,, RoleInfo
+                );
         }
     }
 }

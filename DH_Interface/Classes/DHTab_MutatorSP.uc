@@ -5,12 +5,12 @@
 
 class DHTab_MutatorSP extends UT2K4Tab_MutatorSP;
 
-var automated DHGUIPlainBackground  sb_ButtonBackground;
+var automated DHGUIPlainBackground sb_ButtonBackground;
 
 function InitComponent(GUIController MyController, GUIComponent MyOwner)
 {
     super.InitComponent(MyController, MyOwner);
-        Class'DHInterfaceUtil'.static.SetROStyle(MyController, Controls);
+    Class'DHInterfaceUtil'.static.SetROStyle(MyController, Controls);
 }
 
 defaultproperties

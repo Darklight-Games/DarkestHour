@@ -6,21 +6,21 @@
 class DHAutoWeapon extends DHProjectileWeapon
     abstract;
 
-var     name    SelectFireAnim;
-var     name    SelectFireEmptyAnim;
-var     name    SelectFireIronAnim;
-var     name    SelectFireIronEmptyAnim;
-var     name    SelectFireBipodIronAnim;
-var     name    SelectFireBipodIronEmptyAnim;
+var name SelectFireAnim;
+var name SelectFireEmptyAnim;
+var name SelectFireIronAnim;
+var name SelectFireIronEmptyAnim;
+var name SelectFireBipodIronAnim;
+var name SelectFireBipodIronEmptyAnim;
 
 // Sound effect for the fire selector switch (in case it's not handled by the animation).
-var     Sound   SelectFireSound;
-var     float   SelectFireVolume;
+var Sound SelectFireSound;
+var float SelectFireVolume;
 
 // Fire select switch
-var     name            FireSelectSwitchBoneName;
-var     Rotator         FireSelectSemiRotation;
-var     Rotator         FireSelectAutoRotation;
+var name FireSelectSwitchBoneName;
+var Rotator FireSelectSemiRotation;
+var Rotator FireSelectAutoRotation;
 
 replication
 {
@@ -249,7 +249,7 @@ simulated function NotifyOwnerJumped()
 // Modified to prevent auto weapons from playing fire end anims while still firing
 simulated function AnimEnd(int Channel)
 {
-    local name  Anim;
+    local name Anim;
     local float Frame, Rate;
 
     if (ClientState == WS_ReadyToFire)
@@ -257,16 +257,23 @@ simulated function AnimEnd(int Channel)
         GetAnimParams(0, Anim, Frame, Rate);
 
         // Don't play the idle anim after a bayo strike or bash
-        if (FireMode[1].bMeleeMode && ROWeaponFire(FireMode[1]) != none &&
-            (Anim == ROWeaponFire(FireMode[1]).BashAnim || Anim == ROWeaponFire(FireMode[1]).BayoStabAnim || Anim == ROWeaponFire(FireMode[1]).BashEmptyAnim))
+        if (FireMode[1].bMeleeMode
+            && ROWeaponFire(FireMode[1]) != none
+            && (Anim == ROWeaponFire(FireMode[1]).BashAnim
+                || Anim == ROWeaponFire(FireMode[1]).BayoStabAnim
+                || Anim == ROWeaponFire(FireMode[1]).BashEmptyAnim))
         {
             // do nothing;
         }
-        else if (Anim == FireMode[0].FireAnim && HasAnim(FireMode[0].FireEndAnim) && (!FireMode[0].bIsFiring || !UsingAutoFire())) // adds checks that isn't firing
+        else if (Anim == FireMode[0].FireAnim
+            && HasAnim(FireMode[0].FireEndAnim)
+            && (!FireMode[0].bIsFiring || !UsingAutoFire())) // adds checks that isn't firing
         {
             PlayAnim(FireMode[0].FireEndAnim, FireMode[0].FireEndAnimRate, FastTweenTime); // uses FastTweenTime instead of 0.0
         }
-        else if (DHProjectileFire(FireMode[0]) != none && Anim == DHProjectileFire(FireMode[0]).FireIronAnim && (!FireMode[0].bIsFiring || !UsingAutoFire())) // adds check that isn't auto firing
+        else if (DHProjectileFire(FireMode[0]) != none
+            && Anim == DHProjectileFire(FireMode[0]).FireIronAnim
+            && (!FireMode[0].bIsFiring || !UsingAutoFire())) // adds check that isn't auto firing
         {
             PlayIdle();
         }

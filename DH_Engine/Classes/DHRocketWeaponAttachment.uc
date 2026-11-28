@@ -6,19 +6,19 @@
 class DHRocketWeaponAttachment extends DHWeaponAttachment
     abstract;
 
-var           bool bHideWarheadWhenFired;
-var           bool bWarheadVisible;
-var           name WarheadBoneName;
-var           int  WarheadScaleSlot; // Slot holding the scalar values for the warhead bone
-var           Mesh EmptyMesh;        // TODO: EmptyMesh is kept for backwards compatibility. Deprecate this when possible!
+var bool bHideWarheadWhenFired;
+var bool bWarheadVisible;
+var name WarheadBoneName;
+var int WarheadScaleSlot; // Slot holding the scalar values for the warhead bone
+var Mesh EmptyMesh; // TODO: EmptyMesh is kept for backwards compatibility. Deprecate this when possible!
 
-var bool           bPanzerfaustAttachment; // Panzerfaust 3rd person muzzle flash needs to be handled differently
-var name           ExhaustBoneName;
+var bool bPanzerfaustAttachment; // Panzerfaust 3rd person muzzle flash needs to be handled differently
+var name ExhaustBoneName;
 var class<Emitter> mExhFlashClass;
-var Emitter        mExhFlash3rd;
+var Emitter mExhFlash3rd;
 
 // HACK: Fixes the issue where warhead is incorrectly shown when the weapon is pulled out.
-var     bool    bInitiallyLoaded;
+var bool bInitiallyLoaded;
 
 replication
 {
@@ -141,6 +141,5 @@ simulated event ThirdPersonEffects()
 
 defaultproperties
 {
-    bPanzerfaustAttachment=false
     bRapidFire=false
 }

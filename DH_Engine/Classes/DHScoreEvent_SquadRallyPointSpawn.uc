@@ -17,4 +17,3 @@ defaultproperties
     Value=25
     LimitPerDuration=10
 }
-

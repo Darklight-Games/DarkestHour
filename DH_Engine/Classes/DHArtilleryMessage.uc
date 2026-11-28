@@ -88,4 +88,3 @@ defaultproperties
     CancelledText="{name} has been cancelled."
     ActiveTargetChosen="Fire support target selected."
 }
-

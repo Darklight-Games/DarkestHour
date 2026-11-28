@@ -12,7 +12,12 @@ var localized string TargetMarkedSmoke;
 var localized string CannotMarkTargetYet;
 var localized string TooManyArtilleryTargets;
 
-static function string GetString(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string S;
 
@@ -45,17 +50,22 @@ static function string GetString(optional int Switch, optional PlayerReplication
     return S;
 }
 
-static function int getIconID(optional int Switch, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function int GetIconID(
+    optional int Switch,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     switch (Switch)
     {
-        case 0:     // TargetInvalid
+        case 0: // TargetInvalid
             return 11;
-        case 2:     // TargetMarkedHE
+        case 2: // TargetMarkedHE
             return 14;
-        case 3:     // TargetMarkedSmoke
+        case 3: // TargetMarkedSmoke
             return 15;
-        case 4:     // CannotMarkTargetYet
+        case 4: // CannotMarkTargetYet
             return 11;
         default:
             return super.getIconID(Switch, RelatedPRI_1, RelatedPRI_2, OptionalObject);

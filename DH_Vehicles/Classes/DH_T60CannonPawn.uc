@@ -39,4 +39,3 @@ defaultproperties
     AmmoShellTexture=Texture'InterfaceArt_tex.t60shell'
     AmmoShellReloadTexture=Texture'InterfaceArt_tex.t60_reload'
 }
-

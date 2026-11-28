@@ -6,10 +6,10 @@
 class DHCannonShellSmokeWP extends DHCannonShellSmoke
     abstract;
 
-var int                    GasDamage;
-var float                  GasRadius;
-var class<DamageType>      GasDamageClass;
-var float                  GasEffectDuration;
+var int GasDamage;
+var float GasRadius;
+var class<DamageType> GasDamageClass;
+var float GasEffectDuration;
 
 // Modified so actor is torn off & then destroyed on server, but persists for its LifeSpan on clients to play the smoke sound
 simulated function HandleDestruction()

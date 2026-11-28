@@ -5,4 +5,3 @@
 
 class DHGEMortarObserverRoles extends DHDeprecated
     abstract;
-

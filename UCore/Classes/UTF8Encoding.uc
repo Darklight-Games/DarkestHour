@@ -48,12 +48,15 @@ final static function array<int> ToBytes(string S)
 
         switch (BytesToWrite)
         {
+            // usagi:ignore[switch-case-fallthrough]
             case 4:
                 UTF8Bytes[--j] = ((c | BYTE_MARK) & BYTE_MASK) & 0xFF;
                 c = c >> 6;
+            // usagi:ignore[switch-case-fallthrough]
             case 3:
                 UTF8Bytes[--j] = ((c | BYTE_MARK) & BYTE_MASK) & 0xFF;
                 c = c >> 6;
+            // usagi:ignore[switch-case-fallthrough]
             case 2:
                 UTF8Bytes[--j] = ((c | BYTE_MARK) & BYTE_MASK) & 0xFF;
                 c = c >> 6;
@@ -85,18 +88,23 @@ final static function string FromBytes(array<int> Bytes)
 
         switch (ExtraBytesToRead)
         {
+            // usagi:ignore[switch-case-fallthrough]
             case 5:
                 c += Bytes[i++];
                 c = c << 6;
+            // usagi:ignore[switch-case-fallthrough]
             case 4:
                 c += Bytes[i++];
                 c = c << 6;
+            // usagi:ignore[switch-case-fallthrough]
             case 3:
                 c += Bytes[i++];
                 c = c << 6;
+            // usagi:ignore[switch-case-fallthrough]
             case 2:
                 c += Bytes[i++];
                 c = c << 6;
+            // usagi:ignore[switch-case-fallthrough]
             case 1:
                 c += Bytes[i++];
                 c = c << 6;
@@ -110,7 +118,7 @@ final static function string FromBytes(array<int> Bytes)
     return S;
 }
 
-final private static function int GetTrailingBytesForUTF8(int B)
+private final static function int GetTrailingBytesForUTF8(int B)
 {
     if (B < 0xC0)
     {
@@ -138,7 +146,7 @@ final private static function int GetTrailingBytesForUTF8(int B)
     }
 }
 
-final private static function int GetFirstByteMark(int BytesToWrite)
+private final static function int GetFirstByteMark(int BytesToWrite)
 {
     switch (BytesToWrite)
     {
@@ -159,4 +167,3 @@ final private static function int GetFirstByteMark(int BytesToWrite)
             return 0x00;
     }
 }
-

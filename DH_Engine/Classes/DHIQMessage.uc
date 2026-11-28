@@ -12,7 +12,12 @@ var localized string NotInSquadMessage;
 
 var localized array<string> Congratulations;
 
-static function string GetString(optional int S, optional PlayerReplicationInfo RelatedPRI_1, optional PlayerReplicationInfo RelatedPRI_2, optional Object OptionalObject)
+static function string GetString(
+    optional int S,
+    optional PlayerReplicationInfo RelatedPRI_1,
+    optional PlayerReplicationInfo RelatedPRI_2,
+    optional Object OptionalObject
+    )
 {
     local string MessageBody, MessageEnd;
 

@@ -5,23 +5,22 @@
 
 class DHConstruction_Foxhole extends DHConstruction;
 
-var TerrainInfo         TerrainInfo;
+var TerrainInfo TerrainInfo;
 
 // Dirt projector
-var DynamicProjector    DirtProjector;
-var Material            DirtProjectorMaterial;
-var float               DirtProjectorDrawScale;
-var float               DirtProjectorDrawScaleLarge;
+var DynamicProjector DirtProjector;
+var Material DirtProjectorMaterial;
+var float DirtProjectorDrawScale;
+var float DirtProjectorDrawScaleLarge;
 
 // Large terrain
-var float               LargeTerrainScaleThreshold;
-var StaticMesh          LargeTerrainScaleStaticMesh;
-var float               LargeTerrainScaleCollisionRadius;
+var float LargeTerrainScaleThreshold;
+var StaticMesh LargeTerrainScaleStaticMesh;
+var float LargeTerrainScaleCollisionRadius;
 
 // Large foxhole
-var int                 PokeTerrainDepthLarge;
-var int                 PokeTerrainRadiusLarge;
-
+var int PokeTerrainDepthLarge;
+var int PokeTerrainRadiusLarge;
 
 simulated function PostBeginPlay()
 {
@@ -119,7 +118,7 @@ simulated event Destroyed()
     }
 }
 
-function static GetCollisionSize(DHActorProxy.Context Context, out float NewRadius, out float NewHeight)
+static function GetCollisionSize(DHActorProxy.Context Context, out float NewRadius, out float NewHeight)
 {
     super.GetCollisionSize(Context, NewRadius, NewHeight);
 

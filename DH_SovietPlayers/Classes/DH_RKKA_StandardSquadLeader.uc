@@ -3,6 +3,4 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_RKKA_StandardSquadLeader extends DH_RKKA_StandardSquadLeaderEarly; //to be removed
-
-
+class DH_RKKA_StandardSquadLeader extends DH_RKKA_StandardSquadLeaderEarly; // to be removed

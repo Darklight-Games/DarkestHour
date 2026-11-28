@@ -5,25 +5,28 @@
 
 class DHArtillerySpawner extends Actor;
 
-var     int     OwningTeam;   // index no. of our team
-var     int     ShellCounter; // no. of shells fired so far in current salvo (renamed from SpawnCounter)
-var     int     SalvoCounter; // no. of salvoes fired so far
+var int OwningTeam; // index no. of our team
+var int ShellCounter; // no. of shells fired so far in current salvo (renamed from SpawnCounter)
+var int SalvoCounter; // no. of salvoes fired so far
 
-var     DHArtilleryShell    LastSpawnedShell; // reference to the last artillery shell spawned by this arty spawner
+var DHArtilleryShell LastSpawnedShell; // reference to the last artillery shell spawned by this arty spawner
 
 // Arty strike properties, taken from team's arty settings in the map's DHLevelInfo
-var     int     BatterySize;  // no. of shells per salvo
-var     int     SalvoAmount;  // no. of salvoes in this strike
-var     int     SpreadAmount; // randomised spread of each shell (in UU)
+var int BatterySize; // no. of shells per salvo
+var int SalvoAmount; // no. of salvoes in this strike
+var int SpreadAmount; // randomised spread of each shell (in UU)
 
 // From deprecated ROArtillerySpawner, optimised a little
 // And setting a LifeSpan for this actor, as a fail-safe in case the sequence of timers somehow gets interrupted & we don't ever get to end of arty strike
 function PostBeginPlay()
 {
     local ROLevelInfo LI;
-    local float       StrikeDelay, MaxSalvoDuration;
+    local float StrikeDelay, MaxSalvoDuration;
 
-    if (Controller(Owner) != none && ROTeamGame(Level.Game) != none && ROTeamGame(Level.Game).LevelInfo != none && ROGameReplicationInfo(Level.Game.GameReplicationInfo) != none)
+    if (Controller(Owner) != none
+        && ROTeamGame(Level.Game) != none
+        && ROTeamGame(Level.Game).LevelInfo != none
+        && ROGameReplicationInfo(Level.Game.GameReplicationInfo) != none)
     {
         // Record the team that called this arty strike
         // Also save strike position to GRI so team players see it on their map (note this also prevents team calling another strike until this one is over)
@@ -35,7 +38,7 @@ function PostBeginPlay()
         BatterySize = LI.GetBatterySize(OwningTeam);
         SalvoAmount = LI.GetSalvoAmount(OwningTeam);
         SpreadAmount = LI.GetSpreadAmount(OwningTeam);
-        StrikeDelay = float(LI.GetStrikeDelay(OwningTeam)) * (0.85 + (FRand() * 0.3));  // +/- 15% randomisation on delay
+        StrikeDelay = float(LI.GetStrikeDelay(OwningTeam)) * (0.85 + (FRand() * 0.3)); // +/- 15% randomisation on delay
 
         // Set timer until arty strike begins
         SetTimer(FMin(StrikeDelay, 1.0), false); // added a minimum to avoid any possibility of setting a null timer
@@ -63,7 +66,9 @@ function Destroyed()
     }
     else
     {
-        Log("DHArtillerySpawner ERROR: actor destroyed but no GRI so can't clear the ArtyStrikeLocation to end the strike!");
+        Log(
+            "DHArtillerySpawner ERROR: actor destroyed but no GRI so can't clear the ArtyStrikeLocation to end the strike!"
+            );
     }
 
     LastSpawnedShell = none;
@@ -76,11 +81,13 @@ function Destroyed()
 function Timer()
 {
     local DHVolumeTest VT;
-    local Vector       RandomSpread;
-    local bool         bInvalid;
+    local Vector RandomSpread;
+    local bool bInvalid;
 
     // Cancel the strike if the arty officer has switched teams or left the server, or if the round is over
-    if (Controller(Owner) == none || Controller(Owner).GetTeamNum() != OwningTeam || !(ROTeamGame(Level.Game) != none && ROTeamGame(Level.Game).IsInState('RoundInPlay')))
+    if (Controller(Owner) == none
+        || Controller(Owner).GetTeamNum() != OwningTeam
+        || !(ROTeamGame(Level.Game) != none && ROTeamGame(Level.Game).IsInState('RoundInPlay')))
     {
         bInvalid = true;
     }
@@ -125,7 +132,11 @@ function Timer()
         RandomSpread.Y += Rand((2 * SpreadAmount) + 1) - SpreadAmount;
 
         // Altered to spawn shell a standard approx 50m above strike location & to use a different method of setting shell's InstigatorController
-        LastSpawnedShell = Spawn(Class'DHArtilleryShell',,, Location + vect(0.0, 0.0, 3000.0) + RandomSpread, Rotator(PhysicsVolume.Gravity));
+        LastSpawnedShell = Spawn(
+            Class'DHArtilleryShell',,,
+            Location + vect(0.0, 0.0, 3000.0) + RandomSpread,
+            Rotator(PhysicsVolume.Gravity)
+            );
 
         if (LastSpawnedShell != none)
         {

@@ -12,28 +12,28 @@ struct Option
     var array<PlayerController> Voters;
 };
 
-var int                        VoteId;
-var int                        TeamIndex;
-var int                        VoterCount;
-var array<Option>              Options;
-var array<PlayerController>    Voters;
-var array<PlayerController>    Nominators;
-var DateTime                   StartedAt;
-var DateTime                   EndedAt;
+var int VoteId;
+var int TeamIndex;
+var int VoterCount;
+var array<Option> Options;
+var array<PlayerController> Voters;
+var array<PlayerController> Nominators;
+var DateTime StartedAt;
+var DateTime EndedAt;
 
 var class<DHPromptInteraction> VoteInteractionClass;
-var localized string           QuestionText;
+var localized string QuestionText;
 
 // Rules
-var bool  bIsGlobalVote;               // Do both teams participate?
-var int   CooldownSeconds;             // The time between the votes
-var float DurationSeconds;             // How until the vote closes
-var float VotesThresholdPercent;       // votes needed to pass
+var bool bIsGlobalVote; // Do both teams participate?
+var int CooldownSeconds; // The time between the votes
+var float DurationSeconds; // How until the vote closes
+var float VotesThresholdPercent; // votes needed to pass
 var float NominationsThresholdPercent; // Nominations needed to start the vote
 
 // Should nominators receive the prompt or vote automatically?
-var bool  bNominatorsVoteAutomatically;
-var int   NominatorsDefaultOption;
+var bool bNominatorsVoteAutomatically;
+var int NominatorsDefaultOption;
 
 // Gets the list of eligible voters.
 function array<PlayerController> GetEligibleVoters();
@@ -83,7 +83,9 @@ function StartVote()
 
     if (bNominatorsVoteAutomatically)
     {
-        i = 0; while (i < Voters.Length)
+        i = 0;
+
+        while (i < Voters.Length)
         {
             if (Voters[i] != none && Class'UArray'.static.IndexOf(Nominators, Voters[i]) >= 0)
             {
@@ -206,9 +208,9 @@ function SendMetricsEvent(string VoteType, int Result)
 
     GRI.GetTeamSizes(TeamSizes);
 
-    if (arraycount(TeamSizes) > arraycount(GRI.SpawnsRemaining) ||
-        arraycount(TeamSizes) > arraycount(GRI.TeamMunitionPercentages) ||
-        arraycount(TeamSizes) > arraycount(ObjectiveCount))
+    if (arraycount(TeamSizes) > arraycount(GRI.SpawnsRemaining)
+        || arraycount(TeamSizes) > arraycount(GRI.TeamMunitionPercentages)
+        || arraycount(TeamSizes) > arraycount(ObjectiveCount))
     {
         Warn("Trying to access an invalid array index");
         return;
@@ -229,9 +231,11 @@ function SendMetricsEvent(string VoteType, int Result)
             }
         }
 
-        Votes.Add((new Class'JSONObject')
-                      .PutInteger("option_id", i)
-                      .Put("voter_ids", Class'JSONArray'.static.FromStrings(VoterIDs)));
+        Votes.Add(
+            (new Class'JSONObject')
+                .PutInteger("option_id", i)
+                .Put("voter_ids", Class'JSONArray'.static.FromStrings(VoterIDs))
+            );
     }
 
     // Get nominator IDs
@@ -265,28 +269,31 @@ function SendMetricsEvent(string VoteType, int Result)
 
     for (i = 0; i < arraycount(TeamSizes); ++i)
     {
-        TeamStats.Add((new Class'JSONObject')
-                  .PutInteger("team_index", i)
-                  .PutInteger("size", TeamSizes[i])
-                  .PutInteger("reinforcements", GRI.SpawnsRemaining[i])
-                  .PutFloat("munitions", GRI.TeamMunitionPercentages[i])
-                  .PutInteger("objectives_owned", ObjectiveCount[i]));
+        TeamStats.Add(
+            (new Class'JSONObject')
+                .PutInteger("team_index", i)
+                .PutInteger("size", TeamSizes[i])
+                .PutInteger("reinforcements", GRI.SpawnsRemaining[i])
+                .PutFloat("munitions", GRI.TeamMunitionPercentages[i])
+                .PutInteger("objectives_owned", ObjectiveCount[i])
+            );
     }
 
-    RoundState = (new Class'JSONObject')
-                     .PutInteger("round_time", GRI.ElapsedTime)
-                     .Put("teams", TeamStats);
+    RoundState = (new Class'JSONObject').PutInteger("round_time", GRI.ElapsedTime).Put("teams", TeamStats);
 
     // Send away
-    G.Metrics.AddEvent("vote", (new Class'JSONObject')
-                                   .PutString("vote_type", VoteType)
-                                   .PutString("started_at", StartedAt.IsoFormat())
-                                   .PutString("ended_at", EndedAt.IsoFormat())
-                                   .PutInteger("team_index", TeamIndex)
-                                   .PutInteger("result_id", Result)
-                                   .Put("votes", Votes)
-                                   .Put("nominator_ids", Class'JSONArray'.static.FromStrings(NominatorIDs))
-                                   .Put("round_state", RoundState));
+    G.Metrics.AddEvent(
+        "vote",
+        (new Class'JSONObject')
+            .PutString("vote_type", VoteType)
+            .PutString("started_at", StartedAt.IsoFormat())
+            .PutString("ended_at", EndedAt.IsoFormat())
+            .PutInteger("team_index", TeamIndex)
+            .PutInteger("result_id", Result)
+            .Put("votes", Votes)
+            .Put("nominator_ids", Class'JSONArray'.static.FromStrings(NominatorIDs))
+            .Put("round_state", RoundState)
+        );
 }
 
 // The number of players that cast a vote.
@@ -343,9 +350,21 @@ function OnVoteStarted();
 function OnVoteEnded();
 static function OnNominated(PlayerController Player, LevelInfo Level, optional int NominationsRemaining);
 static function OnNominationRemoved(PlayerController Player);
-static function int GetCooldownSeconds() { return default.CooldownSeconds; }
-static function float GetVotesThresholdPercent() { return default.VotesThresholdPercent; }
-static function float GetNominationsThresholdPercent() { return default.NominationsThresholdPercent; }
+
+static function int GetCooldownSeconds()
+{
+    return default.CooldownSeconds;
+}
+
+static function float GetVotesThresholdPercent()
+{
+    return default.VotesThresholdPercent;
+}
+
+static function float GetNominationsThresholdPercent()
+{
+    return default.NominationsThresholdPercent;
+}
 
 defaultproperties
 {

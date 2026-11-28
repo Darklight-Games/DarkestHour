@@ -3,7 +3,7 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_KV1sTank extends DHArmoredVehicle;  //to do: is the standart texture really accurate? It's a light blue/grey color, i never found any images of such KV-1S
+class DH_KV1sTank extends DHArmoredVehicle; // to do: is the standart texture really accurate? It's a light blue/grey color, i never found any images of such KV-1S
 
 defaultproperties
 {

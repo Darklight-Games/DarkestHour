@@ -4,7 +4,7 @@
 //==============================================================================
 
 class DH_M1919A4Gun extends DHATGun
-    //abstract
+    // abstract
     ;
 
 defaultproperties

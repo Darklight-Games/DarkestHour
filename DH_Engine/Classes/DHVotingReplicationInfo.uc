@@ -4,7 +4,7 @@
 //==============================================================================
 
 class DHVotingReplicationInfo extends VotingReplicationInfo
-    DependsOn(DHVotingHandler);
+    dependson(DHVotingHandler);
 
 var config bool bEnableSinglePlayerVoting; // for debugging purposes
 
@@ -30,8 +30,7 @@ function ServerForceMapVote(int MapIndex, int GameIndex)
 // Overriden to allow single-player debugging
 simulated function GetServerData()
 {
-    if (Level.NetMode == NM_Client &&
-        (Level.NetMode != NM_Standalone || !bEnableSinglePlayerVoting))
+    if (Level.NetMode == NM_Client && (Level.NetMode != NM_Standalone || !bEnableSinglePlayerVoting))
     {
         return;
     }
@@ -50,18 +49,18 @@ simulated function GetServerData()
 
         CurrentGameConfig = VH.CurrentGameConfig;
 
-        AddToTickedReplicationQueue(REPDATATYPE_GameConfig, GameConfigCount-1);
-        AddToTickedReplicationQueue(REPDATATYPE_MapList, MapCount-1);
+        AddToTickedReplicationQueue(REPDATATYPE_GameConfig, GameConfigCount - 1);
+        AddToTickedReplicationQueue(REPDATATYPE_MapList, MapCount - 1);
 
         if (VH.MapVoteCount.Length > 0)
         {
-            AddToTickedReplicationQueue(REPDATATYPE_MapVoteCount, VH.MapVoteCount.Length-1);
+            AddToTickedReplicationQueue(REPDATATYPE_MapVoteCount, VH.MapVoteCount.Length - 1);
         }
     }
 
     if (bKickVote && VH.KickVoteCount.Length > 0)
     {
-        AddToTickedReplicationQueue(REPDATATYPE_KickVoteCount, VH.KickVoteCount.Length-1);
+        AddToTickedReplicationQueue(REPDATATYPE_KickVoteCount, VH.KickVoteCount.Length - 1);
     }
 }
 
@@ -75,16 +74,12 @@ simulated function Tick(float DeltaTime)
         return;
     }
 
-    bDedicated = Level.NetMode == NM_DedicatedServer ||
-                (Level.NetMode == NM_ListenServer && PlayerOwner != none &&
-                 PlayerOwner.Player.Console == none );
+    bDedicated = Level.NetMode == NM_DedicatedServer
+        || (Level.NetMode == NM_ListenServer && PlayerOwner != none && PlayerOwner.Player.Console == none);
 
-    bListening = Level.NetMode == NM_ListenServer && PlayerOwner != none &&
-                 PlayerOwner.Player.Console != none;
+    bListening = Level.NetMode == NM_ListenServer && PlayerOwner != none && PlayerOwner.Player.Console != none;
 
-    if (!bDedicated &&
-        !bListening &&
-        (Level.NetMode != NM_Standalone || !bEnableSinglePlayerVoting))
+    if (!bDedicated && !bListening && (Level.NetMode != NM_Standalone || !bEnableSinglePlayerVoting))
     {
         return;
     }
@@ -120,7 +115,7 @@ simulated function Tick(float DeltaTime)
 
     if (TickedReplicationQueue[i].Index > TickedReplicationQueue[i].Last)
     {
-        TickedReplicationQueue.Remove(i,1);
+        TickedReplicationQueue.Remove(i, 1);
     }
 }
 

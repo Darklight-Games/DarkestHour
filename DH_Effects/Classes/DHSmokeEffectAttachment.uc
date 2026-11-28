@@ -9,11 +9,11 @@
 class DHSmokeEffectAttachment extends Actor
     notplaceable;
 
-var     Emitter         SmokeEmitter;
-var     class<Emitter>  SmokeEmitterClass;
-var     Sound           SmokeIgniteSound;
-var     Sound           SmokeLoopSound;
-var     float           SmokeSoundDuration;
+var Emitter SmokeEmitter;
+var class<Emitter> SmokeEmitterClass;
+var Sound SmokeIgniteSound;
+var Sound SmokeLoopSound;
+var float SmokeSoundDuration;
 
 simulated function PostBeginPlay()
 {
@@ -30,7 +30,7 @@ simulated function PostBeginPlay()
 
     if (Level.NetMode != NM_DedicatedServer)
     {
-        SmokeEmitter = Spawn(SmokeEmitterClass,,,Location);
+        SmokeEmitter = Spawn(SmokeEmitterClass,,, Location);
         SmokeEmitter.SetBase(self);
     }
 }

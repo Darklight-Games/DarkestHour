@@ -18,4 +18,3 @@ defaultproperties
     VehicleAttachments(0)=(Skins=(Texture'DH_Jeep_tex.Willys_Body_Winter',Texture'DH_Jeep_tex.Willys_Gear_Snow'))
 
 }
-

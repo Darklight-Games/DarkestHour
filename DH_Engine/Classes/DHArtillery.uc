@@ -5,19 +5,19 @@
 
 class DHArtillery extends Actor
     abstract
-    notplaceable
-    dependson(DHGameReplicationInfo);
+    dependson(DHGameReplicationInfo)
+    notplaceable;
 
-var DHGameReplicationInfo.EArtilleryType              ArtilleryType;
+var DHGameReplicationInfo.EArtilleryType ArtilleryType;
 
-var localized protected string  MenuName;
-var Material                    MenuIcon;
+var protected localized string MenuName;
+var Material MenuIcon;
 
-var protected int               TeamIndex;
-var PlayerController            Requester;
+var protected int TeamIndex;
+var PlayerController Requester;
 
-var bool                        bCanBeCancelled;
-var int                         RequiredSquadMemberCount;
+var bool bCanBeCancelled;
+var int RequiredSquadMemberCount;
 
 var class<DHMapMarker> ActiveArtilleryMarkerClass;
 
@@ -53,7 +53,10 @@ function PostBeginPlay()
 // Returns whether or not this artillery has actually started.
 // An artilley strike that hasn't been started yet can be cancelled without
 // decrementing the total number of strikes available.
-function bool HasStarted() { return true; }
+function bool HasStarted()
+{
+    return true;
+}
 
 function Reset()
 {
@@ -101,20 +104,17 @@ simulated function int GetTeamIndex()
     return TeamIndex;
 }
 
-function SetTeamIndex(int TeamIndex)
+function SetTeamIndex(int NewTeamIndex)
 {
-    if (self.TeamIndex != TeamIndex)
+    if (TeamIndex != NewTeamIndex)
     {
-        self.TeamIndex = TeamIndex;
+        TeamIndex = NewTeamIndex;
 
         OnTeamIndexChanged();
     }
 }
 
-simulated function bool IsParadrop()
-{
-    return false;
-}
+simulated function bool IsParadrop();
 
 defaultproperties
 {

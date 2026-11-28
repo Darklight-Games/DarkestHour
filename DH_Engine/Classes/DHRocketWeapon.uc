@@ -10,7 +10,7 @@ class DHRocketWeapon extends DHProjectileWeapon
 struct RangeSetting
 {
     var int Range;
-    var int  FirePitch;
+    var int FirePitch;
     var name IronIdleAnim;
     var name IronFireAnim;
     var name BipodIdleAnim;
@@ -18,20 +18,19 @@ struct RangeSetting
     var name AssistedReloadAnim;
 };
 
-var     DHUnits.EDistanceUnit   RangeDistanceUnit;            // unit of measure for range settings
-var     array<RangeSetting>     RangeSettings;                // array of different range settings, with firing pitch angle & idle animation
-var     int                     RangeIndex;                   // current range setting
+var DHUnits.EDistanceUnit RangeDistanceUnit; // unit of measure for range settings
+var array<RangeSetting> RangeSettings; // array of different range settings, with firing pitch angle & idle animation
+var int RangeIndex; // current range setting
 
 // Assisted Reload
-var     bool                    bCanHaveAsssistedReload;      // another friendly player can provide an assisted reload, which is much quicker //COMPAREPIAT added
-
+var bool bCanHaveAsssistedReload; // another friendly player can provide an assisted reload, which is much quicker //COMPAREPIAT added
 
 // Rocket Attachment
-var     class<ROFPAmmoRound>    RocketAttachmentClass;
-var     ROFPAmmoRound           RocketAttachment;             // the attached first person ammo round
-var     name                    RocketBone;
+var class<ROFPAmmoRound> RocketAttachmentClass;
+var ROFPAmmoRound RocketAttachment; // the attached first person ammo round
+var name RocketBone;
 
-var     class<LocalMessage>     WarningMessageClass;
+var class<LocalMessage> WarningMessageClass;
 
 replication
 {
@@ -66,7 +65,7 @@ exec simulated function SwitchFireMode()
             Instigator.ReceiveLocalizedMessage(
                 Class'DHWeaponRangeMessage',
                 Class'UInteger'.static.FromShorts(RangeSettings[RangeIndex].Range, int(RangeDistanceUnit))
-            );
+                );
         }
     }
 }
@@ -123,8 +122,15 @@ function UpdateResupplyStatus(bool bCurrentWeapon)
 
     if (P != none)
     {
-        P.bWeaponNeedsResupply = bCanBeResupplied && bCurrentWeapon && CurrentMagCount < MaxNumPrimaryMags && (TeamIndex == 2 || TeamIndex == P.GetTeamNum());
-        P.bWeaponNeedsReload = bCanHaveAsssistedReload && bCurrentWeapon && !IsLoaded() && CurrentMagCount > 0 && !IsInState('Reloading');
+        P.bWeaponNeedsResupply = bCanBeResupplied
+            && bCurrentWeapon
+            && CurrentMagCount < MaxNumPrimaryMags
+            && (TeamIndex == 2 || TeamIndex == P.GetTeamNum());
+        P.bWeaponNeedsReload = bCanHaveAsssistedReload
+            && bCurrentWeapon
+            && !IsLoaded()
+            && CurrentMagCount > 0
+            && !IsInState('Reloading');
     }
 }
 
@@ -163,6 +169,22 @@ simulated function bool PutDown()
     }
 
     return super.PutDown();
+}
+
+// Modified to always unload a loaded rocket when the weapon is holstered if weapon is flagged as bDoesNotRetainLoadedMag.
+// The server's PutDown() can be ignored if the weapon is in a busy state (e.g. sprinting or zooming) when the switch
+// arrives, which would leave the server loaded & the client unloaded, & that desync would never be corrected by replication.
+state Hidden
+{
+    function BeginState()
+    {
+        if (bDoesNotRetainLoadedMag)
+        {
+            AmmoCharge[0] = 0;
+        }
+
+        super.BeginState();
+    }
 }
 
 // Modified so if player has entered vehicle, we unload a loaded rocket if weapon is flagged as bDoesNotRetainLoadedMag (pawn's StartDriving event calls this function)
@@ -312,10 +334,13 @@ simulated function bool AllowReload()
         return false;
     }
 
-    if (!IsLoaded())
+    if (IsLoaded())
     {
-        return super.AllowReload();
+        // Already loaded.
+        return false;
     }
+
+    return super.AllowReload();
 }
 
 // Modified to prevent proning while reloading
@@ -331,10 +356,7 @@ simulated state Reloading
         }
     }
 
-    simulated function bool WeaponAllowProneChange()
-    {
-        return false;
-    }
+    simulated function bool WeaponAllowProneChange();
 }
 
 // Server-to-client function to send client into state AssistedReloading
@@ -375,7 +397,7 @@ simulated state AssistedReloading extends Reloading
         return true;
     }
 
-// Emptied to avoid taking player out of ironsights when someone else is loading them
+    // Emptied to avoid taking player out of ironsights when someone else is loading them
 Begin:
 }
 
@@ -451,7 +473,7 @@ simulated function bool IsLoaded()
 
 function float GetAIRating()
 {
-    local Bot   B;
+    local Bot B;
     local float ZDiff, Dist, Result;
 
     B = Bot(Instigator.Controller);
@@ -497,11 +519,17 @@ static function StaticPrecache(LevelInfo L)
 
 // Modified to stop backblast damage from hurting the shooter (nothing else calls HurtRadius, so this hack should not be harmful)
 // This is a hack, but is also a temporary solution until the backblast system is redesigned
-simulated function HurtRadius(float DamageAmount, float DamageRadius, class<DamageType> DamageType, float Momentum, Vector HitLocation)
+simulated function HurtRadius(
+    float DamageAmount,
+    float DamageRadius,
+    class<DamageType> DamageType,
+    float Momentum,
+    Vector HitLocation
+    )
 {
-    local actor  Victims;
+    local actor Victims;
     local Vector Dir;
-    local float  Dist, DamageScale;
+    local float Dist, DamageScale;
 
     if (bHurtEntry)
     {
@@ -512,19 +540,27 @@ simulated function HurtRadius(float DamageAmount, float DamageRadius, class<Dama
 
     foreach VisibleCollidingActors(Class'Actor', Victims, DamageRadius, HitLocation)
     {
-        if (Victims != self && Victims != Pawn(Owner) && Victims.Role == ROLE_Authority && !Victims.IsA('FluidSurfaceInfo'))
+        if (Victims != self
+            && Victims != Pawn(Owner)
+            && Victims.Role == ROLE_Authority
+            && !Victims.IsA('FluidSurfaceInfo'))
         {
             Dir = Victims.Location - HitLocation;
             Dist = FMax(1.0, VSize(Dir));
             Dir = Dir / Dist;
             DamageScale = 1.0 - FMax(0.0, (Dist - Victims.CollisionRadius) / DamageRadius);
 
-            Victims.TakeDamage(DamageScale * DamageAmount, Instigator, Victims.Location - (0.5 * (Victims.CollisionHeight + Victims.CollisionRadius) * Dir),
-                (DamageScale * Momentum * Dir), DamageType);
+            Victims.TakeDamage(
+                DamageScale * DamageAmount, Instigator,
+                Victims.Location - (0.5 * (Victims.CollisionHeight + Victims.CollisionRadius) * Dir),
+                (DamageScale * Momentum * Dir), DamageType
+                );
 
             if (Instigator != none && Vehicle(Victims) != none && Vehicle(Victims).Health > 0)
             {
-                Vehicle(Victims).DriverRadiusDamage(DamageAmount, DamageRadius, Instigator.Controller, DamageType, Momentum, HitLocation);
+                Vehicle(Victims).DriverRadiusDamage(
+                    DamageAmount, DamageRadius, Instigator.Controller, DamageType, Momentum, HitLocation
+                    );
             }
         }
     }

@@ -34,4 +34,3 @@ function string IsoFormat()
 
     return S;
 }
-

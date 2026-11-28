@@ -5,4 +5,3 @@
 
 class DH_FJ_Bandolier extends DHDeprecated
     abstract;
-

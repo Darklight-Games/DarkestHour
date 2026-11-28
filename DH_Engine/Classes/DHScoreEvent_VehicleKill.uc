@@ -27,4 +27,3 @@ defaultproperties
     HumanReadableName="Vehicle Kill"
     CategoryClass=Class'DHScoreCategory_Combat'
 }
-

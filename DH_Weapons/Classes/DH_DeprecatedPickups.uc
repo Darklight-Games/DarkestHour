@@ -3,7 +3,8 @@
 // Copyright (c) Darklight Games.  All rights reserved.
 //==============================================================================
 
-class DH_DeprecatedPickups extends DHPlaceableWeaponPickup abstract;
+class DH_DeprecatedPickups extends DHPlaceableWeaponPickup
+    abstract;
 
 defaultproperties
 {

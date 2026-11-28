@@ -6,36 +6,41 @@
 class DHVehicleMGPawn extends DHVehicleWeaponPawn
     abstract;
 
-var     bool        bMustUnbuttonToReload;       // player must be unbuttoned to load MG
-var     Texture     VehicleMGReloadTexture;      // used to show reload progress on the HUD, like a tank cannon reload
-var     Vector      BinocsDrivePos;              // optional additional player position adjustment when on binocs, as player animation can be quite different from typical MG stance
-var     Rotator     BinocsDriveRot;              // this is a stupid hack made by someone because they didn't have a way to create new animations.
-var     name        GunsightCameraBone;          // optional separate camera bone for the MG gunsights
-var     name        FirstPersonGunRefBone;       // static gun bone used as reference point to adjust 1st person view HUDOverlay offset, if gunner can raise his head above sights
-var     float       FirstPersonOffsetZScale;     // used with HUDOverlay to scale how much lower the 1st person gun appears when player raises his head above it
-var     float       FirstPersonGunShakeScale;    // scales up view shake on 1st person HUDOverlay view
-var     bool        bHideMuzzleFlashAboveSights; // workaround (hack really) to turn off muzzle flash in 1st person when player raises head above sights, as it sometimes looks wrong
+var bool bMustUnbuttonToReload; // player must be unbuttoned to load MG
+var Texture VehicleMGReloadTexture; // used to show reload progress on the HUD, like a tank cannon reload
+var Vector BinocsDrivePos; // optional additional player position adjustment when on binocs, as player animation can be quite different from typical MG stance
+var Rotator BinocsDriveRot; // this is a stupid hack made by someone because they didn't have a way to create new animations.
+var name GunsightCameraBone; // optional separate camera bone for the MG gunsights
+var name FirstPersonGunRefBone; // static gun bone used as reference point to adjust 1st person view HUDOverlay offset, if gunner can raise his head above sights
+var float FirstPersonOffsetZScale; // used with HUDOverlay to scale how much lower the 1st person gun appears when player raises his head above it
+var float FirstPersonGunShakeScale; // scales up view shake on 1st person HUDOverlay view
+var bool bHideMuzzleFlashAboveSights; // workaround (hack really) to turn off muzzle flash in 1st person when player raises head above sights, as it sometimes looks wrong
 
 // HUD overlay animations
-var     name        HudOverlayIdleAnim;
-var     name        HudOverlayFireLoopAnim;
-var     name        HudOverlayFireEndAnim;
+var name HudOverlayIdleAnim;
+var name HudOverlayFireLoopAnim;
+var name HudOverlayFireEndAnim;
 
-var     name        DriverReloadAnim;
+var name DriverReloadAnim;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //  *******************************  VIEW/DISPLAY  ********************************  //
 ///////////////////////////////////////////////////////////////////////////////////////
 
 // Modified to make into a generic function, avoiding need for overrides in subclasses, to properly handle vehicle roll, & to optimise & simplify generally
-simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor ViewActor, out Vector CameraLocation, out Rotator CameraRotation)
+simulated function SpecialCalcFirstPersonView(
+    PlayerController PC,
+    out Actor ViewActor,
+    out Vector CameraLocation,
+    out Rotator CameraRotation
+    )
 {
     local Quat RelativeQuat, VehicleQuat, NonRelativeQuat;
     local bool bOnTheGun;
 
     ViewActor = self;
 
-    if (PC == none || Gun == none || CameraBone =='')
+    if (PC == none || Gun == none || CameraBone == '')
     {
         return;
     }
@@ -91,15 +96,17 @@ simulated function SpecialCalcFirstPersonView(PlayerController PC, out Actor Vie
 simulated function DrawHUD(Canvas C)
 {
     local PlayerController PC;
-    local Vector           GunOffset;
-    local float            SavedOpacity;
+    local Vector GunOffset;
+    local float SavedOpacity;
 
     PC = PlayerController(Controller);
 
     if (PC != none && !PC.bBehindView)
     {
         // Player is in a position where an overlay should be drawn
-        if (!bMultiPosition || (DriverPositions[DriverPositionIndex].bDrawOverlays && (!IsInState('ViewTransition') || DriverPositions[LastPositionIndex].bDrawOverlays)))
+        if (!bMultiPosition
+            || (DriverPositions[DriverPositionIndex].bDrawOverlays
+                && (!IsInState('ViewTransition') || DriverPositions[LastPositionIndex].bDrawOverlays)))
         {
             // Draw any texture overlay
             if (!PC.bBehindView)
@@ -132,11 +139,15 @@ simulated function DrawHUD(Canvas C)
                     // This makes the first person gun appear lower if player raises his head above the gun
                     if (FirstPersonGunRefBone != '' && Gun != none)
                     {
-                        GunOffset.Z += (Gun.GetBoneCoords(FirstPersonGunRefBone).Origin.Z - PC.CalcViewLocation.Z) * FirstPersonOffsetZScale;
+                        GunOffset.Z += (Gun.GetBoneCoords(FirstPersonGunRefBone).Origin.Z - PC.CalcViewLocation.Z)
+                            * FirstPersonOffsetZScale;
                     }
 
                     HUDOverlay.SetLocation(PC.CalcViewLocation);
-                    C.DrawBoundActor(HUDOverlay, false, true, HUDOverlayFOV, PC.CalcViewRotation, PC.ShakeRot * FirstPersonGunShakeScale, -GunOffset);
+                    C.DrawBoundActor(
+                        HUDOverlay, false, true, HUDOverlayFOV, PC.CalcViewRotation,
+                        PC.ShakeRot * FirstPersonGunShakeScale, -GunOffset
+                        );
                 }
             }
         }
@@ -289,8 +300,10 @@ simulated function bool CanReload()
         return false;
     }
 
-    return !bMustUnbuttonToReload || DriverPositionIndex > UnbuttonedPositionIndex
-        || (DriverPositionIndex == UnbuttonedPositionIndex && (!IsInState('ViewTransition') || LastPositionIndex > UnbuttonedPositionIndex)); // if unbuttoned position make sure not unbuttoning
+    return !bMustUnbuttonToReload
+        || DriverPositionIndex > UnbuttonedPositionIndex
+        || (DriverPositionIndex == UnbuttonedPositionIndex
+            && (!IsInState('ViewTransition') || LastPositionIndex > UnbuttonedPositionIndex)); // if unbuttoned position make sure not unbuttoning
 }
 
 // Modified to show screen message advising player they must unbutton to reload an external MG, if they press the reload key (perhaps in confusion on finding they can't reload)
@@ -322,13 +335,19 @@ simulated state ViewTransition
         if (VehWep != none)
         {
             // If the option is flagged, turn off muzzle flash if player has raised head above sights
-            if (bHideMuzzleFlashAboveSights && DriverPositionIndex > 0 && IsFirstPerson() && VehWep.AmbientEffectEmitter != none)
+            if (bHideMuzzleFlashAboveSights
+                && DriverPositionIndex > 0
+                && IsFirstPerson()
+                && VehWep.AmbientEffectEmitter != none)
             {
                 VehWep.AmbientEffectEmitter.bHidden = true;
             }
 
             // If player was reloading MG but can't continue in the new position, interrupt the reload
-            if (VehWep.ReloadState < RL_ReadyToFire && !VehWep.bReloadPaused && !CanReload() && VehWep.bMultiStageReload)
+            if (VehWep.ReloadState < RL_ReadyToFire
+                && !VehWep.bReloadPaused
+                && !CanReload()
+                && VehWep.bMultiStageReload)
             {
                 VehWep.PauseReload();
 
@@ -346,7 +365,11 @@ simulated state ViewTransition
         super.EndState();
 
         // Re-enable muzzle flash if it has previously been turned off when player raised head above sights
-        if (bHideMuzzleFlashAboveSights && DriverPositionIndex == 0 && Gun != none && Gun.AmbientEffectEmitter != none && Gun.AmbientEffectEmitter.bHidden)
+        if (bHideMuzzleFlashAboveSights
+            && DriverPositionIndex == 0
+            && Gun != none
+            && Gun.AmbientEffectEmitter != none
+            && Gun.AmbientEffectEmitter.bHidden)
         {
             Gun.AmbientEffectEmitter.bHidden = false;
         }
@@ -370,7 +393,8 @@ simulated state LeavingViewTransition
 {
     simulated function BeginState()
     {
-        if (VehWep != none && (VehWep.ReloadState == RL_Waiting || (VehWep.bReloadPaused && VehWep.ReloadState < RL_ReadyToFire)))
+        if (VehWep != none
+            && (VehWep.ReloadState == RL_Waiting || (VehWep.bReloadPaused && VehWep.ReloadState < RL_ReadyToFire)))
         {
             VehWep.AttemptReload();
         }
@@ -432,7 +456,7 @@ simulated function UpdatePrecacheMaterials()
 simulated function HandleBinoculars(bool bMovingOntoBinocs)
 {
     local Rotator DesiredRelativeRotation;
-    local Vector  DesiredRelativeLocation;
+    local Vector DesiredRelativeLocation;
 
     // On binocs, remove any player rotation (DriveRot), as some MGs turn player sideways when on the gun & that's no good for the binocs pose
     if (DriveRot != rot(0, 0, 0))
@@ -480,7 +504,7 @@ simulated function HandleBinoculars(bool bMovingOntoBinocs)
 function UpdateRocketAcceleration(float DeltaTime, float YawChange, float PitchChange)
 {
     local DHPlayer PC;
-    local float    MaxChange;
+    local float MaxChange;
 
     PC = DHPlayer(Controller);
 
@@ -564,11 +588,22 @@ exec function SetBinocsDrivePos(string NewX, string NewY, string NewZ)
 
 exec function LogMG() // DEBUG (Matt: please use & report if you ever find you can't fire or reload MG when you should be able to)
 {
-    Log("LogMG: Gun =" @ Gun.Tag @ " VehWep =" @ VehWep.Tag @ " VehWep.WeaponPawn =" @ VehWep.WeaponPawn.Tag @ " Gun.Owner =" @ Gun.Owner.Tag);
-    Log("Controller =" @ Controller.Tag @ " ViewTransition =" @ IsInState('ViewTransition') @ " DriverPositionIndex =" @ DriverPositionIndex);
-    Log("ReloadState =" @ GetEnum(enum'EReloadState', VehWep.ReloadState) @ " bReloadPaused =" @ VehWep.bReloadPaused @ " CanReload() =" @ CanReload() @ " ProjectileClass =" @ VehWep.ProjectileClass);
-    Log("AmmoIndex =" @ VehWep.GetAmmoIndex() @ " PrimaryAmmoCount() =" @ VehWep.PrimaryAmmoCount() @ " NumMGMags =" @ VehWep.NumMGMags
-        @ " HasAmmoToReload() =" @ VehWep.HasAmmoToReload(VehWep.GetAmmoIndex()));
+    Log(
+        "LogMG: Gun =" @ Gun.Tag @ " VehWep =" @ VehWep.Tag @ " VehWep.WeaponPawn =" @ VehWep.WeaponPawn.Tag
+            @ " Gun.Owner =" @ Gun.Owner.Tag
+        );
+    Log(
+        "Controller =" @ Controller.Tag @ " ViewTransition =" @ IsInState('ViewTransition') @ " DriverPositionIndex ="
+            @ DriverPositionIndex
+        );
+    Log(
+        "ReloadState =" @ GetEnum(Enum'EReloadState', VehWep.ReloadState) @ " bReloadPaused =" @ VehWep.bReloadPaused
+            @ " CanReload() =" @ CanReload() @ " ProjectileClass =" @ VehWep.ProjectileClass
+        );
+    Log(
+        "AmmoIndex =" @ VehWep.GetAmmoIndex() @ " PrimaryAmmoCount() =" @ VehWep.PrimaryAmmoCount() @ " NumMGMags ="
+            @ VehWep.NumMGMags @ " HasAmmoToReload() =" @ VehWep.HasAmmoToReload(VehWep.GetAmmoIndex())
+        );
 }
 
 function Material CreateXRayMaterial()
