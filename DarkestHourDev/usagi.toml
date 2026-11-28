@@ -4,5 +4,5 @@ include = ["DH_*", "UCore"]
 
 # `usagi build` settings for DarkestHourDev.
 [build]
-version = "12.2.7"
+version = "12.2.8"
 version-class = "DH_Engine/Classes/DHBuildManifest.uc"
