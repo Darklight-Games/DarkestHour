@@ -5,10 +5,11 @@
 
 class DH_SatchelCharge10lb10sProjectile extends DHThrowableExplosiveProjectile; // incorporating SatchelCharge10lb10sProjectile & ROSatchelChargeProjectile
 
+// Parameters used to locate vehicles above the explosive
+// Search radius should be about half-length of the longest vehicle;
+// keep it low for better performance.
+const UNDER_VEHICLE_SEARCH_RADIUS = 200.0;
 const UNDER_VEHICLE_TRACE_HEIGHT = 64.0;
-const UNDER_VEHICLE_SEARCH_RADIUS = 200.0; // Used to check if explosive is under a vehicle.
-                                           // Search radius should be about half-length of the longest vehicle
-                                           // (keep it on the low for better performance).
 
 var float UnderVehicleDamageBonus; // Extra damage applied on top of normal damage if explosive is under a vehicle
 

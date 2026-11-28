@@ -18,8 +18,10 @@ defaultproperties
     DamageRadius=1100 // about 18 meters. practically, user has to either throw from cover or run away immediately
 
     EngineDamageMax=700.0
-    EngineDeckArmorThicknessThreshold=25.0 // arbitrary value scaled down from larger satchel
-                                           // penetrates most engine decks except some heavy tanks
+
+    // Arbitrary value scaled down from larger satchel;
+    // penetrates most engine decks except on some heavy tanks.
+    EngineDeckArmorThicknessThreshold=25.0
 
     TreadDamageMassThreshold=12.0
     TreadDamageRadius=64.0
