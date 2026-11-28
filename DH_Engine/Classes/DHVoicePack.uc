@@ -10,10 +10,31 @@ var SoundGroup RadioRequestSound;
 var SoundGroup RadioResponseConfirmSound;
 var SoundGroup RadioResponseDenySound;
 
+const SHOUT_TEXT_RANGE_METERS = 50.0; // How far away the text of a spoken message can be seen.
+
 // This function is called to get voice pack variant when facing a specific enemy nation.
 static function class<DHVoicePack> GetVoicePackClass(class<DHNation> EnemyNationClass)
 {
     return default.Class;
+}
+
+// Returns whether the text of a voice message of the given type can be seen
+// from the given distance (in Unreal units). Spoken messages that are not tied
+// to a place on the map are limited to how far the voice would carry.
+static function bool IsMessageTextInRange(name MessageType, float Distance)
+{
+    switch (MessageType)
+    {
+        case 'ORDER':
+        case 'SUPPORT':
+        case 'ACK':
+        case 'ENEMY':
+        case 'ALERT':
+        case 'TAUNT':
+            return Distance <= Class'DHUnits'.static.MetersToUnreal(SHOUT_TEXT_RANGE_METERS);
+        default:
+            return true;
+    }
 }
 
 // usagi:ignore[function-name-case]
