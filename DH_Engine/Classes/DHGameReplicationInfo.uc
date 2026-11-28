@@ -1729,105 +1729,101 @@ function int AddMapMarker(
         M.ExpiryTime = -1;
     }
 
+    i = GetNewMapMarkerIndex(PRI.Team.TeamIndex, PRI, MapMarkerClass);
+
+    if (i == -1)
+    {
+        return -1;
+    }
+
     switch (PRI.Team.TeamIndex)
     {
         case AXIS_TEAM_INDEX:
-            switch (MapMarkerClass.default.OverwritingRule)
-            {
-                case UNIQUE_PER_GROUP:
-                    for (i = 0; i < arraycount(AxisMapMarkers); ++i)
-                    {
-                        if (AxisMapMarkers[i].MapMarkerClass != none
-                            && AxisMapMarkers[i].MapMarkerClass.default.GroupIndex
-                                == MapMarkerClass.default.GroupIndex
-                            && (MapMarkerClass.default.Scope == SQUAD
-                                && AxisMapMarkers[i].SquadIndex == PRI.SquadIndex)
-                            || MapMarkerClass.default.Scope == TEAM)
-                        {
-                            AxisMapMarkers[i] = M;
-                            MapMarkerClass.static.OnMapMarkerPlaced(DHPlayer(PRI.Owner), M);
-                            return i;
-                        }
-                    }
-                    break;
-
-                case UNIQUE:
-                    for (i = 0; i < arraycount(AxisMapMarkers); ++i)
-                    {
-                        if (AxisMapMarkers[i].MapMarkerClass == MapMarkerClass
-                            && (MapMarkerClass.default.Scope == SQUAD
-                                && AxisMapMarkers[i].SquadIndex == PRI.SquadIndex)
-                            || MapMarkerClass.default.Scope == TEAM)
-                        {
-                            AxisMapMarkers[i] = M;
-                            MapMarkerClass.static.OnMapMarkerPlaced(DHPlayer(PRI.Owner), M);
-                            return i;
-                        }
-                    }
-                    break;
-                case OFF:
-                    break;
-            }
-
-            for (i = 0; i < arraycount(AxisMapMarkers); ++i)
-            {
-                if (AxisMapMarkers[i].MapMarkerClass == none || IsMapMarkerExpired(AxisMapMarkers[i]))
-                {
-                    AxisMapMarkers[i] = M;
-                    MapMarkerClass.static.OnMapMarkerPlaced(DHPlayer(PRI.Owner), M);
-                    return i;
-                }
-            }
+            AxisMapMarkers[i] = M;
             break;
         case ALLIES_TEAM_INDEX:
-            switch (MapMarkerClass.default.OverwritingRule)
-            {
-                case UNIQUE_PER_GROUP:
-                    for (i = 0; i < arraycount(AlliesMapMarkers); ++i)
-                    {
-                        if (AlliesMapMarkers[i].MapMarkerClass != none
-                            && AlliesMapMarkers[i].MapMarkerClass.default.GroupIndex
-                                == MapMarkerClass.default.GroupIndex
-                            && (MapMarkerClass.default.Scope == SQUAD
-                                && AlliesMapMarkers[i].SquadIndex == PRI.SquadIndex)
-                            || MapMarkerClass.default.Scope == TEAM)
-                        {
-                            AlliesMapMarkers[i] = M;
-                            MapMarkerClass.static.OnMapMarkerPlaced(DHPlayer(PRI.Owner), M);
-                            return i;
-                        }
-                    }
-                    break;
-                case UNIQUE:
-                    for (i = 0; i < arraycount(AlliesMapMarkers); ++i)
-                    {
-                        if (AlliesMapMarkers[i].MapMarkerClass == MapMarkerClass
-                            && (MapMarkerClass.default.Scope == TEAM
-                                || (MapMarkerClass.default.Scope == SQUAD
-                                    && AlliesMapMarkers[i].SquadIndex == PRI.SquadIndex)))
-                        {
-                            AlliesMapMarkers[i] = M;
-                            MapMarkerClass.static.OnMapMarkerPlaced(DHPlayer(PRI.Owner), M);
-                            return i;
-                        }
-                    }
-                    break;
-                case OFF:
-                    break;
-            }
-
-            for (i = 0; i < arraycount(AlliesMapMarkers); ++i)
-            {
-                if (AlliesMapMarkers[i].MapMarkerClass == none || IsMapMarkerExpired(AlliesMapMarkers[i]))
-                {
-                    AlliesMapMarkers[i] = M;
-                    MapMarkerClass.static.OnMapMarkerPlaced(DHPlayer(PRI.Owner), M);
-                    return i;
-                }
-            }
+            AlliesMapMarkers[i] = M;
+            break;
+        default:
+            return -1;
     }
 
-    return -1;
+    MapMarkerClass.static.OnMapMarkerPlaced(DHPlayer(PRI.Owner), M);
+
+    return i;
+}
+
+// Finds the index in a team's map marker array that a new marker should be put in.
+// An existing marker that the new one supersedes (per its overwriting rule) is
+// preferred, then a free or expired index, and finally the index of the marker
+// that will expire soonest. Markers that never expire are never displaced.
+// Returns the index, or -1 if there is no index available.
+private function int GetNewMapMarkerIndex(
+    int TeamIndex,
+    DHPlayerReplicationInfo PRI,
+    class<DHMapMarker> MapMarkerClass
+    )
+{
+    local int i, SoonestExpiringIndex, SoonestExpiryTime;
+    local MapMarker MM;
+
+    if (MapMarkerClass.default.OverwritingRule != OFF)
+    {
+        // Check for a map marker we can overwrite.
+        for (i = 0; i < MAP_MARKERS_MAX; ++i)
+        {
+            if (!GetMapMarker(TeamIndex, i, MM))
+            {
+                continue;
+            }
+
+            if (MapMarkerClass.default.OverwritingRule == UNIQUE && MM.MapMarkerClass != MapMarkerClass)
+            {
+                continue;
+            }
+
+            if (MapMarkerClass.default.OverwritingRule == UNIQUE_PER_GROUP
+                && MM.MapMarkerClass.default.GroupIndex != MapMarkerClass.default.GroupIndex)
+            {
+                continue;
+            }
+
+            if (MapMarkerClass.default.Scope == SQUAD && MM.SquadIndex != PRI.SquadIndex)
+            {
+                continue;
+            }
+
+            return i;
+        }
+    }
+
+    // Now check for a map marker slot that is empty.
+    for (i = 0; i < MAP_MARKERS_MAX; ++i)
+    {
+        if (!GetMapMarker(TeamIndex, i))
+        {
+            return i;
+        }
+    }
+
+    // Every slot is in use, so displace the marker that will expire soonest.
+    SoonestExpiringIndex = -1;
+
+    for (i = 0; i < MAP_MARKERS_MAX; ++i)
+    {
+        if (!GetMapMarker(TeamIndex, i, MM) || MM.ExpiryTime == -1)
+        {
+            continue;
+        }
+
+        if (SoonestExpiringIndex == -1 || MM.ExpiryTime < SoonestExpiryTime)
+        {
+            SoonestExpiringIndex = i;
+            SoonestExpiryTime = MM.ExpiryTime;
+        }
+    }
+
+    return SoonestExpiringIndex;
 }
 
 function RemoveMapMarker(int TeamIndex, int MapMarkerIndex)
