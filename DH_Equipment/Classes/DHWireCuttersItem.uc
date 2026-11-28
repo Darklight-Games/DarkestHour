@@ -110,11 +110,9 @@ simulated function bool CanCut()
     TraceEnd = TraceStart + (Vector(P.Controller.Rotation) * CutDistance);
 
     // Support for obstacles
-    foreach TraceActors(
-        Class'DHObstacleInstance', O, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0)
-        )
+    foreach TraceActors(Class'DHObstacleInstance', O, HitLocation, HitNormal, TraceEnd, TraceStart, vect(1.0, 1.0, 1.0))
     {
-        if (O != none && !O.Info.IsCleared() && O.Info.CanBeCut())
+        if (O != none && !O.IsCleared() && O.Info.CanBeCut())
         {
             ObstacleShouldBeCut = O;
             return true;
@@ -173,7 +171,7 @@ simulated state Cutting
 
         // A fail safe to get out of this state if either something went wrong or somehow we shouldn't continue
         if ((ConstructionBeingCut == none && ObstacleBeingCut == none)
-            || (ObstacleBeingCut != none && ObstacleBeingCut.Info.IsCleared())
+            || (ObstacleBeingCut != none && ObstacleBeingCut.IsCleared())
             || (ConstructionBeingCut != none && !ConstructionBeingCut.CanBeCut()))
         {
             GotoState('');

@@ -15,6 +15,8 @@ simulated function PostBeginPlay()
     GotoState('Cleared');
 }
 
+simulated function bool IsCleared();
+
 simulated state Intact
 {
     simulated function BeginState()
@@ -86,6 +88,11 @@ simulated state Intact
 
 simulated state Cleared
 {
+    simulated function bool IsCleared()
+    {
+        return true;
+    }
+
     simulated function BeginState()
     {
         Info = DHObstacle(Owner);
