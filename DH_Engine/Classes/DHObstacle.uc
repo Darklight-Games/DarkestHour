@@ -23,11 +23,6 @@ var DHObstacleInstance Instance;
 
 var private DHObstacleInfo Info;
 
-simulated function bool IsCleared()
-{
-    return IsInState('Cleared');
-}
-
 simulated function PostBeginPlay()
 {
     local int i;
